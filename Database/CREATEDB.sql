@@ -28,7 +28,7 @@ CREATE TABLE REGISTERUSER (
     LastName NVARCHAR(50) NOT NULL,
     FirstName NVARCHAR(50) NOT NULL,
     Status NVARCHAR(50) NOT NULL CHECK (Status IN('Active', 'Inactive')),
-    Address NVARCHAR(255) NOT NULL,
+    Address NVARCHAR(255),
     PhoneNumber NVARCHAR(20) NOT NULL,
     Points BIGINT NOT NULL
 );
