@@ -106,7 +106,8 @@ CREATE TABLE PRODUCT (
     MainDiamondID NVARCHAR(36) NOT NULL FOREIGN KEY REFERENCES DIAMOND(DiamondID),
     ChargeUp DECIMAL(5, 2) NOT NULL CHECK (ChargeUp >= 0 AND ChargeUp <= 100), -- Constrain the percentage to be between 0 and 100
     LaborPrice DECIMAL(18, 2) NOT NULL,
-    ImageLinkList NVARCHAR(MAX) NOT NULL
+    ImageLinkList NVARCHAR(MAX) NOT NULL,
+	AmountAvailable INT NOT NULL
 );
 
 -- Order Line table
