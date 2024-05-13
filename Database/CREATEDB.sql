@@ -24,24 +24,24 @@ CREATE TABLE REGISTERUSER (
 	UserID NVARCHAR(254) PRIMARY KEY,
     Email NVARCHAR(254) NOT NULL,
     Password NVARCHAR(128) NOT NULL,
-    Role NVARCHAR(20) NOT NULL CHECK (Role IN('Admin', 'Manager', 'Sales', 'Delivery', 'Customer')),
+    Role NVARCHAR(20) NOT NULL,
     LastName NVARCHAR(50) NOT NULL,
     FirstName NVARCHAR(50) NOT NULL,
-    Status NVARCHAR(50) NOT NULL CHECK (Status IN('Active', 'Inactive')),
+    Status BIT NOT NULL,
     Address NVARCHAR(255),
     PhoneNumber NVARCHAR(20) NOT NULL,
     Points BIGINT NOT NULL
 );
 
 -- Content table
-CREATE TABLE CONTENT (
+CREATE TABLE ARTICLE (
     ContentID NVARCHAR(36) PRIMARY KEY,
     Title NVARCHAR(255) NOT NULL,
     Content NVARCHAR(MAX) NOT NULL,
     Creator NVARCHAR(254) NOT NULL FOREIGN KEY REFERENCES REGISTERUSER(UserID),
     Date DATETIME2 NOT NULL,
     Image NVARCHAR(255),
-    Tag NVARCHAR(50) NOT NULL CHECK (Tag IN('Blog', 'FAQ', 'Introduction'))
+    Tag NVARCHAR(50) NOT NULL
 );
 
 -- Promotion table
@@ -51,7 +51,8 @@ CREATE TABLE PROMOTION (
     ValidFrom DATETIME2 NOT NULL,
     ValidTo DATETIME2 NOT NULL,
     Description NVARCHAR(MAX),
-    Code NVARCHAR(50) NOT NULL
+    Code NVARCHAR(50) NOT NULL,
+	Status BIT NOT NULL,
 );
 
 -- Purchase Order table
@@ -59,10 +60,10 @@ CREATE TABLE PURCHASEORDER (
     OrderID NVARCHAR(36) PRIMARY KEY,
     UserID NVARCHAR(254) NOT NULL FOREIGN KEY REFERENCES REGISTERUSER(UserID),
     Date DATETIME2 NOT NULL,
-    PaymentMethod NVARCHAR(50) NOT NULL CHECK (PaymentMethod IN ('Cash', 'Bank')),
+    PaymentMethod NVARCHAR(50) NOT NULL,
     ShippingAddress NVARCHAR(255) NOT NULL,
     TotalPrice DECIMAL(18, 2) NOT NULL,
-    Status NVARCHAR(50) NOT NULL CHECK (Status IN ('Preparing', 'Completed', 'Cancelled')),
+    Status NVARCHAR(50) NOT NULL,
     PromotionID NVARCHAR(36) NULL FOREIGN KEY REFERENCES PROMOTION(PromotionID),
     PayWithPoint BIT NOT NULL
 );
@@ -71,6 +72,7 @@ CREATE TABLE PURCHASEORDER (
 CREATE TABLE SHELL (
     ShellID NVARCHAR(36) NOT NULL,
     Name NVARCHAR(100) NOT NULL,
+	Status BIT NOT NULL,
     PRIMARY KEY (ShellID)
 );
 
@@ -94,7 +96,8 @@ CREATE TABLE DIAMOND (
     Cut NVARCHAR(50) NOT NULL,
     CertificateScan NVARCHAR(MAX) NOT NULL,
     Cost DECIMAL(18, 2) NOT NULL,
-    AmountAvailable INT NOT NULL
+    AmountAvailable INT NOT NULL,
+	Status BIT NOT NULL
 );
 
 
@@ -108,7 +111,8 @@ CREATE TABLE PRODUCT (
     ChargeUp DECIMAL(5, 2) NOT NULL CHECK (ChargeUp >= 0 AND ChargeUp <= 100), -- Constrain the percentage to be between 0 and 100
     LaborPrice DECIMAL(18, 2) NOT NULL,
     ImageLinkList NVARCHAR(MAX) NOT NULL,
-	SubDiamondAmount INT NOT NULL
+	SubDiamondAmount INT NOT NULL,
+	Status BIT NOT NULL,
 );
 
 -- Order Line table
@@ -127,13 +131,14 @@ CREATE TABLE WARRANTY (
     OrderLineID NVARCHAR(36) PRIMARY KEY FOREIGN KEY REFERENCES ORDERLINE(OrderLineID),
     StartDate DATETIME2 NOT NULL,
     EndDate DATETIME2 NOT NULL,
-    Status NVARCHAR(50) NOT NULL CHECK (Status IN('Valid', 'Expired'))
+    Status BIT NOT NULL
 );
 
 -- Category table
 CREATE TABLE CATEGORY (
     CategoryID NVARCHAR(36) PRIMARY KEY,
-    Name NVARCHAR(100) UNIQUE NOT NULL
+    Name NVARCHAR(100) UNIQUE NOT NULL,
+	Status BIT NOT NULL
 );
 
 -- Product Category table
