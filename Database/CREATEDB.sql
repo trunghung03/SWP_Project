@@ -149,6 +149,17 @@ CREATE TABLE PRODUCTCATEGORY (
 
 
 use DIAN
+
+--INSERT INTO REGISTERUSER TABLE
+
+INSERT INTO REGISTERUSER	 ([UserID], Email, [Password], [Role],LastName,FirstName,[Status],[Address],PhoneNumber,Points) VALUES
+('U001','john.doe@example.com', 'password123','Manager', 'Doe','John',1,'12st-Oregon','0125468941',0),
+('U002','admin.user@example.com', 'adminpassword','Admin','Dang','Michael',1,'143 south avenue,Florida','036854124',0),
+('U003','mike.manager@example.com', 'managerpass','Customer','Lee','Cindy',1,'1542st','0324556874',1000),
+('U004', 'jane.doe@example.com', 'securepassword123', 'Sale Staff', 'Doe', 'Jane', 1, '14st-Oregon', '0125874963', 10),
+('U005', 'mike.smith@example.com', 'Mikepass123', 'Delivery Staff', 'Smith', 'Mike', 1, '18st-Oregon', '0123654123', 50),
+('U006', 'linda.jones@example.com', 'Lindapassword1', 'Customer', 'Jones', 'Linda', 0, '22nd-Oregon', '0123541289', 20);
+
 --INSERT INTO ARTICLE TABLE
 INSERT INTO ARTICLE (ContentID, Title, Content, Creator, Date, Image, Tag) 
 VALUES 
@@ -218,15 +229,7 @@ INSERT INTO SHELLINVENTORY ([ShellInventoryID],[ShellID],[Size],[Price],[AmountA
 
 
 
---INSERT INTO REGISTERUSER TABLE
 
-INSERT INTO REGISTERUSER	 ([UserID], Email, [Password], [Role],LastName,FirstName,[Status],[Address],PhoneNumber,Points) VALUES
-('U001','john.doe@example.com', 'password123','Manager', 'Doe','John',1,'12st-Oregon','0125468941',0),
-('U002','admin.user@example.com', 'adminpassword','Admin','Dang','Michael',1,'143 south avenue,Florida','036854124',0),
-('U003','mike.manager@example.com', 'managerpass','Customer','Lee','Cindy',1,'1542st','0324556874',1000),
-('U004', 'jane.doe@example.com', 'securepassword123', 'Sale Staff', 'Doe', 'Jane', 1, '14st-Oregon', '0125874963', 10),
-('U005', 'mike.smith@example.com', 'Mikepass123', 'Delivery Staff', 'Smith', 'Mike', 1, '18st-Oregon', '0123654123', 50),
-('U006', 'linda.jones@example.com', 'Lindapassword1', 'Customer', 'Jones', 'Linda', 0, '22nd-Oregon', '0123541289', 20);
 
 
 --INSERT INTO PURCHASE ORDER
@@ -258,8 +261,8 @@ INSERT INTO ORDERLINE ([OrderLineID], OrderID,[LineTotal], ProductID, [ShellInve
 -- INSERT INTO WARRANTY TABLE
 
 INSERT INTO WARRANTY ([OrderLineID], StartDate, EndDate, [Status]) VALUES
-('OD1', '2024-06-15', '2025-06-15', 1),
-('OD2', '2024-07-28', '2025-07-28', 0),
-('OD3', '2024-08-30', '2025-08-30', 0),
-('OD4', '2024-09-20', '2025-09-20', 1),
-('OD5', '2024-10-10', '2025-10-10', 1);
+('ODL1', '2024-06-15', '2025-06-15', 1),
+('ODL2', '2024-07-28', '2025-07-28', 0),
+('ODL3', '2024-08-30', '2025-08-30', 0),
+('ODL4', '2024-09-20', '2025-09-20', 1),
+('ODL5', '2024-10-10', '2025-10-10', 1);
