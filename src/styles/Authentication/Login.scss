@@ -1,0 +1,142 @@
+input {
+    height: 30px;
+  }
+  
+  :placeholder-shown {
+    font-size: 70%;
+  }
+  
+  .right_image {
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .left_section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .email_section {
+    margin-bottom: 4%;
+  }
+  
+  .sign_in_button {
+    width: 100%;
+    background-color: #0f2770;
+    color: white;
+  }
+  
+  .sign_in_button:hover {
+    background-color: #2d4ba8;
+    color: white;
+  }
+  
+  .sign_up_section {
+    text-align: center;
+    margin-top: 3%;
+    font-size: 13px;
+  }
+  
+  .sign_up_link {
+    text-decoration: none;
+    color: #0f2770;
+  }
+  
+  .sign_up_link:hover {
+    text-decoration: underline;
+  }
+  
+  .remember_forgot_section {
+    display: flex;
+    align-items: center;
+    margin: 5px 0 10px 0;
+  }
+  
+  .forgot_password_link {
+    margin-left: auto;
+    text-decoration: none;
+    color: #0f2770;
+    font-size: 13px;
+  }
+  
+  .forgot_password_link:hover {
+    text-decoration: underline;
+  }
+  
+  .remember_me {
+    margin: 0 0 0 5px;
+    font-size: 13px;
+  }
+  
+  .sign_in_form {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 25px 25px 25px;
+  }
+  
+  .google_section button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .google_section i {
+    margin-right: 8px;
+  }
+  
+  .line {
+    margin: 30px 0 30px 0;
+  }
+  
+  .sign_in_title {
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
+  
+  .password_eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .email_label, .password_label {
+    font-weight: bold;
+  }
+  
+  .email_section input, .password_section input {
+    background-color: #f3f4f6;
+    border: none;
+  }
+  
+  .email_section input:focus, .password_section input:focus {
+    background-color: #f3f4f6;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .google_login {
+    color: white;
+    background-color: #cc383a;
+    padding-bottom: 7px;
+  }
+  
+  .google_login:hover {
+    color: white;
+    background-color: #ed3d40;
+  }
+
+  .icon_gg {
+    font-size: 17px;
+    color: white; 
+  }
