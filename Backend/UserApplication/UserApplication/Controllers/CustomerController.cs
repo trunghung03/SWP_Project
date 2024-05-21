@@ -8,6 +8,7 @@ namespace UserApplication.Controllers
     [ApiController]
     public class CustomerController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

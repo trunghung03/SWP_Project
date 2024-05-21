@@ -8,6 +8,7 @@ namespace UserApplication.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        [HttpGet]
         public async Task<IActionResult> AddProduct()
         {
             return Ok();

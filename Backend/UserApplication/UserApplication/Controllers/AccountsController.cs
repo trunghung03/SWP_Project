@@ -71,7 +71,7 @@ namespace UserApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto)
         {
             try
             {
@@ -113,5 +113,6 @@ namespace UserApplication.Controllers
                 return StatusCode(500, e);
             }
         }
+    
     }
 }

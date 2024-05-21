@@ -8,6 +8,7 @@ namespace UserApplication.Controllers
     [ApiController]
     public class ManagerController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
