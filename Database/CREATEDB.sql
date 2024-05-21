@@ -21,7 +21,7 @@ GO
 
 -- User table
 CREATE TABLE REGISTERUSER (
-	UserID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT PRIMARY KEY IDENTITY(1,1),
     Email NVARCHAR(254) NOT NULL,
     Password NVARCHAR(128) NOT NULL,
     Role NVARCHAR(20) NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE PURCHASEORDER (
     PaymentMethod NVARCHAR(50) NOT NULL,
     ShippingAddress NVARCHAR(255) NOT NULL,
     TotalPrice DECIMAL(18, 2) NOT NULL,
-    [Status] NVARCHAR(50) NOT NULL DEFAULT 'Pending',
+    [OrderStatus] NVARCHAR(50) NOT NULL DEFAULT 'Pending', -- Renamed to OrderStatus
     PromotionID INT NULL FOREIGN KEY REFERENCES PROMOTION(PromotionID),
     PayWithPoint BIT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
@@ -74,7 +74,7 @@ CREATE TABLE PURCHASEORDER (
 CREATE TABLE SHELL (
     ShellID INT PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(100) NOT NULL,
-	Status BIT NOT NULL DEFAULT 1
+    Status BIT NOT NULL DEFAULT 1
 );
 
 -- New Shell Size table to track sizes and their availability
@@ -98,7 +98,7 @@ CREATE TABLE DIAMOND (
     CertificateScan NVARCHAR(MAX) NOT NULL,
     Cost DECIMAL(18, 2) NOT NULL,
     AmountAvailable INT NOT NULL,
-	Status BIT NOT NULL DEFAULT 1
+    Status BIT NOT NULL DEFAULT 1
 );
 
 -- Product table
@@ -112,8 +112,8 @@ CREATE TABLE PRODUCT (
     ChargeUp DECIMAL(5, 2) NOT NULL CHECK (ChargeUp >= 0 AND ChargeUp <= 100), -- Constrain the percentage to be between 0 and 100
     LaborPrice DECIMAL(18, 2) NOT NULL,
     ImageLinkList NVARCHAR(MAX) NOT NULL,
-	SubDiamondAmount INT NOT NULL,
-	Status BIT NOT NULL DEFAULT 1
+    SubDiamondAmount INT NOT NULL,
+    Status BIT NOT NULL DEFAULT 1
 );
 
 -- Order Line table
@@ -139,7 +139,7 @@ CREATE TABLE WARRANTY (
 CREATE TABLE CATEGORY (
     CategoryID INT PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(100) UNIQUE NOT NULL,
-	Status BIT NOT NULL DEFAULT 1
+    Status BIT NOT NULL DEFAULT 1
 );
 
 -- Product Category table
@@ -221,7 +221,7 @@ INSERT INTO SHELLINVENTORY (ShellID, [Size], [Price], [AmountAvailable], [Status
 (5, 0.8, 300, 23, 1);
 
 -- Insert dummy data into PURCHASEORDER table
-INSERT INTO PURCHASEORDER (UserID, [Date], [PaymentMethod], [ShippingAddress], [TotalPrice], [Status], PromotionID, [PayWithPoint]) VALUES
+INSERT INTO PURCHASEORDER (UserID, [Date], [PaymentMethod], [ShippingAddress], [TotalPrice], [OrderStatus], PromotionID, [PayWithPoint]) VALUES -- Column renamed to OrderStatus
 (3, '2024-05-11 00:00:00', 'Bank Transfer', '1542st', 958.50, 'Shipping', 1, 1),
 (6, '2024-06-14 00:00:00', 'Credit Card', '18st-Oregon', 1200.90, 'In progress', 3, 1),
 (6, '2024-07-21 00:00:00', 'Cash', '14st-Oregon', 850.75, 'Delivered', 2, 1),
