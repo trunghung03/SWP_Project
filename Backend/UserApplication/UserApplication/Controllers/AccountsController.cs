@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using UserApplication.Dtos.Account;
 using UserApplication.Interfaces;
 using UserApplication.Model;
@@ -24,56 +25,92 @@ namespace UserApplication.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
-            if (user == null) { return Unauthorized("Invalid Username!"); }
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Email.ToLower());
+
+            if (user == null) return Unauthorized("Invalid username!");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-            if (!result.Succeeded) { return Unauthorized("Username not found and/or password incorrect!"); }
 
-            return Ok(
-                new NewUserDto
-                {
-                    Username = user.UserName,
-                    Email = user.Email,
-                    Token = _tokenService.CreateToken(user)
-                });
+            if (!result.Succeeded) return Unauthorized("Username not found and/or password incorrect");
+
+            // Get the user's claims
+            var userClaims = await _userManager.GetClaimsAsync(user);
+
+            // Check user claims and redirect to specified resource
+            if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Manager"))
+            {
+                // Redirect manager to specified resource
+                return RedirectToAction("ManagerAction", "ManagerController", new { token = _tokenService.CreateToken(user) });
+            }
+            else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin"))
+            {
+                // Redirect admin to specified resource
+                return RedirectToAction("AdminAction", "AdminController", new { token = _tokenService.CreateToken(user) });
+            }
+            else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Customer"))
+            {
+                // Redirect customer to specified resource
+                return RedirectToAction("CustomerAction", "CustomerController", new { token = _tokenService.CreateToken(user) });
+            }
+            else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "SalesStaff"))
+            {
+                // Redirect sales staff to specified resource
+                return RedirectToAction("SalesStaffAction", "SalesStaffController", new { token = _tokenService.CreateToken(user) });
+            }
+            else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "DeliveryStaff"))
+            {
+                // Redirect delivery staff to specified resource
+                return RedirectToAction("DeliveryStaffAction", "DeliveryStaffController", new { token = _tokenService.CreateToken(user) });
+            }
+
+            // Add a return statement at the end of the method
+            return Ok(); // Replace this with the appropriate return value or action
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserDto user)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             try
             {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
                 var appUser = new AppUser
                 {
-                    UserName = user.Username,
-                    Email = user.Email,
+                    Email = registerDto.Email
                 };
 
-                var createdUser = await _userManager.CreateAsync(appUser, user.Password);
+                var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
                 if (createdUser.Succeeded)
                 {
-                    return Ok(
-                        new NewUserDto
-                        {
-                            Username = appUser.UserName,
-                            Email = appUser.Email,
-                            Token = _tokenService.CreateToken(appUser)
-                        });
+                    var roleResult = await _userManager.AddToRoleAsync(appUser, "Customer");
+                    if (roleResult.Succeeded)
+                    {
+                        return Ok(
+                            new NewUserDto
+                            {
+                                Email = appUser.Email,
+                                Token = _tokenService.CreateToken(appUser)
+                            }
+                        );
+                    }
+                    else
+                    {
+                        return StatusCode(500, roleResult.Errors);
+                    }
                 }
                 else
                 {
-                    return BadRequest(createdUser.Errors);
+                    return StatusCode(500, createdUser.Errors);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return BadRequest(ex);
+                return StatusCode(500, e);
             }
         }
     }

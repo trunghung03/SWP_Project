@@ -17,6 +17,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CustomerOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Customer"));
+    options.AddPolicy("ManagerOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Manager"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+    options.AddPolicy("SalesStaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "SalesStaff"));
+    options.AddPolicy("DeliveryStaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "DeliveryStaff"));
+});
+
+
+builder.Services.AddCors();
+
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -95,6 +109,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(builder => builder
+.AllowAnyOrigin()
+.AllowAnyMethod()
+.AllowAnyHeader()
+);
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 
