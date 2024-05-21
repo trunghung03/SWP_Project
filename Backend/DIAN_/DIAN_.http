@@ -1,6 +1,0 @@
-@DIAN__HostAddress = http://localhost:5139
-
-GET {{DIAN__HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
