@@ -46,6 +46,7 @@ namespace DIAN_.Controllers
             }
 
             var ProductModel = product.ToProductFromCreateDTO();
+            ProductModel.Status = true;
             _context.Products.Add(ProductModel);
             try
             {
@@ -111,7 +112,8 @@ namespace DIAN_.Controllers
             {
                 return NotFound();
             }
-           //Set productModel.Status == 0;
+            //Set productModel.Status == 0;
+            productModel.Status = false;
             _context.SaveChanges();
             return  NoContent();
 
