@@ -5,7 +5,6 @@ namespace UserApplication.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -20,8 +19,24 @@ namespace UserApplication.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet]
+        [Route("user")]
+        [Authorize(Roles = "User")]
+        public IEnumerable<WeatherForecast> GetUser()
+        {
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
+
+        [HttpGet]
+        [Route("admin")]
+        [Authorize(Roles = "Admin")]
+        public IEnumerable<WeatherForecast> GetAdmin()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

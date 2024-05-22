@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserApplication.Dtos.Account;
+using UserApplication.Helpers;
 using UserApplication.Interfaces;
 using UserApplication.Model;
 
@@ -36,12 +37,47 @@ namespace UserApplication.Controllers
                 new NewUserDto
                 {
                     Email = user.UserName,
-                    Token = _tokenService.CreateToken(user)
+                    Token = _tokenService.CreateToken(user, user.Role)
                 });
         }
 
-        [HttpPost("register")]
+        [HttpPost("registeruser")]
         public async Task<IActionResult> Register(RegisterUserDto user)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var appUser = new AppUser
+                {
+                    UserName = user.Email,
+                    Role = Roles.User
+                };
+
+                var createdUser = await _userManager.CreateAsync(appUser, user.Password);
+
+                if (createdUser.Succeeded)
+                {
+                    return Ok(
+                        new NewUserDto
+                        {
+                            Email = appUser.UserName,
+                            Token = _tokenService.CreateToken(appUser, appUser.Role)
+                        });
+                }
+                else
+                {
+                    return BadRequest(createdUser.Errors);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("registeradmin")]
+        public async Task<IActionResult> RegisterAdmin(RegisterUserDto user)
         {
             try
             {
@@ -60,7 +96,7 @@ namespace UserApplication.Controllers
                         new NewUserDto
                         {
                             Email = appUser.UserName,
-                            Token = _tokenService.CreateToken(appUser)
+                            Token = _tokenService.CreateToken(appUser, Roles.Admin)
                         });
                 }
                 else
