@@ -12,8 +12,8 @@ using UserApplication.Data;
 namespace UserApplication.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240522021155_initialCreate")]
-    partial class initialCreate
+    [Migration("20240522055056_Update")]
+    partial class Update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,9 @@ namespace UserApplication.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

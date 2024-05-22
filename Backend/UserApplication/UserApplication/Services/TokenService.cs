@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using UserApplication.Helpers;
 using UserApplication.Interfaces;
 using UserApplication.Model;
 
@@ -16,11 +17,12 @@ namespace UserApplication.Services
             _configuration = configuration;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]));
         }
-        public string CreateToken(AppUser user)
+        public string CreateToken(AppUser user, Roles role)
         {
             var claims = new List<Claim>
             {
                 new(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                new(ClaimTypes.Role, role.ToString()),
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
