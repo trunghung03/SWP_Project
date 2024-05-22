@@ -28,7 +28,7 @@ namespace UserApplication.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Email.ToLower());
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email.ToLower());
 
             if (user == null) return Unauthorized("Invalid username!");
 
@@ -42,28 +42,63 @@ namespace UserApplication.Controllers
             // Check user claims and redirect to specified resource
             if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Manager"))
             {
-                // Redirect manager to specified resource
-                return RedirectToAction("ManagerAction", "ManagerController", new { token = _tokenService.CreateToken(user) });
+                // Create a new user DTO with the user's email and token
+                var newUserDto = new NewUserDto
+                {
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                };
+
+                // Return the new user DTO
+                return Ok(newUserDto);
             }
-            else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin"))
+            if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin"))
             {
-                // Redirect admin to specified resource
-                return RedirectToAction("AdminAction", "AdminController", new { token = _tokenService.CreateToken(user) });
+                // Create a new user DTO with the user's email and token
+                var newUserDto = new NewUserDto
+                {
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                };
+
+                // Return the new user DTO
+                return Ok(newUserDto);
             }
             else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Customer"))
             {
                 // Redirect customer to specified resource
-                return RedirectToAction("CustomerAction", "CustomerController", new { token = _tokenService.CreateToken(user) });
+                var newUserDto = new NewUserDto
+                {
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                };
+
+                // Return the new user DTO
+                return Ok(newUserDto);
             }
             else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "SalesStaff"))
             {
                 // Redirect sales staff to specified resource
-                return RedirectToAction("SalesStaffAction", "SalesStaffController", new { token = _tokenService.CreateToken(user) });
+               var newUserDto = new NewUserDto
+                {
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                };
+
+                // Return the new user DTO
+                return Ok(newUserDto);
             }
             else if (userClaims.Any(c => c.Type == ClaimTypes.Role && c.Value == "DeliveryStaff"))
             {
                 // Redirect delivery staff to specified resource
-                return RedirectToAction("DeliveryStaffAction", "DeliveryStaffController", new { token = _tokenService.CreateToken(user) });
+                var newUserDto = new NewUserDto
+                {
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                };
+
+                // Return the new user DTO
+                return Ok(newUserDto);
             }
 
             // Add a return statement at the end of the method
@@ -80,14 +115,14 @@ namespace UserApplication.Controllers
 
                 var appUser = new AppUser
                 {
-                    Email = registerDto.Email
+                    Email = registerDto.Email,
                 };
 
                 var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
                 if (createdUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, "Customer");
+                    var roleResult = await _userManager.AddToRoleAsync(appUser, registerDto.Password);
                     if (roleResult.Succeeded)
                     {
                         return Ok(
@@ -113,6 +148,6 @@ namespace UserApplication.Controllers
                 return StatusCode(500, e);
             }
         }
-    
+
     }
 }

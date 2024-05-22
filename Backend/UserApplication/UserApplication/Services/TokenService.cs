@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -23,6 +24,10 @@ namespace UserApplication.Services
                 new(JwtRegisteredClaimNames.Email, user.Email),
                 new(JwtRegisteredClaimNames.GivenName, user.UserName)
             };
+
+            // Add role claims
+            var userRoles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
 
