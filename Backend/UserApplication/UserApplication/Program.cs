@@ -1,10 +1,9 @@
-using api.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
+using UserApplication.Data;
 using UserApplication.Interfaces;
 using UserApplication.Model;
 using UserApplication.Services;
