@@ -3,7 +3,7 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-/UserApplication/Migrations
+UserApplication/Migrations
 
 # dotenv files
 .env
