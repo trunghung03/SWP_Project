@@ -29,8 +29,8 @@ CREATE TABLE REGISTERUSER (
     FirstName NVARCHAR(50) NOT NULL,
     Status BIT NOT NULL DEFAULT 1,
     Address NVARCHAR(255),
-    PhoneNumber NVARCHAR(20) NOT NULL,
-    Points BIGINT NOT NULL
+    PhoneNumber NVARCHAR(20),
+    Points BIGINT 
 );
 
 -- Content table
@@ -48,6 +48,7 @@ CREATE TABLE ARTICLE (
 -- Promotion table
 CREATE TABLE PROMOTION (
     PromotionID INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(50),
     Amount DECIMAL(5, 2) NOT NULL CHECK (Amount >= 0 AND Amount <= 100), -- Constrain the percentage to be between 0 and 100
     ValidFrom DATETIME2 NOT NULL,
     ValidTo DATETIME2 NOT NULL,
@@ -66,7 +67,7 @@ CREATE TABLE PURCHASEORDER (
     TotalPrice DECIMAL(18, 2) NOT NULL,
     [OrderStatus] NVARCHAR(50) NOT NULL DEFAULT 'Pending', -- Renamed to OrderStatus
     PromotionID INT NULL FOREIGN KEY REFERENCES PROMOTION(PromotionID),
-    PayWithPoint BIT NOT NULL,
+    PayWithPoint BIT,
     Status BIT NOT NULL DEFAULT 1
 );
 
@@ -81,7 +82,7 @@ CREATE TABLE SHELL (
 CREATE TABLE SHELLINVENTORY (
     ShellInventoryID INT PRIMARY KEY IDENTITY(1,1),
     ShellID INT NOT NULL FOREIGN KEY REFERENCES SHELL(ShellID),
-    Size TINYINT NOT NULL,
+    Size DECIMAL(5, 2) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
@@ -91,11 +92,11 @@ CREATE TABLE SHELLINVENTORY (
 CREATE TABLE DIAMOND (
     DiamondID INT PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(100) NOT NULL,
-    Color NVARCHAR(50) NOT NULL,
-    Clarity NVARCHAR(50) NOT NULL,
-    Carat DECIMAL(5, 2) NOT NULL,
-    Cut NVARCHAR(50) NOT NULL,
-    CertificateScan NVARCHAR(MAX) NOT NULL,
+    Color NVARCHAR(50) ,
+    Clarity NVARCHAR(50) ,
+    Carat DECIMAL(5, 2) ,
+    Cut NVARCHAR(50),
+    CertificateScan NVARCHAR(MAX) ,
     Cost DECIMAL(18, 2) NOT NULL,
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
@@ -107,12 +108,12 @@ CREATE TABLE PRODUCT (
     proCode NVARCHAR(36) UNIQUE NOT NULL,
     [Name] NVARCHAR(100) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
-    [Description] NVARCHAR(MAX) NOT NULL,
+    [Description] NVARCHAR(MAX) ,
     MainDiamondID INT NOT NULL FOREIGN KEY REFERENCES DIAMOND(DiamondID),
-    ChargeUp DECIMAL(5, 2) NOT NULL CHECK (ChargeUp >= 0 AND ChargeUp <= 100), -- Constrain the percentage to be between 0 and 100
-    LaborPrice DECIMAL(18, 2) NOT NULL,
-    ImageLinkList NVARCHAR(MAX) NOT NULL,
-    SubDiamondAmount INT NOT NULL,
+    ChargeUp DECIMAL(5, 2) CHECK (ChargeUp >= 0 AND ChargeUp <= 100), -- Constrain the percentage to be between 0 and 100
+    LaborPrice DECIMAL(18, 2),
+    ImageLinkList NVARCHAR(MAX),
+    SubDiamondAmount INT,
     Status BIT NOT NULL DEFAULT 1
 );
 
@@ -181,12 +182,12 @@ INSERT INTO CATEGORY ([Name], Status) VALUES
 ('Cufflinks', 1);
 
 -- Insert dummy data into PROMOTION table
-INSERT INTO PROMOTION (Amount, ValidFrom, ValidTo, [Description], Code, Status) VALUES 
-(0.10, '2024-05-01 00:00:00', '2024-06-01 00:00:00', 'Spring Fling Sale', 'SPRING10', 1),
-(0.15, '2024-07-01 00:00:00', '2024-07-31 23:59:59', 'July Joy Discount', 'JULY15', 1),
-(0.20, '2024-08-10 00:00:00', '2024-09-05 23:59:59', 'Back to School Bash', 'SCHOOL20', 1),
-(0.25, '2024-11-25 00:00:00', '2024-11-30 23:59:59', 'Black Friday Bonanza', 'BFRIDAY25', 1),
-(0.30, '2024-12-10 00:00:00', '2024-12-25 23:59:59', 'Holiday Season Saver', 'HOLIDAY30', 1);
+INSERT INTO PROMOTION (Amount, [Name], ValidFrom, ValidTo, [Description], Code, Status) VALUES 
+(0.10,'Valentine', '2024-05-01 00:00:00', '2024-06-01 00:00:00', 'Spring Fling Sale', 'SPRING10', 1),
+(0.15, 'Christmas', '2024-07-01 00:00:00', '2024-07-31 23:59:59', 'July Joy Discount', 'JULY15', 1),
+(0.20, 'NewYear', '2024-08-10 00:00:00', '2024-09-05 23:59:59', 'Back to School Bash', 'SCHOOL20', 1),
+(0.25, 'Celebrate','2024-11-25 00:00:00', '2024-11-30 23:59:59', 'Black Friday Bonanza', 'BFRIDAY25', 1),
+(0.30,'Prize', '2024-12-10 00:00:00', '2024-12-25 23:59:59', 'Holiday Season Saver', 'HOLIDAY30', 1);
 
 -- Insert dummy data into DIAMOND table
 INSERT INTO DIAMOND ([Name], Color, Clarity, Carat, Cut, [CertificateScan], [Cost], [AmountAvailable], [Status]) VALUES 
