@@ -26,7 +26,7 @@ namespace UserApplication.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Email.ToLower());
             if (user == null) { return Unauthorized("Invalid Username!"); }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
@@ -35,8 +35,7 @@ namespace UserApplication.Controllers
             return Ok(
                 new NewUserDto
                 {
-                    Username = user.UserName,
-                    Email = user.Email,
+                    Email = user.UserName,
                     Token = _tokenService.CreateToken(user)
                 });
         }
@@ -50,8 +49,7 @@ namespace UserApplication.Controllers
 
                 var appUser = new AppUser
                 {
-                    UserName = user.Username,
-                    Email = user.Email,
+                    UserName = user.Email,
                 };
 
                 var createdUser = await _userManager.CreateAsync(appUser, user.Password);
@@ -61,8 +59,7 @@ namespace UserApplication.Controllers
                     return Ok(
                         new NewUserDto
                         {
-                            Username = appUser.UserName,
-                            Email = appUser.Email,
+                            Email = appUser.UserName,
                             Token = _tokenService.CreateToken(appUser)
                         });
                 }

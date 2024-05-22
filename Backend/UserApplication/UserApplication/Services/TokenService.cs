@@ -20,8 +20,7 @@ namespace UserApplication.Services
         {
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Email, user.Email),
-                new(JwtRegisteredClaimNames.GivenName, user.UserName)
+                new(JwtRegisteredClaimNames.UniqueName, user.UserName),
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
