@@ -30,19 +30,6 @@ namespace DIAN_.Mapper
                 ImageLinkList = product.ImageLinkList,
             };
         }
-        public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
-        {
-            return new ProductDetailDTO
-            {
-                Name = product.Name,
-                Price = product.Price,
-                Image = product.ImageLinkList,
-                ProCode = product.ProCode,
-                Description = product.Description,
-                Carat = diamond.Carat,
-                SubDiamond = subDiamondColors,
-            };
-        }
         public static Product ToProductFromCreateDTO (this CreateProductRequestDTO productRequestDTO)
         {
             return new Product
