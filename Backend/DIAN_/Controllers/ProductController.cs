@@ -35,6 +35,8 @@ namespace DIAN_.Controllers
             }
             return Ok(product);
         }
+
+
         [HttpPost]
         public IActionResult Create([FromBody] CreateProductRequestDTO product)
         {
@@ -117,6 +119,30 @@ namespace DIAN_.Controllers
 
 
         }
+        [HttpGet("detail/{id}")]
+        public IActionResult GetDetail([FromRoute] int id)
+        {
+            var product = _context.Products
+                                  .Include(p => p.MainDiamond)
+                                  .FirstOrDefault(p => p.ProId == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var mainDiamond = product.MainDiamond;
+
+            // Retrieve all diamond colors from the database
+            var subDiamondColors = _context.Diamonds.Select(d => d.Color).ToList();
+
+            var productDetailDTO = product.ToProductDetailDTO(mainDiamond, subDiamondColors);
+
+            return Ok(productDetailDTO);
+        }
+
+
+
 
     }
 }
