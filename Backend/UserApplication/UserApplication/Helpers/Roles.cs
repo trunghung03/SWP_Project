@@ -1,4 +1,4 @@
 ﻿namespace UserApplication.Helpers
 {
-    public enum Roles { Admin, User, Staff };
+    public enum Roles { Admin, User, SalesStaff, DeliveryStaff, Manager };
 }
