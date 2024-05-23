@@ -15,7 +15,7 @@ public partial class Diamond
 
     public string Clarity { get; set; }
 
-    public decimal Carat { get; set; }
+    public decimal? Carat { get; set; }
 
     public string Cut { get; set; }
 

@@ -9,9 +9,8 @@ public partial class Promotion
 {
     public int PromotionId { get; set; }
 
-
     public string Name { get; set; }
-    
+
     public decimal Amount { get; set; }
 
     public DateTime ValidFrom { get; set; }
@@ -22,7 +21,11 @@ public partial class Promotion
 
     public string Code { get; set; }
 
+    public int EmployeeId { get; set; }
+
     public bool Status { get; set; }
+
+    public virtual Employee Employee { get; set; }
 
     public virtual ICollection<Purchaseorder> Purchaseorders { get; set; } = new List<Purchaseorder>();
 }

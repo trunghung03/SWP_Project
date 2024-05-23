@@ -1,4 +1,6 @@
-﻿using DIAN_.DTOs;
+﻿using DIAN_.D;
+using DIAN_.Data;
+using DIAN_.DTOs;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +12,8 @@ namespace DIAN_.Controllers
     [ApiController]
     public class ShellController : ControllerBase
     {
-        private readonly DIANContext _context;
-        public ShellController(DIANContext context)
+        private readonly ApplicationDbContext _context;
+        public ShellController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -19,8 +21,8 @@ namespace DIAN_.Controllers
         [HttpGet("shell")]
         public IActionResult GetAllNames()
         {
-            var shellNames = _context.Shells
-                                     .Select(shell => shell.ToShellNameDTO())
+            var shellNames = _context.Shellmaterials
+                                     .Select(shell => Shellmaterial.ToShellNameDTO())
                                      .ToList();
 
             return Ok(shellNames);

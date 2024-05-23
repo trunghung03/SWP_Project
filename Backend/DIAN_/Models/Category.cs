@@ -14,4 +14,6 @@ public partial class Category
     public bool Status { get; set; }
 
     public virtual ICollection<Productcategory> Productcategories { get; set; } = new List<Productcategory>();
+
+    public virtual Size Size { get; set; }
 }

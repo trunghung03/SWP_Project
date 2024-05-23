@@ -23,7 +23,7 @@ public partial class Purchaseorder
 
     public int? PromotionId { get; set; }
 
-    public bool PayWithPoint { get; set; }
+    public bool? PayWithPoint { get; set; }
 
     public bool Status { get; set; }
 
@@ -31,5 +31,5 @@ public partial class Purchaseorder
 
     public virtual Promotion Promotion { get; set; }
 
-    public virtual Registeruser User { get; set; }
+    public virtual Customer User { get; set; }
 }

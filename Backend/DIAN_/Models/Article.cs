@@ -13,7 +13,7 @@ public partial class Article
 
     public string Content { get; set; }
 
-    public int Creator { get; set; }
+    public int Employee { get; set; }
 
     public DateTime Date { get; set; }
 
@@ -23,5 +23,5 @@ public partial class Article
 
     public bool Status { get; set; }
 
-    public virtual Registeruser CreatorNavigation { get; set; }
+    public virtual Employee EmployeeNavigation { get; set; }
 }

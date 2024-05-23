@@ -19,13 +19,17 @@ public partial class Product
 
     public int MainDiamondId { get; set; }
 
-    public decimal ChargeUp { get; set; }
+    public decimal? ChargeUp { get; set; }
 
-    public decimal LaborPrice { get; set; }
+    public decimal? LaborPrice { get; set; }
 
     public string ImageLinkList { get; set; }
 
-    public int SubDiamondAmount { get; set; }
+    public int? MainDiamondAmount { get; set; }
+
+    public int? SubDiamondAmount { get; set; }
+
+    public decimal? ShellAmount { get; set; }
 
     public bool Status { get; set; }
 
@@ -34,6 +38,4 @@ public partial class Product
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
 
     public virtual ICollection<Productcategory> Productcategories { get; set; } = new List<Productcategory>();
-
-
 }

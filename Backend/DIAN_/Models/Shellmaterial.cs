@@ -5,21 +5,17 @@ using System.Collections.Generic;
 
 namespace DIAN_.Models;
 
-public partial class Shellinventory
+public partial class Shellmaterial
 {
-    public int ShellInventoryId { get; set; }
+    public int ShellMaterialId { get; set; }
 
-    public int ShellId { get; set; }
+    public string Name { get; set; }
 
-    public byte Size { get; set; }
+    public decimal AmountAvailable { get; set; }
 
     public decimal Price { get; set; }
-
-    public int AmountAvailable { get; set; }
 
     public bool Status { get; set; }
 
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
-
-    public virtual Shell Shell { get; set; }
 }
