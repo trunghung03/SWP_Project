@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs;
+﻿using DIAN_.Data;
+using DIAN_.DTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
@@ -12,9 +13,9 @@ namespace DIAN_.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly DIANContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepo;
-        public ProductController(DIANContext context, IProductRepository productRepo)
+        public ProductController(ApplicationDbContext context, IProductRepository productRepo)
         {
             _productRepo = productRepo;
             _context = context;

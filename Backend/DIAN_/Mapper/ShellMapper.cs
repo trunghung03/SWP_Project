@@ -5,7 +5,7 @@ namespace DIAN_.Mapper
 {
     public static class ShellMapper
     {
-        public static ShellDTO ToShellNameDTO(this Shell shell)
+        public static ShellDTO ToShellNameDTO(this Shellmaterial shell)
         {
             return new ShellDTO
             {

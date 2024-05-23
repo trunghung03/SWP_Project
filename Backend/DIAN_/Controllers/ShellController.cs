@@ -1,10 +1,11 @@
-﻿using DIAN_.D;
+﻿
 using DIAN_.Data;
 using DIAN_.DTOs;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using DIAN_.DTOs;
 
 namespace DIAN_.Controllers
 {
@@ -22,8 +23,8 @@ namespace DIAN_.Controllers
         public IActionResult GetAllNames()
         {
             var shellNames = _context.Shellmaterials
-                                     .Select(shell => Shellmaterial.ToShellNameDTO())
-                                     .ToList();
+                                     .Select(shell => Shellmaterial.ToShellNameDTO()
+                                     .ToList());
 
             return Ok(shellNames);
         }

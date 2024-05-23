@@ -7,13 +7,14 @@ using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.DTOs;
 using DIAN_.Mapper;
+using DIAN_.Data;
 
 namespace DIAN_.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly DIANContext _context;
-        public ProductRepository(DIANContext context)
+        private readonly ApplicationDbContext _context;
+        public ProductRepository(ApplicationDbContext context)
         {
             _context = context; 
         }
