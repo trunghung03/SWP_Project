@@ -1,13 +1,15 @@
+using DIAN_.DTOs.PromotionDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DIAN_.Models;
 
 namespace DIAN_.Mapper.Promotion
 {
-    public class PromotionMapper
+    public static class PromotionMapper
     {
-        public static UpdatePromotionRequestDto ToUpdatePromotionRequestDto(this Promotion promotionModel)
+        public static UpdatePromotionRequestDto ToUpdatePromotionRequestDto(this UpdatePromotionRequestDto promotionModel)
         {
             return new UpdatePromotionRequestDto
             {

@@ -196,6 +196,7 @@ public partial class DIANContext : DbContext
 
             entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
             entity.Property(e => e.Amount).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Code)
                 .IsRequired()
                 .HasMaxLength(50);

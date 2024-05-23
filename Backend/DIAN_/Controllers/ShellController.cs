@@ -2,7 +2,6 @@
 using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace DIAN_.Controllers
@@ -17,15 +16,14 @@ namespace DIAN_.Controllers
             _context = context;
         }
 
-        [HttpGet("shells")]
-        public IActionResult GetShells()
+        [HttpGet("shell")]
+        public IActionResult GetAllNames()
         {
-            var shells = _context.Shells
-                                 .Include(s => s.Shellinventories)
-                                 .Select(shell => shell.ToShellDTO())
-                                 .ToList();
+            var shellNames = _context.Shells
+                                     .Select(shell => shell.ToShellNameDTO())
+                                     .ToList();
 
-            return Ok(shells);
+            return Ok(shellNames);
         }
     }
 }

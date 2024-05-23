@@ -11,7 +11,7 @@ public partial class Shellinventory
 
     public int ShellId { get; set; }
 
-    public decimal Size { get; set; }
+    public byte Size { get; set; }
 
     public decimal Price { get; set; }
 
