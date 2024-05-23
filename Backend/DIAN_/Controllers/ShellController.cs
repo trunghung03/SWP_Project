@@ -18,12 +18,12 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("shells")]
-        public IActionResult GetShells()
+        public async Task<IActionResult> GetShells()
         {
-            var shells = _context.Shells
+            var shells = await _context.Shells
                                  .Include(s => s.Shellinventories)
                                  .Select(shell => shell.ToShellDTO())
-                                 .ToList();
+                                 .ToListAsync();
 
             return Ok(shells);
         }
