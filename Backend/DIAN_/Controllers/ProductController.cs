@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs;
+using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Http;
@@ -12,46 +13,48 @@ namespace DIAN_.Controllers
     public class ProductController : ControllerBase
     {
         private readonly DIANContext _context;
-        public ProductController(DIANContext context)
+        private readonly IProductRepository _productRepo;
+        public ProductController(DIANContext context, IProductRepository productRepo)
         {
+            _productRepo = productRepo;
             _context = context;
         }
        
         [HttpGet ("list")]
-        public IActionResult GetList()
+        public async Task<IActionResult> GetList()
         {
-            var products = _context.Products.ToList().Select(p => p.ToProductListDTO());
+            var products = await _productRepo.GetListAsync();
 
             return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var product = _context.Products.Find(id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
-            return Ok(product);
+            return Ok(product.ToProductDTO());
         }
 
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateProductRequestDTO product)
+        public async Task<IActionResult> Create([FromBody] CreateProductRequestDTO product)
         {
             // Check if the MainDiamondId exists
-            var mainDiamondExists = _context.Diamonds.Any(d => d.DiamondId == product.MainDiamondId);
+            var mainDiamondExists = await _context.Diamonds.AnyAsync(d => d.DiamondId == product.MainDiamondId);
             if (!mainDiamondExists)
             {
                 return BadRequest("The specified MainDiamondId does not exist.");
             }
 
             var ProductModel = product.ToProductFromCreateDTO();
-            _context.Products.Add(ProductModel);
+            await _context.Products.AddAsync(ProductModel);
             try
             {
-                _context.SaveChanges();
+            await   _context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -73,9 +76,9 @@ namespace DIAN_.Controllers
         }
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
+        public async  Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
-            var ProductModel = _context.Products.FirstOrDefault(x => x.ProId == id);
+            var ProductModel = await _context.Products.FirstOrDefaultAsync(x => x.ProId == id);
             if (ProductModel == null)
             {
                 return NotFound();
@@ -90,41 +93,41 @@ namespace DIAN_.Controllers
             ProductModel.SubDiamondAmount   = updateDTO.SubDiamondAmount;
             ProductModel.ProCode = updateDTO.ProCode;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(ProductModel.ToProductDTO());
         }
         [HttpGet ("all")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var products = _context.Products
-                                   .Include(p => p.MainDiamond) // Optional if you want to include related Diamond entity
+            var products = await _context.Products
+                                   .Include(p => p.MainDiamond) 
                                    .Select(p => p.ToProductDTO())
-                                   .ToList();
+                                   .ToListAsync();
 
             return Ok(products);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var productModel = _context.Products.FirstOrDefault(p => p.ProId == id);
+            var productModel = await _context.Products.FirstOrDefaultAsync(p => p.ProId == id);
             if (productModel == null) 
             {
                 return NotFound();
             }
            //Set productModel.Status == 0;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return  NoContent();
 
 
         }
         [HttpGet("detail/{id}")]
-        public IActionResult GetDetail([FromRoute] int id)
+        public async Task<IActionResult> GetDetail([FromRoute] int id)
         {
-            var product = _context.Products
+            var product = await _context.Products
                                   .Include(p => p.MainDiamond)
-                                  .FirstOrDefault(p => p.ProId == id);
+                                  .FirstOrDefaultAsync(p => p.ProId == id);
 
             if (product == null)
             {
@@ -134,13 +137,22 @@ namespace DIAN_.Controllers
             var mainDiamond = product.MainDiamond;
 
             // Retrieve all diamond colors from the database
-            var subDiamondColors = _context.Diamonds.Select(d => d.Color).ToList();
+            var subDiamondColors = await _context.Diamonds.Select(d => d.Color).ToListAsync();
 
             var productDetailDTO = product.ToProductDetailDTO(mainDiamond, subDiamondColors);
 
             return Ok(productDetailDTO);
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> GetByName([FromQuery] string name)
+        {
+            var products = await _context.Products
+                                   .Where(p => p.Name.Contains(name))
+                                   .Select(p => p.ToProductListDTO())
+                                   .ToListAsync();
 
+            return Ok(products);
+        }
 
 
 
