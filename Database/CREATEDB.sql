@@ -242,7 +242,6 @@ VALUES
 ('P004', 'Classic Earrings', 1800.00, 'Classic earrings set with shining star diamonds.', 4, 12.00, 120.00, 'image7.png,image8.png', 2, 8, 60.00, 1),
 ('P005', 'Radiant Pendant', 3500.00, 'A radiant pendant adorned with a radiant beauty diamond.', 5, 18.00, 250.00, 'image9.png,image10.png', 1, 12, 90.00, 1);
 
-
 -- Insert dummy data into ORDERDETAIL table
 INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiamondID, Size, Status) VALUES
 (1, 2000.00, 1, 2, 3, 7.5, 1),
@@ -250,8 +249,8 @@ INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiam
 (3, 3000.00, 3, 3, 4, 16.0, 1),
 (4, 1500.00, 4, 4, 5, 6.0, 1),
 (5, 3500.00, 5, 3, 6, 20.0, 1), -- Changed ShellMaterialID to 3
-(6, 10000.00, 6, 3, 7, 22.0, 1), -- Changed ShellMaterialID to 3
-(7, 4000.00, 7, 1, 1, 12.0, 1);
+(6, 10000.00, 1, 3, 7, 22.0, 1), -- Changed ProductID to 1 and ShellMaterialID to 3
+(7, 4000.00, 2, 1, 1, 12.0, 1); -- Changed ProductID to 2 and ShellMaterialID to 1
 
 -- Insert dummy data into WARRANTY table
 INSERT INTO WARRANTY (OrderDetailID, StartDate, EndDate, Status) VALUES
@@ -279,9 +278,7 @@ INSERT INTO PRODUCTCATEGORY (ProductID, CategoryID, Status) VALUES
 (2, 2, 1),
 (3, 3, 1),
 (4, 4, 1),
-(5, 5, 1),
-(6, 6, 1),
-(7, 7, 1);
+(5, 5, 1);
 
 -- Insert dummy data into SIZE table
 INSERT INTO SIZE (CategoryID, MinSize, MaxSize, Step) VALUES
