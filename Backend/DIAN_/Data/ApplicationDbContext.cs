@@ -45,6 +45,8 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Article>(entity =>
         {
             entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E4043A7D4");

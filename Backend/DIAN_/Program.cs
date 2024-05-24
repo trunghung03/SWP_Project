@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors();
 
@@ -99,9 +98,6 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -112,8 +108,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
-
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 

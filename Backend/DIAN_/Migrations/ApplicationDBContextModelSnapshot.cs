@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace UserApplication.Migrations
+namespace DIAN_.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,550 @@ namespace UserApplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DIAN_.Models.Article", b =>
+                {
+                    b.Property<int>("ContentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ContentID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContentId"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Employee")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("ContentId")
+                        .HasName("PK__ARTICLE__2907A87E4043A7D4");
+
+                    b.HasIndex("Employee");
+
+                    b.ToTable("ARTICLE", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CategoryID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("CategoryId")
+                        .HasName("PK__CATEGORY__19093A2BE78CB5F6");
+
+                    b.HasIndex(new[] { "Name" }, "UQ__CATEGORY__737584F6CBA410C0")
+                        .IsUnique();
+
+                    b.ToTable("CATEGORY", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Customer", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<long?>("Points")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("CustomerId")
+                        .HasName("PK__CUSTOMER__A4AE64B84D73444B");
+
+                    b.ToTable("CUSTOMER", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Diamond", b =>
+                {
+                    b.Property<int>("DiamondId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("DiamondID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiamondId"));
+
+                    b.Property<int>("AmountAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Carat")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<string>("CertificateScan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Clarity")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Cut")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("DiamondId")
+                        .HasName("PK__DIAMOND__23A8E7BB770F75D6");
+
+                    b.ToTable("DIAMOND", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Employee", b =>
+                {
+                    b.Property<int>("EmployeeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("EmployeeID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("EmployeeId")
+                        .HasName("PK__EMPLOYEE__7AD04FF1CD9B410A");
+
+                    b.ToTable("EMPLOYEE", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Orderdetail", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("OrderDetailID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
+
+                    b.Property<decimal>("LineTotal")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrderID");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProductID");
+
+                    b.Property<int?>("ShellMaterialId")
+                        .HasColumnType("int")
+                        .HasColumnName("ShellMaterialID");
+
+                    b.Property<decimal?>("Size")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int?>("SubDiamondId")
+                        .HasColumnType("int")
+                        .HasColumnName("SubDiamondID");
+
+                    b.HasKey("OrderDetailId")
+                        .HasName("PK__ORDERDET__D3B9D30CC0F05BE9");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShellMaterialId");
+
+                    b.HasIndex("SubDiamondId");
+
+                    b.ToTable("ORDERDETAIL", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Product", b =>
+                {
+                    b.Property<int>("ProId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("proID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProId"));
+
+                    b.Property<decimal?>("ChargeUp")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageLinkList")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("LaborPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int?>("MainDiamondAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MainDiamondId")
+                        .HasColumnType("int")
+                        .HasColumnName("MainDiamondID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("ProCode")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)")
+                        .HasColumnName("proCode");
+
+                    b.Property<decimal?>("ShellAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int?>("SubDiamondAmount")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProId")
+                        .HasName("PK__PRODUCT__5BBBEED516FB8D4E");
+
+                    b.HasIndex("MainDiamondId");
+
+                    b.HasIndex(new[] { "ProCode" }, "UQ__PRODUCT__4C8C9986FFAA47EE")
+                        .IsUnique();
+
+                    b.ToTable("PRODUCT", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Productcategory", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProductID");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("CategoryID");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("ProductId", "CategoryId")
+                        .HasName("PK__PRODUCTC__159C554F50F89BF5");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("PRODUCTCATEGORY", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Promotion", b =>
+                {
+                    b.Property<int>("PromotionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("PromotionID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromotionId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("EmployeeID");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("PromotionId")
+                        .HasName("PK__PROMOTIO__52C42F2F62063373");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("PROMOTION", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Purchaseorder", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("OrderID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<bool?>("PayWithPoint")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int")
+                        .HasColumnName("PromotionID");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("OrderId")
+                        .HasName("PK__PURCHASE__C3905BAF131EFE72");
+
+                    b.HasIndex("PromotionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PURCHASEORDER", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Shellmaterial", b =>
+                {
+                    b.Property<int>("ShellMaterialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ShellMaterialID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShellMaterialId"));
+
+                    b.Property<decimal>("AmountAvailable")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("ShellMaterialId")
+                        .HasName("PK__SHELLMAT__B375E41D8E58E3D0");
+
+                    b.ToTable("SHELLMATERIAL", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Size", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("CategoryID");
+
+                    b.Property<decimal?>("MaxSize")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<decimal?>("MinSize")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<decimal?>("Step")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.HasKey("CategoryId")
+                        .HasName("PK__SIZE__19093A2B6166AD48");
+
+                    b.ToTable("SIZE", (string)null);
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Warranty", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrderDetailID");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("OrderDetailId")
+                        .HasName("PK__WARRANTY__D3B9D30C4B0C1B8B");
+
+                    b.ToTable("WARRANTY", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -101,7 +645,6 @@ namespace UserApplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasNoKey();
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
 
@@ -120,8 +663,6 @@ namespace UserApplication.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
-
-                    
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -226,6 +767,131 @@ namespace UserApplication.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("DIAN_.Models.Article", b =>
+                {
+                    b.HasOne("DIAN_.Models.Employee", "EmployeeNavigation")
+                        .WithMany("Articles")
+                        .HasForeignKey("Employee")
+                        .IsRequired()
+                        .HasConstraintName("FK__ARTICLE__Employe__164452B1");
+
+                    b.Navigation("EmployeeNavigation");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Orderdetail", b =>
+                {
+                    b.HasOne("DIAN_.Models.Purchaseorder", "Order")
+                        .WithMany("Orderdetails")
+                        .HasForeignKey("OrderId")
+                        .IsRequired()
+                        .HasConstraintName("FK__ORDERDETA__Order__300424B4");
+
+                    b.HasOne("DIAN_.Models.Product", "Product")
+                        .WithMany("Orderdetails")
+                        .HasForeignKey("ProductId")
+                        .IsRequired()
+                        .HasConstraintName("FK__ORDERDETA__Produ__30F848ED");
+
+                    b.HasOne("DIAN_.Models.Shellmaterial", "ShellMaterial")
+                        .WithMany("Orderdetails")
+                        .HasForeignKey("ShellMaterialId")
+                        .HasConstraintName("FK__ORDERDETA__Shell__31EC6D26");
+
+                    b.HasOne("DIAN_.Models.Diamond", "SubDiamond")
+                        .WithMany("Orderdetails")
+                        .HasForeignKey("SubDiamondId")
+                        .HasConstraintName("FK__ORDERDETA__SubDi__32E0915F");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ShellMaterial");
+
+                    b.Navigation("SubDiamond");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Product", b =>
+                {
+                    b.HasOne("DIAN_.Models.Diamond", "MainDiamond")
+                        .WithMany("Products")
+                        .HasForeignKey("MainDiamondId")
+                        .IsRequired()
+                        .HasConstraintName("FK__PRODUCT__MainDia__2B3F6F97");
+
+                    b.Navigation("MainDiamond");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Productcategory", b =>
+                {
+                    b.HasOne("DIAN_.Models.Category", "Category")
+                        .WithMany("Productcategories")
+                        .HasForeignKey("CategoryId")
+                        .IsRequired()
+                        .HasConstraintName("FK__PRODUCTCA__Categ__3F466844");
+
+                    b.HasOne("DIAN_.Models.Product", "Product")
+                        .WithMany("Productcategories")
+                        .HasForeignKey("ProductId")
+                        .IsRequired()
+                        .HasConstraintName("FK__PRODUCTCA__Produ__3E52440B");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Promotion", b =>
+                {
+                    b.HasOne("DIAN_.Models.Employee", "Employee")
+                        .WithMany("Promotions")
+                        .HasForeignKey("EmployeeId")
+                        .IsRequired()
+                        .HasConstraintName("FK__PROMOTION__Emplo__1B0907CE");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Purchaseorder", b =>
+                {
+                    b.HasOne("DIAN_.Models.Promotion", "Promotion")
+                        .WithMany("Purchaseorders")
+                        .HasForeignKey("PromotionId")
+                        .HasConstraintName("FK__PURCHASEO__Promo__20C1E124");
+
+                    b.HasOne("DIAN_.Models.Customer", "User")
+                        .WithMany("Purchaseorders")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK__PURCHASEO__UserI__1ED998B2");
+
+                    b.Navigation("Promotion");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Size", b =>
+                {
+                    b.HasOne("DIAN_.Models.Category", "Category")
+                        .WithOne("Size")
+                        .HasForeignKey("DIAN_.Models.Size", "CategoryId")
+                        .IsRequired()
+                        .HasConstraintName("FK__SIZE__CategoryID__4316F928");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Warranty", b =>
+                {
+                    b.HasOne("DIAN_.Models.Orderdetail", "OrderDetail")
+                        .WithOne("Warranty")
+                        .HasForeignKey("DIAN_.Models.Warranty", "OrderDetailId")
+                        .IsRequired()
+                        .HasConstraintName("FK__WARRANTY__OrderD__36B12243");
+
+                    b.Navigation("OrderDetail");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -246,13 +912,11 @@ namespace UserApplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    
                     b.HasOne("UserApplication.Model.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                        
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -277,6 +941,59 @@ namespace UserApplication.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Category", b =>
+                {
+                    b.Navigation("Productcategories");
+
+                    b.Navigation("Size");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Customer", b =>
+                {
+                    b.Navigation("Purchaseorders");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Diamond", b =>
+                {
+                    b.Navigation("Orderdetails");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Employee", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("Promotions");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Orderdetail", b =>
+                {
+                    b.Navigation("Warranty");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Product", b =>
+                {
+                    b.Navigation("Orderdetails");
+
+                    b.Navigation("Productcategories");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Promotion", b =>
+                {
+                    b.Navigation("Purchaseorders");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Purchaseorder", b =>
+                {
+                    b.Navigation("Orderdetails");
+                });
+
+            modelBuilder.Entity("DIAN_.Models.Shellmaterial", b =>
+                {
+                    b.Navigation("Orderdetails");
                 });
 #pragma warning restore 612, 618
         }
