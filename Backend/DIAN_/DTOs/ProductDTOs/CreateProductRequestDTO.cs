@@ -1,6 +1,6 @@
-﻿namespace DIAN_.DTOs
+﻿namespace DIAN_.DTOs.ProductDTOs
 {
-    public class ProductDTO
+    public class CreateProductRequestDTO
     {
         public string ProCode { get; set; }
 
@@ -19,5 +19,7 @@
         public string ImageLinkList { get; set; }
 
         public int SubDiamondAmount { get; set; }
+
+
     }
 }

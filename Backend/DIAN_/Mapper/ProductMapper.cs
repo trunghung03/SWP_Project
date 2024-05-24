@@ -1,24 +1,25 @@
-﻿using DIAN_.DTOs;
+﻿using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Models;
 
 namespace DIAN_.Mapper
 {
     public static class ProductMapper
     {
-        public static ProductDTO ToProductDTO (this Product productDTO)
+        public static ProductDTO ToProductDTO(this Product product)
         {
             return new ProductDTO
             {
-                ProCode = productDTO.ProCode,
-                Name = productDTO.Name, 
-                Price = productDTO.Price,
-                LaborPrice = productDTO.LaborPrice,
-                ChargeUp = productDTO.ChargeUp,
-                Description = productDTO.Description,
-                MainDiamondId = productDTO.MainDiamondId,
-                ImageLinkList = productDTO.ImageLinkList,
-                SubDiamondAmount = productDTO.SubDiamondAmount,
-
+                ProCode = product.ProCode,
+                Name = product.Name,
+                Price = product.Price,
+                LaborPrice = product.LaborPrice ?? 0, // Handle nullable types
+                ChargeUp = product.ChargeUp ?? 0,
+                Description = product.Description,
+                MainDiamondId = product.MainDiamondId,
+                ImageLinkList = product.ImageLinkList,
+                SubDiamondAmount = product.SubDiamondAmount ?? 0, 
+                MainDiamondAmount= product.MainDiamondAmount ?? 0,
+                ShellAmount= product.ShellAmount ?? 0,
             };
         }
         public static ProductListDTO ToProductListDTO(this Product product)
@@ -39,7 +40,7 @@ namespace DIAN_.Mapper
                 Image = product.ImageLinkList,
                 ProCode = product.ProCode,
                 Description = product.Description,
-                Carat = diamond.Carat,
+                Carat = diamond.Carat ?? 0,
                 SubDiamond = subDiamondColors,
             };
         }

@@ -1,4 +1,4 @@
-﻿using DIAN_.DTOs;
+﻿using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Models;
 using System.Collections.Generic;
 using System.Linq;

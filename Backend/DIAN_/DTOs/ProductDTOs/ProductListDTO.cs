@@ -1,4 +1,4 @@
-﻿namespace DIAN_.DTOs
+﻿namespace DIAN_.DTOs.ProductDTOs
 {
     public class ProductListDTO
     {

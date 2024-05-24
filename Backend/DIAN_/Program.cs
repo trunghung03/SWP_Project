@@ -1,5 +1,6 @@
 using DIAN_.Interfaces;
 using DIAN_.Models;
+using DIAN_.Data;
 using DIAN_.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DIANContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DIAN")));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DIAN")));
 
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 

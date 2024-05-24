@@ -1,5 +1,5 @@
 ﻿using DIAN_.Data;
-using DIAN_.DTOs;
+using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
@@ -50,7 +50,11 @@ namespace DIAN_.Controllers
             {
                 return BadRequest("The specified MainDiamondId does not exist.");
             }
-
+            var proCodeExists = await _context.Products.AnyAsync(p => p.ProCode == product.ProCode);
+            if (proCodeExists)
+            {
+                return BadRequest($"The ProCode '{product.ProCode}' already exists.");
+            }
             var ProductModel = product.ToProductFromCreateDTO();
             await _context.Products.AddAsync(ProductModel);
             try
@@ -93,6 +97,8 @@ namespace DIAN_.Controllers
             ProductModel.MainDiamondId = updateDTO.MainDiamondId;
             ProductModel.SubDiamondAmount   = updateDTO.SubDiamondAmount;
             ProductModel.ProCode = updateDTO.ProCode;
+            ProductModel.MainDiamondAmount = updateDTO.MainDiamondAmount;
+            ProductModel.ShellAmount = updateDTO.ShellAmount;
 
             await _context.SaveChangesAsync();
             return Ok(ProductModel.ToProductDTO());
@@ -108,20 +114,39 @@ namespace DIAN_.Controllers
             return Ok(products);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var productModel = await _context.Products.FirstOrDefaultAsync(p => p.ProId == id);
-            if (productModel == null) 
+            if (productModel == null)
             {
                 return NotFound();
             }
-           //Set productModel.Status == 0;
-            await _context.SaveChangesAsync();
-            return  NoContent();
 
+            // Set productModel.Status to false to mark it as deleted
+            productModel.Status = false;
 
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                var errorMessage = ex.InnerException?.Message ?? ex.Message;
+                // Log the detailed error message
+                Console.WriteLine($"An error occurred while saving changes: {errorMessage}");
+
+                // Optionally log the stack trace and inner exception details
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Stack Trace: {ex.InnerException.StackTrace}");
+                }
+
+                throw; // Optionally rethrow the exception if you want to handle it higher up
+            }
+
+            return NoContent();
         }
         [HttpGet("detail/{id}")]
         public async Task<IActionResult> GetDetail([FromRoute] int id)
