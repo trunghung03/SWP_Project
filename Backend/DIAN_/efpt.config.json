@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 4,
-   "ContextClassName": "DIANContext",
+   "ContextClassName": "ApplicationDbContext",
    "ContextNamespace": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
@@ -23,7 +23,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[CUSTOMER]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[DIAMOND]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EMPLOYEE]",
          "ObjectType": 0
       },
       {
@@ -47,15 +55,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[REGISTERUSER]",
+         "Name": "[dbo].[SHELLMATERIAL]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[SHELL]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[SHELLINVENTORY]",
+         "Name": "[dbo].[SIZE]",
          "ObjectType": 0
       },
       {
