@@ -99,16 +99,17 @@ CREATE TABLE DIAMOND (
     Clarity NVARCHAR(50) ,
     Carat DECIMAL(5, 2) ,
     Cut NVARCHAR(50),
-    CertificateScan NVARCHAR(MAX) ,
     Cost DECIMAL(18, 2) NOT NULL,
+	CertificateScan NVARCHAR(MAX),
+	DiamondSize Decimal(5,2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 );
 
 -- Product table
 CREATE TABLE PRODUCT (
-    proID INT PRIMARY KEY IDENTITY(1,1),
-    proCode NVARCHAR(36) UNIQUE NOT NULL,
+    productID INT PRIMARY KEY IDENTITY(1,1),
+    productCode NVARCHAR(36) UNIQUE NOT NULL,
     [Name] NVARCHAR(100) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     [Description] NVARCHAR(MAX) ,
@@ -127,7 +128,7 @@ CREATE TABLE ORDERDETAIL (
     OrderDetailID INT PRIMARY KEY IDENTITY(1,1),
     OrderID INT NOT NULL FOREIGN KEY REFERENCES PURCHASEORDER(OrderID),
     LineTotal DECIMAL(18, 2) NOT NULL,
-    ProductID INT NOT NULL FOREIGN KEY REFERENCES PRODUCT(proID),
+    ProductID INT NOT NULL FOREIGN KEY REFERENCES PRODUCT(productID),
     ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
     SubDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
 	Size DECIMAL(5, 2),
@@ -151,7 +152,7 @@ CREATE TABLE CATEGORY (
 
 -- Product Category table
 CREATE TABLE PRODUCTCATEGORY (
-    ProductID INT NOT NULL FOREIGN KEY REFERENCES PRODUCT(proID),
+    ProductID INT NOT NULL FOREIGN KEY REFERENCES PRODUCT(productID),
     CategoryID INT NOT NULL FOREIGN KEY REFERENCES CATEGORY(CategoryID),
     PRIMARY KEY (ProductID, CategoryID),
     Status BIT NOT NULL DEFAULT 1
@@ -222,24 +223,25 @@ INSERT INTO SHELLMATERIAL ([Name], AmountAvailable, Price, Status) VALUES
 ('White Gold', 120.00, 60.00, 1);
 
 -- Insert dummy data into DIAMOND table
-INSERT INTO DIAMOND ([Name], Color, Clarity, Carat, Cut, CertificateScan, Cost, AmountAvailable, Status) VALUES
-('Diamond A', 'D', 'VVS1', 1.00, 'Excellent', 'cert1.jpg', 5000.00, 10, 1),
-('Diamond B', 'E', 'VS1', 0.50, 'Very Good', 'cert2.jpg', 2500.00, 20, 1),
-('Diamond C', 'F', 'SI1', 0.75, 'Good', 'cert3.jpg', 3000.00, 15, 1),
-('Diamond D', 'G', 'VS2', 1.50, 'Excellent', 'cert4.jpg', 7000.00, 5, 1),
-('Diamond E', 'H', 'I1', 2.00, 'Fair', 'cert5.jpg', 10000.00, 3, 1),
-('Diamond F', 'I', 'VVS2', 0.25, 'Very Good', 'cert6.jpg', 1500.00, 25, 1),
-('Diamond G', 'J', 'IF', 3.00, 'Excellent', 'cert7.jpg', 20000.00, 2, 1);
+INSERT INTO DIAMOND ([Name], Color, Clarity, Carat, Cut, Cost, CertificateScan, DiamondSize, AmountAvailable, Status)
+VALUES
+('Brilliant Rose', 'D', 'VVS1', 1.25, 'Excellent', 5000.00, 'scan1.png', 1.25, 10, 1),
+('Perfect Princess', 'E', 'VS1', 0.95, 'Very Good', 4000.00, 'scan2.png', 0.95, 5, 1),
+('Sparkling Emerald', 'F', 'IF', 2.00, 'Excellent', 12000.00, 'scan3.png', 3.00, 2, 1),
+('Shining Star', 'G', 'SI1', 1.50, 'Good', 7000.00, 'scan4.png', 1.50, 3, 1),
+('Radiant Beauty', 'H', 'VS2', 1.20, 'Very Good', 5500.00, 'scan5.png', 1.20, 8, 1),
+('Glistening Gem', 'I', 'VVS2', 1.75, 'Excellent', 9500.00, 'scan6.png', 1.75, 6, 1),
+('Luminous Light', 'J', 'SI2', 2.50, 'Good', 15000.00, 'scan7.png', 2.50, 1, 1);
 
 -- Insert dummy data into PRODUCT table
-INSERT INTO PRODUCT (proCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status) VALUES
-('PROD001', 'Diamond Ring', 2000.00, 'A beautiful diamond ring', 1, 10.00, 200.00, 'image1.jpg', 1, 2, 5.00, 1),
-('PROD002', 'Diamond Necklace', 5000.00, 'An elegant diamond necklace', 2, 15.00, 300.00, 'image2.jpg', 1, 3, 10.00, 1),
-('PROD003', 'Diamond Bracelet', 3000.00, 'A stunning diamond bracelet', 3, 20.00, 250.00, 'image3.jpg', 1, 4, 8.00, 1),
-('PROD004', 'Diamond Earrings', 1500.00, 'Beautiful diamond earrings', 4, 25.00, 100.00, 'image4.jpg', 1, 1, 3.00, 1),
-('PROD005', 'Diamond Pendant', 3500.00, 'An exquisite diamond pendant', 5, 30.00, 350.00, 'image5.jpg', 1, 5, 12.00, 1),
-('PROD006', 'Diamond Tiara', 10000.00, 'A royal diamond tiara', 6, 35.00, 500.00, 'image6.jpg', 1, 6, 20.00, 1),
-('PROD007', 'Diamond Cufflinks', 4000.00, 'Elegant diamond cufflinks', 7, 40.00, 400.00, 'image7.jpg', 1, 7, 15.00, 1);
+INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status)
+VALUES
+('P001', 'Elegant Necklace', 1500.00, 'An elegant necklace with a brilliant rose diamond.', 1, 15.00, 200.00, 'image1.png,image2.png', 1, 5, 50.00, 1),
+('P002', 'Luxury Ring', 5000.00, 'A luxury ring featuring a perfect princess diamond.', 2, 20.00, 300.00, 'image3.png,image4.png', 1, 10, 100.00, 1),
+('P003', 'Glamorous Bracelet', 2500.00, 'A glamorous bracelet with sparkling emerald diamonds.', 3, 10.00, 150.00, 'image5.png,image6.png', 2, 15, 75.00, 1),
+('P004', 'Classic Earrings', 1800.00, 'Classic earrings set with shining star diamonds.', 4, 12.00, 120.00, 'image7.png,image8.png', 2, 8, 60.00, 1),
+('P005', 'Radiant Pendant', 3500.00, 'A radiant pendant adorned with a radiant beauty diamond.', 5, 18.00, 250.00, 'image9.png,image10.png', 1, 12, 90.00, 1);
+
 
 -- Insert dummy data into ORDERDETAIL table
 INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiamondID, Size, Status) VALUES
