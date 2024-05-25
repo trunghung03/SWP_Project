@@ -25,7 +25,7 @@ namespace UserApplication.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpPost("logincustomer")]
+        [HttpPost("loginemployee")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -44,7 +44,7 @@ namespace UserApplication.Controllers
                 });
         }
 
-        [HttpPost("registeradmin")]
+        [HttpPost("registeremployee")]
         public async Task<IActionResult> RegisterAdmin(RegisterEmployeeDto user)
         {
             try

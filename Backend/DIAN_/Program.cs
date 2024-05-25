@@ -3,11 +3,13 @@ using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UserApplication.Interfaces;
 using UserApplication.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using DIAN_.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
 builder.Services.AddIdentity<Customer, IdentityRole>(options =>
@@ -64,14 +67,7 @@ builder.Services.AddIdentity<Customer, IdentityRole>(options =>
     options.Password.RequiredLength = 3;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentity<Employee, IdentityRole>(options =>
-{
-    options.Password.RequireDigit =
-    options.Password.RequireUppercase =
-    options.Password.RequireLowercase =
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 3;
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddSecondIdentity<Employee, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -95,8 +91,6 @@ builder.Services.AddAuthentication(options =>
         )
     };
 });
-
-builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

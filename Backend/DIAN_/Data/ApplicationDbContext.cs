@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Models;
 
-public partial class ApplicationDbContext : IdentityDbContext
+public partial class ApplicationDbContext : IdentityDbContext<Customer>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
