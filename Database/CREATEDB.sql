@@ -113,6 +113,13 @@ CREATE TABLE COLLECTIONS(
 	Description  NVARCHAR(MAX) NOT NULL
 );
 
+-- Category table
+CREATE TABLE CATEGORY (
+    CategoryID INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(100) UNIQUE NOT NULL,
+    Status BIT NOT NULL DEFAULT 1
+);
+
 -- Product table
 CREATE TABLE PRODUCT (
     productID INT PRIMARY KEY IDENTITY(1,1),
@@ -128,7 +135,8 @@ CREATE TABLE PRODUCT (
     SubDiamondAmount INT,
 	ShellAmount DECIMAL(18, 2),
     Status BIT NOT NULL DEFAULT 1,
-	CollectionID INT FOREIGN KEY REFERENCES COLLECTIONS(COLLECTIONID)
+	CollectionID INT FOREIGN KEY REFERENCES COLLECTIONS(CollectionID),
+	CategoryID INT FOREIGN KEY REFERENCES CATEGORY(CategoryID),
 );
 
 -- Order Line table
@@ -148,21 +156,6 @@ CREATE TABLE WARRANTY (
     OrderDetailID INT PRIMARY KEY FOREIGN KEY REFERENCES ORDERDETAIL(OrderDetailID),
     StartDate DATETIME2 NOT NULL,
     EndDate DATETIME2 NOT NULL,
-    Status BIT NOT NULL DEFAULT 1
-);
-
--- Category table
-CREATE TABLE CATEGORY (
-    CategoryID INT PRIMARY KEY IDENTITY(1,1),
-    [Name] NVARCHAR(100) UNIQUE NOT NULL,
-    Status BIT NOT NULL DEFAULT 1
-);
-
--- Product Category table
-CREATE TABLE PRODUCTCATEGORY (
-    ProductID INT NOT NULL FOREIGN KEY REFERENCES PRODUCT(productID),
-    CategoryID INT NOT NULL FOREIGN KEY REFERENCES CATEGORY(CategoryID),
-    PRIMARY KEY (ProductID, CategoryID),
     Status BIT NOT NULL DEFAULT 1
 );
 
@@ -289,14 +282,6 @@ INSERT INTO CATEGORY ([Name], Status) VALUES
 ('Pendants', 1),
 ('Tiaras', 1),
 ('Cufflinks', 1);
-
--- Insert dummy data into PRODUCTCATEGORY table
-INSERT INTO PRODUCTCATEGORY (ProductID, CategoryID, Status) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 1),
-(5, 5, 1);
 
 -- Insert dummy data into SIZE table
 INSERT INTO SIZE (CategoryID, MinSize, MaxSize, Step) VALUES
