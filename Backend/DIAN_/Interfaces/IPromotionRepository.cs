@@ -1,11 +1,12 @@
-﻿using DIAN_.Helper;
+﻿using DIAN_.DTOs.PromotionDto;
+using DIAN_.Helper;
 using DIAN_.Models;
 
 namespace DIAN_.Interfaces
 {
     public interface IPromotionRepository
     {
-        Task<List<Promotion>> GetAllPromotionAsync(QueryObject queryObj);
+        Task<List<Promotion>> GetAllPromotionAsync(PromotionQuery promotionQuery);
 
         Task<Promotion> GetPromotionByIdAsync(int id);
 
@@ -13,20 +14,17 @@ namespace DIAN_.Interfaces
 
         Task<Promotion> CreatePromotionAsync(Promotion promotionModel);
 
-        Task<Promotion> UpdatePromotionAsync(int id, Promotion promotion);   
+        Task<Promotion> UpdatePromotionAsync(int id, UpdatePromotionRequestDto promotion);   
 
-        Task<Promotion> DeletePromotionAsync(int id);
+        Task<Promotion> DeletePromotionAsync(int id, UpdatePromotionRequestDto promotion);
 
-        Task<bool> HasPromotionAsync(int id);
+        //Task<bool> HasPromotionAsync(int id);
 
         Task<List<Promotion>> SearchPromotionsByNameAsync(string name);
 
         Task<List<Promotion>> GetActivePromotionsAsync();
 
         // Task<List<Promotion>> GetPromotionsByPriceRangeAsync(decimal minPrice, decimal maxPrice);
-
-
-
 
         //Task<List<Promotion>> GetPromotionsByDateRangeAsync(DateTime startDate, DateTime endDate);
     }
