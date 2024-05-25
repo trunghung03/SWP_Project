@@ -9,16 +9,17 @@ namespace DIAN_.Mapper
 {
     public static class PromotionMapper
     {
-        public static PromotionDto ToProductFromCreateDto(this CreatePromotionRequestDto promotionModel)
+        public static Promotion ToPromotionFromCreateDto(this CreatePromotionRequestDto promotionModel)
         {
-            return new PromotionDto
+            return new Promotion
             {
+                PromotionId = promotionModel.PromotionId,
                 Name = promotionModel.Name,
                 Code = promotionModel.Code,
                 Amount = promotionModel.Amount,
                 Description = promotionModel.Description,
-                StartDate = promotionModel.StartDate,
-                EndDate = promotionModel.EndDate,
+                ValidFrom = promotionModel.StartDate,
+                ValidTo = promotionModel.EndDate,
                 Status = promotionModel.Status
             };
         }
@@ -39,6 +40,7 @@ namespace DIAN_.Mapper
         {
             return new PromotionDetailDto
             {
+                Id = promotionModel.PromotionId,
                 Name = promotionModel.Name,
                 Code = promotionModel.Code,
                 Amount = promotionModel.Amount,
