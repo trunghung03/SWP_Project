@@ -9,7 +9,7 @@ namespace DIAN_.Mapper
         {
             return new ProductDTO
             {
-                ProCode = product.ProCode,
+                ProCode = product.ProductCode,
                 Name = product.Name,
                 Price = product.Price,
                 LaborPrice = product.LaborPrice ?? 0, // Handle nullable types
@@ -38,7 +38,7 @@ namespace DIAN_.Mapper
                 Name = product.Name,
                 Price = product.Price,
                 Image = product.ImageLinkList,
-                ProCode = product.ProCode,
+                ProCode = product.ProductCode,
                 Description = product.Description,
                 Carat = diamond.Carat ?? 0,
                 SubDiamond = subDiamondColors,
@@ -50,7 +50,7 @@ namespace DIAN_.Mapper
             {
                 Name = productRequestDTO.Name,
                 Price = productRequestDTO.Price,
-                ProCode = productRequestDTO.ProCode,
+                ProductCode = productRequestDTO.ProCode,
                 LaborPrice = productRequestDTO.LaborPrice,
                 Description = productRequestDTO.Description,
                 ImageLinkList = productRequestDTO.ImageLinkList,

@@ -1,4 +1,4 @@
-﻿using DIAN_.Data;
+﻿using DIAN_.Models;
 using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
@@ -50,7 +50,7 @@ namespace DIAN_.Controllers
             {
                 return BadRequest("The specified MainDiamondId does not exist.");
             }
-            var proCodeExists = await _context.Products.AnyAsync(p => p.ProCode == product.ProCode);
+            var proCodeExists = await _context.Products.AnyAsync(p => p.ProductCode == product.ProCode);
             if (proCodeExists)
             {
                 return BadRequest($"The ProCode '{product.ProCode}' already exists.");
@@ -77,13 +77,13 @@ namespace DIAN_.Controllers
                 throw; // Optionally rethrow the exception if you want to handle it higher up
             }
 
-            return CreatedAtAction(nameof(GetById), new { id = ProductModel.ProId }, ProductModel.ToProductDTO());
+            return CreatedAtAction(nameof(GetById), new { id = ProductModel.ProductId }, ProductModel.ToProductDTO());
         }
         [HttpPut]
         [Route("{id}")]
         public async  Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
-            var ProductModel = await _context.Products.FirstOrDefaultAsync(x => x.ProId == id);
+            var ProductModel = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == id);
             if (ProductModel == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace DIAN_.Controllers
             ProductModel.ChargeUp  = updateDTO.ChargeUp;
             ProductModel.MainDiamondId = updateDTO.MainDiamondId;
             ProductModel.SubDiamondAmount   = updateDTO.SubDiamondAmount;
-            ProductModel.ProCode = updateDTO.ProCode;
+            ProductModel.ProductCode = updateDTO.ProCode;
             ProductModel.MainDiamondAmount = updateDTO.MainDiamondAmount;
             ProductModel.ShellAmount = updateDTO.ShellAmount;
 
@@ -117,7 +117,7 @@ namespace DIAN_.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var productModel = await _context.Products.FirstOrDefaultAsync(p => p.ProId == id);
+            var productModel = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             if (productModel == null)
             {
                 return NotFound();
@@ -153,7 +153,7 @@ namespace DIAN_.Controllers
         {
             var product = await _context.Products
                                   .Include(p => p.MainDiamond)
-                                  .FirstOrDefaultAsync(p => p.ProId == id);
+                                  .FirstOrDefaultAsync(p => p.ProductId == id);
 
             if (product == null)
             {

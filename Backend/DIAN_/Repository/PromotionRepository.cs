@@ -1,4 +1,4 @@
-﻿using DIAN_.Data;
+﻿using DIAN_.Models;
 using DIAN_.DTOs.PromotionDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;

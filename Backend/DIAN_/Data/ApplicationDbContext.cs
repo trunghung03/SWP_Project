@@ -2,12 +2,11 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using DIAN_.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UserApplication.Model;
 
-namespace DIAN_.Data;
+namespace DIAN_.Models;
 
 public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 {
@@ -20,6 +19,8 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<Collection> Collections { get; set; }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Diamond> Diamonds { get; set; }
@@ -29,8 +30,6 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
     public virtual DbSet<Orderdetail> Orderdetails { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<Productcategory> Productcategories { get; set; }
 
     public virtual DbSet<Promotion> Promotions { get; set; }
 
@@ -42,14 +41,12 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
     public virtual DbSet<Warranty> Warranties { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         modelBuilder.Entity<Article>(entity =>
         {
-            entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E4043A7D4");
+            entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E7CDCA1AF");
 
             entity.ToTable("ARTICLE");
 
@@ -72,11 +69,11 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__CATEGORY__19093A2BE78CB5F6");
+            entity.HasKey(e => e.CategoryId).HasName("PK__CATEGORY__19093A2B497709BA");
 
             entity.ToTable("CATEGORY");
 
-            entity.HasIndex(e => e.Name, "UQ__CATEGORY__737584F6CBA410C0").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__CATEGORY__737584F695DAB6AE").IsUnique();
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.Name)
@@ -85,9 +82,25 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.Status).HasDefaultValue(true);
         });
 
+        modelBuilder.Entity<Collection>(entity =>
+        {
+            entity.HasKey(e => e.CollectionId).HasName("PK__COLLECTI__7DE6BC24721587CE");
+
+            entity.ToTable("COLLECTIONS");
+
+            entity.Property(e => e.CollectionId)
+                .ValueGeneratedNever()
+                .HasColumnName("CollectionID");
+            entity.Property(e => e.Description).IsRequired();
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(128);
+            entity.Property(e => e.Status).HasDefaultValue(true);
+        });
+
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__CUSTOMER__A4AE64B84D73444B");
+            entity.HasKey(e => e.CustomerId).HasName("PK__CUSTOMER__A4AE64B87D21F49E");
 
             entity.ToTable("CUSTOMER");
 
@@ -111,7 +124,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Diamond>(entity =>
         {
-            entity.HasKey(e => e.DiamondId).HasName("PK__DIAMOND__23A8E7BB770F75D6");
+            entity.HasKey(e => e.DiamondId).HasName("PK__DIAMOND__23A8E7BB00CF0A33");
 
             entity.ToTable("DIAMOND");
 
@@ -121,6 +134,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.Color).HasMaxLength(50);
             entity.Property(e => e.Cost).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Cut).HasMaxLength(50);
+            entity.Property(e => e.DiamondSize).HasColumnType("decimal(5, 2)");
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -129,7 +143,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.HasKey(e => e.EmployeeId).HasName("PK__EMPLOYEE__7AD04FF1CD9B410A");
+            entity.HasKey(e => e.EmployeeId).HasName("PK__EMPLOYEE__7AD04FF120D557D2");
 
             entity.ToTable("EMPLOYEE");
 
@@ -156,7 +170,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Orderdetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__ORDERDET__D3B9D30CC0F05BE9");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__ORDERDET__D3B9D30C72FF32EA");
 
             entity.ToTable("ORDERDETAIL");
 
@@ -172,75 +186,64 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
             entity.HasOne(d => d.Order).WithMany(p => p.Orderdetails)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ORDERDETA__Order__300424B4");
+                .HasConstraintName("FK__ORDERDETA__Order__38996AB5");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Orderdetails)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ORDERDETA__Produ__30F848ED");
+                .HasConstraintName("FK__ORDERDETA__Produ__398D8EEE");
 
             entity.HasOne(d => d.ShellMaterial).WithMany(p => p.Orderdetails)
                 .HasForeignKey(d => d.ShellMaterialId)
-                .HasConstraintName("FK__ORDERDETA__Shell__31EC6D26");
+                .HasConstraintName("FK__ORDERDETA__Shell__3A81B327");
 
             entity.HasOne(d => d.SubDiamond).WithMany(p => p.Orderdetails)
                 .HasForeignKey(d => d.SubDiamondId)
-                .HasConstraintName("FK__ORDERDETA__SubDi__32E0915F");
+                .HasConstraintName("FK__ORDERDETA__SubDi__3B75D760");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProId).HasName("PK__PRODUCT__5BBBEED516FB8D4E");
+            entity.HasKey(e => e.ProductId).HasName("PK__PRODUCT__2D10D14AD66AA904");
 
             entity.ToTable("PRODUCT");
 
-            entity.HasIndex(e => e.ProCode, "UQ__PRODUCT__4C8C9986FFAA47EE").IsUnique();
+            entity.HasIndex(e => e.ProductCode, "UQ__PRODUCT__C206838921B36421").IsUnique();
 
-            entity.Property(e => e.ProId).HasColumnName("proID");
+            entity.Property(e => e.ProductId).HasColumnName("productID");
+            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.ChargeUp).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.CollectionId).HasColumnName("CollectionID");
             entity.Property(e => e.LaborPrice).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.MainDiamondId).HasColumnName("MainDiamondID");
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.ProCode)
+            entity.Property(e => e.ProductCode)
                 .IsRequired()
                 .HasMaxLength(36)
-                .HasColumnName("proCode");
+                .HasColumnName("productCode");
             entity.Property(e => e.ShellAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Status).HasDefaultValue(true);
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Products)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("FK__PRODUCT__Categor__35BCFE0A");
+
+            entity.HasOne(d => d.Collection).WithMany(p => p.Products)
+                .HasForeignKey(d => d.CollectionId)
+                .HasConstraintName("FK__PRODUCT__Collect__34C8D9D1");
 
             entity.HasOne(d => d.MainDiamond).WithMany(p => p.Products)
                 .HasForeignKey(d => d.MainDiamondId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PRODUCT__MainDia__2B3F6F97");
-        });
-
-        modelBuilder.Entity<Productcategory>(entity =>
-        {
-            entity.HasKey(e => new { e.ProductId, e.CategoryId }).HasName("PK__PRODUCTC__159C554F50F89BF5");
-
-            entity.ToTable("PRODUCTCATEGORY");
-
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-            entity.Property(e => e.Status).HasDefaultValue(true);
-
-            entity.HasOne(d => d.Category).WithMany(p => p.Productcategories)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PRODUCTCA__Categ__3F466844");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.Productcategories)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PRODUCTCA__Produ__3E52440B");
+                .HasConstraintName("FK__PRODUCT__MainDia__31EC6D26");
         });
 
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__PROMOTIO__52C42F2F62063373");
+            entity.HasKey(e => e.PromotionId).HasName("PK__PROMOTIO__52C42F2F6C1CC401");
 
             entity.ToTable("PROMOTION");
 
@@ -261,7 +264,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Purchaseorder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__PURCHASE__C3905BAF131EFE72");
+            entity.HasKey(e => e.OrderId).HasName("PK__PURCHASE__C3905BAF92DDA9EA");
 
             entity.ToTable("PURCHASEORDER");
 
@@ -293,7 +296,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Shellmaterial>(entity =>
         {
-            entity.HasKey(e => e.ShellMaterialId).HasName("PK__SHELLMAT__B375E41D8E58E3D0");
+            entity.HasKey(e => e.ShellMaterialId).HasName("PK__SHELLMAT__B375E41D94F58E96");
 
             entity.ToTable("SHELLMATERIAL");
 
@@ -308,7 +311,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__SIZE__19093A2B6166AD48");
+            entity.HasKey(e => e.CategoryId).HasName("PK__SIZE__19093A2BA4E43B58");
 
             entity.ToTable("SIZE");
 
@@ -327,7 +330,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Warranty>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__WARRANTY__D3B9D30C4B0C1B8B");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__WARRANTY__D3B9D30C0B5CD543");
 
             entity.ToTable("WARRANTY");
 
@@ -339,7 +342,7 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
             entity.HasOne(d => d.OrderDetail).WithOne(p => p.Warranty)
                 .HasForeignKey<Warranty>(d => d.OrderDetailId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__WARRANTY__OrderD__36B12243");
+                .HasConstraintName("FK__WARRANTY__OrderD__3F466844");
         });
 
         OnModelCreatingPartial(modelBuilder);

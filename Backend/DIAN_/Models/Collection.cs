@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace DIAN_.Models;
 
-public partial class Category
+public partial class Collection
 {
-    public int CategoryId { get; set; }
+    public int CollectionId { get; set; }
 
     public string Name { get; set; }
 
     public bool Status { get; set; }
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public string Description { get; set; }
 
-    public virtual Size Size { get; set; }
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
