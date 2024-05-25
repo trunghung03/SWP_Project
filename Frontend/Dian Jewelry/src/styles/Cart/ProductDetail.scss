@@ -1,0 +1,214 @@
+// Product detail 
+.product_detail_container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.product_image_detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+        width: 415px;
+        height: 400px;
+        border-radius: 10px;
+        border: 1px solid #d7d7d7;
+        margin: 0 0 0 100px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .product_contact_detail {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f8f8f8;
+        padding: 30px 50px 30px 50px;
+        margin: 20px 0 0 100px;
+        width: 81%;
+
+        p {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 0;
+
+            i {
+                margin-right: 10px;
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+.product_info_detail {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    margin: 0 70px 0 55px;
+
+    .product_name_detail {
+        font-size: 28px;
+        margin-bottom: 10px;
+        color: #0f2770;
+    }
+
+    .product_description_detail {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .product_code_detail,
+    .product_weight_detail,
+    .product_shell_detail,
+    .product_sub_diamond_detail {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .price_size_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-right: 27px;
+
+        .product_price_detail {
+            font-size: 28px;
+        }
+
+        .size_guide_container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .size_guide_detail {
+                font-size: 14px;
+                color: #0f2770;
+                text-decoration: underline;
+                cursor: pointer;
+                margin-right: 10px;
+                background-color: transparent;
+                border: none;
+            }
+
+            .ring_size_detail {
+                padding: 5px 20px 7px 15px;
+                font-size: 16px;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .product_actions_detail {
+        margin-bottom: 20px;
+
+        .add_to_cart_btn {
+            background-color: transparent;
+            color: #0f2770;
+            border: 1px solid #0f2770;
+            padding: 10px 20px 12px 20px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            width: calc(100% - 20px);
+
+            &:hover {
+                background-color: #0f2770;
+                color: white;
+
+                i {
+                    color: white;
+                }
+            }
+
+            i {
+                font-size: 16px;
+                color: #0f2770;
+            }
+        }
+    }
+
+    .product_delivery_detail {
+        p {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            margin-bottom: 10px;
+
+            .fa-shipping-fast {
+                margin-right: 10px;
+                font-size: 20px;
+            }
+
+            .fa-calendar-alt {
+                margin-right: 11px;
+                font-size: 22px;
+                margin-left: 2px;
+            }
+        }
+    }
+
+    .product_detail_line {
+        color: gray;
+        margin: 20px 20px 20px 0;
+    }
+}
+
+// End product detail 
+
+//Size guide
+.size_guide_popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.size_guide_content {
+    position: relative;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+}
+
+.size_guide_content i {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.size_guide_content i:hover {
+    color: #0f2770;
+}
+
+.size_guide_content img {
+    width: 520px;
+    height: 520px;
+    text-align: center;
+}
+
+.close_size_guide {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+//End size guide

@@ -1,0 +1,52 @@
+// Contact
+.contact_container {
+    margin: 50px 34px 70px 34px;
+    text-align: center;
+}
+
+.contact_title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0f2770;
+    margin-bottom: 20px;
+    text-align: center;
+    margin-left: 27px;
+}
+
+.contact_grid {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.contact_card {
+    width: 277px;
+    height: 200px;
+    padding: 25px 18px 20px 18px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.contact_icon i {
+    font-size: 40px;
+    color: #0f2770;
+    margin-bottom: 10px;
+}
+
+.contact_card_title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0f2770;
+    margin-bottom: 10px;
+}
+
+.contact_card_description {
+    font-size: 14px;
+    color: #565e6c;
+}
+
+// End contact 
