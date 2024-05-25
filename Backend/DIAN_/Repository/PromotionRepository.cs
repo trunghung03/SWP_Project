@@ -1,54 +1,91 @@
-﻿using DIAN_.Helper;
+﻿using DIAN_.Data;
+using DIAN_.DTOs.PromotionDto;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Repository
 {
     public class PromotionRepository : IPromotionRepository
     {
-        public Task<Promotion> CreatePromotionAsync(Promotion promotionModel)
+        private readonly ApplicationDbContext _context;
+        public PromotionRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+               this._context = context;
+        }
+        public async Task<Promotion> CreatePromotionAsync(Promotion promotionModel)
+        {
+           await _context.Promotions.AddAsync(promotionModel);
+            await _context.SaveChangesAsync();
+            return promotionModel;
         }
 
-        public Task<Promotion> DeletePromotionAsync(int id)
+        public async Task<List<Promotion>> GetAllPromotionAsync(PromotionQuery promotionQuery)
         {
-            throw new NotImplementedException();
+            var promotion = _context.Promotions.AsQueryable();
+            if(!string.IsNullOrWhiteSpace(promotionQuery.Name))
+            {
+                promotion = promotion.Where(x => x.Name.Contains(promotionQuery.Name));
+            }
+            return await _context.Promotions.ToListAsync();
+
+        }
+        public async Task<Promotion?> DeletePromotionAsync(int id, UpdatePromotionRequestDto promotion)
+        {
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+            if (existingPromotion != null)
+            {
+                existingPromotion.Status = false;
+                await _context.SaveChangesAsync();
+                return existingPromotion;
+            }
+            return null;
         }
 
-        public Task<List<Promotion>> GetActivePromotionsAsync()
+        public async Task<List<Promotion>> GetActivePromotionsAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Promotion>> GetAllPromotionAsync(QueryObject queryObj)
-        {
-            throw new NotImplementedException();
+            var existingPromotion = await _context.Promotions.Where(x => x.Status == true).ToListAsync();
+            return existingPromotion;
         }
 
         public Task<Promotion> GetPromotionByCodeAsync(string proCode)
         {
-            throw new NotImplementedException();
+           var existingPromotion = _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            return existingPromotion;
         }
 
-        public Task<Promotion> GetPromotionByIdAsync(int id)
+        public async Task<Promotion?> GetPromotionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
         }
 
-        public Task<bool> HasPromotionAsync(int id)
+        //public Task<bool> HasPromotionAsync(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<List<Promotion>> SearchPromotionsByNameAsync(string name)
         {
-            throw new NotImplementedException();
+           return await _context.Promotions.Where(x => x.Name.Contains(name)).ToListAsync();
         }
 
-        public Task<List<Promotion>> SearchPromotionsByNameAsync(string name)
+        public async Task<Promotion?> UpdatePromotionAsync(int id, UpdatePromotionRequestDto promotion)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Promotion> UpdatePromotionAsync(int id, Promotion promotion)
-        {
-            throw new NotImplementedException();
+           var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+            if(existingPromotion != null)
+            {
+                existingPromotion.Name = promotion.Name;
+                existingPromotion.Code = promotion.Code;
+                existingPromotion.Description = promotion.Description;
+                existingPromotion.ValidFrom = promotion.ValidFrom;
+                existingPromotion.ValidTo = promotion.ValidTo;
+                existingPromotion.Amount = promotion.Amount;
+                existingPromotion.Status = promotion.Status;
+                await _context.SaveChangesAsync();
+                return existingPromotion;
+            }
+            return null;
         }
     }
 }

@@ -100,10 +100,17 @@ CREATE TABLE DIAMOND (
     Carat DECIMAL(5, 2) ,
     Cut NVARCHAR(50),
     Cost DECIMAL(18, 2) NOT NULL,
-	CertificateScan NVARCHAR(MAX),
-	DiamondSize Decimal(5,2),
+    CertificateScan NVARCHAR(MAX),
+    DiamondSize Decimal(5,2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
+);
+
+CREATE TABLE COLLECTIONS(
+	CollectionID INT PRIMARY KEY,	
+	Name NVARCHAR(128) NOT NULL,
+    Status BIT NOT NULL DEFAULT 1,
+	Description  NVARCHAR(MAX) NOT NULL
 );
 
 -- Product table
@@ -120,7 +127,8 @@ CREATE TABLE PRODUCT (
 	MainDiamondAmount INT,
     SubDiamondAmount INT,
 	ShellAmount DECIMAL(18, 2),
-    Status BIT NOT NULL DEFAULT 1
+    Status BIT NOT NULL DEFAULT 1,
+	CollectionID INT FOREIGN KEY REFERENCES COLLECTIONS(COLLECTIONID)
 );
 
 -- Order Line table
@@ -233,14 +241,24 @@ VALUES
 ('Glistening Gem', 'I', 'VVS2', 1.75, 'Excellent', 9500.00, 'scan6.png', 1.75, 6, 1),
 ('Luminous Light', 'J', 'SI2', 2.50, 'Good', 15000.00, 'scan7.png', 2.50, 1, 1);
 
--- Insert dummy data into PRODUCT table
-INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status)
+
+-- Insert dummy data into COLLECTIONS table
+INSERT INTO COLLECTIONS (CollectionID, Name, Status, Description)
 VALUES
-('P001', 'Elegant Necklace', 1500.00, 'An elegant necklace with a brilliant rose diamond.', 1, 15.00, 200.00, 'image1.png,image2.png', 1, 5, 50.00, 1),
-('P002', 'Luxury Ring', 5000.00, 'A luxury ring featuring a perfect princess diamond.', 2, 20.00, 300.00, 'image3.png,image4.png', 1, 10, 100.00, 1),
-('P003', 'Glamorous Bracelet', 2500.00, 'A glamorous bracelet with sparkling emerald diamonds.', 3, 10.00, 150.00, 'image5.png,image6.png', 2, 15, 75.00, 1),
-('P004', 'Classic Earrings', 1800.00, 'Classic earrings set with shining star diamonds.', 4, 12.00, 120.00, 'image7.png,image8.png', 2, 8, 60.00, 1),
-('P005', 'Radiant Pendant', 3500.00, 'A radiant pendant adorned with a radiant beauty diamond.', 5, 18.00, 250.00, 'image9.png,image10.png', 1, 12, 90.00, 1);
+(1, 'Collection 1', 1, 'Description for Collection 1'),
+(2, 'Collection 2', 1, 'Description for Collection 2'),
+(3, 'Collection 3', 1, 'Description for Collection 3'),
+(4, 'Collection 4', 1, 'Description for Collection 4'),
+(5, 'Collection 5', 1, 'Description for Collection 5');
+
+-- Insert dummy data into PRODUCT table
+INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status, CollectionID)
+VALUES
+('PROD-001', 'Product 1', 12000.00, 'Description for Product 1', 1, 10.00, 1500.00, 'Link1', 1, 2, 3.00, 1, 1),
+('PROD-002', 'Product 2', 15000.00, 'Description for Product 2', 2, 12.50, 2000.00, 'Link2', 1, 3, 3.50, 1, 2),
+('PROD-003', 'Product 3', 10000.00, 'Description for Product 3', 3, 8.75, 1200.00, 'Link3', 1, 1, 2.50, 1, 3),
+('PROD-004', 'Product 4', 18000.00, 'Description for Product 4', 4, 15.00, 2500.00, 'Link4', 1, 4, 4.00, 1, 4),
+('PROD-005', 'Product 5', 11000.00, 'Description for Product 5', 5, 9.00, 1400.00, 'Link5', 1, 2, 3.20, 1, 5);
 
 -- Insert dummy data into ORDERDETAIL table
 INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiamondID, Size, Status) VALUES
