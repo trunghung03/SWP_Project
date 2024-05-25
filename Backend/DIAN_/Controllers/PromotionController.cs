@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/promotionController")]
+    [Route("api/promotion")]
     [ApiController]
     public class PromotionController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace DIAN_.Controllers
             this._context = context;
             this._promotionRepository = promotionRepository;
         }
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult>  GetAllPromotions([FromQuery] PromotionQuery query)
         {
             if(!ModelState.IsValid)
@@ -35,7 +35,7 @@ namespace DIAN_.Controllers
         }
 
 
-        [HttpGet("{id:int}")]
+        [HttpGet("get/{id:int}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -50,7 +50,7 @@ namespace DIAN_.Controllers
             return Ok(promotion.ToPromotionDetail());
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreatePromotion([FromBody] CreatePromotionRequestDto promotionDto)
         {
             if(!ModelState.IsValid)
@@ -60,6 +60,36 @@ namespace DIAN_.Controllers
             var promotionModel = promotionDto.ToPromotionFromCreateDto();
             await _promotionRepository.CreatePromotionAsync(promotionModel);
             return CreatedAtAction(nameof(getById), new { id = promotionModel.PromotionId }, promotionModel.ToPromotionDetail());
+        }
+
+        [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdatePromotion([FromRoute] int id, [FromBody] UpdatePromotionRequestDto promotionDto)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var promotion = await _promotionRepository.UpdatePromotionAsync(id, promotionDto);
+            if(promotion == null)
+            {
+                return NotFound();
+            }
+            return Ok(promotion.ToPromotionDetail());
+        }
+
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeletePromotion([FromRoute] int id, UpdatePromotionRequestDto updatePromotion)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var promotion = await _promotionRepository.DeletePromotionAsync(id, updatePromotion);
+            if(promotion == null)
+            {
+                return NotFound();
+            }
+            return Ok(promotion.ToPromotionDetail());
         }
     }
 }
