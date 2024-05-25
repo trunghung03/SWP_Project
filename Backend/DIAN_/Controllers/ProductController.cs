@@ -2,7 +2,6 @@
 using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
-using DIAN_.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,10 +1,10 @@
-﻿using UserApplication.Helpers;
-using UserApplication.Model;
+﻿using Microsoft.AspNetCore.Identity;
+using UserApplication.Helpers;
 
 namespace UserApplication.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser user, Roles role);
+        string CreateToken(IdentityUser user, Roles role);
     }
 }

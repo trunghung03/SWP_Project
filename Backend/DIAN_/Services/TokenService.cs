@@ -1,10 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using UserApplication.Helpers;
 using UserApplication.Interfaces;
-using UserApplication.Model;
 
 namespace UserApplication.Services
 {
@@ -17,7 +17,7 @@ namespace UserApplication.Services
             _configuration = configuration;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]));
         }
-        public string CreateToken(AppUser user, Roles role)
+        public string CreateToken(IdentityUser user, Roles role)
         {
             var claims = new List<Claim>
             {

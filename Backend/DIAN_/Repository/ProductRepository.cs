@@ -6,7 +6,6 @@ using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Mapper;
-using DIAN_.Models;
 using DIAN_.DTOs.ProductDTOs;
 
 namespace DIAN_.Repository

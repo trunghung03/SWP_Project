@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using UserApplication.Model;
 
 namespace DIAN_.Models;
 
-public partial class ApplicationDbContext : IdentityDbContext<AppUser>
+public partial class ApplicationDbContext : IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -44,6 +43,10 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Customer>(entity => { entity.ToTable("Customers"); });
+        modelBuilder.Entity<Employee>(entity => { entity.ToTable("Employees"); });
+
         modelBuilder.Entity<Article>(entity =>
         {
             entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E7CDCA1AF");
@@ -115,9 +118,6 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
-            entity.Property(e => e.Password)
-                .IsRequired()
-                .HasMaxLength(128);
             entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Status).HasDefaultValue(true);
         });
@@ -158,9 +158,6 @@ public partial class ApplicationDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
-            entity.Property(e => e.Password)
-                .IsRequired()
-                .HasMaxLength(128);
             entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Role)
                 .IsRequired()

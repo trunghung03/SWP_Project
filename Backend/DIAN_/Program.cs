@@ -1,10 +1,8 @@
 using DIAN_.Interfaces;
 using DIAN_.Models;
-using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using UserApplication.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UserApplication.Interfaces;
 using UserApplication.Services;
@@ -57,7 +55,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+builder.Services.AddIdentity<Customer, IdentityRole>(options =>
+{
+    options.Password.RequireDigit =
+    options.Password.RequireUppercase =
+    options.Password.RequireLowercase =
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 3;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddIdentity<Employee, IdentityRole>(options =>
 {
     options.Password.RequireDigit =
     options.Password.RequireUppercase =
