@@ -7,6 +7,7 @@ namespace DIAN_.DTOs.PromotionDto
 {
     public class CreatePromotionRequestDto
     {
+        public int PromotionId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public decimal Amount { get; set; }
