@@ -7,9 +7,9 @@ namespace DIAN_.Models;
 
 public partial class Product
 {
-    public int ProId { get; set; }
+    public int ProductId { get; set; }
 
-    public string ProCode { get; set; }
+    public string ProductCode { get; set; }
 
     public string Name { get; set; }
 
@@ -33,9 +33,15 @@ public partial class Product
 
     public bool Status { get; set; }
 
+    public int? CollectionId { get; set; }
+
+    public int? CategoryId { get; set; }
+
+    public virtual Category Category { get; set; }
+
+    public virtual Collection Collection { get; set; }
+
     public virtual Diamond MainDiamond { get; set; }
 
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
-
-    public virtual ICollection<Productcategory> Productcategories { get; set; } = new List<Productcategory>();
 }
