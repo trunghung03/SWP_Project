@@ -2,7 +2,6 @@
 using DIAN_.DTOs.PromotionDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
-using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Repository

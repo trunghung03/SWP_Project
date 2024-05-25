@@ -3,7 +3,6 @@ using DIAN_.DTOs.PromotionDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
-using DIAN_.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
