@@ -189,7 +189,7 @@ const Home = () => {
 
       {/* Collection  */}
       <div className="collections_container text-center">
-        <h1 className="collections_title">SHOP BY CATEGORY</h1>
+        <h1 className="collections_title">OUR COLLECTIONS</h1>
         <div className="collections_grid">
           <div className="collection_column1">
             <div onClick={() => handleNavigate('/ring')} className="collection_item">
