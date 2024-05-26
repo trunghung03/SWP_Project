@@ -44,7 +44,7 @@ namespace DIAN_.Controllers
             }
             var warrantyModel = warrantyDto.ToWarrantyFromCreateDto();
             await _warrantyRepository.CreateWarrantyAsync(warrantyModel);
-            return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel.ToWarrantyDetailDto());
+            return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
         }
 
 

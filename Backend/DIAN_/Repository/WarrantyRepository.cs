@@ -1,4 +1,6 @@
-﻿using DIAN_.Interfaces;
+﻿using DIAN_.DTOs.WarrantyDTO;
+using DIAN_.Interfaces;
+using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,16 +34,16 @@ namespace DIAN_.Repository
             return null;
         }
 
-        public async Task<List<Warranty>> GetAllWarrantyAsync()
+        public async Task<List<WarrantyListDto>> GetAllWarrantyAsync()
         {
-            var warranties = await _context.Warranties.ToListAsync();
+            var warranties = await _context.Warranties.Select(w => w.ToWarrantyDto()).ToListAsync();
 
             return warranties;
         }
 
         public async Task<Warranty?> GetWarrantyByIdAsync(int id)
         {
-            var warranty = await _context.Warranties.FirstOrDefaultAsync(c => c.OrderDetailId == id);
+            var warranty = await _context.Warranties.FindAsync(id);
 
             if (warranty == null) { return null; }
 
@@ -59,7 +61,5 @@ namespace DIAN_.Repository
             }
             return null;
         }
-
-
     }
 }
