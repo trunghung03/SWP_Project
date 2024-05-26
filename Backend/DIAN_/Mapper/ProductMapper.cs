@@ -64,7 +64,7 @@ namespace DIAN_.Mapper
                 Image = product.ImageLinkList,
                 ProductCode = product.ProductCode,
                 Description = product.Description,
-                Carat = diamond.Carat ?? 0,
+                Carat = diamond?.Carat ?? 0,
                 SubDiamond = subDiamondColors,
 
             };
