@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using UserApplication.Model;
 
 namespace DIAN_.Models;
 
-public partial class ApplicationDbContext : IdentityDbContext<AppUser>
+public partial class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

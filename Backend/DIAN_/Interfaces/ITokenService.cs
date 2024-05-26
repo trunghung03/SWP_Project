@@ -1,10 +1,11 @@
-﻿using UserApplication.Helpers;
-using UserApplication.Model;
+﻿using DIAN_.Models;
+using UserApplication.Helpers;
 
 namespace UserApplication.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser user, Roles role);
+        string CreateCustomerToken(Customer user);
+        string CreateEmployeeToken(Employee employee);
     }
 }

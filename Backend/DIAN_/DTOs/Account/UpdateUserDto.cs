@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserApplication.Dtos.Account
+namespace DIAN_.DTOs.Account
 {
-    public class RegisterUserDto
+    public class UpdateUserDto
     {
         [Required]
         [EmailAddress]
