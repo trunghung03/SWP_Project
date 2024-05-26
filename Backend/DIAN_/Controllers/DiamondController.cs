@@ -68,7 +68,7 @@ namespace DIAN_.Controllers
             var diamondModel = await _diamondRepository.UpdateDiamondAsync(id, updateDto.ToDiamondFromUpdateDTO(id));
             if (diamondModel == null)
                 return NotFound("Diamond does not exist");
-            return Ok(diamondModel.ToDiamondDTO);
+            return Ok(diamondModel.ToDiamondDTO());
         }
 
         [HttpPut]
@@ -80,7 +80,7 @@ namespace DIAN_.Controllers
             var diamond = await _diamondRepository.DeleteDiamondAsync(id, deleteDto.ToDiamondFromUpdateDTO(id));
             if (diamond == null)
                 return NotFound("Diamond does not exist");
-            return Ok(diamond.ToDiamondDTO);
+            return Ok(diamond.ToDiamondDTO());
         }
     }
 
