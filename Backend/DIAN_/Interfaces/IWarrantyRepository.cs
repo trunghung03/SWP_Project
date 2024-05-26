@@ -5,7 +5,7 @@ namespace DIAN_.Interfaces
 {
     public interface IWarrantyRepository
     {
-        Task<List<WarrantyListDto>> GetAllWarrantyAsync();
+        Task<List<WarrantyDetailDto>> GetAllWarrantyAsync();
         Task<Warranty?> GetWarrantyByIdAsync(int id);
         Task<Warranty> CreateWarrantyAsync(Warranty warrantyModel);
         Task<Warranty?> UpdateWarrantyAsync(int id, Warranty warranty);

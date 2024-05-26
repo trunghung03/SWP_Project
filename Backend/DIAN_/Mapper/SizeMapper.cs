@@ -27,6 +27,7 @@ namespace DIAN_.Mapper
         public static SizeDetailDto ToSizeDetailDto(this Size size)
         {
            return new SizeDetailDto{
+               CategoryId= size.CategoryId,
                MinSize = size.MinSize,
                MaxSize = size.MaxSize,
                Step = size.Step

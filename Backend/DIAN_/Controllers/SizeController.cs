@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/categorysize")]
+    [Route("api/size")]
     public class SizeController : ControllerBase
     {
         private readonly ISizeRepository _sizeRepository;
@@ -16,6 +16,17 @@ namespace DIAN_.Controllers
         public SizeController(ISizeRepository sizeRepository)
         {
             _sizeRepository = sizeRepository;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var sizes = await _sizeRepository.GetAllSizeAsync();
+
+            return Ok(sizes);
         }
 
         [HttpPost("addsize")]
@@ -27,7 +38,7 @@ namespace DIAN_.Controllers
             }
             var sizeModel = sizeDto.ToSizeFromCreateDto();
             await _sizeRepository.CreateSizeAsync(sizeModel);
-            return CreatedAtAction(nameof(sizeModel.CategoryId), new { id = sizeModel.CategoryId }, sizeModel.ToSizeDetailDto());
+            return CreatedAtAction(nameof(GetSizeByCategoryId), new { id = sizeModel.CategoryId }, sizeModel.ToSizeDetailDto());
         }
 
         [HttpGet("{id:int}")]

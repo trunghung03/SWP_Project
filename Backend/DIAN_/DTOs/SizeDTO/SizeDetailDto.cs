@@ -2,10 +2,12 @@
 {
     public class SizeDetailDto
     {
+        public int CategoryId { get; set; }
         public decimal? MinSize { get; set; }
 
         public decimal? MaxSize { get; set; }
 
         public decimal? Step { get; set; }
+
     }
 }

@@ -7,5 +7,6 @@ namespace DIAN_.DTOs.CategoryDTO
     {
         [Required]
         public string? Name { get; set; }
+
     }
 }

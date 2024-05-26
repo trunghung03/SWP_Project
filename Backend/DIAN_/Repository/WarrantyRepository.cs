@@ -20,7 +20,7 @@ namespace DIAN_.Repository
             await _context.Warranties.AddAsync(warrantyModel);
             await _context.SaveChangesAsync();
             return warrantyModel;
-        }   
+        }
 
         public async Task<Warranty?> DeleteWarrantyAsync(int id, Warranty warranty)
         {
@@ -34,9 +34,11 @@ namespace DIAN_.Repository
             return null;
         }
 
-        public async Task<List<WarrantyListDto>> GetAllWarrantyAsync()
+        public async Task<List<WarrantyDetailDto>> GetAllWarrantyAsync()
         {
-            var warranties = await _context.Warranties.Select(w => w.ToWarrantyDto()).ToListAsync();
+            var warranties = await _context.Warranties
+                .Select(w => w.ToWarrantyDetailDto())
+                .ToListAsync();
 
             return warranties;
         }

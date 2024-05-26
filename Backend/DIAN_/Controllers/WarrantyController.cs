@@ -19,6 +19,7 @@ namespace DIAN_.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllWarranty()
         {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
             var warranties = await _warrantyRepository.GetAllWarrantyAsync();
             return Ok(warranties);
         }
@@ -47,8 +48,6 @@ namespace DIAN_.Controllers
             return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
         }
 
-
-
         [HttpPut]
         [Route("update/{id:int}")]
         public async Task<IActionResult> UpdateWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
@@ -62,7 +61,7 @@ namespace DIAN_.Controllers
             {
                 return NotFound("Warranty does not exist");
             }
-            
+
             return Ok(warranty.ToWarrantyDetailDto());
         }
 
