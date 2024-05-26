@@ -2,7 +2,7 @@
 {
     public class CreateProductRequestDTO
     {
-        public string ProductCode { get; set; }
+        public string ProCode { get; set; }
 
         public string Name { get; set; }
 
@@ -19,12 +19,6 @@
         public string ImageLinkList { get; set; }
 
         public int SubDiamondAmount { get; set; }
-
-        public int? MainDiamondAmount { get; set; }
-
-        public decimal? ShellAmount { get; set; }
-
-        public int? CollectionId { get; set; }
 
 
     }
