@@ -3,6 +3,7 @@ using DIAN_.DTOs.PromotionDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
+using DIAN_.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,14 +14,12 @@ namespace DIAN_.Controllers
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionRepository;
-        
-        private readonly ApplicationDbContext _context;
 
-        public PromotionController(IPromotionRepository promotionRepository, ApplicationDbContext context) 
+        public PromotionController(IPromotionRepository promotionRepository) 
         {
-            this._context = context;
             this._promotionRepository = promotionRepository;
         }
+
         [HttpGet("list")]
         public async Task<IActionResult>  GetAllPromotions([FromQuery] PromotionQuery query)
         {
@@ -29,7 +28,7 @@ namespace DIAN_.Controllers
                 return BadRequest(ModelState);
             }
             var promotions = await _promotionRepository.GetAllPromotionAsync(query);
-            var promotionDtos = promotions.Select(promotion => promotion.ToPromotionList()).ToList();
+            var promotionDtos = promotions.Select(promotion => promotion.ToPromotionDetail());
             return Ok(promotions);
         }
 
@@ -44,7 +43,7 @@ namespace DIAN_.Controllers
             var promotion = await _promotionRepository.GetPromotionByIdAsync(id);
             if (promotion == null)
             {
-                return NotFound();
+                return NotFound("Promotion does not exist");
             }
             return Ok(promotion.ToPromotionDetail());
         }
@@ -68,25 +67,25 @@ namespace DIAN_.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var promotion = await _promotionRepository.UpdatePromotionAsync(id, promotionDto);
+            var promotion = await _promotionRepository.UpdatePromotionAsync(id, promotionDto.ToPromotionFromUpdateDto(id));
             if(promotion == null)
             {
-                return NotFound();
+                return NotFound("Promotion does not exist");
             }
             return Ok(promotion.ToPromotionDetail());
         }
 
         [HttpDelete("delete/{id:int}")]
-        public async Task<IActionResult> DeletePromotion([FromRoute] int id, UpdatePromotionRequestDto updatePromotion)
+        public async Task<IActionResult> DeletePromotion([FromRoute] int id, UpdatePromotionRequestDto deletePromotion)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var promotion = await _promotionRepository.DeletePromotionAsync(id, updatePromotion);
+            var promotion = await _promotionRepository.DeletePromotionAsync(id, deletePromotion.ToPromotionFromUpdateDto(id));
             if(promotion == null)
             {
-                return NotFound();
+                return NotFound("Promotion does not exist");
             }
             return Ok(promotion.ToPromotionDetail());
         }

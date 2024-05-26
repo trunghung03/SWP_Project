@@ -5,33 +5,11 @@ namespace DIAN_.Mapper
 {
     public static class ProductMapper
     {
-        public static Product ToProductFromUpdateDTO(this UpdateProductRequestDTO updateDTO)
-        {
-            return new Product
-            {
-                Name = updateDTO.Name,
-                Description = updateDTO.Description,
-                Price = updateDTO.Price,
-                LaborPrice = updateDTO.LaborPrice,
-                ImageLinkList = updateDTO.ImageLinkList,
-                ChargeUp = updateDTO.ChargeUp,
-                MainDiamondId = updateDTO.MainDiamondId,
-                SubDiamondAmount = updateDTO.SubDiamondAmount,
-                ProductCode = updateDTO.ProductCode,
-                MainDiamondAmount = updateDTO.MainDiamondAmount,
-                ShellAmount = updateDTO.ShellAmount,
-                CollectionId = updateDTO.CollectionId,
-            };
-            
-
-            
-        }
         public static ProductDTO ToProductDTO(this Product product)
         {
             return new ProductDTO
             {
-                ProductId = product.ProductId,
-                ProductCode = product.ProductCode,
+                ProCode = product.ProductCode,
                 Name = product.Name,
                 Price = product.Price,
                 LaborPrice = product.LaborPrice ?? 0, // Handle nullable types
@@ -42,9 +20,9 @@ namespace DIAN_.Mapper
                 SubDiamondAmount = product.SubDiamondAmount ?? 0, 
                 MainDiamondAmount= product.MainDiamondAmount ?? 0,
                 ShellAmount= product.ShellAmount ?? 0,
-                CollectionId = product.CollectionId,
             };
         }
+
         public static ProductListDTO ToProductListDTO(this Product product)
         {
             return new ProductListDTO
@@ -61,11 +39,10 @@ namespace DIAN_.Mapper
                 Name = product.Name,
                 Price = product.Price,
                 Image = product.ImageLinkList,
-                ProductCode = product.ProductCode,
+                ProCode = product.ProductCode,
                 Description = product.Description,
                 Carat = diamond.Carat ?? 0,
                 SubDiamond = subDiamondColors,
-
             };
         }
         public static Product ToProductFromCreateDTO (this CreateProductRequestDTO productRequestDTO)
@@ -74,16 +51,13 @@ namespace DIAN_.Mapper
             {
                 Name = productRequestDTO.Name,
                 Price = productRequestDTO.Price,
-                ProductCode = productRequestDTO.ProductCode,
+                ProductCode = productRequestDTO.ProCode,
                 LaborPrice = productRequestDTO.LaborPrice,
                 Description = productRequestDTO.Description,
                 ImageLinkList = productRequestDTO.ImageLinkList,
                 ChargeUp = productRequestDTO.ChargeUp,
                 MainDiamondId = productRequestDTO.MainDiamondId,
                 SubDiamondAmount = productRequestDTO.SubDiamondAmount,
-                MainDiamondAmount= productRequestDTO.SubDiamondAmount,
-                ShellAmount = productRequestDTO.ShellAmount,
-                CollectionId = productRequestDTO.CollectionId,
             };
         }
 

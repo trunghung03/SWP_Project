@@ -50,5 +50,18 @@ namespace DIAN_.Mapper
                 Status = promotionModel.Status,
             };
         }
+        public static Promotion ToPromotionFromUpdateDto(this UpdatePromotionRequestDto promotionModel, int id)
+        {
+            return new Promotion
+            {
+                Name = promotionModel.Name,
+                Code = promotionModel.Code,
+                Amount = promotionModel.Amount,
+                Description = promotionModel.Description,
+                ValidFrom = promotionModel.ValidFrom,
+                ValidTo = promotionModel.ValidTo,
+                Status = promotionModel.Status
+            };
+        }
     }
 }
