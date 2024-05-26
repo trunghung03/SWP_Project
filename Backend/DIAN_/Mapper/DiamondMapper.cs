@@ -4,7 +4,7 @@ using DIAN_.Models;
 
 namespace DIAN_.Mapper
 {
-    public static class DiamondMappercs
+    public static class DiamondMapper
     {
         public static DiamondDto ToDiamondDTO(this Diamond diamond)
         {
@@ -64,6 +64,21 @@ namespace DIAN_.Mapper
                 DiamondSize = updateDiamond.DiamondSize,
                 AmountAvailable = updateDiamond.AmountAvailable,
                 Status = updateDiamond.Status,
+            };
+        }
+        public static DiamondDetailDto ToDiamondDetailDTO(this Diamond diamond)
+        {
+            return new DiamondDetailDto
+            {
+                DiamondId = diamond.DiamondId,
+                Name = diamond.Name,
+                Color = diamond.Color,
+                Clarity = diamond.Clarity,
+                Cut = diamond.Cut,
+                Carat = diamond.Carat,
+                Cost = diamond.Cost,
+                CertificateScan = diamond.CertificateScan,
+                DiamondSize = diamond.DiamondSize ?? 0,
             };
         }
     }

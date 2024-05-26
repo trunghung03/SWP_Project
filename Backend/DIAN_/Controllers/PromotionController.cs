@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/promotion")]
     [ApiController]
+    [Route("api/promotion")]
+  
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionRepository;
@@ -47,7 +48,7 @@ namespace DIAN_.Controllers
             return Ok(promotion.ToPromotionDetail());
         }
 
-        [HttpPost("create")]
+        [HttpPost("createpromotion")]
         public async Task<IActionResult> CreatePromotion([FromBody] CreatePromotionRequestDto promotionDto)
         {
             if(!ModelState.IsValid)
