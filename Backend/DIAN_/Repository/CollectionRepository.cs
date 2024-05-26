@@ -1,5 +1,4 @@
-﻿using DIAN_.Data;
-using DIAN_.DTOs.CategoryDTO;
+﻿using DIAN_.DTOs.CategoryDTO;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;

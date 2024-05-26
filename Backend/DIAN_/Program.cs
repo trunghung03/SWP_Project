@@ -8,7 +8,6 @@ using UserApplication.Interfaces;
 using UserApplication.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using DIAN_.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

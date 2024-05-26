@@ -5,7 +5,6 @@ using DIAN_.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DIAN_.Data;
 
 namespace DIAN_.Controllers
 {
