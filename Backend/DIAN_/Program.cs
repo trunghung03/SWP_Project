@@ -30,10 +30,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<IShellMaterialRepository,ShellRepository>();
 builder.Services.AddScoped<IPromotionRepository,PromotionRepository>();
 builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
 builder.Services.AddScoped<IOrderRepository,OrderRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 
 var app = builder.Build();
 
@@ -50,6 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.UseRouting();
 

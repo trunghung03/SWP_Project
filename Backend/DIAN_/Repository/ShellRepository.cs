@@ -3,9 +3,6 @@ using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DIAN_.Repository
 {
@@ -30,7 +27,6 @@ namespace DIAN_.Repository
             if (shell != null)
             {
                 shell.Status = false;
-                _context.Shellmaterials.Update(shell);
                 await _context.SaveChangesAsync();
             }
         }
@@ -44,9 +40,9 @@ namespace DIAN_.Repository
         public async Task<List<ShellMaterialDTO>> GetAllAsync()
         {
             return await _context.Shellmaterials
-                                 .Where(s => s.Status)
-                                 .Select(s => s.ToShellMaterialDTO())
-                                 .ToListAsync();
+                .Where(s => s.Status)
+                .Select(s => s.ToShellMaterialDTO())
+                .ToListAsync();
         }
 
         public async Task<ShellMaterialDTO> UpdateAsync(ShellMaterialDTO shellDTO)
@@ -65,6 +61,13 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
 
             return shell.ToShellMaterialDTO();
+        }
+        public async Task<List<string>> GetListNamesAsync()
+        {
+            return await _context.Shellmaterials
+                .Where(s => s.Status)
+                .Select(s => s.Name)
+                .ToListAsync();
         }
     }
 }

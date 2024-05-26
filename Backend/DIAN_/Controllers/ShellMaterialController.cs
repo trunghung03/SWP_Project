@@ -19,6 +19,7 @@ namespace DIAN_.Controllers
             _context = context;
             _shellRepo = shellRepo;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -26,8 +27,8 @@ namespace DIAN_.Controllers
             return Ok(shells);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var shell = await _shellRepo.GetByIdAsync(id);
             if (shell == null)
@@ -45,8 +46,8 @@ namespace DIAN_.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdShell.ShellMaterialId }, createdShell);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateShellMaterialRequestDTO shellDTO)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateShellMaterialRequestDTO shellDTO)
         {
             var existingShell = await _shellRepo.GetByIdAsync(id);
             if (existingShell == null)
@@ -59,11 +60,18 @@ namespace DIAN_.Controllers
             return Ok(updatedShell);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _shellRepo.DeleteAsync(id);
             return NoContent();
+        }
+
+        [HttpGet("listNames")]
+        public async Task<IActionResult> GetAllNames()
+        {
+            var names = await _shellRepo.GetListNamesAsync();
+            return Ok(names);
         }
     }
 }
