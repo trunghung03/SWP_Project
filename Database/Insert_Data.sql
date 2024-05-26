@@ -9,14 +9,15 @@ INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber
 ('clark.kent@example.com', '123', 'Kent', 'Clark', '404 Maple St', '654-987-3210', 4000, 1);
 
 -- Insert dummy data into EMPLOYEE table
+-- Insert dummy data into EMPLOYEE table with updated roles
 INSERT INTO EMPLOYEE (Role, Email, Password, LastName, FirstName, Address, PhoneNumber, Status) VALUES
 ('Admin', 'admin@example.com', '123', 'Admin', 'One', '789 Pine St', '321-654-9870', 1),
 ('Manager', 'manager@example.com', '123', 'Manager', 'Two', '101 Oak St', '654-321-0987', 1),
-('Sales', 'sales@example.com', '123', 'Sales', 'Three', '123 Elm St', '123-987-6540', 1),
-('Support', 'support@example.com', '123', 'Support', 'Four', '456 Birch St', '456-789-0123', 1),
-('Tech', 'tech@example.com', '123', 'Tech', 'Five', '789 Cedar St', '789-012-3456', 1),
-('HR', 'hr@example.com', '123', 'HR', 'Six', '101 Maple St', '321-456-7890', 1),
-('Finance', 'finance@example.com', '123', 'Finance', 'Seven', '202 Oak St', '654-321-1234', 1);
+('SalesStaff', 'sales@example.com', '123', 'Sales', 'Three', '123 Elm St', '123-987-6540', 1),
+('DeliveryStaff', 'delivery@example.com', '123', 'Delivery', 'Four', '456 Birch St', '456-789-0123', 1),
+('SalesStaff', 'sales2@example.com', '123', 'Sales', 'Five', '789 Cedar St', '789-012-3456', 1),
+('Manager', 'manager2@example.com', '123', 'Manager', 'Six', '101 Maple St', '321-456-7890', 1),
+('Admin', 'admin2@example.com', '123', 'Admin', 'Seven', '202 Oak St', '654-321-1234', 1);
 
 -- Insert dummy data into ARTICLE table
 INSERT INTO ARTICLE (Title, Content, Employee, [Date], [Image], Tag, Status) VALUES
