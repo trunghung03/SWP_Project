@@ -57,6 +57,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<IPromotionRepository,PromotionRepository>();
 builder.Services.AddScoped<IOrderRepository,OrderRepository>();
+builder.Services.AddScoped<IShellMaterialRepository,ShellRepository>(); 
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
