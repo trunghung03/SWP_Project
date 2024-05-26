@@ -20,5 +20,7 @@ namespace DIAN_.DTOs.Account
 
         [Required]
         public string? Role { get; set; }
+        [Required]
+        public bool Status { get; set; }
     }
 }

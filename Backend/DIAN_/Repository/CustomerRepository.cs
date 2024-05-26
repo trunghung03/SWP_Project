@@ -37,6 +37,14 @@ namespace DIAN_.Repository
             return customer;
         }
 
+        public async Task<Customer?> GetByIdAsync(int id)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+            if (customer == null) return null;
+
+            return customer;
+        }
+
         public async Task<Customer?> LoginAsync(LoginDto loginDto)
         {
 
@@ -48,7 +56,7 @@ namespace DIAN_.Repository
             return customer;
         }
 
-        public async Task<Customer?> RegisterAsync(RegisterEmployeeDto user)
+        public async Task<Customer?> RegisterAsync(RegisterUserDto user)
         {
             if (_context.Customers.Any(_context => _context.Email == user.Email)) { return null; }
 
@@ -81,6 +89,7 @@ namespace DIAN_.Repository
             customer.Address = customerDto.Address;
             customer.PhoneNumber = customerDto.PhoneNumber;
             customer.Points = customerDto.Points;
+            customer.Status = customerDto.Status;
 
             await _context.SaveChangesAsync();
             return customer;

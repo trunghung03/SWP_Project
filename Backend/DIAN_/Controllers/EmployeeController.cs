@@ -39,7 +39,7 @@ namespace UserApplication.Controllers
                 });
         }
 
-        [HttpPost("registercustomer")]
+        [HttpPost("registeremployee")]
         public async Task<IActionResult> Register(RegisterEmployeeDto user)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
@@ -72,6 +72,17 @@ namespace UserApplication.Controllers
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
             var employee = await _employeeRepository.GetByEmailAsync(email);
+            if (employee == null) return NotFound();
+
+            return Ok(employee);
+        }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var employee = await _employeeRepository.GetByIdAsync(id);
             if (employee == null) return NotFound();
 
             return Ok(employee);

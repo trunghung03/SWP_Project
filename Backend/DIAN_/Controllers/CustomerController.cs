@@ -40,7 +40,7 @@ namespace UserApplication.Controllers
         }
 
         [HttpPost("registercustomer")]
-        public async Task<IActionResult> Register(RegisterEmployeeDto user)
+        public async Task<IActionResult> Register(RegisterUserDto user)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
@@ -72,6 +72,17 @@ namespace UserApplication.Controllers
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
             var customer = await _customerRepository.GetByEmailAsync(email);
+            if (customer == null) return NotFound();
+
+            return Ok(customer);
+        }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var customer = await _customerRepository.GetByIdAsync(id);
             if (customer == null) return NotFound();
 
             return Ok(customer);
