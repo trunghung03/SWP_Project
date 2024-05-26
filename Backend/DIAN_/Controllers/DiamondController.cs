@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/diamond")]
     [ApiController]
+    [Route("api/diamond")]
     public class DiamondController : ControllerBase
     {
         private readonly IDiamondRepository _diamondRepository;
@@ -30,7 +30,7 @@ namespace DIAN_.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get/{id:int}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDiamondByIdAsync([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -40,14 +40,14 @@ namespace DIAN_.Controllers
             var diamond = await _diamondRepository.GetDiamondByIdAsync(id);
             if (diamond == null)
             {
-                return NotFound();
+                return NotFound("Diamond does not exist");
             }
-            return Ok(diamond.ToDiamondDTO);
+            return Ok(diamond.ToDiamondDetailDTO());
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> AddDiamondAsync([FromBody]  CreateDiamondRequestDto diamondDto)
+        [HttpPost("creatediamond")]
+        public async Task<IActionResult> AddDiamondAsync([FromBody] CreateDiamondRequestDto diamondDto)
         {
             if (!ModelState.IsValid)
             {
@@ -59,7 +59,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpPut]
-        [Route("{id: int}")]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> UpdateDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -71,7 +71,8 @@ namespace DIAN_.Controllers
             return Ok(diamondModel.ToDiamondDTO);
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut]
+        [Route("delete/{id:int}")]
         public async Task<IActionResult> DeleteDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto deleteDto)
         {
             if (!ModelState.IsValid)
@@ -81,8 +82,6 @@ namespace DIAN_.Controllers
                 return NotFound("Diamond does not exist");
             return Ok(diamond.ToDiamondDTO);
         }
-
-
-    } 
+    }
 
 }
