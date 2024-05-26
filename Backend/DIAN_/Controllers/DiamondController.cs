@@ -18,7 +18,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllDiamondsAsync(DiamondQuery diamondQuery)
+        public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery diamondQuery)
         {
             if (!ModelState.IsValid)
             {
@@ -30,7 +30,7 @@ namespace DIAN_.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("get/{id:int}")]
         public async Task<IActionResult> GetDiamondByIdAsync([FromRoute] int id)
         {
             if (!ModelState.IsValid)

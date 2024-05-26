@@ -8,19 +8,19 @@ namespace DIAN_.Interfaces
     {
         Task<List<Promotion>> GetAllPromotionAsync(PromotionQuery promotionQuery);
 
-        Task<Promotion> GetPromotionByIdAsync(int id);
+        Task<Promotion?> GetPromotionByIdAsync(int id);
 
-        Task<Promotion> GetPromotionByCodeAsync(string proCode);
+        Task<Promotion?> GetPromotionByCodeAsync(string proCode);
 
         Task<Promotion> CreatePromotionAsync(Promotion promotionModel); 
 
-        Task<Promotion> UpdatePromotionAsync(int id, Promotion promotion);   
+        Task<Promotion?> UpdatePromotionAsync(int id, Promotion promotion);   
 
-        Task<Promotion> DeletePromotionAsync(int id, Promotion promotion);
+        Task<Promotion?> DeletePromotionAsync(int id, Promotion promotion);
 
         //Task<bool> HasPromotionAsync(int id);
 
-        Task<List<Promotion>> SearchPromotionsByNameAsync(string name);
+        Task<List<Promotion?>> SearchPromotionsByNameAsync(string name);
 
         Task<List<Promotion>> GetActivePromotionsAsync();
 

@@ -32,7 +32,7 @@ namespace DIAN_.Controllers
         }
 
 
-        [HttpGet("get/{id:int}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace DIAN_.Controllers
             return Ok(promotion.ToPromotionDetail());
         }
 
-        [HttpDelete("delete/{id:int}")]
+        [HttpPut("delete/{id:int}")]
         public async Task<IActionResult> DeletePromotion([FromRoute] int id, UpdatePromotionRequestDto deletePromotion)
         {
             if(!ModelState.IsValid)

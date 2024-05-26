@@ -76,7 +76,7 @@ namespace DIAN_.Repository
             return existingPromotion;
         }
 
-        public async Task<Promotion> GetPromotionByCodeAsync(string proCode)
+        public async Task<Promotion?> GetPromotionByCodeAsync(string proCode)
         {
             var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
             if(existingPromotion == null)
