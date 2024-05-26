@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserApplication.Dtos.Account
+namespace DIAN_.DTOs.Account
 {
-    public class RegisterUserDto
+    public class UpdateEmployeeDto
     {
         [Required]
         [EmailAddress]
@@ -18,6 +18,7 @@ namespace UserApplication.Dtos.Account
         [Required]
         public string? PhoneNumber { get; set; }
 
-        public long? Points { get; set; }
+        [Required]
+        public string? Role { get; set; }
     }
 }
