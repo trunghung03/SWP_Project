@@ -19,5 +19,7 @@ namespace DIAN_.DTOs.Account
         public string? PhoneNumber { get; set; }
 
         public long? Points { get; set; }
+        [Required]
+        public bool Status { get; set; }
     }
 }

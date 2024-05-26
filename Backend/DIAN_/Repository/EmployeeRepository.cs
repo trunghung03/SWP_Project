@@ -37,6 +37,14 @@ namespace DIAN_.Repository
             return employee;
         }
 
+        public async Task<Employee?> GetByIdAsync(int id)
+        {
+            var employee = await _context.Employees.FirstOrDefaultAsync(c => c.EmployeeId == id);
+            if (employee == null) return null;
+
+            return employee;
+        }
+
         public async Task<Employee?> LoginAsync(LoginDto loginDto)
         {
 
@@ -81,6 +89,7 @@ namespace DIAN_.Repository
             employee.Address = employeeDto.Address;
             employee.PhoneNumber = employeeDto.PhoneNumber;
             employee.Role = employeeDto.Role;
+            employee.Status = employeeDto.Status;
 
             await _context.SaveChangesAsync();
             return employee;
