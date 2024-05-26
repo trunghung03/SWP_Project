@@ -12,11 +12,11 @@ namespace DIAN_.Interfaces
 
         Task<Promotion> GetPromotionByCodeAsync(string proCode);
 
-        Task<Promotion> CreatePromotionAsync(Promotion promotionModel);
+        Task<Promotion> CreatePromotionAsync(Promotion promotionModel); 
 
-        Task<Promotion> UpdatePromotionAsync(int id, UpdatePromotionRequestDto promotion);   
+        Task<Promotion> UpdatePromotionAsync(int id, Promotion promotion);   
 
-        Task<Promotion> DeletePromotionAsync(int id, UpdatePromotionRequestDto promotion);
+        Task<Promotion> DeletePromotionAsync(int id, Promotion promotion);
 
         //Task<bool> HasPromotionAsync(int id);
 

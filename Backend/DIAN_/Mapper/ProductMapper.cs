@@ -22,6 +22,7 @@ namespace DIAN_.Mapper
                 ShellAmount= product.ShellAmount ?? 0,
             };
         }
+
         public static ProductListDTO ToProductListDTO(this Product product)
         {
             return new ProductListDTO

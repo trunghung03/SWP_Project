@@ -1,14 +1,10 @@
 ﻿namespace DIAN_.Helper
 {
-    public class PromotionQuery
+    public class DiamondQuery
     {
         public string? Name { get; set; } = null;
 
-        public decimal? Amount { get; set; } = null;
-
-        public DateTime StartDate { get; set; }
-
-        //public DateTime EndDate { get; set; }
+        public decimal? Cost { get; set; } = null;
 
         public string? SortBy { get; set; } = null;
 
@@ -19,4 +15,3 @@
         public int PageSize { get; set; } = 20;
     }
 }
-
