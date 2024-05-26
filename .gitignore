@@ -25,3 +25,4 @@ yarn-error.log*
 .vs/slnx.sqlite
 .vs/slnx.sqlite
 /Backend/DIAN_/Migrations
+Backend/DIAN_/appsettings.json

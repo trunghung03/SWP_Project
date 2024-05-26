@@ -45,6 +45,7 @@ namespace DIAN_.Mapper
                 CollectionId = product.CollectionId,
             };
         }
+
         public static ProductListDTO ToProductListDTO(this Product product)
         {
             return new ProductListDTO

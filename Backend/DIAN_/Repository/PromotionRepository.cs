@@ -29,6 +29,16 @@ namespace DIAN_.Repository
                 promotion = promotion.Where(x => x.Name.Contains(promotionQuery.Name));
             }
 
+            if (promotionQuery.Amount.HasValue)
+            {
+                promotion = promotion.Where(x => x.Amount == promotionQuery.Amount.Value);
+            }
+
+            if (promotionQuery.StartDate != default(DateTime))
+            {
+                promotion = promotion.Where(x => x.ValidFrom >= promotionQuery.StartDate);
+            }
+
             switch (promotionQuery.SortBy)
             {
                 case "Name":
@@ -44,7 +54,7 @@ namespace DIAN_.Repository
 
             return await promotion.ToListAsync();
         }
-        public async Task<Promotion?> DeletePromotionAsync(int id, UpdatePromotionRequestDto promotion)
+        public async Task<Promotion?> DeletePromotionAsync(int id, Promotion promotion)
         {
             var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
             if (existingPromotion != null)
@@ -59,18 +69,32 @@ namespace DIAN_.Repository
         public async Task<List<Promotion>> GetActivePromotionsAsync()
         {
             var existingPromotion = await _context.Promotions.Where(x => x.Status == true).ToListAsync();
+            if(existingPromotion == null)
+            {
+                return null;
+            }
             return existingPromotion;
         }
 
-        public Task<Promotion> GetPromotionByCodeAsync(string proCode)
+        public async Task<Promotion> GetPromotionByCodeAsync(string proCode)
         {
-            var existingPromotion = _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            if(existingPromotion == null)
+            {
+                return null;
+            }
             return existingPromotion;
         }
 
         public async Task<Promotion?> GetPromotionByIdAsync(int id)
         {
-            return await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+           if(existingPromotion == null)
+           {
+               return null;
+           }
+           return existingPromotion;
+           
         }
 
         //public Task<bool> HasPromotionAsync(int id)
@@ -80,10 +104,15 @@ namespace DIAN_.Repository
 
         public async Task<List<Promotion>> SearchPromotionsByNameAsync(string name)
         {
-            return await _context.Promotions.Where(x => x.Name.Contains(name)).ToListAsync();
+            var promotion = await _context.Promotions.Where(x => x.Name.Contains(name)).ToListAsync();
+            if (promotion == null)
+            {
+                return null;
+            }
+            return promotion;
         }
 
-        public async Task<Promotion?> UpdatePromotionAsync(int id, UpdatePromotionRequestDto promotion)
+        public async Task<Promotion?> UpdatePromotionAsync(int id, Promotion promotion)
         {
             var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
             if (existingPromotion != null)
