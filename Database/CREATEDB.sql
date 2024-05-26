@@ -106,7 +106,7 @@ CREATE TABLE DIAMOND (
     Status BIT NOT NULL DEFAULT 1
 );
 
-CREATE TABLE COLLECTIONS(
+CREATE TABLE COLLECTION (
 	CollectionID INT PRIMARY KEY,	
 	Name NVARCHAR(128) NOT NULL,
     Status BIT NOT NULL DEFAULT 1,
@@ -135,7 +135,7 @@ CREATE TABLE PRODUCT (
     SubDiamondAmount INT,
 	ShellAmount DECIMAL(18, 2),
     Status BIT NOT NULL DEFAULT 1,
-	CollectionID INT FOREIGN KEY REFERENCES COLLECTIONS(CollectionID),
+	CollectionID INT FOREIGN KEY REFERENCES COLLECTION(CollectionID),
 	CategoryID INT FOREIGN KEY REFERENCES CATEGORY(CategoryID),
 );
 
@@ -236,7 +236,7 @@ VALUES
 
 
 -- Insert dummy data into COLLECTIONS table
-INSERT INTO COLLECTIONS (CollectionID, Name, Status, Description)
+INSERT INTO COLLECTION (CollectionID, Name, Status, Description)
 VALUES
 (1, 'Collection 1', 1, 'Description for Collection 1'),
 (2, 'Collection 2', 1, 'Description for Collection 2'),

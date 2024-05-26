@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DIAN_.Mapper;
 using DIAN_.DTOs.ProductDTOs;
 using Microsoft.AspNetCore.Http.HttpResults;
+using DIAN_.Data;
 
 namespace DIAN_.Repository
 {
