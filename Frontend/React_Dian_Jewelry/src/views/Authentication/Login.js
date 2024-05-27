@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/rightImage.png';
 import { loginApi, getUserInfo } from '../../services/UserService';
-
+import { jwtDecode } from 'jwt-decode';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,6 +19,15 @@ const Login = () => {
                 localStorage.setItem("token", res.data.token);
                 console.log(">>> check login: ", res.data);
 
+                const fwtDecode =jwtDecode(res.data.token);
+                localStorage.setItem("convertedCode", JSON.stringify(fwtDecode));
+                console.log(localStorage.getItem("convertedCode")); 
+                const storeConvertedCode = localStorage.getItem("convertedCode");
+                if(storeConvertedCode){
+                    const decodedToken = JSON.parse(storeConvertedCode);
+                    const role = decodedToken.role;
+                    console.log(role);
+                }
                 // Fetch user info
                 let userInfoRes = await getUserInfo(email);
                 if (userInfoRes && userInfoRes.data) {
