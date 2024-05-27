@@ -20,7 +20,6 @@ namespace DIAN_.Mapper
                 CertificateScan = diamond.CertificateScan,
                 DiamondSize = diamond.DiamondSize ?? 0,
                 AmountAvailable = diamond.AmountAvailable,
-                Status = diamond.Status,
             };
         }
 
