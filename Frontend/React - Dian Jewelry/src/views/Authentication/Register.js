@@ -134,62 +134,63 @@ const Register = () => {
     }, []);
 
     return (
-        <div className="main_container container-fluid">
-            <div className="row min-vh-100">
-                <div className="col-md-6 d-flex align-items-center justify-content-center">
-                    <div className="w-75">
-                        <form className="sign_up_form">
-                            <h3 className="sign_up_title">Sign up</h3>
-                            <div className="name_section">
-                                <div className="name_section_row">
-                                    <div className="first_name_wrapper">
-                                        <label className="first_name_label" htmlFor="first_name">First name</label>
-                                        <input type="text" className="form-control" id="first_name" placeholder="Enter first name" required />
-                                    </div>
-                                    <div className="last_name_wrapper">
-                                        <label className="last_name_label" htmlFor="last_name">Last name</label>
-                                        <input type="text" className="form-control" id="last_name" placeholder="Enter last name" required />
-                                    </div>
+        <div className="register_main_container container-fluid">
+            <div className="register_wrapper">
+                {/* Left Side: register Form */}
+                <div className="register_left_side col-md-6">
+                    <form className="sign_up_form">
+                        <h3 className="sign_up_title">Sign up</h3>
+                        <div className="name_section">
+                            <div className="name_section_row">
+                                <div className="first_name_wrapper">
+                                    <label className="first_name_label" htmlFor="first_name">First name</label>
+                                    <input type="text" className="form-control" id="first_name" placeholder="Enter first name" required />
+                                </div>
+                                <div className="last_name_wrapper">
+                                    <label className="last_name_label" htmlFor="last_name">Last name</label>
+                                    <input type="text" className="form-control" id="last_name" placeholder="Enter last name" required />
                                 </div>
                             </div>
-                            <div className="email_section">
-                                <label className="email_label" htmlFor="email">Email</label>
-                                <input type="email" className="form-control" id="email" placeholder="Enter email" required />
-                            </div>
-                            <div className="password_section mb-3 position-relative">
-                                <label className="password_label" htmlFor="password">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder="Enter password" required />
-                                <span className="password_eye">
-                                    <i className="far fa-eye" id="togglePassword" style={{ cursor: 'pointer' }}></i>
-                                </span>
-                            </div>
-                            <div className="re_password_section mb-3 position-relative">
-                                <label className="password_label" htmlFor="re_password">Re-enter password</label>
-                                <input type="password" className="form-control" id="re_password" placeholder="Re-enter password" required />
-                                <span className="re_password_eye">
-                                    <i className="far fa-eye" id="toggleRePassword" style={{ cursor: 'pointer' }}></i>
-                                </span>
-                            </div>
-                            <div className="term_of_service mb-3">
-                                <input id="tos_checkbox" type="checkbox" />
-                                <label style={{ fontSize: '13px' }} className="tos">By signing up, I agree with the <a className="tos_link" href="#" id="tosLink">Terms of Service & Privacy Policy</a></label>
-                            </div>
-                            <div className="submit_section">
-                                <button id="successPopup" type="submit" className="sign_up_button btn btn-block">Sign up</button>
-                            </div>
-                            <div className="sign_up_section">
-                                <span>Already have an account? <a className="sign_up_link" href="/login">Sign in</a></span>
-                            </div>
-                            <div className="google_section text-center">
-                                <hr className="line" />
-                                <button type="button" className="google_login btn btn-block">
-                                    <i className="icon_gg fab fa-google"></i> Sign up with Google Account
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div className="email_section">
+                            <label className="email_label" htmlFor="email">Email</label>
+                            <input type="email" className="form-control" id="email" placeholder="Enter email" required />
+                        </div>
+                        <div className="password_section mb-3 position-relative">
+                            <label className="password_label" htmlFor="password">Password</label>
+                            <input type="password" className="form-control" id="password" placeholder="Enter password" required />
+                            <span className="password_eye">
+                                <i className="far fa-eye" id="togglePassword" style={{ cursor: 'pointer' }}></i>
+                            </span>
+                        </div>
+                        <div className="re_password_section mb-3 position-relative">
+                            <label className="password_label" htmlFor="re_password">Re-enter password</label>
+                            <input type="password" className="form-control" id="re_password" placeholder="Re-enter password" required />
+                            <span className="re_password_eye">
+                                <i className="far fa-eye" id="toggleRePassword" style={{ cursor: 'pointer' }}></i>
+                            </span>
+                        </div>
+                        <div className="term_of_service mb-3">
+                            <input id="tos_checkbox" type="checkbox" />
+                            <label style={{ fontSize: '13px' }} className="tos">I agree with the <a className="tos_link" href="#" id="tosLink">Terms of Service & Privacy Policy</a></label>
+                        </div>
+                        <div className="submit_section">
+                            <button id="successPopup" type="submit" className="sign_up_button btn btn-block">Sign up</button>
+                        </div>
+                        <div className="sign_up_section">
+                            <span>Already have an account? <a className="sign_up_link" href="/login">Sign in</a></span>
+                        </div>
+                        <div className="google_section text-center">
+                            <hr className="line" />
+                            <button type="button" className="google_login btn btn-block">
+                                <i className="icon_gg fab fa-google"></i> Sign up with Google Account
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div className="col-md-6 p-0">
+
+                {/* Right Side: Image */}
+                <div className="register_right_side col-md-6 p-0">
                     <img className="register_image" src={rightImage} alt="Ring photo" />
                 </div>
             </div>
@@ -202,15 +203,15 @@ const Register = () => {
                         you agree to the following terms, conditions and private policy.
                     </p>
                     <p>
-                        - Account Creation: You must provide accurate and complete information during the registration process.
+                        - <strong>Account Creation:</strong> You must provide accurate and complete information during the registration process.
                         You are responsible for maintaining the confidentiality of your account information and password.<br />
-                        - Purchases and Payments: Payments must be made through the provided payment options. All sales are final, and returns or exchanges are subject to our return policy.<br />
-                        - User Conduct: You agree not to use our website for any unlawful purposes or to engage in any conduct that could damage or impair the functionality of our services.<br />
-                        - Information Collection: We collect personal information when you create an account, make a purchase, or contact us. This includes your name, email address, shipping address, and payment information.<br />
-                        - Use of Information: We use your information to process orders, communicate with you, and improve our services. We may also use your email address to send you promotional offers and updates, which you can opt out of at any time.<br />
-                        - Data Protection: We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure.<br />
-                        - Your Rights: You have the right to access, correct, or delete your personal information. You can update your account information at any time or contact us for assistance.<br />
-                        - Changes to This Policy: We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.<br />
+                        - <strong>Purchases and Payments:</strong> Payments must be made through the provided payment options. All sales are final, and returns or exchanges are subject to our return policy.<br />
+                        - <strong>User Conduct:</strong> You agree not to use our website for any unlawful purposes or to engage in any conduct that could damage or impair the functionality of our services.<br />
+                        - <strong>Information Collection:</strong> We collect personal information when you create an account, make a purchase, or contact us. This includes your name, email address, shipping address, and payment information.<br />
+                        - <strong>Use of Information:</strong> We use your information to process orders, communicate with you, and improve our services. We may also use your email address to send you promotional offers and updates, which you can opt out of at any time.<br />
+                        - <strong>Data Protection:</strong> We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure.<br />
+                        - <strong>Your Rights:</strong> You have the right to access, correct, or delete your personal information. You can update your account information at any time or contact us for assistance.<br />
+                        - <strong>Changes to This Policy:</strong> We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.<br />
                     </p>
                     <p className="tos_introduce">
                         By creating an account, you acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you.

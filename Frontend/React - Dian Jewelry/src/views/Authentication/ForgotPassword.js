@@ -23,7 +23,7 @@ const ForgotPassword = () => {
                             className: "swal-button"
                         },
                     }).then(() => {
-                        window.location.href = "/resetPassword"; 
+                        window.location.href = "/resetPassword";
                     });
                 } else {
                     swal({
@@ -67,29 +67,27 @@ const ForgotPassword = () => {
     }, []);
 
     return (
-        <div className="main_container container-fluid">
-            <div className="row min-vh-100">
+        <div className="fp_main_container container-fluid">
+            <div className="fp_wrapper">
                 {/* Left Side: Forgot Password Form */}
-                <div className="col-md-6 d-flex align-items-center justify-content-center">
-                    <div className="w-75">
-                        <form className="forgot_password_form">
-                            <h3 className="forgot_password_title">Forgot password</h3>
-                            <p className="sub_title">Enter your email so that we can send a verify email to reset password</p>
-                            <div className="email_section">
-                                <label className="email_label" htmlFor="email">Email</label>
-                                <input type="email" className="form-control" id="email" placeholder="Enter email" required />
-                            </div>
-                            <div className="submit_section">
-                                <button id="emailPopup" type="submit" className="sign_in_button btn btn-block">Send verify email</button>
-                            </div>
-                            <a className="back_to_login" href="/login">&lt; Back to login</a>
-                        </form>
-                    </div>
+                <div className="fp_left_side col-md-6 d-flex align-items-center justify-content-center">
+                    <form className="forgot_password_form">
+                        <h3 className="forgot_password_title">Forgot password</h3>
+                        <p className="fp_sub_title">Enter your account's email so that we can send a verify email to confirm for reset password</p>
+                        <div className="fp_email_section">
+                            <label className="fp_email_label" htmlFor="email">Email</label>
+                            <input type="email" className="form-control" id="email" placeholder="Enter email" required />
+                        </div>
+                        <div className="fp_submit_section">
+                            <button id="emailPopup" type="submit" className="fp_button btn btn-block">Send verify email</button>
+                        </div>
+                        <a className="back_to_login" href="/login">&lt; Back to login</a>
+                    </form>
                 </div>
 
                 {/* Right Side: Image */}
-                <div className="col-md-6 p-0">
-                    <img className="right_image" src={rightImage} alt="Ring photo" />
+                <div className="fp_right_side col-md-6 p-0">
+                    <img className="fp_right_image" src={rightImage} alt="Ring photo" />
                 </div>
             </div>
 
@@ -104,6 +102,7 @@ const ForgotPassword = () => {
                     <button className="confirm-btn">Confirm</button>
                 </div>
             </div>
+
         </div>
     );
 };
