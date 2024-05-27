@@ -1,10 +1,12 @@
 ﻿using DIAN_.DTOs.CategoryDTO;
+
 using DIAN_.Models;
 
 namespace DIAN_.Mapper
 {
     public static class CategoryMapper
     {
+
         public static Category FromCreateDtoToCategory(this CreateCategoryDTO categoryDto)
         {
             return new Category
@@ -24,3 +26,4 @@ namespace DIAN_.Mapper
         }
     }
 }
+

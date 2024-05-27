@@ -13,14 +13,14 @@ namespace DIAN_.Mapper
         {
             return new Promotion
             {
-                PromotionId = promotionModel.PromotionId,
                 Name = promotionModel.Name,
                 Code = promotionModel.Code,
                 Amount = promotionModel.Amount,
                 Description = promotionModel.Description,
                 ValidFrom = promotionModel.StartDate,
                 ValidTo = promotionModel.EndDate,
-                Status = promotionModel.Status
+                EmployeeId = promotionModel.EmployeeId,
+                Status = true,
             };
         }
 
@@ -47,6 +47,7 @@ namespace DIAN_.Mapper
                 Description = promotionModel.Description,
                 StartDate = promotionModel.ValidFrom,
                 EndDate = promotionModel.ValidTo,
+                EmployeeId = promotionModel.EmployeeId,
                 Status = promotionModel.Status,
             };
         }

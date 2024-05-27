@@ -20,7 +20,6 @@ namespace DIAN_.Mapper
                 CertificateScan = diamond.CertificateScan,
                 DiamondSize = diamond.DiamondSize ?? 0,
                 AmountAvailable = diamond.AmountAvailable,
-                Status = diamond.Status,
             };
         }
 
@@ -38,12 +37,12 @@ namespace DIAN_.Mapper
             return new Diamond
             {
                 Name = diamondRequestDTO.Name,
-                //Color = diamondRequestDTO.Color,
-                //Clarity = diamondRequestDTO.Clarity,
-                //Cut = diamondRequestDTO.Cut,
-                //Carat = diamondRequestDTO.Carat,
+                Color = diamondRequestDTO.Color,
+                Clarity = diamondRequestDTO.Clarity,
+                Cut = diamondRequestDTO.Cut,
+                Carat = diamondRequestDTO.Carat,
                 Cost = diamondRequestDTO.Cost,
-                //CertificateScan = diamondRequestDTO.CertificateScan,
+                CertificateScan = diamondRequestDTO.CertificateScan,
                 DiamondSize = diamondRequestDTO.DiamondSize,
                 AmountAvailable = diamondRequestDTO.AmountAvailable,
                 Status = diamondRequestDTO.Status,
@@ -53,14 +52,13 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
-                DiamondId = updateDiamond.DiamondId,
                 Name = updateDiamond.Name,
-                //Color = diamondRequestDTO.Color,
-                //Clarity = diamondRequestDTO.Clarity,
-                //Cut = diamondRequestDTO.Cut,
-                //Carat = diamondRequestDTO.Carat,
+                Color = updateDiamond.Color,
+                Clarity = updateDiamond.Clarity,
+                Cut = updateDiamond.Cut,
+                Carat = updateDiamond.Carat,
                 Cost = updateDiamond.Cost,
-                //CertificateScan = diamondRequestDTO.CertificateScan,
+                CertificateScan = updateDiamond.CertificateScan,
                 DiamondSize = updateDiamond.DiamondSize,
                 AmountAvailable = updateDiamond.AmountAvailable,
                 Status = updateDiamond.Status,

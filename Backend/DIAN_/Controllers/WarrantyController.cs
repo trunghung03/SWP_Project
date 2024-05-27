@@ -2,35 +2,38 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/warranty")]
     public class WarrantyController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWarrantyRepository _warrantyRepo;
+        private readonly IWarrantyRepository _warrantyRepository;
 
-        public WarrantyController(ApplicationDbContext context, IWarrantyRepository warrantyRepo)
+        public WarrantyController(ApplicationDbContext context, IWarrantyRepository warrantyRepository)
         {
             _context = context;
-            _warrantyRepo = warrantyRepo;
+            _warrantyRepository = warrantyRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllWarranty()
         {
-            var warranties = await _warrantyRepo.GetAllAsync();
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
+            }
+            var warranties = await _warrantyRepository.GetAllWarrantyAsync();
             return Ok(warranties);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetWarrantyById([FromRoute] int id)
         {
-            var warranty = await _warrantyRepo.GetByIdAsync(id);
+            var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
             if (warranty == null)
             {
                 return NotFound();
@@ -38,33 +41,48 @@ namespace DIAN_.Controllers
             return Ok(warranty);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateWarrantyDTO warrantyDTO)
+        [HttpPost("addwarranty")]
+        public async Task<IActionResult> CreateWarranty([FromBody] CreateWarrantyRequestDto warrantyDto)
         {
-            var warranty = warrantyDTO.ToCreateWarranty();
-            var createdWarranty = await _warrantyRepo.CreateAsync(warranty);
-            return CreatedAtAction(nameof(GetById), new { id = createdWarranty.OrderDetailId }, createdWarranty);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var warrantyModel = warrantyDto.ToWarrantyFromCreateDto();
+            await _warrantyRepository.CreateWarrantyAsync(warrantyModel);
+            return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateWarrantyDTO warrantyDTO)
+        [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdateWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
         {
-            var existingWarranty = await _warrantyRepo.GetByIdAsync(id);
-            if (existingWarranty == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
+            }
+            var warranty = await _warrantyRepository.UpdateWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+            if (warranty == null)
+            {
+                return NotFound("Warranty does not exist");
             }
 
-            var warrantyToUpdate = warrantyDTO.ToUpdateWarranty(new Warranty { OrderDetailId = id });
-            var updatedWarranty = await _warrantyRepo.UpdateAsync(warrantyToUpdate);
-            return Ok(updatedWarranty);
+            return Ok(warranty.ToWarrantyDetailDto());
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPut("delete/{id:int}")]
+        public async Task<IActionResult> DeleteWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
         {
-            await _warrantyRepo.DeleteAsync(id);
-            return NoContent();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var warranty = await _warrantyRepository.DeleteWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+            if (warranty == null)
+            {
+                return NotFound("Warranty does not exist");
+            }
+
+            return Ok(warranty.ToWarrantyDetailDto());
         }
     }
 }
