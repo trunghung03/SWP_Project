@@ -1,4 +1,5 @@
-﻿using DIAN_.Models;
+﻿using DIAN_.DTOs.SizeDTO;
+using DIAN_.Models;
 
 namespace DIAN_.Interfaces
 {

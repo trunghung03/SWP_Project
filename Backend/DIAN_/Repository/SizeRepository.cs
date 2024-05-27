@@ -1,4 +1,5 @@
-﻿using DIAN_.Interfaces;
+﻿using DIAN_.DTOs.SizeDTO;
+using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +16,15 @@ namespace DIAN_.Repository
 
         public async Task<Size> CreateSizeAsync(Size sizeModel)
         {
-            var existingSize = await _context.Sizes
+           
+                var existingSize = await _context.Sizes
     .FirstOrDefaultAsync(s => s.MinSize == sizeModel.MinSize && s.MaxSize == sizeModel.MaxSize && s.Step == sizeModel.Step);
-
-            if (existingSize != null)
-            {
-                throw new Exception("Size already exists.");
-            }
+                if (existingSize != null)
+                {
+                    throw new Exception("Size already exists.");
+                }
+            
+            
             await _context.Sizes.AddAsync(sizeModel);
             await _context.SaveChangesAsync();
             return sizeModel;

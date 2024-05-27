@@ -18,15 +18,14 @@ namespace DIAN_.Mapper
         public static Size ToSizeFromUpdateDto(this UpdateSizeRequestDto sizeDto)
         {
            return new Size{
-               CategoryId = sizeDto.CategoryId,
                MinSize = sizeDto.MinSize,
                MaxSize = sizeDto.MaxSize,
                Step = sizeDto.Step
            };
         }
-        public static SizeDetailDto ToSizeDetailDto(this Size size)
+        public static SizeListDto ToSizeDetailDto(this Size size)
         {
-           return new SizeDetailDto{
+           return new SizeListDto{
                CategoryId= size.CategoryId,
                MinSize = size.MinSize,
                MaxSize = size.MaxSize,
