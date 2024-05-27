@@ -2,7 +2,7 @@
 {
     public class UpdateProductRequestDTO
     {
-        public int ProductId { get; set; }
+        
         public string ProductCode { get; set; }
 
         public string Name { get; set; }

@@ -13,16 +13,10 @@ namespace DIAN_.Repository
             _context = context;
         }
 
-        public async Task<Category?> CreateAsync(CreateCategoryDTO categoryDTO)
+        public async Task<Category?> CreateAsync(Category category)
         {
             // Check for duplicates
-            if (await _context.Categories.AnyAsync(c => c.Name == categoryDTO.Name)) { return null; }
-
-            var category = new Category
-            {
-                Name = categoryDTO.Name,
-                Status = true,
-            };
+            if (await _context.Categories.AnyAsync(c => c.Name == category.Name)) { return null; }
 
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
@@ -56,15 +50,15 @@ namespace DIAN_.Repository
             return category;
         }
 
-        public async Task<Category?> UpdateAsync(int id, UpdateCategoryDTO categoryDTO)
+        public async Task<Category?> UpdateAsync(int id, Category category)
         {
             // Check for duplicates
-            if (await _context.Categories.AnyAsync(c => c.Name == categoryDTO.Name)) { return null; }
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
-            if (category == null) return null;
+            if (await _context.Categories.AnyAsync(c => c.Name == category.Name)) { return null; }
+            var updateCategory = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
+            if (updateCategory == null) return null;
 
-            category.Name = categoryDTO.Name;
-            category.Status = categoryDTO.Status ?? true;
+            updateCategory.Name = category.Name;
+            updateCategory.Status = category.Status;
 
             await _context.SaveChangesAsync();
             return category;

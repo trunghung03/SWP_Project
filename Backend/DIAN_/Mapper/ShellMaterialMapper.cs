@@ -15,22 +15,24 @@ namespace DIAN_.Mapper
                 Price = shell.Price
             };
         }
-        public static Shellmaterial ToShellMaterial(this CreateShellMaterialRequestDTO dto)
+
+        public static Shellmaterial ToShellMaterial(this CreateShellMaterialRequestDTO shellDTO)
         {
             return new Shellmaterial
             {
-                Name = dto.Name,
-                AmountAvailable = dto.AmountAvailable,
-                Price = dto.Price
+                Name = shellDTO.Name,
+                AmountAvailable = shellDTO.AmountAvailable,
+                Price = shellDTO.Price,
+                Status = true
             };
         }
 
-        public static Shellmaterial ToShellMaterial(this UpdateShellMaterialRequestDTO dto, Shellmaterial shell)
+        public static Shellmaterial ToShellMaterial(this UpdateShellMaterialRequestDTO shellDTO, Shellmaterial existingShell)
         {
-            shell.Name = dto.Name;
-            shell.AmountAvailable = dto.AmountAvailable;
-            shell.Price = dto.Price;
-            return shell;
+            existingShell.Name = shellDTO.Name;
+            existingShell.AmountAvailable = shellDTO.AmountAvailable;
+            existingShell.Price = shellDTO.Price;
+            return existingShell;
         }
     }
 }

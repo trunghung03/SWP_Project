@@ -47,20 +47,20 @@ namespace DIAN_.Repository
 
         public async Task<List<ProductDTO>> GetAllAsync()
         {
-            return await _context.Products
+            return await _context.Products.Where(p => p.Status)
                          .Select(p => p.ToProductDTO()).ToListAsync();
         }
 
         public async Task<ProductDTO> GetByIdAsync(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.Where(p => p.Status && p.ProductId == id).FirstOrDefaultAsync();
             return product?.ToProductDTO();
         }
 
         public async Task<List<ProductListDTO>> GetByNameAsync(string name)
         {
             return await _context.Products
-                                 .Where(p => p.Name.Contains(name))
+                                 .Where(p => p.Status && p.Name.Contains(name))
                                  .Select(p => p.ToProductListDTO())
                                  .ToListAsync();
         }
@@ -69,7 +69,8 @@ namespace DIAN_.Repository
         {
             var product = await _context.Products
                                         .Include(p => p.MainDiamond)
-                                        .FirstOrDefaultAsync(p => p.ProductId == id);
+                                        .Where(p => p.Status && p.ProductId == id) 
+                                        .FirstOrDefaultAsync();
 
             if (product == null)
             {

@@ -1,4 +1,4 @@
-﻿using DIAN_.DTOs.PromotionDto;
+using DIAN_.DTOs.PromotionDto;
 using DIAN_.DTOs.WarrantyDTO;
 using DIAN_.Models;
 

@@ -1,20 +1,29 @@
 ﻿using DIAN_.DTOs.CategoryDTO;
-using DIAN_.DTOs.ProductDTOs;
+
 using DIAN_.Models;
 
 namespace DIAN_.Mapper
 {
     public static class CategoryMapper
     {
-        public static CategoryDetailDto ToCategoryDetailDTO(this Category category, Size size, List<string> sizes)
+
+        public static Category FromCreateDtoToCategory(this CreateCategoryDTO categoryDto)
         {
-            return new CategoryDetailDto
+            return new Category
             {
-                Name = category.Name,
-                Size = sizes,
+                Name = categoryDto.Name,
+                Status = true,
+            };
+        }
+
+        public static Category FromUpdateDtoToCategory(this UpdateCategoryDTO categoryDto)
+        {
+            return new Category
+            {
+                Name = categoryDto.Name,
+                Status = (bool) categoryDto.Status,
             };
         }
     }
 }
-
 

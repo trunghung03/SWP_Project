@@ -1,7 +1,7 @@
-﻿using DIAN_.DTOs.WarrantyDTO;
+﻿using DIAN_.DTOs.WarrantyDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
-using DIAN_.Repository;
+using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
@@ -10,21 +10,25 @@ namespace DIAN_.Controllers
     [Route("api/warranty")]
     public class WarrantyController : ControllerBase
     {
+        private readonly ApplicationDbContext _context;
         private readonly IWarrantyRepository _warrantyRepository;
 
-        public WarrantyController(IWarrantyRepository warrantyRepository)
+        public WarrantyController(ApplicationDbContext context, IWarrantyRepository warrantyRepository)
         {
+            _context = context;
             _warrantyRepository = warrantyRepository;
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAllWarranty()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
+            }
             var warranties = await _warrantyRepository.GetAllWarrantyAsync();
             return Ok(warranties);
         }
-
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetWarrantyById([FromRoute] int id)
@@ -49,8 +53,7 @@ namespace DIAN_.Controllers
             return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
         }
 
-        [HttpPut]
-        [Route("update/{id:int}")]
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
         {
             if (!ModelState.IsValid)
@@ -66,8 +69,7 @@ namespace DIAN_.Controllers
             return Ok(warranty.ToWarrantyDetailDto());
         }
 
-        [HttpPut]
-        [Route("delete/{id:int}")]
+        [HttpPut("delete/{id:int}")]
         public async Task<IActionResult> DeleteWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
         {
             if (!ModelState.IsValid)

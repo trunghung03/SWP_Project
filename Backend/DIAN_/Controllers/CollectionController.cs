@@ -1,5 +1,6 @@
 ﻿using DIAN_.DTOs.CategoryDTO;
 using DIAN_.Interfaces;
+using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,13 +42,7 @@ namespace DIAN_.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var convertCollection = new Collection
-            {
-                Name = collectionDTO.Name,
-                Description = collectionDTO.Description,
-            };
-
-            var collection = await _collectionRepository.CreateAsync(convertCollection);
+            var collection = await _collectionRepository.CreateAsync(collectionDTO.FromCreateDtoToCollection());
 
             if (collection == null) { return BadRequest("Duplicate category! Please try again!"); }
 
@@ -59,7 +54,7 @@ namespace DIAN_.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var collection = await _collectionRepository.UpdateAsync(id, collectionDTO);
+            var collection = await _collectionRepository.UpdateAsync(id, collectionDTO.FromUpdateDtoToCollection());
 
             if (collection == null) { return BadRequest("Error! Please try again!"); }
 
