@@ -55,17 +55,17 @@ namespace DIAN_.Controllers
             }
             var diamond = diamondDto.ToDiamondFromCreateDTO();
             var result = await _diamondRepository.AddDiamondAsync(diamond);
-            return CreatedAtAction(nameof(GetDiamondByIdAsync), new { id = diamond.DiamondId }, diamond.ToDiamondDTO());
+            return Ok(result.ToDiamondDTO());
         }
 
         [HttpPut]
-        [Route("update/{id:int}")]
+        [Route("update/{id:int}")]  
         public async Task<IActionResult> UpdateDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto updateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var diamondModel = await _diamondRepository.UpdateDiamondAsync(id, updateDto.ToDiamondFromUpdateDTO(id));
+            var diamondModel = await _diamondRepository.UpdateDiamondAsync(updateDto.ToDiamondFromUpdateDTO(id), id);
             if (diamondModel == null)
                 return NotFound("Diamond does not exist");
             return Ok(diamondModel.ToDiamondDTO());

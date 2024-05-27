@@ -69,18 +69,18 @@ namespace DIAN_.Repository
             return existingDiamond;
         }
 
-        public async Task<Diamond?> UpdateDiamondAsync(int id, Diamond diamondModel)
+        public async Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id)
         {
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
             if (existingDiamond != null)
             {
                 existingDiamond.Name = diamondModel.Name;
-                //existingDiamond.Color = diamondModel.Color;
-                //existingDiamond.Clarity = diamondModel.Clarity;
-                //existingDiamond.Cut = diamondModel.Cut;
-                //existingDiamond.Carat = diamondModel.Carat;
+                existingDiamond.Color = diamondModel.Color;
+                existingDiamond.Clarity = diamondModel.Clarity;
+                existingDiamond.Cut = diamondModel.Cut;
+                existingDiamond.Carat = diamondModel.Carat;
                 existingDiamond.Cost = diamondModel.Cost;
-                //existingDiamond.CertificateScan = diamondModel.CertificateScan;
+                existingDiamond.CertificateScan = diamondModel.CertificateScan;
                 existingDiamond.DiamondSize = diamondModel.DiamondSize;
                 existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
                 existingDiamond.Status = diamondModel.Status;

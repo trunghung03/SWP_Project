@@ -9,7 +9,7 @@ namespace DIAN_.Interfaces
         Task<Diamond?> GetDiamondByIdAsync(int id);
         Task<List<Diamond>> GetAllDiamondsAsync(DiamondQuery diamondQuery);
         Task<Diamond> AddDiamondAsync(Diamond diamond);
-        Task<Diamond?> UpdateDiamondAsync(int id, Diamond diamondModel);
+        Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id);
         Task<Diamond?> DeleteDiamondAsync(int id, Diamond diamondModel);
     }
 }
