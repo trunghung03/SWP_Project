@@ -23,71 +23,110 @@ namespace DIAN_.Controllers
         [HttpGet("list")]
         public async Task<IActionResult>  GetAllPromotions([FromQuery] PromotionQuery query)
         {
-            if(!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var promotions = await _promotionRepository.GetAllPromotionAsync(query);
+                if(promotions.Count == 0)
+                {
+                    return NotFound("Promotion does not exist");
+                }
+                var promotionDtos = promotions.Select(promotion => promotion.ToPromotionDetail());
+                return Ok(promotionDtos);
             }
-            var promotions = await _promotionRepository.GetAllPromotionAsync(query);
-            var promotionDtos = promotions.Select(promotion => promotion.ToPromotionDetail());
-            return Ok(promotions);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var promotion = await _promotionRepository.GetPromotionByIdAsync(id);
+                if (promotion == null)
+                {
+                    return NotFound("Promotion does not exist");
+                }
+                return Ok(promotion.ToPromotionDetail());
             }
-            var promotion = await _promotionRepository.GetPromotionByIdAsync(id);
-            if (promotion == null)
+            catch (Exception ex)
             {
-                return NotFound("Promotion does not exist");
+                return StatusCode(500, "Internal server error");
             }
-            return Ok(promotion.ToPromotionDetail());
         }
 
         [HttpPost("createpromotion")]
         public async Task<IActionResult> CreatePromotion([FromBody] CreatePromotionRequestDto promotionDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            var promotionModel = promotionDto.ToPromotionFromCreateDto();
-            await _promotionRepository.CreatePromotionAsync(promotionModel);
-            return Ok(promotionModel.ToPromotionDetail());
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
                 }
-
-        [HttpPut("update/{id:int}")]
-        public async Task<IActionResult> UpdatePromotion([FromRoute] int id, [FromBody] UpdatePromotionRequestDto promotionDto)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
+                var promotionModel = promotionDto.ToPromotionFromCreateDto();
+                await _promotionRepository.CreatePromotionAsync(promotionModel);
+                return Ok(promotionModel.ToPromotionDetail());
             }
-            var promotion = await _promotionRepository.UpdatePromotionAsync(id, promotionDto.ToPromotionFromUpdateDto(id));
-            if(promotion == null)
+            catch (Exception ex)
             {
-                return NotFound("Promotion does not exist");
+                return StatusCode(500, "Internal server error");
             }
-            return Ok(promotion.ToPromotionDetail());
         }
 
-        [HttpPut("delete/{id:int}")]
+            [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdatePromotion([FromRoute] int id, [FromBody] UpdatePromotionRequestDto promotionDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var promotion = await _promotionRepository.UpdatePromotionAsync(id, promotionDto.ToPromotionFromUpdateDto(id));
+                if (promotion == null)
+                {
+                    return NotFound("Promotion does not exist");
+                }
+                return Ok(promotion.ToPromotionDetail());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("delete/{id:int}")]
         public async Task<IActionResult> DeletePromotion([FromRoute] int id, UpdatePromotionRequestDto deletePromotion)
         {
-            if(!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var promotion = await _promotionRepository.DeletePromotionAsync(id, deletePromotion.ToPromotionFromUpdateDto(id));
+                if (promotion == null)
+                {
+                    return NotFound("Promotion does not exist");
+                }
+                return Ok(promotion.ToPromotionDetail());
             }
-            var promotion = await _promotionRepository.DeletePromotionAsync(id, deletePromotion.ToPromotionFromUpdateDto(id));
-            if(promotion == null)
+            catch (Exception ex)
             {
-                return NotFound("Promotion does not exist");
+                return StatusCode(500, "Internal server error");
             }
-            return Ok(promotion.ToPromotionDetail());
         }
     }
 }

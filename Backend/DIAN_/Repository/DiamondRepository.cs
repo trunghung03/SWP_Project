@@ -28,7 +28,7 @@ namespace DIAN_.Repository
                 await _context.SaveChangesAsync();
                 return existingDiamond;
             }
-            return null;
+            throw new KeyNotFoundException("Diamond does not exist");
         }
 
         public async Task<List<Diamond>> GetAllDiamondsAsync(DiamondQuery diamondQuery)
@@ -64,7 +64,7 @@ namespace DIAN_.Repository
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
             if (existingDiamond == null)
             {
-                return null;
+                throw new KeyNotFoundException("Diamond does not exist");
             }
             return existingDiamond;
         }
@@ -87,7 +87,7 @@ namespace DIAN_.Repository
                 await _context.SaveChangesAsync();
                 return existingDiamond;
             }
-            return null;
+            throw new KeyNotFoundException("Diamond does not exist");
         }
     }
 }

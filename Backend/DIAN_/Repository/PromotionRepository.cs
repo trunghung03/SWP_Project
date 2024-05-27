@@ -15,6 +15,16 @@ namespace DIAN_.Repository
         }
         public async Task<Promotion> CreatePromotionAsync(Promotion promotionModel)
         {
+
+            if (await _context.Promotions.AnyAsync(p => p.Code == promotionModel.Code))
+            { 
+                throw new ArgumentException("Invalid promotion code");
+            }
+            if (promotionModel.EmployeeId == null) 
+            {
+                throw new ArgumentException("EmployeeId must be inputed.");
+            }
+        
             await _context.Promotions.AddAsync(promotionModel);
             await _context.SaveChangesAsync();
             return promotionModel;
@@ -23,6 +33,8 @@ namespace DIAN_.Repository
         public async Task<List<Promotion>> GetAllPromotionAsync(PromotionQuery promotionQuery)
         {
             var promotion = _context.Promotions.AsQueryable();
+
+            promotion = promotion.Where(x => x.Status == true);
 
             if (!string.IsNullOrWhiteSpace(promotionQuery.Name))
             {
@@ -66,15 +78,15 @@ namespace DIAN_.Repository
             return null;
         }
 
-        public async Task<List<Promotion>> GetActivePromotionsAsync()
-        {
-            var existingPromotion = await _context.Promotions.Where(x => x.Status == true).ToListAsync();
-            if(existingPromotion == null)
-            {
-                return null;
-            }
-            return existingPromotion;
-        }
+        //public async Task<List<Promotion>> GetInActivePromotionsAsync()
+        //{
+        //    var existingPromotion = await _context.Promotions.Where(x => x.Status == false).ToListAsync();
+        //    if(existingPromotion == null)
+        //    {
+        //        return null;
+        //    }
+        //    return existingPromotion;
+        //}
 
         public async Task<Promotion?> GetPromotionByCodeAsync(string proCode)
         {

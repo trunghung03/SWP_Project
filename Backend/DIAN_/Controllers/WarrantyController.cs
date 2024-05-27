@@ -10,79 +10,123 @@ namespace DIAN_.Controllers
     [Route("api/warranty")]
     public class WarrantyController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IWarrantyRepository _warrantyRepository;
 
-        public WarrantyController(ApplicationDbContext context, IWarrantyRepository warrantyRepository)
+        public WarrantyController(IWarrantyRepository warrantyRepository)
         {
-            _context = context;
             _warrantyRepository = warrantyRepository;
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAllWarranty()
         {
-            if (!ModelState.IsValid) 
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var warranties = await _warrantyRepository.GetAllWarrantyAsync();
+                if(warranties.Count == 0)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranties);
             }
-            var warranties = await _warrantyRepository.GetAllWarrantyAsync();
-            return Ok(warranties);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetWarrantyById([FromRoute] int id)
         {
-            var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
-            if (warranty == null)
+            try
             {
-                return NotFound();
+                var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
+                if (warranty == null)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranty.ToWarrantyDetailDto());
             }
-            return Ok(warranty);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost("addwarranty")]
         public async Task<IActionResult> CreateWarranty([FromBody] CreateWarrantyRequestDto warrantyDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Check if a warranty with the same OrderDetailId already exists
+                var existingWarranty = await _warrantyRepository.GetWarrantyByIdAsync(warrantyDto.OrderDetailId);
+                if (existingWarranty != null)
+                {
+                    return BadRequest("Warranty already exists");
+                }
+
+                var warrantyModel = warrantyDto.ToWarrantyFromCreateDto();
+                await _warrantyRepository.CreateWarrantyAsync(warrantyModel);
+                return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
             }
-            var warrantyModel = warrantyDto.ToWarrantyFromCreateDto();
-            await _warrantyRepository.CreateWarrantyAsync(warrantyModel);
-            return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
+            catch (Exception ex)
+            {
+                // Log the exception message
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var warranty = await _warrantyRepository.UpdateWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+                if (warranty == null)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranty.ToWarrantyDetailDto());
             }
-            var warranty = await _warrantyRepository.UpdateWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
-            if (warranty == null)
+            catch (Exception ex)
             {
-                return NotFound("Warranty does not exist");
+                return StatusCode(500, "Internal server error");
             }
-
-            return Ok(warranty.ToWarrantyDetailDto());
         }
 
-        [HttpPut("delete/{id:int}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<IActionResult> DeleteWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var warranty = await _warrantyRepository.DeleteWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+                if (warranty == null)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranty.ToWarrantyDetailDto());
             }
-            var warranty = await _warrantyRepository.DeleteWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
-            if (warranty == null)
+            catch (Exception ex)
             {
-                return NotFound("Warranty does not exist");
+                return StatusCode(500, "Internal server error");
             }
-
-            return Ok(warranty.ToWarrantyDetailDto());
         }
     }
 }

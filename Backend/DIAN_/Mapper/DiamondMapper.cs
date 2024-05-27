@@ -64,20 +64,20 @@ namespace DIAN_.Mapper
                 Status = updateDiamond.Status,
             };
         }
-        public static DiamondDetailDto ToDiamondDetailDTO(this Diamond diamond)
-        {
-            return new DiamondDetailDto
-            {
-                DiamondId = diamond.DiamondId,
-                Name = diamond.Name,
-                Color = diamond.Color,
-                Clarity = diamond.Clarity,
-                Cut = diamond.Cut,
-                Carat = diamond.Carat,
-                Cost = diamond.Cost,
-                CertificateScan = diamond.CertificateScan,
-                DiamondSize = diamond.DiamondSize ?? 0,
-            };
-        }
+        //public static DiamondDetailDto ToDiamondDetailDTO(this Diamond diamond)
+        //{
+        //    return new DiamondDetailDto
+        //    {
+        //        DiamondId = diamond.DiamondId,
+        //        Name = diamond.Name,
+        //        Color = diamond.Color,
+        //        Clarity = diamond.Clarity,
+        //        Cut = diamond.Cut,
+        //        Carat = diamond.Carat,
+        //        Cost = diamond.Cost,
+        //        CertificateScan = diamond.CertificateScan,
+        //        DiamondSize = diamond.DiamondSize ?? 0,
+        //    };
+        //}
     }
 }

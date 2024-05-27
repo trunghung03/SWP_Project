@@ -20,67 +20,109 @@ namespace DIAN_.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery diamondQuery)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            var result = await _diamondRepository.GetAllDiamondsAsync(diamondQuery);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _diamondRepository.GetAllDiamondsAsync(diamondQuery);
 
-            var diamondDtos = result.Select(diamond => diamond.ToDiamondListDTO()).ToList();
-            return Ok(result);
+                if (!result.Any())
+                {
+                    return NotFound("Diamond does not exist");
+                }
+
+                var diamondDtos = result.Select(diamond => diamond.ToDiamondDTO()).ToList();
+                return Ok(diamondDtos);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+           
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDiamondByIdAsync([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var diamond = await _diamondRepository.GetDiamondByIdAsync(id);
+                if (diamond == null)
+                {
+                    return NotFound("Diamond does not exist");
+                }
+                return Ok(diamond.ToDiamondDTO());
             }
-            var diamond = await _diamondRepository.GetDiamondByIdAsync(id);
-            if (diamond == null)
+            catch(Exception ex)
             {
-                return NotFound("Diamond does not exist");
+                return StatusCode(500, "Internal server error");
             }
-            return Ok(diamond.ToDiamondDetailDTO());
         }
 
 
         [HttpPost("creatediamond")]
         public async Task<IActionResult> AddDiamondAsync([FromBody] CreateDiamondRequestDto diamondDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var diamond = diamondDto.ToDiamondFromCreateDTO();
+                var result = await _diamondRepository.AddDiamondAsync(diamond);
+                return Ok(result.ToDiamondDTO());
             }
-            var diamond = diamondDto.ToDiamondFromCreateDTO();
-            var result = await _diamondRepository.AddDiamondAsync(diamond);
-            return Ok(result.ToDiamondDTO());
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut]
         [Route("update/{id:int}")]  
         public async Task<IActionResult> UpdateDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto updateDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var diamondModel = await _diamondRepository.UpdateDiamondAsync(updateDto.ToDiamondFromUpdateDTO(id), id);
-            if (diamondModel == null)
-                return NotFound("Diamond does not exist");
-            return Ok(diamondModel.ToDiamondDTO());
+                var diamondModel = await _diamondRepository.UpdateDiamondAsync(updateDto.ToDiamondFromUpdateDTO(id), id);
+                if (diamondModel == null)
+                    return NotFound("Diamond does not exist");
+                return Ok(diamondModel.ToDiamondDTO());
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut]
         [Route("delete/{id:int}")]
         public async Task<IActionResult> DeleteDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto deleteDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var diamond = await _diamondRepository.DeleteDiamondAsync(id, deleteDto.ToDiamondFromUpdateDTO(id));
-            if (diamond == null)
-                return NotFound("Diamond does not exist");
-            return Ok(diamond.ToDiamondDTO());
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+                var diamond = await _diamondRepository.DeleteDiamondAsync(id, deleteDto.ToDiamondFromUpdateDTO(id));
+                if (diamond == null)
+                    return NotFound("Diamond does not exist");
+                return Ok(diamond.ToDiamondDTO());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 
