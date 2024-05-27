@@ -1,13 +1,47 @@
+
 input {
   height: 30px;
 }
 
-:placeholder-shown {
-  font-size: 70%;
+.main_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.login_wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.left_side,
+.right_side {
+  width: 50%;
+}
+
+.left_side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+.right_side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .right_image {
-  height: 100vh;
+  height: 90vh;
   width: 100%;
   object-fit: cover;
 }
@@ -70,10 +104,7 @@ input {
 }
 
 .sign_in_form {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px 25px 25px 25px;
+  width: 100%;
 }
 
 .google_section button {

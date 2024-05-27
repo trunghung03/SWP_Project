@@ -6,19 +6,50 @@ input {
     font-size: 70%;
 }
 
-.register_image {
-    height: 140vh;
-    width: 100%;
+.register_main_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 30px;
 }
 
-.left_section {
+.register_wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+
+.register_left_side,
+.register_right_side {
+    width: 50%;
+}
+
+.register_left_side {
+    padding: 50px;
+}
+
+.register_right_side {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 0 40px 0;
 }
 
-.email_section, .name_section, .password_section {
+.register_image {
+    height: 114vh;
+    width: 100%;
+    object-fit: cover;
+}
+
+.email_section,
+.name_section,
+.password_section {
     margin-bottom: 4%;
 }
 
@@ -68,13 +99,6 @@ input {
     margin: 0 0 0 5px;
 }
 
-.sign_up_form {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px 25px 25px 25px;
-}
-
 .google_section button {
     display: flex;
     align-items: center;
@@ -96,7 +120,8 @@ input {
     padding-bottom: 10px;
 }
 
-.password_eye, .re_password_eye {
+.password_eye,
+.re_password_eye {
     position: absolute;
     top: 50%;
     right: 10px;
@@ -163,8 +188,11 @@ input {
     flex-direction: column;
 }
 
-.first_name_wrapper input,
-.last_name_wrapper input {
+.first_name_wrapper input {
+    width: 97%;
+}
+
+.last_name_wrapper input{
     width: 100%;
 }
 
@@ -219,7 +247,8 @@ input {
     background-color: #2d4ba8;
 }
 
-.tos_title, .tos_introduce {
+.tos_title,
+.tos_introduce {
     text-align: center;
 }
 
@@ -237,5 +266,5 @@ input {
 
 .icon_gg {
     font-size: 17px;
-    color: white; 
-  }
+    color: white;
+}
