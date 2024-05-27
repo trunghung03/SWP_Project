@@ -28,16 +28,6 @@ namespace DIAN_.Mapper
             };
         }
 
-        public static WarrantyListDto ToWarrantyDto(this Warranty warranty)
-        {
-            return new WarrantyListDto
-            {
-                OrderDetailId = warranty.OrderDetailId,
-                StartDate = warranty.StartDate,
-                EndDate = warranty.EndDate,
-                Status = warranty.Status
-            };
-        }
         public static WarrantyDetailDto ToWarrantyDetailDto(this Warranty warranty)
         {
             return new WarrantyDetailDto

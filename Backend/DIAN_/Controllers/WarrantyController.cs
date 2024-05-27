@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.WarrantyDTO;
+using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,9 @@ namespace DIAN_.Controllers
     [Route("api/warranty")]
     public class WarrantyController : ControllerBase
     {
-        private readonly WarrantyRepository _warrantyRepository;
+        private readonly IWarrantyRepository _warrantyRepository;
 
-        public WarrantyController(WarrantyRepository warrantyRepository)
+        public WarrantyController(IWarrantyRepository warrantyRepository)
         {
             _warrantyRepository = warrantyRepository;
         }
