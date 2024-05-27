@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -9,6 +9,18 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 function EditProfile() {
   const navigate = useNavigate();
   const [isPasswordFormVisible, setPasswordFormVisible] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const storedFirstName = localStorage.getItem('firstName');
+    const storedLastName = localStorage.getItem('lastName');
+    const storedPoints = localStorage.getItem('points');
+    if (storedFirstName) setFirstName(storedFirstName);
+    if (storedLastName) setLastName(storedLastName);
+    if (storedPoints) setPoints(storedPoints);
+  }, []);
 
   const navItems = ['Home', 'Setting', 'Edit Profile'];
   const menuItems = [
@@ -37,8 +49,8 @@ function EditProfile() {
       <div className="edit_profile_container">
         <div className="setting_menu">
           <div className="setting_menu_section">
-            <div className="setting_full_name">Full Name</div>
-            <div className="setting_point"><p>1209 points</p></div>
+            <div className="setting_full_name">{`${firstName} ${lastName}`}</div>
+            <div className="setting_point"><p>{`${points} points`}</p></div>
           </div>
           <div className="setting_menu_items">
             {menuItems.map(item => (
@@ -59,15 +71,15 @@ function EditProfile() {
           <form>
             <div className="edit_form_group">
               <label>First name</label>
-              <input type="text" value="Nguyen" />
+              <input type="text" value={firstName} readOnly />
             </div>
             <div className="edit_form_group">
               <label>Last name</label>
-              <input type="text" value="Tran" />
+              <input type="text" value={lastName} readOnly />
             </div>
             <div className="edit_form_group">
               <label>Email</label>
-              <input className="edit_email" type="email" value="example.email@gmail.com" />
+              <input className="edit_email" type="email" value="example.email@gmail.com" readOnly />
             </div>
             <div className="edit_form_group">
               <label>Phone number</label>
@@ -115,7 +127,7 @@ function EditProfile() {
         </div>
       </div>
 
-      <ScrollToTop></ScrollToTop>
+      <ScrollToTop />
     </div>
   );
 }

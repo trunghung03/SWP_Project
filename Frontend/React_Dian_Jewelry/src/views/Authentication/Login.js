@@ -24,6 +24,7 @@ const Login = () => {
                 if (userInfoRes && userInfoRes.data) {
                     localStorage.setItem("firstName", userInfoRes.data.firstName);
                     localStorage.setItem("lastName", userInfoRes.data.lastName);
+                    localStorage.setItem("points", userInfoRes.data.points);
                 }
 
                 navigate('/home');

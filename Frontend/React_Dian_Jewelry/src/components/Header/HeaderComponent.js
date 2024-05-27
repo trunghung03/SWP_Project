@@ -7,6 +7,7 @@ const HeaderComponent = () => {
     const [role, setRole] = useState('guest');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [points, setPoints] = useState(0);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -16,6 +17,7 @@ const HeaderComponent = () => {
             setRole('customer');
             setFirstName(localStorage.getItem("firstName"));
             setLastName(localStorage.getItem("lastName"));
+            setPoints(localStorage.getItem("points"));
         } else {
             setRole('guest');
         }
@@ -25,6 +27,7 @@ const HeaderComponent = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("firstName");
         localStorage.removeItem("lastName");
+        localStorage.removeItem("points");
         setRole('guest');
         navigate('/login');
     };
@@ -38,12 +41,6 @@ const HeaderComponent = () => {
     };
     return (
         <header className="header">
-            <div className="top_announcement">
-                FREE WORLDWIDE DELIVERYㅤㅤㅤㅤㅤㅤㅤㅤ
-                5 YEAR GUARANTEEㅤㅤㅤㅤㅤㅤㅤㅤ
-                0% APR FINANCEㅤㅤㅤㅤㅤㅤㅤㅤ
-                UK HANDCRAFTED
-            </div>
             <div className="top_header container-fluid">
                 <div className="row align-items-center" style={{ backgroundColor: 'white' }}>
                     <div className="col-md-4">
@@ -89,7 +86,7 @@ const HeaderComponent = () => {
                                                 <p className="full_name dropdown-item">{firstName} {lastName}</p>
                                             </li>
                                             <li>
-                                                <p className="point dropdown-item">0 point</p>
+                                                <p className="point dropdown-item">{points} points</p>
                                             </li>
                                             <hr className="account_hr1" />
                                             <li><a className="dropdown-item" href="/editProfile"><i className="adm_icon fas fa-cog"></i> Setting</a></li>
