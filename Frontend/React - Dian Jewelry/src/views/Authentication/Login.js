@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/rightImage.png';
-import { loginApi } from '../../services/UserService';
+import { loginApi, getUserInfo } from '../../services/UserService';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -18,6 +18,14 @@ const Login = () => {
             if (res && res.data && res.data.token) {
                 localStorage.setItem("token", res.data.token);
                 console.log(">>> check login: ", res.data);
+
+                // Fetch user info
+                let userInfoRes = await getUserInfo(email);
+                if (userInfoRes && userInfoRes.data) {
+                    localStorage.setItem("firstName", userInfoRes.data.firstName);
+                    localStorage.setItem("lastName", userInfoRes.data.lastName);
+                }
+
                 navigate('/home');
             } else {
                 setError("Login failed: Invalid email or password");

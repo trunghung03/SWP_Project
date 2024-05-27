@@ -5,6 +5,8 @@ import logo from '../../assets/img/logo.png';
 
 const HeaderComponent = () => {
     const [role, setRole] = useState('guest');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -12,6 +14,8 @@ const HeaderComponent = () => {
         const token = localStorage.getItem("token");
         if (token) {
             setRole('customer');
+            setFirstName(localStorage.getItem("firstName"));
+            setLastName(localStorage.getItem("lastName"));
         } else {
             setRole('guest');
         }
@@ -19,6 +23,8 @@ const HeaderComponent = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("firstName");
+        localStorage.removeItem("lastName");
         setRole('guest');
         navigate('/login');
     };
@@ -80,7 +86,7 @@ const HeaderComponent = () => {
                                     ) : (
                                         <>
                                             <li>
-                                                <p className="full_name dropdown-item">Full name</p>
+                                                <p className="full_name dropdown-item">{firstName} {lastName}</p>
                                             </li>
                                             <li>
                                                 <p className="point dropdown-item">0 point</p>
