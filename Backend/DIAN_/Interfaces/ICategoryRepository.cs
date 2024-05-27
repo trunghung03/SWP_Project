@@ -7,8 +7,8 @@ namespace DIAN_.Interfaces
     {
         Task<List<Category>> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
-        Task<Category?> CreateAsync(CreateCategoryDTO categoryDTO);
-        Task<Category?> UpdateAsync(int id, UpdateCategoryDTO categoryDTO);
+        Task<Category?> CreateAsync(Category category);
+        Task<Category?> UpdateAsync(int id, Category category);
         Task<Category?> DeleteAsync(int id);
     }
 }
