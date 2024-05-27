@@ -2,6 +2,7 @@
 using DIAN_.DTOs.SizeDTO;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
+using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace DIAN_.Controllers
 
             var sizes = await _sizeRepository.GetAllSizeAsync();
 
-            return Ok(sizes);
+            return Ok(sizes.Select(s => s.ToSizeDetailDto()));
         }
 
         [HttpPost("addsize")]
@@ -37,8 +38,8 @@ namespace DIAN_.Controllers
                 return BadRequest(ModelState);
             }
             var sizeModel = sizeDto.ToSizeFromCreateDto();
-            await _sizeRepository.CreateSizeAsync(sizeModel);
-            return CreatedAtAction(nameof(GetSizeByCategoryId), new { id = sizeModel.CategoryId }, sizeModel.ToSizeDetailDto());
+            var createdSize = await _sizeRepository.CreateSizeAsync(sizeModel);
+            return CreatedAtAction(nameof(GetSizeByCategoryId), new { id = createdSize.CategoryId }, sizeModel.ToSizeDetailDto());
         }
 
         [HttpGet("{id:int}")]

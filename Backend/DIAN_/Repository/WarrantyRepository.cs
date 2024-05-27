@@ -36,7 +36,9 @@ namespace DIAN_.Repository
 
         public async Task<List<WarrantyDetailDto>> GetAllWarrantyAsync()
         {
+            
             var warranties = await _context.Warranties
+                .Where(w => w.Status)
                 .Select(w => w.ToWarrantyDetailDto())
                 .ToListAsync();
 

@@ -4,7 +4,6 @@ namespace DIAN_.DTOs.SizeDTO
 {
     public class UpdateSizeRequestDto
     {
-        public int CategoryId { get; set; }
 
         public decimal? MinSize { get; set; }
 
