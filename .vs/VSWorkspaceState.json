@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Backend",
+    "\\Backend\\DIAN_",
+    "\\Database"
   ],
-  "SelectedNode": "\\UserApplication.sln",
+  "SelectedNode": "\\Database\\Insert_Data.sql",
   "PreviewInSolutionExplorer": false
 }
