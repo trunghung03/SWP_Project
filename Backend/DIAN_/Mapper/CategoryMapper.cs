@@ -5,7 +5,7 @@ namespace DIAN_.Mapper
 {
     public static class CategoryMapper
     {
-        public static Category FromCreateDtoToModel(this CreateCategoryDTO categoryDto)
+        public static Category FromCreateDtoToCategory(this CreateCategoryDTO categoryDto)
         {
             return new Category
             {
@@ -14,7 +14,7 @@ namespace DIAN_.Mapper
             };
         }
 
-        public static Category FromUpdateDtoToModel(this UpdateCategoryDTO categoryDto)
+        public static Category FromUpdateDtoToCategory(this UpdateCategoryDTO categoryDto)
         {
             return new Category
             {

@@ -42,7 +42,7 @@ namespace DIAN_.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var category = await _categoryRepository.CreateAsync(categoryDTO.FromCreateDtoToModel());
+            var category = await _categoryRepository.CreateAsync(categoryDTO.FromCreateDtoToCategory());
 
             if (category == null) { return  BadRequest("Duplicate category! Please try again!"); }
 
@@ -54,7 +54,7 @@ namespace DIAN_.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var category = await _categoryRepository.UpdateAsync(id, categoryDTO.FromUpdateDtoToModel());
+            var category = await _categoryRepository.UpdateAsync(id, categoryDTO.FromUpdateDtoToCategory());
 
             if (category == null) { return BadRequest("Error! Please try again!"); }
 

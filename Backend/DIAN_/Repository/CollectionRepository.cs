@@ -50,19 +50,19 @@ namespace DIAN_.Repository
             return collection;
         }
 
-        public async Task<Collection?> UpdateAsync(int id, UpdateCollectionDTO collectionDTO)
+        public async Task<Collection?> UpdateAsync(int id, Collection collection)
         {
             // Check for duplicates
-            if (await _context.Collections.AnyAsync(c => c.Name == collectionDTO.Name)) { return null; }
-            var collection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
-            if (collection == null) return null;
+            if (await _context.Collections.AnyAsync(c => c.Name == collection.Name)) { return null; }
+            var updateCollection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
+            if (updateCollection == null) return null;
 
-            collection.Name = collectionDTO.Name;
-            collection.Description = collectionDTO.Description;
-            collection.Status = collectionDTO.Status ?? true;
+            updateCollection.Name = collection.Name;
+            updateCollection.Description = collection.Description;
+            updateCollection.Status = collection.Status;
 
             await _context.SaveChangesAsync();
-            return collection;
+            return updateCollection;
         }
     }
 }
