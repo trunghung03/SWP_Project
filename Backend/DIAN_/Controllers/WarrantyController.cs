@@ -1,4 +1,4 @@
-﻿using DIAN_.DTOs.WarrantyDTOs;
+﻿using DIAN_.DTOs.WarrantyDTO;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
