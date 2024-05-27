@@ -51,14 +51,14 @@ namespace DIAN_.Controllers
         [HttpPost("createpromotion")]
         public async Task<IActionResult> CreatePromotion([FromBody] CreatePromotionRequestDto promotionDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var promotionModel = promotionDto.ToPromotionFromCreateDto();
             await _promotionRepository.CreatePromotionAsync(promotionModel);
-            return CreatedAtAction(nameof(getById), new { id = promotionModel.PromotionId }, promotionModel.ToPromotionDetail());
-        }
+            return Ok(promotionModel.ToPromotionDetail());
+                }
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdatePromotion([FromRoute] int id, [FromBody] UpdatePromotionRequestDto promotionDto)
