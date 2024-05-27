@@ -85,10 +85,9 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasKey(e => e.CollectionId).HasName("PK__COLLECTI__7DE6BC24721587CE");
 
-            entity.ToTable("COLLECTIONS");
+            entity.ToTable("COLLECTION");
 
             entity.Property(e => e.CollectionId)
-                .ValueGeneratedNever()
                 .HasColumnName("CollectionID");
             entity.Property(e => e.Description).IsRequired();
             entity.Property(e => e.Name)

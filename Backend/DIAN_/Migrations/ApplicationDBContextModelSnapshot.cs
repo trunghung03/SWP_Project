@@ -99,8 +99,11 @@ namespace DIAN_.Migrations
             modelBuilder.Entity("DIAN_.Models.Collection", b =>
                 {
                     b.Property<int>("CollectionId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("CollectionID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CollectionId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -119,7 +122,7 @@ namespace DIAN_.Migrations
                     b.HasKey("CollectionId")
                         .HasName("PK__COLLECTI__7DE6BC24721587CE");
 
-                    b.ToTable("COLLECTIONS", (string)null);
+                    b.ToTable("COLLECTION", (string)null);
                 });
 
             modelBuilder.Entity("DIAN_.Models.Customer", b =>
@@ -185,7 +188,7 @@ namespace DIAN_.Migrations
                     b.Property<int>("AmountAvailable")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Carat")
+                    b.Property<decimal>("Carat")
                         .HasColumnType("decimal(5, 2)");
 
                     b.Property<string>("CertificateScan")

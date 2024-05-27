@@ -30,6 +30,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IShellMaterialRepository,ShellRepository>();
 builder.Services.AddScoped<IPromotionRepository,PromotionRepository>();
 builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
