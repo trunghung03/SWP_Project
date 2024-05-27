@@ -1,3 +1,5 @@
+use DIAN;
+
 -- Insert dummy data into CUSTOMER table
 INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
 ('john.doe@example.com', '123', 'Doe', 'John', '123 Main St', '123-456-7890', 1000, 1),
@@ -51,7 +53,7 @@ INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, ShippingAddress, Total
 
 -- Insert dummy data into SHELLMATERIAL table
 INSERT INTO SHELLMATERIAL ([Name], AmountAvailable, Price, Status) VALUES
-('Diamond', 100.00, 5000.00, 1),
+('Silver', 100.00, 5000.00, 1),
 ('Gold', 200.00, 50.00, 1),
 ('Rose Gold', 150.00, 55.00, 1),
 ('White Gold', 120.00, 60.00, 1);
@@ -59,32 +61,32 @@ INSERT INTO SHELLMATERIAL ([Name], AmountAvailable, Price, Status) VALUES
 -- Insert dummy data into DIAMOND table
 INSERT INTO DIAMOND ([Name], Color, Clarity, Carat, Cut, Cost, CertificateScan, DiamondSize, AmountAvailable, Status)
 VALUES
-('Brilliant Rose', 'D', 'VVS1', 1.25, 'Excellent', 5000.00, 'scan1.png', 1.25, 10, 1),
-('Perfect Princess', 'E', 'VS1', 0.95, 'Very Good', 4000.00, 'scan2.png', 0.95, 5, 1),
-('Sparkling Emerald', 'F', 'IF', 2.00, 'Excellent', 12000.00, 'scan3.png', 3.00, 2, 1),
-('Shining Star', 'G', 'SI1', 1.50, 'Good', 7000.00, 'scan4.png', 1.50, 3, 1),
-('Radiant Beauty', 'H', 'VS2', 1.20, 'Very Good', 5500.00, 'scan5.png', 1.20, 8, 1),
-('Glistening Gem', 'I', 'VVS2', 1.75, 'Excellent', 9500.00, 'scan6.png', 1.75, 6, 1),
-('Luminous Light', 'J', 'SI2', 2.50, 'Good', 15000.00, 'scan7.png', 2.50, 1, 1);
+('Brilliant Rose', 'D', 'VVS1', 1.25, 'Excellent', 5000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 1.25, 10, 1),
+('Perfect Princess', 'E', 'VS1', 0.95, 'Very Good', 4000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 0.95, 5, 1),
+('Sparkling Emerald', 'F', 'IF', 2.00, 'Excellent', 12000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 3.00, 2, 1),
+('Shining Star', 'G', 'SI1', 1.50, 'Good', 7000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 1.50, 3, 1),
+('Radiant Beauty', 'H', 'VS2', 1.20, 'Very Good', 5500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 1.20, 8, 1),
+('Glistening Gem', 'I', 'VVS2', 1.75, 'Excellent', 9500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 1.75, 6, 1),
+('Luminous Light', 'J', 'SI2', 2.50, 'Good', 15000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 2.50, 1, 1);
 
 
 -- Insert dummy data into COLLECTIONS table
-INSERT INTO COLLECTION (CollectionID, Name, Status, Description)
+INSERT INTO COLLECTION (Name, Description)
 VALUES
-(1, 'Collection 1', 1, 'Description for Collection 1'),
-(2, 'Collection 2', 1, 'Description for Collection 2'),
-(3, 'Collection 3', 1, 'Description for Collection 3'),
-(4, 'Collection 4', 1, 'Description for Collection 4'),
-(5, 'Collection 5', 1, 'Description for Collection 5');
+('Collection 1','Description for Collection 1'),
+('Collection 2', 'Description for Collection 2'),
+('Collection 3', 'Description for Collection 3'),
+('Collection 4', 'Description for Collection 4'),
+('Collection 5', 'Description for Collection 5');
 
 -- Insert dummy data into PRODUCT table
 INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status, CollectionID)
 VALUES
-('PROD001', 'Product 1', 12000.00, 'Description for Product 1', 1, 10.00, 1500.00, 'Link1', 1, 2, 3.00, 1, 1),
-('PROD002', 'Product 2', 15000.00, 'Description for Product 2', 2, 12.50, 2000.00, 'Link2', 1, 3, 3.50, 1, 2),
-('PROD003', 'Product 3', 10000.00, 'Description for Product 3', 3, 8.75, 1200.00, 'Link3', 1, 1, 2.50, 1, 3),
-('PROD004', 'Product 4', 18000.00, 'Description for Product 4', 4, 15.00, 2500.00, 'Link4', 1, 4, 4.00, 1, 4),
-('PROD005', 'Product 5', 11000.00, 'Description for Product 5', 5, 9.00, 1400.00, 'Link5', 1, 2, 3.20, 1, 5);
+('PROD001', 'Product 1', 12000.00, 'Description for Product 1', 1, 10.00, 1500.00, 'https://css.brilliantearth.com/static/img/fillter/shop-by-style/Accents-ir358-old.jpg', 1, 2, 3.00, 1, 1),
+('PROD002', 'Product 2', 15000.00, 'Description for Product 2', 2, 12.50, 2000.00, 'https://script.brilliantearth.com/static/img/fillter/shop-by-style/ThreeStone-ir358-old.jpg?_v=1716006408', 1, 3, 3.50, 1, 2),
+('PROD003', 'Product 3', 10000.00, 'Description for Product 3', 3, 8.75, 1200.00, 'https://image.brilliantearth.com/media/thumbnail/17/84/17840dced5a4e298cf86893922bcfe4d.jpg', 1, 1, 2.50, 1, 3),
+('PROD004', 'Product 4', 18000.00, 'Description for Product 4', 4, 15.00, 2500.00, 'https://image.brilliantearth.com/media/thumbnail/2c/1d/2c1d2138c202c3a0197d1970136d47fa.jpg', 1, 4, 4.00, 1, 4),
+('PROD005', 'Product 5', 11000.00, 'Description for Product 5', 5, 9.00, 1400.00, 'https://image.brilliantearth.com/media/thumbnail/b4/40/b44056e082aefe5fae481448827f3b5d.webp	', 1, 2, 3.20, 1, 5);
 
 -- Insert dummy data into ORDERDETAIL table
 INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiamondID, Size, Status) VALUES
