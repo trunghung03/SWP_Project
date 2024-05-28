@@ -42,7 +42,8 @@ namespace DIAN_.Mapper
                Content = articleDto.Content,
                Date = DateTime.Now,
                Image = articleDto.Image,
-               Tag = articleDto.Tag,
+                Employee = articleDto.Employee,
+                Tag = articleDto.Tag,
             };
         }
 

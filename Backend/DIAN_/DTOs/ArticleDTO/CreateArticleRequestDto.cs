@@ -1,4 +1,6 @@
-﻿namespace DIAN_.DTOs.ArticleDTO
+﻿using DIAN_.Models;
+
+namespace DIAN_.DTOs.ArticleDTO
 {
     public class CreateArticleRequestDto
     {
@@ -9,6 +11,8 @@
         public string Image { get; set; }
 
         public string Tag { get; set; } = string.Empty;
+
+        public int Employee { get; set; }
 
         public bool Status { get; set; }
     }

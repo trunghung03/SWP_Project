@@ -46,45 +46,44 @@ namespace DIAN_.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetArticleById([FromRoute] int id)
         {
-            try
-            {
+            //try
+            //{
                 var article = await _articleRepository.GetArticleByIdAsync(id);
                 if (article == null)
                 {
                     return NotFound("Content does not exist");
                 }
-                return Ok(article.ToArticleDto());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+               return Ok(article.ToArticleDto());
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, "Internal server error");
+            //}
         }
 
-        [HttpGet("title/{title}")]
+        [HttpGet("{title}")]
         public async Task<IActionResult> GetArticleByTitle(string title)
         {
-            try
-            {
+           // try
+            //{
                 var article = await _articleRepository.GetArticleByTitleAsync(title);
                 if (article == null)
                 {
                     return NotFound("Title does not exist");
                 }
                 return Ok(article.ToArticleDto());
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                return StatusCode(500, "Internal server error");
-            }
+           // }
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, "Internal server error");
+            //}
         }
 
         [HttpPost("addcontent")]
         public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDto articleDto)
         {
-            try
-            {
+            //try
+            //{
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -92,22 +91,21 @@ namespace DIAN_.Controllers
                 var existingContent = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
                 if (existingContent != null)
                 {
-                    return BadRequest("Warranty already exists");
+                    return BadRequest("Article already exists");
                 }
 
                 var articleModel = articleDto.ToArticleFromCreate();
                 await _articleRepository.CreateArticleAsync(articleModel);
-                return CreatedAtAction(nameof(GetArticleById), new { id = articleModel.ContentId }, articleModel);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                return StatusCode(500, "Internal server error");
-            }
+                return CreatedAtAction(nameof(GetArticleById), new { id = articleModel.ContentId }, articleModel.ToArticleDetailDto());
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, "Internal server error");
+            //}
         }
 
         [HttpPut("update/{id:int}")]
-        public async Task<IActionResult> UpdateWarranty([FromRoute] int id, [FromBody] UpdateArticleRequestDto warrantyDto)
+        public async Task<IActionResult> UpdateArticle([FromRoute] int id, [FromBody] UpdateArticleRequestDto warrantyDto)
         {
             try
             {
@@ -129,7 +127,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
-        public async Task<IActionResult> DeleteWarranty([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
+        public async Task<IActionResult> DeleteArticle([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
         {
             try
             {
