@@ -27,3 +27,4 @@ yarn-error.log*
 /Backend/DIAN_/Migrations
 Backend/DIAN_/appsettings.json
 /.vs
+Backend/DIAN_/appsettings.json

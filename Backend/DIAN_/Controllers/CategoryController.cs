@@ -46,7 +46,7 @@ namespace DIAN_.Controllers
 
             if (category == null) { return  BadRequest("Duplicate category! Please try again!"); }
 
-            return Ok(category);
+            return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
         }
 
         [HttpPut("{id}")]
