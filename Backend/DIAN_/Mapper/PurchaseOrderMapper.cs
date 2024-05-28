@@ -22,6 +22,18 @@ namespace DIAN_.Mapper
             };
         }
 
+        public static PurchaseOrderInfoDTO ToPurchaseOrderInfoDTO(this Purchaseorder order)
+        {
+            return new PurchaseOrderInfoDTO
+            {
+                FullName = $"{order.User.LastName} {order.User.FirstName}",
+                PhoneNumber = order.User.PhoneNumber,
+                Address = order.User.Address,
+                Note = order.Note,
+                PaymentMethod = order.PaymentMethod,
+                PromotionCode = order.Promotion?.Code
+            };
+        }
         public static Purchaseorder ToCreatePurchaseOrder(this CreatePurchaseOrderDTO dto)
         {
             return new Purchaseorder
@@ -32,7 +44,7 @@ namespace DIAN_.Mapper
                 ShippingAddress = dto.ShippingAddress,
                 TotalPrice = dto.TotalPrice,
                 OrderStatus = dto.OrderStatus,
-                PromotionId = dto.PromotionId ?? 0,
+                PromotionId = dto.PromotionId,
                 PayWithPoint = dto.PayWithPoint,
                 Note = dto.Note
             };
