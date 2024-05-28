@@ -29,6 +29,8 @@ import Cart from './Cart/Cart.js';
 import Checkout from './Cart/Checkout.js';
 import Invoice from './Cart/Invoice.js';
 import EditProfile from './Setting/EditProfile.js'
+import OrderHistory from './Setting/OrderHistory.js'
+import OrderDetail from './Setting/OrderDetail.js'
 import {
   BrowserRouter as Router,
   Routes,
@@ -80,6 +82,8 @@ function App() {
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/introduce" element={<Layout><Introduce /></Layout>} />
         <Route path="/editProfile" element={<Layout><EditProfile /></Layout>} />
+        <Route path="/orderHistory" element={<Layout><OrderHistory /></Layout>} />
+        <Route path="/orderDetail" element={<Layout><OrderDetail /></Layout>} />
       </Routes>
     </Router>
   );

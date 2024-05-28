@@ -49,8 +49,8 @@ const FooterComponent = () => {
                         <div className="col-md-4">
                             <h6>Service</h6>
                             <ul className="footer_content">
-                                <li><a href="#">FAQs</a></li>
-                                <li><a href="#">Tracking orders</a></li>
+                                <li><a href="/FAQs">FAQs</a></li>
+                                <li><a href="/orderHistory">Tracking orders</a></li>
                                 <li><a href="#">Promotional codes</a></li>
                             </ul>
                             <br />
