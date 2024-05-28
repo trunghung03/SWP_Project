@@ -17,13 +17,18 @@ namespace DIAN_.Repository
 
         public async Task<Article> CreateArticleAsync(Article articleModel)
         {
+            // Khởi tạo EmployeeNavigation dựa trên EmployeeID
+            articleModel.EmployeeNavigation = await _context.Employees.FindAsync(articleModel.Employee);
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
             return articleModel;
         }
-        public async Task<Article?> GetArticleByTitleAsync(string title)
+        public async Task<List<Article>> GetArticleByTitleAsync(string title)
         {
-            return await _context.Articles.Include(a => a.EmployeeNavigation).FirstOrDefaultAsync(c => c.Title == title);
+            return await _context.Articles
+        .Where(a => a.Title.Contains(title))
+        .Include(a => a.EmployeeNavigation)
+        .ToListAsync();
         }
 
         public async Task<Article?> DeleteArticleAsync(int id)

@@ -28,7 +28,7 @@ namespace DIAN_.Mapper
                 Title = article.Title,
                 Content = article.Content,
                 CreatedOn = article.Date,
-                CreatedBy = article.EmployeeNavigation.LastName,
+                CreatedBy = article.EmployeeNavigation?.LastName ?? "Unknown", // Sử dụng ?. và cung cấp giá trị mặc định
                 Image = article.Image,
                 Tag = article.Tag
 
