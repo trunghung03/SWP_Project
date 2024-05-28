@@ -114,7 +114,7 @@ namespace DIAN_.Controllers
                 {
                     return NotFound("Warranty does not exist");
                 }
-                return Ok(warranty.ToArticleDto());
+                return Ok(warranty.ToDisplayArticleFromUpdate());
             }
             catch (Exception ex)
             {

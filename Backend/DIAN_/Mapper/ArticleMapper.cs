@@ -52,7 +52,19 @@ namespace DIAN_.Mapper
             return new Article {
                 Title = articleDto.Title,
                 Content = articleDto.Content,
-                Date = DateTime.Now,
+                Status = articleDto.Status,
+                Image = articleDto.Image,
+                Tag = articleDto.Tag,
+            };
+        }
+
+        public static UpdatedArticleDto ToDisplayArticleFromUpdate(this Article articleDto)
+        {
+            return new UpdatedArticleDto
+            {
+                Title = articleDto.Title,
+                Content = articleDto.Content,
+                Date = articleDto.Date,
                 Image = articleDto.Image,
                 Tag = articleDto.Tag,
             };
