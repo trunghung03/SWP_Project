@@ -12,4 +12,8 @@ const getUserInfo = (email) => {
     return axios.get(`https://localhost:7184/api/account/${encodeURIComponent(email)}`);
 }
 
-export { customerLoginApi, employeeLoginApi, getUserInfo };
+const getEmployeeInfo = (email) => {
+    return axios.get(`https://localhost:7184/api/employee/${encodeURIComponent(email)}`);
+}
+
+export { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo };

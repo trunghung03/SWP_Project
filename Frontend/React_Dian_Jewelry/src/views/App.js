@@ -34,6 +34,7 @@ import OrderDetail from './Setting/OrderDetail.js'
 import AdminCustomerList from './Admin/AdminCustomerList.js'; 
 import AdminTest from './Admin/AdminTest.js'; 
 import ManagerStatitic from './Manager/ManagerStatitic.js';  
+import ManagerManageDiamond from './Manager/ManagerManageDiamond.js';  
 import SalesStaffOrderList from './SalesStaff/SalesStaffOrderList.js';  
 import DeliStaffDeliveryList from './DeliveryStaff/DeliStaffDeliveryList.js';  
 import {
@@ -96,6 +97,7 @@ function App() {
 
         {/* Manager  */}
         <Route path="/managerStatitic" element={<ManagerStatitic />} />
+        <Route path="/managerManageDiamond" element={<ManagerManageDiamond />} />
 
         {/* Sales Staff  */}
         <Route path="/salesStaffOrderList" element={<SalesStaffOrderList />} />
