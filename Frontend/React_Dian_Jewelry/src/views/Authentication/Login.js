@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/rightImage.png';
-import { customerLoginApi, employeeLoginApi, getUserInfo } from '../../services/UserService';
+import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
 import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
@@ -52,6 +52,13 @@ const Login = () => {
             if (role === 'Admin') {
                 navigate('/adminCustomerList');
             } else if (role === 'Manager') {
+                if (userType === 'employee') {
+                    let employeeInfoRes = await getEmployeeInfo(email);
+                    if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("firstName", employeeInfoRes.data.firstName);
+                        localStorage.setItem("lastName", employeeInfoRes.data.lastName);
+                    }
+                }
                 navigate('/managerStatitic');
             } else if (role === 'SalesStaff') {
                 navigate('/salesStaffOrderList');
@@ -95,7 +102,6 @@ const Login = () => {
     return (
         <div className="main_container">
             <div className="login_wrapper">
-                {/* Left Side: Sign In Form */}
                 <div className="left_side">
                     <form className="sign_in_form" onSubmit={handleLogin}>
                         <h3 className="sign_in_title">Sign in</h3>
@@ -146,8 +152,6 @@ const Login = () => {
                         </div>
                     </form>
                 </div>
-
-                {/* Right Side: Image */}
                 <div className="right_side">
                     <img className="right_image" src={rightImage} alt="Ring photo" />
                 </div>
