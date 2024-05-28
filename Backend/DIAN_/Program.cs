@@ -39,6 +39,7 @@ builder.Services.AddScoped<IOrderRepository,OrderRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
 builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 
 
 var app = builder.Build();
