@@ -22,8 +22,4 @@
     <None Include="efpt.config.json.user" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\PurchaseOrderDTOs\" />
-  </ItemGroup>
-
 </Project>

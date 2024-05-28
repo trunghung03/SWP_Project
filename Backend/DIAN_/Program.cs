@@ -40,7 +40,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
 builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseorderRepository>();
+builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 
 var app = builder.Build();
 
