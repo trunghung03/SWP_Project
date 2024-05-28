@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Header/HeaderComponent.scss';
-import logo from '../../assets/img/logo.png';
+import logo from '../../assets/img/logo2.png';
 
 const HeaderComponent = () => {
     const [role, setRole] = useState('guest');
