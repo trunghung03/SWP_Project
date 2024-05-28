@@ -1,4 +1,4 @@
-use DIAN;
+use DIAN_Test;
 
 -- Insert dummy data into CUSTOMER table
 INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
@@ -71,13 +71,13 @@ VALUES
 
 
 -- Insert dummy data into COLLECTIONS table
-INSERT INTO COLLECTION (Name, Description)
+INSERT INTO COLLECTION (CollectionID,Name, Description)
 VALUES
-('Collection 1','Description for Collection 1'),
-('Collection 2', 'Description for Collection 2'),
-('Collection 3', 'Description for Collection 3'),
-('Collection 4', 'Description for Collection 4'),
-('Collection 5', 'Description for Collection 5');
+(1,'Collection 1','Description for Collection 1'),
+(2,'Collection 2', 'Description for Collection 2'),
+(3,'Collection 3', 'Description for Collection 3'),
+(4,'Collection 4', 'Description for Collection 4'),
+(5,'Collection 5', 'Description for Collection 5');
 
 -- Insert dummy data into PRODUCT table
 INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status, CollectionID)
