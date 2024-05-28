@@ -15,7 +15,7 @@ namespace DIAN_.Mapper
                 Color = diamond.Color,
                 Clarity = diamond.Clarity,
                 Cut = diamond.Cut,
-                Carat = diamond.Carat,
+                Carat = diamond.Carat ?? 0,
                 Cost = diamond.Cost,
                 CertificateScan = diamond.CertificateScan,
                 DiamondSize = diamond.DiamondSize ?? 0,

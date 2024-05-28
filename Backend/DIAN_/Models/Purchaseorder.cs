@@ -25,7 +25,7 @@ public partial class Purchaseorder
 
     public bool? PayWithPoint { get; set; }
 
-    public bool Status { get; set; }
+    public string Note { get; set; }
 
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
 
