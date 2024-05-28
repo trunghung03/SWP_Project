@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/rightImage.png';
-import { loginApi, getUserInfo } from '../../services/UserService';
+import { customerLoginApi, employeeLoginApi, getUserInfo } from '../../services/UserService';
 import { jwtDecode } from 'jwt-decode';
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,42 +14,66 @@ const Login = () => {
     const handleLogin = async (event) => {
         event.preventDefault();
         setError('');
+        let res;
+
         try {
-            let res = await loginApi(email, password);
+            res = await customerLoginApi(email, password);
+
             if (res && res.data && res.data.token) {
-                localStorage.setItem("token", res.data.token);
-                console.log(">>> check login: ", res.data);
-
-                const fwtDecode =jwtDecode(res.data.token);
-                localStorage.setItem("convertedCode", JSON.stringify(fwtDecode));
-                console.log(localStorage.getItem("convertedCode")); 
-                const storeConvertedCode = localStorage.getItem("convertedCode");
-                if(storeConvertedCode){
-                    const decodedToken = JSON.parse(storeConvertedCode);
-                    const role = decodedToken.role;
-                    console.log(role);
-                }
-                // Fetch user info
-                let userInfoRes = await getUserInfo(email);
-                if (userInfoRes && userInfoRes.data) {
-                    localStorage.setItem("firstName", userInfoRes.data.firstName);
-                    localStorage.setItem("lastName", userInfoRes.data.lastName);
-                    localStorage.setItem("points", userInfoRes.data.points);
-                }
-
-                navigate('/home');
-            } else {
-                setError("Login failed: Invalid email or password");
+                handleSuccessfulLogin(res.data.token, 'customer');
+                return;
             }
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                setError("Login failed: Invalid email or password");
-            } else {
-                setError("Login failed: An unexpected error occurred");
+            console.log("Customer login failed, trying employee login...");
+        }
+
+        try {
+            res = await employeeLoginApi(email, password);
+
+            if (res && res.data && res.data.token) {
+                handleSuccessfulLogin(res.data.token, 'employee');
+                return;
             }
+        } catch (error) {
+            setError("Login failed: Invalid email or password");
             console.error("Login failed: ", error);
         }
-    }
+    };
+
+    const handleSuccessfulLogin = async (token, userType) => {
+        localStorage.setItem("token", token);
+        const decodedToken = jwtDecode(token);
+        const role = decodedToken.role;
+
+        if (role) {
+            localStorage.setItem("role", role);
+            console.log("Role: ", role);
+
+            if (role === 'Admin') {
+                navigate('/adminCustomerList');
+            } else if (role === 'Manager') {
+                navigate('/managerStatitic');
+            } else if (role === 'SalesStaff') {
+                navigate('/salesStaffOrderList');
+            } else if (role === 'DeliveryStaff') {
+                navigate('/deliveryStaffDeliveryList');
+            } else if (role === 'Customer') {
+                if (userType === 'customer') {
+                    let userInfoRes = await getUserInfo(email);
+                    if (userInfoRes && userInfoRes.data) {
+                        localStorage.setItem("firstName", userInfoRes.data.firstName);
+                        localStorage.setItem("lastName", userInfoRes.data.lastName);
+                        localStorage.setItem("points", userInfoRes.data.points);
+                    }
+                }
+                navigate('/home');
+            } else {
+                setError("Login failed: Unknown role");
+            }
+        } else {
+            setError("Login failed: No role found");
+        }
+    };
 
     useEffect(() => {
         const togglePassword = document.getElementById('togglePassword');

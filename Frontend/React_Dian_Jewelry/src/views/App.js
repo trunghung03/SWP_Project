@@ -31,6 +31,11 @@ import Invoice from './Cart/Invoice.js';
 import EditProfile from './Setting/EditProfile.js'
 import OrderHistory from './Setting/OrderHistory.js'
 import OrderDetail from './Setting/OrderDetail.js'
+import AdminCustomerList from './Admin/AdminCustomerList.js'; 
+import AdminTest from './Admin/AdminTest.js'; 
+import ManagerStatitic from './Manager/ManagerStatitic.js';  
+import SalesStaffOrderList from './SalesStaff/SalesStaffOrderList.js';  
+import DeliStaffDeliveryList from './DeliveryStaff/DeliStaffDeliveryList.js';  
 import {
   BrowserRouter as Router,
   Routes,
@@ -84,6 +89,19 @@ function App() {
         <Route path="/editProfile" element={<Layout><EditProfile /></Layout>} />
         <Route path="/orderHistory" element={<Layout><OrderHistory /></Layout>} />
         <Route path="/orderDetail" element={<Layout><OrderDetail /></Layout>} />
+
+        {/* Admin  */}
+        <Route path="/adminCustomerList" element={<AdminCustomerList />} />
+        <Route path="/adminTest" element={<AdminTest />} />
+
+        {/* Manager  */}
+        <Route path="/managerStatitic" element={<ManagerStatitic />} />
+
+        {/* Sales Staff  */}
+        <Route path="/salesStaffOrderList" element={<SalesStaffOrderList />} />
+
+        {/* Delivery Staff  */}
+        <Route path="/deliStaffDeliveryList" element={<DeliStaffDeliveryList />} />
       </Routes>
     </Router>
   );
