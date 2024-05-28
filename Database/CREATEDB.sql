@@ -79,6 +79,7 @@ CREATE TABLE PURCHASEORDER (
     [OrderStatus] NVARCHAR(50) NOT NULL DEFAULT 'Pending', -- Renamed to OrderStatus
     PromotionID INT NULL FOREIGN KEY REFERENCES PROMOTION(PromotionID),
     PayWithPoint BIT,
+    Note NVARCHAR(MAX)
 );
 
 -- Revised Shell table with ShellID as the primary key

@@ -42,14 +42,14 @@
 	('Holiday Special', 40.00, GETDATE(), DATEADD(month, 7, GETDATE()), '40% off all items for the Holidays', 'HOLIDAY40', 7, 1);
 
 	-- Insert dummy data into PURCHASEORDER table
-	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint) VALUES
-	(1, GETDATE(), 'Credit Card', '123 Main St', 200.00, 'Pending', 1, 0),
-	(2, GETDATE(), 'PayPal', '456 Elm St', 300.00, 'Pending', 2, 1),
-	(3, GETDATE(), 'Credit Card', '789 Oak St', 150.00, 'Pending', 3, 0),
-	(4, GETDATE(), 'PayPal', '101 Pine St', 250.00, 'Pending', 4, 1),
-	(5, GETDATE(), 'Credit Card', '202 Cedar St', 350.00, 'Pending', 5, 0),
-	(6, GETDATE(), 'PayPal', '303 Birch St', 400.00, 'Pending', 6, 1),
-	(7, GETDATE(), 'Credit Card', '404 Maple St', 450.00, 'Pending', 7, 0);
+	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note) VALUES
+	(1, GETDATE(), 'Credit Card', '123 Main St', 200.00, 'Pending', 1, 0, 'Shipping with packaging'),
+	(2, GETDATE(), 'PayPal', '456 Elm St', 300.00, 'Pending', 2, 1, 'Ship at D2'),
+	(3, GETDATE(), 'Credit Card', '789 Oak St', 150.00, 'Pending', 3, 0, 'Shipping without packaging'),
+	(4, GETDATE(), 'PayPal', '101 Pine St', 250.00, 'Pending', 4, 1, 'Shipping with packaging'),
+	(5, GETDATE(), 'Credit Card', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging'),
+	(6, GETDATE(), 'PayPal', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging'),
+	(7, GETDATE(), 'Credit Card', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging');
 
 	-- Insert dummy data into SHELLMATERIAL table
 	INSERT INTO SHELLMATERIAL ([Name], AmountAvailable, Price, Status) VALUES
@@ -71,13 +71,13 @@
 
 
 	-- Insert dummy data into COLLECTIONS table
-	INSERT INTO COLLECTION (CollectionID,Name, Description)
-	VALUES
-	(1,'Collection 1','Description for Collection 1'),
-	(2,'Collection 2', 'Description for Collection 2'),
-	(3,'Collection 3', 'Description for Collection 3'),
-	(4,'Collection 4', 'Description for Collection 4'),
-	(5,'Collection 5', 'Description for Collection 5');
+INSERT INTO COLLECTION (CollectionID, Name, Status, Description)
+VALUES
+(1, 'Collection 1', 1, 'Description for Collection 1'),
+(2, 'Collection 2', 1, 'Description for Collection 2'),
+(3, 'Collection 3', 1, 'Description for Collection 3'),
+(4, 'Collection 4', 1, 'Description for Collection 4'),
+(5, 'Collection 5', 1, 'Description for Collection 5');
 
 	-- Insert dummy data into PRODUCT table
 	INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status, CollectionID)
