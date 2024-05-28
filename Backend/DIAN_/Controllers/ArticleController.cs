@@ -2,6 +2,7 @@
 using DIAN_.DTOs.WarrantyDTO;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
+using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,11 +68,11 @@ namespace DIAN_.Controllers
            // try
             //{
                 var article = await _articleRepository.GetArticleByTitleAsync(title);
-                if (article == null)
+                if (article == null )
                 {
-                    return NotFound("Title does not exist");
+                    return NotFound("No articles found with the given title");
                 }
-                return Ok(article.ToArticleDto());
+                return Ok(article.Select(a => a.ToArticleList())); ;
            // }
             //catch (Exception ex)
             //{
@@ -82,27 +83,22 @@ namespace DIAN_.Controllers
         [HttpPost("addcontent")]
         public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDto articleDto)
         {
-            //try
-            //{
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var existingContent = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
-                if (existingContent != null)
-                {
-                    return BadRequest("Article already exists");
-                }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-                var articleModel = articleDto.ToArticleFromCreate();
-                await _articleRepository.CreateArticleAsync(articleModel);
-                return CreatedAtAction(nameof(GetArticleById), new { id = articleModel.ContentId }, articleModel.ToArticleDetailDto());
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, "Internal server error");
-            //}
+            var existingArticles = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
+            if (existingArticles.Any(a => a.Title == articleDto.Title))
+            {
+                return BadRequest("Article already exists");
+            }
+
+            var articleModel = articleDto.ToArticleFromCreate();
+            await _articleRepository.CreateArticleAsync(articleModel);
+            return CreatedAtAction(nameof(GetArticleById), new { id = articleModel.ContentId }, articleModel.ToArticleDetailDto());
         }
+
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateArticle([FromRoute] int id, [FromBody] UpdateArticleRequestDto warrantyDto)

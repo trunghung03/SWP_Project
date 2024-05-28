@@ -61,7 +61,7 @@ namespace DIAN_.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("ContentId")
-                        .HasName("PK__ARTICLE__2907A87E7CDCA1AF");
+                        .HasName("PK__ARTICLE__2907A87E479995E2");
 
                     b.HasIndex("Employee");
 
@@ -88,9 +88,9 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("CategoryId")
-                        .HasName("PK__CATEGORY__19093A2B497709BA");
+                        .HasName("PK__CATEGORY__19093A2B95E8FEB4");
 
-                    b.HasIndex(new[] { "Name" }, "UQ__CATEGORY__737584F695DAB6AE")
+                    b.HasIndex(new[] { "Name" }, "UQ__CATEGORY__737584F62DDF46B8")
                         .IsUnique();
 
                     b.ToTable("CATEGORY", (string)null);
@@ -99,11 +99,8 @@ namespace DIAN_.Migrations
             modelBuilder.Entity("DIAN_.Models.Collection", b =>
                 {
                     b.Property<int>("CollectionId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("CollectionID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CollectionId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -120,7 +117,7 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("CollectionId")
-                        .HasName("PK__COLLECTI__7DE6BC24721587CE");
+                        .HasName("PK__COLLECTI__7DE6BC24045AC66D");
 
                     b.ToTable("COLLECTION", (string)null);
                 });
@@ -171,7 +168,7 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("CustomerId")
-                        .HasName("PK__CUSTOMER__A4AE64B87D21F49E");
+                        .HasName("PK__CUSTOMER__A4AE64B8DC59C5FC");
 
                     b.ToTable("CUSTOMER", (string)null);
                 });
@@ -188,7 +185,7 @@ namespace DIAN_.Migrations
                     b.Property<int>("AmountAvailable")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Carat")
+                    b.Property<decimal?>("Carat")
                         .HasColumnType("decimal(5, 2)");
 
                     b.Property<string>("CertificateScan")
@@ -223,7 +220,7 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("DiamondId")
-                        .HasName("PK__DIAMOND__23A8E7BB00CF0A33");
+                        .HasName("PK__DIAMOND__23A8E7BB276D7699");
 
                     b.ToTable("DIAMOND", (string)null);
                 });
@@ -276,7 +273,7 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("EmployeeId")
-                        .HasName("PK__EMPLOYEE__7AD04FF120D557D2");
+                        .HasName("PK__EMPLOYEE__7AD04FF1913BDBE1");
 
                     b.ToTable("EMPLOYEE", (string)null);
                 });
@@ -318,7 +315,7 @@ namespace DIAN_.Migrations
                         .HasColumnName("SubDiamondID");
 
                     b.HasKey("OrderDetailId")
-                        .HasName("PK__ORDERDET__D3B9D30C72FF32EA");
+                        .HasName("PK__ORDERDET__D3B9D30C68B10E28");
 
                     b.HasIndex("OrderId");
 
@@ -393,7 +390,7 @@ namespace DIAN_.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ProductId")
-                        .HasName("PK__PRODUCT__2D10D14AD66AA904");
+                        .HasName("PK__PRODUCT__2D10D14A4AD15641");
 
                     b.HasIndex("CategoryId");
 
@@ -401,7 +398,7 @@ namespace DIAN_.Migrations
 
                     b.HasIndex("MainDiamondId");
 
-                    b.HasIndex(new[] { "ProductCode" }, "UQ__PRODUCT__C206838921B36421")
+                    b.HasIndex(new[] { "ProductCode" }, "UQ__PRODUCT__C20683896CCF11D8")
                         .IsUnique();
 
                     b.ToTable("PRODUCT", (string)null);
@@ -447,7 +444,7 @@ namespace DIAN_.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("PromotionId")
-                        .HasName("PK__PROMOTIO__52C42F2F6C1CC401");
+                        .HasName("PK__PROMOTIO__52C42F2F93527612");
 
                     b.HasIndex("EmployeeId");
 
@@ -465,6 +462,9 @@ namespace DIAN_.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderStatus")
                         .IsRequired()
@@ -490,11 +490,6 @@ namespace DIAN_.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18, 2)");
 
@@ -503,7 +498,7 @@ namespace DIAN_.Migrations
                         .HasColumnName("UserID");
 
                     b.HasKey("OrderId")
-                        .HasName("PK__PURCHASE__C3905BAF92DDA9EA");
+                        .HasName("PK__PURCHASE__C3905BAFD39FFA8D");
 
                     b.HasIndex("PromotionId");
 
@@ -538,7 +533,7 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("ShellMaterialId")
-                        .HasName("PK__SHELLMAT__B375E41D94F58E96");
+                        .HasName("PK__SHELLMAT__B375E41DA7AF3329");
 
                     b.ToTable("SHELLMATERIAL", (string)null);
                 });
@@ -559,7 +554,7 @@ namespace DIAN_.Migrations
                         .HasColumnType("decimal(5, 2)");
 
                     b.HasKey("CategoryId")
-                        .HasName("PK__SIZE__19093A2BA4E43B58");
+                        .HasName("PK__SIZE__19093A2BF2B6CBE6");
 
                     b.ToTable("SIZE", (string)null);
                 });
@@ -582,7 +577,7 @@ namespace DIAN_.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("OrderDetailId")
-                        .HasName("PK__WARRANTY__D3B9D30C0B5CD543");
+                        .HasName("PK__WARRANTY__D3B9D30C716321EF");
 
                     b.ToTable("WARRANTY", (string)null);
                 });
@@ -604,23 +599,23 @@ namespace DIAN_.Migrations
                         .WithMany("Orderdetails")
                         .HasForeignKey("OrderId")
                         .IsRequired()
-                        .HasConstraintName("FK__ORDERDETA__Order__38996AB5");
+                        .HasConstraintName("FK__ORDERDETA__Order__37A5467C");
 
                     b.HasOne("DIAN_.Models.Product", "Product")
                         .WithMany("Orderdetails")
                         .HasForeignKey("ProductId")
                         .IsRequired()
-                        .HasConstraintName("FK__ORDERDETA__Produ__398D8EEE");
+                        .HasConstraintName("FK__ORDERDETA__Produ__38996AB5");
 
                     b.HasOne("DIAN_.Models.Shellmaterial", "ShellMaterial")
                         .WithMany("Orderdetails")
                         .HasForeignKey("ShellMaterialId")
-                        .HasConstraintName("FK__ORDERDETA__Shell__3A81B327");
+                        .HasConstraintName("FK__ORDERDETA__Shell__398D8EEE");
 
                     b.HasOne("DIAN_.Models.Diamond", "SubDiamond")
                         .WithMany("Orderdetails")
                         .HasForeignKey("SubDiamondId")
-                        .HasConstraintName("FK__ORDERDETA__SubDi__3B75D760");
+                        .HasConstraintName("FK__ORDERDETA__SubDi__3A81B327");
 
                     b.Navigation("Order");
 
@@ -636,18 +631,18 @@ namespace DIAN_.Migrations
                     b.HasOne("DIAN_.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK__PRODUCT__Categor__35BCFE0A");
+                        .HasConstraintName("FK__PRODUCT__Categor__34C8D9D1");
 
                     b.HasOne("DIAN_.Models.Collection", "Collection")
                         .WithMany("Products")
                         .HasForeignKey("CollectionId")
-                        .HasConstraintName("FK__PRODUCT__Collect__34C8D9D1");
+                        .HasConstraintName("FK__PRODUCT__Collect__33D4B598");
 
                     b.HasOne("DIAN_.Models.Diamond", "MainDiamond")
                         .WithMany("Products")
                         .HasForeignKey("MainDiamondId")
                         .IsRequired()
-                        .HasConstraintName("FK__PRODUCT__MainDia__31EC6D26");
+                        .HasConstraintName("FK__PRODUCT__MainDia__30F848ED");
 
                     b.Navigation("Category");
 
@@ -691,7 +686,7 @@ namespace DIAN_.Migrations
                         .WithOne("Size")
                         .HasForeignKey("DIAN_.Models.Size", "CategoryId")
                         .IsRequired()
-                        .HasConstraintName("FK__SIZE__CategoryID__4316F928");
+                        .HasConstraintName("FK__SIZE__CategoryID__4222D4EF");
 
                     b.Navigation("Category");
                 });
@@ -702,7 +697,7 @@ namespace DIAN_.Migrations
                         .WithOne("Warranty")
                         .HasForeignKey("DIAN_.Models.Warranty", "OrderDetailId")
                         .IsRequired()
-                        .HasConstraintName("FK__WARRANTY__OrderD__3F466844");
+                        .HasConstraintName("FK__WARRANTY__OrderD__3E52440B");
 
                     b.Navigation("OrderDetail");
                 });
