@@ -10,6 +10,6 @@ namespace DIAN_.Interfaces
         Task<Article> CreateArticleAsync(Article articleModel);
         Task<Article?> UpdateArticleAsync(int id, Article articleModel);
         Task<Article?> DeleteArticleAsync(int id);
-        Task<Article> GetArticleByTitleAsync(string title);
+        Task<Article?> GetArticleByTitleAsync(string title);
     }
 }
