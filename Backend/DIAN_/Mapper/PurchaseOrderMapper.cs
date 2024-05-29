@@ -11,6 +11,8 @@ namespace DIAN_.Mapper
             {
                 OrderId = order.OrderId,
                 UserId = order.UserId,
+                Name=order.Name,
+                PhoneNumber=order.PhoneNumber,
                 Date = order.Date,
                 PaymentMethod = order.PaymentMethod,
                 ShippingAddress = order.ShippingAddress,
@@ -26,9 +28,10 @@ namespace DIAN_.Mapper
         {
             return new PurchaseOrderInfoDTO
             {
-                FullName = $"{order.User.LastName} {order.User.FirstName}",
+                 //$"{order.User.LastName} {order.User.FirstName}",
+                FullName=order.Name,
                 PhoneNumber = order.User.PhoneNumber,
-                Address = order.User.Address,
+                Address= order.User.Address,
                 Note = order.Note,
                 PaymentMethod = order.PaymentMethod,
                 PromotionCode = order.Promotion?.Code
@@ -40,6 +43,8 @@ namespace DIAN_.Mapper
             {
                 UserId = dto.UserId,
                 Date = dto.Date,
+                Name=dto.Name,
+                PhoneNumber = dto.PhoneNumber,
                 PaymentMethod = dto.PaymentMethod,
                 ShippingAddress = dto.ShippingAddress,
                 TotalPrice = dto.TotalPrice,
@@ -54,6 +59,8 @@ namespace DIAN_.Mapper
         {
             order.UserId = dto.UserId;
             order.Date = dto.Date;
+            order.Name = dto.Name;
+            order.PhoneNumber = dto.PhoneNumber;
             order.PaymentMethod = dto.PaymentMethod;
             order.ShippingAddress = dto.ShippingAddress;
             order.TotalPrice = dto.TotalPrice;

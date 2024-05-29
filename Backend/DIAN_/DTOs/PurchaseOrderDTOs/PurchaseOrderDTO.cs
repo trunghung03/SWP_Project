@@ -4,6 +4,8 @@
     {
         public int OrderId { get; set; }
         public int UserId { get; set; }
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime Date { get; set; }
         public string PaymentMethod { get; set; }
         public string ShippingAddress { get; set; }
