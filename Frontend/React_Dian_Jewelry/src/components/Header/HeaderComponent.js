@@ -24,10 +24,13 @@ const HeaderComponent = () => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("firstName");
-        localStorage.removeItem("lastName");
-        localStorage.removeItem("points");
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+        localStorage.clear();
+        if (rememberedEmail && rememberedPassword) {
+            localStorage.setItem('rememberedEmail', rememberedEmail);
+            localStorage.setItem('rememberedPassword', rememberedPassword);
+        }
         setRole('guest');
         navigate('/login');
     };

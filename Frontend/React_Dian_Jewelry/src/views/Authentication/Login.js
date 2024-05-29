@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/rightImage.png';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
@@ -8,18 +9,87 @@ import { jwtDecode } from 'jwt-decode';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+
+        if (rememberedEmail && rememberedPassword) {
+            setEmail(rememberedEmail);
+            setPassword(rememberedPassword);
+            setRememberMe(true);
+        }
+    }, []);
+
+    const isValidEmail = (email) => {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailPattern.test(email);
+    };
 
     const handleLogin = async (event) => {
         event.preventDefault();
         setError('');
+
+        if (!isValidEmail(email)) {
+            swal({
+                title: "Wrong email format!",
+                text: "Please enter a valid email.",
+                icon: "error",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                },
+            });
+            return;
+        }
+
+        let userInfoRes;
+        try {
+            userInfoRes = await getUserInfo(email);
+        } catch (error) {
+            console.error("Error checking email existence: ", error);
+        }
+
         let res;
 
         try {
             res = await customerLoginApi(email, password);
 
             if (res && res.data && res.data.token) {
+                if (userInfoRes.data.password !== password) {
+                    swal({
+                        title: "Wrong password!",
+                        text: "Please try again.",
+                        icon: "error",
+                        button: {
+                            text: "Ok",
+                            className: "swal-button"
+                        }
+                    });
+                    return;
+                }
+                if (!userInfoRes.data.status) {
+                    swal({
+                        title: "Account is deactivated!",
+                        text: "Please contact us if this is a mistake.",
+                        icon: "error",
+                        buttons: {
+                            contact: {
+                                text: "Contact",
+                                value: "contact",
+                                className: "contact-alert-button"
+                            }
+                        }
+                    }).then((value) => {
+                        if (value === "contact") {
+                            navigate('/contact');
+                        }
+                    });
+                    return;
+                }
                 handleSuccessfulLogin(res.data.token, 'customer');
                 return;
             }
@@ -31,11 +101,60 @@ const Login = () => {
             res = await employeeLoginApi(email, password);
 
             if (res && res.data && res.data.token) {
+                const employeeInfoRes = await getEmployeeInfo(email);
+                if (employeeInfoRes && employeeInfoRes.data) {
+                    if (employeeInfoRes.data.password !== password) {
+                        swal({
+                            title: "Wrong password!",
+                            text: "Please try again.",
+                            icon: "error",
+                            button: {
+                                text: "Ok",
+                                className: "swal-button"
+                            }
+                        });
+                        return;
+                    }
+                    if (!employeeInfoRes.data.status) {
+                        swal({
+                            title: "Account is deactivated!",
+                            text: "Please contact us if this is a mistake.",
+                            icon: "error",
+                            buttons: {
+                                contact: {
+                                    text: "Contact",
+                                    value: "contact",
+                                    className: "contact-alert-button"
+                                }
+                            }
+                        }).then((value) => {
+                            if (value === "contact") {
+                                navigate('/contact');
+                            }
+                        });
+                        return;
+                    }
+                }
                 handleSuccessfulLogin(res.data.token, 'employee');
                 return;
             }
         } catch (error) {
-            setError("Login failed: Invalid email or password");
+            swal({
+                title: "Email does not exist!",
+                text: "Please try other email or sign up an account with this email.",
+                icon: "error",
+                buttons: {
+                    signUp: {
+                        text: "Sign up",
+                        value: "signUp",
+                        className: "swal-button"
+                    }
+                }
+            }).then((value) => {
+                if (value === "signUp") {
+                    navigate('/register');
+                }
+            });
             console.error("Login failed: ", error);
         }
     };
@@ -76,6 +195,14 @@ const Login = () => {
                 navigate('/home');
             } else {
                 setError("Login failed: Unknown role");
+            }
+
+            if (rememberMe) {
+                localStorage.setItem('rememberedEmail', email);
+                localStorage.setItem('rememberedPassword', password);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('rememberedPassword');
             }
         } else {
             setError("Login failed: No role found");
@@ -134,7 +261,11 @@ const Login = () => {
                             </span>
                         </div>
                         <div className="remember_forgot_section mb-3">
-                            <input type="checkbox" />
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                            />
                             <label className="remember_me">Remember me</label>
                             <a className="forgot_password_link" href="/forgotPassword">Forgot password?</a>
                         </div>

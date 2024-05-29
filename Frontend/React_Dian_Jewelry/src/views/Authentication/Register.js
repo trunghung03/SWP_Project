@@ -3,6 +3,7 @@ import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/Register.scss';
 import rightImage from '../../assets/img/register.jpg';
+import { getUserInfo } from '../../services/UserService'; 
 
 const Register = () => {
     useEffect(() => {
@@ -48,7 +49,7 @@ const Register = () => {
         }
 
         const btnSuccessPopup = document.getElementById("successPopup");
-        btnSuccessPopup.onclick = function (e) {
+        btnSuccessPopup.onclick = async function (e) {
             e.preventDefault();
             const firstName = document.getElementById("first_name").value.trim();
             const lastName = document.getElementById("last_name").value.trim();
@@ -59,8 +60,8 @@ const Register = () => {
 
             if (!firstName || !lastName || !email || !password || !rePassword) {
                 swal({
-                    title: "Error!",
-                    text: "Please fill all fields first.",
+                    title: "Fields haven't filled in all yet!",
+                    text: "Please fill in all fields first.",
                     icon: "error",
                     button: {
                         text: "Ok",
@@ -77,7 +78,7 @@ const Register = () => {
 
             if (!isValidEmail(email)) {
                 swal({
-                    title: "Error!",
+                    title: "Wrong email format!",
                     text: "Please enter a valid email.",
                     icon: "error",
                     button: {
@@ -90,8 +91,8 @@ const Register = () => {
 
             if (password !== rePassword) {
                 swal({
-                    title: "Error!",
-                    text: "Passwords have to be the same.",
+                    title: "Passwords have to be the same!",
+                    text: "Please try again.",
                     icon: "error",
                     button: {
                         text: "Ok",
@@ -103,8 +104,8 @@ const Register = () => {
 
             if (!tosCheckbox.checked) {
                 swal({
-                    title: "Error!",
-                    text: "You have not agreed to the term of service.",
+                    title: "Have not agreed to term of service!",
+                    text: "Cannot sign up if you do not agree with our terms of service.",
                     icon: "error",
                     button: {
                         text: "Ok",
@@ -114,17 +115,80 @@ const Register = () => {
                 return;
             }
 
-            swal({
-                title: "Success!",
-                text: "You have signed up successfully.",
-                icon: "success",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
-            }).then(() => {
-                window.location.href = "/login";
-            });
+            try {
+                const userInfoRes = await getUserInfo(email);
+                if (userInfoRes && userInfoRes.data) {
+                    swal({
+                        title: "Email has been registered!",
+                        text: "Please use another email to sign up.",
+                        icon: "error",
+                        button: {
+                            text: "Ok",
+                            className: "swal-button"
+                        },
+                    });
+                    return;
+                }
+            } catch (error) {
+                console.error("Error checking email existence: ", error);
+            }
+
+            const requestData = {
+                firstName,
+                lastName,
+                email,
+                password
+            };
+
+            try {
+                const response = await fetch('https://localhost:7184/api/account/registercustomer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    swal({
+                        title: "Sign up successfully!",
+                        text: "You have signed up a new account successfully.",
+                        icon: "success",
+                        button: {
+                            text: "Ok",
+                            className: "swal-button"
+                        },
+                    }).then(() => {
+                        window.location.href = "/login";
+                    });
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: result.message || "Registration failed. Please try again.",
+                        icon: "error",
+                        button: {
+                            text: "Ok",
+                            className: "swal-button"
+                        },
+                    });
+                }
+            } catch (error) {
+                swal({
+                    title: "Error!",
+                    text: "Registration failed. Please try again.",
+                    icon: "error",
+                    button: {
+                        text: "Ok",
+                        className: "swal-button"
+                    },
+                });
+            }
         }
 
         return () => {
