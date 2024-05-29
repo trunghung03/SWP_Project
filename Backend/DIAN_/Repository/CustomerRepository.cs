@@ -66,8 +66,8 @@ namespace DIAN_.Repository
                 Password = user.Password,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
-                Address = user.Address,
-                PhoneNumber = user.PhoneNumber,
+                Address = user.Address ?? null,
+                PhoneNumber = user.PhoneNumber ?? null,
                 Points = 0
             };
 
