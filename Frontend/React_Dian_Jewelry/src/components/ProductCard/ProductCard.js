@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ProductCard.scss';
 
-const ProductCard = ({ image, name, price }) => {
+const ProductCard = ({ id, image, name, price }) => {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate('/productDetail', { state: { image, name, price } });
+        navigate('/productDetail', { state: { id } });
     };
 
     return (
@@ -44,7 +44,7 @@ const ProductList = ({ products }) => {
     return (
         <div className="product_list">
             {products.map((product, index) => (
-                <ProductCard key={index} image={product.imageLinkList} name={product.name} price={product.price} />
+                <ProductCard key={index} id={product.productId} image={product.imageLinkList} name={product.name} price={product.price} />
             ))}
             {!isDiamondJewelryPage && <SpecialCard />}
         </div>

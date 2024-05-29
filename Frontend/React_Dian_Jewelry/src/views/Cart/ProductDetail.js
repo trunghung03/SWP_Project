@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -7,40 +7,75 @@ import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { useLocation } from 'react-router-dom';
 import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
+import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials } from '../../services/ProductService';
 
 function ProductDetail() {
     const location = useLocation();
-    const product = location.state || {};
-    const { image, name, price } = product;
     const navigate = useNavigate();
     const [showSizeGuide, setShowSizeGuide] = useState(false);
     const [selectedSize, setSelectedSize] = useState('');
+    const [selectedShell, setSelectedShell] = useState('');
+    const [product, setProduct] = useState({});
+    const [diamond, setDiamond] = useState({});
+    const [collection, setCollection] = useState({});
+    const [shellMaterials, setShellMaterials] = useState([]);
     const [cartItems, setCartItems] = useState([]);
-    const updatedCartItems = [...cartItems, product];
+
+    useEffect(() => {
+        const { id } = location.state || {};
+        if (id) {
+            getProductDetail(id).then(response => {
+                const productData = response.data;
+                setProduct(productData);
+                return Promise.all([
+                    getDiamondDetail(productData.mainDiamondId),
+                    getCollectionDetail(productData.collectionId)
+                ]);
+            }).then(([diamondResponse, collectionResponse]) => {
+                setDiamond(diamondResponse.data);
+                setCollection(collectionResponse.data);
+            }).catch(error => {
+                console.error('Error fetching product, diamond, or collection details:', error);
+            });
+
+            getShellMaterials().then(response => {
+                setShellMaterials(response.data);
+            }).catch(error => {
+                console.error('Error fetching shell materials:', error);
+            });
+        }
+    }, [location.state]);
+
     const handleAddToCart = () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            swal("Please sign in or sign up an account first.", {
+            swal({
+                title: "Can not add to cart!",
+                text: "Please sign in or sign up an account first.",
                 icon: "warning",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                }
             });
         } else {
-            saveProductToLocalStorage(product);
+            const productToSave = {
+                ...product,
+                selectedSize,
+                selectedShell
+            };
+            saveProductToLocalStorage(productToSave);
             navigateToCart();
         }
     };
-    console.log(localStorage.getItem("cartItems"));
+
     const saveProductToLocalStorage = (product) => {
-        // Retrieve the existing cart items from localStorage
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        
-        // Add the new product to the cart items
         const updatedCartItems = [...cartItems, product];
-        
-        // Save the updated cart items back to localStorage
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
     };
+
     const navigateToCart = () => {
         navigate('/cart');
     };
@@ -53,7 +88,11 @@ function ProductDetail() {
         setShowSizeGuide(false);
     };
 
-    const navItems = ['Home', 'Diamond Jewelry', name];
+    const handleShellChange = (e) => {
+        setSelectedShell(e.target.value);
+    };
+
+    const navItems = ['Home', 'Diamond Jewelry', product.name];
 
     return (
         <div className="product_detail">
@@ -61,23 +100,37 @@ function ProductDetail() {
             <br />
             <div className="product_detail_container">
                 <div className="product_image_detail">
-                    <img src={image} alt={name} />
+                    <img src={product.imageLinkList} alt={product.name} />
                     <div className="product_contact_detail">
                         <p><i className="fas fa-envelope"></i> example@gmail.com</p>
                         <p><i className="fas fa-phone"></i> 0912 345 678</p>
                     </div>
                 </div>
                 <div className="product_info_detail">
-                    <h2 className="product_name_detail">{name}</h2>
+                    <h2 className="product_name_detail">{product.name}</h2>
                     <p className="product_description_detail">
-                        Alternating round and marquise diamonds create an alluring pattern across the top of this chic and distinctive ring.
+                        {product.description}
                     </p>
-                    <p className="product_code_detail"><strong>Code:</strong> 129029012</p>
-                    <p className="product_weight_detail"><strong>Total Carat Weight:</strong> 3/8 ct. tw.</p>
-                    <p className="product_shell_detail"><strong>Shell:</strong> S2272</p>
-                    <p className="product_sub_diamond_detail"><strong>Sub diamond:</strong> D8227</p>
+                    <p className="product_code_detail"><strong>Code:</strong> {product.productCode}</p>
+                    <p className="product_diamond_detail"><strong>Diamond:</strong> {diamond.name}</p>
+                    <p className="product_weight_detail"><strong>Carat:</strong> {diamond.carat}</p>
+                    <p className="product_shell_detail"><strong>Shell:</strong>
+                        {shellMaterials.map((shell) => (
+                            <label key={shell.shellMaterialId} style={{ marginRight: '10px', color: shell.amountAvailable === 0 ? 'gray' : 'black' }}>
+                                <input
+                                    className="shell_checkbox"
+                                    type="radio"
+                                    value={shell.name}
+                                    checked={selectedShell === shell.name}
+                                    onChange={handleShellChange}
+                                    disabled={shell.amountAvailable === 0}
+                                />
+                                {shell.name}
+                            </label>
+                        ))}
+                    </p>
                     <div className="price_size_container">
-                        <p className="product_price_detail">${price}</p>
+                        <p className="product_price_detail">{product.price}$</p>
                         <div className="size_guide_container">
                             <button onClick={openSizeGuide} className="size_guide_detail">Size guide</button>
                             <select
@@ -108,6 +161,19 @@ function ProductDetail() {
                     </div>
                     <hr className="product_detail_line" />
                 </div>
+            </div>
+            <div className="product_specification_container">
+                <h3 className="product_specification_title">Specifications & Descriptions</h3>
+                <hr className="product_specification_line"></hr>
+                <p className="product_specification_trademark"><strong>Trademark:</strong> Dian Jewelry</p>
+                <p className="product_specification_diamond_amount"><strong>Main Diamond:</strong> {diamond.name}</p>
+                <p className="product_specification_color"><strong>Color:</strong> {diamond.color}</p>
+                <p className="product_specification_cut"><strong>Cut:</strong> {diamond.cut}</p>
+                <p className="product_specification_carat"><strong>Carat:</strong> {diamond.carat}</p>
+                <p className="product_specification_clarity"><strong>Clarity:</strong> {diamond.clarity}</p>
+                <p className="product_specification_diamond_size"><strong>Size:</strong> {diamond.diamondSize}</p>
+                <p className="product_specification_sub_diamond_amount"><strong>Sub Diamond Amount:</strong> {product.subDiamondAmount}</p>
+                <p className="product_specification_collection"><strong>Collection:</strong> {collection.name}</p>
             </div>
             {showSizeGuide && (
                 <div className="size_guide_popup">

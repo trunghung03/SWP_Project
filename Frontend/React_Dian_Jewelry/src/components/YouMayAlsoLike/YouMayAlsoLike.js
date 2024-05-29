@@ -93,7 +93,9 @@ function YouMayAlsoLike() {
                         { image: rightImage, name: "Product 5", price: 620.73 },
                         { image: rightImage, name: "Product 6", price: 620.73 },
                         { image: rightImage, name: "Product 7", price: 620.73 },
-                        { image: rightImage, name: "Product 8", price: 620.73 }
+                        { image: rightImage, name: "Product 8", price: 620.73 },
+                        { image: rightImage, name: "Product 1", price: 620.73 },
+                        { image: rightImage, name: "Product 2", price: 620.73 }
                     ].map((product, index) => (
                         <div key={index} className="also_like_card" onClick={() => navigateToProductDetail(product)}>
                             <img src={product.image} alt={product.name} className="also_like_image" />
