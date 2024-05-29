@@ -3,7 +3,7 @@ import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/Register.scss';
 import rightImage from '../../assets/img/register.jpg';
-import { getUserInfo } from '../../services/UserService'; 
+import { getUserInfo } from '../../services/UserService';
 
 const Register = () => {
     useEffect(() => {
@@ -157,18 +157,6 @@ const Register = () => {
 
                 if (result.success) {
                     swal({
-                        title: "Sign up successfully!",
-                        text: "You have signed up a new account successfully.",
-                        icon: "success",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        },
-                    }).then(() => {
-                        window.location.href = "/login";
-                    });
-                } else {
-                    swal({
                         title: "Error!",
                         text: result.message || "Registration failed. Please try again.",
                         icon: "error",
@@ -176,6 +164,18 @@ const Register = () => {
                             text: "Ok",
                             className: "swal-button"
                         },
+                    });
+                } else {
+                    swal({
+                        title: "Sign up successfully!",
+                        text: "You have signed up a new account.",
+                        icon: "success",
+                        button: {
+                            text: "Ok",
+                            className: "swal-button"
+                        },
+                    }).then(() => {
+                        window.location.href = "/login";
                     });
                 }
             } catch (error) {
