@@ -68,7 +68,8 @@ namespace DIAN_.Repository
                 FirstName = user.FirstName,
                 Address = user.Address ?? null,
                 PhoneNumber = user.PhoneNumber ?? null,
-                Points = 0
+                Points = 0,
+                Status = true,
             };
 
             var createdUser = await _context.Customers.AddAsync(customer);

@@ -69,6 +69,7 @@ namespace DIAN_.Repository
                 Address = user.Address,
                 PhoneNumber = user.PhoneNumber,
                 Role = user.Role,
+                Status = true,
             };
 
             var createdUser = await _context.Employees.AddAsync(employee);
