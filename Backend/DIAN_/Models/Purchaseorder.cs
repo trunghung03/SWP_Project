@@ -15,6 +15,10 @@ public partial class Purchaseorder
 
     public string PaymentMethod { get; set; }
 
+    public string Name { get; set; }
+
+    public string PhoneNumber { get; set; }
+
     public string ShippingAddress { get; set; }
 
     public decimal TotalPrice { get; set; }
