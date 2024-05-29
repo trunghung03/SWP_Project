@@ -42,16 +42,15 @@
 	('Holiday Special', 40.00, GETDATE(), DATEADD(month, 7, GETDATE()), '40% off all items for the Holidays', 'HOLIDAY40', 7, 1);
 
 	-- Insert dummy data into PURCHASEORDER table
-	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note) VALUES
-	(1, GETDATE(), 'Credit Card', '123 Main St', 200.00, 'Pending', 1, 0, 'Shipping with packaging'),
-	(2, GETDATE(), 'PayPal', '456 Elm St', 300.00, 'Pending', 2, 1, 'Ship at D2'),
-	(3, GETDATE(), 'Credit Card', '789 Oak St', 150.00, 'Pending', 3, 0, 'Shipping without packaging'),
-	(4, GETDATE(), 'PayPal', '101 Pine St', 250.00, 'Pending', 4, 1, 'Shipping with packaging'),
-	(5, GETDATE(), 'Credit Card', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging'),
-	(6, GETDATE(), 'PayPal', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging'),
-	(7, GETDATE(), 'Credit Card', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging');
-
-	-- Insert dummy data into SHELLMATERIAL table
+	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note) VALUES
+	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 200.00, 'Pending', 1, 0, 'Shipping with packaging'),
+	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 300.00, 'Pending', 2, 1, 'Ship at D2'),
+	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 150.00, 'Pending', 3, 0, 'Shipping without packaging'),
+	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 250.00, 'Pending', 4, 1, 'Shipping with packaging'),
+	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging'),
+	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging'),
+	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging');
+		-- Insert dummy data into SHELLMATERIAL table
 	INSERT INTO SHELLMATERIAL ([Name], AmountAvailable, Price, Status) VALUES
 	('Silver', 100.00, 5000.00, 1),
 	('Gold', 200.00, 50.00, 1),

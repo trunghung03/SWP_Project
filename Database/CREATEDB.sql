@@ -74,6 +74,8 @@ CREATE TABLE PURCHASEORDER (
     UserID INT NOT NULL FOREIGN KEY REFERENCES CUSTOMER(CustomerID),
     [Date] DATETIME2 NOT NULL,
     PaymentMethod NVARCHAR(50) NOT NULL,
+    Name NVARCHAR(50) NOT NULL,
+    PhoneNumber NVARCHAR(20) NOT NULL,
     ShippingAddress NVARCHAR(255) NOT NULL,
     TotalPrice DECIMAL(18, 2) NOT NULL,
     [OrderStatus] NVARCHAR(50) NOT NULL DEFAULT 'Pending', -- Renamed to OrderStatus
