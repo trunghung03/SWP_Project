@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import sizeGuideImage from '../../assets/img/sizeGuide.jpg'; 
+import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
@@ -12,11 +12,13 @@ import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
 
 function ProductDetail() {
     const location = useLocation();
-    const { image, name, price } = location.state || {};
+    const product = location.state || {};
+    const { image, name, price } = product;
     const navigate = useNavigate();
     const [showSizeGuide, setShowSizeGuide] = useState(false);
     const [selectedSize, setSelectedSize] = useState('');
-
+    const [cartItems, setCartItems] = useState([]);
+    const updatedCartItems = [...cartItems, product];
     const handleAddToCart = () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -24,8 +26,23 @@ function ProductDetail() {
                 icon: "warning",
             });
         } else {
-            navigate('/cart');
+            saveProductToLocalStorage(product);
+            navigateToCart();
         }
+    };
+    console.log(localStorage.getItem("cartItems"));
+    const saveProductToLocalStorage = (product) => {
+        // Retrieve the existing cart items from localStorage
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        
+        // Add the new product to the cart items
+        const updatedCartItems = [...cartItems, product];
+        
+        // Save the updated cart items back to localStorage
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    };
+    const navigateToCart = () => {
+        navigate('/cart');
     };
 
     const openSizeGuide = () => {
