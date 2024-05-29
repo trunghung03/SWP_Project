@@ -50,6 +50,7 @@ namespace DIAN_.Mapper
         {
             return new ProductListDTO
             {
+                ProductId = product.ProductId,
                 Name = product.Name,
                 Price = product.Price,
                 ImageLinkList = product.ImageLinkList,
