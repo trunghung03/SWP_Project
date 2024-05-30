@@ -16,5 +16,8 @@ const getShellMaterials = () => {
     return axios.get('https://localhost:7184/api/ShellMaterial');
 };
 
-export { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials };
- 
+const getProductsByIds = (ids) => {
+    return axios.get(`https://localhost:7184/api/Product/list`, { params: { ids: ids.join(',') } });
+};
+
+export { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds };

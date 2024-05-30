@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -9,14 +9,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
 import '../../styles/Active/Home.scss';
-import img1 from '../../assets/img/feature1.webp';
-import img2 from '../../assets/img/feature2.webp';
-import img3 from '../../assets/img/feature3.webp';
-import img4 from '../../assets/img/feature4.webp';
-import img5 from '../../assets/img/feature5.webp';
-import img6 from '../../assets/img/feature6.webp';
-import img7 from '../../assets/img/feature7.webp';
-import img8 from '../../assets/img/feature8.jpg';
 import brilliant1 from '../../assets/img/brilliant1.png';
 import brilliant2 from '../../assets/img/brilliant2.png';
 import brilliant3 from '../../assets/img/brilliant3.png';
@@ -34,6 +26,7 @@ import slide3 from '../../assets/img/slide3.png';
 import impression from '../../assets/img/impression.png';
 import proposal from '../../assets/img/proposal.png';
 import bb from '../../assets/img/bb.png';
+import { getProductsByIds } from '../../services/ProductService';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -64,13 +57,25 @@ function PrevArrow(props) {
 const Home = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const productIds = [1, 2, 3, 4, 5, 6, 7, 8];
+    getProductsByIds(productIds)
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
 
   const handleNavigate = (path) => {
     navigate(path);
   };
 
-  const navigateToProductDetail = (product) => {
-    navigate('/productDetail', { state: { image: product.image, name: product.name, price: product.price } });
+  const navigateToProductDetail = (productId) => {
+    navigate('/productDetail', { state: { id: productId } });
   };
 
   const settings = {
@@ -167,20 +172,11 @@ const Home = () => {
         </div>
         <div className="right_section wrapper">
           <ul className="carousel">
-            {[
-              { image: img1, name: "Product 1", price: 327 },
-              { image: img2, name: "Product 2", price: 327 },
-              { image: img3, name: "Product 3", price: 327 },
-              { image: img4, name: "Product 4", price: 327 },
-              { image: img5, name: "Product 5", price: 327 },
-              { image: img6, name: "Product 6", price: 327 },
-              { image: img7, name: "Product 7", price: 327 },
-              { image: img8, name: "Product 8", price: 327 }
-            ].map((product, index) => (
-              <li key={index} className="home_product_card card" onClick={() => navigateToProductDetail(product)}>
-                <img src={product.image} alt={product.name} className="home_product_image" />
+            {products.map((product, index) => (
+              <li key={index} className="home_product_card card" onClick={() => navigateToProductDetail(product.productId)}>
+                <img src={product.imageLinkList} alt={product.name} className="home_product_image" />
                 <p className="home_product_name">{product.name}</p>
-                <p className="home_product_price">${product.price}</p>
+                <p className="home_product_price">{product.price}$</p>
               </li>
             ))}
           </ul>
