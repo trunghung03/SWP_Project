@@ -21,6 +21,7 @@ namespace DIAN_.Mapper
                 MainDiamondAmount = updateDTO.MainDiamondAmount,
                 ShellAmount = updateDTO.ShellAmount,
                 CollectionId = updateDTO.CollectionId,
+                CategoryId = updateDTO.CategoryId,
             };
             
 
@@ -56,6 +57,7 @@ namespace DIAN_.Mapper
                 ShellAmount= product.ShellAmount ?? 0,
                 CollectionId = product.CollectionId,
                 Sizes = sizes,
+                CategoryId = product.CategoryId,
             };
         }
 
@@ -93,6 +95,7 @@ namespace DIAN_.Mapper
                 Carat = diamond?.Carat ?? 0,
                 SubDiamondColors = subDiamondColors,
                 Sizes= sizes,
+                CategoryId=product.CategoryId,
             };
         }
         public static Product ToProductFromCreateDTO (this CreateProductRequestDTO productRequestDTO)
@@ -111,6 +114,7 @@ namespace DIAN_.Mapper
                 MainDiamondAmount= productRequestDTO.SubDiamondAmount,
                 ShellAmount = productRequestDTO.ShellAmount,
                 CollectionId = productRequestDTO.CollectionId,
+                CategoryId = productRequestDTO.CategoryId,
             };
         }       
     }
