@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -12,24 +12,31 @@ import inclusion from '../../assets/img/inclusion.jpg';
 import differ1 from '../../assets/img/difference1.png';
 import differ2 from '../../assets/img/difference2.png';
 import experience from '../../assets/img/experience.webp';
-import img1 from '../../assets/img/feature1.webp';
-import img2 from '../../assets/img/feature2.webp';
-import img3 from '../../assets/img/feature3.webp';
-import img4 from '../../assets/img/feature4.webp';
-import img5 from '../../assets/img/feature5.webp';
-import img6 from '../../assets/img/feature6.webp';
-import img7 from '../../assets/img/feature7.webp';
-import img8 from '../../assets/img/feature8.jpg';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
+import { getProductsByIds } from '../../services/ProductService';
 
 function Introduce() {
   const navItems = ['Home', 'Introduce'];
   const navigate = useNavigate();
-  const navigateToProductDetail = (product) => {
-    navigate('/productDetail', { state: { image: product.image, name: product.name, price: product.price } });
+  const [exploreProducts, setExploreProducts] = useState([]);
+
+  useEffect(() => {
+    const exploreProductIds = [1, 2, 3, 4, 5, 6, 7, 8];
+    getProductsByIds(exploreProductIds)
+      .then(response => {
+        setExploreProducts(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
+
+  const navigateToProductDetail = (productId) => {
+    navigate('/productDetail', { state: { id: productId } });
   };
-  
+
+
   useEffect(() => {
     const wrapper = document.querySelector(".wrapper");
     const carousel = document.querySelector(".carousel");
@@ -174,26 +181,17 @@ function Introduce() {
       <div className="explore_jewelry_container">
         <div className="explore_left_section">
           <h1 className="explore_title">Move To Explore</h1>
-          <button onClick={() => navigate('/diamondJewelry')} className="explore_shop_now_btn" >Shop now</button>
+          <button onClick={() => navigate('/diamondJewelry')} className="explore_shop_now_btn">Shop now</button>
           <i id="left" className="fa-solid fa-angle-left nav_arrow explore_left_arrow" role="button"></i>
           <i id="right" className="fa-solid fa-angle-right nav_arrow explore_right_arrow" role="button"></i>
         </div>
         <div className="explore_right_section wrapper">
           <ul className="carousel">
-            {[
-              { image: img1, name: "Product 1", price: 327 },
-              { image: img2, name: "Product 2", price: 327 },
-              { image: img3, name: "Product 3", price: 327 },
-              { image: img4, name: "Product 4", price: 327 },
-              { image: img5, name: "Product 5", price: 327 },
-              { image: img6, name: "Product 6", price: 327 },
-              { image: img7, name: "Product 7", price: 327 },
-              { image: img8, name: "Product 8", price: 327 }
-            ].map((product, index) => (
-              <li key={index} className="explore_product_card card" onClick={() => navigateToProductDetail(product)}>
-                <img src={product.image} alt={product.name} className="explore_product_image" />
+            {exploreProducts.map((product, index) => (
+              <li key={index} className="explore_product_card card" onClick={() => navigateToProductDetail(product.productId)}>
+                <img src={product.imageLinkList} alt={product.name} className="explore_product_image" />
                 <p className="explore_product_name">{product.name}</p>
-                <p className="explore_product_price">${product.price}</p>
+                <p className="explore_product_price">{product.price}$</p>
               </li>
             ))}
           </ul>

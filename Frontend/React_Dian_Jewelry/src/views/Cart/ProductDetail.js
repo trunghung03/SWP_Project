@@ -11,6 +11,9 @@ import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
 import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials } from '../../services/ProductService';
 
 function ProductDetail() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const location = useLocation();
     const navigate = useNavigate();
     const [showSizeGuide, setShowSizeGuide] = useState(false);
