@@ -20,8 +20,4 @@ const getProductsByIds = (ids) => {
     return axios.get(`https://localhost:7184/api/Product/list`, { params: { ids: ids.join(',') } });
 };
 
-const getSizeByCategoryId = (id) => {
-    return axios.get(`https://localhost:7184/api/size/${id}`);
-};
-
-export { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds, getSizeByCategoryId };
+export { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds };

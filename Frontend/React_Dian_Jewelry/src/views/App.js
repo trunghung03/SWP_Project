@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import './App.scss';
 import HeaderComponent from '../components/Header/HeaderComponent.js';
 import FooterComponent from '../components/Footer/FooterComponent.js'
 import AutoScrollToTop from '../components/AutoScrollToTop/AutoScrollToTop';

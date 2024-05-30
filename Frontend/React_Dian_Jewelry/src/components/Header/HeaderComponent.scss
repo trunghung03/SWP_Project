@@ -4,10 +4,10 @@ body {
 
 .top_announcement {
     background-color: #1a2654;
-    color: white; 
-    text-align: center; 
-    padding: 3px 0; 
-    font-size: 11px; 
+    color: white;
+    text-align: center;
+    padding: 3px 0;
+    font-size: 11px;
     margin-bottom: 10px;
 }
 
@@ -59,7 +59,8 @@ body {
 }
 
 .logo {
-    width: 47%;
+    width: 43%;
+    margin: 5px 0 0 0;
 }
 
 .header_icons {
@@ -75,8 +76,8 @@ body {
 }
 
 .header_icons {
-    
-    .icon_cart{
+
+    .icon_cart {
         font-size: 18px;
         color: #565e6c;
         margin: 0 25px;
@@ -114,14 +115,43 @@ body {
     font-size: 13.5px;
 }
 
-.navbar-nav .nav-item .nav-link:hover {
-    color: #0f2770;
+//nav item animation
+
+.navbar-nav .nav-item .nav-link {
+    font-size: 13.5px;
+    position: relative;
+    overflow: hidden;
 }
+
+.navbar-nav .nav-item .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 17px;
+    left: 20px;
+    width: 0;
+    border: 1px solid #0f2770;
+    transition: width 0.6s ease, left 0.6s ease;
+    opacity: 0;
+}
+
+.navbar-nav .nav-item .nav-link:hover::before {
+    width: calc(100% - 40px);
+    left: 20px;
+    opacity: 1;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #1e3d9c;
+}
+
+
+
+//end nav item animation
 
 .navbar {
     border-bottom: 1px solid #e0e0e0;
     background-color: white;
-    margin: -7px -5px -5px -5px;
+    margin: -8px -5px -5px -5px;
 }
 
 .navbar-collapse {
@@ -133,6 +163,7 @@ body {
     border: none;
     margin-right: 10px;
     width: 220px;
+    height: 28px;
 }
 
 .search_section input:focus {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Header/HeaderComponent.scss';
-import logo from '../../assets/img/logo2.png';
+import logo from '../../assets/img/logo.png';
 
 const HeaderComponent = () => {
     const [role, setRole] = useState('guest');
@@ -49,7 +49,7 @@ const HeaderComponent = () => {
                     <div className="col-md-4">
                         <div className="contact_info">
                             <p className="contact_phone"><i className="fas fa-phone-alt"></i>0912 345 678</p>
-                            <p className="contact_address"><i className="fas fa-map-marker-alt"></i> Đường D1, Long Thạnh Mỹ, TP Thủ Đức, TP HCM</p>
+                            <p className="contact_address"><i className="fas fa-map-marker-alt"></i> D1 Street, Long Thanh My, Thu Duc City, Ho Chi Minh City</p>
                         </div>
                     </div>
                     <div className="col-md-4 text-center">
