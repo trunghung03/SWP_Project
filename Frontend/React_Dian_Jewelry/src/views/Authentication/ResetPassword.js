@@ -35,8 +35,8 @@ const ResetPassword = () => {
 
             if (!password || !rePassword) {
                 swal({
-                    title: "Error!",
-                    text: "Please fill all fields first.",
+                    title: "Fields haven't filled in all yet!",
+                    text: "Please fill in all fields first.",
                     icon: "error",
                     button: {
                         text: "Ok",
@@ -44,12 +44,12 @@ const ResetPassword = () => {
                     },
                 });
                 return;
-            }
+            } 
 
             if (password !== rePassword) {
                 swal({
-                    title: "Error!",
-                    text: "Passwords have to be the same.",
+                    title: "Passwords have to be the same!",
+                    text: "Please try again.",
                     icon: "error",
                     button: {
                         text: "Ok",
@@ -60,8 +60,8 @@ const ResetPassword = () => {
             }
 
             swal({
-                title: "Success!",
-                text: "Your password has been reset successfully.",
+                title: "Reset password successfully!",
+                text: "You can sign in with new password now.",
                 icon: "success",
                 button: {
                     text: "Ok",

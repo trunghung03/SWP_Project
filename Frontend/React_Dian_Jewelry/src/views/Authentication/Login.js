@@ -141,20 +141,29 @@ const Login = () => {
         } catch (error) {
             swal({
                 title: "Email does not exist!",
-                text: "Please try other email or sign up an account with this email.",
+                text: "Please try another email or sign up an account with this email.",
                 icon: "error",
-                buttons: {
-                    signUp: {
-                        text: "Sign up",
-                        value: "signUp",
-                        className: "swal-button"
-                    }
-                }
-            }).then((value) => {
-                if (value === "signUp") {
-                    navigate('/register');
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
                 }
             });
+            // swal({
+            //     title: "Email does not exist!",
+            //     text: "Please try other email or sign up an account with this email.",
+            //     icon: "error",
+            //     buttons: {
+            //         signUp: {
+            //             text: "Sign up",
+            //             value: "signUp",
+            //             className: "swal-button"
+            //         }
+            //     }
+            // }).then((value) => {
+            //     if (value === "signUp") {
+            //         navigate('/register');
+            //     }
+            // });
             console.error("Login failed: ", error);
         }
     };
