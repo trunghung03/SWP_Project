@@ -94,7 +94,7 @@ function Cart() {
                                     </div>
                                 </div>
                                 <p className="cart_item_description">
-                                    {item.description}<br />
+                                    {item.shell}<br />
                                 </p>
                                 <div className="cart_item_actions">
                                     <div className="cart_size_guide_container">

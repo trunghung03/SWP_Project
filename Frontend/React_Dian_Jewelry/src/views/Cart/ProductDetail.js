@@ -8,12 +8,13 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
-import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials } from '../../services/ProductService';
+import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getSizeByCategoryId } from '../../services/ProductService';
 
 function ProductDetail() {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
     const location = useLocation();
     const navigate = useNavigate();
     const [showSizeGuide, setShowSizeGuide] = useState(false);
@@ -23,7 +24,7 @@ function ProductDetail() {
     const [diamond, setDiamond] = useState({});
     const [collection, setCollection] = useState({});
     const [shellMaterials, setShellMaterials] = useState([]);
-    const [cartItems, setCartItems] = useState([]);
+    const [sizes, setSizes] = useState([]);
 
     useEffect(() => {
         const { id } = location.state || {};
@@ -31,13 +32,23 @@ function ProductDetail() {
             getProductDetail(id).then(response => {
                 const productData = response.data;
                 setProduct(productData);
+
                 return Promise.all([
                     getDiamondDetail(productData.mainDiamondId),
-                    getCollectionDetail(productData.collectionId)
+                    getCollectionDetail(productData.collectionId),
+                    getSizeByCategoryId(productData.categoryId)
                 ]);
-            }).then(([diamondResponse, collectionResponse]) => {
+            }).then(([diamondResponse, collectionResponse, sizeResponse]) => {
                 setDiamond(diamondResponse.data);
                 setCollection(collectionResponse.data);
+
+                const { minSize, maxSize, step } = sizeResponse.data;
+                const sizeOptions = [];
+                for (let size = minSize; size <= maxSize; size += step) {
+                    sizeOptions.push(size.toFixed(1));
+                }
+                setSizes(sizeOptions);
+
             }).catch(error => {
                 console.error('Error fetching product, diamond, or collection details:', error);
             });
@@ -51,6 +62,19 @@ function ProductDetail() {
     }, [location.state]);
 
     const handleAddToCart = () => {
+        if (!selectedShell) {
+            swal({
+                title: "Have not choose a shell yet!",
+                text: "Please choose a shell type for this jewelry.",
+                icon: "warning",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                }
+            });
+            return;
+        }
+
         const token = localStorage.getItem('token');
         if (!token) {
             swal({
@@ -142,13 +166,9 @@ function ProductDetail() {
                                 onChange={(e) => setSelectedSize(e.target.value)}
                             >
                                 <option value="">Size</option>
-                                <option value="5">Size 5</option>
-                                <option value="6">Size 6</option>
-                                <option value="7">Size 7</option>
-                                <option value="8">Size 8</option>
-                                <option value="9">Size 9</option>
-                                <option value="10">Size 10</option>
-                                <option value="11">Size 11</option>
+                                {sizes.map((size, index) => (
+                                    <option key={index} value={size}>Size {size}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
@@ -160,7 +180,7 @@ function ProductDetail() {
                     <hr className="product_detail_line" />
                     <div className="product_delivery_detail">
                         <p><i className="fas fa-shipping-fast"></i> Fast Delivery</p>
-                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
+                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
                     </div>
                     <hr className="product_detail_line" />
                 </div>
