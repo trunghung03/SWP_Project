@@ -27,7 +27,7 @@ const ForgotPassword = () => {
                     });
                 } else {
                     swal({
-                        title: "Error!",
+                        title: "Wrong email format!",
                         text: "Please enter a valid email.",
                         icon: "error",
                         button: {
@@ -38,7 +38,7 @@ const ForgotPassword = () => {
                 }
             } else {
                 swal({
-                    title: "Error!",
+                    title: "Have not enter an email yet!",
                     text: "Please enter your email before submitting.",
                     icon: "error",
                     button: {
