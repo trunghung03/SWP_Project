@@ -18,7 +18,7 @@ function ProductDetail() {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const { addToCart } = useCart(); // Use the addToCart function from the context
+    const { addToCart } = useCart();
     const [showSizeGuide, setShowSizeGuide] = useState(false);
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedShell, setSelectedShell] = useState('');
@@ -96,7 +96,7 @@ function ProductDetail() {
                 selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
                 selectedShellName: selectedShell
             };
-            addToCart(productToSave); // Use addToCart from the context
+            addToCart(productToSave); 
             navigateToCart();
         }
     };
@@ -161,7 +161,7 @@ function ProductDetail() {
                         {product.description}
                     </p>
                     <p className="product_code_detail"><strong>Code:</strong> {product.productCode}</p>
-                    <p className="product_diamond_detail"><strong>Diamond:</strong> {diamond.cut}</p>
+                    <p className="product_diamond_detail"><strong>Diamond Shape:</strong> {diamond.shape}</p>
                     <p className="product_weight_detail"><strong>Carat:</strong> {diamond.carat}</p>
                     <p className="product_shell_detail"><strong>Shell:</strong>
                         {shellMaterials.map((shell) => (
@@ -217,7 +217,7 @@ function ProductDetail() {
                 {showSpecifications && (
                     <>
                         <p className="product_specification_trademark"><strong>Trademark:</strong> Dian Jewelry</p>
-                        <p className="product_specification_diamond_amount"><strong>Main Diamond:</strong> {diamond.name}</p>
+                        <p className="product_specification_diamond_amount"><strong>Shape:</strong> {diamond.shape}</p>
                         <p className="product_specification_color"><strong>Color:</strong> {diamond.color}</p>
                         <p className="product_specification_cut"><strong>Cut:</strong> {diamond.cut}</p>
                         <p className="product_specification_carat"><strong>Carat:</strong> {diamond.carat}</p>
