@@ -3,20 +3,18 @@
     public class CreateDiamondRequestDto
     {
 
-        public string Name { get; set; }
+        public string Shape { get; set; } = string.Empty;
 
-        public string Color { get; set; }
+        public string Color { get; set; } = string.Empty;
 
-        public string Clarity { get; set; }
+        public string Clarity { get; set; } = string.Empty;
 
-        public string Cut { get; set; }
+        public string Cut { get; set; } = string.Empty;
 
         public decimal Carat { get; set; }
 
         public decimal Cost { get; set; }
-        public string CertificateScan { get; set; }
-
-        public decimal DiamondSize { get; set; }
+        public string CertificateScan { get; set; } = string.Empty;
 
         public int AmountAvailable { get; set; }
 

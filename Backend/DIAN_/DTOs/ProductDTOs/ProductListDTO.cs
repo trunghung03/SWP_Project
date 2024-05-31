@@ -4,11 +4,11 @@
     {
         public int ProductId { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public decimal Price { get; set; }
 
-        public string ImageLinkList { get; set; }
+        public string? ImageLinkList { get; set; } = string.Empty;
         public int? CategoryID { get; set; }
     }
 }

@@ -32,7 +32,12 @@ namespace DIAN_.Repository
                 .Include(po => po.Promotion)
                 .FirstOrDefaultAsync(po => po.OrderId == orderId);
 
-            return order?.ToPurchaseOrderInfoDTO();
+            if (order == null)
+            {
+                throw new Exception($"Order with id {orderId} not found.");
+            }
+
+            return order.ToPurchaseOrderInfoDTO();
         }
         public async Task<PurchaseOrderDTO> CreateAsync(Purchaseorder order)
         {

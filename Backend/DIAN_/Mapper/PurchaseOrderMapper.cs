@@ -34,7 +34,7 @@ namespace DIAN_.Mapper
                 Address= order.User.Address,
                 Note = order.Note,
                 PaymentMethod = order.PaymentMethod,
-                PromotionCode = order.Promotion?.Code
+                PromotionCode = order.Promotion?.Code ?? string.Empty
             };
         }
         public static Purchaseorder ToCreatePurchaseOrder(this CreatePurchaseOrderDTO dto)

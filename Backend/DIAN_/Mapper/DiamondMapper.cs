@@ -10,15 +10,14 @@ namespace DIAN_.Mapper
         {
             return new DiamondDto
             {
+                Shape = diamond.Shape,
                 DiamondId = diamond.DiamondId,
-                Name = diamond.Name,
                 Color = diamond.Color,
                 Clarity = diamond.Clarity,
                 Cut = diamond.Cut,
                 Carat = diamond.Carat ?? 0,
                 Cost = diamond.Cost,
                 CertificateScan = diamond.CertificateScan,
-                DiamondSize = diamond.DiamondSize ?? 0,
                 AmountAvailable = diamond.AmountAvailable,
             };
         }
@@ -27,7 +26,7 @@ namespace DIAN_.Mapper
         {
             return new DiamondListDto
             {
-                Name = diamond.Name,
+                Shape = diamond.Shape,
                 DiamondId = diamond.DiamondId,
             };
         }
@@ -36,14 +35,13 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
-                Name = diamondRequestDTO.Name,
+                Shape = diamondRequestDTO.Shape,
                 Color = diamondRequestDTO.Color,
                 Clarity = diamondRequestDTO.Clarity,
                 Cut = diamondRequestDTO.Cut,
                 Carat = diamondRequestDTO.Carat,
                 Cost = diamondRequestDTO.Cost,
                 CertificateScan = diamondRequestDTO.CertificateScan,
-                DiamondSize = diamondRequestDTO.DiamondSize,
                 AmountAvailable = diamondRequestDTO.AmountAvailable,
                 Status = diamondRequestDTO.Status,
             };
@@ -52,14 +50,13 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
-                Name = updateDiamond.Name,
+                Shape = updateDiamond.Shape,    
                 Color = updateDiamond.Color,
                 Clarity = updateDiamond.Clarity,
                 Cut = updateDiamond.Cut,
                 Carat = updateDiamond.Carat,
                 Cost = updateDiamond.Cost,
                 CertificateScan = updateDiamond.CertificateScan,
-                DiamondSize = updateDiamond.DiamondSize,
                 AmountAvailable = updateDiamond.AmountAvailable,
                 Status = updateDiamond.Status,
             };

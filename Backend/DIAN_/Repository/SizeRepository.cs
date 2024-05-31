@@ -61,13 +61,17 @@ namespace DIAN_.Repository
         public async Task<Size?> UpdateSizeAsync(int id, Size size)
         {
             var existingSize = await _context.Sizes.FirstOrDefaultAsync(x => x.CategoryId == id);
-            var duplicateSize = await _context.Sizes
-       .FirstOrDefaultAsync(s => s.MinSize == size.MinSize && s.MaxSize == size.MaxSize && s.Step == size.Step);
-
-            if (duplicateSize != null)
+            if (existingSize == null)
             {
-                throw new Exception("Size already exists.");
+                throw new Exception("Size not found.");
             }
+       //     var duplicateSize = await _context.Sizes
+       //.FirstOrDefaultAsync(s => s.MinSize == size.MinSize && s.MaxSize == size.MaxSize && s.Step == size.Step);
+
+       //     if (duplicateSize != null)
+       //     {
+       //         throw new Exception("Size already exists.");
+       //     }
 
             else
             {
@@ -77,7 +81,6 @@ namespace DIAN_.Repository
                 await _context.SaveChangesAsync();
                 return existingSize;
             }
-            return null;
         }
     }
 }

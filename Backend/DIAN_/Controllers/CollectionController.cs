@@ -22,8 +22,8 @@ namespace DIAN_.Controllers
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
             var collections = await _collectionRepository.GetAllAsync();
-
-            return Ok(collections);
+            var collectionsDto = collections.Select(collection => collection.ToCollectionDTO());
+            return Ok(collectionsDto);
         }
 
         [HttpGet("{id}")]

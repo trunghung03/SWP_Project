@@ -17,11 +17,11 @@ public partial class Product
 
     public string Description { get; set; }
 
-    public int MainDiamondId { get; set; }
+    public int? MainDiamondId { get; set; }
 
-    public decimal? ChargeUp { get; set; }
+    public decimal? MarkupPrice { get; set; }
 
-    public decimal? LaborPrice { get; set; }
+    public decimal? LaborCost { get; set; }
 
     public string ImageLinkList { get; set; }
 

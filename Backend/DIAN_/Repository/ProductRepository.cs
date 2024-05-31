@@ -57,7 +57,11 @@ namespace DIAN_.Repository
             var product = await _context.Products.Where(p => p.Status && p.ProductId == id)
                           .Include(p => p.Category).ThenInclude(c => c.Size)
                           .FirstOrDefaultAsync();
-            return product?.ToProductDTO();
+            if (product == null)
+            {
+                throw new Exception($"Product with id {id} not found.");
+            }
+            return product.ToProductDTO();
         }
 
         public async Task<List<ProductListDTO>> GetByNameAsync(string name)
@@ -78,7 +82,7 @@ namespace DIAN_.Repository
 
             if (product == null)
             {
-                return null;
+                throw new KeyNotFoundException("Product does not exist");
             }
 
             var subDiamondColors = await _context.Diamonds.Select(d => d.Color).ToListAsync();
@@ -97,16 +101,16 @@ namespace DIAN_.Repository
             var product = await _context.Products.FindAsync(productDTO.ProductId);
             if (product == null)
             {
-                return null;
+                throw new KeyNotFoundException("Product does not exist");
             }
 
             // Map the DTO properties to the entity
             product.Name = productDTO.Name;
             product.Description = productDTO.Description;
             product.Price = productDTO.Price;
-            product.LaborPrice = productDTO.LaborPrice;
+            product.LaborCost = productDTO.LaborPrice;
             product.ImageLinkList = productDTO.ImageLinkList;
-            product.ChargeUp = productDTO.ChargeUp;
+            product.MarkupPrice = productDTO.ChargeUp;
             product.MainDiamondId = productDTO.MainDiamondId;
             product.SubDiamondAmount = productDTO.SubDiamondAmount;
             product.ProductCode = productDTO.ProductCode;
