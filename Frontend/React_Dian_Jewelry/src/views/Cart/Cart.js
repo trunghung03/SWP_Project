@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -8,16 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
+import { useCart } from '../../services/CartService';
 
 function Cart() {
     const navigate = useNavigate();
     const navItems = ['Home', 'Cart'];
     const [showSizeGuide, setShowSizeGuide] = useState(false);
-    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cartItems')) || []);
-
-    useEffect(() => {
-        setCartItems(JSON.parse(localStorage.getItem('cartItems')) || []);
-    }, []);
+    const { cartItems, removeFromCart, updateCartItem } = useCart();
 
     const openSizeGuide = () => {
         setShowSizeGuide(true);
@@ -40,6 +37,21 @@ function Cart() {
             });
             return;
         }
+
+        const missingSizeItems = cartItems.some(item => !item.selectedSize);
+        if (missingSizeItems) {
+            swal({
+                title: "Have not choose a size yet!",
+                text: "Please select a size for all jewelries.",
+                icon: "warning",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                }
+            });
+            return;
+        }
+
         navigate('/checkout');
     };
 
@@ -47,18 +59,10 @@ function Cart() {
         navigate('/diamondJewelry');
     };
 
-    const handleRemoveItem = (index) => {
-        const updatedCartItems = cartItems.filter((_, i) => i !== index);
-        setCartItems(updatedCartItems);
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    };
-
     const handleSizeChange = (e, index) => {
         const newSize = e.target.value;
-        const updatedCartItems = [...cartItems];
-        updatedCartItems[index].selectedSize = newSize;
-        setCartItems(updatedCartItems);
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        const updatedItem = { ...cartItems[index], selectedSize: newSize };
+        updateCartItem(index, updatedItem);
     };
 
     const handleViewProduct = (productId) => {
@@ -84,40 +88,43 @@ function Cart() {
 
                 <div className="cart_container">
                     <div className="cart_items">
-                        {cartItems.map((item, index) => (
-                            <div className="cart_item" key={index}>
-                                <img src={item.image} className="cart_item_image" alt={item.name} />
-                                <div className="cart_item_details">
-                                    <div className="cart_item_header">
-                                        <h5 className="cart_item_name">{item.name}</h5>
-                                        <div className="cart_item_links">
-                                            <a onClick={() => handleViewProduct(item.productId)} className="cart_item_view">VIEW</a>
-                                            <span> | </span>
-                                            <a className="cart_item_remove" onClick={() => handleRemoveItem(index)}>REMOVE</a>
+                        {cartItems.map((item, index) => {
+                            const firstImage = item.image.split(';')[0];
+                            return (
+                                <div className="cart_item" key={index}>
+                                    <img src={firstImage} className="cart_item_image" alt={item.name} />
+                                    <div className="cart_item_details">
+                                        <div className="cart_item_header">
+                                            <h5 className="cart_item_name">{item.name}</h5>
+                                            <div className="cart_item_links">
+                                                <a onClick={() => handleViewProduct(item.productId)} className="cart_item_view">VIEW</a>
+                                                <span> | </span>
+                                                <a className="cart_item_remove" onClick={() => removeFromCart(index)}>REMOVE</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <p className="cart_item_description">
-                                        Shell: {item.selectedShellName}<br />
-                                    </p>
-                                    <div className="cart_item_actions">
-                                        <div className="cart_size_guide_container">
-                                            <select
-                                                className="cart_ring_size_detail"
-                                                value={item.selectedSize || ''}
-                                                onChange={(e) => handleSizeChange(e, index)}
-                                            >
-                                                <option value="">Size</option>
-                                                {item.sizes.map((size, sizeIndex) => (
-                                                    <option key={sizeIndex} value={size}>Size {size}</option>
-                                                ))}
-                                            </select>
-                                            <button onClick={openSizeGuide} className="cart_size_guide_detail">Size guide</button>
+                                        <p className="cart_item_description">
+                                            Shell: {item.selectedShellName}<br />
+                                        </p>
+                                        <div className="cart_item_actions">
+                                            <div className="cart_size_guide_container">
+                                                <select
+                                                    className="cart_ring_size_detail"
+                                                    value={item.selectedSize || ''}
+                                                    onChange={(e) => handleSizeChange(e, index)}
+                                                >
+                                                    <option value="">Size</option>
+                                                    {item.sizes.map((size, sizeIndex) => (
+                                                        <option key={sizeIndex} value={size}>Size {size}</option>
+                                                    ))}
+                                                </select>
+                                                <button onClick={openSizeGuide} className="cart_size_guide_detail">Size guide</button>
+                                            </div>
                                         </div>
+                                        <div className="cart_item_price">{item.price}$</div>
                                     </div>
-                                    <div className="cart_item_price">{item.price}$</div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     <div className="cart_summary">

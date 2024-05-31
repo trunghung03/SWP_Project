@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../services/CartService'; 
 import '../Header/HeaderComponent.scss';
 import logo from '../../assets/img/logo.png';
 
@@ -10,6 +11,7 @@ const HeaderComponent = () => {
     const [points, setPoints] = useState(0);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
+    const { cartItems } = useCart(); 
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -26,11 +28,19 @@ const HeaderComponent = () => {
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');
+        const cartItems = localStorage.getItem('cartItems'); 
+
         localStorage.clear();
+
         if (rememberedEmail && rememberedPassword) {
             localStorage.setItem('rememberedEmail', rememberedEmail);
             localStorage.setItem('rememberedPassword', rememberedPassword);
         }
+
+        if (cartItems) {
+            localStorage.setItem('cartItems', cartItems); 
+        }
+
         setRole('guest');
         navigate('/login');
     };
@@ -42,6 +52,7 @@ const HeaderComponent = () => {
             navigate('/search', { state: { products: data } });
         }
     };
+
     return (
         <header className="header">
             <div className="top_header container-fluid">
@@ -69,8 +80,9 @@ const HeaderComponent = () => {
                                     onKeyPress={handleSearchKeyPress}
                                 />
                             </div>
-                            <a href="/cart">
+                            <a href="/cart" className="cart_icon">
                                 <i className="icon_cart fas fa-shopping-bag"></i>
+                                {cartItems.length > 0 && <span className="cart_badge">{cartItems.length}</span>}
                             </a>
                             <div className="account_dropdown_section dropdown">
                                 <i className="icon_account fas fa-user" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -124,6 +136,7 @@ const HeaderComponent = () => {
                                     <li><a className="dropdown-item" href="/ring">Ring</a></li>
                                     <li><a className="dropdown-item" href="/earings">Earings</a></li>
                                     <li><a className="dropdown-item" href="/bracelet">Bracelet</a></li>
+                                    <li><a className="dropdown-item" href="/necklace">Necklace</a></li>
                                 </ul>
                             </li>
                             <li className="wedding_dropdown_section nav-item dropdown">
@@ -135,6 +148,7 @@ const HeaderComponent = () => {
                                     <li><a className="dropdown-item" href="/weddingRing">Wedding Ring</a></li>
                                     <li><a className="dropdown-item" href="/weddingEarings">Wedding Earings</a></li>
                                     <li><a className="dropdown-item" href="/weddingBracelet">Wedding Bracelet</a></li>
+                                    <li><a className="dropdown-item" href="/weddingNecklace">Wedding Necklace</a></li>
                                     <li><a className="dropdown-item" href="/engagementRing">Engagement Ring</a></li>
                                 </ul>
                             </li>

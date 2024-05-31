@@ -115,6 +115,23 @@ body {
     font-size: 13.5px;
 }
 
+.header_icons .cart_icon {
+    position: relative;
+}
+
+.cart_badge {
+    position: absolute;
+    top: -5%;
+    right: 22%;
+    background-color: #db2222;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px 1px 5px;
+    font-size: 7px;
+    font-weight: bold;
+}
+
+
 //nav item animation
 
 .navbar-nav .nav-item .nav-link {

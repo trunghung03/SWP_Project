@@ -9,22 +9,22 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList } from '../../services/ProductService.js';
 
-function Earings() {
-    const navItems = ['Home', 'Diamond Jewelry', 'Earings'];
+function WeddingNecklace() {
+    const navItems = ['Home', 'Diamond Jewelry', 'Wedding Jewelry', 'Wedding Necklace'];
 
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         getProductList()
             .then(response => {
-                const filteredProducts = response.data.filter(product => [2, 6].includes(product.categoryID));
+                const filteredProducts = response.data.filter(product => [8].includes(product.categoryID));
                 setProducts(filteredProducts);
             })
             .catch(error => console.log('Error fetching products:', error));
     }, []);
 
     return (
-        <div className="Earings">
+        <div className="WeddingNecklace">
             <SubNav items={navItems} />
 
             {/* Main image */}
@@ -42,4 +42,4 @@ function Earings() {
     );
 }
 
-export default Earings;
+export default WeddingNecklace;

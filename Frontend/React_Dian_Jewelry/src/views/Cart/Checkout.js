@@ -11,6 +11,7 @@ function Checkout() {
     const navItems = ['Home', 'Cart', 'Checkout'];
     const navigate = useNavigate();
     const [paymentMethod, setPaymentMethod] = useState('');
+    const [cartItems] = useState(JSON.parse(localStorage.getItem('cartItems')) || []);
 
     const handleBackToCart = () => {
         navigate('/cart');
@@ -35,7 +36,7 @@ function Checkout() {
 
             <div className="checkout_header">
                 <div className="checkout_title">
-                    <i className="fas fa-shopping-cart"></i> Checkout (2)
+                    <i className="fas fa-shopping-cart"></i> Checkout ({cartItems.length})
                 </div>
                 <div className="checkout_continue_shopping" onClick={handleBackToCart}>
                     &lt; Back To Cart
