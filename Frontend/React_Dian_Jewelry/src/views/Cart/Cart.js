@@ -7,7 +7,6 @@ import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
 import { useCart } from '../../services/CartService';
 
 function Cart() {
@@ -151,7 +150,6 @@ function Cart() {
                     </div>
                 </div>
             )}
-            <YouMayAlsoLike />
             <ScrollToTop />
         </div>
     );

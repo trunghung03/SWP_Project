@@ -7,9 +7,8 @@ import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import YouMayAlsoLike from '../../components/YouMayAlsoLike/YouMayAlsoLike.js';
-import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials } from '../../services/ProductService';
-import { useCart } from '../../services/CartService'; 
+import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductList } from '../../services/ProductService';
+import { useCart } from '../../services/CartService';
 
 function ProductDetail() {
     useEffect(() => {
@@ -29,6 +28,12 @@ function ProductDetail() {
     const [sizes, setSizes] = useState([]);
     const [showSpecifications, setShowSpecifications] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
+
+    const navigateToProductDetail = (productId) => {
+        window.scrollTo(0, 0);
+        navigate('/productDetail', { state: { id: productId } });
+    };
 
     useEffect(() => {
         const { id } = location.state || {};
@@ -42,13 +47,17 @@ function ProductDetail() {
 
                 return Promise.all([
                     getDiamondDetail(productData.mainDiamondId),
-                    getCollectionDetail(productData.collectionId)
-                ]);
-            }).then(([diamondResponse, collectionResponse]) => {
-                setDiamond(diamondResponse.data);
-                setCollection(collectionResponse.data);
-            }).catch(error => {
-                console.error('Error fetching product, diamond, or collection details:', error);
+                    getCollectionDetail(productData.collectionId),
+                    getProductList()
+                ]).then(([diamondResponse, collectionResponse, productListResponse]) => {
+                    setDiamond(diamondResponse.data);
+                    setCollection(collectionResponse.data);
+
+                    const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
+                    setAlsoLikeProducts(relatedProducts.slice(0, 5)); // Display up to 5 products
+                }).catch(error => {
+                    console.error('Error fetching product, diamond, or collection details:', error);
+                });
             });
 
             getShellMaterials().then(response => {
@@ -96,7 +105,7 @@ function ProductDetail() {
                 selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
                 selectedShellName: selectedShell
             };
-            addToCart(productToSave); 
+            addToCart(productToSave);
             navigateToCart();
         }
     };
@@ -222,7 +231,6 @@ function ProductDetail() {
                         <p className="product_specification_cut"><strong>Cut:</strong> {diamond.cut}</p>
                         <p className="product_specification_carat"><strong>Carat:</strong> {diamond.carat}</p>
                         <p className="product_specification_clarity"><strong>Clarity:</strong> {diamond.clarity}</p>
-                        <p className="product_specification_diamond_size"><strong>Size:</strong> {diamond.diamondSize}</p>
                         <p className="product_specification_sub_diamond_amount"><strong>Sub Diamond Amount:</strong> {product.subDiamondAmount}</p>
                         <p className="product_specification_collection"><strong>Collection:</strong> {collection.name}</p>
                     </>
@@ -236,7 +244,44 @@ function ProductDetail() {
                     </div>
                 </div>
             )}
-            <YouMayAlsoLike />
+
+            {/* You may also like  */}
+            <div>
+                <div className="just_for_you_container">
+                    <div className="just_for_you_text">
+                        <h3>Made Just For You</h3>
+                        <p>At our San Francisco design studio, our team designs every ring to delight you, from the first time you see it and every day after. We carefully consider the entire piece—obsessing over comfort, quality, and durability so you can cherish it for a lifetime.</p>
+                    </div>
+                    <div className="just_for_you_features">
+                        <div className="feature">
+                            <i className="fas fa-recycle"></i>
+                            <p><strong>Recycle Gold and Silver</strong><br />We say no to 'dirty gold'</p>
+                        </div>
+                        <hr className="jfy_line1" />
+                        <div className="feature with-lines">
+                            <i className="fas fa-gift"></i>
+                            <p><strong>Responsibly Packaged</strong><br />Made with less energy, less water, and fewer emissions</p>
+                        </div>
+                        <hr className="jfy_line2" />
+                        <div className="feature">
+                            <i className="fas fa-leaf"></i>
+                            <p><strong>Progress to Carbon Neutrality</strong><br />We are committed to protecting the planet</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="also_like_container">
+                    <h2 className="also_like_title">YOU MAY ALSO LIKE</h2>
+                    <div className="also_like_wrapper">
+                        {alsoLikeProducts.map((product, index) => (
+                            <div key={index} className="also_like_card" onClick={() => navigateToProductDetail(product.productId)}>
+                                <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
+                                <p className="also_like_name">{product.name}</p>
+                                <p className="also_like_price">{product.price}$</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
             <ScrollToTop />
         </div>
     );

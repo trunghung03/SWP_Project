@@ -157,6 +157,12 @@ body {
     opacity: 1;
 }
 
+.navbar-nav .nav-item .header_spe_nav_link:hover::before {
+    width: calc(100% - 57px);
+    left: 20px;
+    opacity: 1;
+}
+
 .navbar-nav .nav-item .nav-link:hover {
     color: #1e3d9c;
 }

@@ -14,7 +14,7 @@ const ProductCard = ({ id, image, name, price }) => {
         <div className="product_card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
             <img src={image} alt={name} />
             <h6>{name}</h6>
-            <p>${price}</p>
+            <p>{price}$</p>
         </div>
     );
 };

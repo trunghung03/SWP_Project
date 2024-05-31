@@ -128,7 +128,7 @@ const HeaderComponent = () => {
                                 <a className="home nav-link" href="/home">HOME</a>
                             </li>
                             <li className="diamond_dropdown_section nav-item dropdown">
-                                <a className="diamond nav-link" id="diamondDropdown" role="button"
+                                <a className="diamond header_spe_nav_link nav-link" id="diamondDropdown" role="button"
                                     aria-expanded="false" href="/diamondJewelry">
                                     DIAMOND JEWELRY<i className="icon_arrow_diamond fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
                                 </a>
@@ -140,7 +140,7 @@ const HeaderComponent = () => {
                                 </ul>
                             </li>
                             <li className="wedding_dropdown_section nav-item dropdown">
-                                <a className="wedding nav-link" id="weddingDropdown" role="button"
+                                <a className="wedding header_spe_nav_link nav-link" id="weddingDropdown" role="button"
                                     aria-expanded="false" href="/weddingJewelry">
                                     WEDDING JEWELRY<i className="icon_arrow_wedding fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
                                 </a>
