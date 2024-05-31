@@ -63,12 +63,13 @@ namespace DIAN_.Mapper
 
         public static ProductListDTO ToProductListDTO(this Product product)
         {
+            var FirstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
             return new ProductListDTO
             {
                 ProductId = product.ProductId,
                 Name = product.Name,
                 Price = product.Price,
-                ImageLinkList = product.ImageLinkList,
+                ImageLinkList = FirstImgLink,
             };
         }
         public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
