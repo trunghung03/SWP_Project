@@ -69,6 +69,7 @@ namespace DIAN_.Mapper
                 ProductId = product.ProductId,
                 Name = product.Name,
                 Price = product.Price,
+                CategoryID = product.CategoryId,
                 ImageLinkList = FirstImgLink,
             };
         }
