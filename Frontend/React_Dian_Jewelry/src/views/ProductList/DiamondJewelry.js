@@ -7,14 +7,14 @@ import Question from '../../components/Question/Question.js';
 import '../../styles/ProductList/DiamondJewelry.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
+import { getProductList } from '../../services/ProductService.js';
 
 function DiamondJewelry() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch('https://localhost:7184/api/Product/list')
-            .then(response => response.json())
-            .then(data => setProducts(data))
+        getProductList()
+            .then(response => setProducts(response.data))
             .catch(error => console.log('Error fetching products:', error));
     }, []);
 

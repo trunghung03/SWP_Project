@@ -25,6 +25,8 @@
         public decimal? ShellAmount { get; set; }
 
         public int? CollectionId { get; set; }
+        public int? CategoryId { get; set; }
+
 
 
     }

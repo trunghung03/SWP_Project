@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import '../../styles/Authentication/Login.scss';
-import rightImage from '../../assets/img/rightImage.png';
+import rightImage from '../../assets/img/right.jpeg';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
 import { jwtDecode } from 'jwt-decode';
 
@@ -11,6 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,6 +33,7 @@ const Login = () => {
     const handleLogin = async (event) => {
         event.preventDefault();
         setError('');
+        setLoading(true);
 
         if (!isValidEmail(email)) {
             swal({
@@ -43,6 +45,7 @@ const Login = () => {
                     className: "swal-button"
                 },
             });
+            setLoading(false);
             return;
         }
 
@@ -51,6 +54,8 @@ const Login = () => {
             userInfoRes = await getUserInfo(email);
         } catch (error) {
             console.error("Error checking email existence: ", error);
+            setLoading(false);
+            return;
         }
 
         let res;
@@ -69,6 +74,7 @@ const Login = () => {
                             className: "swal-button"
                         }
                     });
+                    setLoading(false);
                     return;
                 }
                 if (!userInfoRes.data.status) {
@@ -88,6 +94,7 @@ const Login = () => {
                             navigate('/contact');
                         }
                     });
+                    setLoading(false);
                     return;
                 }
                 handleSuccessfulLogin(res.data.token, 'customer');
@@ -113,6 +120,7 @@ const Login = () => {
                                 className: "swal-button"
                             }
                         });
+                        setLoading(false);
                         return;
                     }
                     if (!employeeInfoRes.data.status) {
@@ -132,6 +140,7 @@ const Login = () => {
                                 navigate('/contact');
                             }
                         });
+                        setLoading(false);
                         return;
                     }
                 }
@@ -141,21 +150,15 @@ const Login = () => {
         } catch (error) {
             swal({
                 title: "Email does not exist!",
-                text: "Please try other email or sign up an account with this email.",
+                text: "Please try another email or sign up an account with this email.",
                 icon: "error",
-                buttons: {
-                    signUp: {
-                        text: "Sign up",
-                        value: "signUp",
-                        className: "swal-button"
-                    }
-                }
-            }).then((value) => {
-                if (value === "signUp") {
-                    navigate('/register');
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
                 }
             });
             console.error("Login failed: ", error);
+            setLoading(false);
         }
     };
 
@@ -207,6 +210,8 @@ const Login = () => {
         } else {
             setError("Login failed: No role found");
         }
+
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -270,7 +275,10 @@ const Login = () => {
                             <a className="forgot_password_link" href="/forgotPassword">Forgot password?</a>
                         </div>
                         <div className="submit_section">
-                            <button type="submit" className="sign_in_button btn btn-block">Sign in</button>
+                            <button type="submit" className="sign_in_button btn btn-block" disabled={loading}>
+                                {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}
+                                Sign in
+                            </button>
                         </div>
                         <div className="sign_up_section">
                             <span>Don't have an account? <a className="sign_up_link" href="/register">Sign up</a></span>

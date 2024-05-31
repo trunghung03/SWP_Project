@@ -1,20 +1,29 @@
 import axios from 'axios';
 
+const API_BASE_URL = 'https://localhost:7184/api';
+
+const getProductList = () => {
+    return axios.get(`${API_BASE_URL}/Product/list`);
+};
+
 const getProductDetail = (id) => {
-    return axios.get(`https://localhost:7184/api/Product/${id}`);
+    return axios.get(`${API_BASE_URL}/Product/${id}`);
 };
 
 const getDiamondDetail = (id) => {
-    return axios.get(`https://localhost:7184/api/diamond/${id}`);
+    return axios.get(`${API_BASE_URL}/diamond/${id}`);
 };
 
 const getCollectionDetail = (id) => {
-    return axios.get(`https://localhost:7184/api/collection/${id}`);
+    return axios.get(`${API_BASE_URL}/collection/${id}`);
 };
 
 const getShellMaterials = () => {
-    return axios.get('https://localhost:7184/api/ShellMaterial');
+    return axios.get(`${API_BASE_URL}/ShellMaterial`);
 };
 
-export { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials };
- 
+const getProductsByIds = (ids) => {
+    return axios.get(`${API_BASE_URL}/Product/list`, { params: { ids: ids.join(',') } });
+};
+
+export { getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds };

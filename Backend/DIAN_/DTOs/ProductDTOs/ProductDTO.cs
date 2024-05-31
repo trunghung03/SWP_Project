@@ -26,5 +26,8 @@
         public decimal? ShellAmount { get; set; }
         
         public int? CollectionId { get; set; }
+
+        public List<decimal> Sizes { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

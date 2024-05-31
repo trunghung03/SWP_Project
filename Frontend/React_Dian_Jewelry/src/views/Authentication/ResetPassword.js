@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ResetPassword.scss';
-import rightImage from '../../assets/img/rightImage.png';
+import rightImage from '../../assets/img/right.jpeg';
 
 const ResetPassword = () => {
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const togglePassword = document.getElementById('togglePassword');
         const handleTogglePassword = () => {
@@ -30,38 +32,42 @@ const ResetPassword = () => {
         const btnReset = document.getElementById("resetPasswordButton");
         btnReset.onclick = function (e) {
             e.preventDefault();
+            setLoading(true);
+
             const password = document.getElementById("password").value.trim();
             const rePassword = document.getElementById("re_password").value.trim();
 
             if (!password || !rePassword) {
                 swal({
-                    title: "Error!",
-                    text: "Please fill all fields first.",
+                    title: "Fields haven't filled in all yet!",
+                    text: "Please fill in all fields first.",
                     icon: "error",
                     button: {
                         text: "Ok",
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
                 return;
             }
 
             if (password !== rePassword) {
                 swal({
-                    title: "Error!",
-                    text: "Passwords have to be the same.",
+                    title: "Passwords have to be the same!",
+                    text: "Please try again.",
                     icon: "error",
                     button: {
                         text: "Ok",
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
                 return;
             }
 
             swal({
-                title: "Success!",
-                text: "Your password has been reset successfully.",
+                title: "Reset password successfully!",
+                text: "You can sign in with new password now.",
                 icon: "success",
                 button: {
                     text: "Ok",
@@ -69,6 +75,8 @@ const ResetPassword = () => {
                 },
             }).then(() => {
                 window.location.href = "/login";
+            }).finally(() => {
+                setLoading(false);
             });
         }
 
@@ -100,7 +108,10 @@ const ResetPassword = () => {
                             </span>
                         </div>
                         <div className="rp_submit_section">
-                            <button id="resetPasswordButton" type="submit" className="rp_button btn btn-block">Reset password</button>
+                            <button id="resetPasswordButton" type="submit" className="rp_button btn btn-block" disabled={loading}>
+                                {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}
+                                Reset password
+                            </button>
                         </div>
                     </form>
                 </div>

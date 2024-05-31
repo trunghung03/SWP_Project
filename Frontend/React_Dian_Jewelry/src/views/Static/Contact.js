@@ -21,7 +21,7 @@ function Contact() {
             <i className="fas fa-map-marker-alt"></i>
             </div>
             <h3 className="contact_card_title">ADDRESS</h3>
-            <p className="contact_card_description"> Lô E2a-7, Đường D1 Khu Công nghệ cao, Phường Long Thạnh Mỹ, Thủ Đức, TP. Hồ Chí Minh.</p>
+            <p className="contact_card_description"> Lot E2a-7, Street D1 High-Tech Park, Long Thanh My Ward, Thu Duc, City. Ho Chi Minh.</p>
           </div>
           <div className="contact_card">
             <div className="contact_icon">

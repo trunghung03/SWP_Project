@@ -88,7 +88,7 @@ const FooterComponent = () => {
             </footer>
 
             <div id="tosModal" className="modal" style={{ zIndex: 1000 }}>
-                <div className="modal-content" style={{ zIndex: 1001 }}>
+                <div className="modal-content">
                     <span className="close" style={{ textAlign: 'end' }}>&times;</span>
                     <h4 className="tos_title">Terms of Service & Privacy Policy</h4>
                     <p className="tos_introduce">
@@ -96,15 +96,15 @@ const FooterComponent = () => {
                         you agree to the following terms, conditions and private policy.
                     </p>
                     <p>
-                        - Account Creation: You must provide accurate and complete information during the registration process.
+                        - <strong>Account Creation:</strong> You must provide accurate and complete information during the registration process.
                         You are responsible for maintaining the confidentiality of your account information and password.<br />
-                        - Purchases and Payments: Payments must be made through the provided payment options. All sales are final, and returns or exchanges are subject to our return policy.<br />
-                        - User Conduct: You agree not to use our website for any unlawful purposes or to engage in any conduct that could damage or impair the functionality of our services.<br />
-                        - Information Collection: We collect personal information when you create an account, make a purchase, or contact us. This includes your name, email address, shipping address, and payment information.<br />
-                        - Use of Information: We use your information to process orders, communicate with you, and improve our services. We may also use your email address to send you promotional offers and updates, which you can opt out of at any time.<br />
-                        - Data Protection: We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure.<br />
-                        - Your Rights: You have the right to access, correct, or delete your personal information. You can update your account information at any time or contact us for assistance.<br />
-                        - Changes to This Policy: We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.<br />
+                        - <strong>Purchases and Payments:</strong> Payments must be made through the provided payment options. All sales are final, and returns or exchanges are subject to our return policy.<br />
+                        - <strong>User Conduct:</strong> You agree not to use our website for any unlawful purposes or to engage in any conduct that could damage or impair the functionality of our services.<br />
+                        - <strong>Information Collection:</strong> We collect personal information when you create an account, make a purchase, or contact us. This includes your name, email address, shipping address, and payment information.<br />
+                        - <strong>Use of Information:</strong> We use your information to process orders, communicate with you, and improve our services. We may also use your email address to send you promotional offers and updates, which you can opt out of at any time.<br />
+                        - <strong>Data Protection:</strong> We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure.<br />
+                        - <strong>Your Rights:</strong> You have the right to access, correct, or delete your personal information. You can update your account information at any time or contact us for assistance.<br />
+                        - <strong>Changes to This Policy:</strong> We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.<br />
                     </p>
                     <p className="tos_introduce">
                         By creating an account, you acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you.

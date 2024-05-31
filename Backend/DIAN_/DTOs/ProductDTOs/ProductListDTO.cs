@@ -9,5 +9,6 @@
         public decimal Price { get; set; }
 
         public string ImageLinkList { get; set; }
+        public int? CategoryID { get; set; }
     }
 }

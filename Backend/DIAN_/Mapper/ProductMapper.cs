@@ -21,6 +21,7 @@ namespace DIAN_.Mapper
                 MainDiamondAmount = updateDTO.MainDiamondAmount,
                 ShellAmount = updateDTO.ShellAmount,
                 CollectionId = updateDTO.CollectionId,
+                CategoryId = updateDTO.CategoryId,
             };
             
 
@@ -28,6 +29,18 @@ namespace DIAN_.Mapper
         }
         public static ProductDTO ToProductDTO(this Product product)
         {
+            var sizes = new List<decimal>();
+            if (product.Category != null && product.Category.Size != null)
+            {
+                var minSize = product.Category.Size.MinSize ?? 0;
+                var maxSize = product.Category.Size.MaxSize ?? 0;
+                var step = product.Category.Size.Step ?? 1;
+
+                for (var size = minSize; size <= maxSize; size += step)
+                {
+                    sizes.Add(size);
+                }
+            }
             return new ProductDTO
             {
                 ProductId = product.ProductId,
@@ -43,21 +56,37 @@ namespace DIAN_.Mapper
                 MainDiamondAmount= product.MainDiamondAmount ?? 0,
                 ShellAmount= product.ShellAmount ?? 0,
                 CollectionId = product.CollectionId,
+                Sizes = sizes,
+                CategoryId = product.CategoryId,
             };
         }
 
         public static ProductListDTO ToProductListDTO(this Product product)
         {
+            var FirstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
             return new ProductListDTO
             {
                 ProductId = product.ProductId,
                 Name = product.Name,
                 Price = product.Price,
-                ImageLinkList = product.ImageLinkList,
+                CategoryID = product.CategoryId,
+                ImageLinkList = FirstImgLink,
             };
         }
         public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
         {
+            var sizes = new List<decimal>();
+            if (product.Category != null && product.Category.Size != null)
+            {
+                var minSize = product.Category.Size.MinSize ?? 0;
+                var maxSize = product.Category.Size.MaxSize ?? 0;
+                var step = product.Category.Size.Step ?? 1;
+
+                for (var size = minSize; size <= maxSize; size += step)
+                {
+                    sizes.Add(size);
+                }
+            }
             return new ProductDetailDTO
             {
                 Name = product.Name,
@@ -67,7 +96,8 @@ namespace DIAN_.Mapper
                 Description = product.Description,
                 Carat = diamond?.Carat ?? 0,
                 SubDiamondColors = subDiamondColors,
-
+                Sizes= sizes,
+                CategoryId=product.CategoryId,
             };
         }
         public static Product ToProductFromCreateDTO (this CreateProductRequestDTO productRequestDTO)
@@ -86,9 +116,8 @@ namespace DIAN_.Mapper
                 MainDiamondAmount= productRequestDTO.SubDiamondAmount,
                 ShellAmount = productRequestDTO.ShellAmount,
                 CollectionId = productRequestDTO.CollectionId,
+                CategoryId = productRequestDTO.CategoryId,
             };
-        }
-
-
+        }       
     }
 }

@@ -7,6 +7,7 @@ import Question from '../../components/Question/Question.js';
 import '../../styles/ProductList/DiamondJewelry.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
+import { getProductList } from '../../services/ProductService.js';
 
 function WeddingRing() {
     const navItems = ['Home', 'Diamond Jewelry', 'Wedding Jewelry', 'Wedding Ring'];
@@ -14,9 +15,11 @@ function WeddingRing() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch('http://127.0.0.1:1880/products')
-            .then(response => response.json())
-            .then(data => setProducts(data))
+        getProductList()
+            .then(response => {
+                const filteredProducts = response.data.filter(product => [5].includes(product.categoryID));
+                setProducts(filteredProducts);
+            })
             .catch(error => console.log('Error fetching products:', error));
     }, []);
 

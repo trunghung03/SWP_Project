@@ -9,5 +9,7 @@
         public string Description { get; set; }
         public decimal Carat { get; set; }
         public List<string> SubDiamondColors { get; set; }
+        public List<decimal> Sizes { get; set; }
+        public int? CategoryId { get; set; }
     }
 }
