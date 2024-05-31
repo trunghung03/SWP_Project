@@ -2,10 +2,10 @@
 {
     public class UpdatedArticleDto
     {
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
         public DateTime Date { get; set; }
-        public string Image { get; set; }
-        public string Tag { get; set; }
+        public string Image { get; set; } = string.Empty;
+        public string Tag { get; set; } = string.Empty;
     }
 }

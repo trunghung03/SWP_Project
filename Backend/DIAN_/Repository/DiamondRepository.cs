@@ -1,5 +1,6 @@
 ﻿using DIAN_.Helper;
 using DIAN_.Interfaces;
+using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,32 +32,11 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
-        public async Task<List<Diamond>> GetAllDiamondsAsync(DiamondQuery diamondQuery)
+        public async Task<List<Diamond>> GetAllDiamondsAsync()
         {
-
-            var diamond = _context.Diamonds.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(diamondQuery.Name))
-            {
-                diamond = diamond.Where(x => x.Name.Contains(diamondQuery.Name));
-            }
-
-            if (diamondQuery.Cost.HasValue)
-            {
-                diamond = diamond.Where(x => x.Cost == diamondQuery.Cost.Value);
-            }
-            switch (diamondQuery.SortBy)
-            {
-                case "Name":
-                    diamond = diamondQuery.Ascending ? diamond.OrderBy(x => x.Name) : diamond.OrderByDescending(x => x.Name);
-                    break;
-                case "Cost":
-                    diamond = diamondQuery.Ascending ? diamond.OrderBy(x => x.Cost) : diamond.OrderByDescending(x => x.Cost);
-                    break;
-            }
-            return await diamond.ToListAsync();
-
-
+            return await _context.Diamonds
+               .Where(s => s.Status)
+               .ToListAsync();
         }
 
         public async Task<Diamond?> GetDiamondByIdAsync(int id)
@@ -74,14 +54,12 @@ namespace DIAN_.Repository
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
             if (existingDiamond != null)
             {
-                existingDiamond.Name = diamondModel.Name;
                 existingDiamond.Color = diamondModel.Color;
                 existingDiamond.Clarity = diamondModel.Clarity;
                 existingDiamond.Cut = diamondModel.Cut;
                 existingDiamond.Carat = diamondModel.Carat;
                 existingDiamond.Cost = diamondModel.Cost;
                 existingDiamond.CertificateScan = diamondModel.CertificateScan;
-                existingDiamond.DiamondSize = diamondModel.DiamondSize;
                 existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
                 existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();

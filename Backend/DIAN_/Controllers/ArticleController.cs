@@ -116,7 +116,7 @@ namespace DIAN_.Controllers
                 }
                 return Ok(warranty.ToDisplayArticleFromUpdate());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -138,7 +138,7 @@ namespace DIAN_.Controllers
                 }
                 return Ok(warranty.ToArticleDto());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }

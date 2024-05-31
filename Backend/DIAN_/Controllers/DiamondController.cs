@@ -18,7 +18,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery diamondQuery)
+        public async Task<IActionResult> GetAllDiamondsAsync()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _diamondRepository.GetAllDiamondsAsync(diamondQuery);
+                var result = await _diamondRepository.GetAllDiamondsAsync();
 
                 if (!result.Any())
                 {
@@ -80,7 +80,7 @@ namespace DIAN_.Controllers
                 var result = await _diamondRepository.AddDiamondAsync(diamond);
                 return Ok(result.ToDiamondDTO());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -100,7 +100,7 @@ namespace DIAN_.Controllers
                     return NotFound("Diamond does not exist");
                 return Ok(diamondModel.ToDiamondDTO());
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -119,7 +119,7 @@ namespace DIAN_.Controllers
                     return NotFound("Diamond does not exist");
                 return Ok(diamond.ToDiamondDTO());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }

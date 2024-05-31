@@ -6,7 +6,7 @@ namespace DIAN_.Interfaces
 {
     public interface IPromotionRepository
     {
-        Task<List<Promotion>> GetAllPromotionAsync(PromotionQuery promotionQuery);
+        Task<List<Promotion>> GetAllPromotionAsync();
 
         Task<Promotion?> GetPromotionByIdAsync(int id);
 

@@ -3,6 +3,7 @@ using DIAN_.DTOs.PromotionDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DIAN_.Mapper;
 
 namespace DIAN_.Repository
 {
@@ -20,7 +21,7 @@ namespace DIAN_.Repository
             { 
                 throw new ArgumentException("Invalid promotion code");
             }
-            if (promotionModel.EmployeeId == null) 
+            if (promotionModel.EmployeeId == 0) 
             {
                 throw new ArgumentException("EmployeeId must be inputed.");
             }
@@ -30,41 +31,15 @@ namespace DIAN_.Repository
             return promotionModel;
         }
 
-        public async Task<List<Promotion>> GetAllPromotionAsync(PromotionQuery promotionQuery)
+        public async Task<List<Promotion>> GetAllPromotionAsync()
         {
-            var promotion = _context.Promotions.AsQueryable();
 
-            promotion = promotion.Where(x => x.Status == true);
+         //   return await _context.Promotions.Where(x => x.Status == true)
+         //.Select(p => p.ToPromotionList()).ToListAsync();
+         var promotions = await _context.Promotions.ToListAsync();
+            
+            return promotions;
 
-            if (!string.IsNullOrWhiteSpace(promotionQuery.Name))
-            {
-                promotion = promotion.Where(x => x.Name.Contains(promotionQuery.Name));
-            }
-
-            if (promotionQuery.Amount.HasValue)
-            {
-                promotion = promotion.Where(x => x.Amount == promotionQuery.Amount.Value);
-            }
-
-            if (promotionQuery.StartDate != default(DateTime))
-            {
-                promotion = promotion.Where(x => x.ValidFrom >= promotionQuery.StartDate);
-            }
-
-            switch (promotionQuery.SortBy)
-            {
-                case "Name":
-                    promotion = promotionQuery.Ascending ? promotion.OrderBy(x => x.Name) : promotion.OrderByDescending(x => x.Name);
-                    break;
-                case "Amount":
-                    promotion = promotionQuery.Ascending ? promotion.OrderBy(x => x.Amount) : promotion.OrderByDescending(x => x.Amount);
-                    break;
-                case "ValidFrom":
-                    promotion = promotionQuery.Ascending ? promotion.OrderBy(x => x.ValidFrom) : promotion.OrderByDescending(x => x.ValidFrom);
-                    break;
-            }
-
-            return await promotion.ToListAsync();
         }
         public async Task<Promotion?> DeletePromotionAsync(int id, Promotion promotion)
         {
@@ -114,14 +89,14 @@ namespace DIAN_.Repository
         //    throw new NotImplementedException();
         //}
 
-        public async Task<List<Promotion>> SearchPromotionsByNameAsync(string name)
+        public async Task<List<Promotion?>> SearchPromotionsByNameAsync(string name)
         {
             var promotion = await _context.Promotions.Where(x => x.Name.Contains(name)).ToListAsync();
             if (promotion == null)
             {
-                return null;
+                throw new KeyNotFoundException("Promotion does not exist");
             }
-            return promotion;
+            return promotion.Cast<Promotion?>().ToList(); 
         }
 
         public async Task<Promotion?> UpdatePromotionAsync(int id, Promotion promotion)

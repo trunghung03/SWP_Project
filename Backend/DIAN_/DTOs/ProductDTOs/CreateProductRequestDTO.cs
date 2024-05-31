@@ -2,13 +2,13 @@
 {
     public class CreateProductRequestDTO
     {
-        public string ProductCode { get; set; }
+        public string ProductCode { get; set; } = string.Empty;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public decimal Price { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public int MainDiamondId { get; set; }
 
@@ -16,7 +16,7 @@
 
         public decimal LaborPrice { get; set; }
 
-        public string ImageLinkList { get; set; }
+        public string ImageLinkList { get; set; } = string.Empty;
 
         public int SubDiamondAmount { get; set; }
 

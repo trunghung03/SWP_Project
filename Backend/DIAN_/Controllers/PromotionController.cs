@@ -21,7 +21,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult>  GetAllPromotions([FromQuery] PromotionQuery query)
+        public async Task<IActionResult>  GetAllPromotions()
         {
             try
             {
@@ -29,7 +29,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var promotions = await _promotionRepository.GetAllPromotionAsync(query);
+                var promotions = await _promotionRepository.GetAllPromotionAsync();
                 if(promotions.Count == 0)
                 {
                     return NotFound("Promotion does not exist");
@@ -37,7 +37,7 @@ namespace DIAN_.Controllers
                 var promotionDtos = promotions.Select(promotion => promotion.ToPromotionDetail());
                 return Ok(promotionDtos);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -60,7 +60,7 @@ namespace DIAN_.Controllers
                 }
                 return Ok(promotion.ToPromotionDetail());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -79,7 +79,7 @@ namespace DIAN_.Controllers
                 await _promotionRepository.CreatePromotionAsync(promotionModel);
                 return Ok(promotionModel.ToPromotionDetail());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -101,7 +101,7 @@ namespace DIAN_.Controllers
                 }
                 return Ok(promotion.ToPromotionDetail());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -123,7 +123,7 @@ namespace DIAN_.Controllers
                 }
                 return Ok(promotion.ToPromotionDetail());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
