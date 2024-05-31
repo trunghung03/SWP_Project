@@ -3,6 +3,11 @@ import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ResetPassword.scss';
 import rightImage from '../../assets/img/right.jpeg';
+import rightImage2 from '../../assets/img/right2.jpg';
+import rightImage3 from '../../assets/img/right3.jpg';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const ResetPassword = () => {
     const [loading, setLoading] = useState(false);
@@ -86,6 +91,19 @@ const ResetPassword = () => {
         };
     }, []);
 
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        cssEase: "linear",
+        nextArrow: <div className="login_slider_arrow login_slider_next"><i className="login_left_arrow fas fa-chevron-right"></i></div>,
+        prevArrow: <div className="login_slider_arrow login_slider_prev"><i className="login_right_arrow fas fa-chevron-left"></i></div>
+    };
+
     return (
         <div className="rp_main_container container-fluid">
             <div className="rp_wrapper">
@@ -118,7 +136,17 @@ const ResetPassword = () => {
 
                 {/* Right Side: Image */}
                 <div className="rp_right_side col-md-6 p-0">
-                    <img className="rp_right_image" src={rightImage} alt="Ring photo" />
+                    <Slider {...sliderSettings}>
+                        <div>
+                            <img className="rp_right_image" src={rightImage} alt="Ring photo" />
+                        </div>
+                        <div>
+                            <img className="rp_right_image" src={rightImage2} alt="Ring photo" />
+                        </div>
+                        <div>
+                            <img className="rp_right_image" src={rightImage3} alt="Model with jewelry photo" />
+                        </div>
+                    </Slider>
                 </div>
             </div>
         </div>

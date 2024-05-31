@@ -45,6 +45,7 @@ input {
     height: 114vh;
     width: 100%;
     object-fit: cover;
+    margin-bottom: -6px;
 }
 
 .email_section,
@@ -199,7 +200,7 @@ input {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     left: 0;
     top: 0;
     width: 100%;

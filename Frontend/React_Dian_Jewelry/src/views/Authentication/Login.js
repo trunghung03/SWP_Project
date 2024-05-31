@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/right.jpeg';
+import rightImage2 from '../../assets/img/right2.jpg';
+import rightImage3 from '../../assets/img/right3.jpg';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
 import { jwtDecode } from 'jwt-decode';
+
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -231,6 +237,19 @@ const Login = () => {
         };
     }, []);
 
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        cssEase: "linear",
+        nextArrow: <div className="login_slider_arrow login_slider_next"><i className="login_left_arrow fas fa-chevron-right"></i></div>,
+        prevArrow: <div className="login_slider_arrow login_slider_prev"><i className="login_right_arrow fas fa-chevron-left"></i></div>
+    };
+
     return (
         <div className="main_container">
             <div className="login_wrapper">
@@ -292,9 +311,20 @@ const Login = () => {
                     </form>
                 </div>
                 <div className="right_side">
-                    <img className="right_image" src={rightImage} alt="Ring photo" />
+                    <Slider {...sliderSettings}>
+                        <div>
+                            <img className="right_image" src={rightImage} alt="Ring photo" />
+                        </div>
+                        <div>
+                            <img className="right_image" src={rightImage2} alt="Ring photo" />
+                        </div>
+                        <div>
+                            <img className="right_image" src={rightImage3} alt="" />
+                        </div>
+                    </Slider>
                 </div>
             </div>
+
         </div>
     );
 };
