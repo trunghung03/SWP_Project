@@ -96,14 +96,13 @@ CREATE TABLE SHELLMATERIAL (
 -- Diamond table
 CREATE TABLE DIAMOND (
     DiamondID INT PRIMARY KEY IDENTITY(1,1),
-    [Name] NVARCHAR(100) NOT NULL,
+	Shape NVARCHAR (50),
     Color NVARCHAR(50) ,
     Clarity NVARCHAR(50) ,
     Carat DECIMAL(5, 2) ,
     Cut NVARCHAR(50),
     Cost DECIMAL(18, 2) NOT NULL,
     CertificateScan NVARCHAR(MAX),
-    DiamondSize Decimal(5,2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 );
@@ -129,9 +128,9 @@ CREATE TABLE PRODUCT (
     [Name] NVARCHAR(100) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     [Description] NVARCHAR(MAX) ,
-    MainDiamondID INT NOT NULL FOREIGN KEY REFERENCES DIAMOND(DiamondID),
-    ChargeUp DECIMAL(5, 2) CHECK (ChargeUp >= 0 AND ChargeUp <= 100), -- Constrain the percentage to be between 0 and 100
-    LaborPrice DECIMAL(18, 2),
+    MainDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
+    MarkupPrice DECIMAL(5, 2) CHECK (MarkupPrice >= 0 AND MarkupPrice <= 100), -- Constrain the percentage to be between 0 and 100
+    LaborCost DECIMAL(18, 2),
     ImageLinkList NVARCHAR(MAX),
 	MainDiamondAmount INT,
     SubDiamondAmount INT,

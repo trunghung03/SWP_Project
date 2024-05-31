@@ -1,35 +1,35 @@
-	use DIAN;
+﻿	use DIAN;
 
 	-- Insert dummy data into CUSTOMER table
 	INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
-	('john.doe@example.com', '123', 'Doe', 'John', '123 Main St', '123-456-7890', 1000, 1),
-	('jane.smith@example.com', '123', 'Smith', 'Jane', '456 Elm St', '987-654-3210', 1500, 1),
-	('michael.jordan@example.com', '123', 'Jordan', 'Michael', '789 Oak St', '123-789-4560', 2000, 1),
-	('emma.watson@example.com', '123', 'Watson', 'Emma', '101 Pine St', '456-123-7890', 2500, 1),
-	('oliver.queen@example.com', '123', 'Queen', 'Oliver', '202 Cedar St', '789-456-1230', 3000, 1),
-	('bruce.wayne@example.com', '123', 'Wayne', 'Bruce', '303 Birch St', '321-654-9871', 3500, 1),
-	('clark.kent@example.com', '123', 'Kent', 'Clark', '404 Maple St', '654-987-3210', 4000, 1);
+	('john.doe@yahoo.com', '123', 'Doe', 'John', '123 Main St', '+1 (212) 555-0198', 1000, 1),
+	('jane.smith@gmail.com', '123', 'Smith', 'Jane', '456 Elm St', '+1 (415) 555-0234', 1500, 1),
+	('cxhrisB124@gmail.com', '123', 'Chris', 'Burkerly', '789 Oak St', '+1 (310) 555-0745', 2000, 1),
+	('emma.watson@gmail.com', '123', 'Watson', 'Emma', '101 Pine St', '+1 (617) 555-0987', 800, 1),
+	('oliver.queen@gmail.com', '123', 'Queen', 'Oliver', '202 Cedar St', '+1 (818) 555-0367', 300, 1),
+	('lee1103@gmail.com', '123', 'Lee', 'Bruce', '303 Birch St', '+1 (305) 555-0456', 3500, 1),
+	('clark08kent@gmail.com', 'clark0809', 'Kent', 'Clark', '404 Maple St', '+1 (702) 555-0823', 200, 1);
 
 	-- Insert dummy data into EMPLOYEE table
 	-- Insert dummy data into EMPLOYEE table with updated roles
 	INSERT INTO EMPLOYEE (Role, Email, Password, LastName, FirstName, Address, PhoneNumber, Status) VALUES
-	('Admin', 'admin@example.com', '123', 'Admin', 'One', '789 Pine St', '321-654-9870', 1),
-	('Manager', 'manager@example.com', '123', 'Manager', 'Two', '101 Oak St', '654-321-0987', 1),
-	('SalesStaff', 'sales@example.com', '123', 'Sales', 'Three', '123 Elm St', '123-987-6540', 1),
-	('DeliveryStaff', 'delivery@example.com', '123', 'Delivery', 'Four', '456 Birch St', '456-789-0123', 1),
-	('SalesStaff', 'sales2@example.com', '123', 'Sales', 'Five', '789 Cedar St', '789-012-3456', 1),
-	('Manager', 'manager2@example.com', '123', 'Manager', 'Six', '101 Maple St', '321-456-7890', 1),
-	('Admin', 'admin2@example.com', '123', 'Admin', 'Seven', '202 Oak St', '654-321-1234', 1);
-
+	('Admin', 'RaveAdmin@gmail.com', '123', 'Steve', 'Ravy', '789 Pine St', '+1 (202) 555-0178', 1),
+	('Manager', 'SmithManager@gmail.com', '123', 'Smith', 'John', '101 Oak St', '+1 (303) 555-0192', 1),
+	('SalesStaff', 'BrownSales@gmail.com', '123', 'Sarah', 'Brown', '123 Elm St', '+1 (404) 555-0153', 1),
+	('DeliveryStaff', 'DanielDelivery@gmail.com', '123', 'Moore', 'Daniel', '456 Birch St', '+1 (505) 555-0147', 1),
+	('SalesStaff', 'AmandaSale02@gmail.com', '123', 'Taylor', 'Amanda', '789 Cedar St', '+1 (707) 555-0185', 1),
+	('Manager', 'JamesManager02@gmail.com', '123', 'Davis', 'James', '101 Maple St', '+1 (808) 555-0136', 1),
+	('Admin', 'JessicaAdmin2@gmail.com', '123', 'Miller', 'Jessica', '202 Oak St', '+1 (315) 555-0176', 1);
+	
 	-- Insert dummy data into ARTICLE table
 	INSERT INTO ARTICLE (Title, Content, Employee, [Date], [Image], Tag, Status) VALUES
-	('New Collection Launch', 'We are excited to launch our new collection...', 1, GETDATE(), 'image1.jpg', 'Launch', 1),
-	('Holiday Sale', 'Enjoy up to 50% off during our holiday sale...', 2, GETDATE(), 'image2.jpg', 'Sale', 1),
-	('Employee of the Month', 'Congratulations to our employee of the month...', 3, GETDATE(), 'image3.jpg', 'Recognition', 1),
-	('Product Spotlight', 'Check out our latest product...', 4, GETDATE(), 'image4.jpg', 'Product', 1),
-	('Customer Testimonial', 'Hear what our customers have to say...', 5, GETDATE(), 'image5.jpg', 'Testimonial', 1),
-	('Company News', 'Stay updated with our latest company news...', 6, GETDATE(), 'image6.jpg', 'News', 1),
-	('Upcoming Events', 'Join us for our upcoming events...', 7, GETDATE(), 'image7.jpg', 'Events', 1);
+	('Natural vs. Lab Diamonds', 'Natural and lab-grown diamonds are identical to the naked eye. In fact, most experts can''t even tell them apart without specialized equipment. Ultimately, the main difference is how they''re created. Learn more to understand which diamond type suits your style.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F369828bf6d7c48d6ae52eb7edb069602', 'Blog', 1),
+	('Transformational Blockchain Technology', 'Blockchain technology is revolutionizing the natural diamond industry. Our blockchain keeps track of every step in a diamond’s journey – from mining, to market, to the moment it reaches you – safely, securely, and permanently. With our blockchain verified diamonds, you’ll have an enduring digital record about where your diamond comes from and how it was sourced. In 2019, we became one of the first retailers to offer blockchain verified diamonds, and year after year we have increased our offering of blockchain verified diamonds, ahead of our ESG Goals.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fa6e7c9b72fb840e29ce3d58ef93d4f6d', 'Blog', 1),
+	('Colored Diamonds', 'Explore our curated collection of natural and lab created colored diamonds in a variety of stunning shades.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F67a2c143703b4239a605d7b3a10d4420', 'Product Description Section', 1),
+	('The Capture Collection', 'We capture CO₂ before it is released into the atmosphere to create the most innovative lab grown diamonds on the planet.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fa9aa8fd2de794d0581588e4a187d878e', 'News', 1),
+	('Design Your Own Earrings', 'Select your setting and diamonds to get exactly what you''re looking for.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Ff4562a479cb049a2b8e5f1787d3f4633', 'Services', 1),
+	('Design Your Own Necklace', 'Customize a solitaire necklace with a setting and gemstone that suit your style.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F3f926b3050bd4f6baa39fe0b3db32fd3', 'Services', 1),
+	('OUR BEGINNING', 'In 2019, after witnessing the gap in ethical and sustainable options within the diamond industry, visionary entrepreneur Danielle Taylor embarked on a mission to redefine the narrative. Inspired by Beth Gerstein''s journey, Danielle envisioned a diamond jewelry brand that not only symbolized love but also upheld principles of environmental stewardship and ethical sourcing. With a shared commitment to sustainability, Danielle partnered with renowned jeweler Michael Adams to establish DIAN Diamond Jewelry in 2022. Together, they pioneered innovative approaches to diamond sourcing and transparency, leveraging cutting-edge technology to trace each gemstone''s origin. By offering consumers the assurance of ethical practices and environmental responsibility, DIAN quickly gained recognition as a leader in sustainable luxury jewelry, inspiring a new generation of conscientious consumers to adorn themselves with diamonds that shine with integrity and purpose.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=600,height=258,quality=100,format=auto/https://www.brilliantearth.com/bee2-ui/img/mission/about/Mission_About_Static.jpg', 'About', 1);
 
 	-- Insert dummy data into PROMOTION table
 	INSERT INTO PROMOTION ([Name], Amount, ValidFrom, ValidTo, [Description], Code, EmployeeID, Status) VALUES
@@ -50,43 +50,141 @@
 	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging'),
 	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging'),
 	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging');
+	
+	-- Insert dummy data into CATEGORY table
+	INSERT INTO CATEGORY ([Name], Status) VALUES
+	('Rings', 1),
+	('Necklaces', 1),
+	('Bracelets', 1),
+	('Earrings', 1),
+	('Tiaras', 1),
+	('Cufflinks', 1),
+	('Watches',1),
+	('PENDANT',1);
+
 		-- Insert dummy data into SHELLMATERIAL table
 	INSERT INTO SHELLMATERIAL ([Name], AmountAvailable, Price, Status) VALUES
-	('Silver', 100.00, 5000.00, 1),
-	('Gold', 200.00, 50.00, 1),
-	('Rose Gold', 150.00, 55.00, 1),
-	('White Gold', 120.00, 60.00, 1);
-
+	('Silver', 100.00, 1.08, 1),
+	('18K Yellow Gold', 20.00,75.21, 1),
+	('18K Rose Gold', 150.00, 45.51, 1),
+	('18K White Gold', 120.00, 50.74, 1),
+	('Platinum', 120.00, 33.37, 1);
 	-- Insert dummy data into DIAMOND table
-	INSERT INTO DIAMOND ([Name], Color, Clarity, Carat, Cut, Cost, CertificateScan, DiamondSize, AmountAvailable, Status)
+	INSERT INTO DIAMOND (Shape,Color, Clarity, Carat, Cut, Cost, CertificateScan, AmountAvailable, Status)
 	VALUES
-	('Brilliant Rose', 'D', 'VVS1', 1.25, 'Excellent', 5000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 1.25, 10, 1),
-	('Perfect Princess', 'E', 'VS1', 0.95, 'Very Good', 4000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 0.95, 5, 1),
-	('Sparkling Emerald', 'F', 'IF', 2.00, 'Excellent', 12000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 3.00, 2, 1),
-	('Shining Star', 'G', 'SI1', 1.50, 'Good', 7000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 1.50, 3, 1),
-	('Radiant Beauty', 'H', 'VS2', 1.20, 'Very Good', 5500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 1.20, 8, 1),
-	('Glistening Gem', 'I', 'VVS2', 1.75, 'Excellent', 9500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 1.75, 6, 1),
-	('Luminous Light', 'J', 'SI2', 2.50, 'Good', 15000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 2.50, 1, 1);
-
-
+	('Round','F', 'VVS2', 1.03, 'Super Ideal', 6880.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg',10, 1),
+	('Round','G', 'VVS2', 1.00, 'Super Ideal', 4930.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg',5, 1),
+	('Round','F', 'VVS2', 0.56, 'Super Ideal', 1710.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg',20, 1),
+	('Round','G', 'VS2', 1.20, 'Super Ideal', 7240.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 1),
+	('Round','H', 'VS1', 2.01, 'Super Ideald', 20980.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg',8, 1),
+	('Round','I', 'VVS2', 0.31, 'Very Good', 470.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg',21, 1),
+	('Oval', 'G', 'VS1', 1.50, 'Super Ideal', 12530.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 8, 1),
+    ('Oval', 'J', 'VS1', 1.51, 'Ideal', 6340.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 12, 1),
+    ('Oval', 'F', 'VS1', 1.00, 'Ideal', 3860.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 15, 1),
+	('Oval', 'J', 'VS1', 1.51, 'Ideal', 4490.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 6, 1),
+	('Oval', 'G', 'VVS2', 1.70, 'Ideal', 14590.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 3, 1),
+    ('Oval', 'G', 'VS1', 1.50, 'Super Ideal', 13130.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 8, 1),
+    ('Oval', 'F', 'VVS2', 1.00, 'Ideal', 5540.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 10, 1),
+    ('Oval', 'F', 'VVS2', 1.01, 'Ideal', 6590.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/oval_new.jpg', 9, 1),
+	('Emerald', 'F', 'VVS2', 1.30, 'Super Ideal', 7950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 10, 1),
+    ('Emerald', 'G', 'VS1', 2.01, 'Super Ideal', 16070.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 5, 1),
+    ('Emerald', 'G', 'IF', 2.01, 'Ideal', 22220.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 4, 1),
+    ('Emerald', 'H', 'VVS2', 2.02, 'Ideal', 15380.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 6, 1),
+    ('Emerald', 'H', 'VVS1', 1.21, 'Ideal', 4830.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 7, 1),
+    ('Emerald', 'H', 'IF', 2.00, 'Super Ideal', 14240.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/emerald_new.jpg', 8, 1),
+	('Cushion', 'H', 'VS2', 1.03, 'Super Ideal', 2500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 10, 1),
+    ('Cushion', 'G', 'VVS1', 1.01, 'Super Ideal', 3760.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 5, 1),
+    ('Cushion', 'G', 'VVS2', 1.51, 'Super Ideal', 8110.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 4, 1),
+    ('Cushion', 'G', 'IF', 1.50, 'Super Ideal', 8000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 6, 1),
+    ('Cushion', 'I', 'VS2', 2.01, 'Very Good', 9710.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 7, 1),
+    ('Cushion', 'G', 'VVS2', 1.51, 'Super Ideal', 8090.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 8, 1),
+    ('Cushion', 'I', 'VS1', 1.90, 'Super Ideal', 10210.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/cushion_new.jpg', 3, 1),
+	('Pear', 'J', 'SI1', 3.01, 'Ideal', 18250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 5, 1),
+    ('Pear', 'I', 'SI1', 1.75, 'Ideal', 8060.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 4, 1),
+    ('Pear', 'J', 'SI1', 0.96, 'Very Good', 2010.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 7, 1),
+    ('Pear', 'F', 'VVS2', 1.02, 'Ideal', 5980.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 8, 1),
+    ('Pear', 'F', 'VS1', 1.21, 'Ideal', 6820.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 6, 1),
+    ('Pear', 'F', 'VS2', 1.43, 'Ideal', 7970.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/pear_new.jpg', 9, 1),
+	('Radiant', 'J', 'VS2', 2.01, 'Super Ideal', 10050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/radiant_new.jpg', 5, 1),
+    ('Radiant', 'F', 'VVS1', 1.03, 'Ideal', 4370.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/radiant_new.jpg', 4, 1),
+    ('Radiant', 'I', 'VS1', 2.01, 'Super Ideal', 13350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/radiant_new.jpg', 6, 1),
+    ('Radiant', 'H', 'VS1', 2.02, 'Super Ideal', 16040.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/radiant_new.jpg', 7, 1),
+    ('Radiant', 'G', 'VVS1', 1.50, 'Ideal', 9780.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/radiant_new.jpg', 8, 1),
+	('Princess', 'F', 'VVS2', 1.00, 'Super Ideal', 4230.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 10, 1),
+    ('Princess', 'J', 'VVS1', 2.02, 'Super Ideal', 13180.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 5, 1),
+    ('Princess', 'F', 'VS1', 0.80, 'Ideal', 2110.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 12, 1),
+    ('Princess', 'F', 'VVS2', 1.01, 'Ideal', 3900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 8, 1),
+    ('Princess', 'G', 'VVS1', 1.51, 'Super Ideal', 10160.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 6, 1),
+    ('Princess', 'G', 'VS1', 1.01, 'Ideal', 3220.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 7, 1),
+    ('Princess', 'F', 'VVS1', 0.92, 'Super Ideal', 3790.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/princess_new.jpg', 9, 1),
+	('Marquise', 'J', 'VS2', 1.00, 'Ideal', 3280.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 5, 1),
+    ('Marquise', 'G', 'VVS1', 0.53, 'Ideal', 1340.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 10, 1),
+    ('Marquise', 'F', 'SI1', 0.32, 'Ideal', 480.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 12, 1),
+    ('Marquise', 'I', 'VS2', 0.50, 'Very Good', 1110.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 8, 1),
+    ('Marquise', 'G', 'VS1', 0.50, 'Ideal', 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/marquise_new.jpg', 7, 1),
+	('Asscher', 'J', 'VVS2', 1.01, 'Ideal', 2500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/asscher_new.jpg', 5, 1),
+    ('Asscher', 'F', 'VS1', 0.91, 'Super Ideal', 2550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/asscher_new.jpg', 10, 1),
+    ('Asscher', 'F', 'VVS2', 0.70, 'Ideal', 1590.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/asscher_new.jpg', 12, 1),
+    ('Asscher', 'G', 'IF', 0.71, 'Ideal', 1780.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/asscher_new.jpg', 8, 1),
+    ('Asscher', 'F', 'VS1', 0.51, 'Super Ideal', 1080.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/asscher_new.jpg', 7, 1),
+    ('Asscher', 'F', 'VVS2', 1.00, 'Super Ideal', 4480.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/asscher_new.jpg', 9, 1),
+	('Heart', 'F', 'VS1', 0.91, 'Ideal', 2900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 5, 1),
+    ('Heart', 'G', 'VS1', 0.90, 'Ideal', 3300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 10, 1),
+    ('Heart', 'F', 'VS2', 0.71, 'Ideal', 2030.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 12, 1),
+    ('Heart', 'F', 'IF', 0.52, 'Ideal', 1390.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 8, 1),
+    ('Heart', 'F', 'VVS2', 0.56, 'Very Good', 1480.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 7, 1),
+    ('Heart', 'F', 'VS1', 1.05, 'Ideal', 3550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 9, 1);
 	-- Insert dummy data into COLLECTIONS table
-INSERT INTO COLLECTION (CollectionID, Name, Status, Description)
+INSERT INTO COLLECTION (CollectionID, [Name], Status, [Description])
 VALUES
-(1, 'Collection 1', 1, 'Description for Collection 1'),
-(2, 'Collection 2', 1, 'Description for Collection 2'),
-(3, 'Collection 3', 1, 'Description for Collection 3'),
-(4, 'Collection 4', 1, 'Description for Collection 4'),
-(5, 'Collection 5', 1, 'Description for Collection 5');
+(1, 'LOTUS FASHION DIAMOND JEWELRY SET 05', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.'),
+(2, 'Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.'),
+(3, 'Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.'),
+(4, 'Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.'),
+(5, 'Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.'),
+(6, 'Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.'),
+(7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.'),
+(8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.');
+
 
 	-- Insert dummy data into PRODUCT table
-	INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, ChargeUp, LaborPrice, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status, CollectionID)
+	INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, MarkupPrice, LaborCost, ImageLinkList, MainDiamondAmount, SubDiamondAmount, ShellAmount, Status, CollectionID,CategoryID)
 	VALUES
-	('PROD001', 'Product 1', 12000.00, 'Description for Product 1', 1, 10.00, 1500.00, 'https://css.brilliantearth.com/static/img/fillter/shop-by-style/Accents-ir358-old.jpg', 1, 2, 3.00, 1, 1),
-	('PROD002', 'Product 2', 15000.00, 'Description for Product 2', 2, 12.50, 2000.00, 'https://script.brilliantearth.com/static/img/fillter/shop-by-style/ThreeStone-ir358-old.jpg?_v=1716006408', 1, 3, 3.50, 1, 2),
-	('PROD003', 'Product 3', 10000.00, 'Description for Product 3', 3, 8.75, 1200.00, 'https://image.brilliantearth.com/media/thumbnail/17/84/17840dced5a4e298cf86893922bcfe4d.jpg', 1, 1, 2.50, 1, 3),
-	('PROD004', 'Product 4', 18000.00, 'Description for Product 4', 4, 15.00, 2500.00, 'https://image.brilliantearth.com/media/thumbnail/2c/1d/2c1d2138c202c3a0197d1970136d47fa.jpg', 1, 4, 4.00, 1, 4),
-	('PROD005', 'Product 5', 11000.00, 'Description for Product 5', 5, 9.00, 1400.00, 'https://image.brilliantearth.com/media/thumbnail/b4/40/b44056e082aefe5fae481448827f3b5d.webp	', 1, 2, 3.20, 1, 5);
-
+	('PROD001', 'Eternity Lab Diamond Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap all the way around the band wrap the finger in light in this glamorous cocktail design (1 1/2 total carat weight).',1, 71.50, 240.00, 'https://script.brilliantearth.com/static/img/fillter/shop-by-style/ThreeStone-ir358-old.jpg?_v=1716006408', 0, 73, 10.50, 1, 2,1),
+	('PROD002', 'Ballad Eternity Diamond Ring', 1190.00, 'A stunning ring featuring diamonds that encircle the band for a timeless and elegant look.', 4., 76.00, 150.00, 'https://image.brilliantearth.com/media/product_new_images/6D/BE2D1823E_white_top.jpg', 1, 30, 5.00, 1, 2, 1),
+	('PROD003', 'Riviera Eternity Lab Diamond Ring', 1990.00, 'This ring showcases lab diamonds in a continuous band, creating an eternity effect.', 3, 64.00, 220.00, 'https://image.brilliantearth.com/media/product_new_images/9C/BE2DMS100ELC_white_top.jpg', 1, 50, 7.50, 1, 2, 1),
+	('PROD004', 'Ellora Eternity Lab Diamond Ring', 2750.00, 'Featuring lab diamonds around the entire band, this ring sparkles with sophistication.', 12, 82.10, 300.00, 'https://image.brilliantearth.com/media/product_new_images/1E/BE2D2811ETLC_yellow_top.jpgg', 1, 60, 10.00, 1, 2, 1),
+	('PROD005', 'Certified Lab Grown Diamond Stud Earrings', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.', 18, 69.80, 180.00, 'https://image.brilliantearth.com/media/product_images/17/BE304RD150LAB_white_top.jpg', 2, 0, 1.00, 1, 2, 4),
+	('PROD006', 'Heart Lab Diamond Stud Earrings', 425.00, 'Beautiful heart-shaped stud earrings with lab grown diamonds.',(NULL), 53.00, 50.00, 'https://image.brilliantearth.com/media/product_images/53/BE3LD008_white_top.jpg', 0, 1, 0.25, 1, 2, 1),
+	('PROD007', 'Luxe Ballad Diamond Eternity Ring', 2590.00, 'Luxe design with diamonds set along the band.', 21, 81.00, 250.00, 'https://image.brilliantearth.com/media/shape_images/c210f949807dd26b5923794bfbb99224_7f68f841f667b2a8057d44562e44aa84_8b144bb23bad9575b5d0e08d6c9c7e2e_110_.jpg', 1, 0, 9.00, 1, 2, 2),
+	('PROD008', 'Luxe Secret Garden Diamond Eternity Ring', 4790.00, 'Nature-inspired with diamonds resembling leaves and vines.', NULL, 61.60, 450.00, 'https://image.brilliantearth.com/media/diamond_ring_vto/K5/BE1D6352_white_Round_top_2_carat.pngg', 0, 80, 15.00, 1, 2, 1),
+	('PROD009', 'Twisted Vine Diamond Eternity Ring', 2490.00, 'Twisted design with diamonds entwined in vines.', NULL, 72.00, 220.00, 'https://image.brilliantearth.com/media/product_new_images/38/BE2D509E_white_top.jpg', 0, 50, 8.00, 1, 2, 1),
+	('PROD010', 'Petite Twist Diamond Eternity Ring', 1690.00, 'Elegant twist design with petite diamonds.', NULL, 43.15, 180.00, 'https://www.brilliantearth.com/images/rings/large/BE2FD3-009-lt-1-104-1x.jpg', 0, 35, 12.00, 1, 4, 1),
+	('PROD011', 'Whisper Diamond Eternity Ring', 2890.00, 'Delicate design with diamonds encircling the band.', NULL, 68.30, 250.00, 'https://image.brilliantearth.com/media/product_new_images/8C/BE266E_white_top.jpg', 0, 28, 10.00, 1, 5, 1),
+	('PROD012', 'Certified Lab Grown Diamond Stud Earrings (1 1/2 ct. tw.)', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.', 19, 79.32, 180.00, 'https://image.brilliantearth.com/media/product_images/17/BE304RD150LAB_white_top.jpg', 2, 0, 5.50, 1, 6, 4),
+	('PROD013', 'Lab Grown Diamond Stud Earrings (1/2 ct. tw.)', 495.00, 'Simple and elegant lab grown diamond stud earrings.', 14, 42.00, 60.00, 'https://image.brilliantearth.com/media/product_images/FD/BE304RD50LC_white_top.jpg', 2, 0, 3.50, 1, 8, 4),
+	('PROD014', 'Heart Lab Diamond Stud Earrings (1/4 ct. tw.)', 425.00, 'Beautiful heart-shaped stud earrings with lab grown diamonds.', 7, 48.00, 50.00, 'https://image.brilliantearth.com/media/product_images/53/BE3LD008_white_top.jpg',2, 0, 1.25, 1, 5, 4),
+	('PROD015', 'Certified Lab Grown Diamond Stud Earrings (2 ct. tw.)', 3495.00, 'Elegant stud earrings featuring certified lab grown diamonds.', 8, 70.00, 300.00, 'https://image.brilliantearth.com/media/product_images/XR/BE304RD200_White.webp', 2, 0, 2.00, 1, 5, 4),
+	('PROD016', 'Lab Grown Diamond Stud Earrings (3/4 ct. tw.)', 750.00, 'Elegant lab grown diamond stud earrings.', 16, 56.00, 75.00, 'https://image.brilliantearth.com/media/product_images/1C/BE304RD75LC_white_top.jpg', 2, 0, 3.75, 1, 1, 4),
+	('PROD017', 'Lab Grown Diamond Stud Earrings (1 ct. tw.)', 1295.00, 'Classic and elegant lab grown diamond stud earrings.', 11, 75.00, 120.00, 'https://image.brilliantearth.com/media/product_images/6B/BE304RD100LC_white_top.jpg', 2, 0, 1.90, 1, 7, 4),
+	('PROD018', 'Heart Lab Diamond Stud Earrings (1/4 ct. tw.)', 425.00, 'Beautiful heart-shaped stud earrings with lab grown diamonds.', NULL, 59.00, 50.00, 'https://www.brilliantearth.com/images/earrings/large/BE5FD1-007-lt-1-104-1x.jpg', 0, 2, 0.25, 1, 2, 2),
+	('PROD019', 'Certified Lab Grown Diamond Stud Earrings (1 1/2 ct. tw.)', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.', 13, 81.30, 60.00, 'https://image.brilliantearth.com/media/product_images/17/BE304RD150LAB_white_top.jpg', 2, 0, 7.50, 1, 2, 4),
+	('PROD020', '18K Yellow Gold Baguette and Round Diamond Tennis Bracelet', 3990.00, 'A sophisticated bracelet featuring baguette and round diamonds in 18K yellow gold.',NULL, 74.20, 350.00, 'https://image.brilliantearth.com/media/product_images/75/BE5D3255_yellow_top.jpg', 0, 20, 12.00, 1, 2, 3),
+	('PROD021', '14K Yellow Gold Paperclip Lab Diamond Tennis Bracelet', 1295.00, 'A modern paperclip design adorned with lab-grown diamonds in 14K yellow gold.', NULL, 68.00, 180.00, 'https://image.brilliantearth.com/media/product_images/5B/BE5D4033LC_yellow_top.jpg', 0, 15, 7.00, 1, 8, 3),
+	('PROD022', 'Aster Lab Diamond Tennis Bracelet', 1795.00, 'Elegant lab diamond tennis bracelet with a classic design.', 6, 73.50, 200.00, 'https://image.brilliantearth.com/media/product_images/WG/BE5D3695LAB_white_top.jpg', 1, 27, 6.00, 1, 2, 3),
+	('PROD023', 'Beatrice Lab Diamond Tennis Bracelet', 1795.00, 'A stunning tennis bracelet featuring lab-grown diamonds.', 21, 80.00, 200.00, 'https://www.brilliantearth.com/images/bracelets/large/Beatrice_Lab_Diamond_Tennis_Bracelet_1_ct-tw.jpg', 0, 25, 6.00, 1, 2, 3),
+	('PROD024', '18K White Gold Emerald Cut Diamond Tennis Bracelet', 14990.00, 'An exquisite bracelet with emerald-cut diamonds in 18K white gold.', NULL, 84.00, 800.00, 'https://image.brilliantearth.com/media/product_images/O3/BE3694LAB-18KW_additional1.webp', 1, 21, 20.00, 1, 3, 3),
+	('PROD025', '14K White Gold Oval Diamond Tennis Bracelet', 13990.00, 'A luxurious oval diamond tennis bracelet set in 14K white gold.', 22, 78.60, 750.00, 'https://image.brilliantearth.com/media/product_images/35/BE5DB603LC-14KY_additional1.jpg', 12, 0, 18.00, 1, 4, 3),
+	('PROD026', '18K White Gold Heart Shaped Lab Diamond Tennis Bracelet', 6000.00, 'A romantic bracelet featuring heart-shaped lab diamonds in 18K white gold.', NULL, 67.00, 500.00, 'https://image.brilliantearth.com/media/product_images/97/BE5LC9056_white_top.jpg', 10, 0, 42.00, 1, 5, 3),
+	('PROD027', '14K White Gold Princess Diamond Tennis Bracelet', 23000.00, 'A magnificent bracelet with princess-cut diamonds in 14K white gold.', NULL, 72.00, 1200.00, 'https://image.brilliantearth.com/media/product_images/AB/BE5D4152_white_top.jpg', 21, 0, 45.00, 1, 6, 3),
+	('PROD028', '18K White Gold Marquise Lab Diamond Tennis Bracelet', 6795.00, 'An elegant bracelet featuring marquise-cut lab diamonds in 18K white gold.',18, 68.00, 600.00, 'https://image.brilliantearth.com/media/product_images/C8/BE5LD7788_white_top.jpg', 1, 20, 23.00, 1, 7, 3),
+	('PROD029', 'Olivetta Lab Diamond Tennis Bracelet', 5000.00, 'A timeless tennis bracelet adorned with lab-grown diamonds.', NULL, 69.00, 500.00, 'https://image.brilliantearth.com/media/product_images/KV/BE5LD505_white_top.jpg', 0, 30, 62.00, 1, 2, 3),
+	('PROD030', 'Willow Diamond Necklace', 2650.00, 'A delicate necklace featuring a diamond-encrusted willow branch design.', NULL, 76.00, 250.00, 'https://image.brilliantearth.com/media/product_images/HT/BE4D767_white_top_3.jpg', 0, 54, 51.50, 1, 1, 2),
+	('PROD031', 'Luna Diamond Pendant', 4800.00, 'A stunning pendant with a crescent moon design adorned with diamonds.', 25, 81.00, 320.00, 'https://image.brilliantearth.com/media/product_images/2E/BE4DAQ3MN_white_top.jpg', 1, 15, 6.20, 1, 6, 2),
+	('PROD032', 'Starburst Diamond Necklace', 3400.00, 'A radiant starburst design necklace featuring brilliant diamonds.', 9, 63.00, 500.00, 'https://image.brilliantearth.com/media/product_images/XH/BE4D770-14KY_top.jpg', 3, 0, 45.00, 1, 2, 2),
+	('PROD033', 'Infinity Lab Diamond Necklace', 1790.00, 'An elegant infinity symbol necklace with lab-grown diamonds.',NULL, 77.00, 250.00, 'https://image.brilliantearth.com/media/product_images/ZX/BE4D4230LC_2_WG_1000.jpg', 0, 42, 3.00, 1, 8, 2),
+	('PROD034', 'Hearts Diamond Necklace', 6200.00, 'A beautiful necklace featuring hearts and arrows design set with diamonds.', 1, 58.90, 1000.00, 'https://image.brilliantearth.com/media/product_images/6R/BE4LCPS061_yellow_top.jpg', 1, 0, 25.00, 1, 6, 2),
+	('PROD0135', 'Blossom Diamond Pendant', 395.00, 'A charming pendant with a floral blossom design encrusted with diamonds.', NULL, 43.00, 100.00, 'https://image.brilliantearth.com/media/product_images/99/BE4P400_white_top.jpg', 0, 5, 4.00, 1, 1, 2);
 	-- Insert dummy data into ORDERDETAIL table
 	INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiamondID, Size, Status) VALUES
 	(1, 2000.00, 1, 2, 3, 7.5, 1),
@@ -107,22 +205,12 @@ VALUES
 	(6, GETDATE(), DATEADD(year, 1, GETDATE()), 1),
 	(7, GETDATE(), DATEADD(year, 1, GETDATE()), 1);
 
-	-- Insert dummy data into CATEGORY table
-	INSERT INTO CATEGORY ([Name], Status) VALUES
-	('Rings', 1),
-	('Necklaces', 1),
-	('Bracelets', 1),
-	('Earrings', 1),
-	('Pendants', 1),
-	('Tiaras', 1),
-	('Cufflinks', 1);
-
 	-- Insert dummy data into SIZE table
 	INSERT INTO SIZE (CategoryID, MinSize, MaxSize, Step) VALUES
-	(1, 5.0, 10.0, 0.5),
-	(2, 16.0, 22.0, 0.5),
-	(3, 15.0, 21.0, 0.5),
-	(4, 5.0, 10.0, 0.5),
-	(5, 16.0, 22.0, 0.5),
-	(6, 15.0, 21.0, 0.5),
-	(7, 5.0, 10.0, 0.5);
+	(1, 3.0, 13.5, 0.5),
+	(2, 36.0, 61.0, 5.0),
+	(3, 14.0, 24.0, 2.0),
+	(4, 0.0, 0.0, 0.0),
+	(5, 20.0, 22.0, 0.5),
+	(6, 10.0, 18.0, 2.0),
+	(7, 24.0, 56.0, 4.0);
