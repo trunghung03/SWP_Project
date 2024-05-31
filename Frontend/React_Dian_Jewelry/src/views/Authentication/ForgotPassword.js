@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ForgotPassword.scss';
-import rightImage from '../../assets/img/rightImage.png';
+import rightImage from '../../assets/img/right.jpeg';
 
 const ForgotPassword = () => {
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const btn = document.getElementById("emailPopup");
         btn.onclick = function (e) {
             e.preventDefault();
+            setLoading(true);
+
             const email = document.getElementById("email").value;
             const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
@@ -24,6 +28,8 @@ const ForgotPassword = () => {
                         },
                     }).then(() => {
                         window.location.href = "/resetPassword";
+                    }).finally(() => {
+                        setLoading(false);
                     });
                 } else {
                     swal({
@@ -35,6 +41,7 @@ const ForgotPassword = () => {
                             className: "swal-button"
                         },
                     });
+                    setLoading(false);
                 }
             } else {
                 swal({
@@ -46,6 +53,7 @@ const ForgotPassword = () => {
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
             }
         };
 
@@ -79,7 +87,10 @@ const ForgotPassword = () => {
                             <input type="email" className="form-control" id="email" placeholder="Enter email" required />
                         </div>
                         <div className="fp_submit_section">
-                            <button id="emailPopup" type="submit" className="fp_button btn btn-block">Send verify email</button>
+                            <button id="emailPopup" type="submit" className="fp_button btn btn-block" disabled={loading}>
+                                {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}
+                                Send verify email
+                            </button>
                         </div>
                         <a className="back_to_login" href="/login">&lt; Back to login</a>
                     </form>

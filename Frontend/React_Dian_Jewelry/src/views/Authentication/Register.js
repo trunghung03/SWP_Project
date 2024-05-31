@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/Register.scss';
-import rightImage from '../../assets/img/register.jpg';
+import rightImage from '../../assets/img/right.jpeg';
 import { getUserInfo } from '../../services/UserService';
 
 const Register = () => {
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const togglePassword = document.getElementById('togglePassword');
         const handleTogglePassword = () => {
@@ -51,6 +53,7 @@ const Register = () => {
         const btnSuccessPopup = document.getElementById("successPopup");
         btnSuccessPopup.onclick = async function (e) {
             e.preventDefault();
+            setLoading(true);
             const firstName = document.getElementById("first_name").value.trim();
             const lastName = document.getElementById("last_name").value.trim();
             const email = document.getElementById("email").value.trim();
@@ -68,6 +71,7 @@ const Register = () => {
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
                 return;
             }
 
@@ -86,6 +90,7 @@ const Register = () => {
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
                 return;
             }
 
@@ -99,6 +104,7 @@ const Register = () => {
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
                 return;
             }
 
@@ -112,6 +118,7 @@ const Register = () => {
                         className: "swal-button"
                     },
                 });
+                setLoading(false);
                 return;
             }
 
@@ -127,10 +134,13 @@ const Register = () => {
                             className: "swal-button"
                         },
                     });
+                    setLoading(false);
                     return;
                 }
             } catch (error) {
                 console.error("Error checking email existence: ", error);
+                setLoading(false);
+                return;
             }
 
             const requestData = {
@@ -188,6 +198,8 @@ const Register = () => {
                         className: "swal-button"
                     },
                 });
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -239,7 +251,10 @@ const Register = () => {
                             <label style={{ fontSize: '13px' }} className="tos">I agree with the <a className="tos_link" href="#" id="tosLink">Terms of Service & Privacy Policy</a></label>
                         </div>
                         <div className="submit_section">
-                            <button id="successPopup" type="submit" className="sign_up_button btn btn-block">Sign up</button>
+                            <button id="successPopup" type="submit" className="sign_up_button btn btn-block" disabled={loading}>
+                                {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}
+                                Sign up
+                            </button>
                         </div>
                         <div className="sign_up_section">
                             <span>Already have an account? <a className="sign_up_link" href="/login">Sign in</a></span>
