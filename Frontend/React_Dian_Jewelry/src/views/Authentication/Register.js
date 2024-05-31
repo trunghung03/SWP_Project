@@ -142,9 +142,13 @@ const Register = () => {
                     return;
                 }
             } catch (error) {
-                console.error("Error checking email existence: ", error);
-                setLoading(false);
-                return;
+                if (error.response && error.response.status === 404) {
+                    console.log('Email not found, safe to proceed with registration.');
+                } else {
+                    console.error("Error checking email existence: ", error);
+                    setLoading(false);
+                    return;
+                }
             }
 
             const requestData = {

@@ -11,7 +11,6 @@ import rightImage3 from '../../assets/img/right3.jpg';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
 import { jwtDecode } from 'jwt-decode';
 
-
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -55,116 +54,73 @@ const Login = () => {
             return;
         }
 
-        let userInfoRes;
         try {
-            userInfoRes = await getUserInfo(email);
-        } catch (error) {
-            console.error("Error checking email existence: ", error);
-            setLoading(false);
-            return;
-        }
+            const userInfoRes = await getUserInfo(email);
 
-        let res;
-
-        try {
-            res = await customerLoginApi(email, password);
-
-            if (res && res.data && res.data.token) {
-                if (userInfoRes.data.password !== password) {
-                    swal({
-                        title: "Wrong password!",
-                        text: "Please try again.",
-                        icon: "error",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        }
-                    });
-                    setLoading(false);
-                    return;
-                }
-                if (!userInfoRes.data.status) {
-                    swal({
-                        title: "Account is deactivated!",
-                        text: "Please contact us if this is a mistake.",
-                        icon: "error",
-                        buttons: {
-                            contact: {
-                                text: "Contact",
-                                value: "contact",
-                                className: "contact-alert-button"
-                            }
-                        }
-                    }).then((value) => {
-                        if (value === "contact") {
-                            navigate('/contact');
-                        }
-                    });
-                    setLoading(false);
-                    return;
-                }
-                handleSuccessfulLogin(res.data.token, 'customer');
-                return;
+            if (userInfoRes.data) {
+                const res = await customerLoginApi(email, password);
+                handleLoginResponse(res, userInfoRes.data, 'customer');
             }
         } catch (error) {
-            console.log("Customer login failed, trying employee login...");
-        }
-
-        try {
-            res = await employeeLoginApi(email, password);
-
-            if (res && res.data && res.data.token) {
+            try {
                 const employeeInfoRes = await getEmployeeInfo(email);
-                if (employeeInfoRes && employeeInfoRes.data) {
-                    if (employeeInfoRes.data.password !== password) {
-                        swal({
-                            title: "Wrong password!",
-                            text: "Please try again.",
-                            icon: "error",
-                            button: {
-                                text: "Ok",
-                                className: "swal-button"
-                            }
-                        });
-                        setLoading(false);
-                        return;
-                    }
-                    if (!employeeInfoRes.data.status) {
-                        swal({
-                            title: "Account is deactivated!",
-                            text: "Please contact us if this is a mistake.",
-                            icon: "error",
-                            buttons: {
-                                contact: {
-                                    text: "Contact",
-                                    value: "contact",
-                                    className: "contact-alert-button"
-                                }
-                            }
-                        }).then((value) => {
-                            if (value === "contact") {
-                                navigate('/contact');
-                            }
-                        });
-                        setLoading(false);
-                        return;
-                    }
+
+                if (employeeInfoRes.data) {
+                    const res = await employeeLoginApi(email, password);
+                    handleLoginResponse(res, employeeInfoRes.data, 'employee');
                 }
-                handleSuccessfulLogin(res.data.token, 'employee');
+            } catch (error) {
+                swal({
+                    title: "Email does not exist!",
+                    text: "Please try another email or sign up an account with this email.",
+                    icon: "error",
+                    button: {
+                        text: "Ok",
+                        className: "swal-button"
+                    }
+                });
+                console.error("Login failed: ", error);
+                setLoading(false);
+            }
+        }
+    };
+
+    const handleLoginResponse = (res, userInfo, userType) => {
+        if (res && res.data && res.data.token) {
+            if (userInfo.password !== password) {
+                swal({
+                    title: "Wrong password!",
+                    text: "Please try again.",
+                    icon: "error",
+                    button: {
+                        text: "Ok",
+                        className: "swal-button"
+                    }
+                });
+                setLoading(false);
                 return;
             }
-        } catch (error) {
-            swal({
-                title: "Email does not exist!",
-                text: "Please try another email or sign up an account with this email.",
-                icon: "error",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                }
-            });
-            console.error("Login failed: ", error);
-            setLoading(false);
+            if (!userInfo.status) {
+                swal({
+                    title: "Account is deactivated!",
+                    text: "Please contact us if this is a mistake.",
+                    icon: "error",
+                    buttons: {
+                        contact: {
+                            text: "Contact",
+                            value: "contact",
+                            className: "contact-alert-button"
+                        }
+                    }
+                }).then((value) => {
+                    if (value === "contact") {
+                        navigate('/contact');
+                    }
+                });
+                setLoading(false);
+                return;
+            }
+            handleSuccessfulLogin(res.data.token, userType);
         }
     };
 

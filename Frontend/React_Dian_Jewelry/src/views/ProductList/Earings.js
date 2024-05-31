@@ -10,7 +10,7 @@ import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList } from '../../services/ProductService.js';
 
 function Earings() {
-    const navItems = ['Home', 'Diamond Jewelry', 'Earings'];
+    const navItems = ['Home', 'Diamond Jewelry', 'Earrings'];
 
     const [products, setProducts] = useState([]);
 

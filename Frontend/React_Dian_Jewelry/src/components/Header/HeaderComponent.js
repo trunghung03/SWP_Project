@@ -146,7 +146,7 @@ const HeaderComponent = () => {
                                 </a>
                                 <ul className="wedding_dropdown_menu dropdown-menu" aria-labelledby="weddingDropdown">
                                     <li><a className="dropdown-item" href="/weddingRing">Wedding Ring</a></li>
-                                    <li><a className="dropdown-item" href="/weddingEarings">Wedding Earings</a></li>
+                                    <li><a className="dropdown-item" href="/weddingEarings">Wedding Earrings</a></li>
                                     <li><a className="dropdown-item" href="/weddingBracelet">Wedding Bracelet</a></li>
                                     <li><a className="dropdown-item" href="/weddingNecklace">Wedding Necklace</a></li>
                                     <li><a className="dropdown-item" href="/engagementRing">Engagement Ring</a></li>
