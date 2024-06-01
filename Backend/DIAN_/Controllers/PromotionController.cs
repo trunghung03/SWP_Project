@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/promotion")]
+    [Route("api/promotions")]
   
     public class PromotionController : ControllerBase
     {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/orderdetail")]
+    [Route("api/orderdetails")]
     public class OrderDetailController : ControllerBase
     {
         private readonly IOrderDetailRepository _orderDetailRepository;

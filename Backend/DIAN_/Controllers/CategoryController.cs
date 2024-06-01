@@ -7,7 +7,7 @@ using System.Formats.Asn1;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/category")]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;

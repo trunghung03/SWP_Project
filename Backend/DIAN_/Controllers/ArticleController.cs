@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/article")]
+    [Route("api/articles")]
     [ApiController]
     public class ArticleController : ControllerBase
     {

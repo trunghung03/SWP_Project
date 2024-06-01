@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/diamond")]
+    [Route("api/diamonds")]
     public class DiamondController : ControllerBase
     {
         private readonly IDiamondRepository _diamondRepository;
