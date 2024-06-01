@@ -138,6 +138,11 @@ const Home = () => {
     };
   }, []);
 
+  const navigateToCategory = (category) => {
+    navigate('/diamondJewelry', { state: { category } });
+  };
+
+
   return (
     <div className="Home">
       {/* Slider */}
@@ -241,7 +246,7 @@ const Home = () => {
             <h2 className="bb_title">Best & Beloved</h2>
             <p className="bb_description">Our most coveted engagement rings, as chosen by you.</p>
           </div>
-          <button onClick={() => navigate('/engagementRing')} className="bb_shop_now_button">Shop now</button>
+          <button onClick={() => navigateToCategory('engagementRing')} className="bb_shop_now_button">Shop now</button>
         </div>
       </div>
 
@@ -261,7 +266,7 @@ const Home = () => {
         <div className="proposal_content">
           <h2 className="proposal_title">An Unforgettable Proposal</h2>
           <p className="proposal_description">Glamourous details and matching bands—we have the perfect rings to seal the deal.</p>
-          <button onClick={() => navigate('/engagementRing')} className="proposal_shop_now_button">SHOP THE ENGAGEMENT RINGS</button>
+          <button onClick={() => navigateToCategory('engagementRing')} className="proposal_shop_now_button">SHOP THE ENGAGEMENT RINGS</button>
         </div>
       </div>
 

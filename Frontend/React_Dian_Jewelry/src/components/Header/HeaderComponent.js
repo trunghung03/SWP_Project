@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../services/CartService'; 
+import { useCart } from '../../services/CartService';
 import '../Header/HeaderComponent.scss';
 import logo from '../../assets/img/logo.png';
 
@@ -11,7 +11,7 @@ const HeaderComponent = () => {
     const [points, setPoints] = useState(0);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
-    const { cartItems } = useCart(); 
+    const { cartItems } = useCart();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -28,7 +28,7 @@ const HeaderComponent = () => {
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');
-        const cartItems = localStorage.getItem('cartItems'); 
+        const cartItems = localStorage.getItem('cartItems');
 
         localStorage.clear();
 
@@ -38,7 +38,7 @@ const HeaderComponent = () => {
         }
 
         if (cartItems) {
-            localStorage.setItem('cartItems', cartItems); 
+            localStorage.setItem('cartItems', cartItems);
         }
 
         setRole('guest');
@@ -51,6 +51,10 @@ const HeaderComponent = () => {
             const data = await response.json();
             navigate('/search', { state: { products: data } });
         }
+    };
+
+    const navigateToCategory = (category) => {
+        navigate('/diamondJewelry', { state: { category } });
     };
 
     return (
@@ -129,27 +133,27 @@ const HeaderComponent = () => {
                             </li>
                             <li className="diamond_dropdown_section nav-item dropdown">
                                 <a className="diamond header_spe_nav_link nav-link" id="diamondDropdown" role="button"
-                                    aria-expanded="false" href="/diamondJewelry">
+                                    aria-expanded="false" onClick={() => navigateToCategory(null)}>
                                     DIAMOND JEWELRY<i className="icon_arrow_diamond fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
                                 </a>
                                 <ul className="diamond_dropdown_menu dropdown-menu" aria-labelledby="diamondDropdown">
-                                    <li><a className="dropdown-item" href="/ring">Ring</a></li>
-                                    <li><a className="dropdown-item" href="/earings">Earings</a></li>
-                                    <li><a className="dropdown-item" href="/bracelet">Bracelet</a></li>
-                                    <li><a className="dropdown-item" href="/necklace">Necklace</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('ring')}>Ring</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('earrings')}>Earrings</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('bracelet')}>Bracelet</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('necklace')}>Necklace</a></li>
                                 </ul>
                             </li>
                             <li className="wedding_dropdown_section nav-item dropdown">
                                 <a className="wedding header_spe_nav_link nav-link" id="weddingDropdown" role="button"
-                                    aria-expanded="false" href="/weddingJewelry">
+                                    aria-expanded="false" onClick={() => navigateToCategory('weddingJewelry')}>
                                     WEDDING JEWELRY<i className="icon_arrow_wedding fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
                                 </a>
                                 <ul className="wedding_dropdown_menu dropdown-menu" aria-labelledby="weddingDropdown">
-                                    <li><a className="dropdown-item" href="/weddingRing">Wedding Ring</a></li>
-                                    <li><a className="dropdown-item" href="/weddingEarings">Wedding Earrings</a></li>
-                                    <li><a className="dropdown-item" href="/weddingBracelet">Wedding Bracelet</a></li>
-                                    <li><a className="dropdown-item" href="/weddingNecklace">Wedding Necklace</a></li>
-                                    <li><a className="dropdown-item" href="/engagementRing">Engagement Ring</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingRing')}>Wedding Ring</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingEarrings')}>Wedding Earrings</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingBracelet')}>Wedding Bracelet</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingNecklace')}>Wedding Necklace</a></li>
+                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('engagementRing')}>Engagement Ring</a></li>
                                 </ul>
                             </li>
                             <li className="nav-item">
