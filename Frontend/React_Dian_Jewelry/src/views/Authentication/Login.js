@@ -145,8 +145,22 @@ const Login = () => {
                 }
                 navigate('/managerStatitic');
             } else if (role === 'SalesStaff') {
+                if (userType === 'employee') {
+                    let employeeInfoRes = await getEmployeeInfo(email);
+                    if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("firstName", employeeInfoRes.data.firstName);
+                        localStorage.setItem("lastName", employeeInfoRes.data.lastName);
+                    }
+                }
                 navigate('/salesStaffOrderList');
             } else if (role === 'DeliveryStaff') {
+                if (userType === 'employee') {
+                    let employeeInfoRes = await getEmployeeInfo(email);
+                    if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("firstName", employeeInfoRes.data.firstName);
+                        localStorage.setItem("lastName", employeeInfoRes.data.lastName);
+                    }
+                }
                 navigate('/deliveryStaffDeliveryList');
             } else if (role === 'Customer') {
                 if (userType === 'customer') {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeliveryStaff = () => {
+const DSDeliveryList = () => {
     return (
         <div>
             <h1>DeliveryStaff Dashboard</h1>
@@ -8,4 +8,4 @@ const DeliveryStaff = () => {
     );
 };
 
-export default DeliveryStaff;
+export default DSDeliveryList;

@@ -32,8 +32,8 @@ import ManagerStatitic from './Manager/ManagerStatitic';
 import ManagerManageDiamond from './Manager/ManagerManageDiamond';
 import ManagerAddDiamond from './Manager/ManagerAddDiamond';
 import ManagerUpdateDiamond from './Manager/ManagerUpdateDiamond';
-import DeliStaffDeliveryList from './DeliveryStaff/DeliStaffDeliveryList';
-import SalesStaffOrderList from './SalesStaff/SalesStaffManageOrder/SalesStaffOrderList';
+import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
+import SalesStaffOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SalesStaffManageContent from './SalesStaff/SalesStaffManageContent/SSManageContent';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
@@ -94,7 +94,7 @@ function App() {
           <Route path="/salesStaffManageContent" element={<SalesStaffManageContent />} />
 
           {/* Delivery Staff  */}
-          <Route path="/deliStaffDeliveryList" element={<DeliStaffDeliveryList />} />
+          <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
         </Routes>
       </CartProvider>
     </Router>

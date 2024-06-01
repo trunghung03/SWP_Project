@@ -54,7 +54,7 @@ function ProductDetail() {
                     setCollection(collectionResponse.data);
 
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
-                    setAlsoLikeProducts(relatedProducts.slice(0, 5)); // Display up to 5 products
+                    setAlsoLikeProducts(relatedProducts.slice(0, 5)); 
                 }).catch(error => {
                     console.error('Error fetching product, diamond, or collection details:', error);
                 });
