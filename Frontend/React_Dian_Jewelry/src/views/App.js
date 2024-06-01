@@ -18,6 +18,7 @@ import ForgotPassword from './Authentication/ForgotPassword';
 import ResetPassword from './Authentication/ResetPassword';
 import DiamondJewelry from './ProductList/DiamondJewelry';
 import Search from './ProductList/Search';
+import Collection from './ProductList/Collection';
 import ProductDetail from './Cart/ProductDetail';
 import Cart from './Cart/Cart';
 import Checkout from './Cart/Checkout';
@@ -70,6 +71,7 @@ function App() {
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/diamondJewelry" element={<Layout><DiamondJewelry /></Layout>} />
+          <Route path="/collection" element={<Layout><Collection /></Layout>} />
           <Route path="/priceList" element={<Layout><PriceList /></Layout>} />
           <Route path="/contact" element={<Layout><Contact /></Layout>} />
           <Route path="/introduce" element={<Layout><Introduce /></Layout>} />

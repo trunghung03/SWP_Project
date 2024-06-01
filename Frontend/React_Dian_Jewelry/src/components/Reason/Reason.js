@@ -24,8 +24,8 @@ class Reason extends Component {
                     </div>
                     <div className="reason_card">
                         <div className="reason_icon"><i className="fas fa-gift"></i></div>
-                        <h3 className="reason_card_title">ATTRACTIVE POLICY</h3>
-                        <p className="reason_card_description">Lifetime warranty and renewal of jewelry. Receive wholesale diamonds at good prices throughout Vietnam.</p>
+                        <h3 className="reason_card_title">ATTRACTIVE WARRANTY</h3>
+                        <p className="reason_card_description">Long time warranty for jewelry. Receive wholesale diamonds at good prices throughout Vietnam.</p>
                     </div>
                 </div>
             </div>

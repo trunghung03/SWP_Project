@@ -535,7 +535,7 @@ function DiamondPrice() {
       {/* Last content  */}
       <div className="diamond_price_last_content">
         <p className="diamond_price_last_content_description">
-          When customers come to the Showroom, the product consultant will quote the most detailed and competitive price for natural diamonds. In case you want to order custom samples, we can design the product shape and quality according to your requirements as soon as possible. Please contact Dian Jewelry immediately via hotline <strong> 0912 345 678</strong> to receive free advice from a team of experts.
+          When customers come to the Showroom, the product consultant will quote the most detailed and competitive price for natural diamonds. In case you want to order custom samples, we can design the product shape and quality according to your requirements as soon as possible. Please contact Dian Jewelry immediately via hotline <strong> 0795 795 959</strong> to receive free advice from a team of experts.
         </p>
       </div>
 
