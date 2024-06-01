@@ -19,8 +19,8 @@
 	('DeliveryStaff', 'DanielDelivery@gmail.com', '123', 'Moore', 'Daniel', '456 Birch St', '+1 (505) 555-0147', 1),
 	('SalesStaff', 'AmandaSale02@gmail.com', '123', 'Taylor', 'Amanda', '789 Cedar St', '+1 (707) 555-0185', 1),
 	('Manager', 'JamesManager02@gmail.com', '123', 'Davis', 'James', '101 Maple St', '+1 (808) 555-0136', 1),
-	('Admin', 'JessicaAdmin2@gmail.com', '123', 'Miller', 'Jessica', '202 Oak St', '+1 (315) 555-0176', 1);
-	
+	('Admin', 'JessicaAdmin2@gmail.com', '123', 'Miller', 'Jessica', '202 Oak St', '+1 (315) 555-0176', 1),
+	('DeliveryStaff', 'BobbyDelivery@gmail.com', '123', 'Demer', 'Bobby', '412 OakHill St', '+1 (505) 613-0457', 1);
 	-- Insert dummy data into ARTICLE table
 	INSERT INTO ARTICLE (Title, Content, Employee, [Date], [Image], Tag, Status) VALUES
 	('Natural vs. Lab Diamonds', 'Natural and lab-grown diamonds are identical to the naked eye. In fact, most experts can''t even tell them apart without specialized equipment. Ultimately, the main difference is how they''re created. Learn more to understand which diamond type suits your style.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F369828bf6d7c48d6ae52eb7edb069602', 'Blog', 1),
@@ -42,14 +42,14 @@
 	('Holiday Special', 40.00, GETDATE(), DATEADD(month, 7, GETDATE()), '40% off all items for the Holidays', 'HOLIDAY40', 7, 1);
 
 	-- Insert dummy data into PURCHASEORDER table
-	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note) VALUES
-	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 200.00, 'Pending', 1, 0, 'Shipping with packaging'),
-	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 300.00, 'Pending', 2, 1, 'Ship at D2'),
-	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 150.00, 'Pending', 3, 0, 'Shipping without packaging'),
-	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 250.00, 'Pending', 4, 1, 'Shipping with packaging'),
-	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging'),
-	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging'),
-	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging');
+	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note,SaleStaff,DeliveryStaff) VALUES
+	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 200.00, 'Pending', 1, 0, 'Shipping with packaging',3,4),
+	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 300.00, 'Pending', 2, 1, 'Ship at D2',3,8),
+	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 150.00, 'Pending', 3, 0, 'Shipping without packaging',3,8),
+	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 250.00, 'Pending', 4, 1, 'Shipping with packaging',5,4),
+	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging',5,4),
+	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging',3,4),
+	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging',5,8);
 	
 	-- Insert dummy data into CATEGORY table
 	INSERT INTO CATEGORY ([Name], Status) VALUES
