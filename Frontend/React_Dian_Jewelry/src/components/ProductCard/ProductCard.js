@@ -46,7 +46,7 @@ const ProductList = ({ products }) => {
             {products.map((product, index) => (
                 <ProductCard key={index} id={product.productId} image={product.imageLinkList} name={product.name} price={product.price} />
             ))}
-            {!isDiamondJewelryPage && <SpecialCard />}
+            <SpecialCard />
         </div>
     );
 };

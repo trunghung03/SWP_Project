@@ -12,7 +12,7 @@ using DIAN_.Interfaces;
 namespace UserApplication.Controllers
 {
     [ApiController]
-    [Route("api/account")]
+    [Route("api/accounts")]
     public class CustomerController : ControllerBase
     {
         private readonly ITokenService _tokenService;

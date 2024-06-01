@@ -71,6 +71,7 @@ namespace DIAN_.Mapper
                 Price = product.Price,
                 CategoryID = product.CategoryId,
                 ImageLinkList = FirstImgLink,
+                CollectionId = product.CollectionId ?? 0,
             };
         }
         public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)

@@ -21,8 +21,7 @@ namespace DIAN_.Mapper
         {
             return new Warranty
             {
-                StartDate = warrantyDto.StartDate,
-                EndDate = warrantyDto.EndDate,
+                Status = warrantyDto.Status
             };
         }
 

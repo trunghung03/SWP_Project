@@ -24,18 +24,59 @@ function FAQs() {
 
   const faqs = [
     {
-      question: "How can I reset my password?",
-      answer: "You can reset your password by going to the settings page and selecting 'Reset Password'."
+      question: "What is the 4Cs standard in diamond quality?",
+      answer: "The 4Cs—Carat, Cut, Color, and Clarity—are used to evaluate diamonds. They measure weight, brilliance, color grade, and the presence of imperfections."
     },
     {
-      question: "Where can I find pricing information?",
-      answer: "Pricing information can be found on the 'Pricing' page accessible from the navigation menu."
+      question: "How long does it take to receive my order?",
+      answer: "Standard orders typically arrive within 5-7 business days. Customized items may take longer; you'll receive an estimated delivery date at checkout."
     },
     {
-      question: "What is your return policy?",
-      answer: "Our return policy is 30 days. If 30 days have gone by since your purchase, unfortunately, we can’t offer you a refund or exchange."
+      question: "Do you offer a warranty on your jewelry?",
+      answer: "Yes, we provide a long time warranty on all our jewelry against manufacturing defects, warranty will be send through email that make the order when the delivery is success. Contact our customer service for warranty claims."
+    },
+    {
+      question: "Are your diamonds conflict-free?",
+      answer: "Yes, all our diamonds are certified conflict-free and sourced from ethical suppliers adhering to the Kimberley Process."
+    },
+    {
+      question: "Can I return or exchange an item?",
+      answer: "Yes, we offer a 30-day return and exchange policy. Items must be in their original condition. Contact our customer service for assistance."
+    },
+    {
+      question: "Do you offer customization for engagement rings?",
+      answer: "Yes, we offer customization options for engagement rings, including personalized engravings and bespoke designs. Contact us for more details."
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer: "We accept major credit cards, PayPal, and bank transfers. You can choose your preferred payment method at checkout."
+    },
+    {
+      question: "How can I track my order?",
+      answer: "You can track the order by clicking on setting then direct to order history."
+    },
+    {
+      question: "Do you offer financing options?",
+      answer: "Yes, we offer financing options through our partner services. Check the financing section at checkout for more information."
+    },
+    {
+      question: "How do I find my ring size?",
+      answer: "We provide a ring size guide on our website. You can also visit a local jeweler to have your ring size measured accurately."
+    },
+    {
+      question: "What if my item needs repair?",
+      answer: "We offer repair services for our jewelry. Contact our customer service with details of the issue, and we'll assist you with the repair process."
+    },
+    {
+      question: "Can I visit your physical store?",
+      answer: "Yes, you can visit our physical store at the address provided on our contact page. We recommend booking an appointment for personalized service."
+    },
+    {
+      question: "Do you offer gift wrapping services?",
+      answer: "Yes, we offer complimentary gift wrapping services for all orders. You can select this option at checkout."
     }
   ];
+
 
   return (
     <div className="FAQs">
@@ -54,14 +95,14 @@ function FAQs() {
         <p className="main_faqs_number">({faqs.length} questions)</p>
         {faqs.map((faq, index) => (
           <div key={index}>
-            <hr className="main_faqs_line"/>
+            <hr className="main_faqs_line" />
             <div className="main_faqs_question" onClick={() => toggleFAQ(index)}>
               <h3 className="main_faqs_sub_title">{faq.question} <i className={`fas fa-${activeIndex === index ? 'minus' : 'plus'}`}></i></h3>
               {activeIndex === index && <p className="main_faqs_description">{faq.answer}</p>}
             </div>
           </div>
         ))}
-        <hr className="main_faqs_line"/>
+        <hr className="main_faqs_line" />
       </div>
       <br></br><br></br>
       {/* Still need help */}

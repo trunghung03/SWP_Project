@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/size")]
+    [Route("api/sizes")]
     public class SizeController : ControllerBase
     {
         private readonly ISizeRepository _sizeRepository;

@@ -1,26 +1,61 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import News from '../../components/News/News.js';
 import Question from '../../components/Question/Question.js';
-import '../../styles/ProductList/DiamondJewelry.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList } from '../../services/ProductService.js';
 
 function DiamondJewelry() {
+    const location = useLocation();
     const [products, setProducts] = useState([]);
+    const [navItems, setNavItems] = useState(['Home', 'Diamond Jewelry']);
 
     useEffect(() => {
+        const categoryMap = {
+            ring: [1, 5, 9],
+            earrings: [2, 6],
+            bracelet: [3, 7],
+            necklace: [4, 8],
+            weddingJewelry: [5, 6, 7, 8, 9],
+            weddingRing: [5],
+            weddingEarrings: [6],
+            weddingBracelet: [7],
+            weddingNecklace: [8],
+            engagementRing: [9]
+        };
+
+        const { category } = location.state || {};
+        if (category) {
+            if (category.includes('wedding') || category === 'engagementRing') {
+                setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry', category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
+            } else {
+                setNavItems(['Home', 'Diamond Jewelry', category.charAt(0).toUpperCase() + category.slice(1)]);
+            }
+        } else {
+            setNavItems(['Home', 'Diamond Jewelry']);
+        }
+
         getProductList()
-            .then(response => setProducts(response.data))
+            .then(response => {
+                if (category) {
+                    const filteredProducts = response.data.filter(product => categoryMap[category].includes(product.categoryID));
+                    setProducts(filteredProducts);
+                } else {
+                    setProducts(response.data);
+                }
+            })
             .catch(error => console.log('Error fetching products:', error));
-    }, []);
+
+        window.scrollTo(0, 0);
+    }, [location.state]);
 
     return (
         <div className="DiamondJewelry">
-            <SubNav items={['Home', 'Diamond Jewelry']} />
+            <SubNav items={navItems} />
             <News /> <br />
             <ProductList products={products} />
             <Question />

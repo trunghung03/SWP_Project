@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/collection")]
+    [Route("api/collections")]
     public class CollectionController : ControllerBase
     {
         private readonly ICollectionRepository _collectionRepository;

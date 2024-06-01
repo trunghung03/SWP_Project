@@ -12,30 +12,33 @@ import inclusion from '../../assets/img/inclusion.jpg';
 import differ1 from '../../assets/img/difference1.png';
 import differ2 from '../../assets/img/difference2.png';
 import experience from '../../assets/img/experience.webp';
+import ringCategory from '../../assets/img/ringCategory.jpg';
+import wRingCategory from '../../assets/img/wRingCategory.jpg';
+import engagementCategory from '../../assets/img/engagementCategory.jpg';
+import earringCategory from '../../assets/img/earringCategory.jpeg';
+import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
+import braceletCategory from '../../assets/img/braceletCategory.jpg';
+import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
+import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
+import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
-import { getProductsByIds } from '../../services/ProductService';
 
-function Introduce() {
+const Introduce = () => {
   const navItems = ['Home', 'Introduce'];
   const navigate = useNavigate();
-  const [exploreProducts, setExploreProducts] = useState([]);
 
-  useEffect(() => {
-    const exploreProductIds = [1, 2, 3, 4, 5, 6, 7, 8];
-    getProductsByIds(exploreProductIds)
-      .then(response => {
-        setExploreProducts(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-      });
-  }, []);
-
-  const navigateToProductDetail = (productId) => {
-    navigate('/productDetail', { state: { id: productId } });
-  };
-
+  const cardData = [
+    { name: "Ring", img: ringCategory, category: 'ring' },
+    { name: "Earrings", img: earringCategory, category: 'earrings' },
+    { name: "Bracelet", img: braceletCategory, category: 'bracelet' },
+    { name: "Wedding Ring", img: wRingCategory, category: 'weddingRing' },
+    { name: "Necklace", img: necklaceCategory, category: 'necklace' },
+    { name: "Wedding Earrings", img: wEarringCategory, category: 'weddingEarrings' },
+    { name: "Wedding Bracelet", img: wBraceletCategory, category: 'weddingBracelet' },
+    { name: "Wedding Necklace", img: wNecklaceCategory, category: 'weddingNecklace' },
+    { name: "Engagement Ring", img: engagementCategory, category: 'engagementRing' }
+  ];
 
   useEffect(() => {
     const wrapper = document.querySelector(".wrapper");
@@ -82,6 +85,11 @@ function Introduce() {
       document.removeEventListener("mouseup", dragStop);
     };
   }, []);
+
+  const handleNavigate = (path, state) => {
+    navigate(path, { state });
+  };
+
   return (
     <div className="Introduce">
       <SubNav items={navItems} />
@@ -134,6 +142,26 @@ function Introduce() {
         </div>
       </div>
 
+      
+
+      {/* Reason  */}
+      <Reason></Reason>
+
+      {/* Experience */}
+      <div className="introduce_experience">
+        <div className="introduce_experience_left">
+          <h3>WE ARE HERE FOR YOU</h3>
+          <div className="introduce_experience_underline"></div>
+          <p>Appointments are relaxed, joyful, and tailored to you. Whether it's a milestone moment or an everyday luxury, we're here to help you start your stack, find your fit, and design the perfect piece.</p>
+          <button onClick={() => navigate('/diamondJewelry')} className="introduce_shop_now_btn">Shop now</button>
+        </div>
+        <div className="introduce_experience_right">
+          <img src={experience} alt="Dian Jewelry" />
+        </div>
+      </div>
+      <br></br>
+      <br></br>
+
       {/* Difference */}
       <div className="difference_container">
         <h3 className="difference_title">THE DIAN JEWELRY DIFFERENCE</h3>
@@ -159,39 +187,22 @@ function Introduce() {
         </div>
       </div>
 
-      {/* Reason  */}
-      <Reason></Reason>
-
-      {/* Experience */}
-      <div className="introduce_experience">
-        <div className="introduce_experience_left">
-          <h3>WE ARE HERE FOR YOU</h3>
-          <div className="introduce_experience_underline"></div>
-          <p>Appointments are relaxed, joyful, and tailored to you. Whether it's a milestone moment or an everyday luxury, we're here to help you start your stack, find your fit, and design the perfect piece.</p>
-          <button onClick={() => navigate('/diamondJewelry')} className="introduce_shop_now_btn">Shop now</button>
-        </div>
-        <div className="introduce_experience_right">
-          <img src={experience} alt="Dian Jewelry" />
-        </div>
-      </div>
-      <br></br>
-      <br></br>
-
       {/* Explore */}
       <div className="explore_jewelry_container">
         <div className="explore_left_section">
           <h1 className="explore_title">Move To Explore</h1>
+          <p className="featured_description">Explore our outstanding jewelry categories and collections, where artistry meets
+            timeless elegance. Each piece of jewelry is exquisitely crafted, bringing the splendor and class.</p>
           <button onClick={() => navigate('/diamondJewelry')} className="explore_shop_now_btn">Shop now</button>
           <i id="left" className="fa-solid fa-angle-left nav_arrow explore_left_arrow" role="button"></i>
           <i id="right" className="fa-solid fa-angle-right nav_arrow explore_right_arrow" role="button"></i>
         </div>
         <div className="explore_right_section wrapper">
           <ul className="carousel">
-            {exploreProducts.map((product, index) => (
-              <li key={index} className="explore_product_card card" onClick={() => navigateToProductDetail(product.productId)}>
-                <img src={product.imageLinkList} alt={product.name} className="explore_product_image" />
-                <p className="explore_product_name">{product.name}</p>
-                <p className="explore_product_price">{product.price}$</p>
+            {cardData.map((card, index) => (
+              <li key={index} className="explore_product_card card" onClick={() => handleNavigate('/diamondJewelry', { category: card.category })}>
+                <img src={card.img} alt={card.name} className="explore_product_image" />
+                <p className="explore_product_name">{card.name}</p>
               </li>
             ))}
           </ul>

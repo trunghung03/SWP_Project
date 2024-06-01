@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import '../Footer/FooterComponent.scss';
+import { useNavigate } from 'react-router-dom';
 
 const FooterComponent = () => {
     useEffect(() => {
@@ -24,6 +25,10 @@ const FooterComponent = () => {
             }
         }
     }, []);
+    const navigate = useNavigate();
+    const handleNavigate = (path, state) => {
+        navigate(path, { state });
+    };
 
     return (
         <>
@@ -56,25 +61,26 @@ const FooterComponent = () => {
                             <br />
                             <h6>Collections</h6>
                             <ul className="footer_content">
-                                <li><a href="/ring">Ring</a></li>
-                                <li><a href="/weddingRing">Wedding ring</a></li>
-                                <li><a href="/engagementRing">Engagement ring</a></li>
+                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'blissfulBaubles' })}>Blissful Baubles</a></li>
+                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'timelessTreasures' })}>Timeless Treasures</a></li>
+                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'majesticMystique' })} >Majestic Mystique</a></li>
+                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'vintageVirtue' })}>Vintage Virtue</a></li>
                             </ul>
                         </div>
                         <div className="col-md-4">
                             <h6>Contact Us</h6>
                             <ul className="footer_content">
-                                <li><a href="/contact">0912 345 678</a></li>
-                                <li><a href="/contact">email@gmail.com</a></li>
-                                <li><a href="/contact">Social media</a></li>
+                                <li><a href="/contact">0795 795 959</a></li>
+                                <li><a href="/contact">diamonddianjewelry@gmail.com</a></li>
+                                <li><a href="/contact"> </a></li>
                             </ul>
                             <br />
                             <h6>Social Media</h6>
                             <ul className="footer_content social_media_icon" style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '20px' }}>
                                 <li><a href="#"><i className="fb fab fa-facebook-f"></i></a></li>
                                 <li><a href="#"><i className="ins fab fa-instagram"></i></a></li>
-                                <li><a href="#"><i className="tik fab fa-tiktok"></i></a></li>
-                                <li><a href="#"><i className="gg fab fa-google"></i></a></li>
+                                <li><a href="https://www.tiktok.com/@dianjewelry"><i className="tik fab fa-tiktok"></i></a></li>
+                                <li><a href="/home"><i className="gg fab fa-google"></i></a></li>
                             </ul>
                         </div>
                     </div>

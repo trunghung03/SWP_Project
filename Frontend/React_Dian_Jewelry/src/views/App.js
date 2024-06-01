@@ -17,17 +17,8 @@ import Register from './Authentication/Register';
 import ForgotPassword from './Authentication/ForgotPassword';
 import ResetPassword from './Authentication/ResetPassword';
 import DiamondJewelry from './ProductList/DiamondJewelry';
-import WeddingJewelry from './ProductList/WeddingJewelry';
-import Ring from './ProductList/Ring';
-import Earings from './ProductList/Earings';
-import Bracelet from './ProductList/Bracelet';
-import Necklace from './ProductList/Necklace.js';
-import WeddingRing from './ProductList/WeddingRing';
-import WeddingEarings from './ProductList/WeddingEarings';
-import WeddingBracelet from './ProductList/WeddingBracelet';
-import WeddingNecklace from './ProductList/WeddingNecklace.js';
-import EngagementRing from './ProductList/EngagementRing';
 import Search from './ProductList/Search';
+import Collection from './ProductList/Collection';
 import ProductDetail from './Cart/ProductDetail';
 import Cart from './Cart/Cart';
 import Checkout from './Cart/Checkout';
@@ -41,9 +32,11 @@ import ManagerStatitic from './Manager/ManagerStatitic';
 import ManagerManageDiamond from './Manager/ManagerManageDiamond';
 import ManagerAddDiamond from './Manager/ManagerAddDiamond';
 import ManagerUpdateDiamond from './Manager/ManagerUpdateDiamond';
-import SalesStaffOrderList from './SalesStaff/SalesStaffOrderList';
 import DeliStaffDeliveryList from './DeliveryStaff/DeliStaffDeliveryList';
+import SalesStaffOrderList from './SalesStaff/SalesStaffManageOrder/SalesStaffOrderList';
+import SalesStaffManageContent from './SalesStaff/SalesStaffManageContent/SSManageContent';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -78,16 +71,7 @@ function App() {
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/diamondJewelry" element={<Layout><DiamondJewelry /></Layout>} />
-          <Route path="/weddingJewelry" element={<Layout><WeddingJewelry /></Layout>} />
-          <Route path="/ring" element={<Layout><Ring /></Layout>} />
-          <Route path="/earings" element={<Layout><Earings /></Layout>} />
-          <Route path="/bracelet" element={<Layout><Bracelet /></Layout>} />
-          <Route path="/necklace" element={<Layout><Necklace /></Layout>} />
-          <Route path="/weddingRing" element={<Layout><WeddingRing /></Layout>} />
-          <Route path="/weddingEarings" element={<Layout><WeddingEarings /></Layout>} />
-          <Route path="/weddingBracelet" element={<Layout><WeddingBracelet /></Layout>} />
-          <Route path="/weddingNecklace" element={<Layout><WeddingNecklace /></Layout>} />
-          <Route path="/engagementRing" element={<Layout><EngagementRing /></Layout>} />
+          <Route path="/collection" element={<Layout><Collection /></Layout>} />
           <Route path="/priceList" element={<Layout><PriceList /></Layout>} />
           <Route path="/contact" element={<Layout><Contact /></Layout>} />
           <Route path="/introduce" element={<Layout><Introduce /></Layout>} />
@@ -107,6 +91,7 @@ function App() {
 
           {/* Sales Staff  */}
           <Route path="/salesStaffOrderList" element={<SalesStaffOrderList />} />
+          <Route path="/salesStaffManageContent" element={<SalesStaffManageContent />} />
 
           {/* Delivery Staff  */}
           <Route path="/deliStaffDeliveryList" element={<DeliStaffDeliveryList />} />

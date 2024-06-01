@@ -10,5 +10,7 @@
 
         public string? ImageLinkList { get; set; } = string.Empty;
         public int? CategoryID { get; set; }
+
+        public int CollectionId { get; set; }
     }
 }

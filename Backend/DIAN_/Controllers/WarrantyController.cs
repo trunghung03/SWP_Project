@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DIAN_.Controllers
 {
     [ApiController]
-    [Route("api/warranty")]
+    [Route("api/warranties")]
     public class WarrantyController : ControllerBase
     {
         private readonly IWarrantyRepository _warrantyRepository;
