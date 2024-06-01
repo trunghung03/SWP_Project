@@ -1,4 +1,4 @@
-import SSContentList from './SSContentList.jsx';
+import SSContentList from './SSContentList.js';
 import React from 'react';
 
 

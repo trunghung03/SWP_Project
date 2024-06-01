@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllContent } from "../../../services/SalesStaffService/SalesStaffContentService";
-import "flowbite";
+import { fetchAllContent } from "../../../services/SalesStaffService/SalesStaffContentService.js";
 import ContentList from '../../../components/ContentCard/ContentCard.js';
 
 function GetContentList() {
