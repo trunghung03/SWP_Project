@@ -31,9 +31,11 @@ import ManagerStatitic from './Manager/ManagerStatitic';
 import ManagerManageDiamond from './Manager/ManagerManageDiamond';
 import ManagerAddDiamond from './Manager/ManagerAddDiamond';
 import ManagerUpdateDiamond from './Manager/ManagerUpdateDiamond';
-import SalesStaffOrderList from './SalesStaff/SalesStaffOrderList';
 import DeliStaffDeliveryList from './DeliveryStaff/DeliStaffDeliveryList';
+import SalesStaffOrderList from './SalesStaff/SalesStaffManageOrder/SalesStaffOrderList';
+import SalesStaffManageContent from './SalesStaff/SalesStaffManageContent/SSManageContent';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -87,6 +89,7 @@ function App() {
 
           {/* Sales Staff  */}
           <Route path="/salesStaffOrderList" element={<SalesStaffOrderList />} />
+          <Route path="/salesStaffManageContent" element={<SalesStaffManageContent />} />
 
           {/* Delivery Staff  */}
           <Route path="/deliStaffDeliveryList" element={<DeliStaffDeliveryList />} />
