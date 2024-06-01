@@ -157,6 +157,7 @@
     background-color: #c2a1a5;
     padding: 60px 40px 40px 40px;
     text-align: center;
+    margin: 30px 0 80px 0;
 }
 
 .difference_title {
@@ -300,104 +301,96 @@
 
 // End experience
 
-// Explore
+/* Explore */
 .explore_jewelry_container {
     display: flex;
     justify-content: center;
-    margin: 15px -22px 0 -75px;
+    margin: 40px -22px 80px -75px;
     position: relative;
-    background-color: #1a2654;
-    padding: 55px 0 40px 0;
-}
-
-.explore_left_section {
-    width: 25%;
+  }
+  
+  .explore_left_section {
+    width: 30%;
     text-align: center;
-    padding: 0 50px 0 5px;
+    padding: 0 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.explore_title {
+  }
+  
+  .explore_title {
     font-size: 24px;
     font-weight: bold;
+    color: #1a2654;
+    margin-bottom: -10px;
+  }
+  
+  .explore_shop_now_btn {
+    background-color: #0f2770;
     color: white;
-    margin-bottom: 30px;
-}
-
-.explore_description {
-    font-size: 14px;
-    margin: 20px 55px 20px 55px;
-    color: #565e6c;
-}
-
-.explore_shop_now_btn {
-    background-color: white;
-    color: #0f2770;
     border: none;
     padding: 7px 55px;
     cursor: pointer;
     border-radius: 30px;
     font-size: 13px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.explore_shop_now_btn:hover {
-    background-color: #d1cfcf;
+  }
+  
+  .explore_shop_now_btn:hover {
+    background-color: #2d4ba8;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.explore_right_section {
+  }
+  
+  .explore_right_section {
     display: flex;
     width: 60%;
     overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
-}
-
-.explore_product_card {
+  }
+  
+  .explore_product_card {
     width: 210px;
-    height: 270px;
-    text-align: start;
+    height: 300px;
+    text-align: center;
     border: 1px solid #e0e0e0;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-.explore_product_card:hover .explore_product_image {
-    transform: scale(1.1) translateY(-5%);
-}
-
-.explore_product_image {
-    width: 105%;
-    height: 82%;
+    position: relative;
+  }
+  
+  .explore_product_card:hover .explore_product_image,
+  .explore_product_name:hover {
+    transform: scale(1.1);
+  }
+  
+  .explore_product_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s ease-in-out;
-    margin-bottom: -6px;
-}
-
-.explore_product_name {
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
-    margin-left: -97px;
-    color: #333;
-}
-
-.explore_product_price {
-    font-size: 14px;
-    color: #565e6c;
-    margin: -10px 0 -10px -127px;
-}
-
-.explore_jewelry_container {
-    align-items: center;
-}
-
-.nav_arrow {
+  }
+  
+  .explore_product_name {
+    position: absolute;
+    bottom: 10px;
+    font-size: 15px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    padding: 3px 20px 5px 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .explore_product_name:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav_arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -410,31 +403,31 @@
     user-select: none;
     align-items: center;
     padding: 13px 27px 10px 17px;
-}
-
-.explore_left_arrow {
-    left: 415px;
+  }
+  
+  .explore_left_arrow {
+    left: 33%;
     width: 45px;
     height: 45px;
-}
-
-.explore_right_arrow {
-    right: 75px;
+  }
+  
+  .explore_right_arrow {
+    right: 3%;
     width: 45px;
     height: 45px;
-}
-
-.explore_right_arrow:hover,
-.explore_left_arrow:hover {
+  }
+  
+  .explore_right_arrow:hover,
+  .explore_left_arrow:hover {
     background-color: #e0e0e0;
-}
-
-.wrapper {
+  }
+  
+  .wrapper {
     max-width: 100%;
     position: relative;
-}
-
-.wrapper i {
+  }
+  
+  .wrapper i {
     top: 50%;
     height: 50px;
     width: 50px;
@@ -449,21 +442,21 @@
     transform: translateY(-50%);
     transition: transform 0.1s linear;
     z-index: 1;
-}
-
-.wrapper i:active {
+  }
+  
+  .wrapper i:active {
     transform: translateY(-50%) scale(0.85);
-}
-
-.wrapper i:first-child {
+  }
+  
+  .wrapper i:first-child {
     left: -22px;
-}
-
-.wrapper i:last-child {
+  }
+  
+  .wrapper i:last-child {
     right: -22px;
-}
-
-.wrapper .carousel {
+  }
+  
+  .wrapper .carousel {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: calc((100% / 3) - 12px);
@@ -472,71 +465,68 @@
     border-radius: 8px;
     scroll-behavior: smooth;
     scrollbar-width: none;
-}
-
-.carousel::-webkit-scrollbar {
+  }
+  
+  .carousel::-webkit-scrollbar {
     display: none;
-}
-
-.carousel.no-transition {
+  }
+  
+  .carousel.no-transition {
     scroll-behavior: auto;
-}
-
-.carousel.dragging {
+  }
+  
+  .carousel.dragging {
     scroll-snap-type: none;
     scroll-behavior: auto;
-}
-
-.carousel.dragging .card {
+  }
+  
+  .carousel.dragging .card {
     cursor: grab;
     user-select: none;
-}
-
-.carousel :where(.card, .img) {
+  }
+  
+  .carousel :where(.card, .img) {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.carousel .card {
+  }
+  
+  .carousel .card {
     scroll-snap-align: start;
     list-style: none;
     background: #fff;
     cursor: pointer;
-    padding-bottom: 20px;
     flex-direction: column;
     border-radius: 8px;
     margin-right: -50px;
-}
-
-.carousel .card .img {
+    width: 93%;
+  }
+  
+  .carousel .card .img {
     height: 148px;
     width: 148px;
     border-radius: 50%;
-}
-
-.card .img img {
+  }
+  
+  .card .img img {
     width: 140px;
     height: 140px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid #fff;
-}
-
-.carousel .card h2 {
+  }
+  
+  .carousel .card h2 {
     font-weight: 500;
     font-size: 1.56rem;
     margin: 30px 0 5px;
-}
-
-.carousel .card span {
+  }
+  
+  .carousel .card span {
     color: #6A6D78;
     font-size: 1.31rem;
-}
-
-ol,
-ul {
-    padding-left: 6rem;
-}
-
-// End explore
+  }
+  
+  /* End explore */
+  
+  

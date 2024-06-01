@@ -23,10 +23,18 @@ import diamond_shape from '../../assets/img/shape.png';
 import slide1 from '../../assets/img/slide1.png';
 import slide2 from '../../assets/img/slide2.png';
 import slide3 from '../../assets/img/slide3.png';
+import ringCategory from '../../assets/img/ringCategory.jpg';
+import wRingCategory from '../../assets/img/wRingCategory.jpg';
+import engagementCategory from '../../assets/img/engagementCategory.jpg';
+import earringCategory from '../../assets/img/earringCategory.jpeg';
+import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
+import braceletCategory from '../../assets/img/braceletCategory.jpg';
+import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
+import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
+import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import impression from '../../assets/img/impression.png';
 import proposal from '../../assets/img/proposal.png';
 import bb from '../../assets/img/bb.png';
-import { getProductsByIds } from '../../services/ProductService';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -57,26 +65,6 @@ function PrevArrow(props) {
 const Home = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const productIds = [1, 2, 3, 4, 5, 6, 7, 8];
-    getProductsByIds(productIds)
-      .then(response => {
-        setProducts(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-      });
-  }, []);
-
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
-
-  const navigateToProductDetail = (productId) => {
-    navigate('/productDetail', { state: { id: productId } });
-  };
 
   const settings = {
     dots: true,
@@ -91,6 +79,22 @@ const Home = () => {
     prevArrow: <PrevArrow />,
     beforeChange: (current, next) => setCurrentSlide(next)
   };
+
+  const handleNavigate = (path, state) => {
+    navigate(path, { state });
+  };
+
+  const cardData = [
+    { name: "Ring", img: ringCategory, category: 'ring' },
+    { name: "Earrings", img: earringCategory, category: 'earrings' },
+    { name: "Bracelet", img: braceletCategory, category: 'bracelet' },
+    { name: "Wedding Ring", img: wRingCategory, category: 'weddingRing' },
+    { name: "Necklace", img: necklaceCategory, category: 'necklace' },
+    { name: "Wedding Earrings", img: wEarringCategory, category: 'weddingEarrings' },
+    { name: "Wedding Bracelet", img: wBraceletCategory, category: 'weddingBracelet' },
+    { name: "Wedding Necklace", img: wNecklaceCategory, category: 'weddingNecklace' },
+    { name: "Engagement Ring", img: engagementCategory, category: 'engagementRing' }
+  ];
 
   useEffect(() => {
     const wrapper = document.querySelector(".wrapper");
@@ -138,11 +142,6 @@ const Home = () => {
     };
   }, []);
 
-  const navigateToCategory = (category) => {
-    navigate('/diamondJewelry', { state: { category } });
-  };
-
-
   return (
     <div className="Home">
       {/* Slider */}
@@ -168,20 +167,19 @@ const Home = () => {
       {/* Feature jewelry  */}
       <div className="featured_jewelry_container">
         <div className="left_section">
-          <h1 className="featured_title">Featured Jewelry</h1>
-          <p className="featured_description">Explore our outstanding diamond rings collection, where artistry meets
+          <h1 className="featured_title">Shop By Category</h1>
+          <p className="featured_description">Explore our outstanding jewelry categories and collections, where artistry meets
             timeless elegance. Each piece of jewelry is exquisitely crafted, bringing the splendor and class.</p>
-          <button onClick={() => navigate('/ring')} className="shop_now_btn" >Shop now</button>
+          <button onClick={() => handleNavigate('/diamondJewelry')} className="shop_now_btn" >Shop now</button>
           <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
           <i id="right" className="fa-solid fa-angle-right nav_arrow right_arrow" role="button"></i>
         </div>
         <div className="right_section wrapper">
           <ul className="carousel">
-            {products.map((product, index) => (
-              <li key={index} className="home_product_card card" onClick={() => navigateToProductDetail(product.productId)}>
-                <img src={product.imageLinkList} alt={product.name} className="home_product_image" />
-                <p className="home_product_name">{product.name}</p>
-                <p className="home_product_price">{product.price}$</p>
+            {cardData.map((card, index) => (
+              <li key={index} className="home_product_card card" onClick={() => handleNavigate('/diamondJewelry', { category: card.category })}>
+                <img src={card.img} alt={card.name} className="home_product_image" />
+                <p className="home_product_name">{card.name}</p>
               </li>
             ))}
           </ul>
@@ -193,13 +191,13 @@ const Home = () => {
         <h1 className="collections_title">OUR COLLECTIONS</h1>
         <div className="collections_grid">
           <div className="collection_column1">
-            <div onClick={() => handleNavigate('/ring')} className="collection_item">
+            <div onClick={() => handleNavigate('/collection', { collection: 'luxuriousLustre' })} className="collection_item">
               <div className="collection_image_wrapper">
                 <img src={ring} alt="Luxurious Lustre" />
                 <p className="collection_name">Luxurious Lustre</p>
               </div>
             </div>
-            <div onClick={() => handleNavigate('/bracelet')} className="collection_item">
+            <div onClick={() => handleNavigate('/collection', { collection: 'radiantReflections' })} className="collection_item">
               <div className="collection_image_wrapper">
                 <img src={bracelet} alt="Radiant Reflections" />
                 <p className="collection_name">Radiant Reflections</p>
@@ -207,27 +205,27 @@ const Home = () => {
             </div>
           </div>
           <div className="collection_column2">
-            <div onClick={() => handleNavigate('/weddingEarings')} className="collection_item">
+            <div onClick={() => handleNavigate('/collection', { collection: 'majesticMementos' })} className="collection_item">
               <div className="collection_image_wrapper">
                 <img src={weddingEarings} alt="Majestic Mementos" />
                 <p className="collection_name">Majestic Mementos</p>
               </div>
             </div>
-            <div onClick={() => handleNavigate('/weddingBracelet')} className="collection_item">
+            <div onClick={() => handleNavigate('/collection', { collection: 'blissfulBaubles' })} className="collection_item">
               <div className="collection_image_wrapper">
-                <img src={weddingBracelet} alt="Blissful Baubles" />
+                <img src={weddingRing} alt="Blissful Baubles" />
                 <p className="collection_name">Blissful Baubles</p>
               </div>
             </div>
           </div>
           <div className="collection_column3">
-            <div onClick={() => handleNavigate('/weddingRing')} className="collection_item">
+            <div onClick={() => handleNavigate('/collection', { collection: 'timelessTreasures' })} className="collection_item">
               <div className="collection_image_wrapper">
-                <img src={weddingRing} alt="Timeless Treasures" />
+                <img src={weddingBracelet} alt="Timeless Treasures" />
                 <p className="collection_name">Timeless Treasures</p>
               </div>
             </div>
-            <div onClick={() => handleNavigate('/earings')} className="collection_item">
+            <div onClick={() => handleNavigate('/collection', { collection: 'divineDiamonds' })} className="collection_item">
               <div className="collection_image_wrapper">
                 <img src={earings} alt="Divine Diamonds" />
                 <p className="collection_name">Divine Diamonds</p>
@@ -246,7 +244,7 @@ const Home = () => {
             <h2 className="bb_title">Best & Beloved</h2>
             <p className="bb_description">Our most coveted engagement rings, as chosen by you.</p>
           </div>
-          <button onClick={() => navigateToCategory('engagementRing')} className="bb_shop_now_button">Shop now</button>
+          <button onClick={() => handleNavigate('/collection', { collection: 'engagementRings' })} className="bb_shop_now_button">Shop now</button>
         </div>
       </div>
 
@@ -256,7 +254,7 @@ const Home = () => {
         <div className="impression_content">
           <h2 className="impression_title">Make An Impression</h2>
           <p className="impression_description">The best jewelry embraces extravagance. Discover truly remarkable, one-of-a-kind pieces that are sure to leave them speechless.</p>
-          <button onClick={() => navigate('/bracelet')} className="impression_shop_now_button">SHOP THE BRACELET COLLECTION</button>
+          <button onClick={() => handleNavigate('/collection', { collection: 'majesticMystique' })} className="impression_shop_now_button">SHOP MAJESTIC MYSTIQUE COLLECTION</button>
         </div>
       </div>
 
@@ -266,7 +264,7 @@ const Home = () => {
         <div className="proposal_content">
           <h2 className="proposal_title">An Unforgettable Proposal</h2>
           <p className="proposal_description">Glamourous details and matching bands—we have the perfect rings to seal the deal.</p>
-          <button onClick={() => navigateToCategory('engagementRing')} className="proposal_shop_now_button">SHOP THE ENGAGEMENT RINGS</button>
+          <button onClick={() => handleNavigate('/collection', { collection: 'vintageVirtue' })} className="proposal_shop_now_button">SHOP VINTAGE VIRTUE COLLECTION</button>
         </div>
       </div>
 

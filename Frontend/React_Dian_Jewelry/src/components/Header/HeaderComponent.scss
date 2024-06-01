@@ -318,6 +318,11 @@ i {
     top: 96%;
 }
 
+.diamond_dropdown_menu li a,
+.wedding_dropdown_menu li a{
+    cursor: pointer;
+}
+
 .wedding_dropdown_section {
     position: relative;
     display: inline-block;
