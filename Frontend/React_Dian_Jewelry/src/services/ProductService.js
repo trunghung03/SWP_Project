@@ -7,7 +7,7 @@ const getProductList = () => {
 };
 
 const getProductDetail = (id) => {
-    return axios.get(`${API_BASE_URL}/product/${id}`);
+    return axios.get(`${API_BASE_URL}/products/${id}`);
 };
 
 const getDiamondDetail = (id) => {
@@ -19,7 +19,7 @@ const getCollectionDetail = (id) => {
 };
 
 const getShellMaterials = () => {
-    return axios.get(`${API_BASE_URL}/Shellmaterials`);
+    return axios.get(`${API_BASE_URL}/shellmaterials`);
 };
 
 const getProductsByIds = (ids) => {

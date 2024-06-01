@@ -47,7 +47,7 @@ const HeaderComponent = () => {
 
     const handleSearchKeyPress = async (e) => {
         if (e.key === 'Enter' && searchQuery.trim()) {
-            const response = await fetch(`https://localhost:7184/api/Product/search?name=${searchQuery}`);
+            const response = await fetch(`https://localhost:7184/api/products/search?name=${searchQuery}`);
             const data = await response.json();
             navigate('/search', { state: { products: data } });
         }
