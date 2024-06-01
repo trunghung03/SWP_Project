@@ -28,4 +28,8 @@ public partial class Employee
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 
     public virtual ICollection<Promotion> Promotions { get; set; } = new List<Promotion>();
+
+    public virtual ICollection<Purchaseorder> PurchaseorderDeliveryStaffNavigations { get; set; } = new List<Purchaseorder>();
+
+    public virtual ICollection<Purchaseorder> PurchaseorderSaleStaffNavigations { get; set; } = new List<Purchaseorder>();
 }

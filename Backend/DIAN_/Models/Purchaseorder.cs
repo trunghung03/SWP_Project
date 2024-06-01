@@ -31,9 +31,17 @@ public partial class Purchaseorder
 
     public string Note { get; set; }
 
+    public int? SaleStaff { get; set; }
+
+    public int? DeliveryStaff { get; set; }
+
+    public virtual Employee DeliveryStaffNavigation { get; set; }
+
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
 
     public virtual Promotion Promotion { get; set; }
+
+    public virtual Employee SaleStaffNavigation { get; set; }
 
     public virtual Customer User { get; set; }
 }

@@ -51,7 +51,9 @@ namespace DIAN_.Mapper
                 OrderStatus = dto.OrderStatus,
                 PromotionId = dto.PromotionId,
                 PayWithPoint = dto.PayWithPoint,
-                Note = dto.Note
+                Note = dto.Note,
+                SaleStaff = dto.SaleStaff,
+                DeliveryStaff = dto.DeliveryStaff
             };
         }
 
