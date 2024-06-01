@@ -5,7 +5,7 @@ const API_BASE_URL_WARRANTY = 'https://localhost:7184/api';
 //Get warranty lists
 
 export const fetchAllWarranty = async () => {
-  return axios.get(`${API_BASE_URL_WARRANTY}/warranty/all`)
+  return axios.get(`${API_BASE_URL_WARRANTY}/warranties/all`)
   .then((response) => {
     return response.data;
   })
@@ -15,7 +15,7 @@ export const fetchAllWarranty = async () => {
 };
 
 const fetchWarrantyDetail = async (id) => {
-  return axios.get(`${API_BASE_URL_WARRANTY}/warranty/${id}`)
+  return axios.get(`${API_BASE_URL_WARRANTY}/warranties/${id}`)
   .then((response) => {
     return response.data;
   })
@@ -27,7 +27,7 @@ const fetchWarrantyDetail = async (id) => {
 // create new warranty
 
 export const createWarranty = async (orderDetailId, startDate, endDate, status) => {
-    return axios.post(`${API_BASE_URL_WARRANTY}/warranty/addwarranty`, {
+    return axios.post(`${API_BASE_URL_WARRANTY}/warranties/addwarranty`, {
             orderDetailId, startDate, endDate, status
     })
     .then((response) => {
@@ -40,7 +40,7 @@ export const createWarranty = async (orderDetailId, startDate, endDate, status) 
 
 // update warranty
 export const updateWarranty = async (id) => {
-    return axios.put(`${API_BASE_URL_WARRANTY}/warranty/update/${id}`, {
+    return axios.put(`${API_BASE_URL_WARRANTY}/warranties/update/${id}`, {
 
     })
     .then((response) => {
@@ -53,7 +53,7 @@ export const updateWarranty = async (id) => {
 
 // delete warranty
 export const deleteWarranty = async (id) => {
-    return axios.delete(`${API_BASE_URL_WARRANTY}/warranty/delete/${id}`)
+    return axios.delete(`${API_BASE_URL_WARRANTY}/warranties/delete/${id}`)
       .then((response) => {
         return response.data;
       })

@@ -6,20 +6,20 @@ const API_BASE_URL_BLOG = 'https://localhost:7184/api';
 //Get all content lists
 
  const fetchAllContent = async () => {
-  return axios.get(`${API_BASE_URL_BLOG}/article`);
+  return axios.get(`${API_BASE_URL_BLOG}/articles`);
 };
 
 //get content detail by id
 
  const fetchContentDetail = async (id) => {
-  return axios.get(`${API_BASE_URL_BLOG}/article/${id}`);
+  return axios.get(`${API_BASE_URL_BLOG}/articles/${id}`);
 }
 
 // create new content
 
  const createContent = async (title, content, image, createdOn, 
   createdBy, status, tag) => {
-  return axios.post(`${API_BASE_URL_BLOG}/article/addcontent`, {
+  return axios.post(`${API_BASE_URL_BLOG}/articles/addcontent`, {
        title, content, image, createdOn, createdBy, status, tag 
   })
   .then((response) =>{
@@ -30,7 +30,7 @@ const API_BASE_URL_BLOG = 'https://localhost:7184/api';
 // update content
 
  const updateContent = async (id, blogData) => {
-  return axios.put(`${API_BASE_URL_BLOG}/article/update/${id}`, {
+  return axios.put(`${API_BASE_URL_BLOG}/articles/update/${id}`, {
     title: blogData.title,
     tag: blogData.tag,
     content: blogData.content,
@@ -47,7 +47,7 @@ const API_BASE_URL_BLOG = 'https://localhost:7184/api';
 
 // delete content
  const deleteContent = async (id) => {
-  return axios.delete(`${API_BASE_URL_BLOG}/article/delete/${id}`)
+  return axios.delete(`${API_BASE_URL_BLOG}/articles/delete/${id}`)
     .then((response) => {
       return response.data;
     })
