@@ -7,7 +7,7 @@ import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffS
 import { getContentList, getContentByTitle, deleteContentById } from '../../../services/SalesStaffService/SSContentService.js';
 
 // Content card
-const SSContentCard = ({ id, title, createdBy, date, image, tag, onDelete }) => {
+const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete }) => {
   const handleDeleteClick = () => {
     swal({
       title: "Are you sure to remove this blog?",
@@ -23,7 +23,7 @@ const SSContentCard = ({ id, title, createdBy, date, image, tag, onDelete }) => 
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        onDelete(id);
+        onDelete(articleID);
       }
     });
   };
@@ -52,16 +52,16 @@ function SSContentList() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getContentList();
-        setContents(response.data);
-      } catch (error) {
-        console.error("Error fetching content:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await getContentList();
+      setContents(response.data);
+    } catch (error) {
+      console.error("Error fetching content:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -70,18 +70,18 @@ function SSContentList() {
       if (searchQuery.trim()) {
         try {
           const response = await getContentByTitle(searchQuery.trim());
-          setContents([response.data]);
+          if (response.data.length > 0) {
+            setContents(response.data);
+          } else {
+            swal("Blog not found!", "Please try another title.", "error");
+            fetchData();
+          }
         } catch (error) {
           console.error("Error fetching content:", error);
           swal("Blog not found!", "Please try another title.", "error");
         }
       } else {
-        try {
-          const response = await getContentList();
-          setContents(response.data);
-        } catch (error) {
-          console.error("Error fetching content:", error);
-        }
+        fetchData();
       }
     }
   };
@@ -89,8 +89,8 @@ function SSContentList() {
   const handleDelete = async (id) => {
     try {
       await deleteContentById(id);
-      setContents(contents.filter(content => content.id !== id));
       swal("Remove successfully!", "The blog has been deleted.", "success");
+      fetchData(); // Re-fetch the content list after deletion
     } catch (error) {
       console.error("Error deleting content:", error);
       swal("Something is wrong!", "Failed to delete the blog. Please try again.", "error");
@@ -122,7 +122,7 @@ function SSContentList() {
         </div>
         <div className="ss_manage_content_content_list">
           {contents.map((content) => (
-            <SSContentCard key={content.id} {...content} onDelete={handleDelete} />
+            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} />
           ))}
         </div>
       </div>
