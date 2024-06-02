@@ -106,15 +106,15 @@ namespace DIAN_.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpDelete]
         [Route("delete/{id:int}")]
-        public async Task<IActionResult> DeleteDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto deleteDto)
+        public async Task<IActionResult> DeleteDiamondAsync([FromRoute] int id)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
-                var diamond = await _diamondRepository.DeleteDiamondAsync(id, deleteDto.ToDiamondFromUpdateDTO(id));
+                var diamond = await _diamondRepository.DeleteDiamondAsync(id);
                 if (diamond == null)
                     return NotFound("Diamond does not exist");
                 return Ok(diamond.ToDiamondDTO());

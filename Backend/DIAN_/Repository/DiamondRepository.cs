@@ -20,7 +20,7 @@ namespace DIAN_.Repository
             return diamond;
         }
 
-        public async Task<Diamond?> DeleteDiamondAsync(int id, Diamond diamondModel)
+        public async Task<Diamond?> DeleteDiamondAsync(int id)
         {
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
             if (existingDiamond != null)
