@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
-const ContentCard = ({ contentID, title, image, createdBy, date }) => {
+const ContentCard = ({ contentId, title, image, createdBy, date, tag}) => {
   const navigate = useNavigate();
   const handleCardClick = () => {
-    navigate("/contentDetail", { state: { contentID } });
+    navigate("/contentDetail", { state: { contentId } });
   }
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex" onClick={handleCardClick}>
@@ -25,6 +25,7 @@ const ContentCard = ({ contentID, title, image, createdBy, date }) => {
           <div className="text-sm">
             <p className="text-gray-900 leading-none">{createdBy}</p>
             <p className="text-gray-600">{date}</p>
+            <p className="text-gray-600">{tag}</p>
           </div>
         </div>
       </div>
@@ -38,11 +39,12 @@ const ContentList = ({ contents }) => {
       {contents && contents.map((content, index) => (
         <ContentCard
           key={index}
-          contentID={content.id}
+          contentID={content.contentId}
           title={content.title}
           image={content.image}
           createdBy={content.createdBy}
           date={content.date}
+          tags={content.tag}
         />
       ))}
       hellocontent
