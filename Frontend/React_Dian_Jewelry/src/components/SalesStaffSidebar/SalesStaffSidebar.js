@@ -46,7 +46,7 @@ class SalesStaffSidebar extends Component {
                                 <i className="fas fa-box-open"></i>
                                 <span>Manage Order</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffManageContent')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffContentList')}>
                                 <i className="fas fa-book"></i>
                                 <span>Manage Blog</span>
                             </li>
@@ -58,12 +58,11 @@ class SalesStaffSidebar extends Component {
                                 <i className="fas fa-user"></i>
                                 <span>Edit Profile</span>
                             </li>
+                            <div className="salesstaff_sidebar_sign_out" onClick={this.handleSignOut}>
+                                <i className="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </div>
                         </ul>
-                        <hr className="salesstaff_side_bar_line2"></hr>
-                        <div className="salesstaff_sidebar_sign_out" onClick={this.handleSignOut}>
-                            <i className="fas fa-sign-out-alt"></i>
-                            <span>Sign Out</span>
-                        </div>
                     </div>
                 )}
                 {!expanded && (
@@ -72,7 +71,7 @@ class SalesStaffSidebar extends Component {
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/salesStaffOrderList')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/salesStaffManageContent')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/salesStaffContentList')}>
                                 <i className="fas fa-book"></i>
                             </li>
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('#')}>
@@ -81,11 +80,10 @@ class SalesStaffSidebar extends Component {
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('#')}>
                                 <i className="fas fa-user"></i>
                             </li>
+                            <div className="salesstaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
+                                <i className="fas fa-sign-out-alt"></i>
+                            </div>
                         </ul>
-                        <hr className="salesstaff_side_bar_line2"></hr>
-                        <div className="salesstaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
-                            <i className="fas fa-sign-out-alt"></i>
-                        </div>
                     </div>
                 )}
             </div>

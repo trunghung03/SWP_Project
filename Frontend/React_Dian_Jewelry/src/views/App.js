@@ -29,12 +29,12 @@ import OrderDetail from './Setting/OrderDetail';
 import AdminCustomerList from './Admin/AdminCustomerList';
 import AdminTest from './Admin/AdminTest';
 import ManagerStatitic from './Manager/ManagerStatitic';
-import ManagerListDiamond from './Manager/ManagerManageDiamond/ManagerListDiamond';
+import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
-import ManagerUpdateDiamond from './Manager/ManagerManageDiamond/ManagerUpdateDiamond';
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
-import SalesStaffOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
-import SalesStaffManageContent from './SalesStaff/SalesStaffManageContent/SSManageContent';
+import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
+import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
+import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
 
@@ -85,13 +85,13 @@ function App() {
 
           {/* Manager  */}
           <Route path="/managerStatitic" element={<ManagerStatitic />} />
-          <Route path="/managerListDiamond" element={<ManagerListDiamond />} />
-          <Route path="/managerUpdateDiamond" element={<ManagerUpdateDiamond />} />
+          <Route path="/managerDiamondList" element={<ManagerDiamondList />} />
           <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
-
+          
           {/* Sales Staff  */}
-          <Route path="/salesStaffOrderList" element={<SalesStaffOrderList />} />
-          <Route path="/salesStaffManageContent" element={<SalesStaffManageContent />} />
+          <Route path="/salesStaffOrderList" element={<SSOrderList />} />
+          <Route path="/salesStaffContentList" element={<SSContentList />} />
+          <Route path="/salesStaffAddContent" element={<SSAddContent />} />
 
           {/* Delivery Staff  */}
           <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />

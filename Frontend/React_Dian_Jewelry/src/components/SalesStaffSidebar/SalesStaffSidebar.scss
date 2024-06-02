@@ -3,9 +3,10 @@
     transition: width 0.3s ease;
     background-color: #fafafb;
     border-right: 1px solid #e0e0e0;
-    height: 100vh;
+    min-height: 110%;    
     display: flex;
     flex-direction: column;
+    z-index: 10;
 
     &.collapsed {
         width: 60px;
@@ -108,7 +109,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 40px 16px 45px 16px;
+        padding: 35px 16px 40px 16px;
         height: 60px;
         background-color: #fafafb;
 
@@ -212,7 +213,7 @@
             align-items: center;
             cursor: pointer;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 10px 10px 10px 9px;
 
             .fa-sign-out-alt {
                 font-size: 17px;
@@ -257,6 +258,7 @@
     }
 
     .salesstaff_side_bar_line2 {
-        margin: 0 0 -190px 0;
+        margin: 0 0 -340% 0;
     }
 }
+

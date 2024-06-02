@@ -1,0 +1,36 @@
+.ss_add_content_all_container {
+    display: flex;
+    width: 100%;
+}
+
+.ss_add_content_content {
+    flex-grow: 1;
+    padding: 15px 6% 6% 8%;
+    overflow-x: hidden;
+}
+
+.ss_add_content_sidebar {
+    z-index: 2;
+}
+
+// header
+.ss_add_content_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ss_add_content_line {
+    width: 150%;
+    margin-left: -15%;
+    z-index: 1;
+    color: gray;
+}
+
+.ss_add_content_header .ss_add_content_logo {
+    height: 60px;
+    width: 120px;
+    max-width: 120px;
+}
+
+//Content add form

@@ -54,7 +54,7 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-box-open"></i>
                                 <span>Manage Product</span>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} onClick={() => this.props.navigate('/managerListDiamond')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} onClick={() => this.props.navigate('/managerDiamondList')}>
                                 <i className="fas fa-gem"></i>
                                 <span>Manage Diamond</span>
                             </li>
@@ -62,12 +62,11 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-ring"></i>
                                 <span>Manage Shell</span>
                             </li>
+                            <div className="manager_sidebar_sign_out" onClick={this.handleSignOut}>
+                                <i className="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </div>
                         </ul>
-                        <hr className="manager_side_bar_line2"></hr>
-                        <div className="manager_sidebar_sign_out" onClick={this.handleSignOut}>
-                            <i className="fas fa-sign-out-alt"></i>
-                            <span>Sign Out</span>
-                        </div>
                     </div>
                 )}
                 {!expanded && (
@@ -82,17 +81,16 @@ class ManagerSidebar extends Component {
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_product' ? 'selected' : ''}`} data-tooltip="Manage Product" onClick={() => this.props.navigate('#')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} data-tooltip="Manage Diamond" onClick={() => this.props.navigate('/managerListDiamond')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} data-tooltip="Manage Diamond" onClick={() => this.props.navigate('/managerDiamondList')}>
                                 <i className="fas fa-gem"></i>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_shell' ? 'selected' : ''}`} data-tooltip="Manage Shell" onClick={() => this.props.navigate('#')}>
                                 <i className="fas fa-ring"></i>
                             </li>
+                            <div className="manager_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
+                                <i className="fas fa-sign-out-alt"></i>
+                            </div>
                         </ul>
-                        <hr className="manager_side_bar_line2"></hr>
-                        <div className="manager_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
-                            <i className="fas fa-sign-out-alt"></i>
-                        </div>
                     </div>
                 )}
             </div>

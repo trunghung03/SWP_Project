@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
-import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerListDiamond.scss';
-import { ShowCartItems } from '../../../services/ManagerService.js';
+import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
+import { ShowCartItems, getDiamondDetail } from '../../../services/ManagerService.js';
 import logo from '../../../assets/img/logo.png';
 
 const ManagerManageDiamond = () => {
@@ -24,7 +23,6 @@ const ManagerManageDiamond = () => {
         fetchData();
     }, []);
 
-    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const ordersPerPage = 6;
 
@@ -38,25 +36,41 @@ const ManagerManageDiamond = () => {
     };
 
     const handleSearchKeyPress = async (e) => {
-        if (e.key === 'Enter' && searchQuery.trim()) {
-            // Implement search logic here
-            const response = await fetch(`https://localhost:7184/api/diamonds/search?name=${searchQuery}`);
-            const data = await response.json();
-            setCartItems(data);
+        if (e.key === 'Enter') {
+            if (searchQuery.trim()) {
+                try {
+                    const response = await getDiamondDetail(searchQuery.trim());
+                    setCartItems([response]);
+                    setCurrentPage(1);
+                } catch (error) {
+                    console.error("Error fetching diamond:", error);
+                    swal("Diamond not found!", "Please try another one.", "error");
+                }
+            } else {
+                try {
+                    const response = await ShowCartItems();
+                    setCartItems(response);
+                    setCurrentPage(1);
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            }
         }
     };
 
     return (
         <div className="manager_manage_diamond_all_container">
-            <ManagerSidebar currentPage="manager_manage_diamond" />
+            <div className="manager_manage_diamond_sidebar">
+                <ManagerSidebar currentPage="manager_manage_diamond" />
+            </div>
             <div className="manager_manage_diamond_content">
                 <div className="manager_manage_diamond_header">
-                    <img className="logo" src={logo} alt="Logo" />
-                    <div className="search_section">
+                    <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
+                    <div className="manager_manage_diamond_search_section">
                         <input
                             type="text"
-                            className="search_bar"
-                            placeholder="Search..."
+                            className="manager_manage_diamond_search_bar"
+                            placeholder="Search by ID..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={handleSearchKeyPress}
@@ -80,21 +94,27 @@ const ManagerManageDiamond = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentOrders.map((item) => (
-                                <tr key={item.diamondId}>
-                                    <td>{item.diamondId}</td>
-                                    <td>{item.shape}</td>
-                                    <td>{item.color}</td>
-                                    <td>{item.clarity}</td>
-                                    <td>{item.carat}</td>
-                                    <td>{item.cut}</td>
-                                    <td>{item.cost}</td>
-                                    <td>{item.amountAvailable}</td>
-                                    <td>
-                                        {/* Add any action buttons here */}
-                                    </td>
+                            {currentOrders.length > 0 ? (
+                                currentOrders.map((item) => (
+                                    <tr key={item.diamondId}>
+                                        <td>{item.diamondId}</td>
+                                        <td>{item.shape}</td>
+                                        <td>{item.color}</td>
+                                        <td>{item.clarity}</td>
+                                        <td>{item.carat}</td>
+                                        <td>{item.cut}</td>
+                                        <td>{item.cost}</td>
+                                        <td>{item.amountAvailable}</td>
+                                        <td>
+                                            {/* Add any action buttons here */}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="9">No diamonds found</td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                     <div className="manager_manage_diamond_pagination">

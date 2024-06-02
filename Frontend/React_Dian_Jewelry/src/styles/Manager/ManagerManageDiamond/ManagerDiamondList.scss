@@ -5,9 +5,15 @@
 
 .manager_manage_diamond_content {
     flex-grow: 1;
-    padding: 10px 80px 0 80px;
+    padding: 15px 8% 0 8%;
+    overflow-x: hidden;
 }
 
+.manager_manage_diamond_sidebar{
+    z-index: 2;
+}
+
+//header
 .manager_manage_diamond_header {
     display: flex;
     justify-content: space-between;
@@ -17,24 +23,43 @@
 .manager_header_line{
     width: 150%;
     margin-left: -15%;
+    z-index: 1;
+    color: gray;
 }
 
-.manager_manage_diamond_header .logo {
+.manager_manage_diamond_header .manager_manage_diamond_logo {
     height: 60px; 
     width: 120px;
     max-width: 120px;
 }
 
-.manager_manage_diamond_header .search_section {
+.manager_manage_diamond_header .manager_manage_diamond_search_section {
     display: flex;
     align-items: center;
 }
 
-.manager_manage_diamond_header .search_bar {
+.manager_manage_diamond_header .manager_manage_diamond_search_section input{
+    background-color: #f3f4f6;
+    border: none;
+    width: 220px;
+    height: 28px;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_search_section input:focus{
+    background-color: #f3f4f6;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 220px;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_search_bar {
     padding: 10px;
     border-radius: 5px;
     margin-top: 5px;
 }
+
+//header
 
 .manager_manage_diamond_table_wrapper {
     flex-grow: 1;

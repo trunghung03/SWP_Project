@@ -1,11 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const ShowCartItems = async () => {
-  try {
-    const response = await axios.get("https://localhost:7184/api/diamonds/all");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
+const API_BASE_URL = 'https://localhost:7184/api';
+
+const ShowCartItems = async () => {
+  const response = await axios.get(`${API_BASE_URL}/diamonds/all`);
+  return response.data;
 };
+
+const getDiamondDetail = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/diamonds/${id}`);
+  return response.data;
+};
+
+export { ShowCartItems, getDiamondDetail };
