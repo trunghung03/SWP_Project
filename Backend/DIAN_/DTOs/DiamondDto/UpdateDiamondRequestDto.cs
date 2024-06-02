@@ -26,14 +26,9 @@ namespace DIAN_.DTOs.DiamondDto
 
         [Required]
         public string CertificateScan { get; set; } = string.Empty;
-
-        [Required]
-        public decimal DiamondSize { get; set; }
-
+       
         [Required]
         public int AmountAvailable { get; set; }
 
-        [Required]
-        public bool Status { get; set; }
     }
 }

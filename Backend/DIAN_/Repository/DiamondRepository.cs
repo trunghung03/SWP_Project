@@ -61,7 +61,6 @@ namespace DIAN_.Repository
                 existingDiamond.Cost = diamondModel.Cost;
                 existingDiamond.CertificateScan = diamondModel.CertificateScan;
                 existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
-                existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();
                 return existingDiamond;
             }
