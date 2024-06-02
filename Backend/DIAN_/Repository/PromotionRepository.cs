@@ -84,11 +84,6 @@ namespace DIAN_.Repository
            
         }
 
-        //public Task<bool> HasPromotionAsync(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public async Task<List<Promotion?>> SearchPromotionsByNameAsync(string name)
         {
             var promotion = await _context.Promotions.Where(x => x.Name.Contains(name)).ToListAsync();
@@ -115,6 +110,16 @@ namespace DIAN_.Repository
                 return existingPromotion;
             }
             return null;
+        }
+
+        public async Task<bool> CheckPromotion(string proCode)
+        {
+           var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            if(existingPromotion == null)
+              {
+                return false;
+              }
+            return true;
         }
     }
 }

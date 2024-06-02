@@ -12,11 +12,15 @@ namespace DIAN_.Controllers
     public class PurchaseOrderController : ControllerBase
     {
         private readonly IPurchaseOrderRepository _purchaseOrderRepo;
+
+        private readonly IOrderService _orderService;
+
         private readonly ApplicationDbContext _context;
 
-        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, ApplicationDbContext context)
+        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, ApplicationDbContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
+            _orderService = orderService;
             _context = context;
         }
 
@@ -60,5 +64,29 @@ namespace DIAN_.Controllers
             var updatedOrder = await _purchaseOrderRepo.UpdateAsync(existingOrder);
             return Ok(updatedOrder);
         }
+
+        [HttpPost("order")]
+        public async Task<IActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
+        {
+            var createdOrderResult = await _orderService.CreatePurchaseOrderInformation(purchaseOrderDTO);
+
+            //if (createdOrderResult.Result is BadRequestObjectResult badRequest)
+            //{
+            //    return BadRequest(badRequest.Value);
+            //}
+
+            //if (createdOrderResult.Result is OkObjectResult okResult && okResult.Value is PurchaseOrderDTO createdOrder)
+            //{
+                return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder);
+           // }
+
+           // return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error occurred");
+        }
+        //catch (Exception ex)
+        //{
+        //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //}
+
+
     }
 }

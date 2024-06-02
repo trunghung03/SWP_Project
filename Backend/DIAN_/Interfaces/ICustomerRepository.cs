@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.Account;
+using DIAN_.DTOs.AccountDTO;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 using UserApplication.Dtos.Account;
@@ -13,6 +14,7 @@ namespace DIAN_.Interfaces
         Task<Customer?> GetByEmailAsync(string email);
         Task<Customer?> GetByIdAsync(int id);
         Task<Customer?> UpdateAsync(int id, UpdateUserDto customerDto);
+        Task<Customer?> UpdateCustomerPoint(int id, UpdateCustomerPointDto customerDto);
         Task<Customer?> DeleteAsync(int id);
     }
 }

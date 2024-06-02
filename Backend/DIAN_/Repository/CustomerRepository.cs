@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.Account;
+using DIAN_.DTOs.AccountDTO;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -91,6 +92,17 @@ namespace DIAN_.Repository
             customer.PhoneNumber = customerDto.PhoneNumber;
             customer.Points = customerDto.Points;
             customer.Status = customerDto.Status;
+
+            await _context.SaveChangesAsync();
+            return customer;
+        }
+
+        public async Task<Customer?> UpdateCustomerPoint(int id, UpdateCustomerPointDto customerDto)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+            if (customer == null) return null;
+
+            customer.Points = customerDto.Point;
 
             await _context.SaveChangesAsync();
             return customer;

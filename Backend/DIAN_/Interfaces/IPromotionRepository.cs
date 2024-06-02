@@ -18,7 +18,7 @@ namespace DIAN_.Interfaces
 
         Task<Promotion?> DeletePromotionAsync(int id, Promotion promotion);
 
-        //Task<bool> HasPromotionAsync(int id);
+        Task<bool> CheckPromotion(string proCode);
 
         Task<List<Promotion?>> SearchPromotionsByNameAsync(string name);
 
