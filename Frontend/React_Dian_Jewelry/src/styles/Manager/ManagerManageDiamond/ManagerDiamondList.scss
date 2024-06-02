@@ -1,3 +1,4 @@
+//Sidebar
 .manager_manage_diamond_all_container {
     display: flex;
     width: 100%;
@@ -9,18 +10,18 @@
     overflow-x: hidden;
 }
 
-.manager_manage_diamond_sidebar{
+.manager_manage_diamond_sidebar {
     z-index: 2;
 }
 
-//header
+//Header
 .manager_manage_diamond_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.manager_header_line{
+.manager_header_line {
     width: 150%;
     margin-left: -15%;
     z-index: 1;
@@ -28,7 +29,7 @@
 }
 
 .manager_manage_diamond_header .manager_manage_diamond_logo {
-    height: 60px; 
+    height: 60px;
     width: 120px;
     max-width: 120px;
 }
@@ -38,14 +39,14 @@
     align-items: center;
 }
 
-.manager_manage_diamond_header .manager_manage_diamond_search_section input{
+.manager_manage_diamond_header .manager_manage_diamond_search_section input {
     background-color: #f3f4f6;
     border: none;
     width: 220px;
     height: 28px;
 }
 
-.manager_manage_diamond_header .manager_manage_diamond_search_section input:focus{
+.manager_manage_diamond_header .manager_manage_diamond_search_section input:focus {
     background-color: #f3f4f6;
     border: none;
     outline: none;
@@ -59,8 +60,33 @@
     margin-top: 5px;
 }
 
-//header
+//Add diamond button
+.manager_manage_diamond_create_button_section {
+    display: flex;
+    justify-content: flex-start;
+    padding-right: 20px;
+    margin-top: 35px;
+}
 
+.manager_manage_diamond_create_button {
+    background-color: #0f2770;
+    color: white;
+    padding: 8px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.manager_manage_diamond_create_button:hover {
+    background-color: #0033a0;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+//Table diamond
 .manager_manage_diamond_table_wrapper {
     flex-grow: 1;
 }
@@ -69,7 +95,7 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    margin-top: 35px;
+    margin-top: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -100,6 +126,22 @@
     color: white;
 }
 
+.manager_manage_diamond_table .fa-pen {
+    cursor: pointer;
+    color: #edd723;
+    margin-right: 20px;
+}
+
+.manager_manage_diamond_table .fa-trash {
+    cursor: pointer;
+    color: #e03c3e;
+    transition: color 0.3s ease;
+}
+
+.manager_manage_diamond_table i:hover {
+    color: #0092f7;
+}
+
 .manager_manage_diamond_pagination {
     display: flex;
     justify-content: flex-end;
@@ -127,4 +169,84 @@
     background-color: #0f2770;
     color: white;
     border: 1px solid #0f2770;
+}
+
+// Update modal
+.manager_manage_diamond_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.manager_manage_diamond_update_modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    z-index: 1001;
+    overflow-y: auto;
+    margin: 300px 0 50px 0;
+}
+
+.manager_manage_diamond_modal_content {
+    display: flex;
+    flex-direction: column;
+}
+
+.manager_manage_diamond_modal_content h4 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.manager_manage_diamond_form_group {
+    margin-bottom: 15px;
+}
+
+.manager_manage_diamond_form_group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.manager_manage_diamond_form_group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.manager_manage_diamond_modal_actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.manager_manage_diamond_modal_actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #0f2770;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.manager_manage_diamond_modal_actions button:hover {
+    background-color: #0033a0;
+}
+
+.manager_manage_diamond_modal_actions button:first-child {
+    background-color: #999;
+    margin-right: 10px;
+}
+
+.manager_manage_diamond_modal_actions button:first-child:hover {
+    background-color: #777;
 }

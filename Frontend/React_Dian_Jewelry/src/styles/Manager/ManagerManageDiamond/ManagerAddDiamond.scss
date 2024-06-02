@@ -1,0 +1,122 @@
+.manager_add_diamond_all_container {
+    display: flex;
+    width: 100%;
+}
+
+.manager_add_diamond_content {
+    flex-grow: 1;
+    padding: 15px 8% 0 8%;
+    overflow-x: hidden;
+}
+
+.manager_add_diamond_sidebar {
+    z-index: 2;
+}
+
+//Header
+.manager_add_diamond_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.manager_add_diamond_header_line {
+    width: 150%;
+    margin-left: -15%;
+    z-index: 1;
+    color: gray;
+}
+
+.manager_add_diamond_header .manager_add_diamond_logo {
+    height: 60px;
+    width: 120px;
+    max-width: 120px;
+}
+
+//Add diamond button
+.manager_add_diamond_submit_button {
+    display: flex;
+    justify-content: center;
+    padding-right: 20px;
+    margin-top: 20px;
+}
+
+.manager_add_diamond_submit_button {
+    background-color: #0f2770;
+    color: white;
+    padding: 8px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.manager_add_diamond_submit_button:hover {
+    background-color: #0033a0;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+//Add diamond form
+.manager_add_diamond_title_back {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.manager_add_diamond_title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a2654;
+}
+
+.manager_add_diamond_back_button {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #0056b3;
+}
+
+.manager_add_diamond_form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid #e0e0e0;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.manager_add_diamond_form_row {
+    display: flex;
+    gap: 20px;
+}
+
+.manager_add_diamond_form_group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.manager_add_diamond_form_group label {
+    font-weight: bold;
+}
+
+.manager_add_diamond_form_group input {
+    background-color: #f3f4f6;
+    border: none;
+    height: 28px;
+    padding: 0 10px;
+}
+
+.manager_add_diamond_form_group input:focus {
+    background-color: #f3f4f6;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}

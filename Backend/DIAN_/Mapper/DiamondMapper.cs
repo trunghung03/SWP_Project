@@ -58,6 +58,7 @@ namespace DIAN_.Mapper
                 Cost = updateDiamond.Cost,
                 CertificateScan = updateDiamond.CertificateScan,
                 AmountAvailable = updateDiamond.AmountAvailable,
+                Status = updateDiamond.Status,
             };
         }
         //public static DiamondDetailDto ToDiamondDetailDTO(this Diamond diamond)

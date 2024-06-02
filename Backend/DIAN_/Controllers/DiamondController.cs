@@ -74,17 +74,27 @@ namespace DIAN_.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    foreach (var state in ModelState)
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            Console.WriteLine($"Error: {error.ErrorMessage}");
+                        }
+                    }
                     return BadRequest(ModelState);
                 }
+
                 var diamond = diamondDto.ToDiamondFromCreateDTO();
                 var result = await _diamondRepository.AddDiamondAsync(diamond);
                 return Ok(result.ToDiamondDTO());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Exception: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
         [HttpPut]
         [Route("update/{id:int}")]  

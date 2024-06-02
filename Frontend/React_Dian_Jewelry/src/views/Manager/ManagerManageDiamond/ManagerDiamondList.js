@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import { ShowCartItems, getDiamondDetail } from '../../../services/ManagerService.js';
+import { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById } from '../../../services/ManagerService/ManagerDiamondService.js';
 import logo from '../../../assets/img/logo.png';
 
-const ManagerManageDiamond = () => {
+const ManagerDiamondList = () => {
+    const navigate = useNavigate();
+
     const [cartItems, setCartItems] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [editMode, setEditMode] = useState(false);
+    const [editedDiamond, setEditedDiamond] = useState({});
+    const [originalDiamond, setOriginalDiamond] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await ShowCartItems();
+                const response = await ShowAllDiamond();
                 setCartItems(response);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -35,6 +41,7 @@ const ManagerManageDiamond = () => {
         setCurrentPage(pageNumber);
     };
 
+    // Search diamond by id
     const handleSearchKeyPress = async (e) => {
         if (e.key === 'Enter') {
             if (searchQuery.trim()) {
@@ -48,7 +55,7 @@ const ManagerManageDiamond = () => {
                 }
             } else {
                 try {
-                    const response = await ShowCartItems();
+                    const response = await ShowAllDiamond();
                     setCartItems(response);
                     setCurrentPage(1);
                 } catch (error) {
@@ -57,6 +64,74 @@ const ManagerManageDiamond = () => {
             }
         }
     };
+
+    // Delete diamond by id 
+    const handleDelete = async (diamondId) => {
+        swal({
+            title: "Are you sure to delete this diamond?",
+            text: "This action cannot be undone",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                try {
+                    await deleteDiamondById(diamondId);
+                    const response = await ShowAllDiamond();
+                    setCartItems(response);
+                    swal("Deleted successfully!", "The diamond has been deleted.", "success");
+                } catch (error) {
+                    console.error("Error deleting diamond:", error);
+                    swal("Something went wrong!", "Failed to delete the diamond. Please try again.", "error");
+                }
+            }
+        });
+    };
+
+
+    // Update by id
+    const handleEdit = (diamond) => {
+        setEditMode(true);
+        setEditedDiamond(diamond);
+        setOriginalDiamond(diamond);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditedDiamond({ ...editedDiamond, [name]: value });
+    };
+
+    const handleUpdate = async () => {
+        const requiredFields = ['shape', 'color', 'clarity', 'cut', 'carat', 'cost', 'certificateScan', 'amountAvailable'];
+        for (let field of requiredFields) {
+            if (!editedDiamond[field]) {
+                swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+                return;
+            }
+        }
+
+        const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
+        if (isEqual) {
+            swal("No changes detected!", "You have not made any changes.", "error");
+            return;
+        }
+
+        const diamondToUpdate = { ...editedDiamond, status: true };
+
+        try {
+            console.log("Sending update request with data:", diamondToUpdate);
+            const response = await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
+            console.log("Update response:", response.data);
+            const updatedItems = await ShowAllDiamond();
+            setCartItems(updatedItems);
+            setEditMode(false);
+            swal("Updated successfully!", "The diamond information has been updated.", "success");
+        } catch (error) {
+            console.error("Error updating diamond:", error.response ? error.response.data : error.message);
+            swal("Something went wrong!", "Failed to update. Please try again.", "error");
+        }
+    };
+
 
     return (
         <div className="manager_manage_diamond_all_container">
@@ -78,6 +153,11 @@ const ManagerManageDiamond = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
+                <div className="manager_manage_diamond_create_button_section">
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddDiamond')}>Add new diamond</button>
+                </div>
+
+                {/* Table diamond list */}
                 <div className="manager_manage_diamond_table_wrapper">
                     <table className="manager_manage_diamond_table table">
                         <thead>
@@ -90,6 +170,7 @@ const ManagerManageDiamond = () => {
                                 <th>Cut</th>
                                 <th>Cost</th>
                                 <th>Quantity</th>
+                                <th>Certificate</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -106,13 +187,21 @@ const ManagerManageDiamond = () => {
                                         <td>{item.cost}</td>
                                         <td>{item.amountAvailable}</td>
                                         <td>
-                                            {/* Add any action buttons here */}
+                                            {item.certificateScan ? (
+                                                <img src={item.certificateScan} alt="Certificate" style={{ width: '60px', height: 'auto' }} />
+                                            ) : (
+                                                'No certificate'
+                                            )}
+                                        </td>
+                                        <td>
+                                            <i className="fas fa-pen" onClick={() => handleEdit(item)} style={{ cursor: 'pointer', marginRight: '10px' }}></i>
+                                            <i className="fas fa-trash" onClick={() => handleDelete(item.diamondId)} style={{ cursor: 'pointer' }}></i>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="9">No diamonds found</td>
+                                    <td colSpan="10">No diamonds found</td>
                                 </tr>
                             )}
                         </tbody>
@@ -136,8 +225,55 @@ const ManagerManageDiamond = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Update modal */}
+            {editMode && (
+                <div className="manager_manage_diamond_modal_overlay" onClick={() => setEditMode(false)}>
+                    <div className="manager_manage_diamond_update_modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="manager_manage_diamond_modal_content">
+                            <h4>Edit Diamond Information</h4>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Shape</label>
+                                <input type="text" name="shape" value={editedDiamond.shape} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Color</label>
+                                <input type="text" name="color" value={editedDiamond.color} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Clarity</label>
+                                <input type="text" name="clarity" value={editedDiamond.clarity} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Carat</label>
+                                <input type="text" name="carat" value={editedDiamond.carat} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Cut</label>
+                                <input type="text" name="cut" value={editedDiamond.cut} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Cost</label>
+                                <input type="text" name="cost" value={editedDiamond.cost} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Quantity</label>
+                                <input type="text" name="amountAvailable" value={editedDiamond.amountAvailable} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Certificate</label>
+                                <input type="text" name="certificateScan" value={editedDiamond.certificateScan} onChange={handleChange} />
+                            </div>
+                            <div className="manager_manage_diamond_modal_actions">
+                                <button onClick={() => setEditMode(false)}>Cancel</button>
+                                <button onClick={handleUpdate}>Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
-export default ManagerManageDiamond;
+export default ManagerDiamondList;
