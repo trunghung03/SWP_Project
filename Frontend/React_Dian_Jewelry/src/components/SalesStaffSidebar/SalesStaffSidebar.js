@@ -46,7 +46,7 @@ class SalesStaffSidebar extends Component {
                                 <i className="fas fa-box-open"></i>
                                 <span>Manage Order</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffManageContent')}>
                                 <i className="fas fa-book"></i>
                                 <span>Manage Blog</span>
                             </li>
@@ -72,7 +72,7 @@ class SalesStaffSidebar extends Component {
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/salesStaffOrderList')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('#')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/salesStaffManageContent')}>
                                 <i className="fas fa-book"></i>
                             </li>
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('#')}>

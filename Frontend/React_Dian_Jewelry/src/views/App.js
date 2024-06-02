@@ -29,9 +29,9 @@ import OrderDetail from './Setting/OrderDetail';
 import AdminCustomerList from './Admin/AdminCustomerList';
 import AdminTest from './Admin/AdminTest';
 import ManagerStatitic from './Manager/ManagerStatitic';
-import ManagerManageDiamond from './Manager/ManagerManageDiamond';
-import ManagerAddDiamond from './Manager/ManagerAddDiamond';
-import ManagerUpdateDiamond from './Manager/ManagerUpdateDiamond';
+import ManagerListDiamond from './Manager/ManagerManageDiamond/ManagerListDiamond';
+import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
+import ManagerUpdateDiamond from './Manager/ManagerManageDiamond/ManagerUpdateDiamond';
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
 import SalesStaffOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SalesStaffManageContent from './SalesStaff/SalesStaffManageContent/SSManageContent';
@@ -85,7 +85,7 @@ function App() {
 
           {/* Manager  */}
           <Route path="/managerStatitic" element={<ManagerStatitic />} />
-          <Route path="/managerManageDiamond" element={<ManagerManageDiamond />} />
+          <Route path="/managerListDiamond" element={<ManagerListDiamond />} />
           <Route path="/managerUpdateDiamond" element={<ManagerUpdateDiamond />} />
           <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
 
