@@ -120,7 +120,7 @@ namespace DIAN_.Services
             var random = new Random();
             var randomEmployee = employees[random.Next(employees.Count)];
 
-            order.EmployeeId = randomEmployee.EmployeeId;
+           // order.EmployeeId = randomEmployee.EmployeeId;
             var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
 
             return updatedOrder != null;

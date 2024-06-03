@@ -62,5 +62,10 @@ namespace DIAN_.Repository
             }
             return order;
         }
+
+        public Task<Purchaseorder> UpdateOrderStatusAsync(int orderId, UpdateOrderStatus statusDto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
