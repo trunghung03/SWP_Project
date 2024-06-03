@@ -121,7 +121,8 @@ function ProductDetail() {
                 selectedSize,
                 sizes: product.sizes.map(size => size.toString()),
                 selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
-                selectedShellName: selectedShell
+                selectedShellName: selectedShell,
+                diamondId: product.mainDiamondId
             };
             addToCart(productToSave);
             navigateToCart();
@@ -228,7 +229,7 @@ function ProductDetail() {
                     </div>
                     <hr className="product_detail_line" />
                     <div className="product_delivery_detail">
-                        <p><i className="fas fa-phone"></i> 0912 345 678</p>
+                        <p><i className="fas fa-phone"></i> 0795 795 959</p>
                         <p><i className="fas fa-shipping-fast"></i> Fast delivery, convinient transaction</p>
                         <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
                     </div>

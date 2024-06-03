@@ -35,7 +35,7 @@
     display: flex;
     justify-content: space-between;
     padding: 20px 3% 20px 3%;
-    align-items: flex-start; /* Adjust alignment to top */
+    align-items: flex-start; 
 }
 
 .checkout_items {
@@ -325,7 +325,6 @@
 .checkout_cart_item {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
 }
 
 .checkout_item_image {
@@ -338,6 +337,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-top: 15px;
 }
 
 .checkout_item_row {
@@ -355,4 +355,14 @@ hr {
 .checkout_form_title {
     text-align: center;
     margin: 20px 0 15px 0;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; 
 }

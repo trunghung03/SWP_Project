@@ -27,6 +27,13 @@ function Checkout() {
     useEffect(() => {
         const storedPoints = JSON.parse(localStorage.getItem('points')) || 0;
         setPoints(storedPoints);
+
+        const firstName = localStorage.getItem('firstName') || '';
+        const lastName = localStorage.getItem('lastName') || '';
+        setFormData(prevData => ({
+            ...prevData,
+            fullName: `${firstName} ${lastName}`
+        }));
     }, []);
 
     useEffect(() => {
@@ -57,6 +64,17 @@ function Checkout() {
                 title: "Please fill in all the required fields!",
                 text: "All fields have not been filled in yet.",
                 icon: "warning",
+                button: "OK",
+            });
+            return;
+        }
+
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            swal({
+                title: "Invalid phone number!",
+                text: "Please enter a valid 10-digit phone number.",
+                icon: "error",
                 button: "OK",
             });
             return;
@@ -133,7 +151,7 @@ function Checkout() {
                         <div className="form_group_name_phone">
                             <label htmlFor="phone">Phone number *</label>
                             <input
-                                type="text"
+                                type="number"
                                 id="phone"
                                 name="phone"
                                 required
