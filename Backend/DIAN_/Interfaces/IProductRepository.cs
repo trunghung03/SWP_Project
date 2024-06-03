@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.ProductDTOs;
+using DIAN_.Helper;
 using DIAN_.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace DIAN_.Interfaces
         Task<ProductDTO> UpdateAsync(ProductDTO product);
         Task DeleteAsync(int id);
         Task<ProductDetailDTO> GetDetailAsync(int id);
-        Task <List<ProductDTO>> GetAllAsync();
+        Task <List<ProductDTO>> GetAllAsync(ProductQuery query);
         Task<List<ProductListDTO>> GetByNameAsync(string name);
         Task<bool> ExistsMainDiamondAsync(int mainDiamondId);
         Task<bool> ExistsProCodeAsync(string proCode);

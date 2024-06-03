@@ -61,7 +61,7 @@ namespace DIAN_.Mapper
             };
         }
 
-        public static ProductListDTO ToProductListDTO(this Product product)
+        public static ProductListDTO ToProductListDTO(this Product product, Diamond diamond)
         {
             var FirstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
             return new ProductListDTO
@@ -72,6 +72,7 @@ namespace DIAN_.Mapper
                 CategoryID = product.CategoryId,
                 ImageLinkList = FirstImgLink,
                 CollectionId = product.CollectionId ?? 0,
+                Shape = diamond?.Shape ?? string.Empty,
             };
         }
         public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
