@@ -98,12 +98,12 @@ namespace UserApplication.Controllers
             return Ok(customer);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> Delete(string email)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.DeleteAsync(id);
+            var customer = await _customerRepository.DeleteAsync(email);
 
             if (customer == null) return NotFound();
 

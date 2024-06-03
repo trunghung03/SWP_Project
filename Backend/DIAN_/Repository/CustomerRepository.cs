@@ -15,9 +15,9 @@ namespace DIAN_.Repository
         {
             _context = context;
         }
-        public async Task<Customer?> DeleteAsync(int id)
+        public async Task<Customer?> DeleteAsync(string email)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
             if (customer == null) return null;
 
             _context.Customers.Remove(customer);
