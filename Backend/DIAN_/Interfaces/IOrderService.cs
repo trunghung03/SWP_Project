@@ -8,7 +8,9 @@ namespace DIAN_.Interfaces
 {
     public interface IOrderService
     {
-        public Task<ActionResult<PurchaseOrderDTO>> CreatePurchaseOrderInformation(CreatePurchaseOrderDTO createOrderDto);
+        public Task<ActionResult<PurchaseOrderDTO>> CreateOrder(CreatePurchaseOrderDTO createOrderDto);
+
+        Task<bool> CompleteOrderAsync(int orderId);
 
         //public ActionResult<List<Orderdetail>> SubmitOrderDetails(int orderId, List<CreateOrderDetailDto> orderDetailDtos)
     }

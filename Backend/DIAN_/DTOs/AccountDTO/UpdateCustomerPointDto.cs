@@ -2,6 +2,6 @@
 {
     public class UpdateCustomerPointDto
     {
-        public int Point { get; set; }
+        public long? Point { get; set; }
     }
 }

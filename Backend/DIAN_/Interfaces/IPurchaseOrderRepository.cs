@@ -12,5 +12,7 @@ namespace DIAN_.Interfaces
 
         Task<Purchaseorder> GetPurchasrOrderById(int purchasrId);
 
+        Task<Purchaseorder> UpdateOrderStatusAsync(int orderId, UpdateOrderStatus statusDto);
+
     }
 }

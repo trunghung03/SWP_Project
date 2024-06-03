@@ -71,5 +71,9 @@ namespace DIAN_.Mapper
             order.PayWithPoint = dto.PayWithPoint;
             order.Note = dto.Note;
         }
+        public static void ToUpdatePurchaseOrderStatus(this Purchaseorder order, string status)
+        {
+            order.OrderStatus = status;
+        }
     }
 }
