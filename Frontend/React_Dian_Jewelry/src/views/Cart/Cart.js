@@ -40,7 +40,7 @@ function Cart() {
         const missingSizeItems = cartItems.some(item => !item.selectedSize);
         if (missingSizeItems) {
             swal({
-                title: "Have not choose a size yet!",
+                title: "Have not chosen a size yet!",
                 text: "Please select a size for all jewelries.",
                 icon: "warning",
                 button: {
@@ -51,7 +51,7 @@ function Cart() {
             return;
         }
 
-        navigate('/checkout');
+        navigate('/checkout', { state: { cartItems } });
     };
 
     const handleContinueShopping = () => {

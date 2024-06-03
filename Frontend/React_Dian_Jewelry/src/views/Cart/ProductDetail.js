@@ -54,7 +54,7 @@ function ProductDetail() {
                     setCollection(collectionResponse.data);
 
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
-                    setAlsoLikeProducts(relatedProducts.slice(0, 5)); 
+                    setAlsoLikeProducts(relatedProducts.slice(0, 5));
                 }).catch(error => {
                     console.error('Error fetching product, diamond, or collection details:', error);
                 });
@@ -85,12 +85,30 @@ function ProductDetail() {
         const token = localStorage.getItem('token');
         if (!token) {
             swal({
-                title: "Cannot add to cart!",
-                text: "Please sign in or sign up for an account first.",
+                title: "Please sign in or sign up first!",
+                text: "Sign in to add jewelry to cart.",
                 icon: "warning",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
+                buttons: {
+                    signIn: {
+                        text: "Sign In",
+                        value: "signIn",
+                        className: "swal-button"
+                    },
+                    ok: {
+                        text: "Ok",
+                        value: "ok",
+                        className: "swal-button"
+                    }
+                }
+            }).then((value) => {
+                switch (value) {
+                    case "signIn":
+                        navigate('/login');
+                        break;
+                    case "ok":
+                        break;
+                    default:
+                        break;
                 }
             });
         } else {
@@ -103,7 +121,8 @@ function ProductDetail() {
                 selectedSize,
                 sizes: product.sizes.map(size => size.toString()),
                 selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
-                selectedShellName: selectedShell
+                selectedShellName: selectedShell,
+                diamondId: product.mainDiamondId
             };
             addToCart(productToSave);
             navigateToCart();
@@ -210,7 +229,7 @@ function ProductDetail() {
                     </div>
                     <hr className="product_detail_line" />
                     <div className="product_delivery_detail">
-                        <p><i className="fas fa-phone"></i> 0912 345 678</p>
+                        <p><i className="fas fa-phone"></i> 0795 795 959</p>
                         <p><i className="fas fa-shipping-fast"></i> Fast delivery, convinient transaction</p>
                         <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
                     </div>
