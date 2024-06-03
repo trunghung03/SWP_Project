@@ -50,11 +50,11 @@ class SalesStaffSidebar extends Component {
                                 <i className="fas fa-book"></i>
                                 <span>Manage Blog</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffWarrantyList')}>
                                 <i className="fas fa-file-contract"></i>
                                 <span>Manage Warranty</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffEditProfile')}>
                                 <i className="fas fa-user"></i>
                                 <span>Edit Profile</span>
                             </li>
@@ -74,10 +74,10 @@ class SalesStaffSidebar extends Component {
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/salesStaffContentList')}>
                                 <i className="fas fa-book"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('#')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('/salesStaffWarrantyList')}>
                                 <i className="fas fa-file-contract"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('#')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/salesStaffEditProfile')}>
                                 <i className="fas fa-user"></i>
                             </li>
                             <div className="salesstaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>

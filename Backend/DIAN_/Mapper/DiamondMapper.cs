@@ -16,7 +16,6 @@ namespace DIAN_.Mapper
                 Clarity = diamond.Clarity,
                 Cut = diamond.Cut,
                 Carat = diamond.Carat ?? 0,
-                Cost = diamond.Cost,
                 CertificateScan = diamond.CertificateScan,
                 AmountAvailable = diamond.AmountAvailable,
             };
@@ -40,7 +39,6 @@ namespace DIAN_.Mapper
                 Clarity = diamondRequestDTO.Clarity,
                 Cut = diamondRequestDTO.Cut,
                 Carat = diamondRequestDTO.Carat,
-                Cost = diamondRequestDTO.Cost,
                 CertificateScan = diamondRequestDTO.CertificateScan,
                 AmountAvailable = diamondRequestDTO.AmountAvailable,
                 Status = diamondRequestDTO.Status,
@@ -55,7 +53,6 @@ namespace DIAN_.Mapper
                 Clarity = updateDiamond.Clarity,
                 Cut = updateDiamond.Cut,
                 Carat = updateDiamond.Carat,
-                Cost = updateDiamond.Cost,
                 CertificateScan = updateDiamond.CertificateScan,
                 AmountAvailable = updateDiamond.AmountAvailable,
                 Status = updateDiamond.Status,
@@ -71,7 +68,6 @@ namespace DIAN_.Mapper
         //        Clarity = diamond.Clarity,
         //        Cut = diamond.Cut,
         //        Carat = diamond.Carat,
-        //        Cost = diamond.Cost,
         //        CertificateScan = diamond.CertificateScan,
         //        DiamondSize = diamond.DiamondSize ?? 0,
         //    };

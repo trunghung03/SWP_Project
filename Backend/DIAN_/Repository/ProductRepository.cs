@@ -127,7 +127,6 @@ namespace DIAN_.Repository
             product.Price = productDTO.Price;
             product.LaborCost = productDTO.LaborPrice;
             product.ImageLinkList = productDTO.ImageLinkList;
-            product.MarkupPrice = productDTO.ChargeUp;
             product.MainDiamondId = productDTO.MainDiamondId;
             product.SubDiamondAmount = productDTO.SubDiamondAmount;
             product.ProductCode = productDTO.ProductCode;

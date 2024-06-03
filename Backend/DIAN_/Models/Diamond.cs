@@ -19,8 +19,6 @@ public partial class Diamond
 
     public string Cut { get; set; }
 
-    public decimal Cost { get; set; }
-
     public string CertificateScan { get; set; }
 
     public int AmountAvailable { get; set; }

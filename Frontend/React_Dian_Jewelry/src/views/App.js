@@ -36,7 +36,9 @@ import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond'
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
 import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
+import SSWarrantyList from './SalesStaff/SalesStaffManageWarranty/SSWarrantyList';
 import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
+import SSEditProfile from './SalesStaff/SalesStaffSetting/SSEditProfile';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 
 const Layout = ({ children }) => {
@@ -94,6 +96,8 @@ function App() {
             <Route path="/salesStaffOrderList" element={<SSOrderList />} />
             <Route path="/salesStaffContentList" element={<SSContentList />} />
             <Route path="/salesStaffAddContent" element={<SSAddContent />} />
+            <Route path="/salesStaffWarrantyList" element={<SSWarrantyList />} />
+            <Route path="/salesStaffEditProfile" element={<SSEditProfile />} />
 
             {/* Delivery Staff  */}
             <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />

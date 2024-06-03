@@ -27,6 +27,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[COMPANY]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[CUSTOMER]",
          "ObjectType": 0
       },

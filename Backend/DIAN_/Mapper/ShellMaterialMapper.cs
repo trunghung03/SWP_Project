@@ -12,7 +12,6 @@ namespace DIAN_.Mapper
                 ShellMaterialId = shell.ShellMaterialId,
                 Name = shell.Name,
                 AmountAvailable = shell.AmountAvailable,
-                Price = shell.Price
             };
         }
 
@@ -22,7 +21,6 @@ namespace DIAN_.Mapper
             {
                 Name = shellDTO.Name,
                 AmountAvailable = shellDTO.AmountAvailable,
-                Price = shellDTO.Price,
                 Status = true
             };
         }
@@ -31,7 +29,6 @@ namespace DIAN_.Mapper
         {
             existingShell.Name = shellDTO.Name;
             existingShell.AmountAvailable = shellDTO.AmountAvailable;
-            existingShell.Price = shellDTO.Price;
             return existingShell;
         }
     }

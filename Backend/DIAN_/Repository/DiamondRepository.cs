@@ -58,7 +58,6 @@ namespace DIAN_.Repository
                 existingDiamond.Clarity = diamondModel.Clarity;
                 existingDiamond.Cut = diamondModel.Cut;
                 existingDiamond.Carat = diamondModel.Carat;
-                existingDiamond.Cost = diamondModel.Cost;
                 existingDiamond.CertificateScan = diamondModel.CertificateScan;
                 existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
                 existingDiamond.Status = diamondModel.Status;

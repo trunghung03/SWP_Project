@@ -19,8 +19,6 @@ public partial class Product
 
     public int? MainDiamondId { get; set; }
 
-    public decimal? MarkupPrice { get; set; }
-
     public decimal? LaborCost { get; set; }
 
     public string ImageLinkList { get; set; }
