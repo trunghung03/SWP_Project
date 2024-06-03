@@ -33,7 +33,7 @@ namespace DIAN_.Mapper
                 CollectionId = collection.CollectionId,
                 Name = collection.Name,
                 Description = collection.Description,
-                Products = collection.Products.Select(p => p.ToProductListDTO()).ToList()
+                Products = collection.Products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList()
             };
         }
     }

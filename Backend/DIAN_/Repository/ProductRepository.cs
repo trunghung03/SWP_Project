@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DIAN_.Mapper;
 using DIAN_.DTOs.ProductDTOs;
 using Microsoft.AspNetCore.Http.HttpResults;
+using DIAN_.Helper;
 
 namespace DIAN_.Repository
 {
@@ -45,12 +46,24 @@ namespace DIAN_.Repository
             return await _context.Products.AnyAsync(p => p.ProductCode == proCode);
         }
 
-        public async Task<List<ProductDTO>> GetAllAsync()
+        public async Task<List<ProductDTO>> GetAllAsync(ProductQuery query)
         {
-            return await _context.Products.Where(p => p.Status)
-                         .Include(p => p.Category).ThenInclude(c => c.Size)
-                         .Select(p => p.ToProductDTO()).ToListAsync();
+            var products = _context.Products
+                .Where(p => p.Status)
+                .Include(p => p.Category)
+                .ThenInclude(c => c.Size)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Name))
+            {
+                products = products.Where(p => EF.Functions.Like(p.Name, $"%{query.Name}%"));
+            }
+
+            return await products.Select(p => p.ToProductDTO()).ToListAsync();
         }
+        /*return await _context.Products.Where(p => p.Status)
+                     .Include(p => p.Category).ThenInclude(c => c.Size)
+                     .Select(p => p.ToProductDTO()).ToListAsync();*/
 
         public async Task<ProductDTO> GetByIdAsync(int id)
         {
@@ -66,10 +79,12 @@ namespace DIAN_.Repository
 
         public async Task<List<ProductListDTO>> GetByNameAsync(string name)
         {
-            return await _context.Products
-                                 .Where(p => p.Status && p.Name.Contains(name))
-                                 .Select(p => p.ToProductListDTO())
-                                 .ToListAsync();
+            var products = await _context.Products
+                                  .Where(p => p.Status && p.Name.Contains(name))
+                                  .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                  .ToListAsync();
+
+            return products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList();
         }
 
         public async Task<ProductDetailDTO> GetDetailAsync(int id)
@@ -91,9 +106,11 @@ namespace DIAN_.Repository
 
         public async Task<List<ProductListDTO>> GetListAsync()
         {
-            return await _context.Products
-                                .Select(p => p.ToProductListDTO())
-                                .ToListAsync();
+            var products = await _context.Products
+                                 .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                 .ToListAsync();
+
+            return products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList();
         }
 
         public async Task<ProductDTO> UpdateAsync(ProductDTO productDTO)

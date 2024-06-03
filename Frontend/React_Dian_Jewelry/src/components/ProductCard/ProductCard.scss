@@ -5,7 +5,7 @@
     padding: 40px 8%;
 }
 
-.product_card{
+.product_card {
     flex: 0 0 247px;
     background-color: white;
     border: 1px solid #e0e0e0;
@@ -15,7 +15,7 @@
     height: 330px;
 }
 
-.special_card{
+.special_card {
     flex: 0 0 247px;
     text-align: center;
     background-color: white;
@@ -34,18 +34,29 @@
 }
 
 .product_card:hover img {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
 .product_card h6 {
     font-size: 17px;
     font-weight: bold;
     margin-bottom: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+
+.product_card:hover h6 {
+    transform: translateY(-3px);
 }
 
 .product_card p {
     font-size: 16px;
     color: #565e6c;
+    transition: transform 0.3s ease-in-out;
+}
+
+.product_card:hover p {
+    transform: translateY(-5px);
 }
 
 .special_card {
@@ -81,4 +92,3 @@
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-

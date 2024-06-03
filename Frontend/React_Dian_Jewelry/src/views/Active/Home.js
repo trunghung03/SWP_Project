@@ -20,22 +20,21 @@ import weddingRing from '../../assets/img/weddingRing.jpg';
 import weddingEarings from '../../assets/img/weddingEarings.jpg';
 import weddingBracelet from '../../assets/img/weddingBracelet.webp';
 import diamond_shape from '../../assets/img/shape.png';
-import slide1 from '../../assets/img/slide1.png';
+import slide3 from '../../assets/img/slide1.png';
 import slide2 from '../../assets/img/slide2.png';
-import slide3 from '../../assets/img/slide3.png';
+import slide1 from '../../assets/img/slide3.png';
 import ringCategory from '../../assets/img/ringCategory.jpg';
 import wRingCategory from '../../assets/img/wRingCategory.jpg';
 import engagementCategory from '../../assets/img/engagementCategory.jpg';
-import earringCategory from '../../assets/img/earringCategory.jpeg';
+import earringCategory from '../../assets/img/earringCategory.webp';
 import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
-import braceletCategory from '../../assets/img/braceletCategory.jpg';
+import braceletCategory from '../../assets/img/braceletCategory.webp';
 import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
 import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import impression from '../../assets/img/impression.png';
 import proposal from '../../assets/img/proposal.png';
 import bb from '../../assets/img/bb.png';
-import HeaderComponent from '../../components/Header/HeaderComponent.js';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -43,7 +42,10 @@ function NextArrow(props) {
     <div
       className={className}
       style={{ ...style, display: "block", background: "transparent", zIndex: 25, marginRight: '50px' }}
-      onClick={onClick}
+      onClick={(e) => {
+        onClick(e);
+        props.restartAnimation();
+      }}
     >
       <i className="fas fa-chevron-right" style={{ color: 'white', fontSize: '30px' }}></i>
     </div>
@@ -56,7 +58,10 @@ function PrevArrow(props) {
     <div
       className={className}
       style={{ ...style, display: "block", background: "transparent", zIndex: 25, marginLeft: '50px' }}
-      onClick={onClick}
+      onClick={(e) => {
+        onClick(e);
+        props.restartAnimation();
+      }}
     >
       <i className="fas fa-chevron-left" style={{ color: 'white', fontSize: '30px' }}></i>
     </div>
@@ -66,19 +71,26 @@ function PrevArrow(props) {
 const Home = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [animate, setAnimate] = useState(false);
 
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
     cssEase: "linear",
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    beforeChange: (current, next) => setCurrentSlide(next)
+    nextArrow: <NextArrow restartAnimation={() => setAnimate(false)} />,
+    prevArrow: <PrevArrow restartAnimation={() => setAnimate(false)} />,
+    beforeChange: (current, next) => {
+      setAnimate(false);
+      setCurrentSlide(next);
+    },
+    afterChange: () => {
+      setTimeout(() => setAnimate(true), 0);
+    }
   };
 
   const handleNavigate = (path, state) => {
@@ -148,11 +160,27 @@ const Home = () => {
       {/* Slider */}
       <div className="slider-container">
         <Slider {...settings}>
-          {[slide1, slide2, slide3].map((slide, index) => (
-            <div key={index} className="slide">
-              <img src={slide} alt={`Slide ${index + 1}`} />
+          <div className="slide">
+            <img src={slide1} alt="Slide 1" />
+            <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
+              <h1 className="slide-title">TO LOVE AND CHERISH</h1>
+              <p className="slide-text">Weddings are brilliant moments in time. Make it unforgettable with pieces that’ll always be adored.</p>
             </div>
-          ))}
+          </div>
+          <div className="slide">
+            <img src={slide2} alt="Slide 2" />
+            {/* <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
+              <h1 className="slide-title">DIAMONDS</h1>
+              <p className="slide-text">Cherished for their unique beauty, diamonds are the ultimate way to mark your moment and create a sparkling memory.</p>
+            </div> */}
+          </div>
+          <div className="slide">
+            <img src={slide3} alt="Slide 3" />
+            {/* <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
+              <h1 className="slide-title">JEWELRY</h1>
+              <p className="slide-text">Find handcrafted jewelry featuring ethical diamonds, gems and custom designs. Easily shop high-quality gemstone, natural diamond or lab diamond rings online with settings for any budget and style. We'll help you make your moment.</p>
+            </div> */}
+          </div>
         </Slider>
         <div className="dot-container">
           {[0, 1, 2].map((_, index) => (

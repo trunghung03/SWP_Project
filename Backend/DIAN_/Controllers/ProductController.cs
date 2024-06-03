@@ -5,6 +5,7 @@ using DIAN_.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DIAN_.Helper;
 
 namespace DIAN_.Controllers
 {
@@ -93,9 +94,9 @@ namespace DIAN_.Controllers
             return Ok(updatedProduct);
         }
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
         {
-            var products = await _productRepo.GetAllAsync();
+            var products = await _productRepo.GetAllAsync(query);
             return Ok(products);
         }
 

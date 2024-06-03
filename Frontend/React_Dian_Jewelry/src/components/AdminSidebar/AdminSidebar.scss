@@ -1,0 +1,273 @@
+.manager_sidebar {
+    width: 250px;
+    transition: width 0.3s ease;
+    background-color: #fafafb;
+    border-right: 1px solid #e0e0e0;
+    min-height: 110%;    
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+
+    &.collapsed {
+        width: 60px;
+
+        .toggle-button {
+            margin: 20px;
+        }
+
+        .manager_sidebar_icons {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .manager_sidebar_menu_icons {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            .manager_sidebar_menu_item {
+                padding: 10px;
+                text-align: center;
+                cursor: pointer;
+                position: relative;
+
+                i {
+                    font-size: 16px;
+                }
+
+                &:hover,
+                &.selected {
+                    background-color: #e0e0e0;
+                }
+
+                &::after {
+                    content: attr(data-tooltip);
+                    position: absolute;
+                    left: calc(100% + 10px);
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background-color: #333;
+                    color: #fff;
+                    padding: 5px 10px;
+                    border-radius: 3px;
+                    white-space: nowrap;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                    pointer-events: none;
+                    z-index: 1;
+                    font-size: 12px;
+                }
+
+                &:hover::after {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .manager_sidebar_sign_out_icon {
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+
+            i {
+                font-size: 16px;
+            }
+
+            &:hover {
+                background-color: #e0e0e0;
+            }
+
+            &::after {
+                content: "Sign Out";
+                position: absolute;
+                left: calc(100% + 10px);
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: #333;
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 3px;
+                white-space: nowrap;
+                opacity: 0;
+                transition: opacity 0.3s;
+                pointer-events: none;
+                z-index: 1;
+                font-size: 12px;
+            }
+
+            &:hover::after {
+                opacity: 1;
+            }
+        }
+    }
+
+    .manager_sidebar_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 35px 16px 40px 16px;
+        height: 60px;
+        background-color: #fafafb;
+
+        .manager_sidebar_profile {
+            display: flex;
+            flex-direction: column;
+
+            &.hidden {
+                display: none;
+            }
+
+            .manager_sidebar_full_name {
+                font-weight: bold;
+                margin: 15px 0 5px 15px;
+            }
+
+            .manager_sidebar_role {
+                font-size: 14px;
+                color: #888;
+                margin-left: 15px;
+            }
+
+        }
+
+        .toggle-button {
+            font-size: 24px;
+            cursor: pointer;
+            text-align: center;
+        }
+    }
+
+    .manager_sidebar_content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .manager_sidebar_profile {
+            text-align: left;
+            margin-bottom: 20px;
+
+            .manager_sidebar_full_name {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .manager_sidebar_role {
+                font-size: 14px;
+                color: #888;
+            }
+        }
+
+        .manager_sidebar_menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            .manager_sidebar_menu_item {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                cursor: pointer;
+
+                .fa-chart-bar {
+                    font-size: 17px;
+                    margin-right: 12px;
+                    margin-left: 23px;
+                }
+
+                .fa-users {
+                    font-size: 16px;
+                    margin-right: 11px;
+                    margin-left: 21px;
+                }
+
+                .fa-box-open {
+                    font-size: 16px;
+                    margin-right: 10px;
+                    margin-left: 21px;
+                }
+
+                .fa-gem {
+                    font-size: 17px;
+                    margin-right: 10px;
+                    margin-left: 23px;
+                }
+
+                .fa-ring {
+                    font-size: 17px;
+                    margin-right: 10px;
+                    margin-left: 23px;
+                }
+
+                span {
+                    font-size: 16px;
+                }
+
+                &:hover,
+                &.selected {
+                    background-color: #e0e0e0;
+                }
+            }
+        }
+
+        .manager_sidebar_sign_out {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px 10px 10px 10px;
+
+            .fa-sign-out-alt {
+                font-size: 17px;
+                margin-right: 10px;
+                margin-left: 23px;
+                margin-bottom: -2px;
+            }
+
+            span {
+                font-size: 16px;
+            }
+
+            &:hover {
+                background-color: #e0e0e0;
+            }
+        }
+    }
+
+    .fa-angle-double-right::before {
+        margin-left: -13px;
+    }
+
+    .fa-chart-bar::before {
+        font-size: 17px;
+    }
+
+    .fa-users::before {
+        font-size: 16px;
+    }
+
+    .fa-box-open::before {
+        font-size: 16px;
+    }
+
+    .fa-gem::before {
+        font-size: 17px;
+    }
+
+    .fa-ring::before {
+        font-size: 17px;
+    }
+
+    .fa-sign-out-alt::before {
+        font-size: 17px;
+        margin-bottom: 10px;
+    }
+
+    .manager_side_bar_line2 {
+        margin: 0 0 -155px 0;
+    }
+}

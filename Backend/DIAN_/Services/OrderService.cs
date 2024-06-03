@@ -9,6 +9,7 @@ using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -20,17 +21,49 @@ namespace DIAN_.Services
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public OrderService(IPromotionRepository promotionRepository, IPurchaseOrderRepository purchaseOrderRepository,
-        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository)
+        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository, IEmployeeRepository employeeRepository)
         {
             _promotionRepository = promotionRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
             _customerRepository = customerRepository;
             _orderDetailRepository = orderDetailRepository;
+            _employeeRepository = employeeRepository;
         }
 
-        public async Task<ActionResult<PurchaseOrderDTO>> CreatePurchaseOrderInformation(CreatePurchaseOrderDTO createOrderDto)
+        public async Task<bool> CompleteOrderAsync(int orderId)
+        {
+            var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
+            if (order == null)
+            {
+                throw new Exception($"Order with id {orderId} not found.");
+            }
+
+            order.OrderStatus = "Success";
+            var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
+
+            if (updatedOrder != null && updatedOrder.OrderStatus == "Success")
+            {
+                var points = (int)(updatedOrder.TotalPrice * (decimal)0.03);
+                var customer = await _customerRepository.GetByIdAsync(updatedOrder.UserId);
+                if (customer != null)
+                {
+                    customer.Points += points;
+                    var updateCustomerPointDto = new UpdateCustomerPointDto { Point = customer.Points };
+                    var updatedCustomer = await _customerRepository.UpdateCustomerPoint(customer.CustomerId, updateCustomerPointDto);
+                    if (updatedCustomer != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public async Task<ActionResult<PurchaseOrderDTO>> CreateOrder(CreatePurchaseOrderDTO createOrderDto)
         {
             var order = createOrderDto.ToCreatePurchaseOrder();
 
@@ -69,6 +102,28 @@ namespace DIAN_.Services
             }
 
             return createdOrder;
+        }
+        public async Task<bool> AssignEmployeeToOrderAsync(int orderId)
+        {
+            var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
+            if (order == null)
+            {
+                throw new Exception($"Order with id {orderId} not found.");
+            }
+
+            var employees = await _employeeRepository.GetAllAsync();
+            if (employees == null || !employees.Any())
+            {
+                throw new Exception("No employees found.");
+            }
+
+            var random = new Random();
+            var randomEmployee = employees[random.Next(employees.Count)];
+
+           // order.EmployeeId = randomEmployee.EmployeeId;
+            var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
+
+            return updatedOrder != null;
         }
         //public ActionResult<List<Orderdetail>> SubmitOrderDetails(int orderId)
         //{

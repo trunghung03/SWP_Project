@@ -73,7 +73,7 @@ namespace DIAN_.Controllers
         [HttpPost("duyen_test_order_logic")]
         public async Task<IActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var createdOrderResult = await _orderService.CreatePurchaseOrderInformation(purchaseOrderDTO);
+            var createdOrderResult = await _orderService.CreateOrder(purchaseOrderDTO);
             if (createdOrderResult.Result is OkObjectResult okResult && okResult.Value is PurchaseOrderDTO createdOrder)
             {
                 return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder);

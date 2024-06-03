@@ -91,7 +91,6 @@ CREATE TABLE SHELLMATERIAL (
     ShellMaterialID INT PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(100) NOT NULL,
 	AmountAvailable DECIMAL(18,4) NOT NULL,
-	Price DECIMAL(18,2) NOT NULL,
     Status BIT NOT NULL DEFAULT 1,
 );
 
@@ -103,7 +102,6 @@ CREATE TABLE DIAMOND (
     Clarity NVARCHAR(50) ,
     Carat DECIMAL(5, 2) ,
     Cut NVARCHAR(50),
-    Cost DECIMAL(18, 2) NOT NULL,
     CertificateScan NVARCHAR(MAX),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
@@ -130,8 +128,7 @@ CREATE TABLE PRODUCT (
     [Name] NVARCHAR(100) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     [Description] NVARCHAR(MAX) ,
-    MainDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
-    MarkupPrice DECIMAL(5, 2) CHECK (MarkupPrice >= 0 AND MarkupPrice <= 100), -- Constrain the percentage to be between 0 and 100
+    MainDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID), -- Constrain the percentage to be between 0 and 100
     LaborCost DECIMAL(18, 2),
     ImageLinkList NVARCHAR(MAX),
 	MainDiamondAmount INT,
@@ -167,5 +164,14 @@ CREATE TABLE SIZE (
 	MinSize DECIMAL(5, 2),
 	MaxSize DECIMAL(5, 2),
 	Step DECIMAL(5, 2)
+);
+
+CREATE TABLE COMPANY (
+	CompanyID NVARCHAR(254) PRIMARY KEY,
+	CompanyName NVARCHAR(128) NOT NULL,
+	Email NVARCHAR(254) NOT NULL,
+    Address NVARCHAR(255) NOT NULL,
+    PhoneNumber NVARCHAR(20) NOT NULL,
+	MarkupPrice DECIMAL(5, 2) CHECK (MarkupPrice >= 0 AND MarkupPrice <= 100)
 );
 
