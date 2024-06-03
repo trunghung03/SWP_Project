@@ -42,7 +42,7 @@ const ProductList = ({ products }) => {
     const isDiamondJewelryPage = location.pathname === '/diamondJewelry';
 
     return (
-        <div className="product_list">
+        <div className="product_list col-lg-12">
             {products.map((product, index) => (
                 <ProductCard key={index} id={product.productId} image={product.imageLinkList} name={product.name} price={product.price} />
             ))}
