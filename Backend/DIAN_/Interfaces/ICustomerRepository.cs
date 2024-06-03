@@ -13,7 +13,7 @@ namespace DIAN_.Interfaces
         Task<List<Customer>> GetAllAsync();
         Task<Customer?> GetByEmailAsync(string email);
         Task<Customer?> GetByIdAsync(int id);
-        Task<Customer?> UpdateAsync(int id, UpdateUserDto customerDto);
+        Task<Customer?> UpdateAsync(string email, UpdateUserDto customerDto);
         Task<Customer?> UpdateCustomerPoint(int id, UpdateCustomerPointDto customerDto);
         Task<Customer?> DeleteAsync(int id);
     }

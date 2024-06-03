@@ -88,12 +88,12 @@ namespace UserApplication.Controllers
             return Ok(customer);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateUserDto customerDto)
+        [HttpPut("{email}")]
+        public async Task<IActionResult> Update(string email, UpdateUserDto customerDto)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.UpdateAsync(id, customerDto);
+            var customer = await _customerRepository.UpdateAsync(email, customerDto);
             if (customer == null) return NotFound();
             return Ok(customer);
         }

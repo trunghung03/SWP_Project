@@ -79,9 +79,9 @@ namespace DIAN_.Repository
             return customer;
         }
 
-        public async Task<Customer?> UpdateAsync(int id, UpdateUserDto customerDto)
+        public async Task<Customer?> UpdateAsync(string email, UpdateUserDto customerDto)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
             if (customer == null) return null;
 
             customer.Email = customerDto.Email;
