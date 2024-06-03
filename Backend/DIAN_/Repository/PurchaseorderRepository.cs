@@ -53,5 +53,14 @@ namespace DIAN_.Repository
             return order.ToPurchaseOrderDTO();
         }
 
+        public async Task<Purchaseorder> GetPurchasrOrderById(int purchasrId)
+        {
+            var order =  _context.Purchaseorders.FirstOrDefault(po => po.OrderId == purchasrId);
+            if (order == null)
+            {
+                throw new Exception($"Order with id {purchasrId} not found.");
+            }
+            return order;
+        }
     }
 }

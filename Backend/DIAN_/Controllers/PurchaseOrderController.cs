@@ -2,6 +2,7 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,15 +14,19 @@ namespace DIAN_.Controllers
     {
         private readonly IPurchaseOrderRepository _purchaseOrderRepo;
 
+        private readonly IPointAccumulateService _pointAccumulateService;
+
         private readonly IOrderService _orderService;
 
         private readonly ApplicationDbContext _context;
 
-        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, ApplicationDbContext context)
+        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
+            ApplicationDbContext context, IPointAccumulateService pointAccumulateService)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
             _context = context;
+            _pointAccumulateService = pointAccumulateService;
         }
 
         [HttpGet("all")]
@@ -65,27 +70,37 @@ namespace DIAN_.Controllers
             return Ok(updatedOrder);
         }
 
-        [HttpPost("order")]
+        [HttpPost("duyen_test_order_logic")]
         public async Task<IActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
         {
             var createdOrderResult = await _orderService.CreatePurchaseOrderInformation(purchaseOrderDTO);
-
-            //if (createdOrderResult.Result is BadRequestObjectResult badRequest)
-            //{
-            //    return BadRequest(badRequest.Value);
-            //}
-
-            //if (createdOrderResult.Result is OkObjectResult okResult && okResult.Value is PurchaseOrderDTO createdOrder)
-            //{
+            if (createdOrderResult.Result is OkObjectResult okResult && okResult.Value is PurchaseOrderDTO createdOrder)
+            {
                 return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder);
-           // }
+            }
 
-           // return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error occurred");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error occurred");
         }
-        //catch (Exception ex)
-        //{
-        //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        //}
+
+        [HttpPut("{id}/completeorder")]
+        public async Task<IActionResult> CompleteOrder(int id)
+        {
+            var order = await _purchaseOrderRepo.GetPurchasrOrderById(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.OrderStatus = "Success";
+            var updatedOrder = await _purchaseOrderRepo.UpdateAsync(order);
+
+            if (updatedOrder != null && updatedOrder.OrderStatus == "Success")
+            {
+                await _pointAccumulateService.AccumulatePointsAsync(updatedOrder.OrderId);
+            }
+
+            return Ok(updatedOrder);
+        }
 
 
     }
