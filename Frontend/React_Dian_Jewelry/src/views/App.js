@@ -36,7 +36,7 @@ import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
 import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-
+import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -87,7 +87,7 @@ function App() {
           <Route path="/managerStatitic" element={<ManagerStatitic />} />
           <Route path="/managerDiamondList" element={<ManagerDiamondList />} />
           <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
-          
+          <Route path="/managerProductList"element = {<ManagerProductList/>}/>
           {/* Sales Staff  */}
           <Route path="/salesStaffOrderList" element={<SSOrderList />} />
           <Route path="/salesStaffContentList" element={<SSContentList />} />

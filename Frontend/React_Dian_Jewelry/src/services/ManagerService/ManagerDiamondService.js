@@ -25,4 +25,28 @@ const createDiamond = async (data) => {
   return response.data;
 };
 
-export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond };
+const getProductDetail = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/products/detail/${id}`);
+  return response.data;
+};
+
+
+const ShowAllProduct = async () => {
+  const response = await axios.get(`${API_BASE_URL}/products/list`);
+  return response.data;
+}
+
+const deleteProductById = (id) => {
+  return axios.delete(`${API_BASE_URL}/products/delete/${id}`);
+};
+
+// const updateProductById = (id, data) => {
+//   return axios.put(`${API_BASE_URL}/diamonds/update/${id}`, data);
+// };
+
+const createProduct = async (data) => {
+  const response = await axios.post(`${API_BASE_URL}/products`, data);
+  return response.data;
+};
+
+export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, ShowAllProduct, deleteProductById, createProduct, getProductDetail};
