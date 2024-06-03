@@ -7,7 +7,7 @@ function News() {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-        navigate('/ring');
+        navigate('/diamondJewelry', { state: { category: 'ring' } });
     };
 
     return (

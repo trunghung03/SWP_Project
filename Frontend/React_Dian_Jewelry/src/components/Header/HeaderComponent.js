@@ -1,29 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../services/CartService';
+import { UserContext } from '../../services/UserContext';
 import '../Header/HeaderComponent.scss';
 import logo from '../../assets/img/logo.png';
 
 const HeaderComponent = () => {
-    const [role, setRole] = useState('guest');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [points, setPoints] = useState(0);
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const { cartItems } = useCart();
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            setRole('customer');
-            setFirstName(localStorage.getItem("firstName"));
-            setLastName(localStorage.getItem("lastName"));
-            setPoints(localStorage.getItem("points"));
-        } else {
-            setRole('guest');
-        }
-    }, []);
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -41,7 +27,6 @@ const HeaderComponent = () => {
             localStorage.setItem('cartItems', cartItems);
         }
 
-        setRole('guest');
         navigate('/login');
     };
 
@@ -49,6 +34,7 @@ const HeaderComponent = () => {
         if (e.key === 'Enter' && searchQuery.trim()) {
             const response = await fetch(`https://localhost:7184/api/products/search?name=${searchQuery}`);
             const data = await response.json();
+            setSearchQuery('');
             navigate('/search', { state: { products: data } });
         }
     };
@@ -93,25 +79,25 @@ const HeaderComponent = () => {
                                     aria-expanded="false"></i>
                                 <i className="icon_arrow fas fa-chevron-down"></i>
                                 <ul className="account_dropdown_menu dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    {role === 'guest' ? (
-                                        <>
-                                            <li><a className="dropdown-item" href="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</a></li>
-                                            <hr className="account_hr_guest" />
-                                            <li><a className="dropdown-item" href="/login"><i className="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
-                                        </>
-                                    ) : (
+                                    {user.firstName ? (
                                         <>
                                             <li>
-                                                <p className="full_name dropdown-item">{firstName} {lastName}</p>
+                                                <p className="full_name dropdown-item">{user.firstName} {user.lastName}</p>
                                             </li>
                                             <li>
-                                                <p className="point dropdown-item">{points} points</p>
+                                                <p className="point dropdown-item">{user.points} points</p>
                                             </li>
                                             <hr className="account_hr1" />
                                             <li><a className="dropdown-item" href="/editProfile"><i className="adm_icon fas fa-cog"></i> Setting</a></li>
                                             <li><a className="dropdown-item" href="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</a></li>
                                             <hr className="account_hr2" />
                                             <li><a className="dropdown-item" href="#" onClick={handleLogout}><i className="adm_icon fas fa-sign-out-alt"></i> Sign out</a></li>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <li><a className="dropdown-item" href="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</a></li>
+                                            <hr className="account_hr_guest" />
+                                            <li><a className="dropdown-item" href="/login"><i className="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
                                         </>
                                     )}
                                 </ul>

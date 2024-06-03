@@ -166,6 +166,7 @@ const Login = () => {
                 if (userType === 'customer') {
                     let userInfoRes = await getUserInfo(email);
                     if (userInfoRes && userInfoRes.data) {
+                        localStorage.setItem("email", userInfoRes.data.email);
                         localStorage.setItem("firstName", userInfoRes.data.firstName);
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
