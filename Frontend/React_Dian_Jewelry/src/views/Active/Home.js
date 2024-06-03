@@ -26,16 +26,15 @@ import slide3 from '../../assets/img/slide3.png';
 import ringCategory from '../../assets/img/ringCategory.jpg';
 import wRingCategory from '../../assets/img/wRingCategory.jpg';
 import engagementCategory from '../../assets/img/engagementCategory.jpg';
-import earringCategory from '../../assets/img/earringCategory.jpeg';
+import earringCategory from '../../assets/img/earringCategory.webp';
 import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
-import braceletCategory from '../../assets/img/braceletCategory.jpg';
+import braceletCategory from '../../assets/img/braceletCategory.webp';
 import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
 import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import impression from '../../assets/img/impression.png';
 import proposal from '../../assets/img/proposal.png';
 import bb from '../../assets/img/bb.png';
-import HeaderComponent from '../../components/Header/HeaderComponent.js';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;

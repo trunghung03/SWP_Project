@@ -182,10 +182,11 @@ body {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.home_product_name:hover {
+.home_product_card:hover .home_product_name{
     transform: translateY(-5px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 
 .featured_jewelry_container {
     align-items: center;
