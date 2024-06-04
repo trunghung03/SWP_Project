@@ -42,14 +42,14 @@ namespace DIAN_.Mapper
             return new Purchaseorder
             {
                 UserId = dto.UserId,
-                Date = dto.Date,
+                Date = DateTime.Now,
                 Name=dto.Name,
                 PhoneNumber = dto.PhoneNumber,
                 PaymentMethod = dto.PaymentMethod,
                 ShippingAddress = dto.ShippingAddress,
                 TotalPrice = dto.TotalPrice,
-                OrderStatus = dto.OrderStatus,
-                PromotionId = dto.PromotionId,
+                OrderStatus = "Unpaid",
+                PromotionId = dto.PromotionCode?.PromotionId ?? 0,
                 PayWithPoint = dto.PayWithPoint,
                 Note = dto.Note,
                 SaleStaff = dto.SaleStaff,
