@@ -34,6 +34,7 @@ import ManagerStatitic from './Manager/ManagerStatitic';
 import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
+import DSEditProfile from './DeliveryStaff/DeliveryStaffEditProfile';
 import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
 import SSWarrantyList from './SalesStaff/SalesStaffManageWarranty/SSWarrantyList';
@@ -101,6 +102,7 @@ function App() {
 
             {/* Delivery Staff  */}
             <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
+            <Route path="/deliveryStaffEditProfile" element={<DSEditProfile />} />
           </Routes>
         </UserProvider>
       </CartProvider>

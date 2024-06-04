@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './DeliveryStaffSidebar.scss';
 import { useNavigate } from 'react-router-dom';
 
-class SalesStaffSidebar extends Component {
+class DeliveryStaffSidebar extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -46,7 +46,7 @@ class SalesStaffSidebar extends Component {
                                 <i className="fas fa-box-open"></i>
                                 <span>Delivery List</span>
                             </li>
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('./deliverystaffEditProfile')}>
+                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/deliveryStaffEditProfile')}>
                                 <i className="fas fa-user"></i>
                                 <span>Edit Profile</span>
                             </li>
@@ -63,7 +63,7 @@ class SalesStaffSidebar extends Component {
                             <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} data-tooltip="Delivery List" onClick={() => this.props.navigate('/deliveryStaffDeliveryList')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('./deliverystaffEditProfile')}>
+                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/deliverystaffEditProfile')}>
                                 <i className="fas fa-user"></i>
                             </li>
                             <div className="deliverystaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
