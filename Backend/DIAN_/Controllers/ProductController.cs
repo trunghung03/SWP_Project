@@ -80,7 +80,6 @@ namespace DIAN_.Controllers
                 Price = updateDTO.Price,
                 LaborPrice = updateDTO.LaborPrice,
                 ImageLinkList = updateDTO.ImageLinkList,
-                ChargeUp = updateDTO.ChargeUp,
                 MainDiamondId = updateDTO.MainDiamondId,
                 SubDiamondAmount = updateDTO.SubDiamondAmount,
                 ProductCode = updateDTO.ProductCode,
