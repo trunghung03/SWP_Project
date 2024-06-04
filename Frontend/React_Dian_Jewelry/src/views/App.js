@@ -42,6 +42,9 @@ import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
 import SSEditProfile from './SalesStaff/SalesStaffSetting/SSEditProfile';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmployee';
+import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
+import ManagerAddShell from './Manager/ManagerManageShell/ManagerAddShell';
+import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmployee';
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgotPassword' || location.pathname === '/resetPassword';
@@ -95,7 +98,10 @@ function App() {
           <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
           <Route path="/managerProductList" element={<ManagerProductList />} />
           <Route path="/managerEmployeeList" element = {<ManagerEmployeeList/>}/>
-
+          <Route path="/managerShellList" element={<ManagerShellList/>}/>
+          <Route path="/managerAddEmployee" element={<ManagerAddEmployee/>}/>
+          <Route path="/managerAddShell" element={<ManagerAddShell/>}/>
+          
 
           {/* Sales Staff  */}
           <Route path="/salesStaffOrderList" element={<SSOrderList />} />

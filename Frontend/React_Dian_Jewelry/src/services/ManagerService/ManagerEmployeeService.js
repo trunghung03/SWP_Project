@@ -14,7 +14,11 @@ const getEmployeeDetail = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/employees/id/${id}`);
   return response.data;
 };
+const createEmployee = async (data) => {
+  const response = await axios.post(`${API_BASE_URL}/employees/registeremployee`, data);
+  return response.data;
+};
 const deleteEpmloyeeById = async (id) =>{
   return axios.delete(`${API_BASE_URL}/employees/${id}`);
 }
-export {ShowAllEmployee, getEmployeeDetail,deleteEpmloyeeById,updateEmployeeById};
+export {ShowAllEmployee, getEmployeeDetail,deleteEpmloyeeById,updateEmployeeById,createEmployee};
