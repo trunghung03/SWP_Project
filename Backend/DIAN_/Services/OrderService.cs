@@ -11,6 +11,7 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace DIAN_.Services
@@ -33,19 +34,27 @@ namespace DIAN_.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<CreatePurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, List<Orderdetail> orderDetails)
+        public async Task<PurchaseOrderDetailDto> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, List<Orderdetail> orderDetails)
         {
             var order = orderDto.ToCreatePurchaseOrder();
 
             // 1. Check for promotion
             Promotion promotion = null;
-            if (order?.PromotionId != null)
+
+            if (!string.IsNullOrEmpty(orderDto.promotion?.Code))
             {
-                promotion = await _promotionRepository.GetPromotionByIdAsync(order.PromotionId.Value);
-            }
-            if (promotion != null && promotion.Status)
-            {
-                order.TotalPrice -= order.TotalPrice * promotion.Amount;
+                var promotionId = await _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code);
+
+                if (promotionId != 0)
+                {
+                    promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
+
+                    if (promotion != null && promotion.Status)
+                    {
+                        order.TotalPrice -= order.TotalPrice * promotion.Amount;
+                        order.PromotionId = promotionId; // Assign the promotionId to the order
+                    }
+                }
             }
 
             // 2. Check for usePoint
@@ -109,147 +118,8 @@ namespace DIAN_.Services
                 throw new Exception("The order could not be created.");
             }
 
-            return createdOrder.ToCreatePurchaseOrder();
+            return createdOrder.ToPurchaseOrderDetail();
         }
-
-        //public Task<Purchaseorder> UpdatePurchaseOrderAsync(Purchaseorder order, int orderId)
-        //{
-        //    throw new NotImplementedException();
-        //}   
-
-        public Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public async Task<CreatePurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO order, List<Orderdetail> orderDetails)
-        //{
-        //    var order = createOrderDto.ToCreatePurchaseOrder();
-
-        //    Promotion promotion = null;
-        //    if (order?.PromotionId != null)
-        //    {
-        //        promotion = await _promotionRepository.GetPromotionByIdAsync(order.PromotionId.Value);
-        //    }
-        //    if (promotion != null && promotion.Status)
-        //    {
-        //        createOrderDto.TotalPrice *= (1 - promotion.Amount);
-        //    }
-
-        //    if (order.PayWithPoint == true)
-        //    {
-        //        var customer = await _customerRepository.GetByIdAsync(createOrderDto.UserId);
-        //        if (customer != null && customer.Points > 0)
-        //        {
-        //            createOrderDto.TotalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
-        //            customer.Points = 0;
-
-        //            UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
-        //            {
-        //                Point = 0
-        //            };
-
-        //            await _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto);
-        //        }
-        //    }
-
-        //    var createdOrder = await _purchaseOrderRepository.CreateAsync(order);
-
-        //    if (createdOrder == null)
-        //    {
-        //        return new BadRequestObjectResult("The order could not be created.");
-        //    }
-
-        //    return createdOrder;
-        //}
-
-
-
-
-        //public async Task<bool> AssignEmployeeToOrderAsync(int orderId)
-        //{
-        //    var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
-        //    if (order == null)
-        //    {
-        //        throw new Exception($"Order with id {orderId} not found.");
-        //    }
-
-        //    var employees = await _employeeRepository.GetAllAsync();
-        //    if (employees == null || !employees.Any())
-        //    {
-        //        throw new Exception("No employees found.");
-        //    }
-
-        //    var random = new Random();
-        //    var randomEmployee = employees[random.Next(employees.Count)];
-
-        //   // order.EmployeeId = randomEmployee.EmployeeId;
-        //    var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
-
-        //    return updatedOrder != null;
-        //}
-
-
-
-        //public ActionResult<List<Orderdetail>> SubmitOrderDetails(int orderId)
-        //{
-        //    List<Orderdetail> createdOrderDetails = _orderDetailRepository.GetByOrderIdAsync(orderId).Result.ToList();
-        //    foreach (var orderDetailDto in createdOrderDetails)
-        //    {
-        //        var orderDetail = new Orderdetail
-        //        {
-        //            OrderId = orderId,
-        //            LineTotal = orderDetailDto.LineTotal,
-        //            ProductId = orderDetailDto.ProductId,
-        //            ShellMaterialId = orderDetailDto.ShellMaterialId,
-        //            SubDiamondId = orderDetailDto.SubDiamondId,
-        //            Size = orderDetailDto.Size
-        //        };
-
-        //        var createdOrderDetail = _orderDetailRepository.CreateAsync(orderDetail).Result;
-        //        if (createdOrderDetail == null)
-        //        {
-        //            return new BadRequestObjectResult("The order detail could not be created.");
-        //        }
-
-        //        createdOrderDetails.Add(createdOrderDetail);
-        //    }
-
-        //    // Return the created order details
-        //    return createdOrderDetails;
-        //}
-
-
-
-        //public async Task<bool> CompleteOrderAsync(int orderId)
-        //{
-        //    var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
-        //    if (order == null)
-        //    {
-        //        throw new Exception($"Order with id {orderId} not found.");
-        //    }
-
-        //    order.OrderStatus = "Success";
-        //    var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
-
-        //    if (updatedOrder != null && updatedOrder.OrderStatus == "Success")
-        //    {
-        //        var points = (int)(updatedOrder.TotalPrice * (decimal)0.03);
-        //        var customer = await _customerRepository.GetByIdAsync(updatedOrder.UserId);
-        //        if (customer != null)
-        //        {
-        //            customer.Points += points;
-        //            var updateCustomerPointDto = new UpdateCustomerPointDto { Point = customer.Points };
-        //            var updatedCustomer = await _customerRepository.UpdateCustomerPoint(customer.CustomerId, updateCustomerPointDto);
-        //            if (updatedCustomer != null)
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //    }
-
-        //    return false;
-        //}
 
     }
 }

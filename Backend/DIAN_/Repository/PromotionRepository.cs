@@ -73,6 +73,17 @@ namespace DIAN_.Repository
             return existingPromotion;
         }
 
+        public async Task<int> GetPromotionIdByCodeAsync(string code)
+        {
+            var promotionId = await _context.Promotions
+                .FromSqlRaw("SELECT PromotionId FROM Promotions WHERE PromotionCode = {0}", code)
+                .Select(p => p.PromotionId)
+                .FirstOrDefaultAsync();
+
+            return promotionId;
+        }
+
+
         public async Task<Promotion?> GetPromotionByIdAsync(int id)
         {
             var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);

@@ -83,17 +83,17 @@ namespace DIAN_.Repository
             return order;
         }
 
-        public async Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto)
-        {
-            var order = await _context.Purchaseorders.FirstOrDefaultAsync(po => po.OrderId == orderId);
-            if (order == null)
-            {
-                throw new Exception($"Order with id {orderId} not found.");
-            }
-            order.OrderStatus = statusDto.OrderStatus;
-            await _context.SaveChangesAsync();
-            return order;
-        }
+        //public async Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto)
+        //{
+        //    var order = await _context.Purchaseorders.FirstOrDefaultAsync(po => po.OrderId == orderId);
+        //    if (order == null)
+        //    {
+        //        throw new Exception($"Order with id {orderId} not found.");
+        //    }
+        //    order.OrderStatus = statusDto.OrderStatus;
+        //    await _context.SaveChangesAsync();
+        //    return order;
+        //}
 
         public async Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status)
         {
@@ -101,6 +101,17 @@ namespace DIAN_.Repository
             return orders;
         }
 
+        public async Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, string status)
+        {
+            var order = await _context.Purchaseorders.FirstOrDefaultAsync(po => po.OrderId == orderId);
+            if (order == null)
+            {
+                throw new Exception($"Order with id {orderId} not found.");
+            }
+            order.OrderStatus = status;
+            await _context.SaveChangesAsync();
+            return order;
+        }
         ////parameter is Purchaseorder or UpdateStaffDto?
         //public async Task<Purchaseorder> AssignStaff(int orderId, Purchaseorder order)
         //{

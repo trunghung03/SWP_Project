@@ -8,9 +8,9 @@ namespace DIAN_.Services
 {
     public interface IOrderService
     {
-        Task<CreatePurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO order, List<Orderdetail> orderDetails);
+        Task<PurchaseOrderDetailDto> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO order, List<Orderdetail> orderDetails);
        // Task<Purchaseorder> UpdatePurchaseOrderAsync(Purchaseorder order, int orderId);
-        Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto);
+        //Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto);
        // Task<bool> CompleteOrderAsync(int orderId);
         //public Task<ActionResult<PurchaseOrderDTO>> CreateOrder(CreatePurchaseOrderDTO createOrderDto);
 

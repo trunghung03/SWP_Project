@@ -2,9 +2,11 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Repository;
 using DIAN_.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace DIAN_.Controllers
 {
@@ -32,14 +34,14 @@ namespace DIAN_.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var purchaseOrders = await _purchaseOrderRepo.GetAllAsync();
+            var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
             return Ok(purchaseOrders);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInfo(int id)
         {
-            var purchaseOrderInfo = await _purchaseOrderRepo.GetInfoAsync(id);
+            var purchaseOrderInfo = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
             if (purchaseOrderInfo == null)
             {
                 return NotFound();
@@ -50,14 +52,14 @@ namespace DIAN_.Controllers
         public async Task<IActionResult> Create([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
         {
             var order = purchaseOrderDTO.ToCreatePurchaseOrder();
-            var createdOrder = await _purchaseOrderRepo.CreateAsync(order);
+            var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
             return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var order = await _purchaseOrderRepo.GetInfoAsync(id);
+            var order = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -66,17 +68,19 @@ namespace DIAN_.Controllers
             var existingOrder = await _context.Purchaseorders.FindAsync(id);
             existingOrder.ToUpdatePurchaseOrder(purchaseOrderDTO);
 
-            var updatedOrder = await _purchaseOrderRepo.UpdateAsync(existingOrder);
+            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(existingOrder, id);
             return Ok(updatedOrder);
         }
 
         [HttpPost("duyen_test_order_logic")]
         public async Task<IActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var createdOrderResult = await _orderService.CreateOrder(purchaseOrderDTO);
-            if (createdOrderResult.Result is OkObjectResult okResult && okResult.Value is PurchaseOrderDTO createdOrder)
+            var orderDetails = PurchaseOrderMapper.ToOrderDetails(purchaseOrderDTO.OrderDetails);
+            var createdOrderResult = await _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, orderDetails);
+
+            if (createdOrderResult != null)
             {
-                return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder);
+                return Ok(createdOrderResult);
             }
 
             return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error occurred");
@@ -92,7 +96,7 @@ namespace DIAN_.Controllers
             }
 
             order.OrderStatus = "Success";
-            var updatedOrder = await _purchaseOrderRepo.UpdateAsync(order);
+            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(order, id);
 
             if (updatedOrder != null && updatedOrder.OrderStatus == "Success")
             {
@@ -102,6 +106,30 @@ namespace DIAN_.Controllers
             return Ok(updatedOrder);
         }
 
+        // Endpoint to view orders by status
+        [HttpGet("status/{status}")]
+        public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
+        {
+            var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
+            if (orders == null)
+            {
+                return NotFound($"Cannot find {status} order");
 
+            }
+            return orders;
+        }
+
+        // Endpoint to update order status
+        [HttpPut("{orderId}/status/{status}")]
+        public async Task<ActionResult<Purchaseorder>> UpdateOrderStatus(int orderId, string status)
+        {
+            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(orderId, status);
+            if (updatedOrder == null)
+            {
+                return NotFound($"Cannot find {status} order");
+
+            }
+            return updatedOrder;
+        }
     }
 }
