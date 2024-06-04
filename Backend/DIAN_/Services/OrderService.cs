@@ -63,7 +63,7 @@ namespace DIAN_.Services
             return false;
         }
 
-        public async Task<ActionResult<PurchaseOrderDTO>> CreateOrder(CreatePurchaseOrderDTO createOrderDto)
+        public async Task<ActionResult<PurchaseOrderDTO>> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO createOrderDto)
         {
             var order = createOrderDto.ToCreatePurchaseOrder();
 
@@ -103,28 +103,46 @@ namespace DIAN_.Services
 
             return createdOrder;
         }
-        public async Task<bool> AssignEmployeeToOrderAsync(int orderId)
+
+        public Task<Purchaseorder> UpdatePurchaseOrderAsync(Purchaseorder order, int orderId)
         {
-            var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
-            if (order == null)
-            {
-                throw new Exception($"Order with id {orderId} not found.");
-            }
-
-            var employees = await _employeeRepository.GetAllAsync();
-            if (employees == null || !employees.Any())
-            {
-                throw new Exception("No employees found.");
-            }
-
-            var random = new Random();
-            var randomEmployee = employees[random.Next(employees.Count)];
-
-           // order.EmployeeId = randomEmployee.EmployeeId;
-            var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
-
-            return updatedOrder != null;
+            throw new NotImplementedException();
         }
+
+        public Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Purchaseorder> IOrderService.CreatePurchaseOrderAsync(CreatePurchaseOrderDTO createOrderDto)
+        {
+            throw new NotImplementedException();
+        }
+        //public async Task<bool> AssignEmployeeToOrderAsync(int orderId)
+        //{
+        //    var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
+        //    if (order == null)
+        //    {
+        //        throw new Exception($"Order with id {orderId} not found.");
+        //    }
+
+        //    var employees = await _employeeRepository.GetAllAsync();
+        //    if (employees == null || !employees.Any())
+        //    {
+        //        throw new Exception("No employees found.");
+        //    }
+
+        //    var random = new Random();
+        //    var randomEmployee = employees[random.Next(employees.Count)];
+
+        //   // order.EmployeeId = randomEmployee.EmployeeId;
+        //    var updatedOrder = await _purchaseOrderRepository.UpdateAsync(order);
+
+        //    return updatedOrder != null;
+        //}
+
+
+
         //public ActionResult<List<Orderdetail>> SubmitOrderDetails(int orderId)
         //{
         //    List<Orderdetail> createdOrderDetails = _orderDetailRepository.GetByOrderIdAsync(orderId).Result.ToList();
