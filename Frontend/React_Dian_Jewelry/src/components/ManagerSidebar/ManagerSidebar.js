@@ -46,11 +46,11 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-chart-bar"></i>
                                 <span>Statitic</span>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_employee' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_employee' ? 'selected' : ''}`} onClick={() => this.props.navigate('/managerEmployeeList')}>
                                 <i className="fas fa-users"></i>
                                 <span>Employee</span>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_product' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_product' ? 'selected' : ''}`} onClick={() => this.props.navigate('/managerProductList')}>
                                 <i className="fas fa-box-open"></i>
                                 <span>Manage Product</span>
                             </li>
@@ -75,10 +75,10 @@ class ManagerSidebar extends Component {
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_statitic' ? 'selected' : ''}`} data-tooltip="Statitic" onClick={() => this.props.navigate('/managerStatitic')}>
                                 <i className="fas fa-chart-bar"></i>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_employee' ? 'selected' : ''}`} data-tooltip="Employee" onClick={() => this.props.navigate('#')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_employee' ? 'selected' : ''}`} data-tooltip="Employee" onClick={() => this.props.navigate('/managerEmployeeList')}>
                                 <i className="fas fa-users"></i>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_product' ? 'selected' : ''}`} data-tooltip="Manage Product" onClick={() => this.props.navigate('#')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_product' ? 'selected' : ''}`} data-tooltip="Manage Product" onClick={() => this.props.navigate('/managerProductList')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} data-tooltip="Manage Diamond" onClick={() => this.props.navigate('/managerDiamondList')}>

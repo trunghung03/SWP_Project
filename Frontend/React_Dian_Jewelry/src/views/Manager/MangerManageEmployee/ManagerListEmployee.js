@@ -4,23 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import { ShowAllProduct,getProductDetail, deleteProductById } from '../../../services/ManagerService/ManagerDiamondService.js';
+import {ShowAllEmployee, getEmployeeDetail,deleteEpmloyeeById,updateEmployeeById} from '../../../services/ManagerService/ManagerEmployeeService.js'
 import logo from '../../../assets/img/logo.png';
+import ProductList from '../../../components/ProductCard/ProductCard.js';
 
-const ManagerProductList = () => {
+const ManagerEmployeeList = () => {
     const navigate = useNavigate();
 
-    const [productItems, setProductItems] = useState([]);
+    const [employeeList, setEmployeeList] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [editMode, setEditMode] = useState(false);
-    const [editedProduct, setEditedProduct] = useState({});
-    const [originalDiamond, setOriginalDiamond] = useState({});
+    const [editedEmployee, setEditedEmployee] = useState({});
+    const [originalEmployee, setOriginalEmployee] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await ShowAllProduct();
-                setProductItems(response);
+                const response = await ShowAllEmployee();
+                setEmployeeList(response);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -34,8 +35,8 @@ const ManagerProductList = () => {
 
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentOrders = productItems.slice(indexOfFirstOrder, indexOfLastOrder);
-    const totalPages = Math.ceil(productItems.length / ordersPerPage);
+    const currentEmployee = employeeList.slice(indexOfFirstOrder, indexOfLastOrder);
+    const totalPages = Math.ceil(employeeList.length / ordersPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -46,17 +47,17 @@ const ManagerProductList = () => {
         if (e.key === 'Enter') {
             if (searchQuery.trim()) {
                 try {
-                    const response = await getProductDetail(searchQuery.trim());
-                    setProductItems([response]);
+                    const response = await getEmployeeDetail(searchQuery.trim());
+                    setEmployeeList([response]);
                     setCurrentPage(1);
                 } catch (error) {
                     console.error("Error fetching diamond:", error);
-                    swal("Diamond not found!", "Please try another one.", "error");
+                    swal("Employee not found!", "Please try another one.", "error");
                 }
             } else {
                 try {
-                    const response = await ShowAllProduct();
-                    setProductItems(response);
+                    const response = await ShowAllEmployee();
+                    setEmployeeList(response);
                     setCurrentPage(1);
                 } catch (error) {
                     console.error("Error fetching data:", error);
@@ -76,13 +77,13 @@ const ManagerProductList = () => {
         }).then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    await deleteProductById(productID);
-                    const response = await ShowAllProduct();
-                    setProductItems(response);
-                    swal("Deleted successfully!", "The diamond has been deleted.", "success");
+                    await deleteEpmloyeeById(productID);
+                    const response = await ShowAllEmployee();
+                    setEmployeeList(response);
+                    swal("Deleted successfully!", "The employee has been deleted.", "success");
                 } catch (error) {
                     console.error("Error deleting diamond:", error);
-                    swal("Something went wrong!", "Failed to delete the diamond. Please try again.", "error");
+                    swal("Something went wrong!", "Failed to delete the employee. Please try again.", "error");
                 }
             }
         });
@@ -90,46 +91,47 @@ const ManagerProductList = () => {
 
 
     // Update by id
-    const handleEdit = (product) => {
-    //     setEditMode(true);
-    //     setEditedDiamond(diamond);
-    //     setOriginalDiamond(diamond);
+    const handleEdit = (employee) => {
+        setEditMode(true);
+        setEditedEmployee(employee);
+        setOriginalEmployee(employee);
      };
 
      const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setEditedDiamond({ ...editedDiamond, [name]: value });
+        const { name, value } = e.target;
+        setEditedEmployee({ ...editedEmployee, [name]: value });
     };
 
      const handleUpdate = async () => {
-    //     const requiredFields = ['name', 'price', 'imageLinkList', 'categoryID', 'collectionId', 'cost'];
-    //     for (let field of requiredFields) {
-    //         if (!editedDiamond[field]) {
-    //             swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-    //             return;
-    //         }
-    //     }
+        const status = true;
+        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address','phoneNumber',status];
+        for (let field of requiredFields) {
+            if (!editedEmployee[field]) {
+                swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+                return;
+            }
+        }
 
-    //     const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
-    //     if (isEqual) {
-    //         swal("No changes detected!", "You have not made any changes.", "error");
-    //         return;
-    //     }
+        const isEqual = JSON.stringify(originalEmployee) === JSON.stringify(editedEmployee);
+        if (isEqual) {
+            swal("No changes detected!", "You have not made any changes.", "error");
+            return;
+        }
 
-    //     const diamondToUpdate = { ...editedDiamond, status: true };
+        const employeeToUpdate = { ...editedEmployee, status: true };
 
-    //     try {
-    //         console.log("Sending update request with data:", diamondToUpdate);
-    //         const response = await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
-    //         console.log("Update response:", response.data);
-    //         const updatedItems = await ShowAllDiamond();
-    //         setCartItems(updatedItems);
-    //         setEditMode(false);
-    //         swal("Updated successfully!", "The diamond information has been updated.", "success");
-    //     } catch (error) {
-    //         console.error("Error updating diamond:", error.response ? error.response.data : error.message);
-    //         swal("Something went wrong!", "Failed to update. Please try again.", "error");
-    //     }
+        try {
+            console.log("Sending update request with data:", employeeToUpdate);
+            const response = await updateEmployeeById(employeeToUpdate.employeeId, employeeToUpdate);
+            console.log("Update response:", response.data);
+            const updatedItems = await ShowAllEmployee();
+            setEmployeeList(updatedItems);
+            setEditMode(false);
+            swal("Updated successfully!", "The diamond information has been updated.", "success");
+        } catch (error) {
+            console.error("Error updating diamond:", error.response ? error.response.data : error.message);
+            swal("Something went wrong!", "Failed to update. Please try again.", "error");
+        }
      };
 
 
@@ -159,37 +161,38 @@ const ManagerProductList = () => {
 
                 {/* Table diamond list */}
                 <div className="manager_manage_diamond_table_wrapper">
-                    <h1>List of products</h1>
+                    <h1>List of employees</h1>
                     <table className="manager_manage_diamond_table table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Image</th>
-                                <th>Category</th>
-                                <th>Collection</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Last name</th>
+                                <th>First name</th>
+                                <th>Addresss</th>
+                                <th>Phone number</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {productItems.length > 0 ? (
-                                currentOrders.map((item) => (
-                                    <tr key={item.productId}>
-                                        <td>{item.productId}</td>
-                                        <td>{item.name}</td>
-                                        <td>{item.price}</td>
-                                        <td>{item.imageLinkList}</td>
-                                        <td>{item.categoryID}</td>
-                                        <td>{item.collectionId}</td>
+                            {employeeList.length > 0 ? (
+                                currentEmployee.map((item) => (
+                                    <tr key={item.employeeId}>
+                                        <td>{item.role}</td>
+                                        <td>{item.email}</td>
+                                        <td>{item.lastName}</td>
+                                        <td>{item.firstname}</td>
+                                        <td>{item.address}</td>
+                                        <td>{item.phoneNumber}</td>
                                         <td>
                                             <i className="fas fa-pen" onClick={() => handleEdit(item)} style={{ cursor: 'pointer', marginRight: '10px' }}></i>
-                                            <i className="fas fa-trash" onClick={() => handleDelete(item.productId)} style={{ cursor: 'pointer' }}></i>
+                                            <i className="fas fa-trash" onClick={() => handleDelete(item.employeeId)} style={{ cursor: 'pointer' }}></i>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="10">No products found</td>
+                                    <td colSpan="10">No employee found</td>
                                 </tr>
                             )}
                         </tbody>
@@ -215,42 +218,38 @@ const ManagerProductList = () => {
             </div>
 
             {/* Update modal */}
-            {/* {editMode && (
+            {editMode && (
                 <div className="manager_manage_diamond_modal_overlay" onClick={() => setEditMode(false)}>
                     <div className="manager_manage_diamond_update_modal" onClick={(e) => e.stopPropagation()}>
                         <div className="manager_manage_diamond_modal_content">
-                            <h4>Edit Diamond Information</h4>
+                            <h4>Edit Employee Information</h4>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Shape</label>
-                                <input type="text" name="shape" value={editedDiamond.shape} onChange={handleChange} />
+                                <label>Role</label>
+                                <input type="text" name="role" value={editedEmployee.role} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Color</label>
-                                <input type="text" name="color" value={editedDiamond.color} onChange={handleChange} />
+                                <label>Email</label>
+                                <input type="text" name="email" value={editedEmployee.email} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Clarity</label>
-                                <input type="text" name="clarity" value={editedDiamond.clarity} onChange={handleChange} />
+                                <label>Password</label>
+                                <input type="text" name="password" value={editedEmployee.password} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Carat</label>
-                                <input type="text" name="carat" value={editedDiamond.carat} onChange={handleChange} />
+                                <label>Last name</label>
+                                <input type="text" name="lastName" value={editedEmployee.lastName} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Cut</label>
-                                <input type="text" name="cut" value={editedDiamond.cut} onChange={handleChange} />
+                                <label>First name</label>
+                                <input type="text" name="firstName" value={editedEmployee.firstName} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Cost</label>
-                                <input type="text" name="cost" value={editedDiamond.cost} onChange={handleChange} />
+                                <label>Addresss</label>
+                                <input type="text" name="address" value={editedEmployee.address} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Quantity</label>
-                                <input type="text" name="amountAvailable" value={editedDiamond.amountAvailable} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>Certificate</label>
-                                <input type="text" name="certificateScan" value={editedDiamond.certificateScan} onChange={handleChange} />
+                                <label>Phone number</label>
+                                <input type="text" name="phoneNumber" value={editedEmployee.phoneNumber} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_modal_actions">
                                 <button onClick={() => setEditMode(false)}>Cancel</button>
@@ -259,9 +258,9 @@ const ManagerProductList = () => {
                         </div>
                     </div>
                 </div>
-            )} */}
+            )}
         </div>
     );
 };
 
-export default ManagerProductList;
+export default ManagerEmployeeList;
