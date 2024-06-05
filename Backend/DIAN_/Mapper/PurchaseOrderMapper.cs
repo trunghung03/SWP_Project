@@ -72,10 +72,10 @@ namespace DIAN_.Mapper
             };
         }
 
-        public static List<Orderdetail> ToOrderDetails(List<CreateOrderDetailDto> dtos)
-        {
-            return dtos.Select(dto => ToOrderDetail(dto)).ToList();
-        }
+        //public static List<Orderdetail> ToOrderDetails(List<CreateOrderDetailDto> dtos)
+        //{
+        //    return dtos.Select(dto => ToOrderDetail(dto)).ToList();
+        //}
 
         public static Purchaseorder ToUpdatePurchaseOrder(this Purchaseorder order, UpdatePurchaseOrderDTO dto)
         {

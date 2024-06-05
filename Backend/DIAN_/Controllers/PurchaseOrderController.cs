@@ -75,8 +75,8 @@ namespace DIAN_.Controllers
         [HttpPost("duyen_test_order_logic")]
         public async Task<IActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var orderDetails = PurchaseOrderMapper.ToOrderDetails(purchaseOrderDTO.OrderDetails);
-            var createdOrderResult = await _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, orderDetails);
+            //var orderDetails = PurchaseOrderMapper.ToOrderDetails(purchaseOrderDTO.OrderDetails);
+            var createdOrderResult = await _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO);
 
             if (createdOrderResult != null)
             {

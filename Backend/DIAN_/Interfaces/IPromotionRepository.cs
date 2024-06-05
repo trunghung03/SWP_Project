@@ -20,6 +20,8 @@ namespace DIAN_.Interfaces
 
         Task<bool> CheckPromotion(string proCode);
 
+        Task<decimal?> ApplyPromotion(string proCode);
+
         Task<List<Promotion?>> SearchPromotionsByNameAsync(string name);
 
         Task<int> GetPromotionIdByCodeAsync(string code);

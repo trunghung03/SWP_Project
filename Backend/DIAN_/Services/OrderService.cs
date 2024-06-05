@@ -34,7 +34,7 @@ namespace DIAN_.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<PurchaseOrderDetailDto> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, List<Orderdetail> orderDetails)
+        public async Task<PurchaseOrderDetailDto> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto)
         {
             var order = orderDto.ToCreatePurchaseOrder();
 
@@ -92,24 +92,24 @@ namespace DIAN_.Services
             order.DeliveryStaff = randomDeliveryStaff.EmployeeId;
 
             // 4. Submit orderDetail
-            foreach (var orderDetailDto in orderDetails)
-            {
-                var orderDetail = new Orderdetail
-                {
-                    OrderId = order.OrderId,
-                    LineTotal = orderDetailDto.LineTotal,
-                    ProductId = orderDetailDto.ProductId,
-                    ShellMaterialId = orderDetailDto.ShellMaterialId,
-                    SubDiamondId = orderDetailDto.SubDiamondId,
-                    Size = orderDetailDto.Size
-                };
+            //foreach (var orderDetailDto in orderDetails)
+            //{
+            //    var orderDetail = new Orderdetail
+            //    {
+            //        OrderId = order.OrderId,
+            //        LineTotal = orderDetailDto.LineTotal,
+            //        ProductId = orderDetailDto.ProductId,
+            //        ShellMaterialId = orderDetailDto.ShellMaterialId,
+            //        SubDiamondId = orderDetailDto.SubDiamondId,
+            //        Size = orderDetailDto.Size
+            //    };
 
-                var createdOrderDetail = await _orderDetailRepository.CreateAsync(orderDetail);
-                if (createdOrderDetail == null)
-                {
-                    throw new Exception("The order detail could not be created.");
-                }
-            }
+            //    var createdOrderDetail = await _orderDetailRepository.CreateAsync(orderDetail);
+            //    if (createdOrderDetail == null)
+            //    {
+            //        throw new Exception("The order detail could not be created.");
+            //    }
+            //}
 
             var createdOrder = await _purchaseOrderRepository.CreatePurchaseOrderAsync(order);
 

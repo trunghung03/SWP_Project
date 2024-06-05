@@ -132,5 +132,15 @@ namespace DIAN_.Repository
               }
             return true;
         }
+
+        public async Task<decimal?> ApplyPromotion(string proCode)
+        {
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            if(existingPromotion == null)
+            {
+                return null;
+            }
+            return existingPromotion.Amount;
+        }
     }
 }
