@@ -123,7 +123,7 @@ const ManagerShellList = () => {
 
         try {
             console.log("Sending update request with data:", shellToUpdate);
-            const response = await updateEmployeeById(shellToUpdate.shellMaterialId, shellToUpdate);
+            const response = await updateShellById(shellToUpdate.shellMaterialId, shellToUpdate);
             console.log("Update response:", response.data);
             const updatedItems = await ShowAllShell();
             setShellItems(updatedItems);
