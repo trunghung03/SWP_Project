@@ -7,7 +7,7 @@ namespace DIAN_.Services
     {
         Task<List<PurchaseOrderDTO>> ViewListOrdersByStatus(string status);
 
-        Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(Purchaseorder purchaseOrderDTO);
+        Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int staffId);
 
         Task<Purchaseorder> UpdateOrderStatus(string status, int orderId);
 

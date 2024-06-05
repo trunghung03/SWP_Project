@@ -16,19 +16,17 @@ namespace DIAN_.Controllers
     {
         private readonly IPurchaseOrderRepository _purchaseOrderRepo;
 
-        private readonly IPointAccumulateService _pointAccumulateService;
 
         private readonly IOrderService _orderService;
 
         private readonly ApplicationDbContext _context;
 
         public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
-            ApplicationDbContext context, IPointAccumulateService pointAccumulateService)
+            ApplicationDbContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
             _context = context;
-            _pointAccumulateService = pointAccumulateService;
         }
 
         [HttpGet("all")]
@@ -38,6 +36,8 @@ namespace DIAN_.Controllers
             return Ok(purchaseOrders);
         }
 
+
+        //
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInfo(int id)
         {
@@ -86,26 +86,6 @@ namespace DIAN_.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error occurred");
         }
 
-        [HttpPut("{id}/completeorder")]
-        public async Task<IActionResult> CompleteOrder(int id)
-        {
-            var order = await _purchaseOrderRepo.GetPurchasrOrderById(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            order.OrderStatus = "Success";
-            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(order, id);
-
-            if (updatedOrder != null && updatedOrder.OrderStatus == "Success")
-            {
-                await _pointAccumulateService.AccumulatePointsAsync(updatedOrder.OrderId);
-            }
-
-            return Ok(updatedOrder);
-        }
-
         // Endpoint to view orders by status
         [HttpGet("status/{status}")]
         public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
@@ -119,17 +99,17 @@ namespace DIAN_.Controllers
             return orders;
         }
 
-        // Endpoint to update order status
-        [HttpPut("{orderId}/status/{status}")]
-        public async Task<ActionResult<Purchaseorder>> UpdateOrderStatus(int orderId, string status)
-        {
-            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(orderId, status);
-            if (updatedOrder == null)
-            {
-                return NotFound($"Cannot find {status} order");
+        //// Endpoint to update order status
+        //[HttpPut("{orderId}/status/{status}")]
+        //public async Task<ActionResult<Purchaseorder>> UpdateOrderStatus(int orderId, string status)
+        //{
+        //    var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(orderId, status);
+        //    if (updatedOrder == null)
+        //    {
+        //        return NotFound($"Cannot find {status} order");
 
-            }
-            return updatedOrder;
-        }
+        //    }
+        //    return updatedOrder;
+        //}
     }
 }

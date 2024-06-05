@@ -13,6 +13,12 @@ namespace DIAN_.Interfaces
         Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, string status);
         Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status);
 
+        //just can view the purchaseorder must have the same sale staff id
+        Task<List<Purchaseorder>> GetListSalesOrderAssign(int staffId);
+
+        //just can view the purchaseorder must have the same delivery staff id
+        Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId);
+
         //Task<List<Purchaseorder>> GetListOrderAssign(int staffId);
         //Task<Purchaseorder> AssignStaff(int orderId, Purchaseorder order);
     }

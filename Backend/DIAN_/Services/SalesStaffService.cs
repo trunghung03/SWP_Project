@@ -53,27 +53,16 @@ namespace DIAN_.Services
             return updatedOrder;
         }
 
-        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(Purchaseorder purchaseOrderDTO)
+        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int salesStaffId)
         {
-            if (purchaseOrderDTO.SaleStaff == null)
+            var orders = await _purchaseOrderRepository.GetListSalesOrderAssign(salesStaffId);
+            if (orders == null)
             {
-                throw new ArgumentNullException(nameof(purchaseOrderDTO.SaleStaff));
+                throw new Exception("You completed all orders");
             }
-
-            var orders = await _purchaseOrderRepository.GetAllPurchaseOrderAsync();
-            var deliveryStaff = await _employeeRepository.GetByIdAsync(purchaseOrderDTO.SaleStaff.Value);
-
-            if (deliveryStaff == null)
-            {
-                throw new Exception("Delivery staff not found");
-            }
-
-            var displayOrders = orders.Where(o => o.DeliveryStaff == purchaseOrderDTO.DeliveryStaff).ToList();
-
-            var displayOrderDtos = displayOrders.Select(order => order.ToPurchaseOrderDetail()).ToList();
+            var displayOrderDtos = orders.Select(order => PurchaseOrderMapper.ToPurchaseOrderDetail(order)).ToList();
 
             return displayOrderDtos;
-
         }
 
         public async Task<List<PurchaseOrderDTO>> ViewListOrdersByStatus(string status)
@@ -83,11 +72,7 @@ namespace DIAN_.Services
             {
                 throw new Exception("No orders found with the given status.");
             }
-            return orders.Select(order => new PurchaseOrderDTO
-            {
-                // Map the properties of the Purchaseorder to the PurchaseOrderDTO
-                // ...
-            }).ToList();
+            return orders.Select(orders => PurchaseOrderMapper.ToPurchaseOrderDTO(orders)).ToList();
         }
     }
 }

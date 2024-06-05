@@ -112,6 +112,18 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return order;
         }
+
+        public async Task<List<Purchaseorder>> GetListSalesOrderAssign(int staffId)
+        {
+           var order = await _context.Purchaseorders.Where(po => po.SaleStaff == staffId).ToListAsync();
+            return order;
+        }
+
+        public async Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId)
+        {
+            var order = await _context.Purchaseorders.Where(po => po.DeliveryStaff == staffId).ToListAsync();
+            return order;
+        }
         ////parameter is Purchaseorder or UpdateStaffDto?
         //public async Task<Purchaseorder> AssignStaff(int orderId, Purchaseorder order)
         //{

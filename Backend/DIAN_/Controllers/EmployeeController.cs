@@ -8,6 +8,7 @@ using UserApplication.Interfaces;
 using DIAN_.DTOs.Account;
 using DIAN_.Repository;
 using DIAN_.Interfaces;
+using DIAN_.Services;
 
 namespace UserApplication.Controllers
 {
@@ -17,10 +18,15 @@ namespace UserApplication.Controllers
     {
         private readonly ITokenService _tokenService;
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository)
+        private readonly ISalesStaffService _salesStaffService;
+        private readonly IDeliveryStaffService _deliveryStaffService;
+        public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository, 
+            ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService)
         {
             _tokenService = tokenService;
             _employeeRepository = employeeRepository;
+            _salesStaffService = salesStaffService;
+            _deliveryStaffService = deliveryStaffService;
         }
 
         [HttpPost("login")]
@@ -108,6 +114,57 @@ namespace UserApplication.Controllers
             if (employee == null) return NotFound();
 
             return NoContent();
+        }
+
+
+        //For sales staff   
+        //[HttpGet("salesstaff/orderlists")]
+        //public async Task<IActionResult> ViewListOrdersAssign(Purchaseorder purchaseOrderDTO)
+        //{
+        //    if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+        //    var orders = await _salesStaffService.ViewListOrdersAssign(purchaseOrderDTO);
+
+        //    return Ok(orders);
+        //}
+
+        [HttpGet("salesstaff/orderlists")]
+        public async Task<IActionResult> ViewListOrdersAssign([FromQuery] int staffId)
+        {
+           if(!ModelState.IsValid) { return BadRequest(ModelState); };
+           var orders = await _salesStaffService.ViewListOrdersAssign(staffId);
+
+            return Ok(orders);
+        }
+
+        [HttpPut("salesstaff/updatestatus")]
+        public async Task<IActionResult> SalesStaffUpdateOrderStatus(string status, int orderId)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var order = await _salesStaffService.UpdateOrderStatus(status, orderId);
+
+            return Ok(order);
+        }
+
+        //For delivery staff
+        [HttpGet("deliverystaff/orderlists")]
+        public async Task<IActionResult> ViewListDeliveryOrders([FromQuery] int staffId)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var orders = await _deliveryStaffService.ViewListDeliveryOrders(staffId);
+
+            return Ok(orders);
+        }
+        [HttpPut("deliverystaff/updatestatus")]
+        public async Task<IActionResult> DeliveryStaffUpdateDeliveryStatus(string status, int orderId)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
+
+            return Ok(order);
         }
     }
 }

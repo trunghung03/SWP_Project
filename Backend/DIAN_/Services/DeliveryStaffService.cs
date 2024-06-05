@@ -23,6 +23,7 @@ namespace DIAN_.Services
         public async Task<Purchaseorder> UpdateDeliveryStatus(string status, int orderId)
         {
             var order = await _orderRepository.GetPurchasrOrderById(orderId);
+            var customerId = order.UserId;
             if (order == null)
             {
                 throw new Exception("Order not found");
@@ -32,34 +33,27 @@ namespace DIAN_.Services
             if (order != null && order.OrderStatus == "Completed")
             {
                 var points = (int)(order.TotalPrice * (decimal)0.03);
-                var updateCustomerPointDto = new UpdateCustomerPointDto { Point = points };
+                var updateCustomerPointDto = new UpdateCustomerPointDto { 
+                    CustomerId = customerId,
+                    Point = points
+                };
                 await _customerRepository.UpdateCustomerPoint(order.UserId, updateCustomerPointDto);
             }
             var result = await _orderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
             return result;
         }
 
-        public async Task<List<PurchaseOrderDetailDto>> ViewListDeliveryOrders(Purchaseorder purchaseOrderDTO)
+        //View list of delivery orders (get list is assigned)
+        public async Task<List<PurchaseOrderDetailDto>> ViewListDeliveryOrders(int deliStaffId)
         {
-            if (purchaseOrderDTO.DeliveryStaff == null)
+            var orders = await _orderRepository.GetListDeliOrderAssign(deliStaffId);
+            if (orders == null)
             {
-                throw new ArgumentNullException(nameof(purchaseOrderDTO.DeliveryStaff));
+                throw new Exception("You completed all orders");
             }
-
-            var orders = await _orderRepository.GetAllPurchaseOrderAsync();
-            var deliveryStaff = await _employeeRepository.GetByIdAsync(purchaseOrderDTO.DeliveryStaff.Value);
-
-            if (deliveryStaff == null)
-            {
-                throw new Exception("Delivery staff not found");
-            }
-
-            var displayOrders = orders.Where(o => o.DeliveryStaff == purchaseOrderDTO.DeliveryStaff).ToList();
-
-            var displayOrderDtos = displayOrders.Select(order => order.ToPurchaseOrderDetail()).ToList();
+            var displayOrderDtos = orders.Select(order => PurchaseOrderMapper.ToPurchaseOrderDetail(order)).ToList();
 
             return displayOrderDtos;
-
         }
     }
 }
