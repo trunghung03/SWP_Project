@@ -16,7 +16,6 @@ namespace DIAN_.Controllers
     {
         private readonly IPurchaseOrderRepository _purchaseOrderRepo;
 
-
         private readonly IOrderService _orderService;
 
         private readonly ApplicationDbContext _context;
@@ -53,7 +52,7 @@ namespace DIAN_.Controllers
         {
             var order = purchaseOrderDTO.ToCreatePurchaseOrder();
             var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
-            return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder);
+            return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
         }
 
         [HttpPut("{id}")]
@@ -73,17 +72,11 @@ namespace DIAN_.Controllers
         }
 
         [HttpPost("duyen_test_order_logic")]
-        public async Task<IActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
+        public async Task<ActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            //var orderDetails = PurchaseOrderMapper.ToOrderDetails(purchaseOrderDTO.OrderDetails);
             var createdOrderResult = await _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO);
 
-            if (createdOrderResult != null)
-            {
-                return Ok(createdOrderResult);
-            }
-
-            return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error occurred");
+            return Ok(createdOrderResult);
         }
 
         // Endpoint to view orders by status
@@ -99,17 +92,19 @@ namespace DIAN_.Controllers
             return orders;
         }
 
-        //// Endpoint to update order status
-        //[HttpPut("{orderId}/status/{status}")]
-        //public async Task<ActionResult<Purchaseorder>> UpdateOrderStatus(int orderId, string status)
-        //{
-        //    var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(orderId, status);
-        //    if (updatedOrder == null)
-        //    {
-        //        return NotFound($"Cannot find {status} order");
+        [HttpPost("apply-coupon")]
+        public async Task<ActionResult<decimal>> ApplyCoupon(string code, decimal totalPrice)
+        {
+            var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
+            return Ok(updatedTotalPrice);
+        }
 
-        //    }
-        //    return updatedOrder;
-        //}
+        [HttpPost("check-used-points")]
+        public async Task<ActionResult<decimal>> CheckUsedPoints(int userId, decimal totalPrice, bool usedPoints)
+        {
+            var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
+            return Ok(updatedTotalPrice);
+        }
+
     }
 }

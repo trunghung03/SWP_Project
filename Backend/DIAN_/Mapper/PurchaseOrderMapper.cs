@@ -25,6 +25,24 @@ namespace DIAN_.Mapper
             };
         }
 
+        public static PurchaseOrderResponseDto ToPurchaseOrderResponseDTO(this PurchaseOrderDTO order)
+        {
+            return new PurchaseOrderResponseDto {
+                OrderId = order.OrderId,
+                UserId = order.UserId,
+                Name = order.Name,
+                PhoneNumber = order.PhoneNumber,
+                Date = order.Date,
+                PaymentMethod = order.PaymentMethod,
+                ShippingAddress = order.ShippingAddress,
+                TotalPrice = order.TotalPrice,
+                OrderStatus = order.OrderStatus,
+                PromotionId = order.PromotionId,
+                PayWithPoint = order.PayWithPoint,
+                Note = order.Note
+            };
+        }
+
         public static PurchaseOrderInfoDTO ToPurchaseOrderInfoDTO(this Purchaseorder order)
         {
             return new PurchaseOrderInfoDTO
@@ -99,6 +117,15 @@ namespace DIAN_.Mapper
             return new Purchaseorder
             {
                 OrderStatus = status
+            };
+        }
+
+
+        public static Purchaseorder ToUpdateTotalPrice(this Purchaseorder order, decimal totalPrice)
+        {
+            return new Purchaseorder
+            {
+                TotalPrice = totalPrice
             };
         }
         public static PurchaseOrderDetailDto ToPurchaseOrderDetail(this Purchaseorder dto)

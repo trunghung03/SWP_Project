@@ -8,11 +8,14 @@ namespace DIAN_.Services
 {
     public interface IOrderService
     {
-        Task<PurchaseOrderDetailDto> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO order);
+        Task<PurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO order);
+        Task<decimal> CheckUsedPoints(int userId, decimal totalPrice, bool usePoints);
+
+        Task<decimal> ApplyCoupon(string couponCode, decimal totalPrice);
        // Task<Purchaseorder> UpdatePurchaseOrderAsync(Purchaseorder order, int orderId);
-        //Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto);
+       //Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto);
        // Task<bool> CompleteOrderAsync(int orderId);
-        //public Task<ActionResult<PurchaseOrderDTO>> CreateOrder(CreatePurchaseOrderDTO createOrderDto);
+       //public Task<ActionResult<PurchaseOrderDTO>> CreateOrder(CreatePurchaseOrderDTO createOrderDto);
 
 
 

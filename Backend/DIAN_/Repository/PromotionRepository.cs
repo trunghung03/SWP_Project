@@ -123,6 +123,18 @@ namespace DIAN_.Repository
             return null;
         }
 
+        public async Task<Promotion?> UpdatePromotionAmount(int id, UpdatePromotionAmountDto promotion)
+        {
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+            if (existingPromotion != null)
+            {
+                existingPromotion.Amount = promotion.Amount;
+                await _context.SaveChangesAsync();
+                return existingPromotion;
+            }
+            return null;
+        }
+
         public async Task<bool> CheckPromotion(string proCode)
         {
            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
@@ -142,5 +154,7 @@ namespace DIAN_.Repository
             }
             return existingPromotion.Amount;
         }
+
+
     }
 }

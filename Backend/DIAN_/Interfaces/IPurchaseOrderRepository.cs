@@ -19,7 +19,8 @@ namespace DIAN_.Interfaces
         //just can view the purchaseorder must have the same delivery staff id
         Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId);
 
-        //Task<List<Purchaseorder>> GetListOrderAssign(int staffId);
-        //Task<Purchaseorder> AssignStaff(int orderId, Purchaseorder order);
+        //Use w point or not
+        Task<Purchaseorder?> CheckUsedPoint(bool payWithPoint, int userId);
+
     }
 }

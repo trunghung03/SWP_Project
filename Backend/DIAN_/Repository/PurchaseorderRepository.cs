@@ -124,6 +124,18 @@ namespace DIAN_.Repository
             var order = await _context.Purchaseorders.Where(po => po.DeliveryStaff == staffId).ToListAsync();
             return order;
         }
+
+        public async Task<Purchaseorder?> CheckUsedPoint(bool payWithPoint, int userId)
+        {
+            if (payWithPoint)
+            {
+                return await _context.Purchaseorders
+                    .Where(o => o.UserId == userId)
+                    .FirstOrDefaultAsync();
+            }
+            return null;
+        }
+    }
         ////parameter is Purchaseorder or UpdateStaffDto?
         //public async Task<Purchaseorder> AssignStaff(int orderId, Purchaseorder order)
         //{
@@ -138,4 +150,3 @@ namespace DIAN_.Repository
         //    return existingPurchaseOrder;
         //}
     }
-}
