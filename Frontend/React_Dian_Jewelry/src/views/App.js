@@ -61,6 +61,7 @@ const Layout = ({ children }) => {
 function App() {
   return (
     <Router>
+      <UserProvider>
       <CartProvider>
         <AutoScrollToTop />
         <Routes>
@@ -112,6 +113,7 @@ function App() {
           <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
         </Routes>
       </CartProvider>
+      </UserProvider>
     </Router>
   );
 }
