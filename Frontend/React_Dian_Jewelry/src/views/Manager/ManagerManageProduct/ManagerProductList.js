@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import { ShowAllProduct,getProductDetail, deleteProductById } from '../../../services/ManagerService/ManagerProductService.js';
+import { ShowAllProduct, getProductDetail, updateProductById,deleteProductById, getProductCollection, getProductCategory, getProductDiamond } from '../../../services/ManagerService/ManagerProductService.js';
 import logo from '../../../assets/img/logo.png';
 
 const ManagerProductList = () => {
@@ -14,13 +14,36 @@ const ManagerProductList = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [editMode, setEditMode] = useState(false);
     const [editedProduct, setEditedProduct] = useState({});
-    const [originalDiamond, setOriginalDiamond] = useState({});
-
+    const [originalProduct, setOriginalProduct] = useState({});
+    const [categories, setCategories] = useState({});
+    const [collections, setCollections] = useState({});
+    const [mainDiamonds, setMainDiamonds] = useState({});
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await ShowAllProduct();
                 setProductItems(response);
+                const categoryMap = {};
+                const collectionMap = {};
+                const mainDiamondMap = {};
+                for (const product of response) {
+                    if (!categoryMap[product.categoryId]) {
+                        const category = await getProductCategory(product.categoryId);
+                        categoryMap[product.categoryId] = category.name;
+                    }
+                    if (!collectionMap[product.collectionId]) {
+                        const collection = await getProductCollection(product.collectionId);
+                        collectionMap[product.collectionId] = collection.name;
+                    }
+                    if (!mainDiamondMap[product.mainDiamondId]) {
+                        const mainDiamond = await getProductDiamond(product.mainDiamondId);
+                        mainDiamondMap[product.mainDiamondId] = mainDiamond.shape;
+                    }
+                }
+                setCategories(categoryMap);
+                setCollections(collectionMap);
+                setMainDiamonds(mainDiamondMap);
+
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -90,47 +113,58 @@ const ManagerProductList = () => {
 
 
     // Update by id
-    const handleEdit = (product) => {
-    //     setEditMode(true);
-    //     setEditedDiamond(diamond);
-    //     setOriginalDiamond(diamond);
-     };
-
-     const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setEditedDiamond({ ...editedDiamond, [name]: value });
+    const handleEdit = (diamond) => {
+        setEditMode(true);
+        setEditedProduct(diamond);
+        setOriginalProduct(diamond);
     };
 
-     const handleUpdate = async () => {
-    //     const requiredFields = ['name', 'price', 'imageLinkList', 'categoryID', 'collectionId', 'cost'];
-    //     for (let field of requiredFields) {
-    //         if (!editedDiamond[field]) {
-    //             swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-    //             return;
-    //         }
-    //     }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditedProduct({ ...editedProduct, [name]: value });
+    };
 
-    //     const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
-    //     if (isEqual) {
-    //         swal("No changes detected!", "You have not made any changes.", "error");
-    //         return;
-    //     }
+    const handleUpdate = async () => {
+        const requiredFields = ["productCode",
+            "name",
+            "price",
+            "description",
+            "mainDiamondId",
+            "laborPrice",
+            "imageLinkList",
+            "subDiamondAmount",
+            "mainDiamondAmount",
+            "shellAmount",
+            "collectionId",
+            "categoryId"];
+        for (let field of requiredFields) {
+            if (!editedProduct[field]) {
+                swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+                return;
+            }
+        }
 
-    //     const diamondToUpdate = { ...editedDiamond, status: true };
+        const isEqual = JSON.stringify(originalProduct) === JSON.stringify(editedProduct);
+        if (isEqual) {
+            swal("No changes detected!", "You have not made any changes.", "error");
+            return;
+        }
 
-    //     try {
-    //         console.log("Sending update request with data:", diamondToUpdate);
-    //         const response = await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
-    //         console.log("Update response:", response.data);
-    //         const updatedItems = await ShowAllDiamond();
-    //         setCartItems(updatedItems);
-    //         setEditMode(false);
-    //         swal("Updated successfully!", "The diamond information has been updated.", "success");
-    //     } catch (error) {
-    //         console.error("Error updating diamond:", error.response ? error.response.data : error.message);
-    //         swal("Something went wrong!", "Failed to update. Please try again.", "error");
-    //     }
-     };
+        const productToUpdate = { ...editedProduct, status: true };
+
+        try {
+            console.log("Sending update request with data:", productToUpdate);
+            const response = await updateProductById(productToUpdate.productId, productToUpdate);
+            console.log("Update response:", response.data);
+            const updatedItems = await ShowAllProduct();
+            setProductItems(updatedItems);
+            setEditMode(false);
+            swal("Updated successfully!", "The product information has been updated.", "success");
+        } catch (error) {
+            console.error("Error updating product:", error.response ? error.response.data : error.message);
+            swal("Something went wrong!", "Failed to update. Please try again.", "error");
+        }
+    };
 
 
     return (
@@ -164,8 +198,11 @@ const ManagerProductList = () => {
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Product Code</th>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Description</th>
+                                <th>Main Diamond</th>
                                 <th>Image</th>
                                 <th>Category</th>
                                 <th>Collection</th>
@@ -177,11 +214,14 @@ const ManagerProductList = () => {
                                 currentOrders.map((item) => (
                                     <tr key={item.productId}>
                                         <td>{item.productId}</td>
+                                        <td>{item.productCode}</td>
                                         <td>{item.name}</td>
                                         <td>{item.price}</td>
+                                        <td>{item.description}</td>
+                                        <td>{mainDiamonds[item.mainDiamondId]}</td>
                                         <td>{item.imageLinkList}</td>
-                                        <td>{item.categoryID}</td>
-                                        <td>{item.collectionId}</td>
+                                        <td>{categories[item.categoryId]}</td>
+                                        <td>{collections[item.collectionId]}</td>
                                         <td>
                                             <i className="fas fa-pen" onClick={() => handleEdit(item)} style={{ cursor: 'pointer', marginRight: '10px' }}></i>
                                             <i className="fas fa-trash" onClick={() => handleDelete(item.productId)} style={{ cursor: 'pointer' }}></i>
@@ -216,42 +256,62 @@ const ManagerProductList = () => {
             </div>
 
             {/* Update modal */}
-            {/* {editMode && (
+            {editMode && (
                 <div className="manager_manage_diamond_modal_overlay" onClick={() => setEditMode(false)}>
                     <div className="manager_manage_diamond_update_modal" onClick={(e) => e.stopPropagation()}>
                         <div className="manager_manage_diamond_modal_content">
-                            <h4>Edit Diamond Information</h4>
+                            <h4>Edit Product Information</h4>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Shape</label>
-                                <input type="text" name="shape" value={editedDiamond.shape} onChange={handleChange} />
+                                <label>Product Code</label>
+                                <input type="text" name="productCode" value={editedProduct.productCode} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Color</label>
-                                <input type="text" name="color" value={editedDiamond.color} onChange={handleChange} />
+                                <label>Name</label>
+                                <input type="text" name="name" value={editedProduct.name} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Clarity</label>
-                                <input type="text" name="clarity" value={editedDiamond.clarity} onChange={handleChange} />
+                                <label>Price</label>
+                                <input type="text" name="price" value={editedProduct.price} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Carat</label>
-                                <input type="text" name="carat" value={editedDiamond.carat} onChange={handleChange} />
+                                <label>Description</label>
+                                <input type="text" name="description" value={editedProduct.description} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Cut</label>
-                                <input type="text" name="cut" value={editedDiamond.cut} onChange={handleChange} />
+                                <label>Main Diamond ID</label>
+                                <input type="text" name="mainDiamondId" value={editedProduct.mainDiamondId} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Cost</label>
-                                <input type="text" name="cost" value={editedDiamond.cost} onChange={handleChange} />
+                                <label>Labor Price</label>
+                                <input type="text" name="laborPrice" value={editedProduct.laborPrice} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Quantity</label>
-                                <input type="text" name="amountAvailable" value={editedDiamond.amountAvailable} onChange={handleChange} />
+                                <label>Image</label>
+                                <input type="text" name="imageLinkList" value={editedProduct.imageLinkList} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Certificate</label>
-                                <input type="text" name="certificateScan" value={editedDiamond.certificateScan} onChange={handleChange} />
+                                <label>Main Diamond Amount</label>
+                                <input type="text" name="mainDiamondAmount" value={editedProduct.mainDiamondId} onChange={handleChange} />
+                            </div>
+                            
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Sub Diamond Amount</label>
+                                <input type="text" name="subDiamondAmount" value={editedProduct.subDiamondId} onChange={handleChange} />
+                            </div>
+                            
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Shell Amount</label>
+                                <input type="text" name="shellAmount" value={editedProduct.shellAmount} onChange={handleChange} />
+                            </div>
+                            
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Collection ID</label>
+                                <input type="text" name="collectionId" value={editedProduct.collectionId} onChange={handleChange} />
+                            </div>
+                            
+                            <div className="manager_manage_diamond_form_group">
+                                <label>Category ID</label>
+                                <input type="text" name="categoryID" value={editedProduct.categoryId} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_modal_actions">
                                 <button onClick={() => setEditMode(false)}>Cancel</button>
@@ -260,7 +320,7 @@ const ManagerProductList = () => {
                         </div>
                     </div>
                 </div>
-            )} */}
+            )}
         </div>
     );
 };

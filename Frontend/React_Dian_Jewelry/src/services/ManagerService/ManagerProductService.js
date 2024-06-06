@@ -8,7 +8,7 @@ const getProductDetail = async (id) => {
 };
 
 const updateProductById = (id, data) => {
-  return axios.put(`${API_BASE_URL}/employees/${id}`, data);
+  return axios.put(`${API_BASE_URL}/products/s${id}`, data);
 };
 
 const ShowAllProduct = async () => {
@@ -25,4 +25,17 @@ const createProduct = async (data) => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail,updateProductById };
+const getProductCategory = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/categories/${id}`);
+  return response.data;
+};
+const getProductCollection = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/collections/${id}`);
+  return response.data;
+};
+const getProductDiamond = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/diamonds/${id}`);
+  return response.data;
+};
+
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getProductCollection,getProductDiamond };
