@@ -36,15 +36,19 @@ function Invoice() {
                                 <tbody>
                                     <tr>
                                         <td>Super Luxury Wedding Ring</td>
-                                        <td>299.00$</td>
+                                        <td>$299.00</td>
                                     </tr>
                                     <tr>
                                         <td>Super Luxury Engagement Ring</td>
-                                        <td>299.00$</td>
+                                        <td>$299.00</td>
                                     </tr>
                                     <tr>
                                         <td>Discount</td>
-                                        <td>0$</td>
+                                        <td>$0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total:</td>
+                                        <td>$1000.00</td>
                                     </tr>
                                 </tbody>
                             </table>

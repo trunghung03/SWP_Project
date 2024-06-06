@@ -20,9 +20,9 @@ const ManagerAddEmployee = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEmployeeData({ ...setEmployeeData, [name]: value });
+        setEmployeeData(prevState => ({ ...prevState, [name]: value }));
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -58,7 +58,7 @@ const ManagerAddEmployee = () => {
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
                     <h1 className="manager_add_diamond_title">Add new employee</h1>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerDiamondList')}>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerEmployeeList')}>
                         &lt; Back
                     </button>
                 </div>
