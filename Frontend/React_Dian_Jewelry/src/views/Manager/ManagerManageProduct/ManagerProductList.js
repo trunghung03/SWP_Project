@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import { ShowAllProduct,getProductDetail, deleteProductById } from '../../../services/ManagerService/ManagerDiamondService.js';
+import { ShowAllProduct,getProductDetail, deleteProductById } from '../../../services/ManagerService/ManagerProductService.js';
 import logo from '../../../assets/img/logo.png';
 
 const ManagerProductList = () => {
@@ -154,7 +154,7 @@ const ManagerProductList = () => {
                 </div>
                 <hr className="manager_header_line"></hr>
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddDiamond')}>Add new product</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddProduct')}>Add new product</button>
                 </div>
 
                 {/* Table diamond list */}
