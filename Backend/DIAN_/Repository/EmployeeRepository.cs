@@ -29,6 +29,12 @@ namespace DIAN_.Repository
             return await _context.Employees.ToListAsync();
         }
 
+        public async Task<List<Employee>> GetEmployeeByRole(string role)
+        {
+            var employees = await _context.Employees.Where(c => c.Role == role).ToListAsync();
+            return employees;
+        }
+
         public async Task<Employee?> GetByEmailAsync(string email)
         {
             var employee = await _context.Employees.FirstOrDefaultAsync(c => c.Email == email);
@@ -44,6 +50,8 @@ namespace DIAN_.Repository
 
             return employee;
         }
+
+
 
         public async Task<Employee?> LoginAsync(LoginDto loginDto)
         {

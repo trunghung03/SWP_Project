@@ -10,7 +10,6 @@ namespace DIAN_.Mapper
         {
             return new ArticleDto
             {
-                ArticleID = article.ContentId,
                 Title = article.Title,
                 Content = article.Content,
                 CreatedOn = article.Date,
@@ -25,7 +24,6 @@ namespace DIAN_.Mapper
         {
             return new ArticleDetailDto
             {
-                ArticleID = article.ContentId,
                 Title = article.Title,
                 Content = article.Content,
                 CreatedOn = article.Date,
@@ -75,7 +73,6 @@ namespace DIAN_.Mapper
         {
             return new ArticleList
             {
-                ArticleID= articleDto.ContentId,
                 Title = articleDto.Title,
                 CreatedBy = articleDto.EmployeeNavigation.LastName,
                 Date = articleDto.Date,

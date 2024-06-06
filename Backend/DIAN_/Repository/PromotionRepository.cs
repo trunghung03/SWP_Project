@@ -73,6 +73,17 @@ namespace DIAN_.Repository
             return existingPromotion;
         }
 
+        public async Task<int> GetPromotionIdByCodeAsync(string code)
+        {
+            var promotionId = await _context.Promotions
+                .FromSqlRaw("SELECT PromotionId FROM Promotions WHERE PromotionCode = {0}", code)
+                .Select(p => p.PromotionId)
+                .FirstOrDefaultAsync();
+
+            return promotionId;
+        }
+
+
         public async Task<Promotion?> GetPromotionByIdAsync(int id)
         {
             var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
@@ -112,6 +123,18 @@ namespace DIAN_.Repository
             return null;
         }
 
+        public async Task<Promotion?> UpdatePromotionAmount(int id, UpdatePromotionAmountDto promotion)
+        {
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+            if (existingPromotion != null)
+            {
+                existingPromotion.Amount = promotion.Amount;
+                await _context.SaveChangesAsync();
+                return existingPromotion;
+            }
+            return null;
+        }
+
         public async Task<bool> CheckPromotion(string proCode)
         {
            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
@@ -121,5 +144,17 @@ namespace DIAN_.Repository
               }
             return true;
         }
+
+        public async Task<decimal?> ApplyPromotion(string proCode)
+        {
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            if(existingPromotion == null)
+            {
+                return null;
+            }
+            return existingPromotion.Amount;
+        }
+
+
     }
 }

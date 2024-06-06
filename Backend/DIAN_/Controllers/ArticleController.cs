@@ -19,6 +19,20 @@ namespace DIAN_.Controllers
             _articleRepository = articleRepository;
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetArticleById(int id)
+        {
+            var article = await _articleRepository.GetArticleByIdAsync(id);
+            if (article == null)
+            {
+                return NotFound("No article found with the given id");
+            }
+
+            var articleDto = article.ToArticleDetailDto();
+
+            return Ok(articleDto);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -42,7 +56,11 @@ namespace DIAN_.Controllers
             {
                 return NotFound("No articles found with the given title");
             }
-            return Ok(articles.Select(a => a.ToArticleList()));
+
+            // Assuming you have a ToArticleDetailDto extension method
+            var articleDtos = articles.Select(a => a.ToArticleDetailDto()).ToList();
+
+            return Ok(articleDtos);
         }
 
         [HttpPost("addcontent")]

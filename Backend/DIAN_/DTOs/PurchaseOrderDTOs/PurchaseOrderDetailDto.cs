@@ -1,4 +1,6 @@
-﻿namespace DIAN_.DTOs.PurchaseOrderDTOs
+﻿using DIAN_.Models;
+
+namespace DIAN_.DTOs.PurchaseOrderDTOs
 {
     public class PurchaseOrderDetailDto
     {
@@ -11,10 +13,12 @@
         public decimal TotalPrice { get; set; }
         public string OrderStatus { get; set; } = string.Empty;
         public int? PromotionId { get; set; }
+
+        //public Promotion MyProperty { get; set; }
         public bool? PayWithPoint { get; set; }
         public string Note { get; set; } = string.Empty;
-        public int SaleStaff { get; set; }
-        public int DeliveryStaff { get; set; }
+        public int? SaleStaff { get; set; }
+        public int? DeliveryStaff { get; set; }
 
     }
 }

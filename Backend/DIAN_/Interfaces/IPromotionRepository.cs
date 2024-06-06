@@ -20,12 +20,13 @@ namespace DIAN_.Interfaces
 
         Task<bool> CheckPromotion(string proCode);
 
+        Task<decimal?> ApplyPromotion(string proCode);
+
         Task<List<Promotion?>> SearchPromotionsByNameAsync(string name);
 
-        //Task<List<Promotion>> GetActivePromotionsAsync();
+        Task<int> GetPromotionIdByCodeAsync(string code);
 
-        // Task<List<Promotion>> GetPromotionsByPriceRangeAsync(decimal minPrice, decimal maxPrice);
-
-        //Task<List<Promotion>> GetPromotionsByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<Promotion?> UpdatePromotionAmount(int promoId, UpdatePromotionAmountDto promotion);
+       
     }
 }

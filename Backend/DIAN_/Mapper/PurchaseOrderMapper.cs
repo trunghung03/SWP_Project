@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs.PurchaseOrderDTOs;
+﻿using DIAN_.DTOs.OrderDetailDto;
+using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Models;
 
 namespace DIAN_.Mapper
@@ -11,8 +12,8 @@ namespace DIAN_.Mapper
             {
                 OrderId = order.OrderId,
                 UserId = order.UserId,
-                Name=order.Name,
-                PhoneNumber=order.PhoneNumber,
+                Name = order.Name,
+                PhoneNumber = order.PhoneNumber,
                 Date = order.Date,
                 PaymentMethod = order.PaymentMethod,
                 ShippingAddress = order.ShippingAddress,
@@ -24,6 +25,8 @@ namespace DIAN_.Mapper
             };
         }
 
+
+
         public static PurchaseOrderInfoDTO ToPurchaseOrderInfoDTO(this Purchaseorder order)
         {
             return new PurchaseOrderInfoDTO
@@ -32,7 +35,7 @@ namespace DIAN_.Mapper
                  //$"{order.User.LastName} {order.User.FirstName}",
                 FullName=order.Name,
                 PhoneNumber = order.User.PhoneNumber,
-                Address= order.User.Address,
+                Address = order.User.Address,
                 Note = order.Note,
                 PaymentMethod = order.PaymentMethod,
                 PromotionCode = order.Promotion?.Code ?? string.Empty,
@@ -48,7 +51,7 @@ namespace DIAN_.Mapper
             {
                 UserId = dto.UserId,
                 Date = dto.Date,
-                Name=dto.Name,
+                Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
                 PaymentMethod = dto.PaymentMethod,
                 ShippingAddress = dto.ShippingAddress,
@@ -62,23 +65,77 @@ namespace DIAN_.Mapper
             };
         }
 
-        public static void ToUpdatePurchaseOrder(this Purchaseorder order, UpdatePurchaseOrderDTO dto)
+        public static Orderdetail ToOrderDetail(CreateOrderDetailDto dto)
         {
-            order.UserId = dto.UserId;
-            order.Date = dto.Date;
-            order.Name = dto.Name;
-            order.PhoneNumber = dto.PhoneNumber;
-            order.PaymentMethod = dto.PaymentMethod;
-            order.ShippingAddress = dto.ShippingAddress;
-            order.TotalPrice = dto.TotalPrice;
-            order.OrderStatus = dto.OrderStatus;
-            order.PromotionId = dto.PromotionId ?? 0;
-            order.PayWithPoint = dto.PayWithPoint;
-            order.Note = dto.Note;
+            return new Orderdetail
+            {
+                OrderDetailId = dto.OrderId,
+                OrderId = dto.OrderId,
+                LineTotal = dto.LineTotal,
+                ProductId = dto.ProductId,
+                ShellMaterialId = dto.ShellMaterialId,
+                SubDiamondId = dto.SubDiamondId,
+                Size = dto.Size
+            };
         }
-        public static void ToUpdatePurchaseOrderStatus(this Purchaseorder order, string status)
+
+        //public static List<Orderdetail> ToOrderDetails(List<CreateOrderDetailDto> dtos)
+        //{
+        //    return dtos.Select(dto => ToOrderDetail(dto)).ToList();
+        //}
+
+        public static Purchaseorder ToUpdatePurchaseOrder(this Purchaseorder order, UpdatePurchaseOrderDTO dto)
         {
-            order.OrderStatus = status;
+            return new Purchaseorder
+            {
+                UserId = dto.UserId,
+                Date = dto.Date,
+                Name = dto.Name,
+                PhoneNumber = dto.PhoneNumber,
+                PaymentMethod = dto.PaymentMethod,
+                ShippingAddress = dto.ShippingAddress,
+                TotalPrice = dto.TotalPrice,
+                OrderStatus = dto.OrderStatus,
+                PromotionId = dto.PromotionId ?? 0,
+                PayWithPoint = dto.PayWithPoint,
+                Note = dto.Note
+            };
+        }
+        public static Purchaseorder ToUpdatePurchaseOrderStatus(this Purchaseorder order, string status)
+        {
+            return new Purchaseorder
+            {
+                OrderStatus = status
+            };
+        }
+
+
+        public static Purchaseorder ToUpdateTotalPrice(this Purchaseorder order, decimal totalPrice)
+        {
+            return new Purchaseorder
+            {
+                TotalPrice = totalPrice
+            };
+        }
+        public static PurchaseOrderDetailDto ToPurchaseOrderDetail(this Purchaseorder dto)
+        {
+            return new PurchaseOrderDetailDto
+        {
+            UserId = dto.UserId,
+            Date = DateTime.Now,
+            Name = dto.Name,
+            PhoneNumber = dto.PhoneNumber,
+            PaymentMethod = dto.PaymentMethod,
+            ShippingAddress = dto.ShippingAddress,
+            TotalPrice = dto.TotalPrice,
+            OrderStatus = dto.OrderStatus,
+            PromotionId = dto.PromotionId,
+            PayWithPoint = dto.PayWithPoint,
+            Note = dto.Note,
+            SaleStaff = dto.SaleStaff,
+            DeliveryStaff = dto.DeliveryStaff
+
+        };
         }
     }
 }

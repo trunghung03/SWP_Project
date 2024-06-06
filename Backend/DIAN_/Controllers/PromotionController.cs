@@ -10,18 +10,18 @@ namespace DIAN_.Controllers
 {
     [ApiController]
     [Route("api/promotions")]
-  
+
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionRepository;
 
-        public PromotionController(IPromotionRepository promotionRepository) 
+        public PromotionController(IPromotionRepository promotionRepository)
         {
             this._promotionRepository = promotionRepository;
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult>  GetAllPromotions()
+        public async Task<IActionResult> GetAllPromotions()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var promotions = await _promotionRepository.GetAllPromotionAsync();
-                if(promotions.Count == 0)
+                if (promotions.Count == 0)
                 {
                     return NotFound("Promotion does not exist");
                 }
@@ -85,7 +85,7 @@ namespace DIAN_.Controllers
             }
         }
 
-            [HttpPut("update/{id:int}")]
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdatePromotion([FromRoute] int id, [FromBody] UpdatePromotionRequestDto promotionDto)
         {
             try
@@ -128,5 +128,11 @@ namespace DIAN_.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        //[HttpGet("{code}")]
+        //public async Task<IActionResult> getPromotionByCode(string code)
+        //{
+        //    var promoton
+        //}
     }
 }
+
