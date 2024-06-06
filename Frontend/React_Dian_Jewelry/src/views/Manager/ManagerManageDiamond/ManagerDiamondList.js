@@ -102,7 +102,7 @@ const ManagerDiamondList = () => {
     };
 
     const handleUpdate = async () => {
-        const requiredFields = ['shape', 'color', 'clarity', 'cut', 'carat', 'cost', 'certificateScan', 'amountAvailable'];
+        const requiredFields = ['shape', 'color', 'clarity', 'cut', 'carat',    'certificateScan', 'amountAvailable'];
         for (let field of requiredFields) {
             if (!editedDiamond[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
@@ -168,7 +168,6 @@ const ManagerDiamondList = () => {
                                 <th>Clarity</th>
                                 <th>Carat</th>
                                 <th>Cut</th>
-                                <th>Cost</th>
                                 <th>Quantity</th>
                                 <th>Certificate</th>
                                 <th>Action</th>
@@ -184,7 +183,6 @@ const ManagerDiamondList = () => {
                                         <td>{item.clarity}</td>
                                         <td>{item.carat}</td>
                                         <td>{item.cut}</td>
-                                        <td>{item.cost}</td>
                                         <td>{item.amountAvailable}</td>
                                         <td>
                                             {item.certificateScan ? (
@@ -251,10 +249,6 @@ const ManagerDiamondList = () => {
                             <div className="manager_manage_diamond_form_group">
                                 <label>Cut</label>
                                 <input type="text" name="cut" value={editedDiamond.cut} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>Cost</label>
-                                <input type="text" name="cost" value={editedDiamond.cost} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
                                 <label>Quantity</label>
