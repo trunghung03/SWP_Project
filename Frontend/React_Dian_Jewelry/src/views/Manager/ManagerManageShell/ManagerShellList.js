@@ -105,7 +105,7 @@ const ManagerShellList = () => {
      const handleUpdate = async () => {
         const status = true;
         const price = 0;
-        const requiredFields = ['name', 'amountAvailable',price,status];
+        const requiredFields = ['name', 'amountAvailable'];
         for (let field of requiredFields) {
             if (!editedShell[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
