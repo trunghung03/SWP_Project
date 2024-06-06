@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using DIAN_.Services;
 using System.Text.Json.Serialization;
-using DIAN_.ExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +48,6 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
 var app = builder.Build();
 
@@ -64,9 +62,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-var logger = app.Services.GetRequiredService<ILoggerManager>();
-app.ConfigureExceptionHandler(logger);
 
 app.UseHttpsRedirection();
 

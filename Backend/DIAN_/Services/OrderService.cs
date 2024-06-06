@@ -41,7 +41,7 @@ namespace DIAN_.Services
             // Apply coupon again (for final submit?)
             if (!string.IsNullOrEmpty(orderDto.promotion?.Code))
             {
-                order.TotalPrice = await ApplyCoupon(orderDto.promotion.Code, order.TotalPrice);
+                order.TotalPrice = await ApplyCoupon(orderDto.promotion.Code);
                 var promotionId = await _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code);
                 order.PromotionId = promotionId;
                 // Update the promotion amount
@@ -95,20 +95,22 @@ namespace DIAN_.Services
 
             return createdOrder.ToPurchaseOrderDTO();
         }
-        public async Task<decimal> ApplyCoupon(string couponCode, decimal totalPrice)
+        public async Task<decimal> ApplyCoupon(string couponCode) //not checkout yet, getPromoCodeAmount
         {
-            var promotionId = await _promotionRepository.GetPromotionIdByCodeAsync(couponCode);
-            if (promotionId != 0)
+            var promotion = await _promotionRepository.GetPromotionByCodeAsync(couponCode);
+            if (promotion == null)
             {
-                var promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
-                if (promotion != null && promotion.Status)
+                return 0;
+            }
+            else
+            {
+                if (promotion.Status)
                 {
-                    totalPrice -= totalPrice * promotion.Amount;
+                    return promotion.Amount;
                 }
             }
-            return totalPrice;
+            return 0;
         }
-
         public async Task<decimal> CheckUsedPoints(int userId, decimal totalPrice, bool usePoints)
         {
             if (usePoints)
@@ -120,6 +122,11 @@ namespace DIAN_.Services
                 }
             }
             return totalPrice;
+        }
+
+        public Task<decimal> ApplyCoupon(string couponCode, decimal totalPrice)
+        {
+            throw new NotImplementedException();
         }
     }
 }
