@@ -1,34 +1,16 @@
 ﻿using DIAN_.Interfaces;
+using NLog;
+using static Microsoft.Extensions.Logging.ILogger;
 
 namespace DIAN_.Services
 {
     public class LoggerManager : ILoggerManager
     {
-        private readonly ILogger<LoggerManager> _logger;
-
-        public LoggerManager(ILogger<LoggerManager> logger)
-        {
-            _logger = logger;
-        }
-
-        public void LogInfo(string message)
-        {
-            _logger.LogInformation(message);
-        }
-
-        public void LogWarn(string message)
-        {
-            _logger.LogWarning(message);
-        }
-
-        public void LogDebug(string message)
-        {
-            _logger.LogDebug(message);
-        }
-
-        public void LogError(string message)
-        {
-            _logger.LogError(message);
-        }
+        private static NLog.ILogger logger = LogManager.GetCurrentClassLogger();
+        public void LogDebug(string message) => logger.Debug(message);
+        public void LogError(string message) => logger.Error(message);
+        public void LogInfo(string message) => logger.Info(message);
+        public void LogWarn(string message) => logger.Warn(message);
     }
+
 }

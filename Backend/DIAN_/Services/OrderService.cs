@@ -35,28 +35,21 @@ namespace DIAN_.Services
             _employeeRepository = employeeRepository;
         }
 
-        public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto)
+        public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
-           //var promotion = _promotionRepository.GetPromotionByCodeAsync(orderDto.promotion.Code).Result;
-           // // Apply coupon again (for final submit?)
-           // if (!string.IsNullOrEmpty(orderDto.promotion?.Code))
-           // {
-           //     orderModel.TotalPrice = ApplyCoupon(orderDto.promotion.Code).Result;
-           //     var promotionId = _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code).Result;
-           //     orderModel.PromotionId = promotionId;
-
-           //     // Update the promotion amount
-           //     var promotion = _promotionRepository.GetPromotionByIdAsync(promotionId).Result;
-           //     if (promotion != null && promotion.Amount > 0)
-           //     {
-           //         var updatePromotionAmountDto = new UpdatePromotionAmountDto
-           //         {
-           //             Amount = promotion.Amount - 1
-           //         };
-           //         _promotionRepository.UpdatePromotionAmount(promotionId, updatePromotionAmountDto).Wait();
-           //     }
-           // }
+            var promotion = _promotionRepository.GetPromotionByCodeAsync(promoCode).Result;
+            if (promotion != null)
+            {
+                orderModel.TotalPrice -= promotion.Amount*orderModel.TotalPrice;
+                orderModel.PromotionId = promotion.PromotionId;
+                promotion.Amount -= 1;
+                var updatePromotionAmountDto = new UpdatePromotionAmountDto
+                {
+                    Amount = promotion.Amount
+                };
+                _promotionRepository.UpdatePromotionAmount(promotion.PromotionId, updatePromotionAmountDto).Wait();
+            }
 
             // 2. Check for usedPoint
             bool usedPoints = orderModel.PayWithPoint.HasValue ? orderModel.PayWithPoint.Value : false;
@@ -66,9 +59,7 @@ namespace DIAN_.Services
                 var customer = _customerRepository.GetByIdAsync(orderModel.UserId).Result;
                 if (customer != null && customer.Points > 0)
                 {
-                    orderModel.TotalPrice = CheckUsedPoints(orderModel.UserId, orderModel.TotalPrice, usedPoints).Result;
-                    customer.Points = 0;
-
+                    orderModel.TotalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
                     UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
                     {
                         Point = 0
@@ -77,7 +68,6 @@ namespace DIAN_.Services
                     _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
                 }
             }
-
             // 3. Assign staff
             var salesStaff = _employeeRepository.GetEmployeeByRole("SalesStaff").Result;
             var deliveryStaff = _employeeRepository.GetEmployeeByRole("DeliveryStaff").Result;
@@ -119,6 +109,12 @@ namespace DIAN_.Services
                 if (customer != null && customer.Points > 0)
                 {
                     totalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
+                    UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
+                    {
+                        Point = 0
+                    };
+
+                    _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
                 }
             }
             return totalPrice;

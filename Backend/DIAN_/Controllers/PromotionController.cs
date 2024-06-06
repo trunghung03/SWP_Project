@@ -128,11 +128,6 @@ namespace DIAN_.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-        //[HttpGet("{code}")]
-        //public async Task<IActionResult> getPromotionByCode(string code)
-        //{
-        //    var promoton
-        //}
     }
 }
 

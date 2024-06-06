@@ -73,9 +73,9 @@ namespace DIAN_.Controllers
         }
 
         [HttpPost("duyen_test_order_logic")]
-        public ActionResult Checkout(CreatePurchaseOrderDTO purchaseOrderDTO)
+        public ActionResult Checkout(CreatePurchaseOrderDTO purchaseOrderDTO, string promotionCode)
         {
-            var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO);
+            var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
 
             return Ok(createdOrderResult);
         }
