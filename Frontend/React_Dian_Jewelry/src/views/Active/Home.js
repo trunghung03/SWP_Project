@@ -335,7 +335,7 @@ const Home = () => {
       <div className="brilliant_container">
         <h2 className="brilliant_title">Be Part Of Something Brilliant</h2>
         <p className="brilliant_description">
-          Follow us on Facebook & Instagram for gorgeous engagement rings and wedding bands, real life proposals, and dreamy wedding day inspiration. Be sure to tag us in your beautiful jewelry models pictures @dianjewelry for a chance to be featured.
+          Follow us on Instagram for gorgeous engagement rings and wedding bands, real life proposals, and dreamy wedding day inspiration. Be sure to tag us in your beautiful jewelry models or daily life with jewelry pictures and tag <a href="https://www.instagram.com/dian_jewelryy" target="_blank" rel="noopener noreferrer">@dianjewelry</a> for a chance to be featured on our website.
         </p>
         <div className="brilliant_grid">
           <div className="brilliant_column">
@@ -362,6 +362,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+
 
       <ScrollToTop />
     </div>

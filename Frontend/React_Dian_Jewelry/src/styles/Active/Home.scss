@@ -137,7 +137,7 @@ body {
 .diamond_shape_container {
     display: flex;
     justify-content: center;
-    margin: 50px -3%;
+    margin: 50px -2%;
 }
 
 .diamond_shape_grid {
@@ -715,7 +715,7 @@ ul {
 .brilliant_container {
     background-color: #1a2654;
     color: white;
-    padding: 40px 20px 90px 20px;
+    padding: 40px 4% 90px 4%;
     text-align: center;
     margin-top: 10px;
 }
@@ -729,6 +729,13 @@ ul {
 .brilliant_description {
     font-size: 16px;
     margin: 0 30px 30px 30px;
+}
+
+.brilliant_description a {
+    color: #ffffff; 
+    text-decoration: none; 
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .brilliant_grid {
