@@ -1,60 +1,131 @@
 ﻿using DIAN_.DTOs.WarrantyDTO;
-using DIAN_.Services;
+using DIAN_.Interfaces;
+using DIAN_.Mapper;
+using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
-using System.IO;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/warranties")]
     public class WarrantyController : ControllerBase
     {
-        private readonly PythonService _pythonService;
+        private readonly IWarrantyRepository _warrantyRepository;
 
-        public WarrantyController(PythonService pythonService)
+        public WarrantyController(IWarrantyRepository warrantyRepository)
         {
-            _pythonService = pythonService;
+            _warrantyRepository = warrantyRepository;
         }
 
-        [HttpPost("generate")]
-        public IActionResult GenerateWarranty([FromBody] WarrantyDTO data)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllWarranty()
         {
             try
             {
-                if (data == null)
+                if (!ModelState.IsValid)
                 {
-                    return BadRequest("Data is required.");
+                    return BadRequest(ModelState);
                 }
-
-                var warrantyData = new
+                var warranties = await _warrantyRepository.GetAllWarrantyAsync();
+                if(warranties.Count == 0)
                 {
-                    data.CustomerName,
-                    data.DateOfPurchase,
-                    Service = "Diamond Insurance",
-                    data.IdNumber,
-                    data.WarrantyPeriodStart,
-                    data.WarrantyPeriodEnd
-                };
-
-                var jsonData = JsonConvert.SerializeObject(warrantyData);
-                Console.WriteLine("JSON Data before passing: " + jsonData); // Log the JSON data before passing
-
-                var pdfPath = _pythonService.ExecutePythonScript(jsonData);
-
-                if (System.IO.File.Exists(pdfPath))
-                {
-                    var fileBytes = System.IO.File.ReadAllBytes(pdfPath);
-                    return File(fileBytes, "application/pdf", Path.GetFileName(pdfPath));
+                    return NotFound("Warranty does not exist");
                 }
-
-                return BadRequest("Failed to generate warranty.");
+                return Ok(warranties);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error generating PDF: {ex.Message}");
-                return StatusCode(500, $"Error generating PDF: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetWarrantyById([FromRoute] int id)
+        {
+            try
+            {
+                var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
+                if (warranty == null)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranty.ToWarrantyDetailDto());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPost("addwarranty")]
+        public async Task<IActionResult> CreateWarranty([FromBody] CreateWarrantyRequestDto warrantyDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Check if a warranty with the same OrderDetailId already exists
+                var existingWarranty = await _warrantyRepository.GetWarrantyByIdAsync(warrantyDto.OrderDetailId);
+                if (existingWarranty != null)
+                {
+                    return BadRequest("Warranty already exists");
+                }
+
+                var warrantyModel = warrantyDto.ToWarrantyFromCreateDto();
+                await _warrantyRepository.CreateWarrantyAsync(warrantyModel);
+                return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
+            }
+            catch (Exception)
+            {
+                // Log the exception message
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdateWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var warranty = await _warrantyRepository.UpdateWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+                if (warranty == null)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranty.ToWarrantyDetailDto());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeleteWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var warranty = await _warrantyRepository.DeleteWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+                if (warranty == null)
+                {
+                    return NotFound("Warranty does not exist");
+                }
+                return Ok(warranty.ToWarrantyDetailDto());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
             }
         }
     }
