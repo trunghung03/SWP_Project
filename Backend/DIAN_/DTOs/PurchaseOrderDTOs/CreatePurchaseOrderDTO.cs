@@ -5,7 +5,6 @@ namespace DIAN_.DTOs.PurchaseOrderDTOs
 {
     public class CreatePurchaseOrderDTO
     {
-        //public List<CreateOrderDetailDto> OrderDetails { get; set; } = new List<CreateOrderDetailDto>();
         public int UserId { get; set; }
         public DateTime Date { get; set; }
         public string Name { get; set; } = string.Empty;

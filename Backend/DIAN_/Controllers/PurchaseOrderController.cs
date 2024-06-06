@@ -18,14 +18,12 @@ namespace DIAN_.Controllers
 
         private readonly IOrderService _orderService;
 
-        private readonly ApplicationDbContext _context;
 
         public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
             ApplicationDbContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
-            _context = context;
         }
 
         [HttpGet("all")]
@@ -47,8 +45,8 @@ namespace DIAN_.Controllers
             }
             return Ok(purchaseOrderInfo);
         }
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
+        [HttpPost("creaaaa")]
+        public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
             var order = purchaseOrderDTO.ToCreatePurchaseOrder();
             var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
@@ -72,12 +70,13 @@ namespace DIAN_.Controllers
         }
 
         [HttpPost("duyen_test_order_logic")]
-        public async Task<ActionResult> Checkout([FromBody] CreatePurchaseOrderDTO purchaseOrderDTO)
+        public ActionResult Checkout(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var createdOrderResult = await _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO);
+            var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO);
 
             return Ok(createdOrderResult);
         }
+
 
         // Endpoint to view orders by status
         [HttpGet("status/{status}")]

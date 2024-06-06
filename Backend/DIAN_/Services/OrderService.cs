@@ -35,35 +35,38 @@ namespace DIAN_.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<PurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto)
+        public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto)
         {
-            var order = orderDto.ToCreatePurchaseOrder();
+            var orderModel = orderDto.ToCreatePurchaseOrder();
+
             // Apply coupon again (for final submit?)
             if (!string.IsNullOrEmpty(orderDto.promotion?.Code))
             {
-                order.TotalPrice = await ApplyCoupon(orderDto.promotion.Code);
-                var promotionId = await _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code);
-                order.PromotionId = promotionId;
+                orderModel.TotalPrice = ApplyCoupon(orderDto.promotion.Code).Result;
+                var promotionId = _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code).Result;
+                orderModel.PromotionId = promotionId;
+
                 // Update the promotion amount
-                var promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
-                if(promotion != null && promotion.Amount > 0)
+                var promotion = _promotionRepository.GetPromotionByIdAsync(promotionId).Result;
+                if (promotion != null && promotion.Amount > 0)
                 {
                     var updatePromotionAmountDto = new UpdatePromotionAmountDto
                     {
                         Amount = promotion.Amount - 1
                     };
-                    await _promotionRepository.UpdatePromotionAmount(promotionId, updatePromotionAmountDto);
+                    _promotionRepository.UpdatePromotionAmount(promotionId, updatePromotionAmountDto).Wait();
                 }
             }
+
             // 2. Check for usedPoint
-            bool usedPoints = order.PayWithPoint.HasValue ? order.PayWithPoint.Value : false;
+            bool usedPoints = orderModel.PayWithPoint.HasValue ? orderModel.PayWithPoint.Value : false;
 
             if (usedPoints)
             {
-                var customer = await _customerRepository.GetByIdAsync(order.UserId);
+                var customer = _customerRepository.GetByIdAsync(orderModel.UserId).Result;
                 if (customer != null && customer.Points > 0)
                 {
-                    order.TotalPrice = await CheckUsedPoints(order.UserId, order.TotalPrice, usedPoints);
+                    orderModel.TotalPrice = CheckUsedPoints(orderModel.UserId, orderModel.TotalPrice, usedPoints).Result;
                     customer.Points = 0;
 
                     UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
@@ -71,30 +74,27 @@ namespace DIAN_.Services
                         Point = 0
                     };
 
-                    await _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto);
+                    _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
                 }
             }
+
             // 3. Assign staff
-            var salesStaff = await _employeeRepository.GetEmployeeByRole("SalesStaff");
-            var deliveryStaff = await _employeeRepository.GetEmployeeByRole("DeliveryStaff");
+            var salesStaff = _employeeRepository.GetEmployeeByRole("SalesStaff").Result;
+            var deliveryStaff = _employeeRepository.GetEmployeeByRole("DeliveryStaff").Result;
 
             var random = new Random();
             var randomSalesStaff = salesStaff[random.Next(salesStaff.Count)];
             var randomDeliveryStaff = deliveryStaff[random.Next(deliveryStaff.Count)];
 
-            order.SaleStaff = randomSalesStaff.EmployeeId;
-            order.DeliveryStaff = randomDeliveryStaff.EmployeeId;
+            orderModel.SaleStaff = randomSalesStaff.EmployeeId;
+            orderModel.DeliveryStaff = randomDeliveryStaff.EmployeeId;
+
+            var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
 
             //convert to dto
-            var createdOrder = await _purchaseOrderRepository.CreatePurchaseOrderAsync(order);
-
-            if (createdOrder == null)
-            {
-                throw new Exception("The order could not be created.");
-            }
-
-            return createdOrder.ToPurchaseOrderDTO();
+            return orderToDto.ToPurchaseOrderDTO();
         }
+
         public async Task<decimal> ApplyCoupon(string couponCode) //not checkout yet, getPromoCodeAmount
         {
             var promotion = await _promotionRepository.GetPromotionByCodeAsync(couponCode);
