@@ -21,3 +21,23 @@ export const createOrderDetails = async (orderDetails) => {
         throw error;
     }
 };
+
+export const getPurchaseOrderById = async (orderId) => {
+    try {
+        const response = await axios.get(`${API_URL}/purchaseorders/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching purchase order:', error);
+        throw error;
+    }
+};
+
+export const getOrderDetailsByOrderId = async (orderId) => {
+    try {
+        const response = await axios.get(`${API_URL}/orderdetails`, { params: { orderId } });
+        return response.data.filter(detail => detail.orderId === orderId);
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+        throw error;
+    }
+};

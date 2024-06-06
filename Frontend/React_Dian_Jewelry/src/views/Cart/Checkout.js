@@ -3,15 +3,15 @@ import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/Cart/Checkout.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { createPurchaseOrder, createOrderDetails } from '../../services/CheckoutService.js';
+import { useCart } from '../../services/CartService';
 
 function Checkout() {
     const navItems = ['Home', 'Cart', 'Checkout'];
     const navigate = useNavigate();
-    const location = useLocation();
     const customerId = localStorage.getItem('customerId');
     const [cartItems, setCartItems] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -25,6 +25,8 @@ function Checkout() {
     });
     const [discount, setDiscount] = useState(10);
     const [totalPrice, setTotalPrice] = useState(170);
+    const [loading, setLoading] = useState(false);
+    const { setCartItems: updateCartContext } = useCart();
 
     useEffect(() => {
         const cartKey = `cartItems${customerId}`;
@@ -108,6 +110,8 @@ function Checkout() {
             return;
         }
 
+        setLoading(true);
+
         const userId = parseInt(localStorage.getItem('customerId'), 10);
         const date = new Date().toISOString();
         const orderData = {
@@ -126,8 +130,6 @@ function Checkout() {
             deliveryStaff: 1
         };
 
-        console.log('Order Data:', orderData);
-
         try {
             const createdOrder = await createPurchaseOrder(orderData);
             const orderId = createdOrder.orderId;
@@ -135,7 +137,7 @@ function Checkout() {
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
-                    lineTotal: totalPrice, 
+                    lineTotal: item.price, 
                     productId: item.productId,
                     shellMaterialId: item.selectedShellId,
                     subDiamondId: item.diamondId,
@@ -145,14 +147,26 @@ function Checkout() {
             });
 
             await Promise.all(orderDetailsPromises);
-            
+
+            localStorage.setItem('orderId', orderId);
+            localStorage.setItem('orderDate', date);
+            localStorage.setItem('orderTotalPrice', totalPrice);
+            localStorage.setItem('orderDiscount', discount);
+
+            const cartKey = `cartItems${customerId}`;
+            localStorage.removeItem(cartKey);
+
+            // Clear cart items in the context
+            updateCartContext([]);
+
             swal({
                 title: "Order successfully!",
                 text: "Thank you for your order.",
                 icon: "success",
                 button: "OK",
             });
-            navigate('/invoice', { state: { paymentMethod, usePoints, cartItems } });
+            setLoading(false);
+            navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems } });
         } catch (error) {
             console.error('Error creating purchase order:', error);
             if (error.response) {
@@ -164,6 +178,7 @@ function Checkout() {
                 icon: "error",
                 button: "OK",
             });
+            setLoading(false);
         }
     };
 
@@ -321,7 +336,10 @@ function Checkout() {
                         <hr />
                         <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>{totalPrice}$</strong></span></p>
                     </div>
-                    <button onClick={handleInvoice} className="checkout_summary_checkout">Confirm order</button>
+                    <button onClick={handleInvoice} className="checkout_summary_checkout" disabled={loading}>
+                        {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}
+                        Confirm order
+                    </button>
                     <div className="checkout_summary_service">
                         <p className="24/7_service"><strong>24/7 Customer Service</strong></p>
                         <p className="phone_service"><i className="fas fa-phone"></i> 0912 345 678</p>
