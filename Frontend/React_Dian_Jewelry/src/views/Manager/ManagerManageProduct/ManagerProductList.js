@@ -136,7 +136,7 @@ const ManagerProductList = () => {
     return (
         <div className="manager_manage_diamond_all_container">
             <div className="manager_manage_diamond_sidebar">
-                <ManagerSidebar currentPage="manager_manage_diamond" />
+                <ManagerSidebar currentPage="manager_manage_product" />
             </div>
             <div className="manager_manage_diamond_content">
                 <div className="manager_manage_diamond_header">
@@ -154,7 +154,7 @@ const ManagerProductList = () => {
                 </div>
                 <hr className="manager_header_line"></hr>
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddDiamond')}>Add new diamond</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddDiamond')}>Add new product</button>
                 </div>
 
                 {/* Table diamond list */}
@@ -169,6 +169,7 @@ const ManagerProductList = () => {
                                 <th>Image</th>
                                 <th>Category</th>
                                 <th>Collection</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
