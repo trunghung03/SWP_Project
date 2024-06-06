@@ -6,25 +6,25 @@ namespace DIAN_.Mapper
 {
     public static class PurchaseOrderMapper
     {
-        public static PurchaseOrderDTO ToPurchaseOrderDTO(this Purchaseorder dto)
+        public static PurchaseOrderDTO ToPurchaseOrderDTO(this Purchaseorder order)
         {
             return new PurchaseOrderDTO
             {
-                UserId = dto.UserId,
-                Date = dto.Date,
-                Name = dto.Name,
-                PhoneNumber = dto.PhoneNumber,
-                PaymentMethod = dto.PaymentMethod,
-                ShippingAddress = dto.ShippingAddress,
-                TotalPrice = dto.TotalPrice,
-                OrderStatus = dto.OrderStatus,
-                promotion = dto.Promotion,
-                PayWithPoint = dto.PayWithPoint,
-                Note = dto.Note,
-                SaleStaff = dto.SaleStaff ?? 0,
-                DeliveryStaff = dto.DeliveryStaff ?? 0
+                OrderId = order.OrderId,
+                UserId = order.UserId,
+                Name = order.Name,
+                PhoneNumber = order.PhoneNumber,
+                Date = order.Date,
+                PaymentMethod = order.PaymentMethod,
+                ShippingAddress = order.ShippingAddress,
+                TotalPrice = order.TotalPrice,
+                OrderStatus = order.OrderStatus,
+                PromotionId = order.PromotionId,
+                PayWithPoint = order.PayWithPoint,
+                Note = order.Note
             };
         }
+
 
 
         public static PurchaseOrderInfoDTO ToPurchaseOrderInfoDTO(this Purchaseorder order)
@@ -45,14 +45,14 @@ namespace DIAN_.Mapper
             return new Purchaseorder
             {
                 UserId = dto.UserId,
-                Date = DateTime.Now,
+                Date = dto.Date,
                 Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
                 PaymentMethod = dto.PaymentMethod,
                 ShippingAddress = dto.ShippingAddress,
                 TotalPrice = dto.TotalPrice,
-                OrderStatus = "Unpaid",
-                PromotionId = dto.promotion?.PromotionId,
+                OrderStatus = dto.OrderStatus,
+                PromotionId = dto.PromotionId,
                 PayWithPoint = dto.PayWithPoint,
                 Note = dto.Note,
                 SaleStaff = dto.SaleStaff,

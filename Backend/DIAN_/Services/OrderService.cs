@@ -38,25 +38,25 @@ namespace DIAN_.Services
         public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto)
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
+           //var promotion = _promotionRepository.GetPromotionByCodeAsync(orderDto.promotion.Code).Result;
+           // // Apply coupon again (for final submit?)
+           // if (!string.IsNullOrEmpty(orderDto.promotion?.Code))
+           // {
+           //     orderModel.TotalPrice = ApplyCoupon(orderDto.promotion.Code).Result;
+           //     var promotionId = _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code).Result;
+           //     orderModel.PromotionId = promotionId;
 
-            // Apply coupon again (for final submit?)
-            if (!string.IsNullOrEmpty(orderDto.promotion?.Code))
-            {
-                orderModel.TotalPrice = ApplyCoupon(orderDto.promotion.Code).Result;
-                var promotionId = _promotionRepository.GetPromotionIdByCodeAsync(orderDto.promotion.Code).Result;
-                orderModel.PromotionId = promotionId;
-
-                // Update the promotion amount
-                var promotion = _promotionRepository.GetPromotionByIdAsync(promotionId).Result;
-                if (promotion != null && promotion.Amount > 0)
-                {
-                    var updatePromotionAmountDto = new UpdatePromotionAmountDto
-                    {
-                        Amount = promotion.Amount - 1
-                    };
-                    _promotionRepository.UpdatePromotionAmount(promotionId, updatePromotionAmountDto).Wait();
-                }
-            }
+           //     // Update the promotion amount
+           //     var promotion = _promotionRepository.GetPromotionByIdAsync(promotionId).Result;
+           //     if (promotion != null && promotion.Amount > 0)
+           //     {
+           //         var updatePromotionAmountDto = new UpdatePromotionAmountDto
+           //         {
+           //             Amount = promotion.Amount - 1
+           //         };
+           //         _promotionRepository.UpdatePromotionAmount(promotionId, updatePromotionAmountDto).Wait();
+           //     }
+           // }
 
             // 2. Check for usedPoint
             bool usedPoints = orderModel.PayWithPoint.HasValue ? orderModel.PayWithPoint.Value : false;

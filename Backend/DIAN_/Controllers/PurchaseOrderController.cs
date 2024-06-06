@@ -18,12 +18,15 @@ namespace DIAN_.Controllers
 
         private readonly IOrderService _orderService;
 
+        private readonly ApplicationDbContext _context;
+
 
         public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
             ApplicationDbContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
+            _context = context;
         }
 
         [HttpGet("all")]
