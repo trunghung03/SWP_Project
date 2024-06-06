@@ -56,7 +56,7 @@ const FooterComponent = () => {
                             <ul className="footer_content">
                                 <li><a href="/FAQs">FAQs</a></li>
                                 <li><a href="/orderHistory">Tracking orders</a></li>
-                                <li><a href="#">Promotional codes</a></li>
+                                <li><a href="/editProfile">Edit profile</a></li>
                             </ul>
                             <br />
                             <h6>Collections</h6>
@@ -77,10 +77,10 @@ const FooterComponent = () => {
                             <br />
                             <h6>Social Media</h6>
                             <ul className="footer_content social_media_icon" style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '20px' }}>
-                                <li><a href="#"><i className="fb fab fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i className="ins fab fa-instagram"></i></a></li>
-                                <li><a href="https://www.tiktok.com/@dianjewelry"><i className="tik fab fa-tiktok"></i></a></li>
-                                <li><a href="/home"><i className="gg fab fa-google"></i></a></li>
+                                <li><a href="#"><i className="fb fab fa-facebook-f" target="_blank"></i></a></li>
+                                <li><a href="https://www.instagram.com/dian_jewelryy" target="_blank"><i className="ins fab fa-instagram"></i></a></li>
+                                <li><a href="https://www.tiktok.com/@dianjewelry" target="_blank"><i className="tik fab fa-tiktok"></i></a></li>
+                                <li><a href="/home" target="_blank"><i className="gg fab fa-google"></i></a></li>
                             </ul>
                         </div>
                     </div>
