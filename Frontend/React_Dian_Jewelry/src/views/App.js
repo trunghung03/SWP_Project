@@ -45,7 +45,7 @@ import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmplo
 import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
 import ManagerAddShell from './Manager/ManagerManageShell/ManagerAddShell';
 import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmployee';
-
+import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct';
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgotPassword' || location.pathname === '/resetPassword';
@@ -103,7 +103,7 @@ function App() {
             <Route path="/managerShellList" element={<ManagerShellList />} />
             <Route path="/managerAddEmployee" element={<ManagerAddEmployee />} />
             <Route path="/managerAddShell" element={<ManagerAddShell />} />
-            
+            <Route path="/managerAddProduct" element={<ManagerAddProduct/>} />
             {/* Sales Staff */}
             <Route path="/salesStaffOrderList" element={<SSOrderList />} />
             <Route path="/salesStaffContentList" element={<SSContentList />} />
