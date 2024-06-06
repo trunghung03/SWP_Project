@@ -20,12 +20,15 @@ namespace DIAN_.Controllers
 
         private readonly ApplicationDbContext _context;
 
+        private readonly ILoggerManager _logger;
+
         public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
-            ApplicationDbContext context)
+            ApplicationDbContext context, ILoggerManager logger)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet("all")]
