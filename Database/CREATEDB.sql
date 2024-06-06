@@ -1,23 +1,3 @@
-USE master;
-GO
-
--- Check if the database exists
-IF EXISTS(SELECT * FROM sys.databases WHERE name = 'DIAN')
-BEGIN
-    -- If the database exists, drop it
-    ALTER DATABASE DIAN SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE DIAN;
-END
-GO
-
--- Create the new database
-CREATE DATABASE DIAN;
-GO
-
--- Switch context to the new database
-USE DIAN;
-GO
-
 -- User table
 CREATE TABLE CUSTOMER (
     CustomerID INT PRIMARY KEY IDENTITY(1,1),

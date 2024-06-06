@@ -14,7 +14,14 @@ const HeaderComponent = () => {
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');
-        const cartItems = localStorage.getItem('cartItems');
+
+        const allCartItems = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('cartItems')) {
+                allCartItems[key] = localStorage.getItem(key);
+            }
+        }
 
         localStorage.clear();
 
@@ -23,8 +30,8 @@ const HeaderComponent = () => {
             localStorage.setItem('rememberedPassword', rememberedPassword);
         }
 
-        if (cartItems) {
-            localStorage.setItem('cartItems', cartItems);
+        for (const key in allCartItems) {
+            localStorage.setItem(key, allCartItems[key]);
         }
 
         navigate('/login');
