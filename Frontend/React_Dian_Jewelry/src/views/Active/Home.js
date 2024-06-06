@@ -19,7 +19,16 @@ import bracelet from '../../assets/img/bracelet.jpg';
 import weddingRing from '../../assets/img/weddingRing.jpg';
 import weddingEarings from '../../assets/img/weddingEarings.jpg';
 import weddingBracelet from '../../assets/img/weddingBracelet.webp';
-import diamond_shape from '../../assets/img/shape.png';
+import round from '../../assets/img/round.png';
+import oval from '../../assets/img/oval.png';
+import emerald from '../../assets/img/emerald.png';
+import cushion from '../../assets/img/cushion.png';
+import pear from '../../assets/img/pear.png';
+import radiant from '../../assets/img/radiant.png';
+import princess from '../../assets/img/princess.png';
+import marquise from '../../assets/img/marquise.png';
+import asscher from '../../assets/img/asscher.png';
+import heart from '../../assets/img/heart.png';
 import slide3 from '../../assets/img/slide1.png';
 import slide2 from '../../assets/img/slide2.png';
 import slide1 from '../../assets/img/slide3.png';
@@ -96,6 +105,19 @@ const Home = () => {
   const handleNavigate = (path, state) => {
     navigate(path, { state });
   };
+
+  const diamondShapes = [
+    { img: round, name: 'Round' },
+    { img: oval, name: 'Oval' },
+    { img: emerald, name: 'Emerald' },
+    { img: cushion, name: 'Cushion' },
+    { img: pear, name: 'Pear' },
+    { img: radiant, name: 'Radiant' },
+    { img: princess, name: 'Princess' },
+    { img: marquise, name: 'Marquise' },
+    { img: asscher, name: 'Asscher' },
+    { img: heart, name: 'Heart' },
+  ];
 
   const cardData = [
     { name: "Ring", img: ringCategory, category: 'ring' },
@@ -189,8 +211,17 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="diamond_shape text-center">
-        <img src={diamond_shape} alt="Diamond shape" />
+      <div className="diamond_shape_container">
+        <div className="diamond_shape_grid">
+          {diamondShapes.map((shape, index) => (
+            <div key={index} className="diamond_shape_column" onClick={() => handleNavigate('/shape', { shape: shape.name })}>
+              <a href="#">
+                <img src={shape.img} alt={shape.name} className="diamond_shape_image" />
+                <p className="diamond_shape_name">{shape.name}</p>
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Feature jewelry  */}
@@ -217,7 +248,7 @@ const Home = () => {
 
       {/* Collection  */}
       <div className="collections_container text-center">
-        <h1 className="collections_title">OUR COLLECTIONS</h1>
+        <h1 className="collections_title">Our Collections</h1>
         <div className="collections_grid">
           <div className="collection_column1">
             <div onClick={() => handleNavigate('/collection', { collection: 'luxuriousLustre' })} className="collection_item">
@@ -308,21 +339,25 @@ const Home = () => {
         </p>
         <div className="brilliant_grid">
           <div className="brilliant_column">
-            <div className="brilliant_image_large">
+            <div className="brilliant_image_large" onClick={() => window.open('https://www.instagram.com/dian_jewelryy', '_blank')}>
               <img src={brilliant1} alt="Image 1" />
+              <i className="fab fa-instagram brilliant_icon"></i>
             </div>
           </div>
           <div className="brilliant_column">
-            <div className="brilliant_image_small">
+            <div className="brilliant_image_small" onClick={() => window.open('https://www.instagram.com/dian_jewelryy', '_blank')}>
               <img src={brilliant2} alt="Image 2" />
+              <i className="fab fa-instagram brilliant_icon"></i>
             </div>
-            <div className="brilliant_image_small">
+            <div className="brilliant_image_small" onClick={() => window.open('https://www.instagram.com/dian_jewelryy', '_blank')}>
               <img src={brilliant3} alt="Image 3" />
+              <i className="fab fa-instagram brilliant_icon"></i>
             </div>
           </div>
           <div className="brilliant_column">
-            <div className="brilliant_image_large">
+            <div className="brilliant_image_large" onClick={() => window.open('https://www.instagram.com/dian_jewelryy', '_blank')}>
               <img src={brilliant4} alt="Image 4" />
+              <i className="fab fa-instagram brilliant_icon"></i>
             </div>
           </div>
         </div>

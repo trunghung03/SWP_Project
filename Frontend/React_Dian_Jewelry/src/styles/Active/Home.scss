@@ -47,12 +47,12 @@ body {
     color: white;
 }
 
-.slide-text{
+.slide-text {
     font-size: 19px;
     font-weight: bold;
 }
 
-.slide-title{
+.slide-title {
     font-weight: bold;
 }
 
@@ -72,6 +72,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -132,10 +133,58 @@ body {
 
 // End slide container 
 
-.diamond_shape img {
-    width: 95%;
-    margin: 50px 0 20px 0;
+// Shape 
+.diamond_shape_container {
+    display: flex;
+    justify-content: center;
+    margin: 50px -3%;
 }
+
+.diamond_shape_grid {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.diamond_shape_column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 10%;
+    margin: 0 5px;
+    transition: transform 0.3s ease;
+}
+
+.diamond_shape_column a {
+    text-decoration: none;
+}
+
+.diamond_shape_image {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.diamond_shape_name {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.diamond_shape_column:hover .diamond_shape_image {
+    transform: translateY(-5px) scale(1.1) rotate(5deg);
+}
+
+.diamond_shape_column:hover .diamond_shape_name {
+    transform: translateY(-5px) scale(1.2);
+    color: #0f2770; 
+}
+
+
+// End shape 
+
 
 /* Feature jewelry */
 .featured_jewelry_container {
@@ -227,7 +276,7 @@ body {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.home_product_card:hover .home_product_name{
+.home_product_card:hover .home_product_name {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -706,17 +755,41 @@ ul {
     overflow: hidden;
 }
 
+.brilliant_image_large,
+.brilliant_image_small {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
 .brilliant_image_large img,
 .brilliant_image_small img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
 }
 
 .brilliant_image_large:hover img,
 .brilliant_image_small:hover img {
-    transform: scale(1.05);
+    filter: brightness(50%);
 }
 
-// End brilliant 
+.brilliant_icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    font-size: 40px;
+    color: white;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    opacity: 0;
+}
+
+.brilliant_image_large:hover .brilliant_icon,
+.brilliant_image_small:hover .brilliant_icon {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+// End brilliant

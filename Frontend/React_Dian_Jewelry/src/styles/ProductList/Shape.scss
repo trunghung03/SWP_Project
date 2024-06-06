@@ -1,0 +1,51 @@
+// Shape 
+.s_diamond_shape_container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 2% 30px 2%;
+}
+
+.s_diamond_shape_grid {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.s_diamond_shape_column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 10%;
+    margin: 0 5px;
+    transition: transform 0.3s ease;
+}
+
+.s_diamond_shape_column a {
+    text-decoration: none;
+}
+
+.s_diamond_shape_image {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.s_diamond_shape_name {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.s_diamond_shape_column:hover .s_diamond_shape_image {
+    transform: translateY(-5px) scale(1.1) rotate(5deg);
+}
+
+.s_diamond_shape_column:hover .s_diamond_shape_name {
+    transform: translateY(-5px) scale(1.2);
+    color: #0f2770; 
+}
+
+
+// End shape 
