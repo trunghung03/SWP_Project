@@ -24,6 +24,8 @@ namespace DIAN_.DTOs.DiamondDto
         [Range(0.01, 40.00)]
         public decimal Carat { get; set; }
 
+        
+
         [Required]
         public string CertificateScan { get; set; } = string.Empty;
 

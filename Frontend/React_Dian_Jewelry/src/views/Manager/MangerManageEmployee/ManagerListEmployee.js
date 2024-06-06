@@ -104,7 +104,7 @@ const ManagerEmployeeList = () => {
 
      const handleUpdate = async () => {
         const status = true;
-        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address','phoneNumber',status];
+        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address','phoneNumber'];
         for (let field of requiredFields) {
             if (!editedEmployee[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
@@ -138,7 +138,7 @@ const ManagerEmployeeList = () => {
     return (
         <div className="manager_manage_diamond_all_container">
             <div className="manager_manage_diamond_sidebar">
-                <ManagerSidebar currentPage="manager_manage_shell" />
+                <ManagerSidebar currentPage="manager_manage_employee" />
             </div>
             <div className="manager_manage_diamond_content">
                 <div className="manager_manage_diamond_header">
@@ -172,16 +172,18 @@ const ManagerEmployeeList = () => {
                                 <th>First name</th>
                                 <th>Addresss</th>
                                 <th>Phone number</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {employeeList.length > 0 ? (
                                 currentEmployee.map((item) => (
                                     <tr key={item.employeeId}>
+                                        <td>{item.employeeId}</td>
                                         <td>{item.role}</td>
                                         <td>{item.email}</td>
                                         <td>{item.lastName}</td>
-                                        <td>{item.firstname}</td>
+                                        <td>{item.firstName}</td>
                                         <td>{item.address}</td>
                                         <td>{item.phoneNumber}</td>
                                         <td>

@@ -6,7 +6,6 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../../styles/Cart/Checkout.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { createPurchaseOrder, createOrderDetails } from '../../services/CheckoutService.js';
 
 function Checkout() {
     const navItems = ['Home', 'Cart', 'Checkout'];
@@ -57,8 +56,8 @@ function Checkout() {
         navigate('/cart');
     };
 
-    const handleInvoice = async () => {
-        const { fullName, phone, address, note } = formData;
+    const handleInvoice = () => {
+        const { fullName, phone, address } = formData;
 
         if (!fullName || !phone || !address) {
             swal({
@@ -101,63 +100,7 @@ function Checkout() {
             return;
         }
 
-        const userId = parseInt(localStorage.getItem('customerId'), 10);
-        const date = new Date().toISOString();
-        const orderData = {
-            userId: userId,
-            date: date,
-            name: fullName,
-            phoneNumber: phone,
-            paymentMethod: paymentMethod,
-            shippingAddress: address,
-            totalPrice: totalPrice,
-            orderStatus: "Pending",
-            promotionId: null,
-            payWithPoint: usePoints,
-            note: note || "None",
-            saleStaff: 1,
-            deliveryStaff: 1
-        };
-
-        console.log('Order Data:', orderData);
-
-        try {
-            const createdOrder = await createPurchaseOrder(orderData);
-            const orderId = createdOrder.orderId;
-
-            const orderDetailsPromises = cartItems.map(item => {
-                const orderDetail = {
-                    orderId: orderId,
-                    lineTotal: totalPrice, 
-                    productId: item.productId,
-                    shellMaterialId: item.selectedShellId,
-                    subDiamondId: item.diamondId,
-                    size: parseInt(item.selectedSize, 10)
-                };
-                return createOrderDetails(orderDetail);
-            });
-
-            await Promise.all(orderDetailsPromises);
-            
-            swal({
-                title: "Order succesfully!",
-                text: "Thank you for your order.",
-                icon: "success",
-                button: "OK",
-            });
-            navigate('/invoice', { state: { paymentMethod, usePoints, cartItems } });
-        } catch (error) {
-            console.error('Error creating purchase order:', error);
-            if (error.response) {
-                console.error('Server responded with an error:', error.response.data);
-            }
-            swal({
-                title: "Error processing order!",
-                text: "There was an error processing your order. Please try again.",
-                icon: "error",
-                button: "OK",
-            });
-        }
+        navigate('/invoice', { state: { paymentMethod, usePoints, cartItems } });
     };
 
     const handlePointsClick = () => {
@@ -215,7 +158,6 @@ function Checkout() {
                                 placeholder='Enter phone number'
                                 value={formData.phone}
                                 onChange={handleChange}
-                                onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
                             />
                         </div>
                         <div className="form_group_address_note">
