@@ -46,12 +46,7 @@ builder.Services.AddScoped<IPointAccumulateService, PointAccumulateService>();
 
 
 
-builder.Services.AddSingleton<PythonService>(provider =>
-{
-    var pythonPath = @"C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe";
-    var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "generate_warranty.py");
-    return new PythonService(pythonPath, scriptPath);
-});
+
 
 
 
