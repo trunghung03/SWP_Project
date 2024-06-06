@@ -1,7 +1,7 @@
 .invoice_container{
     display: flex;
     justify-content: center;
-    margin: 0 50px;
+    margin: 0 0;
 }
 
 .invoice_title {
@@ -21,24 +21,23 @@
 
 .invoice_content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
 }
 
 .invoice_left_section table {
-    width: 130%;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .invoice_left_section th {
     border: 1px solid #ccc;
-    padding: 7px 20px;
+    padding: 7px 30px;
     text-align: left;
 }
 
 .invoice_left_section td{
     border: 1px solid #ccc;
-    padding: 15px 20px;
+    padding: 15px 30px;
     text-align: left;
 }
 
@@ -71,5 +70,11 @@
 
 .invoice_bottom_right_section{
     border-left: 4px solid #0f2770;
-    padding-left: 15px;
+    padding-left: 20px;
+    // padding-bottom: 1px;
+}
+
+.qr{
+    width: 300px;
+    margin-top: 20px;
 }

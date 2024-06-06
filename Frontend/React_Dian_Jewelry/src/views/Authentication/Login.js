@@ -174,7 +174,7 @@ const Login = () => {
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
 
-                        setCartItemsForUser(userInfoRes.data.customerId); // Update cart items for the logged-in customer
+                        setCartItemsForUser(userInfoRes.data.customerId); 
                     }
                 }
                 navigate('/home');

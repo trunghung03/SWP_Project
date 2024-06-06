@@ -45,6 +45,7 @@ import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmplo
 import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
 import ManagerAddShell from './Manager/ManagerManageShell/ManagerAddShell';
 import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmployee';
+
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgotPassword' || location.pathname === '/resetPassword';
@@ -62,57 +63,56 @@ function App() {
   return (
     <Router>
       <UserProvider>
-      <CartProvider>
-        <AutoScrollToTop />
-        <Routes>
-          <Route path="/" element={<Layout><Home /></Layout>} /> {/* Default route */}
-          <Route path="/home" element={<Layout><Home /></Layout>} />
-          <Route path="/education" element={<Layout><Education /></Layout>} />
-          <Route path="/search" element={<Layout><Search /></Layout>} />
-          <Route path="/productDetail" element={<Layout><ProductDetail /></Layout>} />
-          <Route path="/cart" element={<Layout><Cart /></Layout>} />
-          <Route path="/FAQs" element={<Layout><FAQs /></Layout>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgotPassword" element={<ForgotPassword />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/diamondJewelry" element={<Layout><DiamondJewelry /></Layout>} />
-          <Route path="/collection" element={<Layout><Collection /></Layout>} />
-          <Route path="/priceList" element={<Layout><PriceList /></Layout>} />
-          <Route path="/contact" element={<Layout><Contact /></Layout>} />
-          
-          {/* Customer */}
-          <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
-          <Route path="/invoice" element={<Layout><Invoice /></Layout>} />
-          <Route path="/introduce" element={<Layout><Introduce /></Layout>} />
-          <Route path="/editProfile" element={<Layout><EditProfile /></Layout>} />
-          <Route path="/orderHistory" element={<Layout><OrderHistory /></Layout>} />
-          <Route path="/orderDetail" element={<Layout><OrderDetail /></Layout>} />
+        <CartProvider>
+          <AutoScrollToTop />
+          <Routes>
+            <Route path="/" element={<Layout><Home /></Layout>} /> {/* Default route */}
+            <Route path="/home" element={<Layout><Home /></Layout>} />
+            <Route path="/education" element={<Layout><Education /></Layout>} />
+            <Route path="/search" element={<Layout><Search /></Layout>} />
+            <Route path="/productDetail" element={<Layout><ProductDetail /></Layout>} />
+            <Route path="/cart" element={<Layout><Cart /></Layout>} />
+            <Route path="/FAQs" element={<Layout><FAQs /></Layout>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
+            <Route path="/diamondJewelry" element={<Layout><DiamondJewelry /></Layout>} />
+            <Route path="/collection" element={<Layout><Collection /></Layout>} />
+            <Route path="/priceList" element={<Layout><PriceList /></Layout>} />
+            <Route path="/contact" element={<Layout><Contact /></Layout>} />
+            
+            {/* Customer */}
+            <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
+            <Route path="/invoice" element={<Layout><Invoice /></Layout>} />
+            <Route path="/introduce" element={<Layout><Introduce /></Layout>} />
+            <Route path="/editProfile" element={<Layout><EditProfile /></Layout>} />
+            <Route path="/orderHistory" element={<Layout><OrderHistory /></Layout>} />
+            <Route path="/orderDetail" element={<Layout><OrderDetail /></Layout>} />
 
-          {/* Admin  */}
-          <Route path="/adminCustomerList" element={<AdminCustomerList />} />
-          <Route path="/adminTest" element={<AdminTest />} />
+            {/* Admin */}
+            <Route path="/adminCustomerList" element={<AdminCustomerList />} />
+            <Route path="/adminTest" element={<AdminTest />} />
 
-          {/* Manager  */}
-          <Route path="/managerStatitic" element={<ManagerStatitic />} />
-          <Route path="/managerDiamondList" element={<ManagerDiamondList />} />
-          <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
-          <Route path="/managerProductList" element={<ManagerProductList />} />
-          <Route path="/managerEmployeeList" element = {<ManagerEmployeeList/>}/>
-          <Route path="/managerShellList" element={<ManagerShellList/>}/>
-          <Route path="/managerAddEmployee" element={<ManagerAddEmployee/>}/>
-          <Route path="/managerAddShell" element={<ManagerAddShell/>}/>
-          
+            {/* Manager */}
+            <Route path="/managerStatitic" element={<ManagerStatitic />} />
+            <Route path="/managerDiamondList" element={<ManagerDiamondList />} />
+            <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
+            <Route path="/managerProductList" element={<ManagerProductList />} />
+            <Route path="/managerEmployeeList" element={<ManagerEmployeeList />} />
+            <Route path="/managerShellList" element={<ManagerShellList />} />
+            <Route path="/managerAddEmployee" element={<ManagerAddEmployee />} />
+            <Route path="/managerAddShell" element={<ManagerAddShell />} />
+            
+            {/* Sales Staff */}
+            <Route path="/salesStaffOrderList" element={<SSOrderList />} />
+            <Route path="/salesStaffContentList" element={<SSContentList />} />
+            <Route path="/salesStaffAddContent" element={<SSAddContent />} />
 
-          {/* Sales Staff  */}
-          <Route path="/salesStaffOrderList" element={<SSOrderList />} />
-          <Route path="/salesStaffContentList" element={<SSContentList />} />
-          <Route path="/salesStaffAddContent" element={<SSAddContent />} />
-
-          {/* Delivery Staff  */}
-          <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
-        </Routes>
-      </CartProvider>
+            {/* Delivery Staff */}
+            <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
+          </Routes>
+        </CartProvider>
       </UserProvider>
     </Router>
   );

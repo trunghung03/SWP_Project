@@ -36,8 +36,8 @@ function Cart() {
 
         if (updatedCartItems.length === 0) {
             swal({
-                title: "There are no products in the cart!",
-                text: "Please add something to the cart first.",
+                title: "Please add something to the cart!",
+                text: "There are no products in the cart.",
                 icon: "warning",
                 button: {
                     text: "Ok",
