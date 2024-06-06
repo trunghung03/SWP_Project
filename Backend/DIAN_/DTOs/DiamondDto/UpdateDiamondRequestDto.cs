@@ -25,10 +25,6 @@ namespace DIAN_.DTOs.DiamondDto
         public decimal Carat { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Cost cannot be smaller than 0")]
-        public decimal Cost { get; set; }
-
-        [Required]
         public string CertificateScan { get; set; } = string.Empty;
 
         [Required]

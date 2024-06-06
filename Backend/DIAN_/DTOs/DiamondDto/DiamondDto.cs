@@ -14,7 +14,6 @@
 
         public decimal Carat { get; set; }
 
-        public decimal Cost { get; set; }
 
         public string CertificateScan { get; set; } = string.Empty;
 
