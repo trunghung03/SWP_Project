@@ -10,6 +10,7 @@ import rightImage2 from '../../assets/img/right2.jpg';
 import rightImage3 from '../../assets/img/right3.jpg';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
 import { jwtDecode } from 'jwt-decode';
+import { useCart } from '../../services/CartService';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -18,6 +19,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { setCartItemsForUser } = useCart();
 
     useEffect(() => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -120,11 +122,11 @@ const Login = () => {
                 setLoading(false);
                 return;
             }
-            handleSuccessfulLogin(res.data.token, userType);
+            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId); // Pass the customerId
         }
     };
 
-    const handleSuccessfulLogin = async (token, userType) => {
+    const handleSuccessfulLogin = async (token, userType, customerId) => {
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
         const role = decodedToken.role;
@@ -166,10 +168,13 @@ const Login = () => {
                 if (userType === 'customer') {
                     let userInfoRes = await getUserInfo(email);
                     if (userInfoRes && userInfoRes.data) {
+                        localStorage.setItem("customerId", userInfoRes.data.customerId);
                         localStorage.setItem("email", userInfoRes.data.email);
                         localStorage.setItem("firstName", userInfoRes.data.firstName);
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
+
+                        setCartItemsForUser(userInfoRes.data.customerId); // Update cart items for the logged-in customer
                     }
                 }
                 navigate('/home');

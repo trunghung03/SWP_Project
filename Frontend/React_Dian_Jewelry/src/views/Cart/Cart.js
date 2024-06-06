@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import SubNav from '../../components/SubNav/SubNav.js';
 import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
-import { useNavigate } from 'react-router-dom';
+import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
@@ -13,7 +13,15 @@ function Cart() {
     const navigate = useNavigate();
     const navItems = ['Home', 'Cart'];
     const [showSizeGuide, setShowSizeGuide] = useState(false);
+    const customerId = localStorage.getItem('customerId');
     const { cartItems, removeFromCart, updateCartItem } = useCart();
+    const [filteredCartItems, setFilteredCartItems] = useState([]);
+
+    useEffect(() => {
+        const cartKey = `cartItems${customerId}`;
+        const storedCartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+        setFilteredCartItems(storedCartItems);
+    }, [customerId, cartItems]);
 
     const openSizeGuide = () => {
         setShowSizeGuide(true);
@@ -24,7 +32,9 @@ function Cart() {
     };
 
     const handleCheckoutPage = () => {
-        if (cartItems.length === 0) {
+        const updatedCartItems = JSON.parse(localStorage.getItem(`cartItems${customerId}`)) || [];
+
+        if (updatedCartItems.length === 0) {
             swal({
                 title: "There are no products in the cart!",
                 text: "Please add something to the cart first.",
@@ -37,7 +47,7 @@ function Cart() {
             return;
         }
 
-        const missingSizeItems = cartItems.some(item => !item.selectedSize);
+        const missingSizeItems = updatedCartItems.some(item => !item.selectedSize);
         if (missingSizeItems) {
             swal({
                 title: "Have not chosen a size yet!",
@@ -51,7 +61,7 @@ function Cart() {
             return;
         }
 
-        navigate('/checkout', { state: { cartItems } });
+        navigate('/checkout', { state: { cartItems: updatedCartItems } });
     };
 
     const handleContinueShopping = () => {

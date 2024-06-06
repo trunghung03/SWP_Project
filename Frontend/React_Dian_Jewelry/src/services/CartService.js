@@ -5,29 +5,38 @@ const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cartItems')) || []);
+    const customerId = localStorage.getItem('customerId');
+    const cartKey = `cartItems${customerId}`;
+    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem(cartKey)) || []);
 
     useEffect(() => {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    }, [cartItems]);
+        localStorage.setItem(cartKey, JSON.stringify(cartItems));
+    }, [cartItems, cartKey]);
 
     const addToCart = (item) => {
-        setCartItems([...cartItems, item]);
+        setCartItems(prevCartItems => [...prevCartItems, item]);
     };
 
     const removeFromCart = (index) => {
-        const updatedCartItems = cartItems.filter((_, i) => i !== index);
-        setCartItems(updatedCartItems);
+        setCartItems(prevCartItems => prevCartItems.filter((_, i) => i !== index));
     };
 
     const updateCartItem = (index, item) => {
-        const updatedCartItems = [...cartItems];
-        updatedCartItems[index] = item;
-        setCartItems(updatedCartItems);
+        setCartItems(prevCartItems => {
+            const updatedCartItems = [...prevCartItems];
+            updatedCartItems[index] = item;
+            return updatedCartItems;
+        });
+    };
+
+    const setCartItemsForUser = (userId) => {
+        const userCartKey = `cartItems${userId}`;
+        const storedCartItems = JSON.parse(localStorage.getItem(userCartKey)) || [];
+        setCartItems(storedCartItems);
     };
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartItem }}>
+        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartItem, setCartItemsForUser }}>
             {children}
         </CartContext.Provider>
     );

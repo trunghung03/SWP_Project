@@ -28,7 +28,6 @@ function OrderDetail() {
     const menuItems = [
         { name: 'Edit Profile', path: '/editProfile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
         { name: 'Order History', path: '/orderHistory', icon: 'fas fa-history', iconClass: 'icon-order-history' },
-        { name: 'Exchange Point', path: '/exchangePoint', icon: 'fas fa-exchange-alt', iconClass: 'icon-exchange-point' },
     ];
 
     // Dummy data for order details
