@@ -5,6 +5,7 @@ import logo from '../../../assets/img/logo.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import { createDiamond } from '../../../services/ManagerService/ManagerDiamondService.js';
 import '../../../styles/Manager/ManagerManageDiamond/ManagerAddDiamond.scss';
+import { createProduct } from '../../../services/ManagerService/ManagerProductService.js';
 
 const ManagerAddProduct = () => {
     const navigate = useNavigate();
@@ -14,25 +15,29 @@ const ManagerAddProduct = () => {
         price: '',
         description: '',
         mainDiamondId: '',
-        chargeUp: '',
-        amountAvailable: '',
-        certificateScan: ''
+        laborCost: '',
+        imageLinkList: '',
+        mainDiamondAmount: '',
+        subDiamondAmount: '',
+        shellAmount: '',
+        collectionId: '',
+        categoryId: ''
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setDiamondData({ ...diamondData, [name]: value });
+        setProductData({ ...productData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const diamondDataWithStatus = { ...diamondData, status: true };
-            await createDiamond(diamondDataWithStatus);
-            swal("Success", "Diamond added successfully", "success");
-            navigate('/managerDiamondList');
+            const productDataWithStatus = { ...productData, status: true };
+            await createProduct(productDataWithStatus);
+            swal("Success", "Product added successfully", "success");
+            navigate('/managerProductList');
         } catch (error) {
-            console.error("Error creating diamond:", error);
+            console.error("Error creating product:", error);
             if (error.response) {
                 console.error("Response data:", error.response.data);
                 console.error("Response status:", error.response.status);
@@ -43,7 +48,7 @@ const ManagerAddProduct = () => {
                     }
                 }
             }
-            swal("Something is wrong!", "Failed to add diamond. Please try again.", "error");
+            swal("Something is wrong!", "Failed to add product. Please try again.", "error");
         }
     };
 
@@ -58,49 +63,65 @@ const ManagerAddProduct = () => {
                 </div>
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
-                    <h1 className="manager_add_diamond_title">Add new diamond</h1>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerDiamondList')}>
+                    <h1 className="manager_add_diamond_title">Add new product</h1>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerProductList')}>
                         &lt; Back
                     </button>
                 </div>
                 <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Shape</label>
-                            <input type="text" name="shape" value={diamondData.shape} onChange={handleChange} required />
+                            <label>Product code</label>
+                            <input type="text" name="productCode" value={productData.productCode} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
-                            <label>Cut</label>
-                            <input type="text" name="cut" value={diamondData.cut} onChange={handleChange} required />
-                        </div>
-                    </div>
-                    <div className="manager_add_diamond_form_row">
-                        <div className="manager_add_diamond_form_group">
-                            <label>Carat</label>
-                            <input type="number" step="0.01" name="carat" value={diamondData.carat} onChange={handleChange} required />
-                        </div>
-                        <div className="manager_add_diamond_form_group">
-                            <label>Clarity</label>
-                            <input type="text" name="clarity" value={diamondData.clarity} onChange={handleChange} required />
+                            <label>Name</label>
+                            <input type="text" name="name" value={productData.name} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Price</label>
-                            <input type="number" name="price" value={diamondData.price} onChange={handleChange} required />
+                            <input type="number" name="price" value={productData.price} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
-                            <label>Quantity</label>
-                            <input type="number" name="amountAvailable" value={diamondData.amountAvailable} onChange={handleChange} required />
+                            <label>Description</label>
+                            <input type="text" name="description" value={productData.description} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Main Diamond ID</label>
+                            <input type="number" name="mainDiamondId" value={productData.mainDiamondId} onChange={handleChange} required />
+                        </div>
+                        <div className="manager_add_diamond_form_group">
+                            <label>Labor price</label>
+                            <input type="number" name="laborPrice" value={productData.laborPrice} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_group">
-                        <label>Color</label>
-                        <input type="text" name="color" value={diamondData.color} onChange={handleChange} required />
+                        <label>Image</label>
+                        <input type="text" name="imageLinkList" value={productData.imageLinkList} onChange={handleChange} required />
                     </div>
                     <div className="manager_add_diamond_form_group">
-                        <label>Certificate</label>
-                        <input type="text" name="certificateScan" value={diamondData.certificateScan} onChange={handleChange} required />
+                        <label>Main Diamond Amount</label>
+                        <input type="text" name="mainDiamondAmount" value={productData.mainDiamondAmount} onChange={handleChange} required />
+                    </div>
+                    <div className="manager_add_diamond_form_group">
+                        <label>Sub Diamond Amount</label>
+                        <input type="text" name="subDiamondAmount" value={productData.subDiamondAmount} onChange={handleChange} required />
+                    </div>
+                    <div className="manager_add_diamond_form_group">
+                        <label>Shell Amount</label>
+                        <input type="text" name="shellAmount" value={productData.shellAmount} onChange={handleChange} required />
+                    </div>
+                    <div className="manager_add_diamond_form_group">
+                        <label>Collection ID</label>
+                        <input type="text" name="collectionId" value={productData.collectionId} onChange={handleChange} required />
+                    </div>
+                    <div className="manager_add_diamond_form_group">
+                        <label>Category ID</label>
+                        <input type="text" name="categoryId" value={productData.categoryId} onChange={handleChange} required />
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
