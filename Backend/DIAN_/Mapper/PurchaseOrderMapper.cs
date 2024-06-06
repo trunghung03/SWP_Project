@@ -28,13 +28,18 @@ namespace DIAN_.Mapper
         {
             return new PurchaseOrderInfoDTO
             {
+                PayWithPoint = order.PayWithPoint,
                  //$"{order.User.LastName} {order.User.FirstName}",
                 FullName=order.Name,
                 PhoneNumber = order.User.PhoneNumber,
                 Address= order.User.Address,
                 Note = order.Note,
                 PaymentMethod = order.PaymentMethod,
-                PromotionCode = order.Promotion?.Code ?? string.Empty
+                PromotionCode = order.Promotion?.Code ?? string.Empty,
+                UserId = order.UserId,
+                TotalPrice= order.TotalPrice,
+                OrderStatus = order.OrderStatus,
+                Date = order.Date,
             };
         }
         public static Purchaseorder ToCreatePurchaseOrder(this CreatePurchaseOrderDTO dto)
