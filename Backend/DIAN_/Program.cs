@@ -38,12 +38,22 @@ builder.Services.AddScoped<IPromotionRepository,PromotionRepository>();
 builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
-builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPointAccumulateService, PointAccumulateService>();
+
+
+
+builder.Services.AddSingleton<PythonService>(provider =>
+{
+    var pythonPath = @"C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe";
+    var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "generate_warranty.py");
+    return new PythonService(pythonPath, scriptPath);
+});
+
+
 
 var app = builder.Build();
 
