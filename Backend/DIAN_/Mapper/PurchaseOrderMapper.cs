@@ -57,7 +57,7 @@ namespace DIAN_.Mapper
                 ShippingAddress = dto.ShippingAddress,
                 TotalPrice = dto.TotalPrice,
                 OrderStatus = dto.OrderStatus,
-                PromotionId = dto.PromotionId,
+                PromotionId = dto.PromotionId ?? 0,
                 PayWithPoint = dto.PayWithPoint,
                 Note = dto.Note,
                 SaleStaff = dto.SaleStaff,
@@ -84,11 +84,10 @@ namespace DIAN_.Mapper
         //    return dtos.Select(dto => ToOrderDetail(dto)).ToList();
         //}
 
-        public static Purchaseorder ToUpdatePurchaseOrder(this Purchaseorder order, UpdatePurchaseOrderDTO dto)
+        public static Purchaseorder ToUpdatePurchaseOrder(this UpdatePurchaseOrderDTO dto, int id)
         {
             return new Purchaseorder
             {
-                UserId = dto.UserId,
                 Date = dto.Date,
                 Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
@@ -96,7 +95,7 @@ namespace DIAN_.Mapper
                 ShippingAddress = dto.ShippingAddress,
                 TotalPrice = dto.TotalPrice,
                 OrderStatus = dto.OrderStatus,
-                PromotionId = dto.PromotionId ?? 0,
+               // PromotionId = dto.PromotionId ?? 0,
                 PayWithPoint = dto.PayWithPoint,
                 Note = dto.Note
             };
@@ -129,7 +128,7 @@ namespace DIAN_.Mapper
             ShippingAddress = dto.ShippingAddress,
             TotalPrice = dto.TotalPrice,
             OrderStatus = dto.OrderStatus,
-            PromotionId = dto.PromotionId,
+            PromotionId = dto.PromotionId ?? 0,
             PayWithPoint = dto.PayWithPoint,
             Note = dto.Note,
             SaleStaff = dto.SaleStaff,

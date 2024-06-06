@@ -55,7 +55,6 @@ namespace DIAN_.Repository
             }
             else
             {
-                existingPurchaseOrder.UserId = order.UserId;
                 existingPurchaseOrder.Date = order.Date;
                 existingPurchaseOrder.Name = order.Name;
                 existingPurchaseOrder.PhoneNumber = order.PhoneNumber;

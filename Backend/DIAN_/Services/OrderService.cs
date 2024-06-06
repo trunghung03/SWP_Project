@@ -50,6 +50,7 @@ namespace DIAN_.Services
                 };
                 _promotionRepository.UpdatePromotionAmount(promotion.PromotionId, updatePromotionAmountDto).Wait();
             }
+            else { orderModel.PromotionId = null; }
 
             // 2. Check for usedPoint
             bool usedPoints = orderModel.PayWithPoint.HasValue ? orderModel.PayWithPoint.Value : false;

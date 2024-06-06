@@ -1,4 +1,6 @@
-﻿using DIAN_.DTOs.PurchaseOrderDTOs;
+﻿using DIAN_.DTOs.CollectionDTO;
+using DIAN_.DTOs.PromotionDto;
+using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
@@ -46,7 +48,7 @@ namespace DIAN_.Controllers
             {
                 return NotFound();
             }
-            return Ok(purchaseOrderInfo);
+            return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
         }
         [HttpPost("creaaaa")]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
@@ -59,17 +61,12 @@ namespace DIAN_.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var order = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            var purchaseOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(purchaseOrderDTO.ToUpdatePurchaseOrder(id), id);
 
-            var existingOrder = await _context.Purchaseorders.FindAsync(id);
-            existingOrder.ToUpdatePurchaseOrder(purchaseOrderDTO);
+            if (purchaseOrder == null) { return BadRequest("Error! Please try again!"); }
 
-            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(existingOrder, id);
-            return Ok(updatedOrder);
+            return Ok(purchaseOrder);
         }
 
         [HttpPost("duyen_test_order_logic")]
