@@ -13,8 +13,6 @@
 
         public int MainDiamondId { get; set; }
 
-        public decimal ChargeUp { get; set; }
-
         public decimal LaborPrice { get; set; }
 
         public string ImageLinkList { get; set; }

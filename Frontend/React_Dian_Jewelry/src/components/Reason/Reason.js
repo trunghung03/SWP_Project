@@ -5,7 +5,7 @@ class Reason extends Component {
     render() {
         return (
             <div className="reason_container">
-                <h1 className="reason_title">THE REASON TO CHOOSE US</h1>
+                <h1 className="reason_title">The Reason To Choose Us</h1>
                 <div className="reason_grid">
                     <div className="reason_card">
                         <div className="reason_icon"><i className="fas fa-gem"></i></div>

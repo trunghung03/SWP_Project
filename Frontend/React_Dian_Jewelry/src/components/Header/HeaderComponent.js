@@ -52,6 +52,9 @@ const HeaderComponent = () => {
 
     return (
         <header className="header">
+            <div className="top_announcement">
+                Free Shipping Around Viet Nam For All Orders, Don't Miss Discount.
+            </div>
             <div className="top_header container-fluid">
                 <div className="row align-items-center" style={{ backgroundColor: 'white' }}>
                     <div className="col-md-4">
