@@ -110,7 +110,7 @@ function App() {
             <Route path="/salesStaffOrderList" element={<SSOrderList />} />
             <Route path="/salesStaffContentList" element={<SSContentList />} />
             <Route path="/salesStaffAddContent" element={<SSAddContent />} />
-
+            <Route path="/salesStaffWarrantyList" element={<SSWarrantyList/>}/>
             {/* Delivery Staff */}
             <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
           </Routes>

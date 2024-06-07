@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import {ShowAllEmployee, getEmployeeDetail,deleteEpmloyeeById,updateEmployeeById} from '../../../services/ManagerService/ManagerEmployeeService.js'
+import { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeeById,  } from '../../../services/ManagerService/ManagerEmployeeService.js'
 import logo from '../../../assets/img/logo.png';
 
 
@@ -67,9 +67,9 @@ const ManagerEmployeeList = () => {
     };
 
     // Delete diamond by id 
-    const handleDelete = async (productID) => {
+    const handleDelete = async (employeeID) => {
         swal({
-            title: "Are you sure to delete this diamond?",
+            title: "Are you sure to delete this employee?",
             text: "This action cannot be undone",
             icon: "warning",
             buttons: true,
@@ -77,7 +77,7 @@ const ManagerEmployeeList = () => {
         }).then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    await deleteEpmloyeeById(productID);
+                    await deleteEpmloyeeById(employeeID);
                     const response = await ShowAllEmployee();
                     setEmployeeList(response);
                     swal("Deleted successfully!", "The employee has been deleted.", "success");
@@ -95,16 +95,15 @@ const ManagerEmployeeList = () => {
         setEditMode(true);
         setEditedEmployee(employee);
         setOriginalEmployee(employee);
-     };
+    };
 
-     const handleChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedEmployee({ ...editedEmployee, [name]: value });
     };
 
-     const handleUpdate = async () => {
-        const status = true;
-        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address','phoneNumber'];
+    const handleUpdate = async () => {
+        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address', 'phoneNumber'];
         for (let field of requiredFields) {
             if (!editedEmployee[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
@@ -127,12 +126,12 @@ const ManagerEmployeeList = () => {
             const updatedItems = await ShowAllEmployee();
             setEmployeeList(updatedItems);
             setEditMode(false);
-            swal("Updated successfully!", "The diamond information has been updated.", "success");
+            swal("Updated successfully!", "The employee information has been updated.", "success");
         } catch (error) {
             console.error("Error updating diamond:", error.response ? error.response.data : error.message);
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
-     };
+    };
 
 
     return (
