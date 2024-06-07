@@ -5,7 +5,7 @@
 
 .manager_add_diamond_content {
     flex-grow: 1;
-    padding: 15px 8% 0 8%;
+    padding: 10px 8% 0 8%;
     overflow-x: hidden;
 }
 
@@ -31,6 +31,7 @@
     height: 60px;
     width: 120px;
     max-width: 120px;
+    margin-bottom: 5px;
 }
 
 //Add diamond button
@@ -42,7 +43,7 @@
 }
 
 .manager_add_diamond_submit_button {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     padding: 8px 30px;
     border: none;
@@ -53,7 +54,7 @@
 }
 
 .manager_add_diamond_submit_button:hover {
-    background-color: #0033a0;
+    background-color: #797979;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -68,9 +69,8 @@
 }
 
 .manager_add_diamond_title {
-    font-size: 24px;
     font-weight: bold;
-    color: #1a2654;
+    color: #1c1c1c;
 }
 
 .manager_add_diamond_back_button {
@@ -78,7 +78,11 @@
     border: none;
     font-size: 16px;
     cursor: pointer;
-    color: #0056b3;
+    color: #1c1c1c;
+}
+
+.manager_add_diamond_back_button:hover{
+    color: #797979;
 }
 
 .manager_add_diamond_form {

@@ -3,9 +3,9 @@ import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import {ShowAllShell, getShellDetail,deleteShellById,updateShellById} from '../../../services/ManagerService/ManagerShellService.js'
-import logo from '../../../assets/img/logo.png';
+import '../../../styles/Manager/ManagerList.scss';
+import { ShowAllShell, getShellDetail, deleteShellById, updateShellById } from '../../../services/ManagerService/ManagerShellService.js'
+import logo from '../../../assets/img/logoN.png';
 
 
 const ManagerShellList = () => {
@@ -69,7 +69,7 @@ const ManagerShellList = () => {
     // Delete diamond by id 
     const handleDelete = async (shellID) => {
         swal({
-            title: "Are you sure to delete this diamond?",
+            title: "Are you sure to delete this shell?",
             text: "This action cannot be undone",
             icon: "warning",
             buttons: true,
@@ -95,14 +95,14 @@ const ManagerShellList = () => {
         setEditMode(true);
         setEditedShell(shell);
         setOriginalShell(shell);
-     };
+    };
 
-     const handleChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedShell({ ...editedShell, [name]: value });
     };
 
-     const handleUpdate = async () => {
+    const handleUpdate = async () => {
         const status = true;
         const price = 0;
         const requiredFields = ['name', 'amountAvailable'];
@@ -133,7 +133,7 @@ const ManagerShellList = () => {
             console.error("Error updating shell:", error.response ? error.response.data : error.message);
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
-     };
+    };
 
 
     return (
@@ -156,25 +156,29 @@ const ManagerShellList = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
+                
+                <h3>List Of Shells</h3>
+
                 <div className="manager_manage_diamond_create_button_section">
                     <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddShell')}>Add new shell</button>
                 </div>
 
                 {/* Table diamond list */}
                 <div className="manager_manage_diamond_table_wrapper">
-                    <h1>List of shells</h1>
                     <table className="manager_manage_diamond_table table">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Amount Available</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {shellItems.length > 0 ? (
                                 currentShell.map((item) => (
                                     <tr key={item.shellMaterialId}>
+                                        <td>{item.shellMaterialId}</td>
                                         <td>{item.name}</td>
                                         <td>{item.amountAvailable}</td>
                                         <td>
@@ -217,7 +221,7 @@ const ManagerShellList = () => {
                         <div className="manager_manage_diamond_modal_content">
                             <h4>Edit Shell Information</h4>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Name</label>
+                                <label>Shell</label>
                                 <input type="text" name="name" value={editedShell.name} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">

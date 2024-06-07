@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
-import logo from '../../../assets/img/logo.png';
+import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import { createShell } from '../../../services/ManagerService/ManagerShellService.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerAddDiamond.scss';
+import '../../../styles/Manager/ManagerAdd.scss';
 
 const ManagerAddShell = () => {
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ const ManagerAddShell = () => {
                     }
                 }
             }
-            swal("Something is wrong!", "Failed to add diamond. Please try again.", "error");
+            swal("Something is wrong!", "Failed to add shell. Please try again.", "error");
         }
     };
 
@@ -52,8 +52,8 @@ const ManagerAddShell = () => {
                 </div>
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
-                    <h1 className="manager_add_diamond_title">Add new Shell</h1>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerDiamondList')}>
+                    <h3 className="manager_add_diamond_title">Add New Shell</h3>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerShellList')}>
                         &lt; Back
                     </button>
                 </div>

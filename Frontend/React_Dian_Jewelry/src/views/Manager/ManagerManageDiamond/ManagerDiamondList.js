@@ -3,9 +3,9 @@ import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
+import '../../../styles/Manager/ManagerList.scss';
 import { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById } from '../../../services/ManagerService/ManagerDiamondService.js';
-import logo from '../../../assets/img/logo.png';
+import logo from '../../../assets/img/logoN.png';
 
 const ManagerDiamondList = () => {
     const navigate = useNavigate();
@@ -153,6 +153,7 @@ const ManagerDiamondList = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
+                <h3>List Of Diamonds</h3>
                 <div className="manager_manage_diamond_create_button_section">
                     <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddDiamond')}>Add new diamond</button>
                 </div>
@@ -170,7 +171,7 @@ const ManagerDiamondList = () => {
                                 <th>Cut</th>
                                 <th>Quantity</th>
                                 <th>Certificate</th>
-                                <th>Action</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -199,7 +200,7 @@ const ManagerDiamondList = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="10">No diamonds found</td>
+                                    <td colSpan="10">No diamond found</td>
                                 </tr>
                             )}
                         </tbody>

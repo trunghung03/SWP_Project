@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
-import logo from '../../../assets/img/logo.png';
+import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import { createDiamond } from '../../../services/ManagerService/ManagerDiamondService.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerAddDiamond.scss';
+import '../../../styles/Manager/ManagerAdd.scss';
 
 const ManagerAddDiamond = () => {
     const navigate = useNavigate();
@@ -58,7 +58,7 @@ const ManagerAddDiamond = () => {
                 </div>
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
-                    <h1 className="manager_add_diamond_title">Add new diamond</h1>
+                    <h3 className="manager_add_diamond_title">Add New Diamond</h3>
                     <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerDiamondList')}>
                         &lt; Back
                     </button>
