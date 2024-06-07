@@ -54,10 +54,24 @@ namespace DIAN_.Services
                 var customer = _customerRepository.GetByIdAsync(orderModel.UserId).Result;
                 if (customer != null && customer.Points > 0)
                 {
-                    orderModel.TotalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
+                    var pointsValue = customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
+                    decimal pointRemaining = 0;
+                    if (pointsValue >= orderModel.TotalPrice)
+                    {                   
+                        pointRemaining = pointsValue - orderModel.TotalPrice;
+                        orderModel.TotalPrice = 0;
+                    }
+                    else
+                    {
+                        // If points are less than total price, subtract points from total price
+                        orderModel.TotalPrice -= pointsValue;
+                        // Set customer's points to 0 as all points are used
+                        pointRemaining = 0;
+                    }
+
                     UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
                     {
-                        Point = 0
+                        Point = (int)pointRemaining
                     };
 
                     _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
