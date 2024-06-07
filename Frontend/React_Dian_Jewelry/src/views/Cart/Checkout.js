@@ -6,7 +6,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Cart/Checkout.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { createPurchaseOrder, createOrderDetails } from '../../services/CheckoutService.js';
+import { createPurchaseOrder, createOrderDetails, getPromotionByCode } from '../../services/CheckoutService.js';
 import { useCart } from '../../services/CartService';
 
 function Checkout() {
@@ -23,10 +23,14 @@ function Checkout() {
         address: '',
         note: ''
     });
-    const [discount, setDiscount] = useState(10);
-    const [totalPrice, setTotalPrice] = useState(170);
+    const [voucherDiscount, setVoucherDiscount] = useState(0);
+    const [pointsDiscount, setPointsDiscount] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [promotionId, setPromotionId] = useState(null);
     const [loading, setLoading] = useState(false);
     const { setCartItems: updateCartContext } = useCart();
+    const [voucherCode, setVoucherCode] = useState('');
+    const [appliedVoucher, setAppliedVoucher] = useState(false);
 
     useEffect(() => {
         const cartKey = `cartItems${customerId}`;
@@ -48,22 +52,37 @@ function Checkout() {
 
     useEffect(() => {
         const initialTotal = calculateTotal();
+        let discountFromPoints = 0;
         if (usePoints) {
-            const discountFromPoints = Math.min(points, initialTotal);
-            setDiscount(discountFromPoints);
-            setTotalPrice(initialTotal - discountFromPoints);
+            discountFromPoints = Math.min(points, initialTotal);
+            setPointsDiscount(discountFromPoints);
         } else {
-            setDiscount(0);
-            setTotalPrice(initialTotal);
+            setPointsDiscount(0);
         }
-    }, [usePoints, points]);
+        const totalDiscount = Math.min(initialTotal, voucherDiscount + discountFromPoints);
+        setTotalPrice(Math.max(0, initialTotal - totalDiscount));
+    }, [usePoints, points, cartItems, voucherDiscount, pointsDiscount]);
 
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + parseFloat(item.price), 0);
+        return cartItems.reduce((total, item) => total + parseFloat(item.price), 0).toFixed(2);
     };
 
     const handleBackToCart = () => {
         navigate('/cart');
+    };
+
+    const handleApplyVoucher = async () => {
+        try {
+            const promotion = await getPromotionByCode(voucherCode);
+            const discountAmount = calculateTotal() * promotion.amount;
+            setVoucherDiscount(discountAmount);
+            setPromotionId(promotion.id); 
+            setAppliedVoucher(true);
+            swal("Apply voucher successfully!", "", "success");
+        } catch (error) {
+            console.error('Error applying voucher:', error);
+            swal("Invalid voucher code!", "Please try another code.", "error");
+        }
     };
 
     const handleInvoice = async () => {
@@ -121,14 +140,15 @@ function Checkout() {
             phoneNumber: phone,
             paymentMethod: paymentMethod,
             shippingAddress: address,
-            totalPrice: totalPrice,
+            totalPrice: calculateTotal(),
             orderStatus: "Pending",
-            promotionId: 1,
+            promotionId: appliedVoucher ? promotionId : null,
             payWithPoint: usePoints,
             note: note || "None",
             saleStaff: 1,
             deliveryStaff: 1
         };
+        console.log(orderData);
 
         try {
             const createdOrder = await createPurchaseOrder(orderData);
@@ -137,7 +157,7 @@ function Checkout() {
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
-                    lineTotal: item.price, 
+                    lineTotal: calculateTotal(),
                     productId: item.productId,
                     shellMaterialId: item.selectedShellId,
                     subDiamondId: item.diamondId,
@@ -151,12 +171,11 @@ function Checkout() {
             localStorage.setItem('orderId', orderId);
             localStorage.setItem('orderDate', date);
             localStorage.setItem('orderTotalPrice', totalPrice);
-            localStorage.setItem('orderDiscount', discount);
+            localStorage.setItem('orderDiscount', voucherDiscount + pointsDiscount);
 
             const cartKey = `cartItems${customerId}`;
             localStorage.removeItem(cartKey);
 
-            // Clear cart items in the context
             updateCartContext([]);
 
             swal({
@@ -270,7 +289,7 @@ function Checkout() {
                                     <div className="checkout_item_details">
                                         <div className="checkout_item_row">
                                             <p className="checkout_item_name"><strong>{item.name} x1</strong></p>
-                                            <p className="checkout_item_price"><strong>{item.price}$</strong></p>
+                                            <p className="checkout_item_price"><strong>{parseFloat(item.price).toFixed(2)}$</strong></p>
                                         </div>
                                         <div className="checkout_item_row">
                                             <p><strong>Shell:</strong> {item.selectedShellName}</p>
@@ -286,8 +305,8 @@ function Checkout() {
                 <div className="checkout_summary">
                     <h5 className="checkout_summary_voucher_title"><i className="fas fa-ticket"></i>Voucher</h5>
                     <div className="voucher">
-                        <input type="text" placeholder="Voucher" />
-                        <button>Apply</button>
+                        <input type="text" placeholder="Voucher" value={voucherCode} onChange={(e) => setVoucherCode(e.target.value)} disabled={appliedVoucher} />
+                        <button onClick={handleApplyVoucher} disabled={appliedVoucher}>Apply</button>
                     </div>
 
                     <h5 className="checkout_summary_payment_title"><i className="fas fa-credit-card"></i>Payment method</h5>
@@ -332,9 +351,9 @@ function Checkout() {
                     <h5 className="checkout_summary_title"><i className="fas fa-receipt"></i>Total price</h5>
                     <div className="checkout_summary_details">
                         <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>{calculateTotal()}$</strong></span></p>
-                        <p className="checkout_summary_discount"><span>Discount</span><span><strong>{discount}$</strong></span></p>
+                        <p className="checkout_summary_discount"><span>Discount</span><span><strong>{(voucherDiscount + pointsDiscount).toFixed(2)}$</strong></span></p>
                         <hr />
-                        <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>{totalPrice}$</strong></span></p>
+                        <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>{totalPrice.toFixed(2)}$</strong></span></p>
                     </div>
                     <button onClick={handleInvoice} className="checkout_summary_checkout" disabled={loading}>
                         {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}

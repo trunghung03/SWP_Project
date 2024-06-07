@@ -41,3 +41,13 @@ export const getOrderDetailsByOrderId = async (orderId) => {
         throw error;
     }
 };
+
+export const getPromotionByCode = async (code) => {
+    try {
+        const response = await axios.get(`${API_URL}/promotions/promotion/${code}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching promotion:', error);
+        throw error;
+    }
+};
