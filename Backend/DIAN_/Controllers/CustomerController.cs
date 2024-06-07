@@ -10,6 +10,9 @@ using DIAN_.Repository;
 using DIAN_.Interfaces;
 using DIAN_.Services;
 using DIAN_.Helper;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity.Data;
+using DIAN_.DTOs.AccountDTO;
 
 namespace UserApplication.Controllers
 {
@@ -19,13 +22,15 @@ namespace UserApplication.Controllers
     {
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
-
+        private readonly ICustomerService _customerService;
         private readonly ICustomerRepository _customerRepository;
-        public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository, IEmailService emailService)
+        public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository, 
+            IEmailService emailService, ICustomerService customerService)
         {
             _tokenService = tokenService;
             _customerRepository = customerRepository;
             _emailService = emailService;
+            _customerService = customerService;
         }
 
         [HttpPost("login")]
@@ -130,8 +135,7 @@ namespace UserApplication.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception and return a 500 error.
-                return StatusCode(500, "An error occurred while sending the email.");
+                throw;
             }
         }
 
@@ -145,6 +149,28 @@ namespace UserApplication.Controllers
             //Response += "<div><h1> Contact us : nihiratechiees@gmail.com</h1></div>";
             Response += "</div>";
             return Response;
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
+        {
+            if(!ModelState.IsValid) { return BadRequest(ModelState); };
+            var result = await _customerService.ResetPasswordRequestAsync(forgotPasswordDto);
+            if (result)
+            {
+                return Ok("Password reset link has been sent.");
+            }
+            else
+            {
+                return BadRequest("An error occurred while processing your request.");
+            }
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            var result = await _customerService.ConfirmResetPasswordAsync(resetPasswordDto);
+            return Ok(result);
         }
 
     }

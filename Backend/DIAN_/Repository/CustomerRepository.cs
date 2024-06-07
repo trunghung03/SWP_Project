@@ -2,8 +2,12 @@
 using DIAN_.DTOs.AccountDTO;
 using DIAN_.Interfaces;
 using DIAN_.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using UserApplication.Dtos.Account;
 
 namespace DIAN_.Repository
@@ -11,9 +15,11 @@ namespace DIAN_.Repository
     public class CustomerRepository : ICustomerRepository
     {
         private readonly ApplicationDbContext _context;
-        public CustomerRepository(ApplicationDbContext context) 
+        private readonly IConfiguration _configuration;
+        public CustomerRepository(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         public async Task<Customer?> DeleteAsync(string email)
         {
@@ -107,5 +113,32 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return customer;
         }
+
+        public async Task<bool> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == resetPasswordDto.Email);
+            if (customer == null)
+            {
+                return false;
+            }
+
+            // Here you should validate the resetPasswordDto.Token
+            // If it's not valid, return false
+
+            customer.Password = resetPasswordDto.Password; // You should hash the password before storing it
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> ResetPasswordAsync(Customer user, string token, string newPassword)
+        {
+            // Hash the new password before storing it
+            user.Password = newPassword; // You should hash the password before storing it
+            _context.Customers.Update(user);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
+        }
+
     }
 }
