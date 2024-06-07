@@ -145,19 +145,19 @@ function Checkout() {
             promotionId: appliedVoucher ? promotionId : null,
             payWithPoint: usePoints,
             note: note || "None",
-            saleStaff: 1,
-            deliveryStaff: 1
+            saleStaff: 0,
+            deliveryStaff: 0
         };
         console.log(orderData);
 
         try {
-            const createdOrder = await createPurchaseOrder(orderData);
+            const createdOrder = await createPurchaseOrder(orderData, voucherCode);
             const orderId = createdOrder.orderId;
 
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
-                    lineTotal: calculateTotal(),
+                    lineTotal: totalPrice,
                     productId: item.productId,
                     shellMaterialId: item.selectedShellId,
                     subDiamondId: item.diamondId,
@@ -172,6 +172,10 @@ function Checkout() {
             localStorage.setItem('orderDate', date);
             localStorage.setItem('orderTotalPrice', totalPrice);
             localStorage.setItem('orderDiscount', voucherDiscount + pointsDiscount);
+
+            if (usePoints) {
+                localStorage.setItem('points', 0);
+            }
 
             const cartKey = `cartItems${customerId}`;
             localStorage.removeItem(cartKey);

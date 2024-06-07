@@ -2,9 +2,10 @@ import axios from 'axios';
 
 const API_URL = 'https://localhost:7184/api';
 
-export const createPurchaseOrder = async (orderData) => {
+export const createPurchaseOrder = async (orderData, promotionCode) => {
     try {
-        const response = await axios.post(`${API_URL}/purchaseorders`, orderData);
+        const url = `${API_URL}/purchaseorders/checkout?promotionCode=${promotionCode ? promotionCode : 'null'}`;
+        const response = await axios.post(url, orderData);
         return response.data;
     } catch (error) {
         console.error('Error creating purchase order:', error);
