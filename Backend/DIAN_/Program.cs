@@ -2,31 +2,31 @@ using DIAN_.Interfaces;
 using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UserApplication.Interfaces;
 using UserApplication.Services;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using DIAN_.Services;
-using System.Text.Json.Serialization;
-using DIAN_.ExceptionHandler;
 using NLog;
+using DIAN_.Extensions;
+using DIAN_.CustomExceptionMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//var config = new NLog.Config.XmlLoggingConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-//NLog.LogManager.Configuration = config;
+
+LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 
 
 builder.Services.AddCors();
 
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddControllers();
 
 //builder.Services.AddControllers().AddJsonOptions(x =>
 //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -57,7 +57,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 
-builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
+
 
 var app = builder.Build();
 
@@ -74,8 +74,9 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 
-var logger = app.Services.GetRequiredService<ILoggerManager>(); 
-app.ConfigureExceptionHandler(logger);
+//var logger = app.Services.GetRequiredService<ILoggerManager>(); 
+app.ConfigureCustomExceptionMiddleware();
+app.UseExceptionHandler(opt => { });
 
 app.UseHttpsRedirection();
 

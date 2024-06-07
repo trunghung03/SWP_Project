@@ -1,8 +1,10 @@
-﻿using DIAN_.Interfaces;
+﻿using DIAN_.CustomExceptionMiddleware;
+using DIAN_.ExceptionHandler;
+using DIAN_.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 
-namespace DIAN_.ExceptionHandler
+namespace DIAN_.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
@@ -12,8 +14,8 @@ namespace DIAN_.ExceptionHandler
             {
                 appError.Run(async context =>
                 {
-                    context.Response.ContentType = "application/json";
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
 
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
@@ -24,10 +26,14 @@ namespace DIAN_.ExceptionHandler
                         {
                             StatusCode = context.Response.StatusCode,
                             Message = "Internal Server Error."
-                        }.ToString());  
+                        }.ToString());
                     }
                 });
             });
+        }
+        public static void ConfigureCustomExceptionMiddleware(this WebApplication app)
+        {
+            app.UseMiddleware<ExceptionMiddleware>();
         }
     }
 }
