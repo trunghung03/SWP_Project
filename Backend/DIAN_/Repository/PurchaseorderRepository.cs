@@ -135,17 +135,4 @@ namespace DIAN_.Repository
             return null;
         }
     }
-        ////parameter is Purchaseorder or UpdateStaffDto?
-        //public async Task<Purchaseorder> AssignStaff(int orderId, Purchaseorder order)
-        //{
-        //   var existingPurchaseOrder = await _context.Purchaseorders.FirstOrDefaultAsync(po => po.OrderId == orderId);
-        //    if (existingPurchaseOrder == null)
-        //    {
-        //        throw new Exception($"Order with id {orderId} not found.");
-        //    }
-        //    existingPurchaseOrder.DeliveryStaff = order.DeliveryStaff;
-        //    existingPurchaseOrder.SaleStaff = order.SaleStaff;
-        //    await _context.SaveChangesAsync();
-        //    return existingPurchaseOrder;
-        //}
-    }
+}

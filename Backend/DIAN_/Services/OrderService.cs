@@ -1,4 +1,4 @@
-    using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,16 +39,10 @@ namespace DIAN_.Services
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
             var promotion = _promotionRepository.GetPromotionByCodeAsync(promoCode).Result;
-            if (promotion != null)
+            if (promotion != null && promotion.Status)
             {
-                orderModel.TotalPrice -= promotion.Amount*orderModel.TotalPrice;
+                orderModel.TotalPrice -= promotion.Amount * orderModel.TotalPrice;
                 orderModel.PromotionId = promotion.PromotionId;
-                promotion.Amount -= 1;
-                var updatePromotionAmountDto = new UpdatePromotionAmountDto
-                {
-                    Amount = promotion.Amount
-                };
-                _promotionRepository.UpdatePromotionAmount(promotion.PromotionId, updatePromotionAmountDto).Wait();
             }
             else { orderModel.PromotionId = null; }
 
@@ -110,20 +104,22 @@ namespace DIAN_.Services
                 if (customer != null && customer.Points > 0)
                 {
                     totalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
-                    UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
-                    {
-                        Point = 0
-                    };
-
-                    _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
                 }
             }
             return totalPrice;
         }
 
-        public Task<decimal> ApplyCoupon(string couponCode, decimal totalPrice)
+        public async Task<decimal> ApplyCoupon(string couponCode, decimal totalPrice) // include totalPrice calculate
         {
-            throw new NotImplementedException();
+            var promotion = await _promotionRepository.GetPromotionByCodeAsync(couponCode);
+            if (promotion != null && promotion.Status)
+            {
+                var promotionId = promotion.PromotionId;
+
+                    totalPrice -= promotion.Amount * totalPrice; // just apply,not pay yet
+                    return totalPrice;
+            }
+            return 0;
         }
     }
 }
