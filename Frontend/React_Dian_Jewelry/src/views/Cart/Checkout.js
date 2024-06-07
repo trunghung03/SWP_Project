@@ -123,7 +123,7 @@ function Checkout() {
             shippingAddress: address,
             totalPrice: totalPrice,
             orderStatus: "Pending",
-            promotionId: null,
+            promotionId: 1,
             payWithPoint: usePoints,
             note: note || "None",
             saleStaff: 1,

@@ -23,7 +23,7 @@
 
 .faqs_header h1 {
     font-size: 32px;
-    color: #1a2654;
+    color: #1c1c1c;
     text-align: left;
     margin-bottom: 10px;
 }
@@ -50,8 +50,8 @@
 
 .more_faqs_btn {
     background-color: transparent;
-    color: #0f2770;
-    border: 1px solid #0f2770;
+    color: #1c1c1c;
+    border: 1px solid #1c1c1c;
     padding: 7px 55px;
     cursor: pointer;
     border-radius: 30px;
@@ -61,7 +61,7 @@
 }
 
 .more_faqs_btn:hover {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -71,9 +71,9 @@
 
 // Question 
 .question-container {
-    background-color: #1a2654;
+    background-color: #f8dcce;
     padding: 45px 20% 35px 10%;
-    color: white;
+    color: #1c1c1c;
 }
 
 .question_content {
@@ -109,13 +109,13 @@
 .contact_item i {
     margin-right: 20px;
     font-size: 20px;
-    color: white;
+    color: #1c1c1c;
 }
 
 .vertical_line {
     width: 1px;
     height: 130px;
-    background-color: rgb(218, 218, 218);
+    background-color: #1c1c1c;
     margin: -10px 0 -5px -10px;
 }
 

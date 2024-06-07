@@ -25,7 +25,7 @@
             border-radius: 5px;
 
             &.selected {
-                border-color: #0f2770;
+                border-color: #1c1c1c;
             }
         }
     }
@@ -108,11 +108,16 @@
 
             .size_guide_detail {
                 font-size: 14px;
-                color: #0f2770;
+                color: #1c1c1c;
                 text-decoration: underline;
                 cursor: pointer;
                 background-color: transparent;
                 border: none;
+            }
+
+            .size_guide_detail:hover{
+                color: #797979;
+                text-decoration: underline;
             }
 
             .ring_size_detail {
@@ -128,8 +133,8 @@
 
         .add_to_cart_btn {
             background-color: transparent;
-            color: #0f2770;
-            border: 1px solid #0f2770;
+            color: #1c1c1c;
+            border: 1px solid #1c1c1c;
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 30px;
@@ -142,7 +147,7 @@
             width: 100%;
 
             &:hover {
-                background-color: #0f2770;
+                background-color: #1c1c1c;
                 color: white;
 
                 i {
@@ -152,7 +157,7 @@
 
             i {
                 font-size: 16px;
-                color: #0f2770;
+                color: #1c1c1c;
             }
         }
     }
@@ -420,8 +425,8 @@
 // Just for you
 .just_for_you_container {
     display: flex;
-    background-color: #1a2654;
-    color: white;
+    background-color: #f8dcce;
+    color: #1c1c1c;
     padding: 20px 70px 5px 70px;
     margin-top: 100px;
 
@@ -457,7 +462,7 @@
             i {
                 font-size: 30px;
                 margin-right: 20px;
-                color: white;
+                color: #1c1c1c;
             }
 
             p {
@@ -469,14 +474,14 @@
     }
 
     .jfy_line1 {
-        border-top: 1px solid white;
+        border-top: 1px solid #1c1c1c;
         margin: 5px 0 15px 0;
         width: 100%;
         opacity: 1;
     }
 
     .jfy_line2 {
-        border-top: 1px solid white;
+        border-top: 1px solid #1c1c1c;
         margin: 5px 0 15px 0;
         width: 100%;
         opacity: 1;
@@ -493,7 +498,7 @@
 
     .also_like_title {
         font-size: 24px;
-        color: #0f2770;
+        color: #1c1c1c;
         margin-bottom: 10px;
         font-weight: bold;
     }
