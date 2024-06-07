@@ -125,7 +125,7 @@ body {
 }
 
 .active {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     width: 27px;
     height: 8px;
     border-radius: 5px;
@@ -179,7 +179,8 @@ body {
 
 .diamond_shape_column:hover .diamond_shape_name {
     transform: translateY(-5px) scale(1.2);
-    color: #0f2770; 
+    color: #1c1c1c; 
+    font-weight: bold;
 }
 
 
@@ -207,7 +208,7 @@ body {
 .featured_title {
     font-size: 24px;
     font-weight: bold;
-    color: #1a2654;
+    color: #1c1c1c;
     margin-bottom: -10px;
 }
 
@@ -218,7 +219,7 @@ body {
 }
 
 .shop_now_btn {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     border: none;
     padding: 7px 55px;
@@ -229,7 +230,7 @@ body {
 }
 
 .shop_now_btn:hover {
-    background-color: #2d4ba8;
+    background-color: #797979;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -435,7 +436,7 @@ ul {
 
 .collections_title {
     font-size: 24px;
-    color: #1a2654;
+    color: #1c1c1c;
     margin-bottom: 20px;
     font-weight: bold;
 }
@@ -517,8 +518,8 @@ ul {
 
 .collection_shop_now_btn {
     background-color: transparent;
-    color: #0f2770;
-    border: 1px solid #0f2770;
+    color: #1c1c1c;
+    border: 1px solid #1c1c1c;
     padding: 7px 55px;
     cursor: pointer;
     border-radius: 30px;
@@ -528,7 +529,7 @@ ul {
 }
 
 .collection_shop_now_btn:hover {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -568,7 +569,7 @@ ul {
     font-size: 22px;
     font-weight: bold;
     margin-top: 10px;
-    color: #1a2654;
+    color: #1c1c1c;
 }
 
 .bb_description {
@@ -577,7 +578,7 @@ ul {
 }
 
 .bb_shop_now_button {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     border: none;
     padding: 7px 55px;
@@ -590,7 +591,7 @@ ul {
 }
 
 .bb_shop_now_button:hover {
-    background-color: #2d4ba8;
+    background-color: #797979;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -623,31 +624,31 @@ ul {
 .impression_title {
     font-size: 24px;
     font-weight: bold;
-    color: #1a2654;
+    color: #1c1c1c;
     margin-bottom: 10px;
 }
 
 .impression_description {
     font-size: 14px;
-    color: #1a2654;
+    color: #1c1c1c;
     margin-bottom: 20px;
     margin-right: 720px;
 }
 
 .impression_shop_now_button {
     background-color: transparent;
-    color: #1a2654;
+    color: #1c1c1c;
     border: none;
     padding: 7px 40px;
     cursor: pointer;
     border-radius: 30px;
     font-size: 13px;
-    border: 2px solid #1a2654;
+    border: 2px solid #1c1c1c;
     font-weight: bold;
 }
 
 .impression_shop_now_button:hover {
-    background-color: #1a2654;
+    background-color: #1c1c1c;
     color: white;
 }
 
@@ -680,13 +681,13 @@ ul {
 .proposal_title {
     font-size: 24px;
     font-weight: bold;
-    color: #1a2654;
+    color: #1c1c1c;
     margin-bottom: 10px;
 }
 
 .proposal_description {
     font-size: 14px;
-    color: #1a2654;
+    color: #1c1c1c;
     margin-bottom: 20px;
     margin-left: 750px;
     text-align: right;
@@ -694,18 +695,18 @@ ul {
 
 .proposal_shop_now_button {
     background-color: transparent;
-    color: #1a2654;
+    color: #1c1c1c;
     border: none;
     padding: 7px 40px;
     cursor: pointer;
     border-radius: 30px;
     font-size: 13px;
-    border: 2px solid #1a2654;
+    border: 2px solid #1c1c1c;
     font-weight: bold;
 }
 
 .proposal_shop_now_button:hover {
-    background-color: #1a2654;
+    background-color: #1c1c1c;
     color: white;
 }
 
@@ -713,8 +714,8 @@ ul {
 
 // Brilliant
 .brilliant_container {
-    background-color: #1a2654;
-    color: white;
+    background-color: #f8dcce;
+    color: #1c1c1c;
     padding: 40px 4% 90px 4%;
     text-align: center;
     margin-top: 10px;
@@ -732,7 +733,7 @@ ul {
 }
 
 .brilliant_description a {
-    color: #ffffff; 
+    color: #1c1c1c; 
     text-decoration: none; 
     cursor: pointer;
     font-weight: bold;
