@@ -108,7 +108,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
-        public async Task<IActionResult> DeleteWarranty([FromRoute] int id, [FromBody] UpdateWarrantyRequestDto warrantyDto)
+        public async Task<IActionResult> DeleteWarranty([FromRoute] int id)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var warranty = await _warrantyRepository.DeleteWarrantyAsync(id, warrantyDto.ToWarrantyFromUpdateDto(id));
+                var warranty = await _warrantyRepository.DeleteWarrantyAsync(id);
                 if (warranty == null)
                 {
                     return NotFound("Warranty does not exist");
