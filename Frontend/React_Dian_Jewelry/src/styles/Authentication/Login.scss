@@ -57,12 +57,12 @@ input {
 
 .sign_in_button {
   width: 100%;
-  background-color: #0f2770;
+  background-color: #1c1c1c;
   color: white;
 }
 
 .sign_in_button:hover {
-  background-color: #2d4ba8;
+  background-color: #797979;
   color: white;
 }
 
@@ -74,10 +74,12 @@ input {
 
 .sign_up_link {
   text-decoration: none;
-  color: #0f2770;
+  color: #1c1c1c;
+  font-weight: bold;
 }
 
 .sign_up_link:hover {
+  color: #797979;
   text-decoration: underline;
 }
 
@@ -90,12 +92,13 @@ input {
 .forgot_password_link {
   margin-left: auto;
   text-decoration: none;
-  color: #0f2770;
+  color: #1c1c1c;
   font-size: 13px;
 }
 
 .forgot_password_link:hover {
   text-decoration: underline;
+  color: #797979;
 }
 
 .remember_me {
@@ -167,7 +170,7 @@ input {
 
 .google_login:hover {
   color: white;
-  background-color: #ed3d40;
+  background-color: #ee5e60;
 }
 
 .icon_gg {

@@ -87,7 +87,7 @@ const FooterComponent = () => {
                     <hr className="hr_footer" />
                     <div className="copyright row">
                         <div className="col-md-12 text-center">
-                            <p>Copyright ©2024 Dian Jewelry | <a className="tos_link" id="tosLink" href="#tos">Terms of Service & Privacy Policy</a></p>
+                            <p>Copyright ©2024 Dian Jewelry | <a className="tos_link" id="tosLink" href="#tos"><strong>Terms of Service & Privacy Policy</strong></a></p>
                         </div>
                     </div>
                 </div>

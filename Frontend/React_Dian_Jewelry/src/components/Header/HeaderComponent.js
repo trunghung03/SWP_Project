@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
 import '../Header/HeaderComponent.scss';
-import logo from '../../assets/img/logo.png';
+import logo from '../../assets/img/logoN.png';
 
 const HeaderComponent = () => {
     const { user } = useContext(UserContext);
