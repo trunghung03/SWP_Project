@@ -23,6 +23,7 @@ namespace UserApplication.Services
             {
                 new(JwtRegisteredClaimNames.UniqueName, user.Email),
                 new(ClaimTypes.Role, Roles.Customer.ToString()),
+                new Claim("ResetPassword", "True")
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
@@ -49,6 +50,7 @@ namespace UserApplication.Services
             {
                 new(JwtRegisteredClaimNames.UniqueName, user.Email),
                 new(ClaimTypes.Role, user.Role),
+                new Claim("ResetPassword", "True")
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);

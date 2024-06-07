@@ -54,9 +54,11 @@ namespace DIAN_.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var order = purchaseOrderDTO.ToCreatePurchaseOrder();
-            var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
-            return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+
+                var order = purchaseOrderDTO.ToCreatePurchaseOrder();
+                var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
+                return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+
         }
 
         [HttpPut("{id}")]
