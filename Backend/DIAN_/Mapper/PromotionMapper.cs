@@ -23,13 +23,7 @@ namespace DIAN_.Mapper
                 Status = true,
             };
         }
-        public static Promotion ToUpdatePromotionAmount(this UpdatePromotionAmountDto promotionModel)
-        {
-            return new Promotion
-            {
-                Amount = promotionModel.Amount,
-            };
-        }
+
         public static PromotionList ToPromotionList(this Promotion promotionModel)
         {
             return new PromotionList

@@ -26,7 +26,6 @@ namespace DIAN_.Interfaces
 
         Task<int> GetPromotionIdByCodeAsync(string code);
 
-        Task<Promotion?> UpdatePromotionAmount(int promoId, UpdatePromotionAmountDto promotion);
        
     }
 }

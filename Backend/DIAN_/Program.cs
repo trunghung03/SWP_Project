@@ -10,10 +10,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using DIAN_.Services;
 using System.Text.Json.Serialization;
+using DIAN_.ExceptionHandler;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//var config = new NLog.Config.XmlLoggingConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+//NLog.LogManager.Configuration = config;
+
 
 
 builder.Services.AddCors();
@@ -31,6 +36,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -50,6 +57,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
 var app = builder.Build();
 
@@ -65,6 +73,9 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
+
+var logger = app.Services.GetRequiredService<ILoggerManager>(); 
+app.ConfigureExceptionHandler(logger);
 
 app.UseHttpsRedirection();
 
