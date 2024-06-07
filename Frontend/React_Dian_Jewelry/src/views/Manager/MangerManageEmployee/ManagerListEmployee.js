@@ -3,15 +3,9 @@ import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-<<<<<<< Updated upstream
-import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
-import { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeeById,  } from '../../../services/ManagerService/ManagerEmployeeService.js'
-import logo from '../../../assets/img/logo.png';
-=======
 import '../../../styles/Manager/ManagerList.scss';
 import {ShowAllEmployee, getEmployeeDetail,deleteEpmloyeeById,updateEmployeeById} from '../../../services/ManagerService/ManagerEmployeeService.js'
 import logo from '../../../assets/img/logoN.png';
->>>>>>> Stashed changes
 
 
 const ManagerEmployeeList = () => {
@@ -75,11 +69,7 @@ const ManagerEmployeeList = () => {
     // Delete diamond by id 
     const handleDelete = async (employeeID) => {
         swal({
-<<<<<<< Updated upstream
-            title: "Are you sure to delete this employee?",
-=======
             title: "Are you sure to delete this employee account?",
->>>>>>> Stashed changes
             text: "This action cannot be undone",
             icon: "warning",
             buttons: true,
@@ -136,11 +126,7 @@ const ManagerEmployeeList = () => {
             const updatedItems = await ShowAllEmployee();
             setEmployeeList(updatedItems);
             setEditMode(false);
-<<<<<<< Updated upstream
-            swal("Updated successfully!", "The employee information has been updated.", "success");
-=======
             swal("Updated successfully!", "Employee information has been updated.", "success");
->>>>>>> Stashed changes
         } catch (error) {
             console.error("Error updating diamond:", error.response ? error.response.data : error.message);
             swal("Something went wrong!", "Failed to update. Please try again.", "error");

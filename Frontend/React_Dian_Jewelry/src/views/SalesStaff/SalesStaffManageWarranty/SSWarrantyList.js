@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../../styles/SalesStaff/SalesStaffManageWarranty/SSWarrantyList.scss';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
+import '../../../styles/Manager/ManagerList.scss';
 import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffSidebar.js';
 import { fetchAllWarranty, updateWarranty, deleteWarranty, fetchWarrantyDetail } from '../../../services/SalesStaffService/SSWarrantyService.js';
 import logo from '../../../assets/img/logo.png';

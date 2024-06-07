@@ -19,7 +19,16 @@ class SalesStaffSidebar extends Component {
     };
 
     handleSignOut = () => {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+
         localStorage.clear();
+
+        if (rememberedEmail && rememberedPassword) {
+            localStorage.setItem('rememberedEmail', rememberedEmail);
+            localStorage.setItem('rememberedPassword', rememberedPassword);
+        }
+
         this.props.navigate('/login');
     };
 
