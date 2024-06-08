@@ -78,30 +78,24 @@ namespace DIAN_.Controllers
             }
 
             var articleModel = articleDto.ToArticleFromCreate();
-            await _articleRepository.CreateArticleAsync(articleModel);
-            return CreatedAtAction(nameof(GetArticleByTitle), new { id = articleModel.ContentId }, articleModel.ToArticleDetailDto());
+            var createdArticle = await _articleRepository.CreateArticleAsync(articleModel);
+            return CreatedAtAction(nameof(GetArticleById), new { id = createdArticle.ContentId }, createdArticle.ToArticleDetailDto());
         }
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateArticle([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
-        {
-            try
-            {
+        {        
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
+                var existingArticles = await _articleRepository.GetArticleByIdAsync(id);
                 var article = await _articleRepository.UpdateArticleAsync(id, articleDto.ToArticleFromUpdate(id));
                 if (article == null)
                 {
-                    return NotFound("Article does not exist");
+                    return NotFound("Cannot update content due to duplicate title.");
                 }
-                return Ok(article.ToDisplayArticleFromUpdate());
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+                return Ok(article.ToArticleDetailDto());
         }
 
         [HttpDelete("delete/{id:int}")]
@@ -114,11 +108,11 @@ namespace DIAN_.Controllers
                 {
                     return NotFound("Article does not exist");
                 }
-                return Ok(article.ToArticleDto());
+                return Ok(article.ToArticleDetailDto());
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
     }
