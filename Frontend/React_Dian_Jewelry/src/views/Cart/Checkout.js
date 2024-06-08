@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -8,6 +8,7 @@ import '../../styles/Cart/Checkout.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { createPurchaseOrder, createOrderDetails, getPromotionByCode } from '../../services/CheckoutService.js';
 import { useCart } from '../../services/CartService';
+import { UserContext } from '../../services/UserContext';
 
 function Checkout() {
     const navItems = ['Home', 'Cart', 'Checkout'];
@@ -31,6 +32,7 @@ function Checkout() {
     const { setCartItems: updateCartContext } = useCart();
     const [voucherCode, setVoucherCode] = useState('');
     const [appliedVoucher, setAppliedVoucher] = useState(false);
+    const { user, setUser } = useContext(UserContext); // Use UserContext
 
     useEffect(() => {
         const cartKey = `cartItems${customerId}`;
@@ -59,7 +61,7 @@ function Checkout() {
         } else {
             setPointsDiscount(0);
         }
-        const totalDiscount = Math.min(initialTotal, voucherDiscount + discountFromPoints);
+        const totalDiscount = voucherDiscount + discountFromPoints;
         setTotalPrice(Math.max(0, initialTotal - totalDiscount));
     }, [usePoints, points, cartItems, voucherDiscount, pointsDiscount]);
 
@@ -133,6 +135,19 @@ function Checkout() {
 
         const userId = parseInt(localStorage.getItem('customerId'), 10);
         const date = new Date().toISOString();
+        const initialTotal = calculateTotal();
+        const totalDiscount = voucherDiscount + pointsDiscount;
+
+        // Calculate remaining points and actual discount applied
+        let remainingPoints = points;
+        let appliedDiscount = totalDiscount;
+        if (totalDiscount > initialTotal) {
+            remainingPoints = totalDiscount - initialTotal;
+            appliedDiscount = initialTotal;
+        } else {
+            remainingPoints = points - pointsDiscount;
+        }
+
         const orderData = {
             userId: userId,
             date: date,
@@ -140,7 +155,7 @@ function Checkout() {
             phoneNumber: phone,
             paymentMethod: paymentMethod,
             shippingAddress: address,
-            totalPrice: calculateTotal(),
+            totalPrice: initialTotal,
             orderStatus: "Pending",
             promotionId: appliedVoucher ? promotionId : null,
             payWithPoint: usePoints,
@@ -170,12 +185,15 @@ function Checkout() {
 
             localStorage.setItem('orderId', orderId);
             localStorage.setItem('orderDate', date);
-            localStorage.setItem('orderTotalPrice', totalPrice);
-            localStorage.setItem('orderDiscount', voucherDiscount + pointsDiscount);
+            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice)); // Store as integer
+            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount)); // Store as integer
 
-            if (usePoints) {
-                localStorage.setItem('points', 0);
-            }
+            // Update points
+            localStorage.setItem('points', remainingPoints);
+            setUser(prevUser => ({
+                ...prevUser,
+                points: remainingPoints
+            }));
 
             const cartKey = `cartItems${customerId}`;
             localStorage.removeItem(cartKey);
@@ -189,7 +207,7 @@ function Checkout() {
                 button: "OK",
             });
             setLoading(false);
-            navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems } });
+            navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } }); // Pass as integer
         } catch (error) {
             console.error('Error creating purchase order:', error);
             if (error.response) {
@@ -354,10 +372,10 @@ function Checkout() {
                     </div>
                     <h5 className="checkout_summary_title"><i className="fas fa-receipt"></i>Total price</h5>
                     <div className="checkout_summary_details">
-                        <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>{calculateTotal()}$</strong></span></p>
-                        <p className="checkout_summary_discount"><span>Discount</span><span><strong>{(voucherDiscount + pointsDiscount).toFixed(2)}$</strong></span></p>
+                        <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>{Math.floor(calculateTotal())}$</strong></span></p>
+                        <p className="checkout_summary_discount"><span>Discount</span><span><strong>{Math.floor(voucherDiscount + pointsDiscount)}$</strong></span></p>
                         <hr />
-                        <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>{totalPrice.toFixed(2)}$</strong></span></p>
+                        <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>{Math.floor(totalPrice)}$</strong></span></p>
                     </div>
                     <button onClick={handleInvoice} className="checkout_summary_checkout" disabled={loading}>
                         {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}

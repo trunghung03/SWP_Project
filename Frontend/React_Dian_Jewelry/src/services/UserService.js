@@ -22,4 +22,8 @@ const updateCustomerInfo = (id, data) => {
     return axios.put(`${API_BASE_URL}/accounts/${id}`, data);
 }
 
-export { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo, updateCustomerInfo };
+const forgotPasswordApi = (email) => {
+    return axios.post(`${API_BASE_URL}/accounts/forgot-password`, { email });
+}
+
+export { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo, updateCustomerInfo, forgotPasswordApi };

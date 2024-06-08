@@ -183,14 +183,48 @@ const Home = () => {
             <img src={slide3} alt="Slide 3" />
           </div>
         </Slider>
-        <div className="dot-container">
+        {/* <div className="dot-container">
           {[0, 1, 2].map((_, index) => (
             <span key={index} className={`dot ${index === currentSlide ? 'active' : ''}`} onClick={() => setCurrentSlide(index)}></span>
           ))}
-        </div>
+        </div> */}
       </div>
 
+      {/* Under slider  */}
+      <div className="under_slider_container">
+        <div className="under_slider_column">
+          <i className="fas fa-shipping-fast under_slider_icon"></i>
+          <div className="under_slider_text_container">
+            <h4 className="under_slider_title">Free shipping</h4>
+            <p className="under_slider_text">For all orders</p>
+          </div>
+        </div>
+        <div className="under_slider_column">
+          <i className="fa fa-headset under_slider_icon"></i>
+          <div className="under_slider_text_container">
+            <h4 className="under_slider_title">Hotline support</h4>
+            <p className="under_slider_text">Customer service</p>
+          </div>
+        </div>
+        <div className="under_slider_column">
+          <i className="fa fa-undo-alt under_slider_icon"></i>
+          <div className="under_slider_text_container">
+            <h4 className="under_slider_title">Better warranty</h4>
+            <p className="under_slider_text">If jewelry have problems</p>
+          </div>
+        </div>
+        <div className="under_slider_column">
+          <i className="far fa-credit-card under_slider_icon"></i>
+          <div className="under_slider_text_container">
+            <h4 className="under_slider_title">Secure payment</h4>
+            <p className="under_slider_text">100% secure payment</p>
+          </div>
+        </div>
+      </div>
+      <hr className="under_slider_hr" />
+
       {/* Diamond shape  */}
+      <h1 className="shape_title">Explore Diamond Shapes</h1>
       <div className="diamond_shape_container">
         <div className="diamond_shape_grid">
           <div className="diamond_shape_column">

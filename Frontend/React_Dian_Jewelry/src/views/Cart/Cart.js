@@ -79,7 +79,7 @@ function Cart() {
     };
 
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + parseFloat(item.price), 0).toFixed(2);
+        return Math.floor(cartItems.reduce((total, item) => total + parseFloat(item.price), 0));
     };
 
     return (
@@ -129,7 +129,7 @@ function Cart() {
                                                 <button onClick={openSizeGuide} className="cart_size_guide_detail">Size guide</button>
                                             </div>
                                         </div>
-                                        <div className="cart_item_price">{item.price}$</div>
+                                        <div className="cart_item_price">{Math.floor(item.price)}$</div>
                                     </div>
                                 </div>
                             );

@@ -22,6 +22,13 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('firstName', user.firstName);
+    localStorage.setItem('lastName', user.lastName);
+    localStorage.setItem('email', user.email);
+    localStorage.setItem('points', user.points);
+  }, [user]);
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
