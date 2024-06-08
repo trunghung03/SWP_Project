@@ -99,6 +99,24 @@ namespace UserApplication.Controllers
             }
         }
 
+        [HttpGet("search/name/{name}")]
+        public async Task<IActionResult> SearchByName(string name)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var customer = await _customerRepository.SearchByNameAsyncs(name);
+                if (customer == null) return NotFound();
+
+                return Ok(customer);
+            } catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
+
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {

@@ -31,11 +31,19 @@ namespace DIAN_.Repository
             }
         }
 
-        public async Task<ShellMaterialDTO> GetByIdAsync(int id)
+        public async Task<ShellMaterialDTO?> GetByIdAsync(int id)
         {
-            var shell = await _context.Shellmaterials.FindAsync(id);
-            return shell?.ToShellMaterialDTO();
+            var shell = await _context.Shellmaterials
+                .Where(s => s.Status && s.ShellMaterialId == id)
+                .FirstOrDefaultAsync();
+            if (shell == null)
+            {
+                return null;
+            }
+            return shell.ToShellMaterialDTO();
         }
+
+
 
         public async Task<List<ShellMaterialDTO>> GetAllAsync()
         {
@@ -45,7 +53,7 @@ namespace DIAN_.Repository
                 .ToListAsync();
         }
 
-        public async Task<ShellMaterialDTO> UpdateAsync(ShellMaterialDTO shellDTO)
+        public async Task<ShellMaterialDTO?> UpdateAsync(ShellMaterialDTO shellDTO)
         {
             var shell = await _context.Shellmaterials.FindAsync(shellDTO.ShellMaterialId);
             if (shell == null)

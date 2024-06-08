@@ -9,9 +9,9 @@ namespace DIAN_.Interfaces
     {
         Task<ShellMaterialDTO> CreateAsync(Shellmaterial shell);
         Task DeleteAsync(int id);
-        Task<ShellMaterialDTO> GetByIdAsync(int id);
+        Task<ShellMaterialDTO?> GetByIdAsync(int id);
         Task<List<ShellMaterialDTO>> GetAllAsync();
-        Task<ShellMaterialDTO> UpdateAsync(ShellMaterialDTO shellDTO);
+        Task<ShellMaterialDTO?> UpdateAsync(ShellMaterialDTO shellDTO);
         Task<List<string>> GetListNamesAsync();
 
         Task<List<Shellmaterial>> GetShellByName(string name);

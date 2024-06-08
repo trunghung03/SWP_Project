@@ -34,9 +34,9 @@ namespace DIAN_.Repository
         public async Task<List<Promotion>> GetAllPromotionAsync()
         {
 
-         //   return await _context.Promotions.Where(x => x.Status == true)
-         //.Select(p => p.ToPromotionList()).ToListAsync();
-         var promotions = await _context.Promotions.ToListAsync();
+         var promotions = await _context.Promotions
+                .Where(p => p.Status)
+                .ToListAsync();
             
             return promotions;
 
@@ -65,7 +65,9 @@ namespace DIAN_.Repository
 
         public async Task<Promotion?> GetPromotionByCodeAsync(string proCode)
         {
-            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.Code == proCode);
+            var existingPromotion = await _context.Promotions
+                .Where(p => p.Status)
+                .FirstOrDefaultAsync(x => x.Code == proCode);
             if(existingPromotion == null)
             {
                 return null;
@@ -86,7 +88,9 @@ namespace DIAN_.Repository
 
         public async Task<Promotion?> GetPromotionByIdAsync(int id)
         {
-            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionId == id);
+            var existingPromotion = await _context.Promotions
+                .Where(p => p.Status)
+                .FirstOrDefaultAsync(x => x.PromotionId == id);
            if(existingPromotion == null)
            {
                return null;
@@ -97,7 +101,8 @@ namespace DIAN_.Repository
 
         public async Task<List<Promotion?>> SearchPromotionsByNameAsync(string name)
         {
-            var promotion = await _context.Promotions.Where(x => x.Name.Contains(name)).ToListAsync();
+            var promotion = await _context.Promotions.Where(x => x.Name.Contains(name) && x.Status)
+                .ToListAsync();
             if (promotion == null)
             {
                 throw new KeyNotFoundException("Promotion does not exist");

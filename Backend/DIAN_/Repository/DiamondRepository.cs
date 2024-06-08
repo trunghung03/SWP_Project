@@ -11,7 +11,7 @@ namespace DIAN_.Repository
         private readonly ApplicationDbContext _context;
         public DiamondRepository(ApplicationDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
         public async Task<Diamond> AddDiamondAsync(Diamond diamond)
         {
@@ -41,7 +41,9 @@ namespace DIAN_.Repository
 
         public async Task<Diamond?> GetDiamondByIdAsync(int id)
         {
-            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
+            var existingDiamond = await _context.Diamonds
+                .Where(s => s.Status)
+                .FirstOrDefaultAsync(x => x.DiamondId == id);
             if (existingDiamond == null)
             {
                 throw new KeyNotFoundException("Diamond does not exist");
@@ -51,7 +53,9 @@ namespace DIAN_.Repository
 
         public Task<List<Diamond>> GetDiamondByShapeAsync(string shape)
         {
-            var diamonds = _context.Diamonds.Where(x => x.Shape.Contains(shape)).ToListAsync();
+            var diamonds = _context.Diamonds
+                .Where(s => s.Status)
+                .Where(x => x.Shape.Contains(shape)).ToListAsync();
             if (diamonds == null)
             {
                 throw new KeyNotFoundException("Diamond does not exist");

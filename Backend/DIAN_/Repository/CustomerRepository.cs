@@ -43,7 +43,13 @@ namespace DIAN_.Repository
 
             return customer;
         }
+        public async Task<Customer?> SearchByNameAsyncs(string name)
+        {
+           var customer = await _context.Customers.FirstOrDefaultAsync(c => c.FirstName.Contains(name) || c.LastName.Contains(name));
+            if (customer == null) return null;
 
+            return customer;
+        }
         public async Task<Customer?> GetByIdAsync(int id)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
@@ -134,6 +140,7 @@ namespace DIAN_.Repository
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
+
 
     }
 }

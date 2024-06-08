@@ -47,7 +47,8 @@ namespace DIAN_.Repository
 
         public async Task<Warranty?> GetWarrantyByIdAsync(int id)
         {
-            var warranty = await _context.Warranties.FindAsync(id);
+            var warranty = await _context.Warranties
+                .FindAsync(id);
 
             if (warranty == null) { return null; }
 
