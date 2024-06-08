@@ -3,7 +3,7 @@ body {
 }
 
 .top_announcement {
-    background-color: #1a2654;
+    background-color: #1c1c1c;
     color: white;
     text-align: center;
     padding: 5px 0;
@@ -30,7 +30,8 @@ body {
 .navbar-nav .nav-item .price_list {
     text-transform: uppercase;
     padding: 10px 20px 16px 20px;
-    color: #000;
+    color: #1c1c1c;
+    font-weight: bold;
 }
 
 :placeholder-shown {
@@ -58,7 +59,7 @@ body {
 }
 
 .logo {
-    width: 43%;
+    width: 42%;
     margin: 5px 0 0 0;
 }
 
@@ -78,13 +79,13 @@ body {
 
     .icon_cart {
         font-size: 18px;
-        color: #565e6c;
+        color: #1c1c1c;
         margin: 0 25px;
         cursor: pointer;
         transition: color 0.3s ease;
 
         &:hover {
-            color: #0f2770;
+            color: #797979;
         }
     }
 
@@ -96,10 +97,10 @@ body {
     }
 
     .icon_account {
-        color: #565e6c;
+        color: #1c1c1c;
 
         &:hover {
-            color: #0f2770;
+            color: #797979;
         }
     }
 }
@@ -120,16 +121,15 @@ body {
 
 .cart_badge {
     position: absolute;
-    top: -5%;
-    right: 22%;
-    background-color: #db2222;
-    color: white;
+    top: -18%;
+    right: 18%;
+    background-color: #f8dcce;
+    color: #1c1c1c;
     border-radius: 50%;
-    padding: 2px 5px 1px 5px;
-    font-size: 7px;
+    padding: 2px 6px 2px 6px;
+    font-size: 9px;
     font-weight: bold;
 }
-
 
 //nav item animation
 
@@ -145,7 +145,7 @@ body {
     bottom: 17px;
     left: 20px;
     width: 0;
-    border: 1px solid #0f2770;
+    border: 1px solid #797979;
     transition: width 0.6s ease, left 0.6s ease;
     opacity: 0;
 }
@@ -163,7 +163,7 @@ body {
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    color: #1e3d9c;
+    color: #797979;
 }
 
 
@@ -173,7 +173,7 @@ body {
 .navbar {
     border-bottom: 1px solid #e0e0e0;
     background-color: white;
-    margin: -8px -5px -5px -5px;
+    margin: -2px -5px -5px -5px;
 }
 
 .navbar-collapse {
@@ -238,7 +238,7 @@ body {
 }
 
 .adm_icon:hover {
-    color: #0f2770;
+    color: #797979;
 }
 
 .account_hr_guest {
@@ -259,12 +259,12 @@ body {
 
 .point {
     font-size: 13px;
-    color: #9095A0;
+    color: #797979;
     margin-top: -23px;
 }
 
 .account_dropdown_menu i {
-    color: #565e6c;
+    color: #1c1c1c;
     font-size: 15px;
 }
 
@@ -283,8 +283,9 @@ li:focus {
     color: #565e6c;
 }
 
-i {
-    color: #565e6c;
+.header .fa-phone-alt,
+.header .fa-map-marker-alt {
+    color: #1c1c1c;
     font-size: 15px;
 }
 

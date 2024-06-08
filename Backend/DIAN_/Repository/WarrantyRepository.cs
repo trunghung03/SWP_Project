@@ -22,7 +22,7 @@ namespace DIAN_.Repository
             return warrantyModel;
         }
 
-        public async Task<Warranty?> DeleteWarrantyAsync(int id, Warranty warranty)
+        public async Task<Warranty?> DeleteWarrantyAsync(int id)
         {
             var existingWarranty = await _context.Warranties.FirstOrDefaultAsync(x => x.OrderDetailId == id);
             if (existingWarranty != null)

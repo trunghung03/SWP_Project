@@ -8,6 +8,7 @@ using DIAN_.Repository;
 using DIAN_.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace DIAN_.Controllers
@@ -23,7 +24,7 @@ namespace DIAN_.Controllers
         private readonly ApplicationDbContext _context;
 
 
-        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
+        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService,
             ApplicationDbContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
@@ -50,7 +51,7 @@ namespace DIAN_.Controllers
             }
             return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
         }
-        [HttpPost("creaaaa")]
+        [HttpPost]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
             var order = purchaseOrderDTO.ToCreatePurchaseOrder();
@@ -69,7 +70,7 @@ namespace DIAN_.Controllers
             return Ok(purchaseOrder);
         }
 
-        [HttpPost("duyen_test_order_logic")]
+        [HttpPost("checkout")]
         public ActionResult Checkout(CreatePurchaseOrderDTO purchaseOrderDTO, string promotionCode)
         {
             var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
@@ -104,6 +105,5 @@ namespace DIAN_.Controllers
             var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
             return Ok(updatedTotalPrice);
         }
-
     }
 }

@@ -3,9 +3,9 @@ import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerDiamondList.scss';
+import '../../../styles/Manager/ManagerList.scss';
 import {ShowAllEmployee, getEmployeeDetail,deleteEpmloyeeById,updateEmployeeById} from '../../../services/ManagerService/ManagerEmployeeService.js'
-import logo from '../../../assets/img/logo.png';
+import logo from '../../../assets/img/logoN.png';
 
 
 const ManagerEmployeeList = () => {
@@ -67,9 +67,9 @@ const ManagerEmployeeList = () => {
     };
 
     // Delete diamond by id 
-    const handleDelete = async (productID) => {
+    const handleDelete = async (employeeID) => {
         swal({
-            title: "Are you sure to delete this diamond?",
+            title: "Are you sure to delete this employee account?",
             text: "This action cannot be undone",
             icon: "warning",
             buttons: true,
@@ -77,10 +77,10 @@ const ManagerEmployeeList = () => {
         }).then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    await deleteEpmloyeeById(productID);
+                    await deleteEpmloyeeById(employeeID);
                     const response = await ShowAllEmployee();
                     setEmployeeList(response);
-                    swal("Deleted successfully!", "The employee has been deleted.", "success");
+                    swal("Deleted successfully!", "Employee has been deleted.", "success");
                 } catch (error) {
                     console.error("Error deleting diamond:", error);
                     swal("Something went wrong!", "Failed to delete the employee. Please try again.", "error");
@@ -95,16 +95,15 @@ const ManagerEmployeeList = () => {
         setEditMode(true);
         setEditedEmployee(employee);
         setOriginalEmployee(employee);
-     };
+    };
 
-     const handleChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedEmployee({ ...editedEmployee, [name]: value });
     };
 
-     const handleUpdate = async () => {
-        const status = true;
-        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address','phoneNumber'];
+    const handleUpdate = async () => {
+        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address', 'phoneNumber'];
         for (let field of requiredFields) {
             if (!editedEmployee[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
@@ -127,18 +126,18 @@ const ManagerEmployeeList = () => {
             const updatedItems = await ShowAllEmployee();
             setEmployeeList(updatedItems);
             setEditMode(false);
-            swal("Updated successfully!", "The diamond information has been updated.", "success");
+            swal("Updated successfully!", "Employee information has been updated.", "success");
         } catch (error) {
             console.error("Error updating diamond:", error.response ? error.response.data : error.message);
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
-     };
+    };
 
 
     return (
         <div className="manager_manage_diamond_all_container">
             <div className="manager_manage_diamond_sidebar">
-                <ManagerSidebar currentPage="manager_manage_employee" />
+                <ManagerSidebar currentPage="manager_employee" />
             </div>
             <div className="manager_manage_diamond_content">
                 <div className="manager_manage_diamond_header">
@@ -155,24 +154,23 @@ const ManagerEmployeeList = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
-                <div className="manager_manage_diamond_create_button_section">
+                <h3>List Of Employees</h3>
+                {/* <div className="manager_manage_diamond_create_button_section">
                     <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddEmployee')}>Add new employee</button>
-                </div>
+                </div> */}
 
                 {/* Table diamond list */}
                 <div className="manager_manage_diamond_table_wrapper">
-                    <h1>List of employees</h1>
                     <table className="manager_manage_diamond_table table">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Role</th>
                                 <th>Email</th>
-                                <th>Last name</th>
-                                <th>First name</th>
-                                <th>Addresss</th>
+                                <th>Full Name</th>
+                                <th>Address</th>
                                 <th>Phone number</th>
-                                <th>Action</th>
+                                {/* <th>Action</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -182,14 +180,13 @@ const ManagerEmployeeList = () => {
                                         <td>{item.employeeId}</td>
                                         <td>{item.role}</td>
                                         <td>{item.email}</td>
-                                        <td>{item.lastName}</td>
-                                        <td>{item.firstName}</td>
+                                        <td>{item.firstName} {item.lastName}</td>
                                         <td>{item.address}</td>
                                         <td>{item.phoneNumber}</td>
-                                        <td>
+                                        {/* <td>
                                             <i className="fas fa-pen" onClick={() => handleEdit(item)} style={{ cursor: 'pointer', marginRight: '10px' }}></i>
                                             <i className="fas fa-trash" onClick={() => handleDelete(item.employeeId)} style={{ cursor: 'pointer' }}></i>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))
                             ) : (

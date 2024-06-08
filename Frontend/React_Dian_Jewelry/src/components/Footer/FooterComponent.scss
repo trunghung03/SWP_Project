@@ -1,7 +1,7 @@
 /* Footer */
 .footer {
-    background-color: #fafafb;
-    padding: 40px 0 15px 0;
+    background-color: #fff7f4;
+    padding: 40px 0 25px 0;
     position: relative;
     bottom: 0;
     left: 0;
@@ -10,7 +10,7 @@
 }
 
 .footer h6 {
-    color: #333;
+    color: #1c1c1c;
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -26,34 +26,34 @@
 }
 
 .footer ul li a {
-    color: #565e6c;
+    color: #7d6f68;
     text-decoration: none;
 }
 
 .footer ul li a:hover {
-    color: #0f2770;
+    color: #1c1c1c;
 }
 
 .footer hr {
     border: 0;
-    border-top: 1px solid rgb(95, 95, 95);
-    margin: 30px -100px 10px -100px;
+    border-top: 1px solid #7d6f68;
+    margin: 30px -20% 25px -20%;
 }
 
 .footer p {
     margin: 0;
     font-size: 14px;
-    color: #565e6c;
+    color: #7d6f68;
 }
 
 .footer p a {
-    color: #0f2770;
+    color: #1c1c1c;
     text-decoration: none;
 }
 
 .footer p a:hover {
     text-decoration: underline;
-    color: #0092f7;
+    color: #797979;
     cursor: pointer;
 }
 
@@ -64,7 +64,7 @@
 
 .footer_content a{
     cursor: pointer;
-    color: #565e6c;
+    color: #7d6f68;
     text-decoration: none;
 }
 
@@ -79,18 +79,18 @@
 }
 
 .social_media_icon i:hover {
-    color: #0f2770;
+    color: #1c1c1c;
 }
 
 .footer ul li a {
-    color: #565e6c;
+    color: #7d6f68 ;
     text-decoration: none;
     display: inline-block;
     transition: transform 0.3s ease;
 }
 
 .footer ul li a:hover {
-    color: #0f2770;
+    color: #1c1c1c;
     transform: translateY(-2px);
 }
 
@@ -134,7 +134,7 @@
     display: block;
     margin: 20px 0 5px 77%;
     padding: 5px 20px 8px 20px;
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     border: none;
     cursor: pointer;
@@ -142,7 +142,7 @@
 }
 
 .confirm-btn:hover {
-    background-color: #2d4ba8;
+    background-color: #797979;
 }
 
 .tos_title,

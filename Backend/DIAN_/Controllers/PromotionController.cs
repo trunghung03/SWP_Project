@@ -5,6 +5,7 @@ using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Controllers
 {
@@ -43,6 +44,16 @@ namespace DIAN_.Controllers
             }
         }
 
+        [HttpGet("promotion/{code}")]
+        public async Task<IActionResult> GetPromotionByCode(string code)
+        {
+            var promotion = await _promotionRepository.GetPromotionByCodeAsync(code);
+            if (promotion == null)
+            {
+                return NotFound("Promotion does not exist");
+            }
+            return Ok(promotion.ToPromotionDetail());
+        }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> getById([FromRoute] int id)

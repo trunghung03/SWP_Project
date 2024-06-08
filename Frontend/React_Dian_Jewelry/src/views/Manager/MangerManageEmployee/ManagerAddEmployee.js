@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 import logo from '../../../assets/img/logo.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import { createEmployee } from '../../../services/ManagerService/ManagerEmployeeService.js';
-import '../../../styles/Manager/ManagerManageDiamond/ManagerAddDiamond.scss';
+import '../../../styles/Manager/ManagerAdd.scss';
 
 const ManagerAddEmployee = () => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const ManagerAddEmployee = () => {
         password: '',
         lastName: '',
         firstName: '',
-        address: '', 
+        address: '',
         phoneNumber: ''
     });
 
@@ -22,7 +22,7 @@ const ManagerAddEmployee = () => {
         const { name, value } = e.target;
         setEmployeeData(prevState => ({ ...prevState, [name]: value }));
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -49,7 +49,7 @@ const ManagerAddEmployee = () => {
     return (
         <div className="manager_add_diamond_all_container">
             <div className="manager_add_diamond_sidebar">
-                <ManagerSidebar currentPage="manager_manage_employee" />
+                <ManagerSidebar currentPage="manager_employee" />
             </div>
             <div className="manager_add_diamond_content">
                 <div className="manager_add_diamond_header">
@@ -57,7 +57,7 @@ const ManagerAddEmployee = () => {
                 </div>
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
-                    <h1 className="manager_add_diamond_title">Add new employee</h1>
+                    <h3 className="manager_add_diamond_title">Add New Employee</h3>
                     <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerEmployeeList')}>
                         &lt; Back
                     </button>
@@ -74,9 +74,10 @@ const ManagerAddEmployee = () => {
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
+
                         <div className="manager_add_diamond_form_group">
-                            <label>Password</label>
-                            <input type="text" name="password" value={employeeData.password} onChange={handleChange} required />
+                            <label>First name</label>
+                            <input type="text" name="firstName" value={employeeData.firstName} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Last name</label>
@@ -85,17 +86,17 @@ const ManagerAddEmployee = () => {
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>First name</label>
-                            <input type="text" name="firstName" value={employeeData.firstName} onChange={handleChange} required />
+                            <label>Password</label>
+                            <input type="text" name="password" value={employeeData.password} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
-                            <label>Address</label>
-                            <input type="text" name="address" value={employeeData.address} onChange={handleChange} required />
+                            <label>Phone number</label>
+                            <input type="text" name="phoneNumber" value={employeeData.phoneNumber} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_group">
-                        <label>Phone number</label>
-                        <input type="text" name="phoneNumber" value={employeeData.phoneNumber} onChange={handleChange} required />
+                        <label>Address</label>
+                        <input type="text" name="address" value={employeeData.address} onChange={handleChange} required />
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>

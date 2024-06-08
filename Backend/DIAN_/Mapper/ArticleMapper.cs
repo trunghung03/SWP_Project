@@ -73,6 +73,7 @@ namespace DIAN_.Mapper
         {
             return new ArticleList
             {
+                ArticleID = articleDto.ContentId,
                 Title = articleDto.Title,
                 CreatedBy = articleDto.EmployeeNavigation.LastName,
                 Date = articleDto.Date,

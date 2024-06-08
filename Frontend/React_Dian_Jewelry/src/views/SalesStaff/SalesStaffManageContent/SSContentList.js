@@ -86,16 +86,27 @@ function SSContentList() {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteContentById(id);
-      swal("Remove successfully!", "The blog has been deleted.", "success");
-      fetchData(); // Re-fetch the content list after deletion
-    } catch (error) {
-      console.error("Error deleting content:", error);
-      swal("Something is wrong!", "Failed to delete the blog. Please try again.", "error");
-    }
-  };
+ const handleDelete = async (articleID) => {
+//     swal({
+//         title: "Are you sure to delete this article?",
+//         text: "This action cannot be undone",
+//         icon: "warning",
+//         buttons: true,
+//         dangerMode: true,
+//     }).then(async (willDelete) => {
+//         if (willDelete) {
+//             try {
+//                 await deleteContentById(productID);
+//                 const response = await S();
+//                 setEmployeeList(response);
+//                 swal("Deleted successfully!", "The employee has been deleted.", "success");
+//             } catch (error) {
+//                 console.error("Error deleting diamond:", error);
+//                 swal("Something went wrong!", "Failed to delete the employee. Please try again.", "error");
+//             }
+//         }
+//     });
+ };
 
   return (
     <div className="ss_manage_content_all_container">

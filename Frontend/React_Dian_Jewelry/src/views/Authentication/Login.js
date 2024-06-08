@@ -122,7 +122,7 @@ const Login = () => {
                 setLoading(false);
                 return;
             }
-            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId); // Pass the customerId
+            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId); 
         }
     };
 

@@ -106,19 +106,6 @@ const Home = () => {
     navigate(path, { state });
   };
 
-  const diamondShapes = [
-    { img: round, name: 'Round' },
-    { img: oval, name: 'Oval' },
-    { img: emerald, name: 'Emerald' },
-    { img: cushion, name: 'Cushion' },
-    { img: pear, name: 'Pear' },
-    { img: radiant, name: 'Radiant' },
-    { img: princess, name: 'Princess' },
-    { img: marquise, name: 'Marquise' },
-    { img: asscher, name: 'Asscher' },
-    { img: heart, name: 'Heart' },
-  ];
-
   const cardData = [
     { name: "Ring", img: ringCategory, category: 'ring' },
     { name: "Earrings", img: earringCategory, category: 'earrings' },
@@ -191,17 +178,9 @@ const Home = () => {
           </div>
           <div className="slide">
             <img src={slide2} alt="Slide 2" />
-            {/* <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
-              <h1 className="slide-title">DIAMONDS</h1>
-              <p className="slide-text">Cherished for their unique beauty, diamonds are the ultimate way to mark your moment and create a sparkling memory.</p>
-            </div> */}
           </div>
           <div className="slide">
             <img src={slide3} alt="Slide 3" />
-            {/* <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
-              <h1 className="slide-title">JEWELRY</h1>
-              <p className="slide-text">Find handcrafted jewelry featuring ethical diamonds, gems and custom designs. Easily shop high-quality gemstone, natural diamond or lab diamond rings online with settings for any budget and style. We'll help you make your moment.</p>
-            </div> */}
           </div>
         </Slider>
         <div className="dot-container">
@@ -211,16 +190,69 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Diamond shape  */}
       <div className="diamond_shape_container">
         <div className="diamond_shape_grid">
-          {diamondShapes.map((shape, index) => (
-            <div key={index} className="diamond_shape_column" onClick={() => handleNavigate('/shape', { shape: shape.name })}>
-              <a href="#">
-                <img src={shape.img} alt={shape.name} className="diamond_shape_image" />
-                <p className="diamond_shape_name">{shape.name}</p>
-              </a>
-            </div>
-          ))}
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Round' })}>
+              <img src={round} alt="Round" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Round</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Oval' })}>
+              <img src={oval} alt="Oval" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Oval</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Emerald' })}>
+              <img src={emerald} alt="Emerald" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Emerald</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Cushion' })}>
+              <img src={cushion} alt="Cushion" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Cushion</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Pear' })}>
+              <img src={pear} alt="Pear" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Pear</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Radiant' })}>
+              <img src={radiant} alt="Radiant" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Radiant</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Princess' })}>
+              <img src={princess} alt="Princess" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Princess</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Marquise' })}>
+              <img src={marquise} alt="Marquise" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Marquise</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Asscher' })}>
+              <img src={asscher} alt="Asscher" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Asscher</p>
+            </a>
+          </div>
+          <div className="diamond_shape_column">
+            <a href="" onClick={() => handleNavigate('/shape', { shape: 'Heart' })}>
+              <img src={heart} alt="Heart" className="diamond_shape_image" />
+              <p className="diamond_shape_name">Heart</p>
+            </a>
+          </div>
         </div>
       </div>
 
