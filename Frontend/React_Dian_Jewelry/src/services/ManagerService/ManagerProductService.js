@@ -7,6 +7,11 @@ const getProductDetail = async (id) => {
   return response.data;
 };
 
+const getProductByName = async (name) => {
+  const response = await axios.get(`${API_BASE_URL}/products/all?Name=${name}`);
+  return response.data;
+};
+
 const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
@@ -38,4 +43,4 @@ const getProductDiamond = async (id) => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getProductCollection,getProductDiamond };
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getProductCollection,getProductDiamond, getProductByName };

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerListProduct.scss';
-import { ShowAllProduct, getProductDetail, updateProductById, deleteProductById, getProductCollection, getProductCategory, getProductDiamond } from '../../../services/ManagerService/ManagerProductService.js';
+import { ShowAllProduct, getProductDetail, updateProductById, deleteProductById, getProductCollection, getProductCategory, getProductDiamond, getProductByName } from '../../../services/ManagerService/ManagerProductService.js';
 import logo from '../../../assets/img/logoN.png';
 
 const ManagerProductList = () => {
@@ -66,17 +66,37 @@ const ManagerProductList = () => {
 
     // Search diamond by id
     const handleSearchKeyPress = async (e) => {
+        const isInteger = (value) => {
+            return /^-?\d+$/.test(value);
+        };
         if (e.key === 'Enter') {
-            if (searchQuery.trim()) {
+            if (isInteger(searchQuery.trim())) {
                 try {
                     const response = await getProductDetail(searchQuery.trim());
                     setProductItems([response]);
                     setCurrentPage(1);
                 } catch (error) {
-                    console.error("Error fetching diamond:", error);
+                    console.error("Error fetching product:", error);
                     swal("Product not found!", "Please try another one.", "error");
                 }
-            } else {
+            } 
+            else if(searchQuery.trim().toString()){
+                try {
+                    const response = await getProductByName(searchQuery.trim());
+                    if (Array.isArray(response)) {
+                        setProductItems(response);
+                    } else if (response) {
+                        setProductItems([response]);
+                    } else {
+                        setProductItems([]);
+                    }
+                    setCurrentPage(1);
+                } catch (error) {
+                    console.error("Error fetching product:", error);
+                    swal("Product not found!", "Please try another one.", "error");
+                }
+            }
+            else {
                 try {
                     const response = await ShowAllProduct();
                     setProductItems(response);
@@ -124,7 +144,8 @@ const ManagerProductList = () => {
     };
 
     const handleUpdate = async () => {
-        const requiredFields = ["productCode",
+        const requiredFields = [
+            "productCode",
             "name",
             "price",
             "description",

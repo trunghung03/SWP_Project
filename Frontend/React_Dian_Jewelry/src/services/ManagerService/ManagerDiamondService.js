@@ -12,6 +12,11 @@ const getDiamondDetail = async (id) => {
   return response.data;
 };
 
+const getDiamondByShape = async (shape) => {
+  const response = await axios.get(`${API_BASE_URL}/diamonds/${shape}`);
+  return response.data;
+};
+
 const deleteDiamondById = (id) => {
   return axios.delete(`${API_BASE_URL}/diamonds/delete/${id}`);
 };
@@ -25,4 +30,4 @@ const createDiamond = async (data) => {
   return response.data;
 };
 
-export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond};
+export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond,getDiamondByShape};

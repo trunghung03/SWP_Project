@@ -12,6 +12,10 @@ const ShowAllShell = async () => {
     const response = await axios.get(`${API_BASE_URL}/shellmaterials/${id}`);
     return response.data;
   };
+  const getShellByName = async (name) => {
+    const response = await axios.get(`${API_BASE_URL}/shellmaterials/${name}`);
+    return response.data;
+  };
   const deleteShellById = async (id) =>{
     return axios.delete(`${API_BASE_URL}/shellmaterials/${id}`);
   }
@@ -19,4 +23,4 @@ const ShowAllShell = async () => {
     const response = await axios.post(`${API_BASE_URL}/shellmaterials`, data);
     return response.data;
   };
-  export {ShowAllShell, getShellDetail,deleteShellById,updateShellById,createShell};
+  export {ShowAllShell, getShellDetail,deleteShellById,updateShellById,createShell,getShellByName};
