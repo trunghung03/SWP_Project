@@ -5,5 +5,7 @@ namespace DIAN_.Services
     public interface IEmailService
     {
         Task SendEmailAsync(MailRequest message);
+
+        Task SendEmailReset(MailResetPassword message);
     }
 }
