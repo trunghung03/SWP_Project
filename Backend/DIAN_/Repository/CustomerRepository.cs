@@ -121,11 +121,7 @@ namespace DIAN_.Repository
             {
                 return false;
             }
-
-            // Here you should validate the resetPasswordDto.Token
-            // If it's not valid, return false
-
-            customer.Password = resetPasswordDto.Password; // You should hash the password before storing it
+            customer.Password = resetPasswordDto.Password;
             await _context.SaveChangesAsync();
 
             return true;
@@ -133,8 +129,7 @@ namespace DIAN_.Repository
 
         public async Task<bool> ResetPasswordAsync(Customer user, string token, string newPassword)
         {
-            // Hash the new password before storing it
-            user.Password = newPassword; // You should hash the password before storing it
+            user.Password = newPassword; 
             _context.Customers.Update(user);
             var result = await _context.SaveChangesAsync();
             return result > 0;

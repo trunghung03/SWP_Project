@@ -83,13 +83,14 @@ namespace DIAN_.Controllers
         }
 
         [HttpPut("update/{id:int}")]
-        public async Task<IActionResult> UpdateArticle([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
+        public async Task<IActionResult> UpdateArticleById([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
         {        
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
                 var existingArticles = await _articleRepository.GetArticleByIdAsync(id);
+
                 var article = await _articleRepository.UpdateArticleAsync(id, articleDto.ToArticleFromUpdate(id));
                 if (article == null)
                 {

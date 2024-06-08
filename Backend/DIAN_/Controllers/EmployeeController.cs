@@ -164,6 +164,35 @@ namespace UserApplication.Controllers
 
             return Ok(order);
         }
+        [HttpPut("customer/{id}")]
+        public async Task<IActionResult> DeactivateAndActivateCustomer(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
+            var result = await _employeeRepository.DeactivateAndActivateCustomer(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        [HttpPut("staff/{id}")]
+        public async Task<IActionResult> DeactivateAndActivateStaff(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var result = await _employeeRepository.DeactivateAndActivateEmployee(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

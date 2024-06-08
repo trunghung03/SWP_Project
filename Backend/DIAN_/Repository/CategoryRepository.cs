@@ -36,14 +36,18 @@ namespace DIAN_.Repository
 
         public async Task<List<Category>> GetAllAsync()
         {
-            var categories = await _context.Categories.ToListAsync();
+            var categories = await _context.Categories
+                .Where(c => c.Status == true)
+                .ToListAsync();
 
             return categories;
         }
 
         public async Task<Category?> GetByIdAsync(int id)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
+            var category = await _context.Categories
+                .Where(c => c.Status == true)
+                .FirstOrDefaultAsync(c => c.CategoryId == id);
 
             if (category == null) { return null; }
 

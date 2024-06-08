@@ -17,7 +17,6 @@ namespace DIAN_.Mapper
                 CreatedBy = article.EmployeeNavigation?.LastName ?? "Unknown", 
                 Image = article.Image,
                 Tag = article.Tag,
-                Status = article.Status,
             };
         }
         public static Article ToArticleFromCreate(this CreateArticleRequestDto articleDto)
@@ -39,7 +38,6 @@ namespace DIAN_.Mapper
             return new Article {
                 Title = articleDto.Title,
                 Content = articleDto.Content,
-                Status = articleDto.Status,
                 Image = articleDto.Image,
                 Tag = articleDto.Tag,
             };

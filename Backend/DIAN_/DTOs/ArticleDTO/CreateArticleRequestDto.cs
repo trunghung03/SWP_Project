@@ -13,7 +13,7 @@ namespace DIAN_.DTOs.ArticleDTO
         public string Content { get; set; } = string.Empty;
 
         [Required]
-        public string Image { get; set; }
+        public string Image { get; set; } = string.Empty;
 
         [Required]
         public string Tag { get; set; } = string.Empty;
