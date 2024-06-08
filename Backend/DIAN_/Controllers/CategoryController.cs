@@ -2,7 +2,7 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Formats.Asn1;
 
 namespace DIAN_.Controllers
 {
@@ -19,118 +19,57 @@ namespace DIAN_.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-                var categories = await _categoryRepository.GetAllAsync();
-                return Ok(categories);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var categories = await _categoryRepository.GetAllAsync();
+
+            return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var category = await _categoryRepository.GetByIdAsync(id);
-                if (category == null)
-                {
-                    return NotFound();
-                }
+            var category = await _categoryRepository.GetByIdAsync(id);
+            if (category == null) return NotFound();
 
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(category);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryDTO categoryDTO)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var category = await _categoryRepository.CreateAsync(categoryDTO.FromCreateDtoToCategory());
+            var category = await _categoryRepository.CreateAsync(categoryDTO.FromCreateDtoToCategory());
 
-                if (category == null)
-                {
-                    return BadRequest("Duplicate category! Please try again!");
-                }
+            if (category == null) { return  BadRequest("Duplicate category! Please try again!"); }
 
-                return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateCategoryDTO categoryDTO)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var category = await _categoryRepository.UpdateAsync(id, categoryDTO.FromUpdateDtoToCategory());
+            var category = await _categoryRepository.UpdateAsync(id, categoryDTO.FromUpdateDtoToCategory());
 
-                if (category == null)
-                {
-                    return BadRequest("Error! Please try again!");
-                }
+            if (category == null) { return BadRequest("Error! Please try again!"); }
 
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(category);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var category = await _categoryRepository.DeleteAsync(id);
-                if (category == null)
-                {
-                    return NotFound();
-                }
+            var category = await _categoryRepository.DeleteAsync(id);
+            if (category == null) return NotFound();
 
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(category);
         }
     }
 }

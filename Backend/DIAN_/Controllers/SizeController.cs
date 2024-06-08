@@ -5,9 +5,6 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DIAN_.Controllers
 {
@@ -22,101 +19,69 @@ namespace DIAN_.Controllers
             _sizeRepository = sizeRepository;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-                var sizes = await _sizeRepository.GetAllSizeAsync();
-                return Ok(sizes.Select(s => s.ToSizeDetailDto()));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var sizes = await _sizeRepository.GetAllSizeAsync();
+
+            return Ok(sizes.Select(s => s.ToSizeDetailDto()));
         }
 
         [HttpPost("addsize")]
         public async Task<IActionResult> CreateSize([FromBody] CreateSizeRequestDto sizeDto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var sizeModel = sizeDto.ToSizeFromCreateDto();
-                var createdSize = await _sizeRepository.CreateSizeAsync(sizeModel);
-                return CreatedAtAction(nameof(GetSizeByCategoryId), new { id = createdSize.CategoryId }, sizeModel.ToSizeDetailDto());
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var sizeModel = sizeDto.ToSizeFromCreateDto();
+            var createdSize = await _sizeRepository.CreateSizeAsync(sizeModel);
+            return CreatedAtAction(nameof(GetSizeByCategoryId), new { id = createdSize.CategoryId }, sizeModel.ToSizeDetailDto());
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetSizeByCategoryId([FromRoute] int id)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var sizeModel = await _sizeRepository.GetSizeByIdAsync(id);
-                if (sizeModel == null)
-                {
-                    return NotFound("Size does not exist");
-                }
-                return Ok(sizeModel.ToSizeDetailDto());
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+            var sizeModel = await _sizeRepository.GetSizeByIdAsync(id);
+            if (sizeModel == null)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return NotFound("Size does not exist");
             }
+            return Ok(sizeModel.ToSizeDetailDto());
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateSize([FromRoute] int id, [FromBody] UpdateSizeRequestDto sizeDto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var sizeModel = await _sizeRepository.UpdateSizeAsync(id, sizeDto.ToSizeFromUpdateDto());
-                if (sizeModel == null)
-                {
-                    return NotFound("Size does not exist");
-                }
-                return Ok(sizeModel.ToSizeDetailDto());
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+            var sizeModel = await _sizeRepository.UpdateSizeAsync(id, sizeDto.ToSizeFromUpdateDto());
+            if (sizeModel == null)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return NotFound("Size does not exist");
             }
+            return Ok(sizeModel.ToSizeDetailDto());
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteSize([FromRoute] int id)
         {
-            try
-            {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var sizeModel = await _sizeRepository.DeleteSizeAsync(id);
-                if (sizeModel == null) return NotFound();
+            var sizeModel = await _sizeRepository.DeleteSizeAsync(id);
+            if (sizeModel == null) return NotFound();
 
-                return Ok(sizeModel);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(sizeModel);
         }
     }
+    
 }
