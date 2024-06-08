@@ -1,4 +1,4 @@
-.manager_sidebar {
+.admin_sidebar {
     width: 250px;
     transition: width 0.3s ease;
     background-color: #fafafb;
@@ -15,19 +15,19 @@
             margin: 20px;
         }
 
-        .manager_sidebar_icons {
+        .admin_sidebar_icons {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             height: 100%;
         }
 
-        .manager_sidebar_menu_icons {
+        .admin_sidebar_menu_icons {
             list-style: none;
             padding: 0;
             margin: 0;
 
-            .manager_sidebar_menu_item {
+            .admin_sidebar_menu_item {
                 padding: 10px;
                 text-align: center;
                 cursor: pointer;
@@ -66,7 +66,7 @@
             }
         }
 
-        .manager_sidebar_sign_out_icon {
+        .admin_sidebar_sign_out_icon {
             text-align: center;
             padding: 10px 0;
             margin-bottom: 20px;
@@ -105,7 +105,7 @@
         }
     }
 
-    .manager_sidebar_header {
+    .admin_sidebar_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -113,7 +113,7 @@
         height: 60px;
         background-color: #fafafb;
 
-        .manager_sidebar_profile {
+        .admin_sidebar_profile {
             display: flex;
             flex-direction: column;
 
@@ -121,12 +121,12 @@
                 display: none;
             }
 
-            .manager_sidebar_full_name {
+            .admin_sidebar_full_name {
                 font-weight: bold;
                 margin: 15px 0 5px 15px;
             }
 
-            .manager_sidebar_role {
+            .admin_sidebar_role {
                 font-size: 14px;
                 color: #888;
                 margin-left: 15px;
@@ -141,33 +141,33 @@
         }
     }
 
-    .manager_sidebar_content {
+    .admin_sidebar_content {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
 
-        .manager_sidebar_profile {
+        .admin_sidebar_profile {
             text-align: left;
             margin-bottom: 20px;
 
-            .manager_sidebar_full_name {
+            .admin_sidebar_full_name {
                 font-weight: bold;
                 margin-bottom: 5px;
             }
 
-            .manager_sidebar_role {
+            .admin_sidebar_role {
                 font-size: 14px;
                 color: #888;
             }
         }
 
-        .manager_sidebar_menu {
+        .admin_sidebar_menu {
             list-style: none;
             padding: 0;
             margin: 0;
 
-            .manager_sidebar_menu_item {
+            .admin_sidebar_menu_item {
                 display: flex;
                 align-items: center;
                 padding: 10px;
@@ -185,9 +185,9 @@
                     margin-left: 21px;
                 }
 
-                .fa-box-open {
-                    font-size: 16px;
-                    margin-right: 10px;
+                .fa-id-badge {
+                    font-size: 17px;
+                    margin-right: 15px;
                     margin-left: 21px;
                 }
 
@@ -214,7 +214,7 @@
             }
         }
 
-        .manager_sidebar_sign_out {
+        .admin_sidebar_sign_out {
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -250,8 +250,8 @@
         font-size: 16px;
     }
 
-    .fa-box-open::before {
-        font-size: 16px;
+    .fa-id-badge::before {
+        font-size: 20px;
     }
 
     .fa-gem::before {
@@ -267,7 +267,7 @@
         margin-bottom: 10px;
     }
 
-    .manager_side_bar_line2 {
+    .admin_side_bar_line2 {
         margin: 0 0 -155px 0;
     }
 }

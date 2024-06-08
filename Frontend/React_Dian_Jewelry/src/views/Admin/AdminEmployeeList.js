@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useNavigate } from 'react-router-dom';
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar.js';
 import '../../styles/Manager/ManagerList.scss';
 import logo from '../../assets/img/logoN.png';
 
-const AdminCustomerList = () => {
+const AdminEmployeeList = () => {
+    const navigate = useNavigate();
 
     return (
         <div className="manager_manage_diamond_all_container">
             <div className="manager_manage_diamond_sidebar">
-                <AdminSidebar currentPage="admin_manage_customer" />
+                <AdminSidebar currentPage="admin_manage_employee" />
             </div>
             <div className="manager_manage_diamond_content">
                 <div className="manager_manage_diamond_header">
@@ -27,7 +29,10 @@ const AdminCustomerList = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
-                <h3>List Of Customer Accounts</h3>
+                <h3>List Of Employee Accounts</h3>
+                <div className="manager_manage_diamond_create_button_section">
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/adminAddEmployee')}>Create new account</button>
+                </div>
 
                 {/* chinh tu day tro xuong */}
 
@@ -37,4 +42,4 @@ const AdminCustomerList = () => {
     );
 };
 
-export default AdminCustomerList;
+export default AdminEmployeeList;

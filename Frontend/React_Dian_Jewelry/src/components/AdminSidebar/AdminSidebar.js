@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './SalesStaffSidebar.scss';
+import './AdminSidebar.scss';
 import { useNavigate } from 'react-router-dom';
 
-class SalesStaffSidebar extends Component {
+class AdminSidebar extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,37 +37,33 @@ class SalesStaffSidebar extends Component {
         const { currentPage } = this.props;
 
         return (
-            <div className={`salesstaff_sidebar ${expanded ? 'expanded' : 'collapsed'}`}>
-                <div className="salesstaff_sidebar_header">
-                    <div className={`salesstaff_sidebar_profile ${expanded ? '' : 'hidden'}`}>
-                        <div className="salesstaff_sidebar_full_name">{`${firstName} ${lastName}`}</div>
-                        <div className="salesstaff_sidebar_role">Sales Staff</div>
+            <div className={`admin_sidebar ${expanded ? 'expanded' : 'collapsed'}`}>
+                <div className="admin_sidebar_header">
+                    <div className={`admin_sidebar_profile ${expanded ? '' : 'hidden'}`}>
+                        <div className="admin_sidebar_full_name">{`${firstName} ${lastName}`}</div>
+                        <div className="admin_sidebar_role">Admin</div>
                     </div>
                     <div className="toggle-button" onClick={this.toggleSidebar}>
                         {expanded ? <i className="fas fa-angle-double-left"></i> : <i className="fas fa-angle-double-right"></i>}
                     </div>
                 </div>
-                <hr className="salesstaff_side_bar_line1"></hr>
+                <hr className="admin_side_bar_line1"></hr>
                 {expanded && (
-                    <div className="salesstaff_sidebar_content">
-                        <ul className="salesstaff_sidebar_menu">
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffOrderList')}>
-                                <i className="fas fa-box-open"></i>
-                                <span>Manage Order</span>
+                    <div className="admin_sidebar_content">
+                        <ul className="admin_sidebar_menu">
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_customer' ? 'selected' : ''}`} onClick={() => this.props.navigate('/adminCustomerList')}>
+                                <i className="fas fa-users"></i>
+                                <span>Customer Account</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffContentList')}>
-                                <i className="fas fa-book"></i>
-                                <span>Manage Blog</span>
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_employee' ? 'selected' : ''}`} onClick={() => this.props.navigate('/adminEmployeeList')}>
+                                <i className="fas  fa-id-badge"></i>
+                                <span>Employee Account</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
-                                <i className="fas fa-file-contract"></i>
-                                <span>Manage Warranty</span>
-                            </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
+                            {/* <li className={`admin_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('#')}>
                                 <i className="fas fa-user"></i>
                                 <span>Edit Profile</span>
-                            </li>
-                            <div className="salesstaff_sidebar_sign_out" onClick={this.handleSignOut}>
+                            </li> */}
+                            <div className="admin_sidebar_sign_out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                                 <span>Sign Out</span>
                             </div>
@@ -75,21 +71,18 @@ class SalesStaffSidebar extends Component {
                     </div>
                 )}
                 {!expanded && (
-                    <div className="salesstaff_sidebar_icons">
-                        <ul className="salesstaff_sidebar_menu_icons">
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/salesStaffOrderList')}>
-                                <i className="fas fa-box-open"></i>
+                    <div className="admin_sidebar_icons">
+                        <ul className="admin_sidebar_menu_icons">
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_customer' ? 'selected' : ''}`} data-tooltip="Customer Account" onClick={() => this.props.navigate('/adminCustomerList')}>
+                                <i className="fas fa-users"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/salesStaffContentList')}>
-                                <i className="fas fa-book"></i>
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_employee' ? 'selected' : ''}`} data-tooltip="Employee Acount" onClick={() => this.props.navigate('/adminEmployeeList')}>
+                                <i className="fas  fa-id-badge"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('#')}>
-                                <i className="fas fa-file-contract"></i>
-                            </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('#')}>
+                            {/* <li className={`admin_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('#')}>
                                 <i className="fas fa-user"></i>
-                            </li>
-                            <div className="salesstaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
+                            </li> */}
+                            <div className="admin_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                             </div>
                         </ul>
@@ -100,9 +93,9 @@ class SalesStaffSidebar extends Component {
     }
 }
 
-const SalesStaffSidebarWithHooks = (props) => {
+const AdminSidebarWithHooks = (props) => {
     const navigate = useNavigate();
-    return <SalesStaffSidebar {...props} navigate={navigate} />;
+    return <AdminSidebar {...props} navigate={navigate} />;
 };
 
-export default SalesStaffSidebarWithHooks;
+export default AdminSidebarWithHooks;

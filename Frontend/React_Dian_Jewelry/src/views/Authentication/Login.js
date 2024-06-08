@@ -122,7 +122,7 @@ const Login = () => {
                 setLoading(false);
                 return;
             }
-            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId); 
+            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId);
         }
     };
 
@@ -136,6 +136,13 @@ const Login = () => {
             console.log("Role: ", role);
 
             if (role === 'Admin') {
+                if (userType === 'employee') {
+                    let employeeInfoRes = await getEmployeeInfo(email);
+                    if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("firstName", employeeInfoRes.data.firstName);
+                        localStorage.setItem("lastName", employeeInfoRes.data.lastName);
+                    }
+                }
                 navigate('/adminCustomerList');
             } else if (role === 'Manager') {
                 if (userType === 'employee') {
@@ -174,7 +181,7 @@ const Login = () => {
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
 
-                        setCartItemsForUser(userInfoRes.data.customerId); 
+                        setCartItemsForUser(userInfoRes.data.customerId);
                     }
                 }
                 navigate('/home');

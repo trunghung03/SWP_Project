@@ -30,7 +30,8 @@ import EditProfile from './Setting/EditProfile';
 import OrderHistory from './Setting/OrderHistory';
 import OrderDetail from './Setting/OrderDetail';
 import AdminCustomerList from './Admin/AdminCustomerList';
-import AdminTest from './Admin/AdminTest';
+import AdminEmployeeList from './Admin/AdminEmployeeList';
+import AdminAddEmployee from './Admin/AdminAddEmployee';
 import ManagerStatitic from './Manager/ManagerStatitic';
 import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
@@ -94,7 +95,8 @@ function App() {
 
             {/* Admin */}
             <Route path="/adminCustomerList" element={<AdminCustomerList />} />
-            <Route path="/adminTest" element={<AdminTest />} />
+            <Route path="/adminEmployeeList" element={<AdminEmployeeList />} />
+            <Route path="/adminAddEmployee" element={<AdminAddEmployee />} />
 
             {/* Manager */}
             <Route path="/managerStatitic" element={<ManagerStatitic />} />
@@ -106,11 +108,13 @@ function App() {
             <Route path="/managerAddEmployee" element={<ManagerAddEmployee />} />
             <Route path="/managerAddShell" element={<ManagerAddShell />} />
             <Route path="/managerAddProduct" element={<ManagerAddProduct/>} />
+
             {/* Sales Staff */}
             <Route path="/salesStaffOrderList" element={<SSOrderList />} />
             <Route path="/salesStaffContentList" element={<SSContentList />} />
             <Route path="/salesStaffAddContent" element={<SSAddContent />} />
             <Route path="/salesStaffWarrantyList" element={<SSWarrantyList/>}/>
+
             {/* Delivery Staff */}
             <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
           </Routes>
