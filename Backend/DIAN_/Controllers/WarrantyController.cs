@@ -51,9 +51,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(warranty.ToWarrantyDetailDto());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
@@ -78,10 +78,9 @@ namespace DIAN_.Controllers
                 await _warrantyRepository.CreateWarrantyAsync(warrantyModel);
                 return CreatedAtAction(nameof(GetWarrantyById), new { id = warrantyModel.OrderDetailId }, warrantyModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception message
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
@@ -101,9 +100,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(warranty.ToWarrantyDetailDto());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 

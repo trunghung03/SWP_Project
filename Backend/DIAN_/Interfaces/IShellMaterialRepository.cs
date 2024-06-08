@@ -13,5 +13,7 @@ namespace DIAN_.Interfaces
         Task<List<ShellMaterialDTO>> GetAllAsync();
         Task<ShellMaterialDTO> UpdateAsync(ShellMaterialDTO shellDTO);
         Task<List<string>> GetListNamesAsync();
+
+        Task<List<Shellmaterial>> GetShellByName(string name);
     }
 }

@@ -69,55 +69,85 @@ namespace UserApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customers = await _customerRepository.GetAllAsync();
-            
-            return Ok(customers);
+                var customers = await _customerRepository.GetAllAsync();
+
+                return Ok(customers);
+            } catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail(string email)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.GetByEmailAsync(email);
-            if (customer == null) return NotFound();
+                var customer = await _customerRepository.GetByEmailAsync(email);
+                if (customer == null) return NotFound();
 
-            return Ok(customer);
+                return Ok(customer);
+            } catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.GetByIdAsync(id);
-            if (customer == null) return NotFound();
+                var customer = await _customerRepository.GetByIdAsync(id);
+                if (customer == null) return NotFound();
 
-            return Ok(customer);
+                return Ok(customer);
+            } catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [HttpPut("{email}")]
         public async Task<IActionResult> Update(string email, UpdateUserDto customerDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.UpdateAsync(email, customerDto);
-            if (customer == null) return NotFound();
-            return Ok(customer);
+                var customer = await _customerRepository.UpdateAsync(email, customerDto);
+                if (customer == null) return NotFound();
+                return Ok(customer);
+            } catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [HttpDelete("{email}")]
         public async Task<IActionResult> Delete(string email)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.DeleteAsync(email);
+                var customer = await _customerRepository.DeleteAsync(email);
 
-            if (customer == null) return NotFound();
+                if (customer == null) return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [HttpPost("send-email")]
@@ -179,7 +209,7 @@ namespace UserApplication.Controllers
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
                 var result = await _customerService.ConfirmResetPassword(resetPasswordDto);
-                return Ok(result);
+                return Ok("Reset password successully.");
             }
             catch (Exception ex)
             {

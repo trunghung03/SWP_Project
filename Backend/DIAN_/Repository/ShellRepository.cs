@@ -68,5 +68,13 @@ namespace DIAN_.Repository
                 .Select(s => s.Name)
                 .ToListAsync();
         }
+
+        public async Task<List<Shellmaterial>> GetShellByName(string name)
+        {
+            var shell = await _context.Shellmaterials
+                .Where(s => s.Name.Contains(name))
+                .ToListAsync();
+            return shell;
+        }
     }
 }

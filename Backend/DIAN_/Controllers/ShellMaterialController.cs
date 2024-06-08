@@ -38,6 +38,18 @@ namespace DIAN_.Controllers
             return Ok(shell);
         }
 
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetShellByName([FromRoute] string name)
+        {
+            var shells = await _shellRepo.GetShellByName(name);
+            if (shells.Count == 0)
+            {
+                return NotFound();
+            }
+            var shellDTOs = shells.Select(shell => shell.ToShellMaterialDTO()).ToList();
+            return Ok(shellDTOs);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateShellMaterialRequestDTO shellDTO)
         {

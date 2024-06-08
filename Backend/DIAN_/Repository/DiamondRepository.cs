@@ -49,6 +49,16 @@ namespace DIAN_.Repository
             return existingDiamond;
         }
 
+        public Task<List<Diamond>> GetDiamondByShapeAsync(string shape)
+        {
+            var diamonds = _context.Diamonds.Where(x => x.Shape.Contains(shape)).ToListAsync();
+            if (diamonds == null)
+            {
+                throw new KeyNotFoundException("Diamond does not exist");
+            }
+            return diamonds;
+        }
+
         public async Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id)
         {
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
