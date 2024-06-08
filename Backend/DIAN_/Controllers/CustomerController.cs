@@ -169,7 +169,7 @@ namespace UserApplication.Controllers
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); };
-            var result = await _customerService.ConfirmResetPasswordAsync(resetPasswordDto);
+            var result = await _customerService.ConfirmResetPassword(resetPasswordDto);
             return Ok(result);
         }
 

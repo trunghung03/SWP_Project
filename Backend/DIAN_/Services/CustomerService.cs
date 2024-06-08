@@ -25,54 +25,6 @@ namespace DIAN_.Services
             _configuration = configuration;
         }
 
-        public async Task<IdentityResult> ResetPasswordAsync(Customer user, string token, string newPassword)
-        {
-            // Validate the token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["SecretKey"]); // Replace "SecretKey" with the actual key in your configuration
-
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // Set clock skew to zero so tokens expire exactly at token expiration time
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-
-                // If token is valid, reset the password
-                if (jwtToken != null)
-                {
-                    var result = await _customerRepository.ResetPasswordAsync(user, token, newPassword);
-                    return result ? IdentityResult.Success : IdentityResult.Failed(new IdentityError { Description = "Failed to update the password." });
-                }
-                else
-                {
-                    return IdentityResult.Failed(new IdentityError { Description = "Invalid token." });
-                }
-            }
-            catch
-            {
-                // Token validation failed
-                return IdentityResult.Failed(new IdentityError { Description = "Token validation failed." });
-            }
-        }
-
-        public async Task<bool> ConfirmResetPasswordAsync(ResetPasswordDto confirmDto)
-        {
-            var user = await _customerRepository.GetByEmailAsync(confirmDto.Email);
-            if (user == null) return false;
-
-            var token = HttpUtility.UrlDecode(confirmDto.Token);
-            var result = await _customerRepository.ResetPasswordAsync(user, token, confirmDto.ConfirmPassword);
-
-            return result;
-        }
         public async Task<bool> ResetPasswordRequestAsync(ForgotPasswordDto resetPasswordDto)
         {
             var user = await _customerRepository.GetByEmailAsync(resetPasswordDto.Email);
@@ -89,5 +41,23 @@ namespace DIAN_.Services
             return true;
         }
 
+        public async Task<IdentityResult> ConfirmResetPassword(ResetPasswordDto confirmDto)
+        {
+            var user = await _customerRepository.GetByEmailAsync(confirmDto.Email);
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "No account found with the provided email." });
+            }
+
+            var token = HttpUtility.UrlDecode(confirmDto.Token);
+            var principal = _tokenService.ValidateToken(token);
+            if (principal == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid token." });
+            }
+
+            var result = await _customerRepository.ResetPasswordAsync(user, token, confirmDto.ConfirmPassword);
+            return result ? IdentityResult.Success : IdentityResult.Failed(new IdentityError { Description = "Failed to update the password." });
+        }
     }
 }

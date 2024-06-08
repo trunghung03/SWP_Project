@@ -16,7 +16,5 @@ namespace DIAN_.Services
         Task<Warranty> PrepareWarranty(int orderId);     //prepare pdf
 
         Task<string> GeneratePdfAsync(Diamond diamond); //gen pdf?
-
-
     }
 }

@@ -70,5 +70,26 @@ namespace UserApplication.Services
 
             return tokenHandler.WriteToken(token);
         }
+        public ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = _key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
