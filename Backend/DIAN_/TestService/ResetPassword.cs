@@ -23,7 +23,7 @@ namespace DIAN_.TestService
             var mockEmailService = new Mock<IEmailService>();
             var mockConfiguration = new Mock<IConfiguration>();
 
-            var customerService = new CustomerService(mockCustomerRepository.Object, mockTokenService.Object, mockConfiguration.Object);
+            var customerService = new CustomerService(mockCustomerRepository.Object, mockEmailService.Object, mockTokenService.Object, mockConfiguration.Object);
 
             var resetPasswordDto = new ForgotPasswordDto { Email = "test@example.com" };
             var user = new Customer { Email = "test@example.com" };

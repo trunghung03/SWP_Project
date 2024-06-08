@@ -18,11 +18,13 @@ namespace DIAN_.Services
         private readonly ITokenService _tokenService;   
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
-        public CustomerService(ICustomerRepository customerRepository, ITokenService tokenService, IConfiguration configuration)
+        public CustomerService(ICustomerRepository customerRepository, IEmailService emailService,
+            ITokenService tokenService, IConfiguration configuration)
         {
             _customerRepository = customerRepository;
             _tokenService = tokenService;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         public async Task<bool> ResetPasswordRequestAsync(ForgotPasswordDto resetPasswordDto)
@@ -31,13 +33,13 @@ namespace DIAN_.Services
             if (user == null) throw new ArgumentException("No account found with the provided email.");
             var token = _tokenService.CreateCustomerToken(user);
             var callbackUrl = $"http://localhost:3000/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
-            var message = new MailRequest
+            var message = new MailResetPassword
             {
                 ToEmail = user.Email,
                 Subject = "Reset password token",
                 Body = $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.",
             };
-            await _emailService.SendEmailAsync(message);
+            await _emailService.SendEmailReset(message);
             return true;
         }
 

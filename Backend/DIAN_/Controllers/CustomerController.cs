@@ -154,23 +154,37 @@ namespace UserApplication.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
         {
-            if(!ModelState.IsValid) { return BadRequest(ModelState); };
-            var result = await _customerService.ResetPasswordRequestAsync(forgotPasswordDto);
-            if (result)
+            try
             {
-                return Ok("Password reset link has been sent.");
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                var result = await _customerService.ResetPasswordRequestAsync(forgotPasswordDto);
+                if (result)
+                {
+                    return Ok("Password reset link has been sent.");
+                }
+                else
+                {
+                    return BadRequest("An error occurred while processing your request.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("An error occurred while processing your request.");
+                throw;
             }
         }
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
-            var result = await _customerService.ConfirmResetPassword(resetPasswordDto);
-            return Ok(result);
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                var result = await _customerService.ConfirmResetPassword(resetPasswordDto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
     }
