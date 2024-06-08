@@ -20,7 +20,8 @@ namespace UserApplication.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ISalesStaffService _salesStaffService;
         private readonly IDeliveryStaffService _deliveryStaffService;
-        public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository, 
+
+        public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository,
             ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService)
         {
             _tokenService = tokenService;
@@ -32,139 +33,201 @@ namespace UserApplication.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.GetByEmailAsync(loginDto.Email);
-            if (employee == null) { return Unauthorized("Invalid Email or Password!"); }
+                var employee = await _employeeRepository.GetByEmailAsync(loginDto.Email);
+                if (employee == null) { return Unauthorized("Invalid Email or Password!"); }
 
-            return Ok(
-                new NewUserDto
-                {
-                    Email = employee.Email,
-                    Token = _tokenService.CreateEmployeeToken(employee)
-                });
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = employee.Email,
+                        Token = _tokenService.CreateEmployeeToken(employee)
+                    });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("registeremployee")]
         public async Task<IActionResult> Register(RegisterEmployeeDto user)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.RegisterAsync(user);
+                var employee = await _employeeRepository.RegisterAsync(user);
 
-            if (employee == null) return BadRequest("Email already exists!");
+                if (employee == null) return BadRequest("Email already exists!");
 
-            return Ok(
-                new NewUserDto
-                {
-                    Email = employee.Email,
-                    Token = _tokenService.CreateEmployeeToken(employee)
-                });
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = employee.Email,
+                        Token = _tokenService.CreateEmployeeToken(employee)
+                    });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.GetAllAsync();
-            
-            return Ok(employee);
+                var employee = await _employeeRepository.GetAllAsync();
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail(string email)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.GetByEmailAsync(email);
-            if (employee == null) return NotFound();
+                var employee = await _employeeRepository.GetByEmailAsync(email);
+                if (employee == null) return NotFound();
 
-            return Ok(employee);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.GetByIdAsync(id);
-            if (employee == null) return NotFound();
+                var employee = await _employeeRepository.GetByIdAsync(id);
+                if (employee == null) return NotFound();
 
-            return Ok(employee);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateEmployeeDto employeeDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.UpdateAsync(id, employeeDto);
-            if (employee == null) return NotFound();
-            return Ok(employee);
+                var employee = await _employeeRepository.UpdateAsync(id, employeeDto);
+                if (employee == null) return NotFound();
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.DeleteAsync(id);
+                var employee = await _employeeRepository.DeleteAsync(id);
+                if (employee == null) return NotFound();
 
-            if (employee == null) return NotFound();
-
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-
-        //For sales staff   
-        //[HttpGet("salesstaff/orderlists")]
-        //public async Task<IActionResult> ViewListOrdersAssign(Purchaseorder purchaseOrderDTO)
-        //{
-        //    if (!ModelState.IsValid) { return BadRequest(ModelState); };
-
-        //    var orders = await _salesStaffService.ViewListOrdersAssign(purchaseOrderDTO);
-
-        //    return Ok(orders);
-        //}
-
+        // For sales staff   
         [HttpGet("salesstaff/orderlists")]
         public async Task<IActionResult> ViewListOrdersAssign([FromQuery] int staffId)
         {
-           if(!ModelState.IsValid) { return BadRequest(ModelState); };
-           var orders = await _salesStaffService.ViewListOrdersAssign(staffId);
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            return Ok(orders);
+                var orders = await _salesStaffService.ViewListOrdersAssign(staffId);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut("salesstaff/updatestatus")]
         public async Task<IActionResult> SalesStaffUpdateOrderStatus(string status, int orderId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var order = await _salesStaffService.UpdateOrderStatus(status, orderId);
-
-            return Ok(order);
+                var order = await _salesStaffService.UpdateOrderStatus(status, orderId);
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-        //For delivery staff
+        // For delivery staff
         [HttpGet("deliverystaff/orderlists")]
         public async Task<IActionResult> ViewListDeliveryOrders([FromQuery] int staffId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var orders = await _deliveryStaffService.ViewListDeliveryOrders(staffId);
-
-            return Ok(orders);
+                var orders = await _deliveryStaffService.ViewListDeliveryOrders(staffId);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpPut("deliverystaff/updatestatus")]
         public async Task<IActionResult> DeliveryStaffUpdateDeliveryStatus(string status, int orderId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
-
-            return Ok(order);
+                var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

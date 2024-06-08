@@ -10,7 +10,6 @@ namespace DIAN_.Controllers
 {
     [ApiController]
     [Route("api/promotions")]
-
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionRepository;
@@ -37,15 +36,14 @@ namespace DIAN_.Controllers
                 var promotionDtos = promotions.Select(promotion => promotion.ToPromotionDetail());
                 return Ok(promotionDtos);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> getById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -60,9 +58,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(promotion.ToPromotionDetail());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -79,9 +77,9 @@ namespace DIAN_.Controllers
                 await _promotionRepository.CreatePromotionAsync(promotionModel);
                 return Ok(promotionModel.ToPromotionDetail());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -101,14 +99,14 @@ namespace DIAN_.Controllers
                 }
                 return Ok(promotion.ToPromotionDetail());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpDelete("delete/{id:int}")]
-        public async Task<IActionResult> DeletePromotion([FromRoute] int id, UpdatePromotionRequestDto deletePromotion)
+        public async Task<IActionResult> DeletePromotion([FromRoute] int id, [FromBody] UpdatePromotionRequestDto deletePromotion)
         {
             try
             {
@@ -123,11 +121,10 @@ namespace DIAN_.Controllers
                 }
                 return Ok(promotion.ToPromotionDetail());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
 }
-

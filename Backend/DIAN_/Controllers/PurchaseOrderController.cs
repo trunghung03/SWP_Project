@@ -17,14 +17,10 @@ namespace DIAN_.Controllers
     public class PurchaseOrderController : ControllerBase
     {
         private readonly IPurchaseOrderRepository _purchaseOrderRepo;
-
         private readonly IOrderService _orderService;
-
         private readonly ApplicationDbContext _context;
 
-
-        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, 
-            ApplicationDbContext context)
+        public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService, ApplicationDbContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
@@ -34,76 +30,130 @@ namespace DIAN_.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
-            return Ok(purchaseOrders);
+            try
+            {
+                var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
+                return Ok(purchaseOrders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-
-        //
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInfo(int id)
         {
-            var purchaseOrderInfo = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
-            if (purchaseOrderInfo == null)
+            try
             {
-                return NotFound();
+                var purchaseOrderInfo = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
+                if (purchaseOrderInfo == null)
+                {
+                    return NotFound();
+                }
+                return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
             }
-            return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpPost("creaaaa")]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var order = purchaseOrderDTO.ToCreatePurchaseOrder();
-            var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
-            return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+            try
+            {
+                var order = purchaseOrderDTO.ToCreatePurchaseOrder();
+                var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
+                return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePurchaseOrderDTO purchaseOrderDTO)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var purchaseOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(purchaseOrderDTO.ToUpdatePurchaseOrder(id), id);
-
-            if (purchaseOrder == null) { return BadRequest("Error! Please try again!"); }
-
-            return Ok(purchaseOrder);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var purchaseOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(purchaseOrderDTO.ToUpdatePurchaseOrder(id), id);
+                if (purchaseOrder == null)
+                {
+                    return BadRequest("Error! Please try again!");
+                }
+                return Ok(purchaseOrder);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("duyen_test_order_logic")]
         public ActionResult Checkout(CreatePurchaseOrderDTO purchaseOrderDTO, string promotionCode)
         {
-            var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
-
-            return Ok(createdOrderResult);
+            try
+            {
+                var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
+                return Ok(createdOrderResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-
-        // Endpoint to view orders by status
         [HttpGet("status/{status}")]
         public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
         {
-            var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
-            if (orders == null)
+            try
             {
-                return NotFound($"Cannot find {status} order");
-
+                var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
+                if (orders == null)
+                {
+                    return NotFound($"Cannot find {status} order");
+                }
+                return orders;
             }
-            return orders;
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("apply-coupon")]
         public async Task<ActionResult<decimal>> ApplyCoupon(string code, decimal totalPrice)
         {
-            var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
-            return Ok(updatedTotalPrice);
+            try
+            {
+                var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
+                return Ok(updatedTotalPrice);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("check-used-points")]
         public async Task<ActionResult<decimal>> CheckUsedPoints(int userId, decimal totalPrice, bool usedPoints)
         {
-            var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
-            return Ok(updatedTotalPrice);
+            try
+            {
+                var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
+                return Ok(updatedTotalPrice);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
     }
 }

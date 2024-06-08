@@ -20,109 +20,163 @@ namespace DIAN_.Controllers
             _productRepo = productRepo;
             _context = context;
         }
-       
-        [HttpGet ("list")]
+
+        [HttpGet("list")]
         public async Task<IActionResult> GetList()
         {
-            var products = await _productRepo.GetListAsync();
-
-            return Ok(products);
+            try
+            {
+                var products = await _productRepo.GetListAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var product = await _productRepo.GetByIdAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _productRepo.GetByIdAsync(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
             }
-            return Ok(product);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductRequestDTO productDTO)
         {
-            // Check if the MainDiamondId exists
-            var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
-            if (!mainDiamondExists)
+            try
             {
-                return BadRequest("The specified MainDiamondId does not exist.");
-            }
+                // Check if the MainDiamondId exists
+                var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
+                if (!mainDiamondExists)
+                {
+                    return BadRequest("The specified MainDiamondId does not exist.");
+                }
 
-            // Check if the ProCode already exists
-            var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
-            if (proCodeExists)
+                // Check if the ProCode already exists
+                var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
+                if (proCodeExists)
+                {
+                    return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
+                }
+
+                var product = productDTO.ToProductFromCreateDTO();
+                var createdProduct = await _productRepo.CreateAsync(product);
+
+                return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+            }
+            catch (Exception ex)
             {
-                return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            var product = productDTO.ToProductFromCreateDTO();
-            var createdProduct = await _productRepo.CreateAsync(product);
-
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
-            var product = await _productRepo.GetByIdAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _productRepo.GetByIdAsync(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                var productDTO = new ProductDTO
+                {
+                    ProductId = id, // Ensure the ID is set correctly
+                    Name = updateDTO.Name,
+                    Description = updateDTO.Description,
+                    Price = updateDTO.Price,
+                    LaborPrice = updateDTO.LaborPrice,
+                    ImageLinkList = updateDTO.ImageLinkList,
+                    MainDiamondId = updateDTO.MainDiamondId,
+                    SubDiamondAmount = updateDTO.SubDiamondAmount,
+                    ProductCode = updateDTO.ProductCode,
+                    MainDiamondAmount = updateDTO.MainDiamondAmount,
+                    ShellAmount = updateDTO.ShellAmount,
+                    CollectionId = updateDTO.CollectionId,
+                };
+
+                var updatedProduct = await _productRepo.UpdateAsync(productDTO);
+                return Ok(updatedProduct);
             }
-
-            var productDTO = new ProductDTO
+            catch (Exception ex)
             {
-                ProductId = id, // Ensure the ID is set correctly
-                Name = updateDTO.Name,
-                Description = updateDTO.Description,
-                Price = updateDTO.Price,
-                LaborPrice = updateDTO.LaborPrice,
-                ImageLinkList = updateDTO.ImageLinkList,
-                MainDiamondId = updateDTO.MainDiamondId,
-                SubDiamondAmount = updateDTO.SubDiamondAmount,
-                ProductCode = updateDTO.ProductCode,
-                MainDiamondAmount = updateDTO.MainDiamondAmount,
-                ShellAmount = updateDTO.ShellAmount,
-                CollectionId= updateDTO.CollectionId,
-                
-            };
-
-            var updatedProduct = await _productRepo.UpdateAsync(productDTO);
-            return Ok(updatedProduct);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
         {
-            var products = await _productRepo.GetAllAsync(query);
-            return Ok(products);
+            try
+            {
+                var products = await _productRepo.GetAllAsync(query);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _productRepo.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                await _productRepo.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpGet("detail/{id}")]
         public async Task<IActionResult> GetDetail([FromRoute] int id)
         {
-            var productDetail = await _productRepo.GetDetailAsync(id);
-            if (productDetail == null)
+            try
             {
-                return NotFound();
+                var productDetail = await _productRepo.GetDetailAsync(id);
+                if (productDetail == null)
+                {
+                    return NotFound();
+                }
+                return Ok(productDetail);
             }
-            return Ok(productDetail);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpGet("search")]
         public async Task<IActionResult> GetByName([FromQuery] string name)
         {
-            var products = await _productRepo.GetByNameAsync(name);
-            return Ok(products);
+            try
+            {
+                var products = await _productRepo.GetByNameAsync(name);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
-
-
     }
 }

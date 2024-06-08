@@ -5,6 +5,7 @@ using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace DIAN_.Controllers
 {
@@ -22,64 +23,89 @@ namespace DIAN_.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetArticleById(int id)
         {
-            var article = await _articleRepository.GetArticleByIdAsync(id);
-            if (article == null)
+            try
             {
-                return NotFound("No article found with the given id");
+                var article = await _articleRepository.GetArticleByIdAsync(id);
+                if (article == null)
+                {
+                    return NotFound("No article found with the given id");
+                }
+
+                var articleDto = article.ToArticleDetailDto();
+                return Ok(articleDto);
             }
-
-            var articleDto = article.ToArticleDetailDto();
-
-            return Ok(articleDto);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var articles = await _articleRepository.GetAllAsync();
+                if (articles.Count == 0)
+                {
+                    return NotFound("No articles found");
+                }
+                return Ok(articles);
             }
-            var articles = await _articleRepository.GetAllAsync();
-            if (articles.Count == 0)
+            catch (Exception ex)
             {
-                return NotFound("No articles found");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            return Ok(articles);
         }
 
         [HttpGet("{title}")]
         public async Task<IActionResult> GetArticleByTitle(string title)
         {
-            var articles = await _articleRepository.GetArticleByTitleAsync(title);
-            if (articles == null || articles.Count == 0)
+            try
             {
-                return NotFound("No articles found with the given title");
+                var articles = await _articleRepository.GetArticleByTitleAsync(title);
+                if (articles == null || articles.Count == 0)
+                {
+                    return NotFound("No articles found with the given title");
+                }
+
+                var articleDtos = articles.Select(a => a.ToArticleDetailDto()).ToList();
+                return Ok(articleDtos);
             }
-
-            // Assuming you have a ToArticleDetailDto extension method
-            var articleDtos = articles.Select(a => a.ToArticleDetailDto()).ToList();
-
-            return Ok(articleDtos);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("addcontent")]
         public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDto articleDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            var existingArticles = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
-            if (existingArticles.Any(a => a.Title == articleDto.Title))
+                var existingArticles = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
+                if (existingArticles.Any(a => a.Title == articleDto.Title))
+                {
+                    return BadRequest("Article already exists");
+                }
+
+                var articleModel = articleDto.ToArticleFromCreate();
+                await _articleRepository.CreateArticleAsync(articleModel);
+                return CreatedAtAction(nameof(GetArticleByTitle), new { id = articleModel.ContentId }, articleModel.ToArticleDetailDto());
+            }
+            catch (Exception ex)
             {
-                return BadRequest("Article already exists");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            var articleModel = articleDto.ToArticleFromCreate();
-            await _articleRepository.CreateArticleAsync(articleModel);
-            return CreatedAtAction(nameof(GetArticleByTitle), new { id = articleModel.ContentId }, articleModel.ToArticleDetailDto());
         }
 
         [HttpPut("update/{id:int}")]
@@ -98,9 +124,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(article.ToDisplayArticleFromUpdate());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -116,9 +142,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(article.ToArticleDto());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
