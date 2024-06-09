@@ -30,7 +30,7 @@ const ManagerAddDiamond = () => {
             const diamondDataWithStatus = { ...diamondData, status: true };
             await createDiamond(diamondDataWithStatus);
             swal("Success", "Diamond added successfully", "success");
-            navigate('/managerDiamondList');
+            navigate('/manager-diamond-list');
         } catch (error) {
             console.error("Error creating diamond:", error);
             if (error.response) {
@@ -59,7 +59,7 @@ const ManagerAddDiamond = () => {
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
                     <h3 className="manager_add_diamond_title">Add New Diamond</h3>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerDiamondList')}>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/manager-diamond-list')}>
                         &lt; Back
                     </button>
                 </div>

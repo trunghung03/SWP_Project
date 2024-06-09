@@ -20,7 +20,7 @@ const ManagerAddDiamond = () => {
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
                     <h3 className="manager_add_diamond_title">Create New Account</h3>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/adminEmployeeList')}>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/admin-employee-list')}>
                         &lt; Back
                     </button>
                 </div>

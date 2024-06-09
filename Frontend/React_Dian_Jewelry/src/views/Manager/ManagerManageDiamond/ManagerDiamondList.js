@@ -175,7 +175,7 @@ const ManagerDiamondList = () => {
                 <hr className="manager_header_line"></hr>
                 <h3>List Of Diamonds</h3>
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddDiamond')}>Add new diamond</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/manager-add-diamond')}>Add new diamond</button>
                 </div>
 
                 {/* Table diamond list */}

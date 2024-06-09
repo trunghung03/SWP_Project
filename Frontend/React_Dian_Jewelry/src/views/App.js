@@ -94,29 +94,29 @@ function App() {
             <Route path="/order-detail" element={<Layout><OrderDetail /></Layout>} />
 
             {/* Admin */}
-            <Route path="/adminCustomerList" element={<AdminCustomerList />} />
-            <Route path="/adminEmployeeList" element={<AdminEmployeeList />} />
-            <Route path="/adminAddEmployee" element={<AdminAddEmployee />} />
+            <Route path="/admin-customer-list" element={<AdminCustomerList />} />
+            <Route path="/admin-employee-list" element={<AdminEmployeeList />} />
+            <Route path="/admin-add-employee" element={<AdminAddEmployee />} />
 
             {/* Manager */}
-            <Route path="/managerStatitic" element={<ManagerStatitic />} />
-            <Route path="/managerDiamondList" element={<ManagerDiamondList />} />
-            <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
-            <Route path="/managerProductList" element={<ManagerProductList />} />
-            <Route path="/managerEmployeeList" element={<ManagerEmployeeList />} />
-            <Route path="/managerShellList" element={<ManagerShellList />} />
-            <Route path="/managerAddEmployee" element={<ManagerAddEmployee />} />
-            <Route path="/managerAddShell" element={<ManagerAddShell />} />
-            <Route path="/managerAddProduct" element={<ManagerAddProduct/>} />
+            <Route path="/manager-statitic" element={<ManagerStatitic />} />
+            <Route path="/manager-diamond-list" element={<ManagerDiamondList />} />
+            <Route path="/manager-add-diamond" element={<ManagerAddDiamond />} />
+            <Route path="/manager-product-list" element={<ManagerProductList />} />
+            <Route path="/manager-employee-list" element={<ManagerEmployeeList />} />
+            <Route path="/manager-shell-list" element={<ManagerShellList />} />
+            <Route path="/manager-add-employee" element={<ManagerAddEmployee />} />
+            <Route path="/manager-add-shell" element={<ManagerAddShell />} />
+            <Route path="/manager-add-product" element={<ManagerAddProduct/>} />
 
             {/* Sales Staff */}
-            <Route path="/salesStaffOrderList" element={<SSOrderList />} />
-            <Route path="/salesStaffContentList" element={<SSContentList />} />
-            <Route path="/salesStaffAddContent" element={<SSAddContent />} />
-            <Route path="/salesStaffWarrantyList" element={<SSWarrantyList/>}/>
+            <Route path="/sales-staff-order-list" element={<SSOrderList />} />
+            <Route path="/sales-staff-content-list" element={<SSContentList />} />
+            <Route path="/sales-staff-add-content" element={<SSAddContent />} />
+            <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>
 
             {/* Delivery Staff */}
-            <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
+            <Route path="/delivery-staff-delivery-list" element={<DSDeliveryList />} />
           </Routes>
         </CartProvider>
       </UserProvider>

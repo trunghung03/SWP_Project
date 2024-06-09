@@ -34,7 +34,7 @@ const ManagerAddProduct = () => {
             const productDataWithStatus = { ...productData, status: true };
             await createProduct(productDataWithStatus);
             swal("Success", "Product added successfully", "success");
-            navigate('/managerProductList');
+            navigate('/manager-product-list');
         } catch (error) {
             console.error("Error creating product:", error);
             if (error.response) {
@@ -63,7 +63,7 @@ const ManagerAddProduct = () => {
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
                     <h3 className="manager_add_diamond_title">Add New Product</h3>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerProductList')}>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/manager-product-list')}>
                         &lt; Back
                     </button>
                 </div>

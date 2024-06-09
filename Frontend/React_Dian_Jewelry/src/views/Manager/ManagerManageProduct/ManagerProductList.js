@@ -208,7 +208,7 @@ const ManagerProductList = () => {
                 <hr className="manager_product_header_line"></hr>
                 <h3>List Of Products</h3>
                 <div className="manager_manage_product_create_button_section">
-                    <button className="manager_manage_product_create_button" onClick={() => navigate('/managerAddProduct')}>Add new product</button>
+                    <button className="manager_manage_product_create_button" onClick={() => navigate('/manager-add-product')}>Add new product</button>
                 </div>
 
                 {/* Table diamond list */}

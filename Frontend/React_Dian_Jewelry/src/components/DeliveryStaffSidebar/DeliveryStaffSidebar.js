@@ -51,7 +51,7 @@ class DeliveryStaffSidebar extends Component {
                 {expanded && (
                     <div className="deliverystaff_sidebar_content">
                         <ul className="deliverystaff_sidebar_menu">
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/deliveryStaffDeliveryList')}>
+                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/delivery-staff-delivery-list')}>
                                 <i className="fas fa-box-open"></i>
                                 <span>Manager Order</span>
                             </li>
@@ -69,7 +69,7 @@ class DeliveryStaffSidebar extends Component {
                 {!expanded && (
                     <div className="deliverystaff_sidebar_icons">
                         <ul className="deliverystaff_sidebar_menu_icons">
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/deliveryStaffDeliveryList')}>
+                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/delivery-staff-delivery-list')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
                             {/* <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/deliverystaffEditProfile')}>

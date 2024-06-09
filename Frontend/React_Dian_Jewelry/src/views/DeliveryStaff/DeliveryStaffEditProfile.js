@@ -17,19 +17,6 @@ const DSEditProfile = () => {
                 <p>sales staff edit profile</p>
                 <p>sales staff edit profile</p>
                 <p>sales staff edit profile</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
-                <p>manage order</p>
             </div>
         </div>
     );

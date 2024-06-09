@@ -181,7 +181,7 @@ const ManagerShellList = () => {
                 <h3>List Of Shells</h3>
 
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddShell')}>Add new shell</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/manager-add-shell')}>Add new shell</button>
                 </div>
 
                 {/* Table diamond list */}

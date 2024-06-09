@@ -51,11 +51,11 @@ class AdminSidebar extends Component {
                 {expanded && (
                     <div className="admin_sidebar_content">
                         <ul className="admin_sidebar_menu">
-                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_customer' ? 'selected' : ''}`} onClick={() => this.props.navigate('/adminCustomerList')}>
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_customer' ? 'selected' : ''}`} onClick={() => this.props.navigate('/admin-customer-list')}>
                                 <i className="fas fa-users"></i>
                                 <span>Customer Account</span>
                             </li>
-                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_employee' ? 'selected' : ''}`} onClick={() => this.props.navigate('/adminEmployeeList')}>
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_employee' ? 'selected' : ''}`} onClick={() => this.props.navigate('/admin-employee-list')}>
                                 <i className="fas  fa-id-badge"></i>
                                 <span>Employee Account</span>
                             </li>
@@ -73,10 +73,10 @@ class AdminSidebar extends Component {
                 {!expanded && (
                     <div className="admin_sidebar_icons">
                         <ul className="admin_sidebar_menu_icons">
-                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_customer' ? 'selected' : ''}`} data-tooltip="Customer Account" onClick={() => this.props.navigate('/adminCustomerList')}>
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_customer' ? 'selected' : ''}`} data-tooltip="Customer Account" onClick={() => this.props.navigate('/admin-customer-list')}>
                                 <i className="fas fa-users"></i>
                             </li>
-                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_employee' ? 'selected' : ''}`} data-tooltip="Employee Acount" onClick={() => this.props.navigate('/adminEmployeeList')}>
+                            <li className={`admin_sidebar_menu_item ${currentPage === 'admin_manage_employee' ? 'selected' : ''}`} data-tooltip="Employee Acount" onClick={() => this.props.navigate('/admin-employee-list')}>
                                 <i className="fas  fa-id-badge"></i>
                             </li>
                             {/* <li className={`admin_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('#')}>

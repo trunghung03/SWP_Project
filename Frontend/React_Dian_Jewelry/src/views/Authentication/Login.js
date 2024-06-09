@@ -143,7 +143,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/adminCustomerList');
+                navigate('/admin-customer-list');
             } else if (role === 'Manager') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
@@ -152,7 +152,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/managerStatitic');
+                navigate('/manager-statitic');
             } else if (role === 'SalesStaff') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
@@ -161,7 +161,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/salesStaffOrderList');
+                navigate('/sales-staff-order-list');
             } else if (role === 'DeliveryStaff') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
@@ -170,7 +170,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/deliveryStaffDeliveryList');
+                navigate('/delivery-staff-delivery-list');
             } else if (role === 'Customer') {
                 if (userType === 'customer') {
                     let userInfoRes = await getUserInfo(email);

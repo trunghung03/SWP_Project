@@ -31,7 +31,7 @@ const AdminEmployeeList = () => {
                 <hr className="manager_header_line"></hr>
                 <h3>List Of Employee Accounts</h3>
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/adminAddEmployee')}>Create new account</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/admin-add-employee')}>Create new account</button>
                 </div>
 
                 {/* chinh tu day tro xuong */}

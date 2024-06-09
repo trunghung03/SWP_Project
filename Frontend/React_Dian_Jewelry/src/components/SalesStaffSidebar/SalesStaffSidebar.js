@@ -51,15 +51,15 @@ class SalesStaffSidebar extends Component {
                 {expanded && (
                     <div className="salesstaff_sidebar_content">
                         <ul className="salesstaff_sidebar_menu">
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffOrderList')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/sales-staff-order-list')}>
                                 <i className="fas fa-box-open"></i>
                                 <span>Manage Order</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffContentList')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} onClick={() => this.props.navigate('/sales-staff-content-list')}>
                                 <i className="fas fa-book"></i>
                                 <span>Manage Blog</span>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffWarrantyList')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} onClick={() => this.props.navigate('/sales-staff-warranty-list')}>
                                 <i className="fas fa-file-contract"></i>
                                 <span>Manage Warranty</span>
                             </li>
@@ -77,13 +77,13 @@ class SalesStaffSidebar extends Component {
                 {!expanded && (
                     <div className="salesstaff_sidebar_icons">
                         <ul className="salesstaff_sidebar_menu_icons">
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/salesStaffOrderList')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/sales-staff-order-list')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/salesStaffContentList')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_blog' ? 'selected' : ''}`} data-tooltip="Manage Blog" onClick={() => this.props.navigate('/sales-staff-content-list')}>
                                 <i className="fas fa-book"></i>
                             </li>
-                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('/salesStaffWarrantyList')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('/sales-staff-warranty-list')}>
                                 <i className="fas fa-file-contract"></i>
                             </li>
                             {/* <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/salesStaffEditProfile')}>
