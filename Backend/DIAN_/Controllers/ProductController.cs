@@ -42,8 +42,31 @@ namespace DIAN_.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateProductRequestDTO productDTO)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] CreateProductRequestDTO productDTO)
         {
+            var imageLinks = new List<string>();
+            var savePath = @"C:\Users\Admin\Documents\SWP_Project\Backend\DIAN_\Images";
+
+            if (productDTO.ImageFiles != null && productDTO.ImageFiles.Count > 0)
+            {
+                foreach (var file in productDTO.ImageFiles)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine(savePath, fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                    // Assuming the URL path structure
+                    var fileUrl = $"/images/{fileName}";
+                    imageLinks.Add(fileUrl); // Store file URL
+                }
+            }
+
+            // Join the image links with a semicolon
+            var imageLinkList = string.Join(";", imageLinks);
+
             // Check if the MainDiamondId exists
             var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
             if (!mainDiamondExists)
@@ -58,11 +81,13 @@ namespace DIAN_.Controllers
                 return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
             }
 
-            var product = productDTO.ToProductFromCreateDTO();
+            var product = productDTO.ToProductFromCreateDTO(imageLinkList);
             var createdProduct = await _productRepo.CreateAsync(product);
 
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
         }
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
