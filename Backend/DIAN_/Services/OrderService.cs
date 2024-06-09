@@ -24,15 +24,18 @@ namespace DIAN_.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IVnPayService _vnPayService;
 
         public OrderService(IPromotionRepository promotionRepository, IPurchaseOrderRepository purchaseOrderRepository,
-        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository, IEmployeeRepository employeeRepository)
+        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository, 
+        IEmployeeRepository employeeRepository, IVnPayService vnPayService)
         {
             _promotionRepository = promotionRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
             _customerRepository = customerRepository;
             _orderDetailRepository = orderDetailRepository;
             _employeeRepository = employeeRepository;
+            _vnPayService = vnPayService;
         }
 
         public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
@@ -87,6 +90,10 @@ namespace DIAN_.Services
 
             orderModel.SaleStaff = randomSalesStaff.EmployeeId;
             orderModel.DeliveryStaff = randomDeliveryStaff.EmployeeId;
+
+            // 4. Payment method
+            
+
 
             var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
 

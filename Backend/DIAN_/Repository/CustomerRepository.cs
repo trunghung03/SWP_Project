@@ -120,7 +120,7 @@ namespace DIAN_.Repository
             return customer;
         }
 
-        public async Task<bool> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        public async Task<bool> ResetPasswordRequestAsync(ResetPasswordDto resetPasswordDto)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == resetPasswordDto.Email);
             if (customer == null)
@@ -133,14 +133,12 @@ namespace DIAN_.Repository
             return true;
         }
 
-        public async Task<bool> ResetPasswordAsync(Customer user, string token, string newPassword)
+        public async Task<bool> ResetPassworConfirmdAsync(Customer user, string token, string newPassword)
         {
             user.Password = newPassword; 
             _context.Customers.Update(user);
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
-
-
     }
 }

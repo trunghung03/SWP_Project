@@ -24,7 +24,7 @@ namespace UserApplication.Controllers
         private readonly IEmailService _emailService;
         private readonly ICustomerService _customerService;
         private readonly ICustomerRepository _customerRepository;
-        public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository, 
+        public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository,
             IEmailService emailService, ICustomerService customerService)
         {
             _tokenService = tokenService;
@@ -76,7 +76,8 @@ namespace UserApplication.Controllers
                 var customers = await _customerRepository.GetAllAsync();
 
                 return Ok(customers);
-            } catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -93,7 +94,8 @@ namespace UserApplication.Controllers
                 if (customer == null) return NotFound();
 
                 return Ok(customer);
-            } catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -110,7 +112,8 @@ namespace UserApplication.Controllers
                 if (customer == null) return NotFound();
 
                 return Ok(customer);
-            } catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -128,7 +131,8 @@ namespace UserApplication.Controllers
                 if (customer == null) return NotFound();
 
                 return Ok(customer);
-            } catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -144,7 +148,8 @@ namespace UserApplication.Controllers
                 var customer = await _customerRepository.UpdateAsync(email, customerDto);
                 if (customer == null) return NotFound();
                 return Ok(customer);
-            } catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -162,7 +167,8 @@ namespace UserApplication.Controllers
                 if (customer == null) return NotFound();
 
                 return NoContent();
-            }catch(Exception ex)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -181,7 +187,7 @@ namespace UserApplication.Controllers
                 await _emailService.SendEmailAsync(mailRequest);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -215,7 +221,7 @@ namespace UserApplication.Controllers
                     return BadRequest("An error occurred while processing your request.");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -226,14 +232,30 @@ namespace UserApplication.Controllers
             try
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
-                var result = await _customerService.ConfirmResetPassword(resetPasswordDto);
-                return Ok("Reset password successully.");
+                var customer = await _customerService.ConfirmResetPassword(resetPasswordDto);
+                if (customer != null)
+                {
+                    var token = _tokenService.CreateCustomerToken(customer);
+                 return Ok(
+                    new NewUserDto
+                        {
+                         Email = customer.Email,
+                         Token = _tokenService.CreateCustomerToken(customer)
+                    }
+                );
+                }
+                else
+                {
+                    return BadRequest("An error occurred while processing your request.");
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
+
+
 
     }
 }
