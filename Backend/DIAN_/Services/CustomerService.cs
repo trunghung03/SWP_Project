@@ -31,17 +31,21 @@ namespace DIAN_.Services
         {
             var user = await _customerRepository.GetByEmailAsync(resetPasswordDto.Email);
             if (user == null) throw new ArgumentException("No account found with the provided email.");
+
             var token = _tokenService.CreateCustomerToken(user);
-            var callbackUrl = $"http://localhost:3000/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
+            var encodedToken = HttpUtility.UrlEncode(token);
+            var callbackUrl = $"http://localhost:3000/resetPassword?token={encodedToken}";
+
             var message = new MailResetPassword
             {
                 ToEmail = user.Email,
-                Subject = "Reset password token",
-                Body = $"Please reset your password by <a href='{callbackUrl}'>clicking here</a>.",
+                Subject = "Reset password for Dian Jewelry",
+                Body = $"You can reset your password by <a href='{callbackUrl}'>clicking here</a>.",
             };
             await _emailService.SendEmailReset(message);
             return true;
         }
+
 
         public async Task<IdentityResult> ConfirmResetPassword(ResetPasswordDto confirmDto)
         {

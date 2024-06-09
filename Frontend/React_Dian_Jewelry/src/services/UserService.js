@@ -26,4 +26,16 @@ const forgotPasswordApi = (email) => {
     return axios.post(`${API_BASE_URL}/accounts/forgot-password`, { email });
 }
 
-export { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo, updateCustomerInfo, forgotPasswordApi };
+const resetPasswordApi = (data) => {
+    return axios.post(`${API_BASE_URL}/accounts/reset-password`, data);
+}
+
+export { 
+    customerLoginApi, 
+    employeeLoginApi, 
+    getUserInfo, 
+    getEmployeeInfo, 
+    updateCustomerInfo, 
+    forgotPasswordApi, 
+    resetPasswordApi  
+};

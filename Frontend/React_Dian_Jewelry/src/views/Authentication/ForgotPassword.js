@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ForgotPassword.scss';
@@ -24,21 +24,20 @@ const ForgotPassword = () => {
             if (emailPattern.test(email)) {
                 try {
                     await forgotPasswordApi(email);
+                    localStorage.setItem('resetPasswordEmail', email);
                     swal({
-                        title: "Email sent!",
-                        text: "Check your email to confirm for reset password.",
+                        title: "Mail sent successfully!",
+                        text: "Check your email to reset your account password.",
                         icon: "success",
                         button: {
                             text: "Ok",
                             className: "swal-button"
                         },
-                    }).then(() => {
-                        window.location.href = "/resetPassword";
                     });
                 } catch (error) {
                     swal({
-                        title: "Error!",
-                        text: "Failed to send the email. Please try again later.",
+                        title: "This email has not sign up an account!",
+                        text: "Please try another one.",
                         icon: "error",
                         button: {
                             text: "Ok",
@@ -124,19 +123,6 @@ const ForgotPassword = () => {
                     </Slider>
                 </div>
             </div>
-
-            {/* Popup */}
-            <div id="emailModal" className="modal">
-                <div className="modal-content">
-                    <span className="close" style={{ textAlign: 'end' }}>&times;</span>
-                    <div className="icon-wrapper">
-                        <i className="fas fa-envelope icon-email"></i>
-                    </div>
-                    <h4 className="popup_title">Check your email to confirm for reset password!</h4>
-                    <button className="confirm-btn">Confirm</button>
-                </div>
-            </div>
-
         </div>
     );
 };
