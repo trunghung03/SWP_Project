@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerList.scss';
-import { ShowAllShell, getShellDetail, deleteShellById, updateShellById } from '../../../services/ManagerService/ManagerShellService.js'
+import { ShowAllShell, getShellDetail, deleteShellById, updateShellById, getShellByName } from '../../../services/ManagerService/ManagerShellService.js'
 import logo from '../../../assets/img/logoN.png';
 
 
@@ -44,8 +44,11 @@ const ManagerShellList = () => {
 
     // Search diamond by id
     const handleSearchKeyPress = async (e) => {
+        const isInteger = (value) => {
+            return /^-?\d+$/.test(value);
+        };
         if (e.key === 'Enter') {
-            if (searchQuery.trim()) {
+            if (isInteger(searchQuery.trim())) {
                 try {
                     const response = await getShellDetail(searchQuery.trim());
                     setShellItems([response]);
@@ -54,7 +57,25 @@ const ManagerShellList = () => {
                     console.error("Error fetching shell:", error);
                     swal("Shell not found!", "Please try another one.", "error");
                 }
-            } else {
+            }else if(searchQuery.trim()){
+                try {
+                    const response = await getShellByName(searchQuery.trim());
+                    if(Array.isArray(response)){
+                        setShellItems(response);
+                    }
+                    else if(response){
+                       setShellItems([response]); 
+                    }
+                    else{
+                        setShellItems([]);
+                    }
+                    setCurrentPage(1);
+                } catch (error) {
+                    console.error("Error fetching shell:", error);
+                    swal("Shell not found!", "Please try another one.", "error");
+                }
+            }
+             else {
                 try {
                     const response = await ShowAllShell();
                     setShellItems(response);
@@ -160,7 +181,7 @@ const ManagerShellList = () => {
                 <h3>List Of Shells</h3>
 
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddShell')}>Add new shell</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/manager-add-shell')}>Add new shell</button>
                 </div>
 
                 {/* Table diamond list */}

@@ -153,7 +153,7 @@ const Introduce = () => {
           <h3>WE ARE HERE FOR YOU</h3>
           <div className="introduce_experience_underline"></div>
           <p>Appointments are relaxed, joyful, and tailored to you. Whether it's a milestone moment or an everyday luxury, we're here to help you start your stack, find your fit, and design the perfect piece.</p>
-          <button onClick={() => navigate('/diamondJewelry')} className="introduce_shop_now_btn">Shop now</button>
+          <button onClick={() => navigate('/diamond-jewelry')} className="introduce_shop_now_btn">Shop now</button>
         </div>
         <div className="introduce_experience_right">
           <img src={experience} alt="Dian Jewelry" />
@@ -200,7 +200,7 @@ const Introduce = () => {
         <div className="explore_right_section wrapper">
           <ul className="carousel">
             {cardData.map((card, index) => (
-              <li key={index} className="explore_product_card card" onClick={() => handleNavigate('/diamondJewelry', { category: card.category })}>
+              <li key={index} className="explore_product_card card" onClick={() => handleNavigate('/diamond-jewelry', { category: card.category })}>
                 <img src={card.img} alt={card.name} className="explore_product_image" />
                 <p className="explore_product_name">{card.name}</p>
               </li>

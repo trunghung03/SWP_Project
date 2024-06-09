@@ -2,8 +2,12 @@
 using DIAN_.DTOs.AccountDTO;
 using DIAN_.Interfaces;
 using DIAN_.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using UserApplication.Dtos.Account;
 
 namespace DIAN_.Repository
@@ -11,9 +15,11 @@ namespace DIAN_.Repository
     public class CustomerRepository : ICustomerRepository
     {
         private readonly ApplicationDbContext _context;
-        public CustomerRepository(ApplicationDbContext context) 
+        private readonly IConfiguration _configuration;
+        public CustomerRepository(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         public async Task<Customer?> DeleteAsync(string email)
         {
@@ -37,7 +43,13 @@ namespace DIAN_.Repository
 
             return customer;
         }
+        public async Task<Customer?> SearchByNameAsyncs(string name)
+        {
+           var customer = await _context.Customers.FirstOrDefaultAsync(c => c.FirstName.Contains(name) || c.LastName.Contains(name));
+            if (customer == null) return null;
 
+            return customer;
+        }
         public async Task<Customer?> GetByIdAsync(int id)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
@@ -106,6 +118,27 @@ namespace DIAN_.Repository
 
             await _context.SaveChangesAsync();
             return customer;
+        }
+
+        public async Task<bool> ResetPasswordRequestAsync(ResetPasswordDto resetPasswordDto)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == resetPasswordDto.Email);
+            if (customer == null)
+            {
+                return false;
+            }
+            customer.Password = resetPasswordDto.Password;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> ResetPassworConfirmdAsync(Customer user, string token, string newPassword)
+        {
+            user.Password = newPassword; 
+            _context.Customers.Update(user);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
     }
 }

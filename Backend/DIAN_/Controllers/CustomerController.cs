@@ -10,6 +10,9 @@ using DIAN_.Repository;
 using DIAN_.Interfaces;
 using DIAN_.Services;
 using DIAN_.Helper;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity.Data;
+using DIAN_.DTOs.AccountDTO;
 
 namespace UserApplication.Controllers
 {
@@ -19,13 +22,15 @@ namespace UserApplication.Controllers
     {
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
-
+        private readonly ICustomerService _customerService;
         private readonly ICustomerRepository _customerRepository;
-        public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository, IEmailService emailService)
+        public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository,
+            IEmailService emailService, ICustomerService customerService)
         {
             _tokenService = tokenService;
             _customerRepository = customerRepository;
             _emailService = emailService;
+            _customerService = customerService;
         }
 
         [HttpPost("login")]
@@ -64,55 +69,109 @@ namespace UserApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customers = await _customerRepository.GetAllAsync();
-            
-            return Ok(customers);
+                var customers = await _customerRepository.GetAllAsync();
+
+                return Ok(customers);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail(string email)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.GetByEmailAsync(email);
-            if (customer == null) return NotFound();
+                var customer = await _customerRepository.GetByEmailAsync(email);
+                if (customer == null) return NotFound();
 
-            return Ok(customer);
+                return Ok(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
+        [HttpGet("search/name/{name}")]
+        public async Task<IActionResult> SearchByName(string name)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var customer = await _customerRepository.SearchByNameAsyncs(name);
+                if (customer == null) return NotFound();
+
+                return Ok(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.GetByIdAsync(id);
-            if (customer == null) return NotFound();
+                var customer = await _customerRepository.GetByIdAsync(id);
+                if (customer == null) return NotFound();
 
-            return Ok(customer);
+                return Ok(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPut("{email}")]
         public async Task<IActionResult> Update(string email, UpdateUserDto customerDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.UpdateAsync(email, customerDto);
-            if (customer == null) return NotFound();
-            return Ok(customer);
+                var customer = await _customerRepository.UpdateAsync(email, customerDto);
+                if (customer == null) return NotFound();
+                return Ok(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpDelete("{email}")]
         public async Task<IActionResult> Delete(string email)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.DeleteAsync(email);
+                var customer = await _customerRepository.DeleteAsync(email);
 
-            if (customer == null) return NotFound();
+                if (customer == null) return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost("send-email")]
@@ -128,10 +187,9 @@ namespace UserApplication.Controllers
                 await _emailService.SendEmailAsync(mailRequest);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception and return a 500 error.
-                return StatusCode(500, "An error occurred while sending the email.");
+                throw;
             }
         }
 
@@ -146,6 +204,58 @@ namespace UserApplication.Controllers
             Response += "</div>";
             return Response;
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                var result = await _customerService.ResetPasswordRequestAsync(forgotPasswordDto);
+                if (result)
+                {
+                    return Ok("Password reset link has been sent.");
+                }
+                else
+                {
+                    return BadRequest("An error occurred while processing your request.");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                var customer = await _customerService.ConfirmResetPassword(resetPasswordDto);
+                if (customer != null)
+                {
+                    var token = _tokenService.CreateCustomerToken(customer);
+                 return Ok(
+                    new NewUserDto
+                        {
+                         Email = customer.Email,
+                         Token = _tokenService.CreateCustomerToken(customer)
+                    }
+                );
+                }
+                else
+                {
+                    return BadRequest("An error occurred while processing your request.");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }

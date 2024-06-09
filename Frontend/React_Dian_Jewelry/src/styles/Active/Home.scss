@@ -35,7 +35,7 @@ body {
 
 .slide img {
     width: 100%;
-    height: 430px;
+    height: 440px;
 }
 
 .slide-content {
@@ -133,11 +133,85 @@ body {
 
 // End slide container 
 
+// Under slider 
+.under_slider_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0 20px 0;
+}
+
+.under_slider_column {
+    display: flex;
+    align-items: center;
+    margin: 0 5%;
+}
+
+.under_slider_icon{
+    color: #1c1c1c;
+}
+
+.under_slider_column .fa-shipping-fast{
+    font-size: 33px;
+    margin-right: 15px;
+    margin-bottom: 11px;
+}
+
+.under_slider_column .fa-headset {
+    font-size: 36px;
+    margin-right: 15px;
+    margin-bottom: 14px;
+}
+
+.under_slider_column .fa-undo-alt {
+    font-size: 35px;
+    margin-right: 15px;
+    margin-bottom: 13px;
+}
+
+.under_slider_column .fa-credit-card {
+    font-size: 34px;
+    margin-right: 15px;
+    margin-bottom: 13px;
+}
+
+.under_slider_text_container {
+    text-align: left;
+}
+
+.under_slider_title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.under_slider_text {
+    font-size: 14px;
+    color: #565e6c;
+}
+
+.under_slider_hr {
+    width: 100%;
+    border: 1px solid #bdbaba;
+}
+
+
+// End under slider 
+
 // Shape 
+.shape_title{
+    font-size: 24px;
+    color: #1c1c1c;
+    margin-top: 60px;
+    margin-bottom: -25px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .diamond_shape_container {
     display: flex;
     justify-content: center;
-    margin: 50px -2%;
+    margin: 40px -2% 70px -2%;
 }
 
 .diamond_shape_grid {
@@ -179,7 +253,7 @@ body {
 
 .diamond_shape_column:hover .diamond_shape_name {
     transform: translateY(-5px) scale(1.2);
-    color: #1c1c1c; 
+    color: #1c1c1c;
     font-weight: bold;
 }
 
@@ -733,8 +807,8 @@ ul {
 }
 
 .brilliant_description a {
-    color: #1c1c1c; 
-    text-decoration: none; 
+    color: #1c1c1c;
+    text-decoration: none;
     cursor: pointer;
     font-weight: bold;
 }

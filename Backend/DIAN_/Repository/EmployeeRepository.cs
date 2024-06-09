@@ -103,5 +103,27 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return employee;
         }
+
+        public async Task<bool> DeactivateAndActivateEmployee(int id)
+        {
+            var employee = await _context.Employees.FirstOrDefaultAsync(c => c.EmployeeId == id);
+            if (employee == null) return false;
+            if (employee.Status == true) employee.Status = false;
+            else if (employee.Status == false) employee.Status = true;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeactivateAndActivateCustomer(int id)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+            if (customer == null) return false;
+            if (customer.Status == true) customer.Status = false;
+            else if (customer.Status == false) customer.Status = true;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 }

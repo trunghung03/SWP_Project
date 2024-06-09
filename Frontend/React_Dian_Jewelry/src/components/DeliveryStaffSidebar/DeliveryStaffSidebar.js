@@ -51,14 +51,14 @@ class DeliveryStaffSidebar extends Component {
                 {expanded && (
                     <div className="deliverystaff_sidebar_content">
                         <ul className="deliverystaff_sidebar_menu">
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/deliveryStaffDeliveryList')}>
+                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} onClick={() => this.props.navigate('/delivery-staff-delivery-list')}>
                                 <i className="fas fa-box-open"></i>
-                                <span>Delivery List</span>
+                                <span>Manager Order</span>
                             </li>
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/deliveryStaffEditProfile')}>
+                            {/* <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/deliveryStaffEditProfile')}>
                                 <i className="fas fa-user"></i>
                                 <span>Edit Profile</span>
-                            </li>
+                            </li> */}
                             <div className="deliverystaff_sidebar_sign_out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                                 <span>Sign Out</span>
@@ -69,12 +69,12 @@ class DeliveryStaffSidebar extends Component {
                 {!expanded && (
                     <div className="deliverystaff_sidebar_icons">
                         <ul className="deliverystaff_sidebar_menu_icons">
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} data-tooltip="Delivery List" onClick={() => this.props.navigate('/deliveryStaffDeliveryList')}>
+                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_manage_order' ? 'selected' : ''}`} data-tooltip="Manage Order" onClick={() => this.props.navigate('/delivery-staff-delivery-list')}>
                                 <i className="fas fa-box-open"></i>
                             </li>
-                            <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/deliverystaffEditProfile')}>
+                            {/* <li className={`deliverystaff_sidebar_menu_item ${currentPage === 'deliverystaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/deliverystaffEditProfile')}>
                                 <i className="fas fa-user"></i>
-                            </li>
+                            </li> */}
                             <div className="deliverystaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                             </div>

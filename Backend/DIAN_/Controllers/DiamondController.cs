@@ -66,6 +66,30 @@ namespace DIAN_.Controllers
             }
         }
 
+        [HttpGet("{shape}")]
+        public async Task<IActionResult> GetDiamondByShapeAsync([FromRoute] string shape)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _diamondRepository.GetDiamondByShapeAsync(shape);
+
+                if (!result.Any())
+                {
+                    return NotFound("Diamond does not exist");
+                }
+
+                var diamondDtos = result.Select(diamond => diamond.ToDiamondDTO()).ToList();
+                return Ok(diamondDtos);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
         [HttpPost("creatediamond")]
         public async Task<IActionResult> AddDiamondAsync([FromBody] CreateDiamondRequestDto diamondDto)

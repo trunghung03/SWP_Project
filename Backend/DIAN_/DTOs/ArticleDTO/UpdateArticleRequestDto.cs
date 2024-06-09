@@ -13,7 +13,5 @@ namespace DIAN_.DTOs.ArticleDTO
         public string Image { get; set; } = string.Empty;
         [Required]
         public string Tag { get; set; } = string.Empty;
-        [Required]
-        public bool Status { get; set; }
     }
 }

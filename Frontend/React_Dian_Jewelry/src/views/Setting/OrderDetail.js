@@ -26,8 +26,8 @@ function OrderDetail() {
 
     const navItems = ['Home', 'Setting', 'Order History', orderNumber];
     const menuItems = [
-        { name: 'Edit Profile', path: '/editProfile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
-        { name: 'Order History', path: '/orderHistory', icon: 'fas fa-history', iconClass: 'icon-order-history' },
+        { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
+        { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
     ];
 
     // Dummy data for order details
@@ -78,7 +78,7 @@ function OrderDetail() {
                         {menuItems.map(item => (
                             <div
                                 key={item.path}
-                                className={`order_history_setting_menu_item ${item.path === '/orderHistory' ? 'order-history-item' : ''}`}
+                                className={`order_history_setting_menu_item ${item.path === '/order-history' ? 'order-history-item' : ''}`}
                                 onClick={() => navigate(item.path)}
                             >
                                 <i className={`${item.icon} order_history_setting_menu_icon ${item.iconClass}`}></i>
@@ -145,7 +145,7 @@ function OrderDetail() {
                         </div>
                         <div className="order_detail_actions">
                             <button className="order_detail_contact_us" onClick={() => navigate('/contact')}><i className="fas fa-phone"></i>Contact us</button>
-                            <button className="order_detail_continue_shopping" onClick={() => navigate('/diamondJewelry')}><i className="fas fa-shopping-cart"></i>Continue shopping</button>
+                            <button className="order_detail_continue_shopping" onClick={() => navigate('/diamond-jewelry')}><i className="fas fa-shopping-cart"></i>Continue shopping</button>
                         </div>
                     </div>
                 </div>

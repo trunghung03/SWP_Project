@@ -32,7 +32,7 @@ function ProductDetail() {
 
     const navigateToProductDetail = (productId) => {
         window.scrollTo(0, 0);
-        navigate('/productDetail', { state: { id: productId } });
+        navigate('/product-detail', { state: { id: productId } });
     };
 
     useEffect(() => {
@@ -268,7 +268,7 @@ function ProductDetail() {
             <div>
                 <div className="just_for_you_container">
                     <div className="just_for_you_text">
-                        <h3>Made Just For You</h3>
+                        <h3><strong>Made Just For You</strong></h3>
                         <p>At our San Francisco design studio, our team designs every ring to delight you, from the first time you see it and every day after. We carefully consider the entire piece—obsessing over comfort, quality, and durability so you can cherish it for a lifetime.</p>
                     </div>
                     <div className="just_for_you_features">

@@ -19,10 +19,11 @@
     font-size: 15px;
     padding-top: 2px;
     cursor: pointer;
+    color: #1c1c1c;
 }
 
 .checkout_header .checkout_continue_shopping:hover {
-    color: #0f2770;
+    color: #797979;
 }
 
 .checkout_item_header {
@@ -75,7 +76,7 @@
 }
 
 .checkout_summary_checkout {
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -88,7 +89,7 @@
 }
 
 .checkout_summary_checkout:hover {
-    background-color: #2d4ba8;
+    background-color: #797979;
     color: white;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -240,7 +241,7 @@
 
 .voucher button {
     padding: 6px 9px;
-    background-color: #0f2770;
+    background-color: #1c1c1c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -250,7 +251,7 @@
 }
 
 .voucher button:hover {
-    background-color: #2d4ba8;
+    background-color: #797979;
 }
 
 .payment_methods {

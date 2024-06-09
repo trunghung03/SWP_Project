@@ -82,18 +82,6 @@ namespace DIAN_.Repository
             return order;
         }
 
-        //public async Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, Purchaseorder statusDto)
-        //{
-        //    var order = await _context.Purchaseorders.FirstOrDefaultAsync(po => po.OrderId == orderId);
-        //    if (order == null)
-        //    {
-        //        throw new Exception($"Order with id {orderId} not found.");
-        //    }
-        //    order.OrderStatus = statusDto.OrderStatus;
-        //    await _context.SaveChangesAsync();
-        //    return order;
-        //}
-
         public async Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status)
         {
             var orders = await _context.Purchaseorders.Where(po => po.OrderStatus == status).ToListAsync();

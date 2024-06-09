@@ -6,10 +6,16 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.Repository;
 using DIAN_.Services;
+using DIAN_.VnPay;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Serilog;
+using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.X9;
+
 
 namespace DIAN_.Controllers
 {
@@ -23,13 +29,16 @@ namespace DIAN_.Controllers
 
         private readonly ApplicationDbContext _context;
 
+        private readonly IVnPayService _vnPayService;
+
 
         public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService,
-            ApplicationDbContext context)
+            ApplicationDbContext context, IVnPayService vpnPayService)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
             _context = context;
+            _vnPayService = vpnPayService;
         }
 
         [HttpGet("all")]
@@ -54,9 +63,11 @@ namespace DIAN_.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-            var order = purchaseOrderDTO.ToCreatePurchaseOrder();
-            var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
-            return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+
+                var order = purchaseOrderDTO.ToCreatePurchaseOrder();
+                var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
+                return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+
         }
 
         [HttpPut("{id}")]
@@ -105,5 +116,59 @@ namespace DIAN_.Controllers
             var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
             return Ok(updatedTotalPrice);
         }
+
+        [HttpPost("vnpay-return")]
+        public async Task<IActionResult> PaymentCallBack()
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+
+            if (response == null)
+            {
+                return BadRequest("Error processing VN Pay payment: No response received.");
+            }
+
+            var order = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(int.Parse(response.OrderId));
+            if (order == null)
+            {
+                return NotFound($"Order with ID {response.OrderId} not found.");
+            }
+
+            var OrderStatus = response.VnPayResponseCode == "00" ? "Paid" : "Failed";
+
+            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(order.OrderId, OrderStatus);
+            if (updatedOrder == null)
+            {
+                return BadRequest("Error updating order status.");
+            }
+            return Ok("VNPay payment processed successfully");
+        }
+
+        [HttpGet("payment-fail")]
+        public async Task<IActionResult> PaymentFail()
+        {
+            return NotFound("Payment failed");
+        }
+
+        [HttpPost("request-vnpay-payment")]
+        public async Task<IActionResult> RequestVnPayPayment([FromBody] VnPaymentRequestModel model)
+        {
+            try
+            {
+                var paymentUrl = await Task.Run(() => _vnPayService.CreatePaymentUrl(HttpContext, model));
+
+                if (string.IsNullOrEmpty(paymentUrl))
+                {
+                    return BadRequest(new { message = "Unable to create payment URL." });
+                }
+
+                return Ok(new { paymentUrl = paymentUrl });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }    
+        }
+
     }
-}
+

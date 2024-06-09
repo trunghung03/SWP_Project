@@ -30,7 +30,8 @@ import EditProfile from './Setting/EditProfile';
 import OrderHistory from './Setting/OrderHistory';
 import OrderDetail from './Setting/OrderDetail';
 import AdminCustomerList from './Admin/AdminCustomerList';
-import AdminTest from './Admin/AdminTest';
+import AdminEmployeeList from './Admin/AdminEmployeeList';
+import AdminAddEmployee from './Admin/AdminAddEmployee';
 import ManagerStatitic from './Manager/ManagerStatitic';
 import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
@@ -71,48 +72,51 @@ function App() {
             <Route path="/home" element={<Layout><Home /></Layout>} />
             <Route path="/education" element={<Layout><Education /></Layout>} />
             <Route path="/search" element={<Layout><Search /></Layout>} />
-            <Route path="/productDetail" element={<Layout><ProductDetail /></Layout>} />
+            <Route path="/product-detail" element={<Layout><ProductDetail /></Layout>} />
             <Route path="/cart" element={<Layout><Cart /></Layout>} />
             <Route path="/FAQs" element={<Layout><FAQs /></Layout>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/resetPassword" element={<ResetPassword />} />
-            <Route path="/diamondJewelry" element={<Layout><DiamondJewelry /></Layout>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/diamond-jewelry" element={<Layout><DiamondJewelry /></Layout>} />
             <Route path="/collection" element={<Layout><Collection /></Layout>} />
             <Route path="/shape" element={<Layout><Shape /></Layout>} />
-            <Route path="/priceList" element={<Layout><PriceList /></Layout>} />
+            <Route path="/price-list" element={<Layout><PriceList /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
             
             {/* Customer */}
             <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
             <Route path="/invoice" element={<Layout><Invoice /></Layout>} />
             <Route path="/introduce" element={<Layout><Introduce /></Layout>} />
-            <Route path="/editProfile" element={<Layout><EditProfile /></Layout>} />
-            <Route path="/orderHistory" element={<Layout><OrderHistory /></Layout>} />
-            <Route path="/orderDetail" element={<Layout><OrderDetail /></Layout>} />
+            <Route path="/edit-profile" element={<Layout><EditProfile /></Layout>} />
+            <Route path="/order-history" element={<Layout><OrderHistory /></Layout>} />
+            <Route path="/order-detail" element={<Layout><OrderDetail /></Layout>} />
 
             {/* Admin */}
-            <Route path="/adminCustomerList" element={<AdminCustomerList />} />
-            <Route path="/adminTest" element={<AdminTest />} />
+            <Route path="/admin-customer-list" element={<AdminCustomerList />} />
+            <Route path="/admin-employee-list" element={<AdminEmployeeList />} />
+            <Route path="/admin-add-employee" element={<AdminAddEmployee />} />
 
             {/* Manager */}
-            <Route path="/managerStatitic" element={<ManagerStatitic />} />
-            <Route path="/managerDiamondList" element={<ManagerDiamondList />} />
-            <Route path="/managerAddDiamond" element={<ManagerAddDiamond />} />
-            <Route path="/managerProductList" element={<ManagerProductList />} />
-            <Route path="/managerEmployeeList" element={<ManagerEmployeeList />} />
-            <Route path="/managerShellList" element={<ManagerShellList />} />
-            <Route path="/managerAddEmployee" element={<ManagerAddEmployee />} />
-            <Route path="/managerAddShell" element={<ManagerAddShell />} />
-            <Route path="/managerAddProduct" element={<ManagerAddProduct/>} />
+            <Route path="/manager-statitic" element={<ManagerStatitic />} />
+            <Route path="/manager-diamond-list" element={<ManagerDiamondList />} />
+            <Route path="/manager-add-diamond" element={<ManagerAddDiamond />} />
+            <Route path="/manager-product-list" element={<ManagerProductList />} />
+            <Route path="/manager-employee-list" element={<ManagerEmployeeList />} />
+            <Route path="/manager-shell-list" element={<ManagerShellList />} />
+            <Route path="/manager-add-employee" element={<ManagerAddEmployee />} />
+            <Route path="/manager-add-shell" element={<ManagerAddShell />} />
+            <Route path="/manager-add-product" element={<ManagerAddProduct/>} />
+
             {/* Sales Staff */}
-            <Route path="/salesStaffOrderList" element={<SSOrderList />} />
-            <Route path="/salesStaffContentList" element={<SSContentList />} />
-            <Route path="/salesStaffAddContent" element={<SSAddContent />} />
-            <Route path="/salesStaffWarrantyList" element={<SSWarrantyList/>}/>
+            <Route path="/sales-staff-order-list" element={<SSOrderList />} />
+            <Route path="/sales-staff-content-list" element={<SSContentList />} />
+            <Route path="/sales-staff-add-content" element={<SSAddContent />} />
+            <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>
+
             {/* Delivery Staff */}
-            <Route path="/deliveryStaffDeliveryList" element={<DSDeliveryList />} />
+            <Route path="/delivery-staff-delivery-list" element={<DSDeliveryList />} />
           </Routes>
         </CartProvider>
       </UserProvider>

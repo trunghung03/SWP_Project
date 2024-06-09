@@ -36,14 +36,18 @@ namespace DIAN_.Repository
 
         public async Task<List<Collection>> GetAllAsync()
         {
-            var collections = await _context.Collections.ToListAsync();
+            var collections = await _context.Collections
+                .Where(c => c.Status == true)
+                .ToListAsync();
 
             return collections;
         }
 
         public async Task<Collection?> GetByIdAsync(int id)
         {
-            var collection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
+            var collection = await _context.Collections
+                .Where(c => c.Status == true)
+                .FirstOrDefaultAsync(c => c.CollectionId == id);
 
             if (collection == null) { return null; }
 

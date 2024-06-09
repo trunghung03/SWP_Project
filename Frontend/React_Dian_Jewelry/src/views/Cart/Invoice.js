@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Invoice.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getPurchaseOrderById, getOrderDetailsByOrderId } from '../../services/CheckoutService.js';
+import { getOrderDetailsByOrderId } from '../../services/CheckoutService.js';
 import { getProductDetail } from '../../services/ProductService.js';
 import qr from '../../assets/img/qr.jpg';
 
@@ -18,9 +18,9 @@ function Invoice() {
 
     const orderId = location.state?.orderId || localStorage.getItem('orderId');
     const paymentMethod = location.state?.paymentMethod || 'Not selected';
-    const discount = localStorage.getItem('orderDiscount');
+    const discount = location.state?.appliedDiscount || localStorage.getItem('orderDiscount');
     const orderDate = new Date(localStorage.getItem('orderDate')).toLocaleDateString('en-GB');
-    const totalPrice = localStorage.getItem('orderTotalPrice');
+    const totalPrice = location.state?.totalPrice || localStorage.getItem('orderTotalPrice');
 
     useEffect(() => {
         const fetchOrderDetails = async () => {
@@ -69,12 +69,12 @@ function Invoice() {
                                         {orderDetails.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{item.productName}</td>
-                                                <td>{item.productPrice}$</td>
+                                                <td>{Math.floor(item.productPrice)}$</td>
                                             </tr>
                                         ))}
                                         <tr>
                                             <td>Discount</td>
-                                            <td>{discount}$</td>
+                                            <td>{Math.floor(discount)}$</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -85,7 +85,7 @@ function Invoice() {
                                     <ul>
                                         <li><span>•</span> Order number: <strong>{orderId}</strong></li>
                                         <li><span>•</span> Date order: <strong>{orderDate}</strong></li>
-                                        <li><span>•</span> Total price: <strong>{totalPrice}$</strong></li>
+                                        <li><span>•</span> Total price: <strong>{Math.floor(totalPrice)}$</strong></li>
                                         <li><span>•</span> Payment method: <strong>{paymentMethod}</strong></li>
                                     </ul>
                                 </div>

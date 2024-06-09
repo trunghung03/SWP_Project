@@ -38,12 +38,14 @@ namespace DIAN_.Repository
 
         public async Task<bool> ExistsMainDiamondAsync(int mainDiamondId)
         {
-            return await _context.Diamonds.AnyAsync(d => d.DiamondId == mainDiamondId);
+            return await _context.Diamonds.Where(s => s.Status).AnyAsync(d => d.DiamondId == mainDiamondId);
         }
 
         public async Task<bool> ExistsProCodeAsync(string proCode)
         {
-            return await _context.Products.AnyAsync(p => p.ProductCode == proCode);
+            return await _context.Products
+                .Where(p => p.Status)
+                .AnyAsync(p => p.ProductCode == proCode);
         }
 
         public async Task<List<ProductDTO>> GetAllAsync(ProductQuery query)

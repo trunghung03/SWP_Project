@@ -17,31 +17,43 @@ namespace DIAN_.Repository
 
         public async Task<Article> CreateArticleAsync(Article articleModel)
         {
+            if (articleModel?.Employee == null)
+            {
+                throw new ArgumentNullException(nameof(articleModel.Employee), "EmployeeId cannot be null.");
+            }
+
             // Khởi tạo EmployeeNavigation dựa trên EmployeeID
             articleModel.EmployeeNavigation = await _context.Employees.FindAsync(articleModel.Employee);
+            if (articleModel.EmployeeNavigation == null)
+            {
+                return null;
+            }
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
             return articleModel;
         }
+
         public async Task<List<Article>> GetArticleByTitleAsync(string title)
         {
             return await _context.Articles
-        .Where(a => a.Title.Contains(title))
+        .Where(a => a.Title.Contains(title) && a.Status)
         .Include(a => a.EmployeeNavigation)
         .ToListAsync();
         }
 
         public async Task<Article?> DeleteArticleAsync(int id)
         {
-            var existingArticle = await _context.Articles.FirstOrDefaultAsync(x => x.ContentId == id);
+            var existingArticle = await _context.Articles
+                .Include(a => a.EmployeeNavigation)
+                .FirstOrDefaultAsync(x => x.ContentId == id);
             if (existingArticle != null)
             {
                 existingArticle.Status = false;
                 await _context.SaveChangesAsync();
-                return existingArticle;
             }
-            return null;
+            return existingArticle;
         }
+
 
         public async Task<List<ArticleList>> GetAllAsync()
         {
@@ -56,27 +68,25 @@ namespace DIAN_.Repository
 
         public async Task<Article?> GetArticleByIdAsync(int id)
         {
-            return await _context.Articles.Include(a => a.EmployeeNavigation).FirstOrDefaultAsync(c => c.ContentId == id);
+            return await _context.Articles.Include(a => a.EmployeeNavigation)
+                .Where(a => a.Status)
+                .FirstOrDefaultAsync(c => c.ContentId == id);
         }
 
         public async Task<Article?> UpdateArticleAsync(int id, Article articleModel)
         {
-            var existingArticle = await _context.Articles.FindAsync(id);
-
-            if (existingArticle == null)
-            {
-                return null;
-            }
-
+            var existingArticle = await _context.Articles
+                .Where(a => a.Status)
+                .FirstOrDefaultAsync(a => a.ContentId == id);
+            if (existingArticle == null) return null;
             existingArticle.Title = articleModel.Title;
             existingArticle.Content = articleModel.Content;
             existingArticle.Image = articleModel.Image;
             existingArticle.Tag = articleModel.Tag;
-            existingArticle.Status = articleModel.Status;
-
             await _context.SaveChangesAsync();
 
             return existingArticle;
         }
+
     }
 }

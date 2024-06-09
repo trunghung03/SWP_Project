@@ -7,7 +7,7 @@ const ProductCard = ({ id, image, name, price }) => {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate('/productDetail', { state: { id } });
+        navigate('/product-detail', { state: { id } });
     };
 
     return (
@@ -23,7 +23,7 @@ const SpecialCard = () => {
     const navigate = useNavigate();
 
     const handleShopNowClick = () => {
-        navigate('/diamondJewelry');
+        navigate('/diamond-jewelry');
     };
 
     return (
@@ -39,7 +39,7 @@ const SpecialCard = () => {
 const ProductList = ({ products }) => {
     const location = useLocation();
 
-    const isDiamondJewelryPage = location.pathname === '/diamondJewelry';
+    const isDiamondJewelryPage = location.pathname === '/diamond-jewelry';
 
     return (
         <div className="product_list ms-5 p-5 col-lg-12">

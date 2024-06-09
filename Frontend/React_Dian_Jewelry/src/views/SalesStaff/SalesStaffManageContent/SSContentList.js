@@ -129,7 +129,7 @@ function SSContentList() {
         </div>
         <hr className="ss_manage_content_line"></hr>
         <div className="ss_manage_content_create_button_section">
-          <button className="ss_manage_content_create_button" onClick={() => navigate('/salesStaffAddContent')}>Create new blog</button>
+          <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-add-content')}>Create new blog</button>
         </div>
         <div className="ss_manage_content_content_list">
           {contents.map((content) => (

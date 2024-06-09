@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ForgotPassword.scss';
@@ -8,50 +8,49 @@ import rightImage3 from '../../assets/img/right3.jpg';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { forgotPasswordApi } from '../../services/UserService';
 
 const ForgotPassword = () => {
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const btn = document.getElementById("emailPopup");
-        btn.onclick = function (e) {
-            e.preventDefault();
-            setLoading(true);
+    const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
 
-            const email = document.getElementById("email").value;
-            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const email = document.getElementById("email").value;
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-            if (email) {
-                if (emailPattern.test(email)) {
+        if (email) {
+            if (emailPattern.test(email)) {
+                try {
+                    await forgotPasswordApi(email);
+                    localStorage.setItem('resetPasswordEmail', email);
                     swal({
-                        title: "Email sent!",
-                        text: "Check your email to confirm for reset password.",
+                        title: "Mail sent successfully!",
+                        text: "Check your email to reset your account password.",
                         icon: "success",
                         button: {
                             text: "Ok",
                             className: "swal-button"
                         },
-                    }).then(() => {
-                        window.location.href = "/resetPassword";
-                    }).finally(() => {
-                        setLoading(false);
                     });
-                } else {
+                } catch (error) {
                     swal({
-                        title: "Wrong email format!",
-                        text: "Please enter a valid email.",
+                        title: "This email has not sign up an account!",
+                        text: "Please try another one.",
                         icon: "error",
                         button: {
                             text: "Ok",
                             className: "swal-button"
                         },
                     });
+                } finally {
                     setLoading(false);
                 }
             } else {
                 swal({
-                    title: "Have not enter an email yet!",
-                    text: "Please enter your email before submitting.",
+                    title: "Wrong email format!",
+                    text: "Please enter a valid email.",
                     icon: "error",
                     button: {
                         text: "Ok",
@@ -60,24 +59,19 @@ const ForgotPassword = () => {
                 });
                 setLoading(false);
             }
-        };
-
-        const modal = document.getElementById("emailModal");
-        const span = document.getElementsByClassName("close")[0];
-        const confirmBtn = document.getElementsByClassName("confirm-btn")[0];
-
-        span.onclick = function () {
-            modal.style.display = "none";
-        };
-        confirmBtn.onclick = function () {
-            modal.style.display = "none";
-        };
-        window.onclick = function (event) {
-            if (event.target === modal) {
-                modal.style.display = "none";
-            }
-        };
-    }, []);
+        } else {
+            swal({
+                title: "Have not enter an email yet!",
+                text: "Please enter your email before submitting.",
+                icon: "error",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                },
+            });
+            setLoading(false);
+        }
+    };
 
     const sliderSettings = {
         dots: true,
@@ -97,7 +91,7 @@ const ForgotPassword = () => {
             <div className="fp_wrapper">
                 {/* Left Side: Forgot Password Form */}
                 <div className="fp_left_side col-md-6 d-flex align-items-center justify-content-center">
-                    <form className="forgot_password_form">
+                    <form className="forgot_password_form" onSubmit={handleEmailSubmit}>
                         <h3 className="forgot_password_title">Forgot password</h3>
                         <p className="fp_sub_title">Enter your account's email so that we can send a verify email to confirm for reset password</p>
                         <div className="fp_email_section">
@@ -129,19 +123,6 @@ const ForgotPassword = () => {
                     </Slider>
                 </div>
             </div>
-
-            {/* Popup */}
-            <div id="emailModal" className="modal">
-                <div className="modal-content">
-                    <span className="close" style={{ textAlign: 'end' }}>&times;</span>
-                    <div className="icon-wrapper">
-                        <i className="fas fa-envelope icon-email"></i>
-                    </div>
-                    <h4 className="popup_title">Check your email to confirm for reset password!</h4>
-                    <button className="confirm-btn">Confirm</button>
-                </div>
-            </div>
-
         </div>
     );
 };

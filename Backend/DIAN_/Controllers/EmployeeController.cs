@@ -116,17 +116,15 @@ namespace UserApplication.Controllers
             return NoContent();
         }
 
+        [HttpGet("role/{role}")]
+        public async Task<IActionResult> GetEmployeeByRole(string role)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-        //For sales staff   
-        //[HttpGet("salesstaff/orderlists")]
-        //public async Task<IActionResult> ViewListOrdersAssign(Purchaseorder purchaseOrderDTO)
-        //{
-        //    if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            var employees = await _employeeRepository.GetEmployeeByRole(role);
 
-        //    var orders = await _salesStaffService.ViewListOrdersAssign(purchaseOrderDTO);
-
-        //    return Ok(orders);
-        //}
+            return Ok(employees);
+        }
 
         [HttpGet("salesstaff/orderlists")]
         public async Task<IActionResult> ViewListOrdersAssign([FromQuery] int staffId)
@@ -165,6 +163,36 @@ namespace UserApplication.Controllers
             var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
 
             return Ok(order);
+        }
+        [HttpPut("customer/{id}")]
+        public async Task<IActionResult> DeactivateAndActivateCustomer(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var result = await _employeeRepository.DeactivateAndActivateCustomer(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        [HttpPut("staff/{id}")]
+        public async Task<IActionResult> DeactivateAndActivateStaff(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var result = await _employeeRepository.DeactivateAndActivateEmployee(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

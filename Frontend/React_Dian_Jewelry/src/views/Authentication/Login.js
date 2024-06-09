@@ -122,7 +122,7 @@ const Login = () => {
                 setLoading(false);
                 return;
             }
-            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId); 
+            handleSuccessfulLogin(res.data.token, userType, userInfo.customerId);
         }
     };
 
@@ -136,7 +136,14 @@ const Login = () => {
             console.log("Role: ", role);
 
             if (role === 'Admin') {
-                navigate('/adminCustomerList');
+                if (userType === 'employee') {
+                    let employeeInfoRes = await getEmployeeInfo(email);
+                    if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("firstName", employeeInfoRes.data.firstName);
+                        localStorage.setItem("lastName", employeeInfoRes.data.lastName);
+                    }
+                }
+                navigate('/admin-customer-list');
             } else if (role === 'Manager') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
@@ -145,7 +152,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/managerStatitic');
+                navigate('/manager-statitic');
             } else if (role === 'SalesStaff') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
@@ -154,7 +161,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/salesStaffOrderList');
+                navigate('/sales-staff-order-list');
             } else if (role === 'DeliveryStaff') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
@@ -163,7 +170,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/deliveryStaffDeliveryList');
+                navigate('/delivery-staff-delivery-list');
             } else if (role === 'Customer') {
                 if (userType === 'customer') {
                     let userInfoRes = await getUserInfo(email);
@@ -174,7 +181,7 @@ const Login = () => {
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
 
-                        setCartItemsForUser(userInfoRes.data.customerId); 
+                        setCartItemsForUser(userInfoRes.data.customerId);
                     }
                 }
                 navigate('/home');
@@ -267,7 +274,7 @@ const Login = () => {
                                 onChange={(e) => setRememberMe(e.target.checked)}
                             />
                             <label className="remember_me">Remember me</label>
-                            <a className="forgot_password_link" href="/forgotPassword">Forgot password?</a>
+                            <a className="forgot_password_link" href="/forgot-password">Forgot password?</a>
                         </div>
                         <div className="submit_section">
                             <button type="submit" className="sign_in_button btn btn-block" disabled={loading}>

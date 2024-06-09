@@ -44,8 +44,8 @@ function EditProfile() {
 
   const navItems = ['Home', 'Setting', 'Edit Profile'];
   const menuItems = [
-    { name: 'Edit Profile', path: '/editProfile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
-    { name: 'Order History', path: '/orderHistory', icon: 'fas fa-history', iconClass: 'icon-order-history' },
+    { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
+    { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
   ];
 
   const togglePasswordForm = () => {

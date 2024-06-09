@@ -24,15 +24,18 @@ namespace DIAN_.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IVnPayService _vnPayService;
 
         public OrderService(IPromotionRepository promotionRepository, IPurchaseOrderRepository purchaseOrderRepository,
-        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository, IEmployeeRepository employeeRepository)
+        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository, 
+        IEmployeeRepository employeeRepository, IVnPayService vnPayService)
         {
             _promotionRepository = promotionRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
             _customerRepository = customerRepository;
             _orderDetailRepository = orderDetailRepository;
             _employeeRepository = employeeRepository;
+            _vnPayService = vnPayService;
         }
 
         public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
@@ -54,10 +57,24 @@ namespace DIAN_.Services
                 var customer = _customerRepository.GetByIdAsync(orderModel.UserId).Result;
                 if (customer != null && customer.Points > 0)
                 {
-                    orderModel.TotalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
+                    var pointsValue = customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
+                    decimal pointRemaining = 0;
+                    if (pointsValue >= orderModel.TotalPrice)
+                    {                   
+                        pointRemaining = pointsValue - orderModel.TotalPrice;
+                        orderModel.TotalPrice = 0;
+                    }
+                    else
+                    {
+                        // If points are less than total price, subtract points from total price
+                        orderModel.TotalPrice -= pointsValue;
+                        // Set customer's points to 0 as all points are used
+                        pointRemaining = 0;
+                    }
+
                     UpdateCustomerPointDto customerDto = new UpdateCustomerPointDto
                     {
-                        Point = 0
+                        Point = (int)pointRemaining
                     };
 
                     _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
@@ -73,6 +90,10 @@ namespace DIAN_.Services
 
             orderModel.SaleStaff = randomSalesStaff.EmployeeId;
             orderModel.DeliveryStaff = randomDeliveryStaff.EmployeeId;
+
+            // 4. Payment method
+            
+
 
             var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
 

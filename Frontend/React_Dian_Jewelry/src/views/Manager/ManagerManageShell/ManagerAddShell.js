@@ -24,7 +24,7 @@ const ManagerAddShell = () => {
             const shellDataWithStatus = { ...shellData, status: true };
             await createShell(shellDataWithStatus);
             swal("Success", "Shell added successfully", "success");
-            navigate('/managerShellList');
+            navigate('/manager-shell-list');
         } catch (error) {
             console.error("Error creating shell:", error);
             if (error.response) {
@@ -53,7 +53,7 @@ const ManagerAddShell = () => {
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
                     <h3 className="manager_add_diamond_title">Add New Shell</h3>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerShellList')}>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/manager-shell-list')}>
                         &lt; Back
                     </button>
                 </div>

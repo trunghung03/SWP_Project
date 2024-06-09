@@ -29,7 +29,7 @@ const ManagerAddEmployee = () => {
             const employeeDataWithStatus = { ...employeeData, status: true };
             await createEmployee(employeeDataWithStatus);
             swal("Success", "Employee added successfully", "success");
-            navigate('/managerEmployeeList');
+            navigate('/manager-employee-list');
         } catch (error) {
             console.error("Error creating employee:", error);
             if (error.response) {
@@ -58,7 +58,7 @@ const ManagerAddEmployee = () => {
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
                     <h3 className="manager_add_diamond_title">Add New Employee</h3>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/managerEmployeeList')}>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/manager-employee-list')}>
                         &lt; Back
                     </button>
                 </div>

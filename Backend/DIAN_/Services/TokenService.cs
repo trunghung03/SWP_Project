@@ -23,6 +23,7 @@ namespace UserApplication.Services
             {
                 new(JwtRegisteredClaimNames.UniqueName, user.Email),
                 new(ClaimTypes.Role, Roles.Customer.ToString()),
+                new Claim("ResetPassword", "True")
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
@@ -49,6 +50,7 @@ namespace UserApplication.Services
             {
                 new(JwtRegisteredClaimNames.UniqueName, user.Email),
                 new(ClaimTypes.Role, user.Role),
+                new Claim("ResetPassword", "True")
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
@@ -67,6 +69,27 @@ namespace UserApplication.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+        public ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = _key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

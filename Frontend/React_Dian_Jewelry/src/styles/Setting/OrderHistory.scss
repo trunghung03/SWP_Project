@@ -53,21 +53,15 @@ body {
             }
 
             .icon-edit-profile {
-                color: #565e6c;
+                color: #797979;
                 margin-right: 10px;
                 font-size: 17px;
             }
 
             .icon-order-history {
-                color: #565e6c;
+                color: black !important;
                 margin-right: 13px;
                 font-size: 18px;
-            }
-
-            .icon-exchange-point {
-                color: #565e6c;
-                margin-right: 15px;
-                font-size: 17px;
             }
         }
 
@@ -102,16 +96,16 @@ body {
         td {
             padding: 15px;
             text-align: left;
-            border: 1px solid #ddd;
+            border: 1px solid #797979;
             font-size: 14px;
             text-align: center;
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #f8dcce;
             padding: 10px 15px;
             text-align: left;
-            border: 1px solid #ddd;
+            border: 1px solid #797979;
             font-size: 14px;
             text-align: center;
         }
@@ -139,9 +133,9 @@ body {
             }
 
             &.order_active {
-                background-color: #0f2770;
+                background-color: #1c1c1c;
                 color: white;
-                border: 1px solid #0f2770;
+                border: 1px solid #1c1c1c;
             }
         }
     }
@@ -149,9 +143,10 @@ body {
 
 .order_history_detail_icon{
     font-size: 13px;
+    color: #1c1c1c;
 }
 
 .order_history_detail_icon:hover{
-    color: #0f2770;
+    color: #797979;
 }
 //End order history table
