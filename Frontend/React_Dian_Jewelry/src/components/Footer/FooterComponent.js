@@ -55,8 +55,8 @@ const FooterComponent = () => {
                             <h6>Service</h6>
                             <ul className="footer_content">
                                 <li><a href="/FAQs">FAQs</a></li>
-                                <li><a href="/orderHistory">Tracking orders</a></li>
-                                <li><a href="/editProfile">Edit profile</a></li>
+                                <li><a href="/order-history">Tracking orders</a></li>
+                                <li><a href="/edit-profile">My profile</a></li>
                             </ul>
                             <br />
                             <h6>Collections</h6>

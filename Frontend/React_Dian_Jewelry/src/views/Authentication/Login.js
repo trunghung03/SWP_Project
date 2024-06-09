@@ -274,7 +274,7 @@ const Login = () => {
                                 onChange={(e) => setRememberMe(e.target.checked)}
                             />
                             <label className="remember_me">Remember me</label>
-                            <a className="forgot_password_link" href="/forgotPassword">Forgot password?</a>
+                            <a className="forgot_password_link" href="/forgot-password">Forgot password?</a>
                         </div>
                         <div className="submit_section">
                             <button type="submit" className="sign_in_button btn btn-block" disabled={loading}>

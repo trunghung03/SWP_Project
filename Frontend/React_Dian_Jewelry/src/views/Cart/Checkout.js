@@ -32,7 +32,7 @@ function Checkout() {
     const { setCartItems: updateCartContext } = useCart();
     const [voucherCode, setVoucherCode] = useState('');
     const [appliedVoucher, setAppliedVoucher] = useState(false);
-    const { user, setUser } = useContext(UserContext); // Use UserContext
+    const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
         const cartKey = `cartItems${customerId}`;
@@ -138,7 +138,6 @@ function Checkout() {
         const initialTotal = calculateTotal();
         const totalDiscount = voucherDiscount + pointsDiscount;
 
-        // Calculate remaining points and actual discount applied
         let remainingPoints = points;
         let appliedDiscount = totalDiscount;
         if (totalDiscount > initialTotal) {
@@ -185,8 +184,8 @@ function Checkout() {
 
             localStorage.setItem('orderId', orderId);
             localStorage.setItem('orderDate', date);
-            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice)); // Store as integer
-            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount)); // Store as integer
+            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice)); 
+            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount)); 
 
             // Update points
             localStorage.setItem('points', remainingPoints);

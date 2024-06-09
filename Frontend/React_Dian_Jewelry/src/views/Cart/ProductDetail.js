@@ -32,7 +32,7 @@ function ProductDetail() {
 
     const navigateToProductDetail = (productId) => {
         window.scrollTo(0, 0);
-        navigate('/productDetail', { state: { id: productId } });
+        navigate('/product-detail', { state: { id: productId } });
     };
 
     useEffect(() => {

@@ -72,26 +72,26 @@ function App() {
             <Route path="/home" element={<Layout><Home /></Layout>} />
             <Route path="/education" element={<Layout><Education /></Layout>} />
             <Route path="/search" element={<Layout><Search /></Layout>} />
-            <Route path="/productDetail" element={<Layout><ProductDetail /></Layout>} />
+            <Route path="/product-detail" element={<Layout><ProductDetail /></Layout>} />
             <Route path="/cart" element={<Layout><Cart /></Layout>} />
             <Route path="/FAQs" element={<Layout><FAQs /></Layout>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/resetPassword" element={<ResetPassword />} />
-            <Route path="/diamondJewelry" element={<Layout><DiamondJewelry /></Layout>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/diamond-jewelry" element={<Layout><DiamondJewelry /></Layout>} />
             <Route path="/collection" element={<Layout><Collection /></Layout>} />
             <Route path="/shape" element={<Layout><Shape /></Layout>} />
-            <Route path="/priceList" element={<Layout><PriceList /></Layout>} />
+            <Route path="/price-list" element={<Layout><PriceList /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
             
             {/* Customer */}
             <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
             <Route path="/invoice" element={<Layout><Invoice /></Layout>} />
             <Route path="/introduce" element={<Layout><Introduce /></Layout>} />
-            <Route path="/editProfile" element={<Layout><EditProfile /></Layout>} />
-            <Route path="/orderHistory" element={<Layout><OrderHistory /></Layout>} />
-            <Route path="/orderDetail" element={<Layout><OrderDetail /></Layout>} />
+            <Route path="/edit-profile" element={<Layout><EditProfile /></Layout>} />
+            <Route path="/order-history" element={<Layout><OrderHistory /></Layout>} />
+            <Route path="/order-detail" element={<Layout><OrderDetail /></Layout>} />
 
             {/* Admin */}
             <Route path="/adminCustomerList" element={<AdminCustomerList />} />

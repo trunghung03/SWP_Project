@@ -47,7 +47,7 @@ const HeaderComponent = () => {
     };
 
     const navigateToCategory = (category) => {
-        navigate('/diamondJewelry', { state: { category } });
+        navigate('/diamond-jewelry', { state: { category } });
     };
 
     return (
@@ -98,7 +98,7 @@ const HeaderComponent = () => {
                                                 <p className="point dropdown-item">{user.points} points</p>
                                             </li>
                                             <hr className="account_hr1" />
-                                            <li><a className="dropdown-item" href="/editProfile"><i className="adm_icon fas fa-cog"></i> Setting</a></li>
+                                            <li><a className="dropdown-item" href="/edit-profile"><i className="adm_icon fas fa-cog"></i> Setting</a></li>
                                             <li><a className="dropdown-item" href="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</a></li>
                                             <hr className="account_hr2" />
                                             <li><a className="dropdown-item" href="#" onClick={handleLogout}><i className="adm_icon fas fa-sign-out-alt"></i> Sign out</a></li>
@@ -153,7 +153,7 @@ const HeaderComponent = () => {
                                 </ul>
                             </li>
                             <li className="nav-item">
-                                <a className="price_list nav-link" href="/priceList">DIAMOND PRICE</a>
+                                <a className="price_list nav-link" href="/price-list">DIAMOND PRICE</a>
                             </li>
                             <li className="nav-item">
                                 <a className="education nav-link" href="/education">EDUCATION</a>

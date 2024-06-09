@@ -303,7 +303,7 @@ const Home = () => {
         <div className="right_section wrapper">
           <ul className="carousel">
             {cardData.map((card, index) => (
-              <li key={index} className="home_product_card card" onClick={() => handleNavigate('/diamondJewelry', { category: card.category })}>
+              <li key={index} className="home_product_card card" onClick={() => handleNavigate('/diamond-jewelry', { category: card.category })}>
                 <img src={card.img} alt={card.name} className="home_product_image" />
                 <p className="home_product_name">{card.name}</p>
               </li>
@@ -359,7 +359,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <button onClick={() => navigate('/diamondJewelry')} className="collection_shop_now_btn">Shop now</button>
+        <button onClick={() => navigate('/diamond-jewelry')} className="collection_shop_now_btn">Shop now</button>
       </div>
 
       {/* Best & Belove */}

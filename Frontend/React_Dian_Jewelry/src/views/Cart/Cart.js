@@ -65,7 +65,7 @@ function Cart() {
     };
 
     const handleContinueShopping = () => {
-        navigate('/diamondJewelry');
+        navigate('/diamond-jewelry');
     };
 
     const handleSizeChange = (e, index) => {
@@ -75,7 +75,7 @@ function Cart() {
     };
 
     const handleViewProduct = (productId) => {
-        navigate('/productDetail', { state: { id: productId } });
+        navigate('/product-detail', { state: { id: productId } });
     };
 
     const calculateTotal = () => {
