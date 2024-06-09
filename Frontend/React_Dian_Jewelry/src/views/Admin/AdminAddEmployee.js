@@ -4,10 +4,46 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logoN.png';
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar.js';
 import '../../styles/Manager/ManagerAdd.scss';
-
-const ManagerAddDiamond = () => {
+import { createEmployee } from '../../services/AdminService/AdminEmployeeService.js';
+const AdminAddEmployee = () => {
     const navigate = useNavigate();
+    const [employeeData, setEmployeeData] = useState({
+        role: '',
+        email: '',
+        password: '',
+        lastName: '',
+        firstName: '',
+        address: '',
+        phoneNumber: ''
+    });
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEmployeeData(prevState => ({ ...prevState, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const employeeDataWithStatus = { ...employeeData, status: true };
+            await createEmployee(employeeDataWithStatus);
+            swal("Success", "Employee added successfully", "success");
+            navigate('/admin-employee-list');
+        } catch (error) {
+            console.error("Error creating employee:", error);
+            if (error.response) {
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+                if (error.response.data.errors) {
+                    for (const [key, value] of Object.entries(error.response.data.errors)) {
+                        console.error(`${key}: ${value}`);
+                    }
+                }
+            }
+            swal("Something is wrong!", "Failed to add employee. Please try again.", "error");
+        }
+    };
     return (
         <div className="manager_add_diamond_all_container">
             <div className="manager_add_diamond_sidebar">
@@ -24,12 +60,49 @@ const ManagerAddDiamond = () => {
                         &lt; Back
                     </button>
                 </div>
+                <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>First name</label>
+                            <input type="text" name="firstName" value={employeeData.firstName} onChange={handleChange} required />
+                        </div>
+                        <div className="manager_add_diamond_form_group">
+                            <label>Last name</label>
+                            <input type="text" name="lastName" value={employeeData.lastName} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Role</label>
+                            <input type="text" name="role" value={employeeData.role} onChange={handleChange} required />
+                        </div>
+                        <div className="manager_add_diamond_form_group">
+                            <label>Phone number</label>
+                            <input type="text" name="phoneNumber" value={employeeData.phoneNumber} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_group">
+                        <label>Address</label>
+                        <input type="text" name="address" value={employeeData.address} onChange={handleChange} required />
+                    </div>
+                    <div className="manager_add_diamond_form_group">
+                        <label>Email</label>
+                        <input type="text" name="email" value={employeeData.email} onChange={handleChange} required />
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Password</label>
+                            <input type="text" name="password" value={employeeData.password} onChange={handleChange} required />
+                        </div>
+                    </div>
 
-                {/* chinh tu day tro xuong */}
+                    <button type="submit" className="manager_add_diamond_submit_button">Add</button>
+                </form>
+             
 
             </div>
         </div>
     );
 };
 
-export default ManagerAddDiamond;
+export default AdminAddEmployee;
