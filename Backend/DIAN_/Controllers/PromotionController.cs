@@ -139,6 +139,33 @@ namespace DIAN_.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpPut("deactivate-activate/{id}")]
+        public async Task<IActionResult> DeactivateAndActivatePromotion(int id)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+            var result = await _promotionRepository.DeactivateAndActivatePromotion(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        [HttpGet("staff/promotion/{code}")]
+        public async Task<IActionResult> GetPromotionByCodeForStaff([FromRoute] string code)
+        {
+            var promotions = await _promotionRepository.GetPromotionByCodeForStaffAsync(code);
+            if (promotions == null || promotions.Count == 0)
+            {
+                return NotFound("No promotions found containing the given code.");
+            }
+
+            var promotionDtos = promotions.Select(p => p?.ToPromotionDetail());
+            return Ok(promotionDtos);
+        }
     }
 }
 
