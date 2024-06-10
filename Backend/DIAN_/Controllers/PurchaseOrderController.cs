@@ -31,14 +31,16 @@ namespace DIAN_.Controllers
 
         private readonly IVnPayService _vnPayService;
 
+        private ILoggerManager _loggerManager;
 
         public PurchaseOrderController(IPurchaseOrderRepository purchaseOrderRepo, IOrderService orderService,
-            ApplicationDbContext context, IVnPayService vpnPayService)
+            ApplicationDbContext context, IVnPayService vpnPayService, ILoggerManager loggerManager)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _orderService = orderService;
             _context = context;
             _vnPayService = vpnPayService;
+            _loggerManager = loggerManager;
         }
 
         [HttpGet("all")]
@@ -117,38 +119,6 @@ namespace DIAN_.Controllers
             return Ok(updatedTotalPrice);
         }
 
-        [HttpPost("vnpay-return")]
-        public async Task<IActionResult> PaymentCallBack()
-        {
-            var response = _vnPayService.PaymentExecute(Request.Query);
-
-            if (response == null)
-            {
-                return BadRequest("Error processing VN Pay payment: No response received.");
-            }
-
-            var order = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(int.Parse(response.OrderId));
-            if (order == null)
-            {
-                return NotFound($"Order with ID {response.OrderId} not found.");
-            }
-
-            var OrderStatus = response.VnPayResponseCode == "00" ? "Paid" : "Failed";
-
-            var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(order.OrderId, OrderStatus);
-            if (updatedOrder == null)
-            {
-                return BadRequest("Error updating order status.");
-            }
-            return Ok("VNPay payment processed successfully");
-        }
-
-        [HttpGet("payment-fail")]
-        public async Task<IActionResult> PaymentFail()
-        {
-            return NotFound("Payment failed");
-        }
-
         [HttpPost("request-vnpay-payment")]
         public async Task<IActionResult> RequestVnPayPayment([FromBody] VnPaymentRequestModel model)
         {
@@ -167,8 +137,78 @@ namespace DIAN_.Controllers
             {
                 throw;
             }
-        }    
         }
 
+        //[HttpPost("vnpay-return")]
+        //public async Task<IActionResult> PaymentCallBack()
+        //{
+        //    var response = _vnPayService.PaymentExecute(Request.Query);
+
+        //    if (response == null)
+        //    {
+        //        return BadRequest("Error processing VN Pay payment: No response received.");
+        //    }
+
+        //    var order = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(int.Parse(response.OrderId));
+        //    if (order == null)
+        //    {
+        //        return NotFound($"Order with ID {response.OrderId} not found.");
+        //    }
+
+        //    var OrderStatus = response.VnPayResponseCode == "00" ? "Paid" : "Failed";
+
+        //    var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(order.OrderId, OrderStatus);
+        //    if (updatedOrder == null)
+        //    {
+        //        return BadRequest("Error updating order status.");
+        //    }
+        //    return Ok("VNPay payment processed successfully");
+        //}
+
+        //test
+        [HttpGet("vnpay-ipn-return")]
+        public IActionResult PaymentUpdateDatabase()
+        {
+            try
+            {
+                var result = _vnPayService.PaymentUpdateDatabase(Request.Query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //test
+        [HttpGet("vnpay-return")]
+        public IActionResult PaymentExecute()
+        {
+            try
+            {
+                var result = _vnPayService.PaymentExecute(Request.Query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("GetQR")]
+        public async Task<IActionResult> GetQR(VnPayQrRequestDto payQrRequest)
+        {
+            try
+            {
+                var pathImage = await _vnPayService.GenerateQRCodeAsync(payQrRequest);
+                return Ok(pathImage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+}
 

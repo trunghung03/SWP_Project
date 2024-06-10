@@ -9,6 +9,7 @@ using NLog;
 using DIAN_.Extensions;
 using DIAN_.CustomExceptionMiddleware;
 using DIAN_.Helper;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddHttpClient();
 
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -62,7 +64,17 @@ builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
-builder.Services.AddSingleton<IVnPayService, VnPayService>();
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+
+//builder.Services.AddHangfire(configuration => configuration
+//                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+//                .UseSimpleAssemblyNameTypeSerializer()
+//                .UseRecommendedSerializerSettings()
+//                .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"),
+//                new Hangfire.SqlServer.SqlServerStorageOptions()
+//                {
+//                    //TODO: Change hangfire sql server option
+//                }));
 
 
 var app = builder.Build();
@@ -87,6 +99,8 @@ app.UseExceptionHandler(opt => { });
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+//app.UseHangfireDashboard();
 
 app.UseRouting();
 
