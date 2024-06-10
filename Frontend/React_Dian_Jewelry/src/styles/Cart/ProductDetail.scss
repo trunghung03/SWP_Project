@@ -115,7 +115,7 @@
                 border: none;
             }
 
-            .size_guide_detail:hover{
+            .size_guide_detail:hover {
                 color: #797979;
                 text-decoration: underline;
             }
@@ -163,6 +163,15 @@
     }
 
     .product_delivery_detail {
+        a {
+            text-decoration: none;
+            color: #1c1c1c !important;
+        }
+
+        a:hover{
+            color: #797979 !important;
+        }
+
         p {
             display: flex;
             align-items: center;

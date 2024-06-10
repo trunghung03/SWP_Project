@@ -20,12 +20,15 @@ function OrderHistory() {
         const storedFirstName = localStorage.getItem('firstName');
         const storedLastName = localStorage.getItem('lastName');
         const storedPoints = localStorage.getItem('points');
+        const customerId = localStorage.getItem('customerId');
         if (storedFirstName) setFirstName(storedFirstName);
         if (storedLastName) setLastName(storedLastName);
         if (storedPoints) setPoints(storedPoints);
 
         getAllOrders().then(data => {
-            setOrders(data);
+            const customerOrders = data.filter(order => order.userId === parseInt(customerId));
+            setOrders(customerOrders);
+            customerOrders.forEach(order => console.log(order.orderId));
         }).catch(error => {
             console.error('Error fetching orders:', error);
         });

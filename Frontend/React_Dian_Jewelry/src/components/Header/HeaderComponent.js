@@ -73,14 +73,17 @@ const HeaderComponent = () => {
                     <div className="col-md-4 text-end">
                         <div className="header_icons">
                             <div className="search_section">
-                                <input
-                                    type="text"
-                                    className="search_bar"
-                                    placeholder="Search..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onKeyPress={handleSearchKeyPress}
-                                />
+                                <div className="search_bar_container">
+                                    <i className="fas fa-search search_icon"></i>
+                                    <input
+                                        type="text"
+                                        className="search_bar"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyPress={handleSearchKeyPress}
+                                    />
+                                </div>
                             </div>
                             <a href="/cart" className="cart_icon">
                                 <i className="icon_cart fas fa-shopping-bag"></i>

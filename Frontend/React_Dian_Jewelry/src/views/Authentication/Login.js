@@ -156,7 +156,7 @@ const Login = () => {
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
                 }
-                navigate('/manager-statitic');
+                navigate('/manager-statistic');
             } else if (role === 'SalesStaff') {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);

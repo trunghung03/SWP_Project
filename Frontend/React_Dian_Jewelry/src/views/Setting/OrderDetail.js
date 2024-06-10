@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Setting/OrderDetail.scss';
-import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById } from '../../services/TrackingOrderService';
+import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellMaterialById } from '../../services/TrackingOrderService';
 
 function OrderDetail() {
     const navigate = useNavigate();
@@ -36,12 +36,14 @@ function OrderDetail() {
                 }
 
                 const orderDetailData = await getOrderDetailsByOrderId(orderNumber);
-                const productDetails = await Promise.all(orderDetailData.map(async (item) => {
+                const filteredOrderDetails = orderDetailData.filter(item => item.orderId === orderNumber);
+                const productDetails = await Promise.all(filteredOrderDetails.map(async (item) => {
                     const productData = await getProductById(item.productId);
+                    const shellMaterialData = await getShellMaterialById(item.shellMaterialId);
                     return {
                         ...productData,
                         size: item.size,
-                        shellMaterialId: item.shellMaterialId,
+                        shellMaterial: shellMaterialData.name,
                     };
                 }));
                 setOrderProducts(productDetails);
@@ -51,7 +53,11 @@ function OrderDetail() {
         }
     }, [orderNumber]);
 
-    const navItems = ['Home', 'Setting', 'Order History', 'Order ' + orderNumber];
+    const handleProductView = (productId) => {
+        navigate('/product-detail', { state: { id: productId } });
+    };
+
+    const navItems = ['Home', 'Setting', 'Order History', `Order ${orderNumber}`];
     const menuItems = [
         { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
         { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
@@ -104,10 +110,10 @@ function OrderDetail() {
                                     <div className="order_detail_product_header">
                                         <h5 className="order_detail_product_name">{product.name}</h5>
                                         <div className="order_detail_product_links">
-                                            <a href="#">VIEW</a>
+                                            <a href="#" onClick={() => handleProductView(product.productId)}>VIEW</a>
                                         </div>
                                     </div>
-                                    <p className="order_detail_product_size">Shell: {product.shellMaterialId}</p>
+                                    <p className="order_detail_product_size">Shell: {product.shellMaterial}</p>
                                     <p className="order_detail_product_size">Size: {product.size}</p>
                                     <p className="order_detail_product_price">{product.price}$</p>
                                 </div>

@@ -283,7 +283,7 @@ const Register = () => {
                         <div className="google_section text-center">
                             <hr className="line" />
                             <button type="button" className="google_login btn btn-block">
-                                <i className="icon_gg fab fa-google"></i> Sign up with Google Account
+                                <i className="icon_gg fab fa-google"></i> Sign in with Google Account
                             </button>
                         </div>
                     </form>

@@ -126,16 +126,6 @@ function Checkout() {
             return;
         }
 
-        if (paymentMethod.split(',').length > 1) {
-            swal({
-                title: "Choose only one payment method!",
-                text: "You have selected multiple payment methods.",
-                icon: "warning",
-                button: "OK",
-            });
-            return;
-        }
-
         setLoading(true);
 
         const userId = parseInt(localStorage.getItem('customerId'), 10);
@@ -216,7 +206,7 @@ function Checkout() {
                     orderId,
                     fullName,
                     description: 'Payment for order ' + orderId,
-                    amount: Math.floor(totalPrice * 25000), // Convert total price to VND
+                    amount: Math.floor(totalPrice * 25000), 
                     createdDate: date,
                 };
                 const vnpayResponse = await requestVNPayPayment(paymentData);
@@ -299,7 +289,7 @@ function Checkout() {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
-                                onWheel={handlePhoneWheel} // Prevent scroll
+                                onWheel={handlePhoneWheel} 
                             />
                         </div>
                         <div className="form_group_address_note">
@@ -356,38 +346,39 @@ function Checkout() {
                     <div className="payment_methods">
                         <div className="payment_method">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 id="cash"
                                 name="paymentMethod"
-                                checked={paymentMethod.includes('Cash')}
-                                onChange={() => handlePaymentMethodChange('Cash')}
+                                checked={paymentMethod === 'Cash'}
+                                onChange={() => setPaymentMethod('Cash')}
                             />
                             <label htmlFor="cash">Cash</label>
-                            <p>(Give cash by the time delivering or contact us through hotline to come and transact directly at the store)</p>
+                            <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>
                         </div>
                         <div className="payment_method">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 id="bankTransfer"
                                 name="paymentMethod"
-                                checked={paymentMethod.includes('Bank Transfer')}
-                                onChange={() => handlePaymentMethodChange('Bank Transfer')}
+                                checked={paymentMethod === 'Bank Transfer'}
+                                onChange={() => setPaymentMethod('Bank Transfer')}
                             />
                             <label htmlFor="bankTransfer">Bank Transfer</label>
-                            <p>(Make a transfer to the shop's account number after confirming. The order will be processed after successful transfer)</p>
+                            <p>(Make a transfer to the shop's account number. Order will be processed after successful transfer)</p>
                         </div>
                         <div className="payment_method">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 id="vnpay"
                                 name="paymentMethod"
-                                checked={paymentMethod.includes('VNPAY')}
-                                onChange={() => handlePaymentMethodChange('VNPAY')}
+                                checked={paymentMethod === 'VNPAY'}
+                                onChange={() => setPaymentMethod('VNPAY')}
                             />
                             <label htmlFor="vnpay">VNPAY</label>
-                            <img src={vnpay} style={{width: "30px", marginLeft: "8px", marginBottom: "14px"}}></img>
-                            <p className="vnpay_p">(Use VNPAY for online payment. The order will be processed after successful payment)</p>
+                            <img src={vnpay} style={{ width: "30px", marginLeft: "8px", marginBottom: "14px" }}></img>
+                            <p className="vnpay_p">(Use VNPAY for online payment. Order will be processed after successful payment)</p>
                         </div>
+
                     </div>
                     {points > 0 && (
                         <>
@@ -407,6 +398,7 @@ function Checkout() {
                             </div>
                         </>
                     )}
+
                     <h5 className="checkout_summary_title"><i className="fas fa-receipt"></i>Total price</h5>
                     <div className="checkout_summary_details">
                         <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>{Math.floor(calculateTotal())}$</strong></span></p>

@@ -22,6 +22,14 @@ class ManagerSidebar extends Component {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');
 
+        const allCartItems = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('cartItems')) {
+                allCartItems[key] = localStorage.getItem(key);
+            }
+        }
+
         localStorage.clear();
 
         if (rememberedEmail && rememberedPassword) {
@@ -29,8 +37,13 @@ class ManagerSidebar extends Component {
             localStorage.setItem('rememberedPassword', rememberedPassword);
         }
 
+        for (const key in allCartItems) {
+            localStorage.setItem(key, allCartItems[key]);
+        }
+
         this.props.navigate('/login');
     };
+
 
     render() {
         const { expanded, firstName, lastName } = this.state;

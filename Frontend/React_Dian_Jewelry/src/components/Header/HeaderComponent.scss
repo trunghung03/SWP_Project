@@ -48,12 +48,12 @@ body {
     margin: 5px 10px 5px 5px;
 }
 
-.contact_info a{
+.contact_info a {
     text-decoration: none;
     color: #1c1c1c !important;
 }
 
-.contact_info a:hover{
+.contact_info a:hover {
     color: #797979 !important;
 }
 
@@ -191,7 +191,7 @@ body {
 }
 
 .search_section input {
-    background-color: #f3f4f6;
+    background-color: #ededed;
     border: none;
     margin-right: 10px;
     width: 220px;
@@ -199,12 +199,38 @@ body {
 }
 
 .search_section input:focus {
-    background-color: #f3f4f6;
+    background-color: #ededed;
     border: none;
     outline: none;
     box-shadow: none;
     width: 220px;
 }
+
+
+.search_bar_container {
+    position: relative;
+    display: inline-block;
+}
+
+.search_icon {
+    position: absolute;
+    top: 51%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: gray;
+    font-size: 13px !important;
+}
+
+.search_bar {
+    padding-left: 35px;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 30px; 
+    line-height: 35px; 
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
 
 .account_dropdown_section {
     position: relative;
@@ -329,7 +355,7 @@ li:focus {
 }
 
 .diamond_dropdown_menu li a,
-.wedding_dropdown_menu li a{
+.wedding_dropdown_menu li a {
     cursor: pointer;
 }
 

@@ -51,3 +51,13 @@ export const getProductById = async (productId) => {
         throw error;
     }
 };
+
+export const getShellMaterialById = async (shellMaterialId) => {
+    try {
+        const response = await axios.get(`${API_URL}/shellmaterials/${shellMaterialId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching shell material details:', error);
+        throw error;
+    }
+};
