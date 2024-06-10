@@ -48,6 +48,15 @@ body {
     margin: 5px 10px 5px 5px;
 }
 
+.contact_info a{
+    text-decoration: none;
+    color: #1c1c1c !important;
+}
+
+.contact_info a:hover{
+    color: #797979 !important;
+}
+
 .contact_phone {
     margin: 13px 10px 0 30px;
     font-size: 12px;
@@ -113,6 +122,7 @@ body {
 
 .navbar-nav .nav-item .nav-link {
     font-size: 13.5px;
+    padding-bottom: 3px;
 }
 
 .header_icons .cart_icon {
@@ -142,7 +152,7 @@ body {
 .navbar-nav .nav-item .nav-link::before {
     content: '';
     position: absolute;
-    bottom: 17px;
+    bottom: 3px;
     left: 20px;
     width: 0;
     border: 1px solid #797979;
@@ -177,7 +187,7 @@ body {
 }
 
 .navbar-collapse {
-    margin-bottom: -10px;
+    // margin-bottom: -5px;
 }
 
 .search_section input {
@@ -315,7 +325,7 @@ li:focus {
     width: 200px;
     border-radius: 0;
     left: -10%;
-    top: 85%;
+    top: 122%;
 }
 
 .diamond_dropdown_menu li a,
@@ -349,5 +359,5 @@ li:focus {
     width: 200px;
     border-radius: 0;
     left: -10%;
-    top: 85%;
+    top: 122%;
 }

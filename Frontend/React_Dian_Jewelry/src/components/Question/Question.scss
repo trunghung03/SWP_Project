@@ -107,8 +107,9 @@
 }
 
 .contact_item i {
-    margin-right: 20px;
-    font-size: 20px;
+    margin-right: 15px;
+    font-size: 18px;
+    margin-top: 2px;
     color: #1c1c1c;
 }
 
@@ -117,6 +118,15 @@
     height: 130px;
     background-color: #1c1c1c;
     margin: -10px 0 -5px -10px;
+}
+
+.contact_item a{
+    text-decoration: none;
+    color: #1c1c1c !important;
+}
+
+.contact_item a:hover{
+    color: #797979 !important;
 }
 
 // End question
