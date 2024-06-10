@@ -44,11 +44,11 @@ import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmployee';
 import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
-import ManagerPromotionalList from './Manager/ManagerManagePromotional/ManagerPromotionalList';
+import ManagerPromotionList from './Manager/ManagerManagePromotional/ManagerPromotionList';
 import ManagerAddShell from './Manager/ManagerManageShell/ManagerAddShell';
 import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmployee';
 import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct';
-import ManagerAddPromotional from './Manager/ManagerManagePromotional/ManagerAddPromotional';
+import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPromotion';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -110,8 +110,8 @@ function App() {
             <Route path="/manager-add-shell" element={<ManagerAddShell />} />
             <Route path="/manager-employee-list" element={<ManagerEmployeeList />} />
             <Route path="/manager-add-employee" element={<ManagerAddEmployee />} />
-            <Route path="/manager-promotional-list" element={<ManagerPromotionalList />} />
-            <Route path="/manager-add-promotional" element={<ManagerAddPromotional />} />
+            <Route path="/manager-promotional-list" element={<ManagerPromotionList />} />
+            <Route path="/manager-add-promotion" element={<ManagerAddPromotion />} />
 
             {/* Sales Staff */}
             <Route path="/sales-staff-order-list" element={<SSOrderList />} />

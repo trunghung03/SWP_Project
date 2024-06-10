@@ -4,24 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerList.scss';
-import { ShowAllShell, getShellDetail, deleteShellById, updateShellById, getShellByName } from '../../../services/ManagerService/ManagerShellService.js'
+import { ShowAllPromotion, getPromotionDetail, deletePromotionById, updatePromotionById, getPromotionByName } from '../../../services/ManagerService/ManagerPromotionService.js'
 import logo from '../../../assets/img/logoN.png';
 
 
-const ManagerShellList = () => {
+const ManagerPromotionList = () => {
     const navigate = useNavigate();
 
-    const [shellItems, setShellItems] = useState([]);
+    const [promotionList, setPromotionList] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [editMode, setEditMode] = useState(false);
-    const [editedShell, setEditedShell] = useState({});
-    const [originalShell, setOriginalShell] = useState({});
+    const [editedPromotion, setEditedPromotion] = useState({});
+    const [originalPromotion, setOriginalPromotion] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await ShowAllShell();
-                setShellItems(response);
+                const response = await ShowAllPromotion();
+                setPromotionList(response);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -35,8 +35,8 @@ const ManagerShellList = () => {
 
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentShell = shellItems.slice(indexOfFirstOrder, indexOfLastOrder);
-    const totalPages = Math.ceil(shellItems.length / ordersPerPage);
+    const currentPromotion = promotionList.slice(indexOfFirstOrder, indexOfLastOrder);
+    const totalPages = Math.ceil(promotionList.length / ordersPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -50,35 +50,35 @@ const ManagerShellList = () => {
         if (e.key === 'Enter') {
             if (isInteger(searchQuery.trim())) {
                 try {
-                    const response = await getShellDetail(searchQuery.trim());
-                    setShellItems([response]);
+                    const response = await getPromotionDetail(searchQuery.trim());
+                    setPromotionList([response]);
                     setCurrentPage(1);
                 } catch (error) {
-                    console.error("Error fetching shell:", error);
-                    swal("Shell not found!", "Please try another one.", "error");
+                    console.error("Error fetching Promotion:", error);
+                    swal("Promotion not found!", "Please try another one.", "error");
                 }
             }else if(searchQuery.trim()){
                 try {
-                    const response = await getShellByName(searchQuery.trim());
+                    const response = await getPromotionByName(searchQuery.trim());
                     if(Array.isArray(response)){
-                        setShellItems(response);
+                        setPromotionList(response);
                     }
                     else if(response){
-                       setShellItems([response]); 
+                       setPromotionList([response]); 
                     }
                     else{
-                        setShellItems([]);
+                        setPromotionList([]);
                     }
                     setCurrentPage(1);
                 } catch (error) {
-                    console.error("Error fetching shell:", error);
-                    swal("Shell not found!", "Please try another one.", "error");
+                    console.error("Error fetching Promotion:", error);
+                    swal("Promotion not found!", "Please try another one.", "error");
                 }
             }
              else {
                 try {
-                    const response = await ShowAllShell();
-                    setShellItems(response);
+                    const response = await ShowAllPromotion();
+                    setPromotionList(response);
                     setCurrentPage(1);
                 } catch (error) {
                     console.error("Error fetching data:", error);
@@ -88,9 +88,9 @@ const ManagerShellList = () => {
     };
 
     // Delete diamond by id 
-    const handleDelete = async (shellID) => {
+    const handleDelete = async (PromotionID) => {
         swal({
-            title: "Are you sure to delete this shell?",
+            title: "Are you sure to delete this Promotion?",
             text: "This action cannot be undone",
             icon: "warning",
             buttons: true,
@@ -98,13 +98,13 @@ const ManagerShellList = () => {
         }).then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    await deleteShellById(shellID);
-                    const response = await ShowAllShell();
-                    setShellItems(response);
-                    swal("Deleted successfully!", "The shell has been deleted.", "success");
+                    await deletePromotionById(PromotionID);
+                    const response = await ShowAllPromotion();
+                    setPromotionList(response);
+                    swal("Deleted successfully!", "The Promotion has been deleted.", "success");
                 } catch (error) {
-                    console.error("Error deleting shell:", error);
-                    swal("Something went wrong!", "Failed to delete the shell. Please try again.", "error");
+                    console.error("Error deleting Promotion:", error);
+                    swal("Something went wrong!", "Failed to delete the Promotion. Please try again.", "error");
                 }
             }
         });
@@ -112,15 +112,15 @@ const ManagerShellList = () => {
 
 
     // Update by id
-    const handleEdit = (shell) => {
+    const handleEdit = (Promotion) => {
         setEditMode(true);
-        setEditedShell(shell);
-        setOriginalShell(shell);
+        setEditedPromotion(Promotion);
+        setOriginalPromotion(Promotion);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedShell({ ...editedShell, [name]: value });
+        setEditedPromotion({ ...editedPromotion, [name]: value });
     };
 
     const handleUpdate = async () => {
@@ -128,30 +128,30 @@ const ManagerShellList = () => {
         const price = 0;
         const requiredFields = ['name', 'amountAvailable'];
         for (let field of requiredFields) {
-            if (!editedShell[field]) {
+            if (!editedPromotion[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
                 return;
             }
         }
 
-        const isEqual = JSON.stringify(originalShell) === JSON.stringify(editedShell);
+        const isEqual = JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
         if (isEqual) {
             swal("No changes detected!", "You have not made any changes.", "error");
             return;
         }
 
-        const shellToUpdate = { ...editedShell, status: true };
+        const PromotionToUpdate = { ...editedPromotion, status: true };
 
         try {
-            console.log("Sending update request with data:", shellToUpdate);
-            const response = await updateShellById(shellToUpdate.shellMaterialId, shellToUpdate);
+            console.log("Sending update request with data:", PromotionToUpdate);
+            const response = await updatePromotionById(PromotionToUpdate.PromotionMaterialId, PromotionToUpdate);
             console.log("Update response:", response.data);
-            const updatedItems = await ShowAllShell();
-            setShellItems(updatedItems);
+            const updatensetPromotionList = await ShowAllPromotion();
+            setPromotionList(updatensetPromotionList);
             setEditMode(false);
-            swal("Updated successfully!", "The shell information has been updated.", "success");
+            swal("Updated successfully!", "The Promotion information has been updated.", "success");
         } catch (error) {
-            console.error("Error updating shell:", error.response ? error.response.data : error.message);
+            console.error("Error updating Promotion:", error.response ? error.response.data : error.message);
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
     };
@@ -181,7 +181,7 @@ const ManagerShellList = () => {
                 <h3>List Of Promotional Codes</h3>
 
                 <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/manager-add-shell')}>Add new promotional code</button>
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/manager-add-promotion')}>Add new promotional code</button>
                 </div>
 
                 {/* Table diamond list */}
@@ -191,26 +191,32 @@ const ManagerShellList = () => {
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Amount Available</th>
-                                <th>Actions</th>
+                                <th>Code</th>
+                                <th>Discount</th>
+                                <th>Description</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Employee</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {shellItems.length > 0 ? (
-                                currentShell.map((item) => (
-                                    <tr key={item.shellMaterialId}>
-                                        <td>{item.shellMaterialId}</td>
+                            {promotionList.length > 0 ? (
+                                currentPromotion.map((item) => (
+                                    <tr key={item.id}>
+                                        <td>{item.id}</td>
                                         <td>{item.name}</td>
-                                        <td>{item.amountAvailable}</td>
-                                        <td>
-                                            <i className="fas fa-pen" onClick={() => handleEdit(item)} style={{ cursor: 'pointer', marginRight: '10px' }}></i>
-                                            <i className="fas fa-trash" onClick={() => handleDelete(item.shellMaterialId)} style={{ cursor: 'pointer' }}></i>
-                                        </td>
+                                        <td>{item.code}</td>
+                                        <td>{item.amount}</td>
+                                        <td>{item.description}</td>
+                                        <td>{item.startDate}</td>
+                                        <td>{item.endDate}</td>
+                                        
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="10">No shell found</td>
+                                    <td colSpan="10">No Promotion found</td>
                                 </tr>
                             )}
                         </tbody>
@@ -240,14 +246,14 @@ const ManagerShellList = () => {
                 <div className="manager_manage_diamond_modal_overlay" onClick={() => setEditMode(false)}>
                     <div className="manager_manage_diamond_update_modal" onClick={(e) => e.stopPropagation()}>
                         <div className="manager_manage_diamond_modal_content">
-                            <h4>Edit Shell Information</h4>
+                            <h4>Edit Promotion Information</h4>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Shell</label>
-                                <input type="text" name="name" value={editedShell.name} onChange={handleChange} />
+                                <label>Promotion</label>
+                                <input type="text" name="name" value={editedPromotion.name} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
                                 <label>Amount Available</label>
-                                <input type="text" name="amountAvailable" value={editedShell.amountAvailable} onChange={handleChange} />
+                                <input type="text" name="amountAvailable" value={editedPromotion.amountAvailable} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_modal_actions">
                                 <button onClick={() => setEditMode(false)}>Cancel</button>
@@ -261,4 +267,4 @@ const ManagerShellList = () => {
     );
 };
 
-export default ManagerShellList;
+export default ManagerPromotionList;
