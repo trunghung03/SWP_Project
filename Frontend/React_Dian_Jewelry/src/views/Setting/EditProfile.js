@@ -130,7 +130,7 @@ function EditProfile() {
             {menuItems.map(item => (
               <div
                 key={item.path}
-                className={`setting_menu_item ${item.path === '/editProfile' ? 'edit-profile-item' : ''}`}
+                className={`setting_menu_item ${item.path === '/edit-profile' ? 'edit-profile-item' : ''}`}
                 onClick={() => navigate(item.path)}
               >
                 <i className={`${item.icon} setting_menu_icon ${item.iconClass}`}></i>

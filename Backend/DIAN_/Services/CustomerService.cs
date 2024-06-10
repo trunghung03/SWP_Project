@@ -15,7 +15,7 @@ namespace DIAN_.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
-        private readonly ITokenService _tokenService;   
+        private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         public CustomerService(ICustomerRepository customerRepository, IEmailService emailService,
@@ -27,15 +27,13 @@ namespace DIAN_.Services
             _emailService = emailService;
         }
 
-        public async Task<bool> ResetPasswordRequestAsync(ForgotPasswordDto resetPasswordDto)
+        public async Task<bool> ResetPasswordRequestAsync( ForgotPasswordDto resetPasswordDto)
         {
             var user = await _customerRepository.GetByEmailAsync(resetPasswordDto.Email);
             if (user == null) throw new ArgumentException("No account found with the provided email.");
 
             var token = _tokenService.CreateCustomerToken(user);
-            var encodedToken = HttpUtility.UrlEncode(token);
-            var callbackUrl = $"http://localhost:3000/resetPassword?token={encodedToken}";
-
+            var callbackUrl = $"http://localhost:3000/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
             var message = new MailResetPassword
             {
                 ToEmail = user.Email,
@@ -46,13 +44,12 @@ namespace DIAN_.Services
             return true;
         }
 
-
         public async Task<IdentityResult> ConfirmResetPassword(ResetPasswordDto confirmDto)
         {
             var user = await _customerRepository.GetByEmailAsync(confirmDto.Email);
             if (user == null)
             {
-                return IdentityResult.Failed(new IdentityError { Description = "No account found with the provided email." });
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
             }
 
             var token = HttpUtility.UrlDecode(confirmDto.Token);
@@ -62,8 +59,9 @@ namespace DIAN_.Services
                 return IdentityResult.Failed(new IdentityError { Description = "Invalid token." });
             }
 
-            var result = await _customerRepository.ResetPasswordAsync(user, token, confirmDto.ConfirmPassword);
-            return result ? IdentityResult.Success : IdentityResult.Failed(new IdentityError { Description = "Failed to update the password." });
+            var result = await _customerRepository.ResetPassworConfirmdAsync(user, token, confirmDto.ConfirmPassword);
+            return result ? IdentityResult.Success : IdentityResult.Failed(new IdentityError { Description = "Failed to reset password." });
         }
+
     }
 }

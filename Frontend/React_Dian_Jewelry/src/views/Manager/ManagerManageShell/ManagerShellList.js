@@ -169,7 +169,7 @@ const ManagerShellList = () => {
                         <input
                             type="text"
                             className="manager_manage_diamond_search_bar"
-                            placeholder="Search by ID..."
+                            placeholder="Search by ID or Name..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={handleSearchKeyPress}

@@ -51,7 +51,7 @@ namespace DIAN_.Controllers
                 }
                 return Ok(warranty.ToWarrantyDetailDto());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

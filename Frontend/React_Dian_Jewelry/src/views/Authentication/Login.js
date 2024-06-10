@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import Slider from 'react-slick';
@@ -9,10 +9,12 @@ import rightImage from '../../assets/img/right.jpeg';
 import rightImage2 from '../../assets/img/right2.jpg';
 import rightImage3 from '../../assets/img/right3.jpg';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; 
 import { useCart } from '../../services/CartService';
+import { UserContext } from '../../services/UserContext'; 
 
 const Login = () => {
+    const { setUser } = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -139,6 +141,7 @@ const Login = () => {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
                     if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("employeeId", employeeInfoRes.data.employeeId);
                         localStorage.setItem("firstName", employeeInfoRes.data.firstName);
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
@@ -148,6 +151,7 @@ const Login = () => {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
                     if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("employeeId", employeeInfoRes.data.employeeId);
                         localStorage.setItem("firstName", employeeInfoRes.data.firstName);
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
@@ -157,6 +161,7 @@ const Login = () => {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
                     if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("employeeId", employeeInfoRes.data.employeeId);
                         localStorage.setItem("firstName", employeeInfoRes.data.firstName);
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
@@ -166,6 +171,7 @@ const Login = () => {
                 if (userType === 'employee') {
                     let employeeInfoRes = await getEmployeeInfo(email);
                     if (employeeInfoRes && employeeInfoRes.data) {
+                        localStorage.setItem("employeeId", employeeInfoRes.data.employeeId);
                         localStorage.setItem("firstName", employeeInfoRes.data.firstName);
                         localStorage.setItem("lastName", employeeInfoRes.data.lastName);
                     }
@@ -180,6 +186,15 @@ const Login = () => {
                         localStorage.setItem("firstName", userInfoRes.data.firstName);
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
+                        localStorage.setItem("address", userInfoRes.data.address);
+                        localStorage.setItem("phone", userInfoRes.data.phoneNumber);
+
+                        setUser({ 
+                            firstName: userInfoRes.data.firstName,
+                            lastName: userInfoRes.data.lastName,
+                            email: userInfoRes.data.email,
+                            points: userInfoRes.data.points,
+                        });
 
                         setCartItemsForUser(userInfoRes.data.customerId);
                     }

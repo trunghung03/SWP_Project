@@ -248,10 +248,26 @@
     cursor: pointer;
     font-size: 12px;
     margin-left: 5px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .voucher button:hover {
     background-color: #797979;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.checkout_summary_checkout {
+    background-color: #1c1c1c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .payment_methods {
@@ -281,6 +297,10 @@
     color: #555;
     margin-left: 37px;
     margin-right: 26px;
+}
+
+.payment_method .vnpay_p{
+    margin-top: -8px;
 }
 
 .checkout_summary_details hr {

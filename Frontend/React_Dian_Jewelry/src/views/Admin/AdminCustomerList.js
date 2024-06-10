@@ -157,7 +157,7 @@ const AdminCustomerList = () => {
                                         <td>{item.address}</td>
                                         <td> {item.points}</td>
                                         <td>
-                                        <button style={{backgroundColor: item.status ? '#1fd655' : 'red', color: 'white',border: 'none'}}><i className="" onClick={() => handleStatus(item.customerId)} style={{ cursor: 'pointer'}}>{item.status?"Active":"Deactive"}</i></button>    
+                                        <button style={{backgroundColor: item.status ? '#1fd655' : 'red', color: 'white', border: "none", borderRadius: '5px'}}><i className="active_deactive_btn" onClick={() => handleStatus(item.customerId)} style={{ cursor: 'pointer'}}>{item.status?"Active":"Deactive"}</i></button>    
                                            </td>
                                     </tr>
                                 ))

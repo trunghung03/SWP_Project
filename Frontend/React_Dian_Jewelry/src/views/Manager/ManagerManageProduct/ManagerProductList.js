@@ -198,7 +198,7 @@ const ManagerProductList = () => {
                         <input
                             type="text"
                             className="manager_manage_product_search_bar"
-                            placeholder="Search by ID..."
+                            placeholder="Search by ID or Name..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={handleSearchKeyPress}

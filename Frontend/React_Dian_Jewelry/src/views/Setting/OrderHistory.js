@@ -36,8 +36,8 @@ function OrderHistory() {
 
     const navItems = ['Home', 'Setting', 'Order History'];
     const menuItems = [
-        { name: 'Edit Profile', path: '/editProfile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
-        { name: 'Order History', path: '/orderHistory', icon: 'fas fa-history', iconClass: 'icon-order-history' },
+        { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
+        { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
     ];
 
     const indexOfLastOrder = currentPage * ordersPerPage;
@@ -46,7 +46,7 @@ function OrderHistory() {
     const totalPages = Math.ceil(orders.length / ordersPerPage);
 
     const handleDetailClick = (orderNumber) => {
-        navigate('/orderDetail', { state: { orderNumber } });
+        navigate('/order-detail', { state: { orderNumber } });
     };
 
     const handlePageChange = (pageNumber) => {
@@ -67,7 +67,7 @@ function OrderHistory() {
                         {menuItems.map(item => (
                             <div
                                 key={item.path}
-                                className={`order_history_setting_menu_item ${item.path === '/orderHistory' ? 'order-history-item' : ''}`}
+                                className={`order_history_setting_menu_item ${item.path === '/order-history' ? 'order-history-item' : ''}`}
                                 onClick={() => navigate(item.path)}
                             >
                                 <i className={`${item.icon} order_history_setting_menu_icon ${item.iconClass}`}></i>

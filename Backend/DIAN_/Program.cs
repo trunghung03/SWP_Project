@@ -62,6 +62,7 @@ builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
+builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
 
 var app = builder.Build();
