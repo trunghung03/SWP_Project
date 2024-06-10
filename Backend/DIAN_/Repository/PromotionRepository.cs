@@ -148,7 +148,27 @@ namespace DIAN_.Repository
             }
             return existingPromotion.Amount;
         }
+        public async Task<bool> DeactivateAndActivatePromotion(int id)
+        {
+            var promotion = await _context.Promotions.FirstOrDefaultAsync(c => c.PromotionId == id);
+            if (promotion == null) return false;
+            if (promotion.Status == true) promotion.Status = false;
+            else if (promotion.Status == false) promotion.Status = true;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<List<Promotion?>> GetPromotionByCodeForStaffAsync(string code)
+        {
+            var promotions = await _context.Promotions
+                .Where(p => p.Status && p.Code.Contains(code))
+                .ToListAsync();
 
+            if (promotions == null || promotions.Count == 0)
+            {
+                return new List<Promotion?>();
+            }
+            return promotions.Cast<Promotion?>().ToList();
+        }
 
     }
 }
