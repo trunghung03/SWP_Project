@@ -49,11 +49,11 @@ const Question = () => {
                     <div className="vertical_line"> </div>
                     <div className="contact-info">
                         <div className="contact_item">
-                            <i className="fas fa-phone-alt"></i> 0795 795 959
+                            <a href='tel:0795795959'><i className="fas fa-phone-alt"></i> 0795 795 959</a>
                         </div>
                         <br />
                         <div className="contact_item">
-                            <i className="fas fa-envelope"></i> diamonddianjewelry@gmail.com
+                            <a href='mailto:diamonddianjewelry@gmail.com'><i className="fas fa-envelope"></i> diamonddianjewelry@gmail.com</a>
                         </div>
                     </div>
                 </div>

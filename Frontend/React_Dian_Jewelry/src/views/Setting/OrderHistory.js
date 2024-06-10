@@ -5,6 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../styles/Setting/OrderHistory.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
+import { getAllOrders } from '../../services/TrackingOrderService';
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -23,15 +24,11 @@ function OrderHistory() {
         if (storedLastName) setLastName(storedLastName);
         if (storedPoints) setPoints(storedPoints);
 
-        // Dummy data for orders, replace with actual data fetching
-        const dummyOrders = Array.from({ length: 35 }, (_, index) => ({
-            date: `15 August 202${index % 3}`,
-            orderNumber: `${Math.floor(Math.random() * 10000000000000000)}`,
-            totalPrice: `$${(Math.random() * 300).toFixed(2)}`,
-            status: 'Content',
-            detail: 'Content'
-        }));
-        setOrders(dummyOrders);
+        getAllOrders().then(data => {
+            setOrders(data);
+        }).catch(error => {
+            console.error('Error fetching orders:', error);
+        });
     }, []);
 
     const navItems = ['Home', 'Setting', 'Order History'];
@@ -51,6 +48,11 @@ function OrderHistory() {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    const formatDate = (dateString) => {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-GB', options);
     };
 
     return (
@@ -81,22 +83,22 @@ function OrderHistory() {
                     <table className="order_history_table table">
                         <thead>
                             <tr>
-                                <th>Order date</th>
-                                <th>Order number</th>
-                                <th>Total price</th>
+                                <th>Date</th>
+                                <th>Order ID</th>
+                                <th>Total Price</th>
                                 <th>Status</th>
                                 <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {currentOrders.map((order, index) => (
-                                <tr key={index}>
-                                    <td>{order.date}</td>
-                                    <td>{order.orderNumber}</td>
-                                    <td>{order.totalPrice}</td>
-                                    <td>{order.status}</td>
+                            {currentOrders.map((order) => (
+                                <tr key={order.orderId}>
+                                    <td>{formatDate(order.date)}</td>
+                                    <td>{order.orderId}</td>
+                                    <td>{order.totalPrice}$</td>
+                                    <td>{order.orderStatus}</td>
                                     <td>
-                                        <i className="order_history_detail_icon fas fa-external-link-alt" onClick={() => handleDetailClick(order.orderNumber)} style={{ cursor: 'pointer' }}></i>
+                                        <i className="order_history_detail_icon fas fa-external-link-alt" onClick={() => handleDetailClick(order.orderId)} style={{ cursor: 'pointer' }}></i>
                                     </td>
                                 </tr>
                             ))}

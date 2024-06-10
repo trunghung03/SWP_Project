@@ -70,15 +70,14 @@ const FooterComponent = () => {
                         <div className="col-md-4">
                             <h6>Contact Us</h6>
                             <ul className="footer_content">
-                                <li><a href='tel:0795795959'><p className="contact_phone"><i className="fas fa-phone-alt"></i>0795 795 959</p></a>
-                                </li>
-                                <li><a href="/contact">diamonddianjewelry@gmail.com</a></li>
+                                <li><a href='tel:0795795959'>0795 795 959</a></li>
+                                <li><a href='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</a></li>
                                 <li><a href="/contact"> </a></li>
                             </ul>
                             <br />
                             <h6>Social Media</h6>
                             <ul className="footer_content social_media_icon" style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '20px' }}>
-                                <li><a href="#"><i className="fb fab fa-facebook-f" target="_blank"></i></a></li>
+                                <li><a href="https://www.facebook.com/profile.php?id=61560517631582" target="_blank"><i className="fb fab fa-facebook-f" target="_blank"></i></a></li>
                                 <li><a href="https://www.instagram.com/dian_jewelryy" target="_blank"><i className="ins fab fa-instagram"></i></a></li>
                                 <li><a href="https://www.tiktok.com/@dianjewelry" target="_blank"><i className="tik fab fa-tiktok"></i></a></li>
                                 <li><a href="/home" target="_blank"><i className="gg fab fa-google"></i></a></li>

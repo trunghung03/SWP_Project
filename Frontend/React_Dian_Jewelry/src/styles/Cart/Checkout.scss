@@ -270,6 +270,16 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
+
+.checkout_summary_service a{
+    text-decoration: none;
+    color: #1c1c1c !important;
+}
+
+.checkout_summary_service a:hover{
+    color: #797979 !important;
+}
+
 .payment_methods {
     margin: 20px 0;
 }

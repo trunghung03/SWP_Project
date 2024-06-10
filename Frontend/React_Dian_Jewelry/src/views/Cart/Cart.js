@@ -146,7 +146,7 @@ function Cart() {
                         <button onClick={handleCheckoutPage} className="cart_summary_checkout">Proceed to checkout</button>
                         <div className="cart_summary_service">
                             <p className="24/7_service"><strong>24/7 Customer Service</strong></p>
-                            <p className="phone_service"><i className="fas fa-phone"></i> 0912 345 678</p>
+                            <a href='tel:0795795959'><p className="phone_service"><i className="fas fa-phone"></i> 0795 795 959</p></a>
                         </div>
                     </div>
                 </div>

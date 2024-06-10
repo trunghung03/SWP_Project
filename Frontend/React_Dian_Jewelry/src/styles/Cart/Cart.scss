@@ -204,6 +204,15 @@
     margin-right: 5px;
 }
 
+.cart_summary_service a{
+    text-decoration: none;
+    color: #1c1c1c !important;
+}
+
+.cart_summary_service a:hover{
+    color: #797979 !important;
+}
+
 .cart_summary .cart_summary_title i {
     margin-right: 12px;
     font-size: 20px;
