@@ -70,7 +70,8 @@ const FooterComponent = () => {
                         <div className="col-md-4">
                             <h6>Contact Us</h6>
                             <ul className="footer_content">
-                                <li><a href="/contact">0795 795 959</a></li>
+                                <li><a href='tel:0795795959'><p className="contact_phone"><i className="fas fa-phone-alt"></i>0795 795 959</p></a>
+                                </li>
                                 <li><a href="/contact">diamonddianjewelry@gmail.com</a></li>
                                 <li><a href="/contact"> </a></li>
                             </ul>
