@@ -180,6 +180,8 @@ const Login = () => {
                         localStorage.setItem("firstName", userInfoRes.data.firstName);
                         localStorage.setItem("lastName", userInfoRes.data.lastName);
                         localStorage.setItem("points", userInfoRes.data.points);
+                        localStorage.setItem("address", userInfoRes.data.address);
+                        localStorage.setItem("phone", userInfoRes.data.phoneNumber);
 
                         setCartItemsForUser(userInfoRes.data.customerId);
                     }

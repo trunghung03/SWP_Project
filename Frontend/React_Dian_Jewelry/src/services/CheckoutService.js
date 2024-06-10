@@ -52,3 +52,13 @@ export const getPromotionByCode = async (code) => {
         throw error;
     }
 };
+
+export const requestVNPayPayment = async (paymentData) => {
+    try {
+        const response = await axios.post(`${API_URL}/purchaseorders/request-vnpay-payment`, paymentData);
+        return response.data;
+    } catch (error) {
+        console.error('Error requesting VNPAY payment:', error);
+        throw error;
+    }
+};

@@ -6,9 +6,10 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Cart/Checkout.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { createPurchaseOrder, createOrderDetails, getPromotionByCode } from '../../services/CheckoutService.js';
+import { createPurchaseOrder, createOrderDetails, getPromotionByCode, requestVNPayPayment } from '../../services/CheckoutService.js';
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
+import vnpay from '../../assets/img/vnpay.webp';
 
 function Checkout() {
     const navItems = ['Home', 'Cart', 'Checkout'];
@@ -46,9 +47,13 @@ function Checkout() {
 
         const firstName = localStorage.getItem('firstName') || '';
         const lastName = localStorage.getItem('lastName') || '';
+        const phone = localStorage.getItem('phone') || '';
+        const address = localStorage.getItem('address') || '';
         setFormData(prevData => ({
             ...prevData,
-            fullName: `${firstName} ${lastName}`
+            fullName: `${firstName} ${lastName}`,
+            phone,
+            address
         }));
     }, []);
 
@@ -66,7 +71,7 @@ function Checkout() {
     }, [usePoints, points, cartItems, voucherDiscount, pointsDiscount]);
 
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + parseFloat(item.price), 0).toFixed(2);
+        return cartItems.reduce((total, item) => total + Math.round(parseFloat(item.price)), 0);
     };
 
     const handleBackToCart = () => {
@@ -78,7 +83,7 @@ function Checkout() {
             const promotion = await getPromotionByCode(voucherCode);
             const discountAmount = calculateTotal() * promotion.amount;
             setVoucherDiscount(discountAmount);
-            setPromotionId(promotion.id); 
+            setPromotionId(promotion.id);
             setAppliedVoucher(true);
             swal("Apply voucher successfully!", "", "success");
         } catch (error) {
@@ -184,10 +189,9 @@ function Checkout() {
 
             localStorage.setItem('orderId', orderId);
             localStorage.setItem('orderDate', date);
-            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice)); 
-            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount)); 
+            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
+            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
 
-            // Update points
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
                 ...prevUser,
@@ -205,8 +209,20 @@ function Checkout() {
                 icon: "success",
                 button: "OK",
             });
-            setLoading(false);
-            navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } }); // Pass as integer
+
+            if (paymentMethod === 'VNPAY') {
+                const paymentData = {
+                    orderId,
+                    fullName,
+                    description: 'Payment for order ' + orderId,
+                    amount: Math.floor(totalPrice * 25000), 
+                    createdDate: date,
+                };
+                const vnpayResponse = await requestVNPayPayment(paymentData);
+                window.location.href = vnpayResponse.paymentUrl;
+            } else {
+                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } }); // Pass as integer
+            }
         } catch (error) {
             console.error('Error creating purchase order:', error);
             if (error.response) {
@@ -238,6 +254,7 @@ function Checkout() {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+    
 
     return (
         <div className="Checkout">
@@ -310,7 +327,7 @@ function Checkout() {
                                     <div className="checkout_item_details">
                                         <div className="checkout_item_row">
                                             <p className="checkout_item_name"><strong>{item.name} x1</strong></p>
-                                            <p className="checkout_item_price"><strong>{parseFloat(item.price).toFixed(2)}$</strong></p>
+                                            <p className="checkout_item_price"><strong>{Math.round(item.price)}$</strong></p>
                                         </div>
                                         <div className="checkout_item_row">
                                             <p><strong>Shell:</strong> {item.selectedShellName}</p>
@@ -335,17 +352,6 @@ function Checkout() {
                         <div className="payment_method">
                             <input
                                 type="checkbox"
-                                id="bankTransfer"
-                                name="paymentMethod"
-                                checked={paymentMethod.includes('Bank Transfer')}
-                                onChange={() => handlePaymentMethodChange('Bank Transfer')}
-                            />
-                            <label htmlFor="bankTransfer">Bank Transfer</label>
-                            <p>(Make a transfer to the shop's account number in the invoice after clicking order. In the transfer content, write the order code. The order will be shipped after successful transfer)</p>
-                        </div>
-                        <div className="payment_method">
-                            <input
-                                type="checkbox"
                                 id="cash"
                                 name="paymentMethod"
                                 checked={paymentMethod.includes('Cash')}
@@ -354,21 +360,48 @@ function Checkout() {
                             <label htmlFor="cash">Cash</label>
                             <p>(Give cash by the time delivering or contact us through hotline to come and transact directly at the store)</p>
                         </div>
+                        <div className="payment_method">
+                            <input
+                                type="checkbox"
+                                id="bankTransfer"
+                                name="paymentMethod"
+                                checked={paymentMethod.includes('Bank Transfer')}
+                                onChange={() => handlePaymentMethodChange('Bank Transfer')}
+                            />
+                            <label htmlFor="bankTransfer">Bank Transfer</label>
+                            <p>(Make a transfer to the shop's account number after confirming. The order will be processed after successful transfer)</p>
+                        </div>
+                        <div className="payment_method">
+                            <input
+                                type="checkbox"
+                                id="vnpay"
+                                name="paymentMethod"
+                                checked={paymentMethod.includes('VNPAY')}
+                                onChange={() => handlePaymentMethodChange('VNPAY')}
+                            />
+                            <label htmlFor="vnpay">VNPAY</label>
+                            <img src={vnpay} style={{width: "30px", marginLeft: "8px", marginBottom: "14px"}}></img>
+                            <p className="vnpay_p">(Use VNPAY for online payment. The order will be processed after successful payment)</p>
+                        </div>
                     </div>
-                    <h5 className="checkout_summary_point_title"><i className="fas fa-coins"></i>Point</h5>
-                    <div className="use_point_method">
-                        <input
-                            className="use_point"
-                            type="checkbox"
-                            id="usePoint"
-                            name="usePoint"
-                            value="Use Point"
-                            checked={usePoints}
-                            onChange={handlePointsClick}
-                        />
-                        <label htmlFor="usePoint">Use {points} points</label>
-                        <p>(1 point = 1$)</p>
-                    </div>
+                    {points > 0 && (
+                        <>
+                            <h5 className="checkout_summary_point_title"><i className="fas fa-coins"></i>Point</h5>
+                            <div className="use_point_method">
+                                <input
+                                    className="use_point"
+                                    type="checkbox"
+                                    id="usePoint"
+                                    name="usePoint"
+                                    value="Use Point"
+                                    checked={usePoints}
+                                    onChange={handlePointsClick}
+                                />
+                                <label htmlFor="usePoint">Use {points} points</label>
+                                <p>(1 point = 1$)</p>
+                            </div>
+                        </>
+                    )}
                     <h5 className="checkout_summary_title"><i className="fas fa-receipt"></i>Total price</h5>
                     <div className="checkout_summary_details">
                         <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>{Math.floor(calculateTotal())}$</strong></span></p>
