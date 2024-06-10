@@ -232,17 +232,25 @@ namespace UserApplication.Controllers
             try
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
-                var customer = await _customerService.ConfirmResetPassword(resetPasswordDto);
-                if (customer != null)
+
+                var result = await _customerService.ConfirmResetPassword(resetPasswordDto);
+                if (result.Succeeded)
                 {
-                    var token = _tokenService.CreateCustomerToken(customer);
-                 return Ok(
-                    new NewUserDto
-                        {
-                         Email = customer.Email,
-                         Token = _tokenService.CreateCustomerToken(customer)
+                    var customer = await _customerRepository.GetByEmailAsync(resetPasswordDto.Email);
+                    if (customer != null)
+                    {
+                        return Ok(
+                            new NewUserDto
+                            {
+                                Email = customer.Email,
+                                Token = _tokenService.CreateCustomerToken(customer)
+                            }
+                        );
                     }
-                );
+                    else
+                    {
+                        return BadRequest("An error occurred while processing your request.");
+                    }
                 }
                 else
                 {
@@ -254,8 +262,5 @@ namespace UserApplication.Controllers
                 throw;
             }
         }
-
-
-
     }
 }

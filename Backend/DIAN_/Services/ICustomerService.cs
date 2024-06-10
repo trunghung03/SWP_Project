@@ -6,7 +6,7 @@ namespace DIAN_.Services
 {
     public interface ICustomerService
     {
-        Task<Customer?> ConfirmResetPassword(ResetPasswordDto confirmDto);
+        Task<IdentityResult?> ConfirmResetPassword(ResetPasswordDto confirmDto);
         Task<bool> ResetPasswordRequestAsync(ForgotPasswordDto resetPasswordDto);
 
 

@@ -135,8 +135,10 @@ namespace DIAN_.Repository
 
         public async Task<bool> ResetPassworConfirmdAsync(Customer user, string token, string newPassword)
         {
-            user.Password = newPassword; 
-            _context.Customers.Update(user);
+            var customer = await _context.Customers.Where(c => c.Email == user.Email).FirstOrDefaultAsync();
+            if (customer == null) return false;
+            customer.Password = newPassword; 
+            _context.Customers.Update(customer);
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
