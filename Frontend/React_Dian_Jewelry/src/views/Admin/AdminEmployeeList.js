@@ -97,7 +97,7 @@ const AdminEmployeeList = () => {
                 await updateStatusById(employeeID);
                 const response = await ShowAllEmployee();
                 setEmployeeList(response);
-                swal("Change status successfully!", "Employee account status has been changed.", "success");
+                swal(`${action} successfully!`, "Employee account status has been changed.", "success");
             }
         } catch (error) {
             console.error("Error changing Employee status:", error);
@@ -133,11 +133,12 @@ const AdminEmployeeList = () => {
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Role</th>
                                 <th>Email</th>
                                 <th>Full Name</th>
                                 <th>Phone number</th>
                                 <th>Address</th>
-                                <th>Action</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -145,6 +146,7 @@ const AdminEmployeeList = () => {
                                 currentEmployee.map((item) => (
                                     <tr key={item.employeeId}>
                                         <td>{item.employeeId}</td>
+                                        <td>{item.role}</td>
                                         <td>{item.email}</td>
                                         <td>{item.firstName} {item.lastName}</td>
                                         <td>{item.phoneNumber}</td>

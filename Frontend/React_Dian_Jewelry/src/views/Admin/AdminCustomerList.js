@@ -101,7 +101,7 @@ const AdminCustomerList = () => {
                 await changeStatus(customerID);
                 const response = await ShowAllCustomer();
                 setCustomerList(response);
-                swal("Change status successfully!", "Customer account status has been changed.", "success");
+                swal(`${action} successfully!`, "Customer account status has been changed.", "success");
             }
         } catch (error) {
             console.error("Error changing customer status:", error);
@@ -143,7 +143,7 @@ const AdminCustomerList = () => {
                                 <th>Phone number</th>
                                 <th>Address</th>
                                 <th>Points</th>
-                                <th>Action</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>

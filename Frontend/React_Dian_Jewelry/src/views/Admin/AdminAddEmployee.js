@@ -74,10 +74,17 @@ const AdminAddEmployee = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Role</label>
-                            <input type="text" name="role" value={employeeData.role} onChange={handleChange} required />
+                            <datalist id='listRole'>
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Sales Staff">Sales Staff</option>
+                                <option value="Delivery Staff">Delivery Staff</option>
+                            </datalist>
+                            <input list="listRole" id='listRole' name="role" value={employeeData.role} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Phone number</label>
+
                             <input type="text" name="phoneNumber" value={employeeData.phoneNumber} onChange={handleChange} required />
                         </div>
                     </div>
@@ -98,7 +105,7 @@ const AdminAddEmployee = () => {
 
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
-             
+
 
             </div>
         </div>
