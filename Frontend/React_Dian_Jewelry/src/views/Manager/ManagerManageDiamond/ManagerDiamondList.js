@@ -165,7 +165,7 @@ const ManagerDiamondList = () => {
                         <input
                             type="text"
                             className="manager_manage_diamond_search_bar"
-                            placeholder="Search by ID..."
+                            placeholder="Search by ID or Shape..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={handleSearchKeyPress}

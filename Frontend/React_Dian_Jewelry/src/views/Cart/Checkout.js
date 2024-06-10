@@ -52,8 +52,8 @@ function Checkout() {
         setFormData(prevData => ({
             ...prevData,
             fullName: `${firstName} ${lastName}`,
-            phone,
-            address
+            phone: phone !== 'null' ? phone : '',
+            address: address !== 'null' ? address : ''
         }));
     }, []);
 
@@ -192,6 +192,7 @@ function Checkout() {
             localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
             localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
 
+            // Update points
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
                 ...prevUser,
@@ -215,7 +216,7 @@ function Checkout() {
                     orderId,
                     fullName,
                     description: 'Payment for order ' + orderId,
-                    amount: Math.floor(totalPrice * 25000), 
+                    amount: Math.floor(totalPrice * 25000), // Convert total price to VND
                     createdDate: date,
                 };
                 const vnpayResponse = await requestVNPayPayment(paymentData);
@@ -254,7 +255,10 @@ function Checkout() {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-    
+
+    const handlePhoneWheel = (e) => {
+        e.preventDefault();
+    };
 
     return (
         <div className="Checkout">
@@ -295,6 +299,7 @@ function Checkout() {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
+                                onWheel={handlePhoneWheel} // Prevent scroll
                             />
                         </div>
                         <div className="form_group_address_note">

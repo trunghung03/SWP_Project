@@ -82,6 +82,19 @@ function ProductDetail() {
             return;
         }
 
+        if (!selectedSize) {
+            swal({
+                title: "Have not chosen a size yet!",
+                text: "Please choose a size for this jewelry.",
+                icon: "warning",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                }
+            });
+            return;
+        }
+
         const token = localStorage.getItem('token');
         if (!token) {
             swal({
@@ -132,7 +145,7 @@ function ProductDetail() {
     const navigateToCart = () => {
         swal({
             title: "Add to cart successfully!",
-            text: "You can direct to cart to see your jewelry that you have add.",
+            text: "You can direct to cart to see your jewelry that you have added.",
             icon: "success",
             button: {
                 text: "Ok",
@@ -230,8 +243,8 @@ function ProductDetail() {
                     <hr className="product_detail_line" />
                     <div className="product_delivery_detail">
                         <p><i className="fas fa-phone"></i> 0795 795 959</p>
-                        <p><i className="fas fa-shipping-fast"></i> Fast delivery, convinient transaction</p>
-                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
+                        <p><i className="fas fa-shipping-fast"></i> Fast delivery, convenient transaction</p>
+                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong>four days</strong> depending on selected size</p>
                     </div>
                     <hr className="product_detail_line" />
                 </div>
@@ -264,7 +277,6 @@ function ProductDetail() {
                 </div>
             )}
 
-            {/* You may also like  */}
             <div>
                 <div className="just_for_you_container">
                     <div className="just_for_you_text">

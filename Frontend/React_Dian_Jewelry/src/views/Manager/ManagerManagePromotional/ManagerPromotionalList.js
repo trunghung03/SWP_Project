@@ -4,24 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerList.scss';
-import { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeeById, getEmployeeByRole } from '../../../services/ManagerService/ManagerEmployeeService.js'
+import { ShowAllShell, getShellDetail, deleteShellById, updateShellById, getShellByName } from '../../../services/ManagerService/ManagerShellService.js'
 import logo from '../../../assets/img/logoN.png';
 
 
-const ManagerEmployeeList = () => {
+const ManagerShellList = () => {
     const navigate = useNavigate();
 
-    const [employeeList, setEmployeeList] = useState([]);
+    const [shellItems, setShellItems] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [editMode, setEditMode] = useState(false);
-    const [editedEmployee, setEditedEmployee] = useState({});
-    const [originalEmployee, setOriginalEmployee] = useState({});
+    const [editedShell, setEditedShell] = useState({});
+    const [originalShell, setOriginalShell] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await ShowAllEmployee();
-                setEmployeeList(response);
+                const response = await ShowAllShell();
+                setShellItems(response);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -35,8 +35,8 @@ const ManagerEmployeeList = () => {
 
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentEmployee = employeeList.slice(indexOfFirstOrder, indexOfLastOrder);
-    const totalPages = Math.ceil(employeeList.length / ordersPerPage);
+    const currentShell = shellItems.slice(indexOfFirstOrder, indexOfLastOrder);
+    const totalPages = Math.ceil(shellItems.length / ordersPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -50,36 +50,35 @@ const ManagerEmployeeList = () => {
         if (e.key === 'Enter') {
             if (isInteger(searchQuery.trim())) {
                 try {
-                    const response = await getEmployeeDetail(searchQuery.trim());
-                    setEmployeeList([response]);
+                    const response = await getShellDetail(searchQuery.trim());
+                    setShellItems([response]);
                     setCurrentPage(1);
                 } catch (error) {
-                    console.error("Error fetching diamond:", error);
-                    swal("Employee not found!", "Please try another one.", "error");
+                    console.error("Error fetching shell:", error);
+                    swal("Shell not found!", "Please try another one.", "error");
                 }
-            } else if (searchQuery.trim()) {
+            }else if(searchQuery.trim()){
                 try {
-                    const response = await getEmployeeByRole(searchQuery.trim());
+                    const response = await getShellByName(searchQuery.trim());
                     if(Array.isArray(response)){
-                        setEmployeeList(response);
+                        setShellItems(response);
                     }
                     else if(response){
-                        setEmployeeList([response]);
+                       setShellItems([response]); 
                     }
-                    else {
-                        setEmployeeList([]);
+                    else{
+                        setShellItems([]);
                     }
-                    
                     setCurrentPage(1);
                 } catch (error) {
-                    console.error("Error fetching diamond:", error);
-                    swal("Employee not found!", "Please try another one.", "error");
+                    console.error("Error fetching shell:", error);
+                    swal("Shell not found!", "Please try another one.", "error");
                 }
             }
-            else {
+             else {
                 try {
-                    const response = await ShowAllEmployee();
-                    setEmployeeList(response);
+                    const response = await ShowAllShell();
+                    setShellItems(response);
                     setCurrentPage(1);
                 } catch (error) {
                     console.error("Error fetching data:", error);
@@ -89,9 +88,9 @@ const ManagerEmployeeList = () => {
     };
 
     // Delete diamond by id 
-    const handleDelete = async (employeeID) => {
+    const handleDelete = async (shellID) => {
         swal({
-            title: "Are you sure to delete this employee account?",
+            title: "Are you sure to delete this shell?",
             text: "This action cannot be undone",
             icon: "warning",
             buttons: true,
@@ -99,13 +98,13 @@ const ManagerEmployeeList = () => {
         }).then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    await deleteEpmloyeeById(employeeID);
-                    const response = await ShowAllEmployee();
-                    setEmployeeList(response);
-                    swal("Deleted successfully!", "Employee has been deleted.", "success");
+                    await deleteShellById(shellID);
+                    const response = await ShowAllShell();
+                    setShellItems(response);
+                    swal("Deleted successfully!", "The shell has been deleted.", "success");
                 } catch (error) {
-                    console.error("Error deleting diamond:", error);
-                    swal("Something went wrong!", "Failed to delete the employee. Please try again.", "error");
+                    console.error("Error deleting shell:", error);
+                    swal("Something went wrong!", "Failed to delete the shell. Please try again.", "error");
                 }
             }
         });
@@ -113,44 +112,46 @@ const ManagerEmployeeList = () => {
 
 
     // Update by id
-    const handleEdit = (employee) => {
+    const handleEdit = (shell) => {
         setEditMode(true);
-        setEditedEmployee(employee);
-        setOriginalEmployee(employee);
+        setEditedShell(shell);
+        setOriginalShell(shell);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedEmployee({ ...editedEmployee, [name]: value });
+        setEditedShell({ ...editedShell, [name]: value });
     };
 
     const handleUpdate = async () => {
-        const requiredFields = ['role', 'email', 'password', 'lastName', 'firstName', 'address', 'phoneNumber'];
+        const status = true;
+        const price = 0;
+        const requiredFields = ['name', 'amountAvailable'];
         for (let field of requiredFields) {
-            if (!editedEmployee[field]) {
+            if (!editedShell[field]) {
                 swal("Please fill in all fields!", `Field cannot be empty.`, "error");
                 return;
             }
         }
 
-        const isEqual = JSON.stringify(originalEmployee) === JSON.stringify(editedEmployee);
+        const isEqual = JSON.stringify(originalShell) === JSON.stringify(editedShell);
         if (isEqual) {
             swal("No changes detected!", "You have not made any changes.", "error");
             return;
         }
 
-        const employeeToUpdate = { ...editedEmployee, status: true };
+        const shellToUpdate = { ...editedShell, status: true };
 
         try {
-            console.log("Sending update request with data:", employeeToUpdate);
-            const response = await updateEmployeeById(employeeToUpdate.employeeId, employeeToUpdate);
+            console.log("Sending update request with data:", shellToUpdate);
+            const response = await updateShellById(shellToUpdate.shellMaterialId, shellToUpdate);
             console.log("Update response:", response.data);
-            const updatedItems = await ShowAllEmployee();
-            setEmployeeList(updatedItems);
+            const updatedItems = await ShowAllShell();
+            setShellItems(updatedItems);
             setEditMode(false);
-            swal("Updated successfully!", "Employee information has been updated.", "success");
+            swal("Updated successfully!", "The shell information has been updated.", "success");
         } catch (error) {
-            console.error("Error updating diamond:", error.response ? error.response.data : error.message);
+            console.error("Error updating shell:", error.response ? error.response.data : error.message);
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
     };
@@ -159,7 +160,7 @@ const ManagerEmployeeList = () => {
     return (
         <div className="manager_manage_diamond_all_container">
             <div className="manager_manage_diamond_sidebar">
-                <ManagerSidebar currentPage="manager_employee" />
+                <ManagerSidebar currentPage="manager_manage_promotional" />
             </div>
             <div className="manager_manage_diamond_content">
                 <div className="manager_manage_diamond_header">
@@ -168,7 +169,7 @@ const ManagerEmployeeList = () => {
                         <input
                             type="text"
                             className="manager_manage_diamond_search_bar"
-                            placeholder="Search by ID or Role..."
+                            placeholder="Search by ID or Code..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={handleSearchKeyPress}
@@ -176,10 +177,12 @@ const ManagerEmployeeList = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
-                <h3>List Of Employees</h3>
-                {/* <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddEmployee')}>Add new employee</button>
-                </div> */}
+                
+                <h3>List Of Promotional Codes</h3>
+
+                <div className="manager_manage_diamond_create_button_section">
+                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/manager-add-shell')}>Add new promotional code</button>
+                </div>
 
                 {/* Table diamond list */}
                 <div className="manager_manage_diamond_table_wrapper">
@@ -187,33 +190,27 @@ const ManagerEmployeeList = () => {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Role</th>
-                                <th>Email</th>
-                                <th>Full Name</th>
-                                <th>Address</th>
-                                <th>Phone number</th>
-                                {/* <th>Action</th> */}
+                                <th>Name</th>
+                                <th>Amount Available</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {employeeList.length > 0 ? (
-                                currentEmployee.map((item) => (
-                                    <tr key={item.employeeId}>
-                                        <td>{item.employeeId}</td>
-                                        <td>{item.role}</td>
-                                        <td>{item.email}</td>
-                                        <td>{item.firstName} {item.lastName}</td>
-                                        <td>{item.address}</td>
-                                        <td>{item.phoneNumber}</td>
-                                        {/* <td>
+                            {shellItems.length > 0 ? (
+                                currentShell.map((item) => (
+                                    <tr key={item.shellMaterialId}>
+                                        <td>{item.shellMaterialId}</td>
+                                        <td>{item.name}</td>
+                                        <td>{item.amountAvailable}</td>
+                                        <td>
                                             <i className="fas fa-pen" onClick={() => handleEdit(item)} style={{ cursor: 'pointer', marginRight: '10px' }}></i>
-                                            <i className="fas fa-trash" onClick={() => handleDelete(item.employeeId)} style={{ cursor: 'pointer' }}></i>
-                                        </td> */}
+                                            <i className="fas fa-trash" onClick={() => handleDelete(item.shellMaterialId)} style={{ cursor: 'pointer' }}></i>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="10">No employee found</td>
+                                    <td colSpan="10">No shell found</td>
                                 </tr>
                             )}
                         </tbody>
@@ -243,34 +240,14 @@ const ManagerEmployeeList = () => {
                 <div className="manager_manage_diamond_modal_overlay" onClick={() => setEditMode(false)}>
                     <div className="manager_manage_diamond_update_modal" onClick={(e) => e.stopPropagation()}>
                         <div className="manager_manage_diamond_modal_content">
-                            <h4>Edit Employee Information</h4>
+                            <h4>Edit Shell Information</h4>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Role</label>
-                                <input type="text" name="role" value={editedEmployee.role} onChange={handleChange} />
+                                <label>Shell</label>
+                                <input type="text" name="name" value={editedShell.name} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_form_group">
-                                <label>Email</label>
-                                <input type="text" name="email" value={editedEmployee.email} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>Password</label>
-                                <input type="text" name="password" value={editedEmployee.password} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>Last name</label>
-                                <input type="text" name="lastName" value={editedEmployee.lastName} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>First name</label>
-                                <input type="text" name="firstName" value={editedEmployee.firstName} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>Addresss</label>
-                                <input type="text" name="address" value={editedEmployee.address} onChange={handleChange} />
-                            </div>
-                            <div className="manager_manage_diamond_form_group">
-                                <label>Phone number</label>
-                                <input type="text" name="phoneNumber" value={editedEmployee.phoneNumber} onChange={handleChange} />
+                                <label>Amount Available</label>
+                                <input type="text" name="amountAvailable" value={editedShell.amountAvailable} onChange={handleChange} />
                             </div>
                             <div className="manager_manage_diamond_modal_actions">
                                 <button onClick={() => setEditMode(false)}>Cancel</button>
@@ -284,4 +261,4 @@ const ManagerEmployeeList = () => {
     );
 };
 
-export default ManagerEmployeeList;
+export default ManagerShellList;

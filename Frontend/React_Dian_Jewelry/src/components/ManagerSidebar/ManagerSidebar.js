@@ -51,9 +51,9 @@ class ManagerSidebar extends Component {
                 {expanded && (
                     <div className="manager_sidebar_content">
                         <ul className="manager_sidebar_menu">
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_statitic' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-statitic')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_statistic' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-statistic')}>
                                 <i className="fas fa-chart-bar"></i>
-                                <span>Statitic</span>
+                                <span>Statistic</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_employee' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-employee-list')}>
                                 <i className="fas fa-users"></i>
@@ -71,6 +71,10 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-ring"></i>
                                 <span>Manage Shell</span>
                             </li>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_promotional' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-promotional-list')}>
+                                <i className="fas fa-receipt"></i>
+                                <span>Manage Promotional</span>
+                            </li>
                             <div className="manager_sidebar_sign_out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                                 <span>Sign Out</span>
@@ -81,7 +85,7 @@ class ManagerSidebar extends Component {
                 {!expanded && (
                     <div className="manager_sidebar_icons">
                         <ul className="manager_sidebar_menu_icons">
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_statitic' ? 'selected' : ''}`} data-tooltip="Statitic" onClick={() => this.props.navigate('/manager-statitic')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_statistic' ? 'selected' : ''}`} data-tooltip="Statistic" onClick={() => this.props.navigate('/manager-statistic')}>
                                 <i className="fas fa-chart-bar"></i>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_employee' ? 'selected' : ''}`} data-tooltip="Employee List" onClick={() => this.props.navigate('/manager-employee-list')}>
@@ -95,6 +99,9 @@ class ManagerSidebar extends Component {
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_shell' ? 'selected' : ''}`} data-tooltip="Manage Shell" onClick={() => this.props.navigate('/manager-shell-list')}>
                                 <i className="fas fa-ring"></i>
+                            </li>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_promotional' ? 'selected' : ''}`} data-tooltip="Manage Promotional" onClick={() => this.props.navigate('/manager-promotional-list')}>
+                                <i className="fas fa-receipt"></i>
                             </li>
                             <div className="manager_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>

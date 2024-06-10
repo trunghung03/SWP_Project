@@ -1,6 +1,6 @@
 import React from 'react';
 import ManagerSidebar from '../../components/ManagerSidebar/ManagerSidebar.js';
-import '../../styles/Manager/ManagerStatitic.scss';
+import '../../styles/Manager/ManagerStatistic.scss';
 
 const ManagerStatitic = () => {
     return (

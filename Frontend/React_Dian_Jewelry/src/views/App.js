@@ -32,22 +32,24 @@ import OrderDetail from './Setting/OrderDetail';
 import AdminCustomerList from './Admin/AdminCustomerList';
 import AdminEmployeeList from './Admin/AdminEmployeeList';
 import AdminAddEmployee from './Admin/AdminAddEmployee';
-import ManagerStatitic from './Manager/ManagerStatitic';
+import ManagerStatistic from './Manager/ManagerStatistic';
 import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
-import DSEditProfile from './DeliveryStaff/DeliveryStaffEditProfile';
+import DSDeliveryDetail from './DeliveryStaff/DSDeliveryDetail';
 import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
 import SSWarrantyList from './SalesStaff/SalesStaffManageWarranty/SSWarrantyList';
 import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
-import SSEditProfile from './SalesStaff/SalesStaffSetting/SSEditProfile';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmployee';
 import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
+import ManagerPromotionalList from './Manager/ManagerManagePromotional/ManagerPromotionalList';
 import ManagerAddShell from './Manager/ManagerManageShell/ManagerAddShell';
 import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmployee';
 import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct';
+import ManagerAddPromotional from './Manager/ManagerManagePromotional/ManagerAddPromotional';
+
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgotPassword' || location.pathname === '/resetPassword';
@@ -99,15 +101,17 @@ function App() {
             <Route path="/admin-add-employee" element={<AdminAddEmployee />} />
 
             {/* Manager */}
-            <Route path="/manager-statitic" element={<ManagerStatitic />} />
+            <Route path="/manager-statistic" element={<ManagerStatistic />} />
             <Route path="/manager-diamond-list" element={<ManagerDiamondList />} />
             <Route path="/manager-add-diamond" element={<ManagerAddDiamond />} />
             <Route path="/manager-product-list" element={<ManagerProductList />} />
-            <Route path="/manager-employee-list" element={<ManagerEmployeeList />} />
-            <Route path="/manager-shell-list" element={<ManagerShellList />} />
-            <Route path="/manager-add-employee" element={<ManagerAddEmployee />} />
-            <Route path="/manager-add-shell" element={<ManagerAddShell />} />
             <Route path="/manager-add-product" element={<ManagerAddProduct/>} />
+            <Route path="/manager-shell-list" element={<ManagerShellList />} />
+            <Route path="/manager-add-shell" element={<ManagerAddShell />} />
+            <Route path="/manager-employee-list" element={<ManagerEmployeeList />} />
+            <Route path="/manager-add-employee" element={<ManagerAddEmployee />} />
+            <Route path="/manager-promotional-list" element={<ManagerPromotionalList />} />
+            <Route path="/manager-add-promotional" element={<ManagerAddPromotional />} />
 
             {/* Sales Staff */}
             <Route path="/sales-staff-order-list" element={<SSOrderList />} />
@@ -117,6 +121,7 @@ function App() {
 
             {/* Delivery Staff */}
             <Route path="/delivery-staff-delivery-list" element={<DSDeliveryList />} />
+            <Route path="/delivery-staff-delivery-detail" element={<DSDeliveryDetail />} />
           </Routes>
         </CartProvider>
       </UserProvider>
