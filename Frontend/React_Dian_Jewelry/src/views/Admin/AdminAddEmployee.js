@@ -64,42 +64,41 @@ const AdminAddEmployee = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>First name</label>
-                            <input type="text" name="firstName" value={employeeData.firstName} onChange={handleChange} required />
+                            <input type="text" name="firstName" placeholder="Enter your first name" value={employeeData.firstName} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Last name</label>
-                            <input type="text" name="lastName" value={employeeData.lastName} onChange={handleChange} required />
+                            <input type="text" name="lastName" placeholder="Enter your last name" value={employeeData.lastName} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Role</label>
-                            <datalist id='listRole'>
+                            <select id='listRole' name='role' value={employeeData.role} onChange={handleChange} required>
+                                <option value="">Please the role</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Manager">Manager</option>
                                 <option value="Sales Staff">Sales Staff</option>
                                 <option value="Delivery Staff">Delivery Staff</option>
-                            </datalist>
-                            <input list="listRole" id='listRole' name="role" value={employeeData.role} onChange={handleChange} required />
+                            </select>
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Phone number</label>
-
-                            <input type="text" name="phoneNumber" value={employeeData.phoneNumber} onChange={handleChange} required />
+                            <input type="text" name="phoneNumber" placeholder="Enter your phone number (+84 xxx xxx xxx)" value={employeeData.phoneNumber} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Address</label>
-                        <input type="text" name="address" value={employeeData.address} onChange={handleChange} required />
+                        <input type="text" name="address" placeholder="Enter your address" value={employeeData.address} onChange={handleChange} required />
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Email</label>
-                        <input type="text" name="email" value={employeeData.email} onChange={handleChange} required />
+                        <input type="text" name="email" placeholder="abcxyz@gmail.com" value={employeeData.email} onChange={handleChange} required />
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Password</label>
-                            <input type="text" name="password" value={employeeData.password} onChange={handleChange} required />
+                            <input type="text" name="password" placeholder="Enter your password" value={employeeData.password} onChange={handleChange} required />
                         </div>
                     </div>
 
