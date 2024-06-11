@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/img/logo.png';
 import '../../../styles/SalesStaff/SalesStaffManageContent/SSContentList.scss';
 import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffSidebar.js';
-import { getContentList, getContentByTitle, deleteContentById } from '../../../services/SalesStaffService/SSContentService.js';
+import { getContentList, getContentByTitle } from '../../../services/SalesStaffService/SSContentService.js';
 
 // Content card
 const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete }) => {
