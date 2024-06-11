@@ -1,15 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
 import '../Header/HeaderComponent.scss';
 import logo from '../../assets/img/logoN.png';
+import mainImgDiamondJewelry from '../../assets/img/nav1.jpg';
+import mainImgWeddingJewelry from '../../assets/img/nav2.jpeg';
+import ringCategory from '../../assets/img/ringCategory.jpg';
+import wRingCategory from '../../assets/img/wRingCategory.jpg';
+import engagementCategory from '../../assets/img/engagementCategory.jpg';
+import earringCategory from '../../assets/img/earringCategory.webp';
+import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
+import braceletCategory from '../../assets/img/braceletCategory.webp';
+import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
+import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
+import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 
 const HeaderComponent = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const { cartItems } = useCart();
+    const diamondMenuRef = useRef(null);
+    const weddingMenuRef = useRef(null);
+    const diamondMenuTimeoutRef = useRef(null);
+    const weddingMenuTimeoutRef = useRef(null);
+    const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry); // Default image for Diamond Jewelry
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -48,6 +64,27 @@ const HeaderComponent = () => {
 
     const navigateToCategory = (category) => {
         navigate('/diamond-jewelry', { state: { category } });
+    };
+
+    const handleMouseEnter = (menuRef, timeoutRef, defaultImage) => {
+        clearTimeout(timeoutRef.current);
+        menuRef.current.style.display = 'flex';
+        menuRef.current.style.opacity = '1';
+        menuRef.current.style.transform = 'translateY(0)';
+        setHoveredImage(defaultImage);
+    };
+
+    const handleMouseLeave = (menuRef, timeoutRef) => {
+        timeoutRef.current = setTimeout(() => {
+            menuRef.current.style.opacity = '0';
+            setTimeout(() => {
+                menuRef.current.style.display = 'none';
+            }, 100);
+        }, 100);
+    };
+
+    const handleImageHover = (imageSrc) => {
+        setHoveredImage(imageSrc);
     };
 
     return (
@@ -90,9 +127,9 @@ const HeaderComponent = () => {
                                 {cartItems.length > 0 && <span className="cart_badge">{cartItems.length}</span>}
                             </a>
                             <div className="account_dropdown_section dropdown">
-                                <i className="icon_account fas fa-user" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                <i className="icon_account fas fa-user" onClick={() => navigate('/edit-profile')}></i>
+                                <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                     aria-expanded="false"></i>
-                                <i className="icon_arrow fas fa-chevron-down"></i>
                                 <ul className="account_dropdown_menu dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     {user.firstName ? (
                                         <>
@@ -132,30 +169,51 @@ const HeaderComponent = () => {
                             <li className="nav-item">
                                 <a className="home nav-link" href="/home">HOME</a>
                             </li>
-                            <li className="diamond_dropdown_section nav-item dropdown">
-                                <a className="diamond header_spe_nav_link nav-link" id="diamondDropdown" role="button"
-                                    aria-expanded="false" onClick={() => navigateToCategory(null)}>
+                            <li
+                                className="diamond_dropdown_section nav-item dropdown"
+                                onMouseEnter={() => handleMouseEnter(diamondMenuRef, diamondMenuTimeoutRef, mainImgDiamondJewelry)}
+                                onMouseLeave={() => handleMouseLeave(diamondMenuRef, diamondMenuTimeoutRef)}
+                            >
+                                <a className="diamond header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry')} id="diamondDropdown" role="button" aria-expanded="false">
                                     DIAMOND JEWELRY<i className="icon_arrow_diamond fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
                                 </a>
-                                <ul className="diamond_dropdown_menu dropdown-menu" aria-labelledby="diamondDropdown">
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('ring')}>Ring</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('earrings')}>Earrings</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('bracelet')}>Bracelet</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('necklace')}>Necklace</a></li>
-                                </ul>
+                                <div className="diamond_dropdown_menu dropdown-menu" ref={diamondMenuRef} aria-labelledby="diamondDropdown">
+                                    <div className="dropdown_content">
+                                        <ul className="dropdown_items">
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(ringCategory)} onClick={() => navigateToCategory('ring')}>Ring</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(earringCategory)} onClick={() => navigateToCategory('earrings')}>Earrings</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(braceletCategory)} onClick={() => navigateToCategory('bracelet')}>Bracelet</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(necklaceCategory)} onClick={() => navigateToCategory('necklace')}>Necklace</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(engagementCategory)} onClick={() => navigateToCategory('engagementRing')}>Engagement Ring</a></li>
+                                        </ul>
+                                        <div className="dropdown_image">
+                                            <img src={hoveredImage} alt="Jewelry" />
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
-                            <li className="wedding_dropdown_section nav-item dropdown">
-                                <a className="wedding header_spe_nav_link nav-link" id="weddingDropdown" role="button"
-                                    aria-expanded="false" onClick={() => navigateToCategory('weddingJewelry')}>
+                            <li
+                                className="wedding_dropdown_section nav-item dropdown"
+                                onMouseEnter={() => handleMouseEnter(weddingMenuRef, weddingMenuTimeoutRef, mainImgWeddingJewelry)}
+                                onMouseLeave={() => handleMouseLeave(weddingMenuRef, weddingMenuTimeoutRef)}
+                            >
+                                <a className="wedding header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry', { state: { category: 'weddingJewelry' } })} id="weddingDropdown" role="button" aria-expanded="false">
                                     WEDDING JEWELRY<i className="icon_arrow_wedding fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
                                 </a>
-                                <ul className="wedding_dropdown_menu dropdown-menu" aria-labelledby="weddingDropdown">
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingRing')}>Wedding Ring</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingEarrings')}>Wedding Earrings</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingBracelet')}>Wedding Bracelet</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('weddingNecklace')}>Wedding Necklace</a></li>
-                                    <li><a className="dropdown-item" onClick={() => navigateToCategory('engagementRing')}>Engagement Ring</a></li>
-                                </ul>
+                                <div className="wedding_dropdown_menu dropdown-menu" ref={weddingMenuRef} aria-labelledby="weddingDropdown">
+                                    <div className="dropdown_content">
+                                        <ul className="dropdown_items">
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(wRingCategory)} onClick={() => navigateToCategory('weddingRing')}>Wedding Ring</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(wEarringCategory)} onClick={() => navigateToCategory('weddingEarrings')}>Wedding Earrings</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(wBraceletCategory)} onClick={() => navigateToCategory('weddingBracelet')}>Wedding Bracelet</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(wNecklaceCategory)} onClick={() => navigateToCategory('weddingNecklace')}>Wedding Necklace</a></li>
+                                            <li><a className="dropdown-item" onMouseEnter={() => handleImageHover(engagementCategory)} onClick={() => navigateToCategory('engagementRing')}>Engagement Ring</a></li>
+                                        </ul>
+                                        <div className="dropdown_image">
+                                            <img src={hoveredImage} alt="Jewelry" />
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                             <li className="nav-item">
                                 <a className="price_list nav-link" href="/price-list">DIAMOND PRICE</a>

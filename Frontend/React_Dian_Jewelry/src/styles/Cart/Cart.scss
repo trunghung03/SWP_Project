@@ -5,8 +5,8 @@
 .cart_header {
     display: flex;
     justify-content: space-between;
-    padding: 20px 270px;
-    margin: 40px 200px -25px -177px;
+    padding: 20px 21% 20px 270px;
+    margin: 40px 205px -25px -177px;
 }
 
 .cart_header i {
@@ -54,7 +54,7 @@
     padding: 15px 20px 15px 25px;
     margin: 0px 40px 20px 50px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    max-width: 705px;
+    max-width: 87%;
 }
 
 .cart_item_size_guide {
@@ -118,12 +118,14 @@
     border-radius: 5px;
     padding: 1px 0 2px 10px;
     font-size: 15px;
+    outline: none;
 }
 
 .cart_item_price {
     font-size: 23px;
     font-weight: bold;
-    margin: 48px 0 0 380px;
+    margin: 48px 0 0 0;
+    text-align: end;
 }
 
 .cart_item_links {

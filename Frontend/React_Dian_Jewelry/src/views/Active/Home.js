@@ -171,10 +171,10 @@ const Home = () => {
         <Slider {...settings}>
           <div className="slide">
             <img src={slide1} alt="Slide 1" />
-            <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
-              <h1 className="slide-title">TO LOVE AND CHERISH</h1>
-              <p className="slide-text">Weddings are brilliant moments in time. Make it unforgettable with pieces that’ll always be adored.</p>
-            </div>
+            {/* <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
+              <h2 className="slide-title">TO LOVE AND CHERISH</h2>
+              <p className="slide-text"> Make it unforgettable with the beautiful pieces that’ll always be adored.</p>
+            </div> */}
           </div>
           <div className="slide">
             <img src={slide2} alt="Slide 2" />

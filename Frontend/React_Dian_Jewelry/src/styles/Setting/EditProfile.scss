@@ -10,7 +10,7 @@ body {
 }
 
 .setting_menu {
-    width: 253px;
+    width: 257px;
     background-color: #fff7f4;
     padding: 40px 0 50px 0;
     border-right: 1px solid #e0e0e0;
@@ -84,11 +84,11 @@ body {
 // Edit profile form
 .edit_profile_form {
     flex-grow: 1;
-    margin: 50px 150px 90px 150px;
+    margin: 50px 13% 90px 13%;
     padding: 20px 40px 40px 40px;
     background-color: #fff;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    // border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
     h2{

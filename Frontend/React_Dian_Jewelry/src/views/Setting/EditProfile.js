@@ -152,7 +152,7 @@ function EditProfile() {
               <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
             </div>
             <div className="edit_form_group">
-              <label>Email</label>
+              <label>Email *</label>
               <input className="edit_email" type="email" value={email} readOnly />
             </div>
             <div className="edit_form_group">

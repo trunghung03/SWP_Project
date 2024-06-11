@@ -11,9 +11,8 @@ body {
     margin-bottom: 5px;
 }
 
-
-/* Header */
 .header {
+    position: relative;
     top: 0;
     z-index: 2;
     width: 100%;
@@ -122,7 +121,7 @@ body {
 
 .navbar-nav .nav-item .nav-link {
     font-size: 13.5px;
-    padding-bottom: 3px;
+    padding-bottom: 0;
 }
 
 .header_icons .cart_icon {
@@ -152,7 +151,7 @@ body {
 .navbar-nav .nav-item .nav-link::before {
     content: '';
     position: absolute;
-    bottom: 3px;
+    bottom: 0px;
     left: 20px;
     width: 0;
     border: 1px solid #797979;
@@ -339,24 +338,56 @@ li:focus {
 }
 
 .diamond_dropdown_section i {
-    color: #565e6c;
+    color: #797979;
     font-size: 15px;
 }
 
 .diamond_dropdown_section li:focus {
-    color: #565e6c;
+    color: #797979;
 }
 
 .diamond_dropdown_menu {
-    width: 200px;
+    display: none;
+    flex-direction: row;
+    width: 480%;
     border-radius: 0;
-    left: -10%;
-    top: 122%;
+    left: 0;
+    right: 0;
+    top: 127%;
+    background-color: white;
+    padding: 10px 40px 15px 40px;
+}
+
+.diamond_dropdown_menu .dropdown_content {
+    display: flex;
+    width: 100%;
+}
+
+.diamond_dropdown_menu .dropdown_items {
+    flex: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.diamond_dropdown_menu .dropdown_image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.diamond_dropdown_menu .dropdown_image img {
+    max-height: 200px;
+    width: 500px;
 }
 
 .diamond_dropdown_menu li a,
 .wedding_dropdown_menu li a {
     cursor: pointer;
+    color: #797979;
+    display: block;
+    padding: 10px;
 }
 
 .wedding_dropdown_section {
@@ -382,8 +413,80 @@ li:focus {
 }
 
 .wedding_dropdown_menu {
-    width: 200px;
+    display: none;
+    flex-direction: row;
+    width: 484%;
     border-radius: 0;
-    left: -10%;
-    top: 122%;
+    left: -114%;
+    right: 0;
+    top: 127%;
+    background-color: white;
+    padding: 10px 40px 15px 40px;
+}
+
+.wedding_dropdown_menu .dropdown_content {
+    display: flex;
+    width: 100%;
+}
+
+.wedding_dropdown_menu .dropdown_items {
+    flex: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wedding_dropdown_menu .dropdown_image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding_dropdown_menu .dropdown_image img {
+    max-height: 200px;
+    width: 500px;
+}
+
+.diamond_dropdown_menu,
+.wedding_dropdown_menu {
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateX(4px);
+}
+
+.diamond_dropdown_section:hover .dropdown-menu,
+.wedding_dropdown_section:hover .dropdown-menu {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.diamond_dropdown_section .dropdown-item,
+.wedding_dropdown_section .dropdown-item {
+    transition: font-weight 0.3s ease, transform 0.3s ease;
+}
+
+.diamond_dropdown_section .dropdown-item:hover,
+.wedding_dropdown_section .dropdown-item:hover {
+    transform: translateX(4px);
+    background-color: transparent !important;
+    color: #1c1c1c;
+}
+
+.diamond_dropdown_section:hover .dropdown-menu,
+.wedding_dropdown_section:hover .dropdown-menu,
+.diamond_dropdown_section .dropdown-menu:hover,
+.wedding_dropdown_section .dropdown-menu:hover {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.diamond_dropdown_section:hover .header_spe_nav_link,
+.wedding_dropdown_section:hover .header_spe_nav_link,
+.diamond_dropdown_section .dropdown-menu:hover ~ .header_spe_nav_link,
+.wedding_dropdown_section .dropdown-menu:hover ~ .header_spe_nav_link {
+    color: #797979;
+    text-decoration: none;
 }

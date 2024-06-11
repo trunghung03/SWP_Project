@@ -30,9 +30,13 @@ function DiamondJewelry() {
 
         const { category } = location.state || {};
         if (category) {
-            if (category.includes('wedding') || category === 'engagementRing') {
+            if (category === 'weddingEarrings' || category === 'weddingBracelet' || category === 'weddingNecklace' || category === 'engagementRing' || category === 'weddingRing') {
                 setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry', category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
-            } else {
+            }
+            else if (category === 'weddingJewelry') {
+                setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry']);
+            }
+            else {
                 setNavItems(['Home', 'Diamond Jewelry', category.charAt(0).toUpperCase() + category.slice(1)]);
             }
         } else {
