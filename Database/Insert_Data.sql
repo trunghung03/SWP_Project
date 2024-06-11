@@ -30,14 +30,14 @@
 	('OUR BEGINNING', 'In 2019, after witnessing the gap in ethical and sustainable options within the diamond industry, visionary entrepreneur Danielle Taylor embarked on a mission to redefine the narrative. Inspired by Beth Gerstein''s journey, Danielle envisioned a diamond jewelry brand that not only symbolized love but also upheld principles of environmental stewardship and ethical sourcing. With a shared commitment to sustainability, Danielle partnered with renowned jeweler Michael Adams to establish DIAN Diamond Jewelry in 2022. Together, they pioneered innovative approaches to diamond sourcing and transparency, leveraging cutting-edge technology to trace each gemstone''s origin. By offering consumers the assurance of ethical practices and environmental responsibility, DIAN quickly gained recognition as a leader in sustainable luxury jewelry, inspiring a new generation of conscientious consumers to adorn themselves with diamonds that shine with integrity and purpose.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=600,height=258,quality=100,format=auto/https://www.brilliantearth.com/bee2-ui/img/mission/about/Mission_About_Static.jpg', 'About', 1);
 
 	-- Insert dummy data into PROMOTION table
-	INSERT INTO PROMOTION ([Name], Amount, ValidFrom, ValidTo, [Description], Code, EmployeeID, Status) VALUES
-	('Spring Sale', 20.00, GETDATE(), DATEADD(month, 1, GETDATE()), '20% off all items for Spring', 'SPRING20', 1, 1),
-	('Summer Sale', 15.00, GETDATE(), DATEADD(month, 2, GETDATE()), '15% off all items for Summer', 'SUMMER15', 2, 1),
-	('Fall Sale', 10.00, GETDATE(), DATEADD(month, 3, GETDATE()), '10% off all items for Fall', 'FALL10', 3, 1),
-	('Winter Sale', 25.00, GETDATE(), DATEADD(month, 4, GETDATE()), '25% off all items for Winter', 'WINTER25', 4, 1),
-	('Black Friday', 30.00, GETDATE(), DATEADD(month, 5, GETDATE()), '30% off all items for Black Friday', 'BLACKFRIDAY30', 5, 1),
-	('Cyber Monday', 35.00, GETDATE(), DATEADD(month, 6, GETDATE()), '35% off all items for Cyber Monday', 'CYBERMONDAY35', 6, 1),
-	('Holiday Special', 40.00, GETDATE(), DATEADD(month, 7, GETDATE()), '40% off all items for the Holidays', 'HOLIDAY40', 7, 1);
+	INSERT INTO PROMOTION ([Name], Amount, ValidFrom, ValidTo, [Description], Code, , Status) VALUES
+	('Spring Sale', 20.00, GETDATE(), DATEADD(month, 1, GETDATE()), '20% off all items for Spring', 'SPRING20',  1),
+	('Summer Sale', 15.00, GETDATE(), DATEADD(month, 2, GETDATE()), '15% off all items for Summer', 'SUMMER15',  1),
+	('Fall Sale', 10.00, GETDATE(), DATEADD(month, 3, GETDATE()), '10% off all items for Fall', 'FALL10', 1),
+	('Winter Sale', 25.00, GETDATE(), DATEADD(month, 4, GETDATE()), '25% off all items for Winter', 'WINTER25', 1),
+	('Black Friday', 30.00, GETDATE(), DATEADD(month, 5, GETDATE()), '30% off all items for Black Friday', 'BLACKFRIDAY30', 1),
+	('Cyber Monday', 35.00, GETDATE(), DATEADD(month, 6, GETDATE()), '35% off all items for Cyber Monday', 'CYBERMONDAY35',  1),
+	('Holiday Special', 40.00, GETDATE(), DATEADD(month, 7, GETDATE()), '40% off all items for the Holidays', 'HOLIDAY40', 1);
 
 	-- Insert dummy data into PURCHASEORDER table
 	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note,SaleStaff,DeliveryStaff) VALUES
