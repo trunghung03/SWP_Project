@@ -15,7 +15,7 @@ const ManagerAddPromotion = () => {
         description: '',
         startDate: '',
         endDate: '',
-        employeeId: '',
+
     });
 
     const handleChange = (e) => {
@@ -94,10 +94,6 @@ const ManagerAddPromotion = () => {
                         <div className="manager_add_diamond_form_group">
                             <label>Amount</label>
                             <input type="text" name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
-                        </div>
-                        <div className="manager_add_diamond_form_group">
-                            <label>Employee ID</label>
-                            <input type="text" name="employeeId" placeholder='Enter employee id ' value={promotionData.employeeId} onChange={handleChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

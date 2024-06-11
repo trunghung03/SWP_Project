@@ -28,10 +28,10 @@ const ManagerProductList = () => {
                 const collectionMap = {};
                 const mainDiamondMap = {};
                 for (const product of response) {
-                    if (!categoryMap[product.categoryId]) {
-                        const category = await getProductCategory(product.categoryId);
-                        categoryMap[product.categoryId] = category.name;
-                    }
+                        if (!categoryMap[product.categoryId]) {
+                            const category = await getProductCategory(product.categoryId);
+                            categoryMap[product.categoryId] = category.name;
+                        }
                     if (!collectionMap[product.collectionId]) {
                         const collection = await getProductCollection(product.collectionId);
                         collectionMap[product.collectionId] = collection.name;

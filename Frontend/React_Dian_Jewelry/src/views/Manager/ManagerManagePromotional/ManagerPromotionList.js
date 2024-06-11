@@ -8,6 +8,48 @@ import { ShowAllPromotion, getPromotionDetail, deletePromotionById, updatePromot
 import logo from '../../../assets/img/logoN.png';
 import { getEmployeeDetail } from '../../../services/ManagerService/ManagerEmployeeService.js';
 
+
+const getPromotionStatus = async (endDate, id) => {
+    try {
+        const promotion = await getPromotionDetail(id);
+        if (promotion.status === true) {
+            const currentDate = new Date();
+            const end = new Date(endDate);
+            return currentDate <= end;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error("Error fetching promotion status:", error);
+        return false;
+    }
+};
+const PromotionButton = ({ endDate, id }) => {
+    const [isActive, setIsActive] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPromotionStatus = async () => {
+            const status = await getPromotionStatus(endDate, id);
+            setIsActive(status);
+            setIsLoading(false);
+        };
+
+        fetchPromotionStatus();
+    }, [endDate, id]);
+
+    if (isLoading) {
+        return <button style={{ backgroundColor: 'gray', color: 'white', border: "none", borderRadius: '5px' }}>Loading...</button>;
+    }
+
+    return (
+        <button style={{ backgroundColor: isActive ? '#1fd655' : 'red', color: 'white', border: "none", borderRadius: '5px' }}>
+            {isActive ? "Active" : "Expired"}
+        </button>
+    );
+};
+
+
 const ManagerPromotionList = () => {
     const navigate = useNavigate();
 
@@ -23,14 +65,6 @@ const ManagerPromotionList = () => {
             try {
                 const response = await ShowAllPromotion();
                 setPromotionList(response);
-                const promotionMap = {};
-                for (const promotion of response) {
-                    if (!promotionMap[promotion.employeeId]) {
-                        const employee = await getEmployeeDetail(promotion.employeeId);
-                        promotionMap[promotion.employeeId] = employee.firstName + ' ' + employee.lastName;
-                    }
-                }
-                setEmployeeList(promotionMap);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -140,13 +174,6 @@ const ManagerPromotionList = () => {
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
     };
-    const getPromotionStatus = (startDate, endDate) => {
-        const currentDate = new Date();
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        return start <= currentDate && currentDate <= end;
-    };
-
 
     return (
         <div className="manager_manage_diamond_all_container">
@@ -187,7 +214,6 @@ const ManagerPromotionList = () => {
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
-                                <th>Employee</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -202,11 +228,8 @@ const ManagerPromotionList = () => {
                                         <td>{item.description}</td>
                                         <td>{item.startDate}</td>
                                         <td>{item.endDate}</td>
-                                        <td>{employeeList[item.employeeId]}</td>
                                         <td>
-                                            <button style={{ backgroundColor: getPromotionStatus(item.startDate, item.endDate) ? '#1fd655' : 'red', color: 'white', border: "none", borderRadius: '5px' }}>
-                                            {getPromotionStatus(item.startDate, item.endDate) ? "Active" : "Expired"}
-                                            </button>
+                                            <PromotionButton endDate={item.endDate} id={item.id} />
                                         </td>
                                     </tr>
                                 ))
