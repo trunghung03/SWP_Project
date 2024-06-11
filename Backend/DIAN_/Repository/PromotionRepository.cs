@@ -35,7 +35,6 @@ namespace DIAN_.Repository
         {
 
          var promotions = await _context.Promotions
-                .Where(p => p.Status)
                 .ToListAsync();
             
             return promotions;
@@ -66,7 +65,6 @@ namespace DIAN_.Repository
         public async Task<Promotion?> GetPromotionByCodeAsync(string proCode)
         {
             var existingPromotion = await _context.Promotions
-                .Where(p => p.Status)
                 .FirstOrDefaultAsync(x => x.Code == proCode);
             if(existingPromotion == null)
             {
@@ -89,7 +87,6 @@ namespace DIAN_.Repository
         public async Task<Promotion?> GetPromotionByIdAsync(int id)
         {
             var existingPromotion = await _context.Promotions
-                .Where(p => p.Status)
                 .FirstOrDefaultAsync(x => x.PromotionId == id);
            if(existingPromotion == null)
            {
@@ -101,7 +98,7 @@ namespace DIAN_.Repository
 
         public async Task<List<Promotion?>> SearchPromotionsByNameAsync(string name)
         {
-            var promotion = await _context.Promotions.Where(x => x.Name.Contains(name) && x.Status)
+            var promotion = await _context.Promotions.Where(x => x.Name.Contains(name))
                 .ToListAsync();
             if (promotion == null)
             {
@@ -160,7 +157,7 @@ namespace DIAN_.Repository
         public async Task<List<Promotion?>> GetPromotionByCodeForStaffAsync(string code)
         {
             var promotions = await _context.Promotions
-                .Where(p => p.Status && p.Code.Contains(code))
+                .Where(p => p.Code.Contains(code))
                 .ToListAsync();
 
             if (promotions == null || promotions.Count == 0)

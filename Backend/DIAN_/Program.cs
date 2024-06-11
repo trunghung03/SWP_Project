@@ -10,6 +10,7 @@ using DIAN_.Extensions;
 using DIAN_.CustomExceptionMiddleware;
 using DIAN_.Helper;
 using Hangfire;
+using System.ComponentModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,12 @@ builder.Services.AddCors();
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+       .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
+       });
+
 
 //builder.Services.AddControllers().AddJsonOptions(x =>
 //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
