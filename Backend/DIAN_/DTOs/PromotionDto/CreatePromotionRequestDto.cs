@@ -19,8 +19,6 @@ namespace DIAN_.DTOs.PromotionDto
         public DateTime StartDate { get; set; }
         [Required]
         public DateTime EndDate { get; set; }
-        [Required]
-        public int EmployeeId { get; set; }
         public bool Status { get; set; }
     }
 }

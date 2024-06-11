@@ -19,7 +19,6 @@ namespace DIAN_.Mapper
                 Description = promotionModel.Description,
                 ValidFrom = promotionModel.StartDate,
                 ValidTo = promotionModel.EndDate,
-                EmployeeId = promotionModel.EmployeeId,
                 Status = true,
             };
         }
@@ -47,7 +46,6 @@ namespace DIAN_.Mapper
                 StartDate = promotionModel.ValidFrom,
                 EndDate = promotionModel.ValidTo,
                 Status = promotionModel.Status,
-                EmployeeId = promotionModel.EmployeeId,
             };
         }
         public static Promotion ToPromotionFromUpdateDto(this UpdatePromotionRequestDto promotionModel, int id)
