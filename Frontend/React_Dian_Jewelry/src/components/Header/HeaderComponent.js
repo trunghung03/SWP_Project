@@ -219,7 +219,7 @@ const HeaderComponent = () => {
                                 <a className="price_list nav-link" href="/price-list">DIAMOND PRICE</a>
                             </li>
                             <li className="nav-item">
-                                <a className="education nav-link" href="/education">EDUCATION</a>
+                                <a className="education nav-link" href="/blog">BLOG</a>
                             </li>
                             <li className="nav-item">
                                 <a className="introduce nav-link" href="/introduce">INTRODUCE</a>

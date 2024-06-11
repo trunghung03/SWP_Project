@@ -9,7 +9,7 @@ import HeaderComponent from '../components/Header/HeaderComponent';
 import FooterComponent from '../components/Footer/FooterComponent';
 import AutoScrollToTop from '../components/AutoScrollToTop/AutoScrollToTop';
 import Home from './Active/Home';
-import Education from './Active/Education';
+import Blog from './Active/Blog';
 import PriceList from './Static/DiamondPrice';
 import Contact from './Static/Contact';
 import Introduce from './Static/Introduce';
@@ -72,7 +72,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout><Home /></Layout>} /> {/* Default route */}
             <Route path="/home" element={<Layout><Home /></Layout>} />
-            <Route path="/education" element={<Layout><Education /></Layout>} />
+            <Route path="/blog" element={<Layout><Blog /></Layout>} />
             <Route path="/search" element={<Layout><Search /></Layout>} />
             <Route path="/product-detail" element={<Layout><ProductDetail /></Layout>} />
             <Route path="/cart" element={<Layout><Cart /></Layout>} />
