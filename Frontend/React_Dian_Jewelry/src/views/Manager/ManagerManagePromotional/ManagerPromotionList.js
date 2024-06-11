@@ -6,13 +6,14 @@ import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js
 import '../../../styles/Manager/ManagerList.scss';
 import { ShowAllPromotion, getPromotionDetail, deletePromotionById, updatePromotionById, getPromotionByName } from '../../../services/ManagerService/ManagerPromotionService.js'
 import logo from '../../../assets/img/logoN.png';
-
+import { getEmployeeDetail } from '../../../services/ManagerService/ManagerEmployeeService.js';
 
 const ManagerPromotionList = () => {
     const navigate = useNavigate();
 
     const [promotionList, setPromotionList] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [employeeList, setEmployeeList] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [editedPromotion, setEditedPromotion] = useState({});
     const [originalPromotion, setOriginalPromotion] = useState({});
@@ -22,6 +23,14 @@ const ManagerPromotionList = () => {
             try {
                 const response = await ShowAllPromotion();
                 setPromotionList(response);
+                const promotionMap = {};
+                for (const promotion of response) {
+                    if (!promotionMap[promotion.employeeId]) {
+                        const employee = await getEmployeeDetail(promotion.employeeId);
+                        promotionMap[promotion.employeeId] = employee.firstName + ' ' + employee.lastName;
+                    }
+                }
+                setEmployeeList(promotionMap);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -57,16 +66,16 @@ const ManagerPromotionList = () => {
                     console.error("Error fetching Promotion:", error);
                     swal("Promotion not found!", "Please try another one.", "error");
                 }
-            }else if(searchQuery.trim()){
+            } else if (searchQuery.trim()) {
                 try {
                     const response = await getPromotionByName(searchQuery.trim());
-                    if(Array.isArray(response)){
+                    if (Array.isArray(response)) {
                         setPromotionList(response);
                     }
-                    else if(response){
-                       setPromotionList([response]); 
+                    else if (response) {
+                        setPromotionList([response]);
                     }
-                    else{
+                    else {
                         setPromotionList([]);
                     }
                     setCurrentPage(1);
@@ -75,7 +84,7 @@ const ManagerPromotionList = () => {
                     swal("Promotion not found!", "Please try another one.", "error");
                 }
             }
-             else {
+            else {
                 try {
                     const response = await ShowAllPromotion();
                     setPromotionList(response);
@@ -86,30 +95,6 @@ const ManagerPromotionList = () => {
             }
         }
     };
-
-    // Delete diamond by id 
-    const handleDelete = async (PromotionID) => {
-        swal({
-            title: "Are you sure to delete this Promotion?",
-            text: "This action cannot be undone",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then(async (willDelete) => {
-            if (willDelete) {
-                try {
-                    await deletePromotionById(PromotionID);
-                    const response = await ShowAllPromotion();
-                    setPromotionList(response);
-                    swal("Deleted successfully!", "The Promotion has been deleted.", "success");
-                } catch (error) {
-                    console.error("Error deleting Promotion:", error);
-                    swal("Something went wrong!", "Failed to delete the Promotion. Please try again.", "error");
-                }
-            }
-        });
-    };
-
 
     // Update by id
     const handleEdit = (Promotion) => {
@@ -155,6 +140,12 @@ const ManagerPromotionList = () => {
             swal("Something went wrong!", "Failed to update. Please try again.", "error");
         }
     };
+    const getPromotionStatus = (startDate, endDate) => {
+        const currentDate = new Date();
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        return start <= currentDate && currentDate <= end;
+    };
 
 
     return (
@@ -177,7 +168,7 @@ const ManagerPromotionList = () => {
                     </div>
                 </div>
                 <hr className="manager_header_line"></hr>
-                
+
                 <h3>List Of Promotional Codes</h3>
 
                 <div className="manager_manage_diamond_create_button_section">
@@ -211,7 +202,12 @@ const ManagerPromotionList = () => {
                                         <td>{item.description}</td>
                                         <td>{item.startDate}</td>
                                         <td>{item.endDate}</td>
-                                        
+                                        <td>{employeeList[item.employeeId]}</td>
+                                        <td>
+                                            <button style={{ backgroundColor: getPromotionStatus(item.startDate, item.endDate) ? '#1fd655' : 'red', color: 'white', border: "none", borderRadius: '5px' }}>
+                                            {getPromotionStatus(item.startDate, item.endDate) ? "Active" : "Expired"}
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (

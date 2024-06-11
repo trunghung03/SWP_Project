@@ -10,13 +10,12 @@ const ManagerAddPromotion = () => {
     const navigate = useNavigate();
     const [promotionData, setPromotionData] = useState({
         name: '',
-        code:'',
+        code: '',
         amount: '',
         description: '',
         startDate: '',
         endDate: '',
         employeeId: '',
-        status : ''
     });
 
     const handleChange = (e) => {
@@ -28,12 +27,15 @@ const ManagerAddPromotion = () => {
         e.preventDefault();
         try {
             const promotionDataWithStatus = { ...promotionData, status: true };
+            if (promotionData.startDate > promotionData.endDate) throw new Error("End Date has to be after Start Date");
             await createPromotion(promotionDataWithStatus);
             swal("Success", "Promotion added successfully", "success");
             navigate('/manager-promotional-list');
         } catch (error) {
             console.error("Error creating Promotion:", error);
-            if (error.response) {
+            if (error.message === "End Date has to be after Start Date") {
+                swal("End Date has to be after Start Date ", error.message, "error");}
+            else if (error.response) {
                 console.error("Response data:", error.response.data);
                 console.error("Response status:", error.response.status);
                 console.error("Response headers:", error.response.headers);
@@ -41,9 +43,9 @@ const ManagerAddPromotion = () => {
                     for (const [key, value] of Object.entries(error.response.data.errors)) {
                         console.error(`${key}: ${value}`);
                     }
-                }
+                } swal("Something is wrong!", "Failed to add Promotion. Please try again.", "error");
             }
-            swal("Something is wrong!", "Failed to add Promotion. Please try again.", "error");
+           
         }
     };
 
@@ -67,35 +69,35 @@ const ManagerAddPromotion = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Code</label>
-                            <input type="text" name="code" value={promotionData.code} onChange={handleChange} required />
+                            <input type="text" name="code" placeholder='Enter promotion code' value={promotionData.code} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Name</label>
-                            <input type="text" name="name" value={promotionData.name} onChange={handleChange} required />
+                            <input type="text" name="name" placeholder='Enter promotion name' value={promotionData.name} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_group">
-                            <label>Description</label>
-                            <input type="text" name="description" value={promotionData.description} onChange={handleChange} required />
-                        </div>
+                        <label>Description</label>
+                        <input type="text" placeholder='Enter promotion description' name="description" value={promotionData.description} onChange={handleChange} required />
+                    </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Start Date</label>
-                            <input type="text" name="startDate" value={promotionData.startDate} onChange={handleChange} required />
+                            <input type="text" name="startDate" placeholder='Enter start date (yyyy/MM/dd)' value={promotionData.startDate} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>End Date</label>
-                            <input type="text" name="endDate" value={promotionData.endDate} onChange={handleChange} required />
+                            <input type="text" placeholder='Enter end date (yyyy/MM/dd)' name="endDate" value={promotionData.endDate} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Amount</label>
-                            <input type="text" name="amount" value={promotionData.amount} onChange={handleChange} required />
+                            <input type="text" name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Employee ID</label>
-                            <input type="text" name="employeeId" value={promotionData.employeeId} onChange={handleChange} required />
+                            <input type="text" name="employeeId" placeholder='Enter employee id ' value={promotionData.employeeId} onChange={handleChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
