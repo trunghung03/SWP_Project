@@ -20,12 +20,7 @@ namespace DIAN_.Repository
             if (await _context.Promotions.AnyAsync(p => p.Code == promotionModel.Code))
             { 
                 throw new ArgumentException("Invalid promotion code");
-            }
-            if (promotionModel.EmployeeId == 0) 
-            {
-                throw new ArgumentException("EmployeeId must be inputed.");
-            }
-        
+            }               
             await _context.Promotions.AddAsync(promotionModel);
             await _context.SaveChangesAsync();
             return promotionModel;
@@ -51,16 +46,6 @@ namespace DIAN_.Repository
             }
             return null;
         }
-
-        //public async Task<List<Promotion>> GetInActivePromotionsAsync()
-        //{
-        //    var existingPromotion = await _context.Promotions.Where(x => x.Status == false).ToListAsync();
-        //    if(existingPromotion == null)
-        //    {
-        //        return null;
-        //    }
-        //    return existingPromotion;
-        //}
 
         public async Task<Promotion?> GetPromotionByCodeAsync(string proCode)
         {

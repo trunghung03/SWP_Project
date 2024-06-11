@@ -92,7 +92,7 @@ namespace DIAN_.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
