@@ -16,10 +16,12 @@ namespace DIAN_.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-        public CustomerRepository(ApplicationDbContext context, IConfiguration configuration)
+        private readonly IPasswordHasher<Customer> _passwordHasher;
+        public CustomerRepository(ApplicationDbContext context, IConfiguration configuration, IPasswordHasher<Customer> passwordHasher)
         {
             _context = context;
             _configuration = configuration;
+            _passwordHasher = passwordHasher;
         }
         public async Task<Customer?> DeleteAsync(string email)
         {
@@ -64,7 +66,8 @@ namespace DIAN_.Repository
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (customer == null) { return null; }
 
-            if (customer.Password != loginDto.Password) { return null; }
+            var verificationResult = _passwordHasher.VerifyHashedPassword(null, customer.Password, loginDto.Password);
+            if (verificationResult == PasswordVerificationResult.Failed) { return null; }
 
             return customer;
         }
@@ -76,7 +79,7 @@ namespace DIAN_.Repository
             var customer = new Customer
             {
                 Email = user.Email,
-                Password = user.Password,
+                Password = _passwordHasher.HashPassword(null, user.Password),
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 Address = user.Address ?? null,

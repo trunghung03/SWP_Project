@@ -23,67 +23,88 @@ namespace DIAN_.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var shells = await _shellRepo.GetAllAsync();
-            return Ok(shells);
+            try
+            {
+                var shells = await _shellRepo.GetAllAsync();
+                return Ok(shells);
+            }catch (Exception) { throw; }
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var shell = await _shellRepo.GetByIdAsync(id);
-            if (shell == null)
+            try
             {
-                return NotFound();
-            }
-            return Ok(shell);
+                var shell = await _shellRepo.GetByIdAsync(id);
+                if (shell == null)
+                {
+                    return NotFound();
+                }
+                return Ok(shell);
+            }catch (Exception) { throw; }
         }
 
         [HttpGet("{name}")]
         public async Task<IActionResult> GetShellByName([FromRoute] string name)
         {
-            var shells = await _shellRepo.GetShellByName(name);
-            if (shells.Count == 0)
+            try
             {
-                return NotFound();
-            }
-            var shellDTOs = shells.Select(shell => shell.ToShellMaterialDTO()).ToList();
-            return Ok(shellDTOs);
+                var shells = await _shellRepo.GetShellByName(name);
+                if (shells.Count == 0)
+                {
+                    return NotFound();
+                }
+                var shellDTOs = shells.Select(shell => shell.ToShellMaterialDTO()).ToList();
+                return Ok(shellDTOs);
+            }catch (Exception) { throw; }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateShellMaterialRequestDTO shellDTO)
         {
-            var shell = shellDTO.ToShellMaterial();
-            var createdShell = await _shellRepo.CreateAsync(shell);
-            return CreatedAtAction(nameof(GetById), new { id = createdShell.ShellMaterialId }, createdShell);
+            try
+            {
+                var shell = shellDTO.ToShellMaterial();
+                var createdShell = await _shellRepo.CreateAsync(shell);
+                return CreatedAtAction(nameof(GetById), new { id = createdShell.ShellMaterialId }, createdShell);
+            }catch (Exception) { throw; }
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateShellMaterialRequestDTO shellDTO)
         {
-            var existingShell = await _shellRepo.GetByIdAsync(id);
-            if (existingShell == null)
+            try
             {
-                return NotFound();
-            }
+                var existingShell = await _shellRepo.GetByIdAsync(id);
+                if (existingShell == null)
+                {
+                    return NotFound();
+                }
 
-            var shellToUpdate = shellDTO.ToShellMaterial(new Shellmaterial { ShellMaterialId = id });
-            var updatedShell = await _shellRepo.UpdateAsync(shellToUpdate.ToShellMaterialDTO());
-            return Ok(updatedShell);
+                var shellToUpdate = shellDTO.ToShellMaterial(new Shellmaterial { ShellMaterialId = id });
+                var updatedShell = await _shellRepo.UpdateAsync(shellToUpdate.ToShellMaterialDTO());
+                return Ok(updatedShell);
+            }catch (Exception) { throw; }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _shellRepo.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                await _shellRepo.DeleteAsync(id);
+                return NoContent();
+            }catch (Exception) { throw; }
         }
 
         [HttpGet("listNames")]
         public async Task<IActionResult> GetAllNames()
         {
-            var names = await _shellRepo.GetListNamesAsync();
-            return Ok(names);
+            try
+            {
+                var names = await _shellRepo.GetListNamesAsync();
+                return Ok(names);
+            }catch (Exception) { throw; }
         }
     }
 }

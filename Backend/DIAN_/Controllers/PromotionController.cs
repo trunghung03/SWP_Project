@@ -40,19 +40,26 @@ namespace DIAN_.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
         [HttpGet("promotion/{code}")]
         public async Task<IActionResult> GetPromotionByCode(string code)
         {
-            var promotion = await _promotionRepository.GetPromotionByCodeAsync(code);
-            if (promotion == null)
+            try
             {
-                return NotFound("Promotion does not exist");
+                var promotion = await _promotionRepository.GetPromotionByCodeAsync(code);
+                if (promotion == null)
+                {
+                    return NotFound("Promotion does not exist");
+                }
+                return Ok(promotion.ToPromotionDetail());
             }
-            return Ok(promotion.ToPromotionDetail());
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{id:int}")]
@@ -73,7 +80,7 @@ namespace DIAN_.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
@@ -114,7 +121,7 @@ namespace DIAN_.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
@@ -136,35 +143,49 @@ namespace DIAN_.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
         [HttpPut("deactivate-activate/{id}")]
         public async Task<IActionResult> DeactivateAndActivatePromotion(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var result = await _promotionRepository.DeactivateAndActivatePromotion(id);
-            if (result)
-            {
-                return NoContent();
+                var result = await _promotionRepository.DeactivateAndActivatePromotion(id);
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
+            catch (Exception)
             {
-                return NotFound();
+                throw;
             }
         }
         [HttpGet("staff/promotion/{code}")]
         public async Task<IActionResult> GetPromotionByCodeForStaff([FromRoute] string code)
         {
-            var promotions = await _promotionRepository.GetPromotionByCodeForStaffAsync(code);
-            if (promotions == null || promotions.Count == 0)
+            try
             {
-                return NotFound("No promotions found containing the given code.");
-            }
+                var promotions = await _promotionRepository.GetPromotionByCodeForStaffAsync(code);
+                if (promotions == null || promotions.Count == 0)
+                {
+                    return NotFound("No promotions found containing the given code.");
+                }
 
-            var promotionDtos = promotions.Select(p => p?.ToPromotionDetail());
-            return Ok(promotionDtos);
+                var promotionDtos = promotions.Select(p => p?.ToPromotionDetail());
+                return Ok(promotionDtos);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

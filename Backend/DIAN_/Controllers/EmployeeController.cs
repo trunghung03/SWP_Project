@@ -32,166 +32,255 @@ namespace UserApplication.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var employee = await _employeeRepository.GetByEmailAsync(loginDto.Email);
-            if (employee == null) { return Unauthorized("Invalid Email or Password!"); }
+                var employee = await _employeeRepository.GetByEmailAsync(loginDto.Email);
+                if (employee == null) { return Unauthorized("Invalid Email or Password!"); }
 
-            return Ok(
-                new NewUserDto
-                {
-                    Email = employee.Email,
-                    Token = _tokenService.CreateEmployeeToken(employee)
-                });
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = employee.Email,
+                        Token = _tokenService.CreateEmployeeToken(employee)
+                    });
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost("registeremployee")]
         public async Task<IActionResult> Register(RegisterEmployeeDto user)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employee = await _employeeRepository.RegisterAsync(user);
+                var employee = await _employeeRepository.RegisterAsync(user);
 
-            if (employee == null) return BadRequest("Email already exists!");
+                if (employee == null) return BadRequest("Email already exists!");
 
-            return Ok(
-                new NewUserDto
-                {
-                    Email = employee.Email,
-                    Token = _tokenService.CreateEmployeeToken(employee)
-                });
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = employee.Email,
+                        Token = _tokenService.CreateEmployeeToken(employee)
+                    });
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employee = await _employeeRepository.GetAllAsync();
-            
-            return Ok(employee);
+                var employee = await _employeeRepository.GetAllAsync();
+
+                return Ok(employee);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail(string email)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employee = await _employeeRepository.GetByEmailAsync(email);
-            if (employee == null) return NotFound();
+                var employee = await _employeeRepository.GetByEmailAsync(email);
+                if (employee == null) return NotFound();
 
-            return Ok(employee);
+                return Ok(employee);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employee = await _employeeRepository.GetByIdAsync(id);
-            if (employee == null) return NotFound();
+                var employee = await _employeeRepository.GetByIdAsync(id);
+                if (employee == null) return NotFound();
 
-            return Ok(employee);
+                return Ok(employee);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateEmployeeDto employeeDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employee = await _employeeRepository.UpdateAsync(id, employeeDto);
-            if (employee == null) return NotFound();
-            return Ok(employee);
+                var employee = await _employeeRepository.UpdateAsync(id, employeeDto);
+                if (employee == null) return NotFound();
+                return Ok(employee);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employee = await _employeeRepository.DeleteAsync(id);
+                var employee = await _employeeRepository.DeleteAsync(id);
 
-            if (employee == null) return NotFound();
+                if (employee == null) return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("role/{role}")]
         public async Task<IActionResult> GetEmployeeByRole(string role)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var employees = await _employeeRepository.GetEmployeeByRole(role);
+                var employees = await _employeeRepository.GetEmployeeByRole(role);
 
-            return Ok(employees);
+                return Ok(employees);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("salesstaff/orderlists")]
         public async Task<IActionResult> ViewListOrdersAssign([FromQuery] int staffId)
         {
-           if(!ModelState.IsValid) { return BadRequest(ModelState); };
-           var orders = await _salesStaffService.ViewListOrdersAssign(staffId);
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                var orders = await _salesStaffService.ViewListOrdersAssign(staffId);
 
-            return Ok(orders);
+                return Ok(orders);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPut("salesstaff/updatestatus")]
         public async Task<IActionResult> SalesStaffUpdateOrderStatus(string status, int orderId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var order = await _salesStaffService.UpdateOrderStatus(status, orderId);
+                var order = await _salesStaffService.UpdateOrderStatus(status, orderId);
 
-            return Ok(order);
+                return Ok(order);
+            }catch(Exception) {
+                throw;
+            }
         }
 
         //For delivery staff
         [HttpGet("deliverystaff/orderlists")]
         public async Task<IActionResult> ViewListDeliveryOrders([FromQuery] int staffId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var orders = await _deliveryStaffService.ViewListDeliveryOrders(staffId);
+                var orders = await _deliveryStaffService.ViewListDeliveryOrders(staffId);
 
-            return Ok(orders);
+                return Ok(orders);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
+
         [HttpPut("deliverystaff/updatestatus")]
         public async Task<IActionResult> DeliveryStaffUpdateDeliveryStatus(string status, int orderId)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
+                var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
 
-            return Ok(order);
+                return Ok(order);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
         [HttpPut("customer/{id}")]
         public async Task<IActionResult> DeactivateAndActivateCustomer(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var result = await _employeeRepository.DeactivateAndActivateCustomer(id);
-            if (result)
+                var result = await _employeeRepository.DeactivateAndActivateCustomer(id);
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }catch(Exception)
             {
-                return NoContent();
-            }
-            else
-            {
-                return NotFound();
+                throw;
             }
         }
         [HttpPut("staff/{id}")]
         public async Task<IActionResult> DeactivateAndActivateStaff(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var result = await _employeeRepository.DeactivateAndActivateEmployee(id);
-            if (result)
-            {
-                return NoContent();
+                var result = await _employeeRepository.DeactivateAndActivateEmployee(id);
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
+            catch (Exception)
             {
-                return NotFound();
+                throw;
             }
         }
     }

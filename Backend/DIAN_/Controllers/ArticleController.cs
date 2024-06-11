@@ -22,69 +22,99 @@ namespace DIAN_.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetArticleById(int id)
         {
-            var article = await _articleRepository.GetArticleByIdAsync(id);
-            if (article == null)
+            try
             {
-                return NotFound("No article found with the given id");
+                var article = await _articleRepository.GetArticleByIdAsync(id);
+                if (article == null)
+                {
+                    return NotFound("No article found with the given id");
+                }
+
+                var articleDto = article.ToArticleDetailDto();
+
+                return Ok(articleDto);
             }
-
-            var articleDto = article.ToArticleDetailDto();
-
-            return Ok(articleDto);
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var articles = await _articleRepository.GetAllAsync();
+                if (articles.Count == 0)
+                {
+                    return NotFound("No articles found");
+                }
+                return Ok(articles);
             }
-            var articles = await _articleRepository.GetAllAsync();
-            if (articles.Count == 0)
+            catch(Exception)
             {
-                return NotFound("No articles found");
+                throw;
             }
-            return Ok(articles);
         }
 
         [HttpGet("{title}")]
         public async Task<IActionResult> GetArticleByTitle(string title)
         {
-            var articles = await _articleRepository.GetArticleByTitleAsync(title);
-            if (articles == null || articles.Count == 0)
+            try
             {
-                return NotFound("No articles found with the given title");
+                var articles = await _articleRepository.GetArticleByTitleAsync(title);
+                if (articles == null || articles.Count == 0)
+                {
+                    return NotFound("No articles found with the given title");
+                }
+
+                // Assuming you have a ToArticleDetailDto extension method
+                var articleDtos = articles.Select(a => a.ToArticleDetailDto()).ToList();
+
+                return Ok(articleDtos);
             }
-
-            // Assuming you have a ToArticleDetailDto extension method
-            var articleDtos = articles.Select(a => a.ToArticleDetailDto()).ToList();
-
-            return Ok(articleDtos);
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost("addcontent")]
         public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDto articleDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            var existingArticles = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
-            if (existingArticles.Any(a => a.Title == articleDto.Title))
+                var existingArticles = await _articleRepository.GetArticleByTitleAsync(articleDto.Title);
+                if (existingArticles.Any(a => a.Title == articleDto.Title))
+                {
+                    return BadRequest("Article already exists");
+                }
+
+                var articleModel = articleDto.ToArticleFromCreate();
+                var createdArticle = await _articleRepository.CreateArticleAsync(articleModel);
+                return CreatedAtAction(nameof(GetArticleById), new { id = createdArticle.ContentId }, createdArticle.ToArticleDetailDto());
+            }
+            catch(Exception)
             {
-                return BadRequest("Article already exists");
+                throw;
             }
-
-            var articleModel = articleDto.ToArticleFromCreate();
-            var createdArticle = await _articleRepository.CreateArticleAsync(articleModel);
-            return CreatedAtAction(nameof(GetArticleById), new { id = createdArticle.ContentId }, createdArticle.ToArticleDetailDto());
         }
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateArticleById([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
-        {        
+        {
+            try
+            {
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -97,6 +127,11 @@ namespace DIAN_.Controllers
                     return NotFound("Cannot update content due to duplicate title.");
                 }
                 return Ok(article.ToArticleDetailDto());
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpDelete("delete/{id:int}")]

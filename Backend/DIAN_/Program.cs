@@ -11,6 +11,7 @@ using DIAN_.CustomExceptionMiddleware;
 using DIAN_.Helper;
 using Hangfire;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,9 @@ builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();
+builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
+
 
 //builder.Services.AddHangfire(configuration => configuration
 //                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

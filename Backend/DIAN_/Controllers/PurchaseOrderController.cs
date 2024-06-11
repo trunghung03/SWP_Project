@@ -46,8 +46,12 @@ namespace DIAN_.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
-            return Ok(purchaseOrders);
+            try
+            {
+                var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
+                return Ok(purchaseOrders);
+            }
+            catch (Exception) { throw; }
         }
 
 
@@ -55,40 +59,52 @@ namespace DIAN_.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInfo(int id)
         {
-            var purchaseOrderInfo = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
-            if (purchaseOrderInfo == null)
+            try
             {
-                return NotFound();
-            }
-            return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
+                var purchaseOrderInfo = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
+                if (purchaseOrderInfo == null)
+                {
+                    return NotFound();
+                }
+                return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
+            }catch(Exception) { throw; }
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
         {
-
+            try
+            {
                 var order = purchaseOrderDTO.ToCreatePurchaseOrder();
                 var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
                 return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
+            }
+            catch (Exception) { throw; }
 
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePurchaseOrderDTO purchaseOrderDTO)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            var purchaseOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(purchaseOrderDTO.ToUpdatePurchaseOrder(id), id);
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
+                var purchaseOrder = await _purchaseOrderRepo.UpdatePurchaseOrderAsync(purchaseOrderDTO.ToUpdatePurchaseOrder(id), id);
 
-            if (purchaseOrder == null) { return BadRequest("Error! Please try again!"); }
+                if (purchaseOrder == null) { return BadRequest("Error! Please try again!"); }
 
-            return Ok(purchaseOrder);
+                return Ok(purchaseOrder);
+            }catch(Exception) { throw; }
         }
 
         [HttpPost("checkout")]
         public ActionResult Checkout(CreatePurchaseOrderDTO purchaseOrderDTO, string promotionCode)
         {
-            var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
+            try
+            {
+                var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
 
-            return Ok(createdOrderResult);
+                return Ok(createdOrderResult);
+            }catch(Exception) { throw; }
         }
 
 
@@ -96,27 +112,36 @@ namespace DIAN_.Controllers
         [HttpGet("status/{status}")]
         public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
         {
-            var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
-            if (orders == null)
+            try
             {
-                return NotFound($"Cannot find {status} order");
+                var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
+                if (orders == null)
+                {
+                    return NotFound($"Cannot find {status} order");
 
-            }
-            return orders;
+                }
+                return orders;
+            }catch(Exception) { throw; }
         }
 
         [HttpPost("apply-coupon")]
         public async Task<ActionResult<decimal>> ApplyCoupon(string code, decimal totalPrice)
         {
-            var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
-            return Ok(updatedTotalPrice);
+            try
+            {
+                var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
+                return Ok(updatedTotalPrice);
+            }catch(Exception) { throw; }
         }
 
         [HttpPost("check-used-points")]
         public async Task<ActionResult<decimal>> CheckUsedPoints(int userId, decimal totalPrice, bool usedPoints)
         {
-            var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
-            return Ok(updatedTotalPrice);
+            try
+            {
+                var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
+                return Ok(updatedTotalPrice);
+            }catch(Exception) { throw; }
         }
 
         [HttpPost("request-vnpay-payment")]
@@ -139,33 +164,6 @@ namespace DIAN_.Controllers
             }
         }
 
-        //[HttpPost("vnpay-return")]
-        //public async Task<IActionResult> PaymentCallBack()
-        //{
-        //    var response = _vnPayService.PaymentExecute(Request.Query);
-
-        //    if (response == null)
-        //    {
-        //        return BadRequest("Error processing VN Pay payment: No response received.");
-        //    }
-
-        //    var order = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(int.Parse(response.OrderId));
-        //    if (order == null)
-        //    {
-        //        return NotFound($"Order with ID {response.OrderId} not found.");
-        //    }
-
-        //    var OrderStatus = response.VnPayResponseCode == "00" ? "Paid" : "Failed";
-
-        //    var updatedOrder = await _purchaseOrderRepo.UpdatePurchaseOrderStatusAsync(order.OrderId, OrderStatus);
-        //    if (updatedOrder == null)
-        //    {
-        //        return BadRequest("Error updating order status.");
-        //    }
-        //    return Ok("VNPay payment processed successfully");
-        //}
-
-        //test
         [HttpGet("vnpay-ipn-return")]
         public IActionResult PaymentUpdateDatabase()
         {
@@ -174,13 +172,12 @@ namespace DIAN_.Controllers
                 var result = _vnPayService.PaymentUpdateDatabase(Request.Query);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
-        //test
         [HttpGet("vnpay-return")]
         public IActionResult PaymentExecute()
         {
@@ -189,9 +186,9 @@ namespace DIAN_.Controllers
                 var result = _vnPayService.PaymentExecute(Request.Query);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
@@ -204,9 +201,9 @@ namespace DIAN_.Controllers
                 var pathImage = await _vnPayService.GenerateQRCodeAsync(payQrRequest);
                 return Ok(pathImage);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
     }

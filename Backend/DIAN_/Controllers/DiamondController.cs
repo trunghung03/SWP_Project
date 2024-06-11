@@ -36,9 +36,9 @@ namespace DIAN_.Controllers
                 var diamondDtos = result.Select(diamond => diamond.ToDiamondDTO()).ToList();
                 return Ok(diamondDtos);
             }
-            catch (KeyNotFoundException ex)
+            catch (Exception)
             {
-                return NotFound(ex.Message);
+                throw;
             }
            
         }
@@ -60,9 +60,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(diamond.ToDiamondDTO());
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                return StatusCode(500, $"Internal server error:{ex}");
+               throw;
             }
         }
 
@@ -85,9 +85,9 @@ namespace DIAN_.Controllers
                 var diamondDtos = result.Select(diamond => diamond.ToDiamondDTO()).ToList();
                 return Ok(diamondDtos);
             }
-            catch (KeyNotFoundException ex)
+            catch (Exception)
             {
-                return NotFound(ex.Message);
+                throw;
             }
         }
 
@@ -112,10 +112,9 @@ namespace DIAN_.Controllers
                 var result = await _diamondRepository.AddDiamondAsync(diamond);
                 return Ok(result.ToDiamondDTO());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
@@ -134,9 +133,9 @@ namespace DIAN_.Controllers
                     return NotFound("Diamond does not exist");
                 return Ok(diamondModel.ToDiamondDTO());
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
@@ -155,7 +154,7 @@ namespace DIAN_.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
     }

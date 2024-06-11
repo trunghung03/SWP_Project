@@ -1,6 +1,8 @@
-﻿using DIAN_.DTOs.Account;
+﻿using Castle.Core.Resource;
+using DIAN_.DTOs.Account;
 using DIAN_.Interfaces;
 using DIAN_.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserApplication.Dtos.Account;
@@ -10,9 +12,11 @@ namespace DIAN_.Repository
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly ApplicationDbContext _context;
-        public EmployeeRepository(ApplicationDbContext context) 
+        private readonly IPasswordHasher<Employee> _passwordHasher;
+        public EmployeeRepository(ApplicationDbContext context, IPasswordHasher<Employee> passwordHasher) 
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
         public async Task<Employee?> DeleteAsync(int id)
         {
@@ -59,7 +63,9 @@ namespace DIAN_.Repository
             var employee = await _context.Employees.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (employee == null) { return null; }
 
-            if (employee.Password != loginDto.Password) { return null; }
+            var verificationResult = _passwordHasher.VerifyHashedPassword(null, employee.Password, loginDto.Password);
+            if (verificationResult == PasswordVerificationResult.Failed) { return null; }
+
 
             return employee;
         }
@@ -71,7 +77,7 @@ namespace DIAN_.Repository
             var employee = new Employee
             {
                 Email = user.Email,
-                Password = user.Password,
+                Password = _passwordHasher.HashPassword(null, user.Password),
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 Address = user.Address,

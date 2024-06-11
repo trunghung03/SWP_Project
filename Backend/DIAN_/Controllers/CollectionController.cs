@@ -19,57 +19,92 @@ namespace DIAN_.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var collections = await _collectionRepository.GetAllAsync();
-            var collectionsDto = collections.Select(collection => collection.ToCollectionDTO());
-            return Ok(collectionsDto);
+                var collections = await _collectionRepository.GetAllAsync();
+                var collectionsDto = collections.Select(collection => collection.ToCollectionDTO());
+                return Ok(collectionsDto);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var collection = await _collectionRepository.GetByIdAsync(id);
-            if (collection == null) return NotFound();
+                var collection = await _collectionRepository.GetByIdAsync(id);
+                if (collection == null) return NotFound();
 
-            return Ok(collection);
+                return Ok(collection);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCollectionDTO collectionDTO)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var collection = await _collectionRepository.CreateAsync(collectionDTO.FromCreateDtoToCollection());
+                var collection = await _collectionRepository.CreateAsync(collectionDTO.FromCreateDtoToCollection());
 
-            if (collection == null) { return BadRequest("Duplicate category! Please try again!"); }
+                if (collection == null) { return BadRequest("Duplicate category! Please try again!"); }
 
-            return CreatedAtAction(nameof(GetById), new { id = collection.CollectionId }, collection); ;
+                return CreatedAtAction(nameof(GetById), new { id = collection.CollectionId }, collection);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateCollectionDTO collectionDTO)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var collection = await _collectionRepository.UpdateAsync(id, collectionDTO.FromUpdateDtoToCollection());
+                var collection = await _collectionRepository.UpdateAsync(id, collectionDTO.FromUpdateDtoToCollection());
 
-            if (collection == null) { return BadRequest("Error! Please try again!"); }
+                if (collection == null) { return BadRequest("Error! Please try again!"); }
 
-            return Ok(collection);
+                return Ok(collection);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var collection = await _collectionRepository.DeleteAsync(id);
-            if (collection == null) return NotFound();
+                var collection = await _collectionRepository.DeleteAsync(id);
+                if (collection == null) return NotFound();
 
-            return Ok(collection);
+                return Ok(collection);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
     }
 }

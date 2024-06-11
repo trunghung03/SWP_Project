@@ -24,130 +24,173 @@ namespace DIAN_.Controllers
         [HttpGet ("list")]
         public async Task<IActionResult> GetList()
         {
-            var products = await _productRepo.GetListAsync();
+            try
+            {
+                var products = await _productRepo.GetListAsync();
 
-            return Ok(products);
+                return Ok(products);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var product = await _productRepo.GetByIdAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _productRepo.GetByIdAsync(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
+            }catch(Exception)
+            {
+                throw;
             }
-            return Ok(product);
         }
 
-
-        [HttpPost]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductRequestDTO productDTO)
         {
-            var imageLinks = new List<string>();
-            var savePath = @"C:\Users\Admin\Documents\SWP_Project\Backend\DIAN_\Images";
-
-            if (productDTO.ImageFiles != null && productDTO.ImageFiles.Count > 0)
+            try
             {
-                foreach (var file in productDTO.ImageFiles)
+                var imageLinks = new List<string>();
+                var savePath = @"C:\Users\Admin\Documents\SWP_Project\Backend\DIAN_\Images";
+
+                if (productDTO.ImageFiles != null && productDTO.ImageFiles.Count > 0)
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine(savePath, fileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    foreach (var file in productDTO.ImageFiles)
                     {
-                        await file.CopyToAsync(stream);
+                        var fileName = Path.GetFileName(file.FileName);
+                        var filePath = Path.Combine(savePath, fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+                        // Assuming the URL path structure
+                        var fileUrl = $"/images/{fileName}";
+                        imageLinks.Add(fileUrl); // Store file URL
                     }
-                    // Assuming the URL path structure
-                    var fileUrl = $"/images/{fileName}";
-                    imageLinks.Add(fileUrl); // Store file URL
                 }
-            }
 
-            // Join the image links with a semicolon
-            var imageLinkList = string.Join(";", imageLinks);
+                // Join the image links with a semicolon
+                var imageLinkList = string.Join(";", imageLinks);
 
-            // Check if the MainDiamondId exists
-            var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
-            if (!mainDiamondExists)
+                // Check if the MainDiamondId exists
+                var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
+                if (!mainDiamondExists)
+                {
+                    return BadRequest("The specified MainDiamondId does not exist.");
+                }
+
+                // Check if the ProCode already exists
+                var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
+                if (proCodeExists)
+                {
+                    return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
+                }
+
+                var product = productDTO.ToProductFromCreateDTO(imageLinkList);
+                var createdProduct = await _productRepo.CreateAsync(product);
+
+                return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+            }catch(Exception)
             {
-                return BadRequest("The specified MainDiamondId does not exist.");
+                throw;
             }
-
-            // Check if the ProCode already exists
-            var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
-            if (proCodeExists)
-            {
-                return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
-            }
-
-            var product = productDTO.ToProductFromCreateDTO(imageLinkList);
-            var createdProduct = await _productRepo.CreateAsync(product);
-
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
         }
 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
-            var product = await _productRepo.GetByIdAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _productRepo.GetByIdAsync(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                var productDTO = new ProductDTO
+                {
+                    ProductId = id, // Ensure the ID is set correctly
+                    Name = updateDTO.Name,
+                    Description = updateDTO.Description,
+                    Price = updateDTO.Price,
+                    LaborPrice = updateDTO.LaborPrice,
+                    ImageLinkList = updateDTO.ImageLinkList,
+                    MainDiamondId = updateDTO.MainDiamondId,
+                    SubDiamondAmount = updateDTO.SubDiamondAmount,
+                    ProductCode = updateDTO.ProductCode,
+                    MainDiamondAmount = updateDTO.MainDiamondAmount,
+                    ShellAmount = updateDTO.ShellAmount,
+                    CollectionId = updateDTO.CollectionId,
+
+                };
+
+                var updatedProduct = await _productRepo.UpdateAsync(productDTO);
+                return Ok(updatedProduct);
+            }catch(Exception)
+            {
+                throw;
             }
-
-            var productDTO = new ProductDTO
-            {
-                ProductId = id, // Ensure the ID is set correctly
-                Name = updateDTO.Name,
-                Description = updateDTO.Description,
-                Price = updateDTO.Price,
-                LaborPrice = updateDTO.LaborPrice,
-                ImageLinkList = updateDTO.ImageLinkList,
-                MainDiamondId = updateDTO.MainDiamondId,
-                SubDiamondAmount = updateDTO.SubDiamondAmount,
-                ProductCode = updateDTO.ProductCode,
-                MainDiamondAmount = updateDTO.MainDiamondAmount,
-                ShellAmount = updateDTO.ShellAmount,
-                CollectionId= updateDTO.CollectionId,
-                
-            };
-
-            var updatedProduct = await _productRepo.UpdateAsync(productDTO);
-            return Ok(updatedProduct);
         }
         [HttpGet("all")]
         public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
         {
-            var products = await _productRepo.GetAllAsync(query);
-            return Ok(products);
+            try
+            {
+                var products = await _productRepo.GetAllAsync(query);
+                return Ok(products);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _productRepo.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                await _productRepo.DeleteAsync(id);
+                return NoContent();
+            }catch(Exception)
+            {
+                throw;
+            }
         }
         [HttpGet("detail/{id}")]
         public async Task<IActionResult> GetDetail([FromRoute] int id)
         {
-            var productDetail = await _productRepo.GetDetailAsync(id);
-            if (productDetail == null)
+            try
             {
-                return NotFound();
+                var productDetail = await _productRepo.GetDetailAsync(id);
+                if (productDetail == null)
+                {
+                    return NotFound();
+                }
+                return Ok(productDetail);
+            }catch(Exception)
+            {
+                throw;
             }
-            return Ok(productDetail);
         }
         [HttpGet("search")]
         public async Task<IActionResult> GetByName([FromQuery] string name)
         {
-            var products = await _productRepo.GetByNameAsync(name);
-            return Ok(products);
+            try
+            {
+                var products = await _productRepo.GetByNameAsync(name);
+                return Ok(products);
+            }catch(Exception)
+            {
+                throw;
+            }
         }
-
-
-
     }
 }

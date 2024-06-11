@@ -19,57 +19,92 @@ namespace DIAN_.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var categories = await _categoryRepository.GetAllAsync();
+                var categories = await _categoryRepository.GetAllAsync();
 
-            return Ok(categories);
+                return Ok(categories);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var category = await _categoryRepository.GetByIdAsync(id);
-            if (category == null) return NotFound();
+                var category = await _categoryRepository.GetByIdAsync(id);
+                if (category == null) return NotFound();
 
-            return Ok(category);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryDTO categoryDTO)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var category = await _categoryRepository.CreateAsync(categoryDTO.FromCreateDtoToCategory());
+                var category = await _categoryRepository.CreateAsync(categoryDTO.FromCreateDtoToCategory());
 
-            if (category == null) { return  BadRequest("Duplicate category! Please try again!"); }
+                if (category == null) { return BadRequest("Duplicate category! Please try again!"); }
 
-            return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
+                return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateCategoryDTO categoryDTO)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var category = await _categoryRepository.UpdateAsync(id, categoryDTO.FromUpdateDtoToCategory());
+                var category = await _categoryRepository.UpdateAsync(id, categoryDTO.FromUpdateDtoToCategory());
 
-            if (category == null) { return BadRequest("Error! Please try again!"); }
+                if (category == null) { return BadRequest("Error! Please try again!"); }
 
-            return Ok(category);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var category = await _categoryRepository.DeleteAsync(id);
-            if (category == null) return NotFound();
+                var category = await _categoryRepository.DeleteAsync(id);
+                if (category == null) return NotFound();
 
-            return Ok(category);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

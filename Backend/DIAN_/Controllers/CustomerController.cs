@@ -36,34 +36,48 @@ namespace UserApplication.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var customer = await _customerRepository.GetByEmailAsync(loginDto.Email);
-            if (customer == null) { return Unauthorized("Invalid Email or Password!"); }
+                var customer = await _customerRepository.GetByEmailAsync(loginDto.Email);
+                if (customer == null) { return Unauthorized("Invalid Email or Password!"); }
 
-            return Ok(
-                new NewUserDto
-                {
-                    Email = customer.Email,
-                    Token = _tokenService.CreateCustomerToken(customer)
-                });
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = customer.Email,
+                        Token = _tokenService.CreateCustomerToken(customer)
+                    });
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost("registercustomer")]
         public async Task<IActionResult> Register(RegisterUserDto user)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-            var customer = await _customerRepository.RegisterAsync(user);
+                var customer = await _customerRepository.RegisterAsync(user);
 
-            if (customer == null) return BadRequest("Email already exists!");
+                if (customer == null) return BadRequest("Email already exists!");
 
-            return Ok(
-                new NewUserDto
-                {
-                    Email = customer.Email,
-                    Token = _tokenService.CreateCustomerToken(customer)
-                });
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = customer.Email,
+                        Token = _tokenService.CreateCustomerToken(customer)
+                    });
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet]
