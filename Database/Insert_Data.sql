@@ -233,3 +233,24 @@ VALUES
 
 	INSERT INTO COMPANY(CompanyID, CompanyName, Email, Address, PhoneNumber, MarkupPrice) VALUES
 	(1, 'DIAN Jewelry', 'diamondianjewelry@gmail.com', 'San Francisco, CA', '415-354-4623', 0.2)
+
+
+	-- Insert more dummy data into PURCHASEORDER table with different dates
+INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note, SaleStaff, DeliveryStaff) VALUES
+(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 220.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
+(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 305.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
+(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 175.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
+(4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 290.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
+(5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 380.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
+(6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 420.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),
+(7, '2023-06-25', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 440.00, 'Pending', 6, 0, 'Signature required', 4, 7);
+
+-- Insert more dummy data into ORDERDETAIL table using existing IDs
+INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, SubDiamondID, Size, Status) VALUES
+(8, 2200.00, 1, 1, 4, 8.0, 1),
+(9, 3500.00, 2, 2, 6, 19.0, 1),
+(10, 2700.00, 3, 3, 5, 17.0, 1),
+(11, 3100.00, 4, 4, 3, 15.0, 1),
+(12, 3900.00, 5, 3, 7, 21.0, 1),
+(13, 4700.00, 1, 3, 2, 23.0, 1),
+(14, 5200.00, 2, 1, 1, 10.0, 1);
