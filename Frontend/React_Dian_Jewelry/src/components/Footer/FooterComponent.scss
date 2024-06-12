@@ -96,7 +96,7 @@
 
 /* Modal CSS */
 .modal {
-    display: none;
+    display: hidden;
     position: fixed;
     left: 0;
     top: 0;
@@ -111,9 +111,8 @@
     margin: 15% auto;
     padding: 5px 30px 20px 30px;
     border: 1px solid #888;
-    width: 110%;
+    width: 100%;
     max-width: 580px;
-    position: relative;
 }
 
 .close {

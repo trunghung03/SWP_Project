@@ -8,6 +8,7 @@ import rightImage from '../../assets/img/right.jpeg';
 import rightImage2 from '../../assets/img/right2.jpg';
 import rightImage3 from '../../assets/img/right3.jpg';
 import { getUserInfo } from '../../services/UserService';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const [loading, setLoading] = useState(false);
@@ -269,7 +270,7 @@ const Register = () => {
                         </div>
                         <div className="term_of_service mb-3">
                             <input id="tos_checkbox" type="checkbox" />
-                            <label style={{ fontSize: '13px' }} className="tos">I agree with the <a className="tos_link" href="#" id="tosLink">Terms of Service & Privacy Policy</a></label>
+                            <label style={{ fontSize: '13px' }} className="tos">I agree with the <Link className="tos_link" to="#" id="tosLink">Terms of Service & Privacy Policy</Link></label>
                         </div>
                         <div className="submit_section">
                             <button id="successPopup" type="submit" className="sign_up_button btn btn-block" disabled={loading}>
@@ -278,7 +279,7 @@ const Register = () => {
                             </button>
                         </div>
                         <div className="sign_up_section">
-                            <span>Already have an account? <a className="sign_up_link" href="/login">Sign in</a></span>
+                            <span>Already have an account? <Link className="sign_up_link" to="/login">Sign in</Link></span>
                         </div>
                         <div className="google_section text-center">
                             <hr className="line" />

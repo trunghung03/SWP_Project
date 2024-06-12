@@ -165,13 +165,14 @@ const ManagerEmployeeList = () => {
                 <div className="manager_manage_diamond_header">
                     <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
                     <div className="manager_manage_diamond_search_section">
+                    <i className="fas fa-search manager_manage_search_icon"></i>
                         <input
                             type="text"
                             className="manager_manage_diamond_search_bar"
                             placeholder="Search by ID or Role..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyPress={handleSearchKeyPress}
+                            onKeyUp={handleSearchKeyPress}
                         />
                     </div>
                 </div>
@@ -184,8 +185,8 @@ const ManagerEmployeeList = () => {
                 {/* Table diamond list */}
                 <div className="manager_manage_diamond_table_wrapper">
                     <table className="manager_manage_diamond_table table">
-                        <thead>
-                            <tr>
+                        <thead className="manager_manage_diamond_table_head">
+                            <tr className="manager_manage_diamond_row">
                                 <th>ID</th>
                                 <th>Role</th>
                                 <th>Email</th>
@@ -198,7 +199,7 @@ const ManagerEmployeeList = () => {
                         <tbody>
                             {employeeList.length > 0 ? (
                                 currentEmployee.map((item) => (
-                                    <tr key={item.employeeId}>
+                                    <tr class="manager_manage_table_body_row"key={item.employeeId}>
                                         <td>{item.employeeId}</td>
                                         <td>{item.role}</td>
                                         <td>{item.email}</td>

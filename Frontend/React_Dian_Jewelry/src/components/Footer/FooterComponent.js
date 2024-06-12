@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import '../Footer/FooterComponent.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FooterComponent = () => {
     useEffect(() => {
@@ -38,25 +38,25 @@ const FooterComponent = () => {
                         <div className="col-md-4">
                             <h6>About Us</h6>
                             <ul className="footer_content">
-                                <li><a href="/introduce">Our story</a></li>
-                                <li><a href="/introduce">Our mission</a></li>
-                                <li><a href="/introduce">The difference</a></li>
+                                <li><Link to="/introduce">Our story</Link></li>
+                                <li><Link to="/introduce">Our mission</Link></li>
+                                <li><Link to="/introduce">The difference</Link></li>
                             </ul>
                             <br />
                             <h6>Education Blog</h6>
                             <ul className="footer_content">
-                                <li><a href="#">Link 1</a></li>
-                                <li><a href="#">Link 2</a></li>
-                                <li><a href="#">Link 3</a></li>
-                                <li><a href="#">Link 4</a></li>
+                                <li><Link to="#">Link 1</Link></li>
+                                <li><Link to="#">Link 2</Link></li>
+                                <li><Link to="#">Link 3</Link></li>
+                                <li><Link to="#">Link 4</Link></li>
                             </ul>
                         </div>
                         <div className="col-md-4">
                             <h6>Service</h6>
                             <ul className="footer_content">
-                                <li><a href="/FAQs">FAQs</a></li>
-                                <li><a href="/order-history">Tracking orders</a></li>
-                                <li><a href="/edit-profile">My profile</a></li>
+                                <li><Link to="/FAQs">FAQs</Link></li>
+                                <li><Link to="/order-history">Tracking orders</Link></li>
+                                <li><Link to="/edit-profile">My profile</Link></li>
                             </ul>
                             <br />
                             <h6>Collections</h6>
@@ -70,24 +70,24 @@ const FooterComponent = () => {
                         <div className="col-md-4">
                             <h6>Contact Us</h6>
                             <ul className="footer_content">
-                                <li><a href='tel:0795795959'>0795 795 959</a></li>
-                                <li><a href='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</a></li>
-                                <li><a href="/contact"> </a></li>
+                                <li><Link to='tel:0795795959'>0795 795 959</Link></li>
+                                <li><Link to='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</Link></li>
+                                <li><Link to="/contact"> </Link></li>
                             </ul>
                             <br />
                             <h6>Social Media</h6>
                             <ul className="footer_content social_media_icon" style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '20px' }}>
-                                <li><a href="https://www.facebook.com/profile.php?id=61560517631582" target="_blank"><i className="fb fab fa-facebook-f" target="_blank"></i></a></li>
-                                <li><a href="https://www.instagram.com/dian_jewelryy" target="_blank"><i className="ins fab fa-instagram"></i></a></li>
-                                <li><a href="https://www.tiktok.com/@dianjewelry" target="_blank"><i className="tik fab fa-tiktok"></i></a></li>
-                                <li><a href="/home" target="_blank"><i className="gg fab fa-google"></i></a></li>
+                                <li><Link to="https://www.facebook.com/profile.php?id=61560517631582" target="_blank"><i className="fb fab fa-facebook-f" target="_blank"></i></Link></li>
+                                <li><Link to="https://www.instagram.com/dian_jewelryy" target="_blank"><i className="ins fab fa-instagram"></i></Link></li>
+                                <li><Link to="https://www.tiktok.com/@dianjewelry" target="_blank"><i className="tik fab fa-tiktok"></i></Link></li>
+                                <li><Link to="/home" target="_blank"><i className="gg fab fa-google"></i></Link></li>
                             </ul>
                         </div>
                     </div>
                     <hr className="hr_footer" />
                     <div className="copyright row">
                         <div className="col-md-12 text-center">
-                            <p>Copyright ©2024 Dian Jewelry | <a className="tos_link" id="tosLink" href="#tos"><strong>Terms of Service & Privacy Policy</strong></a></p>
+                            <p>Copyright ©2024 Dian Jewelry | <Link className="tos_link" id="tosLink" to="#tos"><strong>Terms of Service & Privacy Policy</strong></Link></p>
                         </div>
                     </div>
                 </div>

@@ -38,17 +38,18 @@
 .manager_manage_diamond_header .manager_manage_diamond_search_section {
     display: flex;
     align-items: center;
+    //background-color: white;
 }
 
 .manager_manage_diamond_header .manager_manage_diamond_search_section input {
-    background-color: #f3f4f6;
+    background-color: white;
     border: none;
     width: 220px;
     height: 28px;
 }
 
 .manager_manage_diamond_header .manager_manage_diamond_search_section input:focus {
-    background-color: #f3f4f6;
+    background-color: white;
     border: none;
     outline: none;
     box-shadow: none;
@@ -57,16 +58,45 @@
 
 .manager_manage_diamond_header .manager_manage_diamond_search_bar {
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 7px;
     margin-top: 5px;
+    background-color: white;
+    cursor: pointer; 
+    transition: background 0.3s ease, color 0.3s ease;
+    &:hover {
+        background:#c5c3c2; // Change background on hover
+        color: black; // Change text color on hover
+    }
 }
-
+.manager_manage_search_icon{
+    font-size: 12px;
+    cursor: pointer; 
+    transition: background 0.3s ease, color 0.3s ease;
+    &:hover{
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    }
+    
+}
 .manager_manage_diamond_all_container h3 {
     text-align: center;
     font-weight: bold;
     color: #1c1c1c;
 }
-
+.manager_manage_diamond_table_head{  
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    &:hover{
+        color: #0092f7;
+    }
+}
+.manager_manage_diamond_row {
+    transition: background-color 0.3s ease;
+}
+.manager_manage_diamond_row:hover {
+    background-color: #c5c3c2; 
+}
 //Add diamond button
 .manager_manage_diamond_create_button_section {
     display: flex;
@@ -120,12 +150,21 @@
 
 .manager_manage_diamond_table tr:nth-child(even) {
     background-color: #f9f9f9;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .manager_manage_diamond_table tr:hover {
-    background-color: #ddd;
+    background-color: #d3c5c5;
 }
+.manager_manage_table_body_row{
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    &:hover{
+        background-color: #d3c5c5;
+    }
 
+}
 .manager_manage_diamond_table th {
     padding-top: 12px;
     padding-bottom: 12px;

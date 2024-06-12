@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../styles/Static/Contact.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
+import { Link } from 'react-router-dom';
 
 function Contact() {
   const navItems = ['Home', 'Contact'];
@@ -35,14 +36,14 @@ function Contact() {
               <i className="fas fa-phone-alt"></i>
             </div>
             <h3 className="contact_card_title">HOTLINE</h3>
-            <p className="contact_card_description">Service 24/7: <a href='tel:0795795959'>0795 795 959</a><br></br>Contact us directly when you need.</p>
+            <p className="contact_card_description">Service 24/7: <Link to='tel:0795795959'>0795 795 959</Link><br></br>Contact us directly when you need.</p>
           </div>
           <div className="contact_card">
             <div className="contact_icon">
               <i className="fas fa-envelope"></i>
             </div>
             <h3 className="contact_card_title">EMAIL</h3>
-            <p className="contact_card_description"><a href='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</a><br></br>If urgent please contact us through hotline for faster reply.</p>
+            <p className="contact_card_description"><Link to='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</Link><br></br>If urgent please contact us through hotline for faster reply.</p>
           </div>
         </div>
       </div>

@@ -58,64 +58,64 @@ function Shape() {
             <div className="s_diamond_shape_container">
                 <div className="s_diamond_shape_grid">
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Round' })}>
+                        <div  onClick={() => handleNavigate('/shape', { shape: 'Round' })}>
                             <img src={round} alt="Round" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Round</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Oval' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Oval' })}>
                             <img src={oval} alt="Oval" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Oval</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Emerald' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Emerald' })}>
                             <img src={emerald} alt="Emerald" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Emerald</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Cushion' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Cushion' })}>
                             <img src={cushion} alt="Cushion" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Cushion</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Pear' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Pear' })}>
                             <img src={pear} alt="Pear" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Pear</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Radiant' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Radiant' })}>
                             <img src={radiant} alt="Radiant" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Radiant</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Princess' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Princess' })}>
                             <img src={princess} alt="Princess" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Princess</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Marquise' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Marquise' })}>
                             <img src={marquise} alt="Marquise" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Marquise</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Asscher' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Asscher' })}>
                             <img src={asscher} alt="Asscher" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Asscher</p>
-                        </a>
+                        </div>
                     </div>
                     <div className="s_diamond_shape_column">
-                        <a href="" onClick={() => handleNavigate('/shape', { shape: 'Heart' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Heart' })}>
                             <img src={heart} alt="Heart" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Heart</p>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>

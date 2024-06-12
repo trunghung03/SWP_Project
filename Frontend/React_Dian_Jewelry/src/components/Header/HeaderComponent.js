@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
 import '../Header/HeaderComponent.scss';
@@ -49,8 +49,7 @@ const HeaderComponent = () => {
         for (const key in allCartItems) {
             localStorage.setItem(key, allCartItems[key]);
         }
-
-        navigate('/login');
+        window.location.href='/login';
     };
 
     const handleSearchKeyPress = async (e) => {
@@ -96,16 +95,16 @@ const HeaderComponent = () => {
                 <div className="row align-items-center" style={{ backgroundColor: 'white' }}>
                     <div className="col-md-4">
                         <div className="contact_info">
-                            <a href='tel:0795795959'>
+                            <Link to='tel:0795795959'>
                                 <p className="contact_phone"><i className="fas fa-phone-alt"></i>0795 795 959</p>
-                            </a>
+                            </Link>
                             <p className="contact_address"><i className="fas fa-map-marker-alt"></i> D1 Street, Long Thanh My, Thu Duc City, Ho Chi Minh City</p>
                         </div>
                     </div>
                     <div className="col-md-4 text-center">
-                        <a href="/home">
+                        <Link to="/home">
                             <img className="logo" src={logo} alt="Logo" />
-                        </a>
+                        </Link>
                     </div>
                     <div className="col-md-4 text-end">
                         <div className="header_icons">
@@ -122,10 +121,10 @@ const HeaderComponent = () => {
                                     />
                                 </div>
                             </div>
-                            <a href="/cart" className="cart_icon">
+                            <Link to="/cart" className="cart_icon">
                                 <i className="icon_cart fas fa-shopping-bag"></i>
                                 {cartItems.length > 0 && <span className="cart_badge">{cartItems.length}</span>}
-                            </a>
+                            </Link>
                             <div className="account_dropdown_section dropdown">
                                 <i className="icon_account fas fa-user" onClick={() => navigate('/edit-profile')}></i>
                                 <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -140,16 +139,16 @@ const HeaderComponent = () => {
                                                 <p className="point dropdown-item">{user.points} points</p>
                                             </li>
                                             <hr className="account_hr1" />
-                                            <li><a className="dropdown-item" href="/edit-profile"><i className="adm_icon fas fa-cog"></i> Setting</a></li>
-                                            <li><a className="dropdown-item" href="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</a></li>
+                                            <li><Link className="dropdown-item" to="/edit-profile"><i className="adm_icon fas fa-cog"></i> Setting</Link></li>
+                                            <li><Link className="dropdown-item" to="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</Link></li>
                                             <hr className="account_hr2" />
-                                            <li><a className="dropdown-item" href="#" onClick={handleLogout}><i className="adm_icon fas fa-sign-out-alt"></i> Sign out</a></li>
+                                            <li><div className="dropdown-item" onClick={handleLogout}><i className="adm_icon fas fa-sign-out-alt"></i> Sign out</div></li>
                                         </>
                                     ) : (
                                         <>
-                                            <li><a className="dropdown-item" href="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</a></li>
+                                            <li><Link className="dropdown-item" to="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</Link></li>
                                             <hr className="account_hr_guest" />
-                                            <li><a className="dropdown-item" href="/login"><i className="adm_icon fas fa-sign-in-alt"></i> Sign in</a></li>
+                                            <li><Link className="dropdown-item" to="/login"><i className="adm_icon fas fa-sign-in-alt"></i> Sign in</Link></li>
                                         </>
                                     )}
                                 </ul>
@@ -167,16 +166,16 @@ const HeaderComponent = () => {
                     <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <a className="home nav-link" href="/home">HOME</a>
+                                <Link className="home nav-link" to="/home">HOME</Link>
                             </li>
                             <li
                                 className="diamond_dropdown_section nav-item dropdown"
                                 onMouseEnter={() => handleMouseEnter(diamondMenuRef, diamondMenuTimeoutRef, mainImgDiamondJewelry)}
                                 onMouseLeave={() => handleMouseLeave(diamondMenuRef, diamondMenuTimeoutRef)}
                             >
-                                <a className="diamond header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry')} id="diamondDropdown" role="button" aria-expanded="false">
+                                <Link className="diamond header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry')} id="diamondDropdown" role="button" aria-expanded="false">
                                     DIAMOND JEWELRY<i className="icon_arrow_diamond fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
-                                </a>
+                                </Link>
                                 <div className="diamond_dropdown_menu dropdown-menu" ref={diamondMenuRef} aria-labelledby="diamondDropdown">
                                     <div className="dropdown_content">
                                         <ul className="dropdown_items">
@@ -197,9 +196,9 @@ const HeaderComponent = () => {
                                 onMouseEnter={() => handleMouseEnter(weddingMenuRef, weddingMenuTimeoutRef, mainImgWeddingJewelry)}
                                 onMouseLeave={() => handleMouseLeave(weddingMenuRef, weddingMenuTimeoutRef)}
                             >
-                                <a className="wedding header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry', { state: { category: 'weddingJewelry' } })} id="weddingDropdown" role="button" aria-expanded="false">
+                                <Link className="wedding header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry', { state: { category: 'weddingJewelry' } })} id="weddingDropdown" role="button" aria-expanded="false">
                                     WEDDING JEWELRY<i className="icon_arrow_wedding fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
-                                </a>
+                                </Link>
                                 <div className="wedding_dropdown_menu dropdown-menu" ref={weddingMenuRef} aria-labelledby="weddingDropdown">
                                     <div className="dropdown_content">
                                         <ul className="dropdown_items">
@@ -216,16 +215,16 @@ const HeaderComponent = () => {
                                 </div>
                             </li>
                             <li className="nav-item">
-                                <a className="price_list nav-link" href="/price-list">DIAMOND PRICE</a>
+                                <Link className="price_list nav-link" to="/price-list">DIAMOND PRICE</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="education nav-link" href="/blog">BLOG</a>
+                                <Link className="education nav-link" to="/blog">BLOG</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="introduce nav-link" href="/introduce">INTRODUCE</a>
+                                <Link className="introduce nav-link" to="/introduce">INTRODUCE</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="contact nav-link" href="/contact">CONTACT US</a>
+                                <Link className="contact nav-link" to="/contact">CONTACT US</Link>
                             </li>
                         </ul>
                     </div>

@@ -31,7 +31,14 @@ function ProductDetail() {
     const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
 
     const navigateToProductDetail = (productId) => {
-        window.scrollTo(0, 0);
+        const productDetailElement = document.getElementById('product_detail');
+        if (productDetailElement) {
+            const topPos = productDetailElement.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({
+                top: topPos, // Scroll to the top position of the element
+                behavior: 'smooth' // Optional: for smooth scrolling
+            });
+        }
         navigate('/product-detail', { state: { id: productId } });
     };
 
@@ -178,7 +185,7 @@ function ProductDetail() {
     const images = product.imageLinkList ? product.imageLinkList.split(';') : [];
 
     return (
-        <div className="product_detail">
+        <div id="product_detail" className="product_detail">
             <SubNav items={navItems} />
             <br />
             <div className="product_detail_container">

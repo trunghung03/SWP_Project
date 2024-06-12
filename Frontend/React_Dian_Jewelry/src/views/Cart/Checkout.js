@@ -344,35 +344,32 @@ function Checkout() {
 
                     <h5 className="checkout_summary_payment_title"><i className="fas fa-credit-card"></i>Payment method</h5>
                     <div className="payment_methods">
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('Cash')} >
                             <input
                                 type="radio"
                                 id="cash"
                                 name="paymentMethod"
                                 checked={paymentMethod === 'Cash'}
-                                onChange={() => setPaymentMethod('Cash')}
                             />
                             <label htmlFor="cash">Cash</label>
                             <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>
                         </div>
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('Bank Transfer')}>
                             <input
                                 type="radio"
                                 id="bankTransfer"
                                 name="paymentMethod"
                                 checked={paymentMethod === 'Bank Transfer'}
-                                onChange={() => setPaymentMethod('Bank Transfer')}
                             />
                             <label htmlFor="bankTransfer">Bank Transfer</label>
                             <p>(Make a transfer to the shop's account number. Order will be processed after successful transfer)</p>
                         </div>
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('VNPAY')}>
                             <input
                                 type="radio"
                                 id="vnpay"
                                 name="paymentMethod"
                                 checked={paymentMethod === 'VNPAY'}
-                                onChange={() => setPaymentMethod('VNPAY')}
                             />
                             <label htmlFor="vnpay">VNPAY</label>
                             <img src={vnpay} style={{ width: "30px", marginLeft: "8px", marginBottom: "14px" }}></img>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -289,7 +289,7 @@ const Login = () => {
                                 onChange={(e) => setRememberMe(e.target.checked)}
                             />
                             <label className="remember_me">Remember me</label>
-                            <a className="forgot_password_link" href="/forgot-password">Forgot password?</a>
+                            <Link className="forgot_password_link" to="/forgot-password">Forgot password?</Link>
                         </div>
                         <div className="submit_section">
                             <button type="submit" className="sign_in_button btn btn-block" disabled={loading}>
@@ -298,7 +298,7 @@ const Login = () => {
                             </button>
                         </div>
                         <div className="sign_up_section">
-                            <span>Don't have an account? <a className="sign_up_link" href="/register">Sign up</a></span>
+                            <span>Don't have an account? <Link className="sign_up_link" to="/register">Sign up</Link></span>
                         </div>
                         <div className="google_section text-center">
                             <hr className="line" />
