@@ -5,7 +5,7 @@ import AdminSidebar from '../../components/AdminSidebar/AdminSidebar.js';
 import '../../styles/Manager/ManagerList.scss';
 import logo from '../../assets/img/logoN.png';
 import swal from 'sweetalert';
-import { ShowAllEmployee, updateStatusById,getEmployeeDetail,getEmployeeByRole, getEmployeeByEmail } from '../../services/AdminService/AdminEmployeeService.js';
+import { ShowAllEmployee, updateStatusById, getEmployeeDetail, getEmployeeByRole, getEmployeeByEmail } from '../../services/AdminService/AdminEmployeeService.js';
 const AdminEmployeeList = () => {
     const [employeeList, setEmployeeList] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -113,7 +113,7 @@ const AdminEmployeeList = () => {
                 <div className="manager_manage_diamond_header">
                     <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
                     <div className="manager_manage_diamond_search_section">
-                    <input
+                        <input
                             type="text"
                             className="manager_manage_diamond_search_bar"
                             placeholder="Search by Email or Role..."
@@ -152,8 +152,8 @@ const AdminEmployeeList = () => {
                                         <td>{item.phoneNumber}</td>
                                         <td>{item.address}</td>
                                         <td>
-                                        <button style={{backgroundColor: item.status ? '#1fd655' : 'red', color: 'white', border: "none", borderRadius: '5px'}}><i className="" onClick={() => handleStatus(item.employeeId)} style={{ cursor: 'pointer'}}>{item.status?"Active":"Deactive"}</i></button>    
-                                           </td>
+                                            <button style={{ backgroundColor: item.status ? '#41c974' : '#c94143', color: 'white', border: "none", borderRadius: '5px', fontSize: '15px', paddingBottom: '3px', paddingRight: '8px' }}><i className="" onClick={() => handleStatus(item.employeeId)} style={{ cursor: 'pointer' }}>{item.status ? "Active" : "Deactive"}</i></button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (

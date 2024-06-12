@@ -13,14 +13,18 @@ function SSContentList() {
   const { user } = useContext(UserContext);
   const [imageBase64, setImageBase64] = useState('');
   const employeeId = localStorage.getItem('employeeId');
+  const firstName = localStorage.getItem('firstName');
+  const lastName = localStorage.getItem('lastName');
   const [contentData, setContentData] = useState({
-      title: "",
-      content: window.location.state?.updatedContent || localStorage.getItem("richTextContent") || "",
-      image: "",
-      tag: "",
-      date: "",
-      creator: employeeId,
-      status: "True",
+    title: "",
+    content: window.location.state?.updatedContent || localStorage.getItem("richTextContent") || "",
+    image: "",
+    imageUrl: "",
+    tag: "",
+    date: new Date().toISOString(),
+    employee: employeeId,
+    status: true,
+    creator: `${firstName} ${lastName}`
   });
 
   const handleChange = (e) => {
@@ -44,11 +48,8 @@ function SSContentList() {
     }
 
     reader.onload = () => {
-      // Update the state with the base64 string
       setImageBase64(reader.result);
-      // Update contentData state with the image
       setContentData((prevData) => ({ ...prevData, image: reader.result }));
-      // Update the preview
       preview.src = reader.result;
       preview.style.display = "block";
     };
@@ -59,8 +60,15 @@ function SSContentList() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const contentDataWithStatus = { ...contentData, status: true };
-      await createContent(contentDataWithStatus);
+      const formattedContentData = {
+        ...contentData,
+        date: new Date().toISOString(),
+        status: true,
+        employee: parseInt(employeeId),
+        image: contentData.imageUrl || contentData.image,
+      };
+      console.log("Formatted Content Data:", formattedContentData);
+      await createContent(formattedContentData);
       swal("Success", "Content added successfully", "success");
       navigate("/sales-staff-content-list");
     } catch (error) {
@@ -70,27 +78,19 @@ function SSContentList() {
         console.error("Response status:", error.response.status);
         console.error("Response headers:", error.response.headers);
         if (error.response.data.errors) {
-          for (const [key, value] of Object.entries(
-            error.response.data.errors
-          )) {
+          for (const [key, value] of Object.entries(error.response.data.errors)) {
             console.error(`${key}: ${value}`);
           }
         }
       }
-      swal(
-        "Something is wrong!",
-        "Failed to add new content. Please try again.",
-        "error"
-      );
+      swal("Something is wrong!", "Failed to add new content. Please try again.", "error");
     }
   };
 
   useEffect(() => {
-    // Update local storage when contentData changes
     localStorage.setItem("richTextContent", contentData.content);
     localStorage.setItem('contentData', JSON.stringify(contentData));
 
-    // Handle external changes to contentData in local storage
     const handleStorageChange = (event) => {
       if (event.key === 'contentData' || event.key === 'richTextContent') {
         const updatedContent = event.key === 'contentData' ? JSON.parse(event.newValue).content : event.newValue;
@@ -100,11 +100,10 @@ function SSContentList() {
 
     window.addEventListener('storage', handleStorageChange);
 
-    // Cleanup function to remove the event listener
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-}, [contentData]);
+  }, [contentData]);
 
   return (
     <div className="ss_add_content_all_container">
@@ -157,17 +156,17 @@ function SSContentList() {
                     </select>
                   </div>
                   <div className="ss_add_content_subdiv1">
-                   <div className="ss_text_editor_nav">
-                   <label className="ss_add_content_label">
-                      Write your content:
-                    </label>
-                    <button
-                      onClick={() => window.open("/rich-text-page", "_blank")}
-                      className="ss-navigate-button"
-                    >
-                      <i className="fa fa-external-link-alt"></i> Edit in new window
-                    </button>
-                   </div>
+                    <div className="ss_text_editor_nav">
+                      <label className="ss_add_content_label">
+                        Write your content:
+                      </label>
+                      <button
+                        onClick={() => window.open("/rich-text-page", "_blank")}
+                        className="ss-navigate-button"
+                      >
+                        <i className="fa fa-external-link-alt"></i> Edit in new window
+                      </button>
+                    </div>
                     <RichTextEditor
                       className="ss_add_rich_text"
                       name="content"
@@ -176,7 +175,7 @@ function SSContentList() {
                         setContentData({ ...contentData, content });
                         localStorage.setItem('contentData', JSON.stringify({ ...contentData, content }));
                       }}
-                    />                   
+                    />
                   </div>
                 </div>
                 <div className="ss_add_date_creator_div3 ">
@@ -186,27 +185,38 @@ function SSContentList() {
                       name="date"
                       className="ss_add_title_input"
                       type="date"
-                      value={contentData.date}
+                      value={contentData.date.slice(0, 10)}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="ss_add_subdiv3">
                     <label className="ss_add_content_label">Creator:</label>
-                    <div className="ss_add_title_input">
-                      {user.lastName}                      
-                    </div>
+                    <input
+                      name="creator"
+                      className="ss_add_title_input"
+                      type="text"
+                      value={`${firstName} ${lastName}`}
+                      readOnly
+                    />
                   </div>
                 </div>
               </div>
               <div className="ss_add_displayed_image_div2">
-                <label className="ss_add_content_label">Image:</label>
+                <label className="ss_add_content_label">Image URL:</label>
+                <input
+                  type="text"
+                  name="imageUrl"
+                  value={contentData.imageUrl}
+                  onChange={handleChange}
+                  placeholder="Enter the image URL"
+                />
+                {/* <label className="ss_add_content_label">Image:</label>
                 <input
                   type="file"
                   name="image"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  required
                 />
                 <img
                   id="imagePreview"
@@ -217,7 +227,7 @@ function SSContentList() {
                     marginTop: "10px",
                     maxWidth: "100%",
                   }}
-                />
+                /> */}
               </div>
             </div>
             <button type="submit" className="ss_add_content_submit_button">

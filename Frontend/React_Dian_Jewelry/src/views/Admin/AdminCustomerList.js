@@ -5,7 +5,7 @@ import '../../styles/Manager/ManagerList.scss';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logoN.png';
-import { ShowAllCustomer, getCustomerDetail, getCustomerByName, changeStatus,getCustomerById } from '../../services/AdminService/AdminCustomerService.js';
+import { ShowAllCustomer, getCustomerDetail, getCustomerByName, changeStatus, getCustomerById } from '../../services/AdminService/AdminCustomerService.js';
 const AdminCustomerList = () => {
     const navigate = useNavigate();
     const [customerList, setCustomerList] = useState([]);
@@ -84,7 +84,7 @@ const AdminCustomerList = () => {
     };
 
     // Delete diamond by id 
-    
+
     const handleStatus = async (customerID) => {
         try {
             const customer = await getCustomerById(customerID);
@@ -157,8 +157,8 @@ const AdminCustomerList = () => {
                                         <td>{item.address}</td>
                                         <td> {item.points}</td>
                                         <td>
-                                        <button style={{backgroundColor: item.status ? '#1fd655' : 'red', color: 'white', border: "none", borderRadius: '5px'}}><i className="active_deactive_btn" onClick={() => handleStatus(item.customerId)} style={{ cursor: 'pointer'}}>{item.status?"Active":"Deactive"}</i></button>    
-                                           </td>
+                                            <button style={{ backgroundColor: item.status ? '#41c974' : '#c94143', color: 'white', border: "none", borderRadius: '5px', fontSize: '15px', paddingBottom: '3px', paddingRight: '8px'}}><i className="active_deactive_btn" onClick={() => handleStatus(item.customerId)} style={{ cursor: 'pointer' }}>{item.status ? "Active" : "Deactive"}</i></button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
