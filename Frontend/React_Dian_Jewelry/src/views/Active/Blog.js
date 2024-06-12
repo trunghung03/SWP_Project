@@ -2,20 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import swal from 'sweetalert';
 import '../../styles/Active/Blog.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getAllArticles } from '../../services/BlogService.js';
+import { getAllArticles, searchArticlesByTitle } from '../../services/BlogService.js';
 import blogLogo from '../../assets/img/blogLogo.png';
 import missionImage from '../../assets/img/blogMission.png';
 import conflictFreeIcon from '../../assets/img/blog1.svg';
 import recycledMetalsIcon from '../../assets/img/blog2.svg';
 import givingBackIcon from '../../assets/img/blog3.svg';
+import inspired1 from '../../assets/img/inspired1.png';
+import inspired2 from '../../assets/img/inspired2.png';
+import inspired3 from '../../assets/img/inspired3.png';
+import inspired4 from '../../assets/img/inspired4.png';
+import inspired5 from '../../assets/img/inspired5.png';
+import inspired6 from '../../assets/img/inspired6.png';
 
 function Blog() {
   const [articles, setArticles] = useState([]);
   const [visibleBlogs, setVisibleBlogs] = useState(8);
   const [selectedTag, setSelectedTag] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchActive, setSearchActive] = useState(false);
   const navigate = useNavigate();
 
   const navItems = ['Home', 'Blog'];
@@ -30,6 +40,22 @@ function Blog() {
       });
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const missionText = document.querySelector('.blog_mission_text');
+      if (missionText) {
+        const scrollPosition = window.scrollY;
+        missionText.style.transform = `translateX(${-scrollPosition * 0.1}px)`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
   const handleReadMore = (articleID) => {
     navigate('/blog-detail', { state: { articleID } });
   };
@@ -37,12 +63,54 @@ function Blog() {
   const handleTagClick = (tag) => {
     setSelectedTag(tag);
     setVisibleBlogs(8);
+    setSearchActive(false);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      const validSearchTerm = /^[a-zA-Z\s]*$/.test(searchTerm);
+      if (!validSearchTerm) {
+        swal('No blogs found!', 'Please try another title.', 'error');
+      } else {
+        if (searchTerm.trim() === '') {
+          getAllArticles()
+            .then(data => {
+              setArticles(data);
+              setSearchActive(false);
+              setSelectedTag('');
+            })
+            .catch(error => {
+              console.error('Error fetching articles:', error);
+            });
+        } else {
+          searchArticlesByTitle(searchTerm)
+            .then(data => {
+              if (data.length === 0) {
+                swal('No blogs found!', 'Please try another title.', 'error');
+              } else {
+                setSearchResults(data);
+                setSearchActive(true);
+                setSearchTerm('');
+              }
+            })
+            .catch(error => {
+              console.error('Error searching articles:', error);
+            });
+        }
+      }
+    }
   };
 
   const firstThreeArticles = articles.slice(0, 3);
-  const filteredArticles = selectedTag
-    ? articles.filter(article => article.tag === selectedTag)
-    : articles.slice(0, visibleBlogs);
+  const filteredArticles = searchActive
+    ? searchResults.slice(0, visibleBlogs)
+    : selectedTag
+      ? articles.filter(article => article.tag === selectedTag).slice(0, visibleBlogs)
+      : articles.slice(0, visibleBlogs);
 
   const handleSeeMore = () => {
     setVisibleBlogs(visibleBlogs + 8);
@@ -71,22 +139,41 @@ function Blog() {
               <img src={article.image} alt={article.title} className="blog_image card-img-top" />
               <div className="blog_card_body card-body">
                 <h6 className="blog_title card-title">{article.title}</h6>
-                <div className='blog_card_button'>
-                  <button
-                    className="blog_read_more btn btn-link"
-                    onClick={() => handleReadMore(article.articleID)}
-                  >
-                    Read more <i className="fas fa-arrow-right"></i>
-                  </button>
-                </div>
+              </div>
+              <div className='blog_read_this_button_container'>
+                <button
+                  className="blog_read_this_button"
+                  onClick={() => handleReadMore(article.articleID)}
+                >
+                  Read more
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className='blog_jjdo'>
-        <p>edit later</p>
+
+
+      <div className="blog_recycle_container">
+        <div className="row">
+          <div className="col-md-3 blog_recycle_column">
+            <h4 className="blog_recycle_title">RECYCLED METALS</h4>
+            <p>Today, 96% of our gold and 97% of our silver is recycled. By 2025, 100% will be recycled or Fairmined.</p>
+          </div>
+          <div className="col-md-3 blog_recycle_column">
+            <h4 className="blog_recycle_title">CIRCULARITY</h4>
+            <p>Recycled materials. Timeless designs. Lifetime warranties. And trade-in programs that give your jewelry new life.</p>
+          </div>
+          <div className="col-md-3 blog_recycle_column">
+            <h4 className="blog_recycle_title">ZERO WASTE</h4>
+            <p>No single-use plastics by 2025. Zero waste in showrooms and offices by 2030.</p>
+          </div>
+          <div className="col-md-3 blog_recycle_column">
+            <h4 className="blog_recycle_title">EMISSION REDUCTIONS</h4>
+            <p>We have committed to setting near-term company-wide emission reductions.</p>
+          </div>
+        </div>
       </div>
 
       <div className="blog_nav_bar_container">
@@ -115,40 +202,56 @@ function Blog() {
           <span>Blog</span>
         </div>
         <div className="blog_nav_search">
-          <input type="text" placeholder="Search blog..." />
+          <input
+            type="text"
+            placeholder="Search blog..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            onKeyPress={handleSearchKeyPress}
+          />
           <i className="fas fa-search"></i>
         </div>
       </div>
 
+
+
       <div className="remaining_blogs_container row">
-        {filteredArticles.map(article => (
-          <div key={article.articleID} className="col-md-3 mb-4">
-            <div className="small_blog_card card">
-              <img src={article.image} alt={article.title} className="small_blog_image card-img-top" />
-              <div className="small_blog_card_body card-body">
-                <h6 className="small_blog_title card-title">{article.title}</h6>
-                <div className='small_blog_card_button'>
-                  <button
-                    className="small_blog_read_more btn btn-link"
-                    onClick={() => handleReadMore(article.articleID)}
-                  >
-                    Read more <i className="fas fa-arrow-right"></i>
-                  </button>
+        {filteredArticles.length > 0 ? (
+          filteredArticles.map(article => (
+            <div key={article.articleID} className="col-md-3 mb-4">
+              <div className="small_blog_card card">
+                <img src={article.image} alt={article.title} className="small_blog_image card-img-top" />
+                <div className="small_blog_card_body card-body">
+                  <h6 className="small_blog_title card-title">{article.title}</h6>
+                  <div className='small_blog_card_button'>
+                    <button
+                      className="small_blog_read_more btn btn-link"
+                      onClick={() => handleReadMore(article.articleID)}
+                    >
+                      Read more <i className="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="no_blogs_found col-12">
+            <p>No blogs found..</p>
           </div>
-        ))}
+        )}
       </div>
 
-      {selectedTag === '' && visibleBlogs < articles.length && (
+      {(selectedTag === '' && visibleBlogs < articles.length && !searchActive) ||
+        (selectedTag !== '' && visibleBlogs < articles.filter(article => article.tag === selectedTag).length) ||
+        (searchActive && visibleBlogs < searchResults.length) ? (
         <div className="blog_see_more_container">
           <button className="blog_see_more_button" onClick={handleSeeMore}>See More</button>
         </div>
-      )}
+      ) : null}
 
       <div className="blog_mission_container">
-        <div className="blog_mission_text">forever forward</div>
+        <div className="blog_mission_text">jewelry redefined</div>
         <div className="blog_mission_white">                            </div>
         <div className="row">
           <div className="col-md-6">
@@ -184,37 +287,37 @@ function Blog() {
           <div className="blog_inspired_grid">
             <div className="col-md-2 blog_inspired_column">
               <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={missionImage} alt="Inspired 1" />
+                <img src={inspired1} alt="Inspired 1" />
                 <i className="fab fa-instagram inspired_icon"></i>
               </div>
             </div>
             <div className="col-md-2 blog_inspired_column">
               <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={missionImage} alt="Inspired 2" />
+                <img src={inspired2} alt="Inspired 2" />
                 <i className="fab fa-instagram inspired_icon"></i>
               </div>
             </div>
             <div className="col-md-2 blog_inspired_column">
               <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={missionImage} alt="Inspired 3" />
+                <img src={inspired3} alt="Inspired 3" />
                 <i className="fab fa-instagram inspired_icon"></i>
               </div>
             </div>
             <div className="col-md-2 blog_inspired_column">
               <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={missionImage} alt="Inspired 4" />
+                <img src={inspired4} alt="Inspired 4" />
                 <i className="fab fa-instagram inspired_icon"></i>
               </div>
             </div>
             <div className="col-md-2 blog_inspired_column">
               <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={missionImage} alt="Inspired 5" />
+                <img src={inspired5} alt="Inspired 5" />
                 <i className="fab fa-instagram inspired_icon"></i>
               </div>
             </div>
             <div className="col-md-2 blog_inspired_column">
               <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={missionImage} alt="Inspired 6" />
+                <img src={inspired6} alt="Inspired 6" />
                 <i className="fab fa-instagram inspired_icon"></i>
               </div>
             </div>
@@ -224,7 +327,6 @@ function Blog() {
           </div>
         </div>
       </div>
-
 
       <ScrollToTop />
     </div>
