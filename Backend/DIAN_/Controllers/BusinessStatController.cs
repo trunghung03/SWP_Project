@@ -1,4 +1,5 @@
-﻿using DIAN_.Models;
+﻿using DIAN_.DTOs.BusinessStatDTO;
+using DIAN_.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,33 @@ namespace DIAN_.Controllers
             decimal totalValue = await query.SumAsync(po => po.TotalPrice);
 
             return Ok(totalValue);
+        }
+
+        // GET api/stat/timestampedorders
+        [HttpGet("timestampedorders")]
+        public async Task<IActionResult> GetTimestampedOrders([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        {
+            IQueryable<Purchaseorder> query = _context.Purchaseorders;
+
+            if (startDate.HasValue)
+            {
+                query = query.Where(po => po.Date >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                query = query.Where(po => po.Date < endDate.Value.AddDays(1));
+            }
+
+            var timestampedOrders = await query
+                .Select(po => new TimeStampedOrderDto
+                {
+                    Date = po.Date,
+                    TotalPrice = po.TotalPrice
+                })
+                .ToListAsync();
+
+            return Ok(timestampedOrders);
         }
     }
 }
