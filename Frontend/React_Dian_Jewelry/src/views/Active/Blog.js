@@ -6,18 +6,13 @@ import swal from 'sweetalert';
 import '../../styles/Active/Blog.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
+import BlogInspired from '../../components/BlogInspired/BlogInspired.js';
 import { getAllArticles, searchArticlesByTitle } from '../../services/BlogService.js';
 import blogLogo from '../../assets/img/blogLogo.png';
 import missionImage from '../../assets/img/blogMission.png';
 import conflictFreeIcon from '../../assets/img/blog1.svg';
 import recycledMetalsIcon from '../../assets/img/blog2.svg';
 import givingBackIcon from '../../assets/img/blog3.svg';
-import inspired1 from '../../assets/img/inspired1.png';
-import inspired2 from '../../assets/img/inspired2.png';
-import inspired3 from '../../assets/img/inspired3.png';
-import inspired4 from '../../assets/img/inspired4.png';
-import inspired5 from '../../assets/img/inspired5.png';
-import inspired6 from '../../assets/img/inspired6.png';
 
 function Blog() {
   const [articles, setArticles] = useState([]);
@@ -54,7 +49,6 @@ function Blog() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
 
   const handleReadMore = (articleID) => {
     navigate('/blog-detail', { state: { articleID } });
@@ -153,8 +147,6 @@ function Blog() {
         ))}
       </div>
 
-
-
       <div className="blog_recycle_container">
         <div className="row">
           <div className="col-md-3 blog_recycle_column">
@@ -213,8 +205,6 @@ function Blog() {
         </div>
       </div>
 
-
-
       <div className="remaining_blogs_container row">
         {filteredArticles.length > 0 ? (
           filteredArticles.map(article => (
@@ -252,7 +242,7 @@ function Blog() {
 
       <div className="blog_mission_container">
         <div className="blog_mission_text">jewelry redefined</div>
-        <div className="blog_mission_white">                            </div>
+        <div className="blog_mission_white">                                 </div>
         <div className="row">
           <div className="col-md-6">
             <img src={missionImage} alt="Mission" className="blog_mission_image" />
@@ -278,55 +268,7 @@ function Blog() {
         </div>
       </div>
 
-      <div className="blog_inspired_container">
-        <div className="row">
-          <div className='blog_inspired_title'>
-            <h4>Get Inspired</h4>
-            <p>Tag us on instagram @dianjewelry</p>
-          </div>
-          <div className="blog_inspired_grid">
-            <div className="col-md-2 blog_inspired_column">
-              <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={inspired1} alt="Inspired 1" />
-                <i className="fab fa-instagram inspired_icon"></i>
-              </div>
-            </div>
-            <div className="col-md-2 blog_inspired_column">
-              <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={inspired2} alt="Inspired 2" />
-                <i className="fab fa-instagram inspired_icon"></i>
-              </div>
-            </div>
-            <div className="col-md-2 blog_inspired_column">
-              <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={inspired3} alt="Inspired 3" />
-                <i className="fab fa-instagram inspired_icon"></i>
-              </div>
-            </div>
-            <div className="col-md-2 blog_inspired_column">
-              <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={inspired4} alt="Inspired 4" />
-                <i className="fab fa-instagram inspired_icon"></i>
-              </div>
-            </div>
-            <div className="col-md-2 blog_inspired_column">
-              <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={inspired5} alt="Inspired 5" />
-                <i className="fab fa-instagram inspired_icon"></i>
-              </div>
-            </div>
-            <div className="col-md-2 blog_inspired_column">
-              <div className="blog_inspired_image" onClick={openInstagram}>
-                <img src={inspired6} alt="Inspired 6" />
-                <i className="fab fa-instagram inspired_icon"></i>
-              </div>
-            </div>
-          </div>
-          <div className="instagram_circle" onClick={openInstagram}>
-            <i className="fab fa-instagram"></i>
-          </div>
-        </div>
-      </div>
+      <BlogInspired openInstagram={openInstagram} />
 
       <ScrollToTop />
     </div>

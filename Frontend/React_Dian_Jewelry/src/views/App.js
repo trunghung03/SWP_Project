@@ -10,6 +10,7 @@ import FooterComponent from '../components/Footer/FooterComponent';
 import AutoScrollToTop from '../components/AutoScrollToTop/AutoScrollToTop';
 import Home from './Active/Home';
 import Blog from './Active/Blog';
+import BlogDetail from './Active/BlogDetail';
 import PriceList from './Static/DiamondPrice';
 import Contact from './Static/Contact';
 import Introduce from './Static/Introduce';
@@ -73,6 +74,7 @@ function App() {
             <Route path="/" element={<Layout><Home /></Layout>} /> {/* Default route */}
             <Route path="/home" element={<Layout><Home /></Layout>} />
             <Route path="/blog" element={<Layout><Blog /></Layout>} />
+            <Route path="/blog-detail" element={<Layout><BlogDetail /></Layout>} />
             <Route path="/search" element={<Layout><Search /></Layout>} />
             <Route path="/product-detail" element={<Layout><ProductDetail /></Layout>} />
             <Route path="/cart" element={<Layout><Cart /></Layout>} />
