@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import RichTextEditor from "./RichText";
-//import "../../../styles/SalesStaff/SalesStaffManageContent/RichTextPage.scss"; // Different CSS for this page
+import "../../../styles/SalesStaff/SalesStaffManageContent/RichTextPage.scss"; // Different CSS for this page
 
 function RichTextPage() {
     const navigate = useNavigate();
@@ -21,13 +21,13 @@ function RichTextPage() {
 
     return (
         <div className="ss_rich_text_page">
-            <h2>Edit Content on New Page</h2>
+            <h2 className="ss_rich_text_page_title">Edit Content on New Page</h2>
+            <button onClick={handleSaveChanges} className="ss_button_save_changes">Save Changes</button>
             <RichTextEditor
                 className="ss_add_rich_text"
                 value={content}
                 onChange={setContent}
-            />
-            <button onClick={handleSaveChanges}>Save Changes</button>
+            />           
         </div>
     );
 }

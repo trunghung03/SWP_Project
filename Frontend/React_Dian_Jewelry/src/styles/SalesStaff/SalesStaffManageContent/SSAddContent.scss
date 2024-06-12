@@ -36,22 +36,23 @@
     max-width: 120px;
 }
 
-.ss_add_content_title_back{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;
-    margin-bottom: 20px;
-}
 .ss_add_content_content_form{
     width: 95%;
 }
+.ss_add_content_title{
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 2%;
+    margin-bottom: 10px;
 
+}
 .ss_add_content_subdiv1{
     display: flex;
     flex-direction: column;
+    //width: 50%;
 }
 .ss_add_displayed_image_div2{
+    margin-top: 3%;
     border-radius: 7px;
     display: flex;
     flex-direction: column;
@@ -59,23 +60,53 @@
     border: 1px solid #d1d1d1;
     align-items: flex-start;
     padding: 3%;
-    margin-left: 25px;
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 
 }
+.ss_add_content_submit_button{
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: last baseline;
+    margin-left: 87%;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 25px;
+    cursor: pointer; // Change cursor to pointer on hover
+    font-size: 16px; // Adjust font size as needed
+    text-align: center;
+    transition: background 0.3s ease, color 0.3s ease; // Add transition for hover effects
+
+    &:hover {
+        background: #f4f2f4; // Change background on hover
+        color: black; // Change text color on hover
+    }
+
+}
+.ss_enter_image{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin-top: 1%;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+}
+.ss_add_more_infor{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+}
+.ss_add_creator_date{
+    margin-left: 19%;
+}
 .ss_add_subdiv3{
     display: flex;
     flex-direction: column;
-}
-.ss_add_content_div1_div2{
-    display: flex; /* Enable flexbox */
-    justify-content: space-between; /* Distribute space around the items */
-    align-items: flex-start; /* Align items at the start of the cross axis (top of the container) */
-    padding: 0px 3%; /* Background color for the container */
-    height: 100vh; /* Full height of the viewport */
-    margin-bottom: 0px;
 }
 .ss_add_content{
     display: flex;
@@ -90,39 +121,26 @@
     --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     padding: 10px;  
-    height: 80%; 
-    width: 63%;
-}
-.ss_add_date_creator_div3{
-    position: relative;
-    width: 30%;
-    border: 1px solid #d1d1d1;
-    border-radius: 7px;
-    border: round($number: 20);
-    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-    padding: 10px;
-    height: 30%;
+    height: 100%; 
+    width: 100%;
 }
 .ss_add_title_input{
-    width: 60%;
+    width: 100%;
     height: 30px;
     border: 1px solid #d1d1d1;
-    border-radius: 5px;
-    padding: 5 10px;
+    border-radius: 6px;
+    padding: 4px 10px;
     margin-left: 10px;    
     margin-bottom: 5px;
 }
 .ss_add_content_label{
     font-size: 16px;
-    padding: 5 10px;
-    margin: 10px;
+    padding: 5px 10px;
     width: 50%;
 }
 .ss_add_content_richtext{
     position: relative;
-    width: 90%;
+   width: fit-contents;
     height: 100%;
     border: 1px solid #d1d1d1;
     border-radius: 5px;
@@ -135,19 +153,32 @@
 #imagePreview {
     border-radius: 5px;
     margin-top: 10px;
-    max-width: 100%;
+    width: fit-content;
   }
 .ss_add_all_content{
     display: flex;
     flex-direction: column;
     width: 100%;
 }
+
 .ss_add_content_back_button{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-left: 86%;
+    background-color: white;
+    border: none;
+    text-decoration: underline;
+    padding: 10px 25px;
+    cursor: pointer; // Change cursor to pointer on hover
+    font-size: 16px; // Adjust font size as needed
+    text-align: center;
+    transition: background 0.3s ease, color 0.3s ease; // Add transition for hover effects
+
+    &:hover {
+        background: #f4f2f4; // Change background on hover
+        color: black; // Change text color on hover
+    }
+}
+.ss_back_container{
+    justify-self: end;
 }
 .ss_add_rich_text{
     position: relative;
