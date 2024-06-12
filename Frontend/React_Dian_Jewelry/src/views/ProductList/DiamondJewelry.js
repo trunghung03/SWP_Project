@@ -13,6 +13,7 @@ function DiamondJewelry() {
     const location = useLocation();
     const [products, setProducts] = useState([]);
     const [navItems, setNavItems] = useState(['Home', 'Diamond Jewelry']);
+    const [category, setCategory] = useState('');
 
     useEffect(() => {
         const categoryMap = {
@@ -29,6 +30,7 @@ function DiamondJewelry() {
         };
 
         const { category } = location.state || {};
+        setCategory(category || '');
         if (category) {
             if (category === 'weddingEarrings' || category === 'weddingBracelet' || category === 'weddingNecklace' || category === 'engagementRing' || category === 'weddingRing') {
                 setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry', category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
@@ -61,7 +63,7 @@ function DiamondJewelry() {
         <div className="DiamondJewelry">
             <SubNav items={navItems} />
             <News /> <br />
-            <ProductList products={products} />
+            <ProductList products={products} resetKey={category} />
             <Question />
             <ScrollToTop />
         </div>

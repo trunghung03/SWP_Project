@@ -58,7 +58,7 @@ const HeaderComponent = () => {
             const response = await fetch(`https://localhost:7184/api/products/search?name=${searchQuery}`);
             const data = await response.json();
             setSearchQuery('');
-            navigate('/search', { state: { products: data } });
+            navigate('/search', { state: { products: data, searchQuery } });
         }
     };
 

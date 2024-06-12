@@ -236,7 +236,7 @@ function Blog() {
         (selectedTag !== '' && visibleBlogs < articles.filter(article => article.tag === selectedTag).length) ||
         (searchActive && visibleBlogs < searchResults.length) ? (
         <div className="blog_see_more_container">
-          <button className="blog_see_more_button" onClick={handleSeeMore}>See More</button>
+          <button className="blog_see_more_button" onClick={handleSeeMore}>View More</button>
         </div>
       ) : null}
 

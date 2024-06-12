@@ -9,6 +9,8 @@ import '../../styles/ProductList/Search.scss';
 const Search = () => {
     const location = useLocation();
     const products = location.state?.products || [];
+    const searchQuery = location.state?.searchQuery || '';
+    const resetKey = searchQuery + products.length; 
 
     const navItems = ['Home', 'Search'];
 
@@ -23,7 +25,7 @@ const Search = () => {
                 </div>
             </div>
 
-            <ProductList products={products} />
+            <ProductList products={products} resetKey={resetKey} />
             <Question />
             <ScrollToTop />
         </div>

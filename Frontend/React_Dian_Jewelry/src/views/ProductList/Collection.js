@@ -14,6 +14,7 @@ function Collection() {
     const [products, setProducts] = useState([]);
     const [collectionInfo, setCollectionInfo] = useState({});
     const [navItems, setNavItems] = useState(['Home', 'Diamond Jewelry', 'Collection Name']);
+    const [collection, setCollection] = useState('');
 
     useEffect(() => {
         const collectionMap = {
@@ -30,6 +31,7 @@ function Collection() {
         const { collection } = location.state || {};
         if (collection) {
             const collectionId = collectionMap[collection];
+            setCollection(collection);
             setNavItems(['Home', 'Diamond Jewelry', 'Collections', collection.charAt(0).toUpperCase() + collection.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
 
             getCollectionDetail(collectionId)
@@ -68,7 +70,7 @@ function Collection() {
                 </div>
             </div>
             <br></br>
-            <ProductList products={products} />
+            <ProductList products={products} resetKey={collection} />
             <Question />
             <ScrollToTop />
         </div>

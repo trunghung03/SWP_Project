@@ -119,7 +119,7 @@ function Shape() {
                     </div>
                 </div>
             </div>
-            <ProductList products={products} />
+            <ProductList products={products} resetKey={shape} />
             <Question />
             <ScrollToTop />
         </div>

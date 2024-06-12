@@ -244,7 +244,7 @@ function ProductDetail() {
                     <div className="product_delivery_detail">
                         <p><i className="fas fa-phone"></i> <a href='tel:0795795959'>0795 795 959</a></p>
                         <p><i className="fas fa-shipping-fast"></i> Fast delivery, convenient transaction</p>
-                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong>four days</strong> depending on selected size</p>
+                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
                     </div>
                     <hr className="product_detail_line" />
                 </div>

@@ -67,10 +67,11 @@ function BlogDetail() {
                     <div className='blog_detail_main_image'>
                         <img src={article.image} alt={article.title} className="blog_detail_image" />
                     </div>
-                    <style dangerouslySetInnerHTML={{ __html: styles }} />
+                    {/* <style dangerouslySetInnerHTML={{ __html: styles }} />
                     <div dangerouslySetInnerHTML={{ __html: mainTitle }} />
                     <div dangerouslySetInnerHTML={{ __html: content }} />
-                    <div dangerouslySetInnerHTML={{ __html: images }} />
+                    <div dangerouslySetInnerHTML={{ __html: images }} /> */}
+                    <p className="blog_detail_created_by">{article.content}</p>
                 </div>
             </div>
 

@@ -12,6 +12,7 @@
 
 .faqs_banner_content h2 {
     color: white;
+    font-weight: bold;
 }
 
 // End main title 
@@ -71,7 +72,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1c1c1c;
+    background-color: #f4f2ee;
     color: white;
     margin: 20px 80px;
     border-radius: 10px;
@@ -87,10 +88,12 @@
     font-size: 26px;
     font-weight: bold;
     margin-bottom: 10px;
+    color: #1c1c1c;
 }
 
 .faqs_help_description {
     margin-bottom: 20px;
+    color: #1c1c1c;
 }
 
 .faqs_help_image img {
@@ -101,8 +104,8 @@
 }
 
 .faqs_help_btn {
-    background-color: white;
-    color: #1c1c1c;
+    background-color: #1c1c1c;
+    color: white;
     border: none;
     padding: 7px 55px;
     cursor: pointer;
@@ -113,7 +116,7 @@
 }
 
 .faqs_help_btn:hover {
-    background-color: #d1cfcf;
+    background-color: #797979;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

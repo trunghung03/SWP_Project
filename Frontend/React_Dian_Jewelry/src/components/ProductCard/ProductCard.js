@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ProductCard.scss';
 
@@ -36,17 +36,31 @@ const SpecialCard = () => {
     );
 };
 
-const ProductList = ({ products }) => {
-    const location = useLocation();
+const ProductList = ({ products, resetKey }) => {
+    const [visibleProducts, setVisibleProducts] = useState(12);
 
-    const isDiamondJewelryPage = location.pathname === '/diamond-jewelry';
+    useEffect(() => {
+        setVisibleProducts(12);
+    }, [resetKey]);
+
+    const handleSeeMore = () => {
+        setVisibleProducts(visibleProducts + 12);
+    };
+
+    const displayedProducts = products.slice(0, visibleProducts);
 
     return (
-        <div className="product_list ms-5 p-5 col-lg-12">
-            {products.map((product, index) => (
+        <div className="product_list col-lg-12">
+            {displayedProducts.map((product, index) => (
                 <ProductCard key={index} id={product.productId} image={product.imageLinkList} name={product.name} price={product.price} />
             ))}
-            <SpecialCard />
+            {visibleProducts < products.length ? (
+                <div className="product_see_more_container">
+                    <button className="product_see_more_button" onClick={handleSeeMore}>View More</button>
+                </div>
+            ) : (
+                <SpecialCard />
+            )}
         </div>
     );
 };

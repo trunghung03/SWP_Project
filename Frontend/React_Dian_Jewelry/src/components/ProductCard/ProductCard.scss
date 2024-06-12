@@ -2,33 +2,34 @@
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
-    padding: 40px 8%;
+    padding: 40px 5%;
+    justify-content: center;
 }
 
 .product_card {
-    flex: 0 0 247px;
+    flex: 0 0 250px;
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 5px;
     padding: 20px 20px 10px 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 330px;
+    height: 340px;
 }
 
 .special_card {
-    flex: 0 0 247px;
+    flex: 0 0 250px;
     text-align: center;
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 5px;
     padding: 58px 20px 10px 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 330px;
+    height: 340px;
 }
 
 .product_card img {
     width: 100%;
-    height: 200px;
+    height: 210px;
     margin-bottom: 20px;
     transition: transform 0.3s ease-in-out;
 }
@@ -43,7 +44,6 @@
     margin-bottom: 10px;
     transition: transform 0.3s ease-in-out;
 }
-
 
 .product_card:hover h6 {
     transform: translateY(-3px);
@@ -75,7 +75,6 @@
     margin-bottom: 20px;
 }
 
-
 .all_shop_now_btn {
     background-color: #1c1c1c;
     color: white;
@@ -91,4 +90,25 @@
     background-color: #797979;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product_see_more_container {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.product_see_more_button {
+    color: #1c1c1c;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    padding: 5px;
+    transition: color 0.3s;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.product_see_more_button:hover {
+    color: #797979;
 }
