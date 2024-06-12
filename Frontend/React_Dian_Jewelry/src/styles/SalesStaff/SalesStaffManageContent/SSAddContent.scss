@@ -117,7 +117,8 @@
 .ss_add_content_label{
     font-size: 16px;
     padding: 5 10px;
-    margin: 10px;  
+    margin: 10px;
+    width: 50%;
 }
 .ss_add_content_richtext{
     position: relative;
@@ -147,4 +148,28 @@
     align-items: center;
     margin-top: 30px;
     margin-bottom: 20px;
+}
+.ss_add_rich_text{
+    position: relative;
+    width: 90%;
+    height: 100%;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    padding: 5 10px;
+    margin-left: 10px;    
+    margin-bottom: 10%;
+    position: relative;
+    overflow-x: hidden;
+}
+.ss-navigate-button{
+    width: 25%;
+    background-color: white;
+    border: 0px;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+.ss_text_editor_nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

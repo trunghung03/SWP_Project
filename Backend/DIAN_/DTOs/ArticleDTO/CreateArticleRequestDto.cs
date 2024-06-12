@@ -23,5 +23,7 @@ namespace DIAN_.DTOs.ArticleDTO
 
         [Required]
         public bool Status { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
     }
 }

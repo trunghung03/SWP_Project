@@ -23,11 +23,11 @@ namespace DIAN_.Repository
             }
 
             // Khởi tạo EmployeeNavigation dựa trên EmployeeID
-            articleModel.EmployeeNavigation = await _context.Employees.FindAsync(articleModel.Employee);
-            if (articleModel.EmployeeNavigation == null)
-            {
-                return null;
-            }
+            //articleModel.EmployeeNavigation = await _context.Employees.FindAsync(articleModel.Employee);
+            //if (articleModel.EmployeeNavigation == null)
+            //{
+            //    return null;
+            //}
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
             return articleModel;

@@ -25,7 +25,7 @@ namespace DIAN_.Mapper
             {
                Title = articleDto.Title,
                Content = articleDto.Content,
-               Date = DateTime.Now,
+               Date =articleDto.Date,
                Image = articleDto.Image,
                 Employee = articleDto.Employee,
                 Tag = articleDto.Tag,

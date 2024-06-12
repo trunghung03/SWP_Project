@@ -49,7 +49,7 @@ import ManagerAddShell from './Manager/ManagerManageShell/ManagerAddShell';
 import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmployee';
 import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct';
 import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPromotion';
-
+import RichTextPage from './SalesStaff/SalesStaffManageContent/SSRichTextPage';
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgotPassword' || location.pathname === '/resetPassword';
@@ -118,10 +118,11 @@ function App() {
             <Route path="/sales-staff-content-list" element={<SSContentList />} />
             <Route path="/sales-staff-add-content" element={<SSAddContent />} />
             <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>
-
+            <Route path="/rich-text-page" element={<RichTextPage/>} />
             {/* Delivery Staff */}
             <Route path="/delivery-staff-delivery-list" element={<DSDeliveryList />} />
             <Route path="/delivery-staff-delivery-detail" element={<DSDeliveryDetail />} />
+            
           </Routes>
         </CartProvider>
       </UserProvider>
