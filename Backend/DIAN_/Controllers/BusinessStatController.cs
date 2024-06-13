@@ -154,11 +154,11 @@ namespace DIAN_.Controllers
             return Ok(categoryPercent);
         }
 
-        [HttpGet("monthly")]
-        public async Task<IActionResult> GetMonthlyStat([FromQuery] int? year)
+        [HttpGet("monthlyPurchaseOrderCount")]
+        public async Task<IActionResult> GetMonthlyPurchaseOrderCount([FromQuery] int? year)
         {
             int targetYear = year ?? DateTime.Now.Year;
-            var monthlyStats = new List<object>();
+            var monthlyCounts = new int[12];
 
             for (int month = 1; month <= 12; month++)
             {
@@ -169,20 +169,34 @@ namespace DIAN_.Controllers
                     .Where(po => po.Date >= startDate && po.Date <= endDate)
                     .CountAsync();
 
+                monthlyCounts[month - 1] = purchaseOrderCount;
+            }
+
+            return Ok(monthlyCounts);
+        }
+
+
+        [HttpGet("monthlyTotalValue")]
+        public async Task<IActionResult> GetMonthlyTotalValue([FromQuery] int? year)
+        {
+            int targetYear = year ?? DateTime.Now.Year;
+            var monthlyValues = new decimal[12];
+
+            for (int month = 1; month <= 12; month++)
+            {
+                DateTime startDate = new DateTime(targetYear, month, 1);
+                DateTime endDate = startDate.AddMonths(1).AddDays(-1);
+
                 decimal totalValue = await _context.Purchaseorders
                     .Where(po => po.Date >= startDate && po.Date <= endDate)
                     .SumAsync(po => po.TotalPrice);
 
-                monthlyStats.Add(new
-                {
-                    Month = month,
-                    PurchaseOrderCount = purchaseOrderCount,
-                    TotalValue = totalValue
-                });
+                monthlyValues[month - 1] = totalValue;
             }
 
-            return Ok(monthlyStats);
+            return Ok(monthlyValues);
         }
+
 
     }
 }
