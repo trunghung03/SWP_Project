@@ -174,7 +174,7 @@ namespace DIAN_.Controllers
             var categoryPercent = superCategoryCounts.Select(s => new
             {
                 Categories = s.Categories,
-                Percentage = (double)s.Count / totalSoldProducts
+                Percentage = (double)s.Count / totalSoldProducts * 100
             }).ToList();
 
             return Ok(categoryPercent);
