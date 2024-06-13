@@ -100,5 +100,58 @@ namespace DIAN_.Controllers
             int count = await _context.Products.CountAsync();
             return Ok(count);
         }
+
+        [HttpGet("products/soldpercentage")]
+        public async Task<IActionResult> GetSoldProductPercentage([FromQuery] string startMonthYear, [FromQuery] string endMonthYear)
+        {
+            DateTime? startDate = null;
+            DateTime? endDate = null;
+
+            // Parse the startMonthYear and endMonthYear parameters
+            if (!string.IsNullOrEmpty(startMonthYear))
+            {
+                startDate = DateTime.ParseExact(startMonthYear, "MM-yyyy", null);
+            }
+
+            if (!string.IsNullOrEmpty(endMonthYear))
+            {
+                endDate = DateTime.ParseExact(endMonthYear, "MM-yyyy", null).AddMonths(1).AddDays(-1); // End of the month
+            }
+
+            // Get the order details, optionally filtered by date
+            var query = _context.Orderdetails.AsQueryable();
+
+            if (startDate.HasValue)
+            {
+                query = query.Where(od => od.Order.Date >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                query = query.Where(od => od.Order.Date <= endDate.Value);
+            }
+
+            // Group by category and count the number of products sold in each category
+            var soldProductCount = await query
+                .GroupBy(od => od.Product.CategoryId)
+                .Select(g => new
+                {
+                    CategoryId = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            // Calculate the total number of sold products
+            int totalSoldProducts = soldProductCount.Sum(s => s.Count);
+
+            // Calculate the percentage of products sold for each category
+            var categoryPercent = soldProductCount.Select(s => new
+            {
+                CategoryId = s.CategoryId,
+                Percentage = (double)s.Count / totalSoldProducts
+            }).ToList();
+
+            return Ok(categoryPercent);
+        }
     }
 }
