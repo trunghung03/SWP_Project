@@ -3,6 +3,7 @@ using DIAN_.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DIAN_.Controllers
 {
@@ -102,7 +103,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("products/soldpercentage")]
-        public async Task<IActionResult> GetSoldProductPercentage([FromQuery] string startMonthYear, [FromQuery] string endMonthYear)
+        public async Task<IActionResult> GetSoldProductPercentage([FromQuery] string? startMonthYear, [FromQuery] string? endMonthYear)
         {
             DateTime? startDate = null;
             DateTime? endDate = null;
@@ -131,6 +132,20 @@ namespace DIAN_.Controllers
                 query = query.Where(od => od.Order.Date <= endDate.Value);
             }
 
+            // Define the mapping from category ID to super-category
+            var superCategoryMapping = new Dictionary<int, string>
+                {
+                    { 1, "Rings" },
+                    { 5, "Rings" },
+                    { 9, "Rings" },
+                    { 2, "Earrings" },
+                    { 6, "Earrings" },
+                    { 3, "Bracelets" },
+                    { 7, "Bracelets" },
+                    { 4, "Necklaces" },
+                    { 8, "Necklaces" }
+                };
+
             // Group by category and count the number of products sold in each category
             var soldProductCount = await query
                 .GroupBy(od => od.Product.CategoryId)
@@ -141,18 +156,30 @@ namespace DIAN_.Controllers
                 })
                 .ToListAsync();
 
-            // Calculate the total number of sold products
-            int totalSoldProducts = soldProductCount.Sum(s => s.Count);
+            // Group by super-category and aggregate counts
+            var superCategoryCounts = soldProductCount
+                .GroupBy(s => superCategoryMapping[(int)s.CategoryId])
+                .Select(g => new
+                {
+                    SuperCategory = g.Key,
+                    Count = g.Sum(x => x.Count),
+                    Categories = g.Select(x => x.CategoryId).ToArray()
+                })
+                .ToList();
 
-            // Calculate the percentage of products sold for each category
-            var categoryPercent = soldProductCount.Select(s => new
+            // Calculate the total number of sold products
+            int totalSoldProducts = superCategoryCounts.Sum(s => s.Count);
+
+            // Calculate the percentage of products sold for each super-category
+            var categoryPercent = superCategoryCounts.Select(s => new
             {
-                CategoryId = s.CategoryId,
+                Categories = s.Categories,
                 Percentage = (double)s.Count / totalSoldProducts
             }).ToList();
 
             return Ok(categoryPercent);
         }
+
 
         [HttpGet("monthlyPurchaseOrderCount")]
         public async Task<IActionResult> GetMonthlyPurchaseOrderCount([FromQuery] int? year)
