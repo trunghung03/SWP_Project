@@ -212,7 +212,8 @@ function Checkout() {
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
-                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } }); // Pass as integer
+                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } }); 
+                console.log(orderId, paymentMethod, usePoints, cartItems);
             }
         } catch (error) {
             console.error('Error creating purchase order:', error);
@@ -231,14 +232,6 @@ function Checkout() {
 
     const handlePointsClick = () => {
         setUsePoints(!usePoints);
-    };
-
-    const handlePaymentMethodChange = (method) => {
-        if (paymentMethod.includes(method)) {
-            setPaymentMethod(paymentMethod.replace(method, '').replace(',,', ',').replace(/^,|,$/g, ''));
-        } else {
-            setPaymentMethod(paymentMethod ? `${paymentMethod},${method}` : method);
-        }
     };
 
     const handleChange = (e) => {

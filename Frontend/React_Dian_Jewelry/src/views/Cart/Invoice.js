@@ -96,13 +96,17 @@ function Invoice() {
                                             <li>Transfer content (important): <strong>DIAN{orderId}</strong></li>
                                             <li>Order will be cancel after 2 days if do not transfer</li>
                                             <li>Keep track your order at tracking orders section after transfer</li>
-                                            <img src={qr} className="qr" alt="QR Code"/>
+                                            <img src={qr} className="qr" alt="QR Code" />
                                         </ul>
                                     ) : paymentMethod === "Cash" ? (
                                         <ul>
                                             <li>Order will be prepare about four days</li>
                                             <li>Keep track your order at tracking orders section</li>
                                             <li>Contact hotline <strong> 0795795959 </strong> to transact directly at store</li>
+                                        </ul>
+                                    ) : paymentMethod === "VNPAY" ? (
+                                        <ul>
+                                            <li>VNPAY</li>
                                         </ul>
                                     ) : null}
                                 </div>
