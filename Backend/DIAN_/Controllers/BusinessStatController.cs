@@ -92,5 +92,13 @@ namespace DIAN_.Controllers
 
             return Ok(timestampedOrders);
         }
+
+        // GET api/stat/products
+        [HttpGet("products")]
+        public async Task<IActionResult> GetProductCount()
+        {
+            int count = await _context.Products.CountAsync();
+            return Ok(count);
+        }
     }
 }
