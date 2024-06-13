@@ -71,6 +71,9 @@ namespace DIAN_.Mapper
                 ImageLinkList = FirstImgLink,
                 CollectionId = product.CollectionId ?? 0,
                 Shape = diamond?.Shape ?? string.Empty,
+                Carat = diamond?.Carat ?? 0,
+                Color = diamond?.Color ?? string.Empty,
+                Clarity = diamond?.Clarity ?? string.Empty,
             };
         }
         public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
