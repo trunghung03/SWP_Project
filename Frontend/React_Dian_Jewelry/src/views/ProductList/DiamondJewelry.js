@@ -32,29 +32,39 @@ function DiamondJewelry() {
         const { category } = location.state || {};
         setCategory(category || '');
         if (category) {
-            if (category === 'weddingEarrings' || category === 'weddingBracelet' || category === 'weddingNecklace' || category === 'engagementRing' || category === 'weddingRing') {
-                setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry', category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
-            }
-            else if (category === 'weddingJewelry') {
-                setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry']);
-            }
-            else {
-                setNavItems(['Home', 'Diamond Jewelry', category.charAt(0).toUpperCase() + category.slice(1)]);
+            if (category === 'all') {
+                setNavItems(['Home', 'Diamond Jewelry']);
+                getProductList()
+                    .then(response => {
+                        setProducts(response.data);
+                    })
+                    .catch(error => console.log('Error fetching products:', error));
+            } else {
+                if (category === 'weddingEarrings' || category === 'weddingBracelet' || category === 'weddingNecklace' || category === 'engagementRing' || category === 'weddingRing') {
+                    setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry', category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
+                }
+                else if (category === 'weddingJewelry') {
+                    setNavItems(['Home', 'Diamond Jewelry', 'Wedding Jewelry']);
+                }
+                else {
+                    setNavItems(['Home', 'Diamond Jewelry', category.charAt(0).toUpperCase() + category.slice(1)]);
+                }
+
+                getProductList()
+                    .then(response => {
+                        const filteredProducts = response.data.filter(product => categoryMap[category].includes(product.categoryID));
+                        setProducts(filteredProducts);
+                    })
+                    .catch(error => console.log('Error fetching products:', error));
             }
         } else {
             setNavItems(['Home', 'Diamond Jewelry']);
-        }
-
-        getProductList()
-            .then(response => {
-                if (category) {
-                    const filteredProducts = response.data.filter(product => categoryMap[category].includes(product.categoryID));
-                    setProducts(filteredProducts);
-                } else {
+            getProductList()
+                .then(response => {
                     setProducts(response.data);
-                }
-            })
-            .catch(error => console.log('Error fetching products:', error));
+                })
+                .catch(error => console.log('Error fetching products:', error));
+        }
 
         window.scrollTo(0, 0);
     }, [location.state]);

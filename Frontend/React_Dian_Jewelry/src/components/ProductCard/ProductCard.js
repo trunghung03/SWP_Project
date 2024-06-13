@@ -3,18 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ProductCard.scss';
 
-const ProductCard = ({ id, image, name, price }) => {
+const ProductCard = ({ id, image, name, price, color, carat, clarity }) => {
     const navigate = useNavigate();
 
-    const handleCardClick = () => {
+    const handleViewClick = (e) => {
+        e.stopPropagation();
         navigate('/product-detail', { state: { id } });
     };
 
     return (
-        <div className="product_card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+        <div className="product_card">
             <img src={image} alt={name} />
-            <h6>{name}</h6>
-            <p>{price}$</p>
+            <button className="product_view_button" onClick={handleViewClick}>View Detail</button>
+            <p className='product_card_detail'>{clarity} | {carat} | {color}</p>
+            <h6 className='product_card_name'>{name}</h6>
+            <p className='product_card_price'>{price}$</p>
         </div>
     );
 };
@@ -52,7 +55,16 @@ const ProductList = ({ products, resetKey }) => {
     return (
         <div className="product_list col-lg-12">
             {displayedProducts.map((product, index) => (
-                <ProductCard key={index} id={product.productId} image={product.imageLinkList} name={product.name} price={product.price} />
+                <ProductCard 
+                key={index} 
+                id={product.productId} 
+                image={product.imageLinkList} 
+                name={product.name} 
+                price={product.price}  
+                color={product.color}
+                carat={product.carat}
+                clarity={product.clarity}
+                />
             ))}
             {visibleProducts < products.length ? (
                 <div className="product_see_more_container">

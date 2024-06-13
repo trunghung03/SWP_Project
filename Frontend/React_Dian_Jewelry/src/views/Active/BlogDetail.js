@@ -20,6 +20,10 @@ function BlogDetail() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0); 
+    }, [articleID]);
+
+    useEffect(() => {
         getArticleById(articleID)
             .then(data => {
                 setArticle(data);
@@ -44,7 +48,7 @@ function BlogDetail() {
         tempDiv.innerHTML = htmlString;
 
         const mainTitle = tempDiv.querySelector('.main-title')?.outerHTML || '';
-        const content = tempDiv.querySelector('.content')?.outerHTML || '';
+        const content = tempDiv.querySelector('.testtest')?.outerHTML || '';
         const images = [...tempDiv.querySelectorAll('img')].map(img => img.outerHTML).join('');
         const styles = tempDiv.querySelector('style')?.outerHTML || '';
 
@@ -67,11 +71,11 @@ function BlogDetail() {
                     <div className='blog_detail_main_image'>
                         <img src={article.image} alt={article.title} className="blog_detail_image" />
                     </div>
-                    {/* <style dangerouslySetInnerHTML={{ __html: styles }} />
+                    <style dangerouslySetInnerHTML={{ __html: styles }} />
                     <div dangerouslySetInnerHTML={{ __html: mainTitle }} />
-                    <div dangerouslySetInnerHTML={{ __html: content }} />
-                    <div dangerouslySetInnerHTML={{ __html: images }} /> */}
-                    <p className="blog_detail_created_by">{article.content}</p>
+                    <div className='test' dangerouslySetInnerHTML={{ __html: content }} />
+                    <div dangerouslySetInnerHTML={{ __html: images }} />
+                    {/* <p className="blog_detail_created_by">{article.content}</p> */}
                 </div>
             </div>
 

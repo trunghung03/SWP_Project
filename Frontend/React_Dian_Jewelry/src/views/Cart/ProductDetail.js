@@ -35,8 +35,8 @@ function ProductDetail() {
         if (productDetailElement) {
             const topPos = productDetailElement.getBoundingClientRect().top + window.pageYOffset;
             window.scrollTo({
-                top: topPos, // Scroll to the top position of the element
-                behavior: 'smooth' // Optional: for smooth scrolling
+                top: topPos,
+                behavior: 'smooth'
             });
         }
         navigate('/product-detail', { state: { id: productId } });
@@ -61,7 +61,7 @@ function ProductDetail() {
                     setCollection(collectionResponse.data);
 
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
-                    setAlsoLikeProducts(relatedProducts.slice(0, 5));
+                    setAlsoLikeProducts(relatedProducts.slice(0, 4));
                 }).catch(error => {
                     console.error('Error fetching product, diamond, or collection details:', error);
                 });
@@ -311,8 +311,10 @@ function ProductDetail() {
                     <h2 className="also_like_title">YOU MAY ALSO LIKE</h2>
                     <div className="also_like_wrapper">
                         {alsoLikeProducts.map((product, index) => (
-                            <div key={index} className="also_like_card" onClick={() => navigateToProductDetail(product.productId)}>
+                            <div key={index} className="also_like_card">
                                 <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
+                                <button className="also_view_button" onClick={(e) => { e.stopPropagation(); navigateToProductDetail(product.productId); }}>View Detail</button>
+                                <p className="also_like_detail">{product.clarity} | {product.carat} | {product.color}</p>
                                 <p className="also_like_name">{product.name}</p>
                                 <p className="also_like_price">{product.price}$</p>
                             </div>

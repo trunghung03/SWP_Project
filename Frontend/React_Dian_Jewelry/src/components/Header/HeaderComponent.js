@@ -25,7 +25,7 @@ const HeaderComponent = () => {
     const weddingMenuRef = useRef(null);
     const diamondMenuTimeoutRef = useRef(null);
     const weddingMenuTimeoutRef = useRef(null);
-    const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry); // Default image for Diamond Jewelry
+    const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry); 
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -126,7 +126,7 @@ const HeaderComponent = () => {
                                 {cartItems.length > 0 && <span className="cart_badge">{cartItems.length}</span>}
                             </Link>
                             <div className="account_dropdown_section dropdown">
-                                <i className="icon_account fas fa-user" onClick={() => navigate('/edit-profile')}></i>
+                                <i className="icon_account fas fa-user"></i>
                                 <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                     aria-expanded="false"></i>
                                 <ul className="account_dropdown_menu dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -173,9 +173,9 @@ const HeaderComponent = () => {
                                 onMouseEnter={() => handleMouseEnter(diamondMenuRef, diamondMenuTimeoutRef, mainImgDiamondJewelry)}
                                 onMouseLeave={() => handleMouseLeave(diamondMenuRef, diamondMenuTimeoutRef)}
                             >
-                                <Link className="diamond header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry')} id="diamondDropdown" role="button" aria-expanded="false">
+                                <a className="diamond header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry', { state: { category: 'all' } })} id="diamondDropdown" role="button" aria-expanded="false">
                                     DIAMOND JEWELRY<i className="icon_arrow_diamond fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
-                                </Link>
+                                </a>
                                 <div className="diamond_dropdown_menu dropdown-menu" ref={diamondMenuRef} aria-labelledby="diamondDropdown">
                                     <div className="dropdown_content">
                                         <ul className="dropdown_items">
@@ -196,9 +196,9 @@ const HeaderComponent = () => {
                                 onMouseEnter={() => handleMouseEnter(weddingMenuRef, weddingMenuTimeoutRef, mainImgWeddingJewelry)}
                                 onMouseLeave={() => handleMouseLeave(weddingMenuRef, weddingMenuTimeoutRef)}
                             >
-                                <Link className="wedding header_spe_nav_link nav-link" onClick={() => navigate('/diamond-jewelry', { state: { category: 'weddingJewelry' } })} id="weddingDropdown" role="button" aria-expanded="false">
+                                <a className="wedding header_spe_nav_link nav-link" onClick={() => navigateToCategory('weddingJewelry')} id="weddingDropdown" role="button" aria-expanded="false">
                                     WEDDING JEWELRY<i className="icon_arrow_wedding fas fa-chevron-down" style={{ fontSize: '10px' }}></i>
-                                </Link>
+                                </a>
                                 <div className="wedding_dropdown_menu dropdown-menu" ref={weddingMenuRef} aria-labelledby="weddingDropdown">
                                     <div className="dropdown_content">
                                         <ul className="dropdown_items">
