@@ -16,7 +16,7 @@ import Switch from '@mui/material/Switch';
 const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
-    width: 50,
+    width: 45,
     height: 20,
     padding: 0,
     '& .MuiSwitch-switchBase': {
@@ -24,7 +24,7 @@ const IOSSwitch = styled((props) => (
         margin: 2,
         transitionDuration: '300ms',
         '&.Mui-checked': {
-            transform: 'translateX(30px)',
+            transform: 'translateX(25px)',
             color: '#fff',
             '& + .MuiSwitch-track': {
                 backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#f4b798',
@@ -148,7 +148,7 @@ function Checkout() {
 
     const handleInvoice = async () => {
         const { fullName, phone, address, note } = formData;
-
+    
         if (!fullName || !phone || !address) {
             swal({
                 title: "Please fill in all the required fields!",
@@ -158,7 +158,7 @@ function Checkout() {
             });
             return;
         }
-
+    
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(phone)) {
             swal({
@@ -169,7 +169,7 @@ function Checkout() {
             });
             return;
         }
-
+    
         if (paymentMethod === '') {
             swal({
                 title: "Have not chosen a payment method!",
@@ -179,14 +179,14 @@ function Checkout() {
             });
             return;
         }
-
+    
         setLoading(true);
-
+    
         const userId = parseInt(localStorage.getItem('customerId'), 10);
         const date = new Date().toISOString();
         const initialTotal = calculateTotal();
         const totalDiscount = voucherDiscount + pointsDiscount;
-
+    
         let remainingPoints = points;
         let appliedDiscount = totalDiscount;
         if (totalDiscount > initialTotal) {
@@ -195,7 +195,7 @@ function Checkout() {
         } else {
             remainingPoints = points - pointsDiscount;
         }
-
+    
         const orderData = {
             userId: userId,
             date: date,
@@ -211,12 +211,11 @@ function Checkout() {
             saleStaff: 0,
             deliveryStaff: 0
         };
-        console.log(orderData);
-
+    
         try {
             const createdOrder = await createPurchaseOrder(orderData, voucherCode);
             const orderId = createdOrder.orderId;
-
+    
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
@@ -228,32 +227,21 @@ function Checkout() {
                 };
                 return createOrderDetails(orderDetail);
             });
-
+    
             await Promise.all(orderDetailsPromises);
-
+    
             localStorage.setItem('orderId', orderId);
             localStorage.setItem('orderDate', date);
             localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
             localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
-
+            localStorage.setItem('paymentMethod', paymentMethod);
+    
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
                 ...prevUser,
                 points: remainingPoints
             }));
-
-            const cartKey = `cartItems${customerId}`;
-            localStorage.removeItem(cartKey);
-
-            updateCartContext([]);
-
-            swal({
-                title: "Order successfully!",
-                text: "Thank you for your order.",
-                icon: "success",
-                button: "OK",
-            });
-
+    
             if (paymentMethod === 'VNPAY') {
                 const paymentData = {
                     orderId,
@@ -265,9 +253,20 @@ function Checkout() {
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
+                const cartKey = `cartItems${customerId}`;
+                localStorage.removeItem(cartKey);
+                updateCartContext([]);
+    
+                swal({
+                    title: "Order successfully!",
+                    text: "Thank you for your order.",
+                    icon: "success",
+                    button: "OK",
+                });
+    
                 navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } });
-                console.log(orderId, paymentMethod, usePoints, cartItems);
             }
+    
         } catch (error) {
             console.error('Error creating purchase order:', error);
             if (error.response) {
@@ -282,6 +281,7 @@ function Checkout() {
             setLoading(false);
         }
     };
+    
 
     const handlePointsClick = () => {
         setUsePoints(!usePoints);
