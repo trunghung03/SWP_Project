@@ -3,9 +3,29 @@
     width: 100%;
 }
 
+.ss_manage_content_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ss_manage_content_line {
+    width: 150%;
+    margin-left: -15%;
+    z-index: 1;
+    color: gray;
+}
+
+.ss_manage_content_header .ss_manage_content_logo {
+    height: 60px;
+    width: 120px;
+    max-width: 120px;
+}
+
 .ss_manage_orderdetail_content {
     flex-grow: 1;
     padding: 15px 6% 6% 8%;
+    overflow-x: hidden;
 }
 .ss_order_detail_p_tag{
     margin-left: 3.5%;
@@ -83,17 +103,22 @@
 .ss_detail_card_name{
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
-.manager-header-line {
-    width: calc(100% - 40px); /* Adjust to match padding */
-    border: 1px solid #ccc;
-    margin: 20px 0;
-    margin-left: auto;
-    margin-right: auto;
+// .manager-header-line {
+//     width: 150%;
+//     margin-left: -15%;
+//     z-index: 1;
+//     color: gray;
+// }
+.ss_manage_content_line {
+    width: 150%;
+    margin-left: -15%;
+    z-index: 1;
+    color: gray;
 }
 .ss_order_detail_container {
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 3% auto;
     border: 0.5px solid #cccccc;
 }
 .ss_detail_confirmbutton button {
@@ -112,4 +137,16 @@
 .ss_detail_confirmbutton button:hover {
     border: 1.3px solid #8bc4f0;
     background-color: #ebf5ff;
+}
+.SS_back_button{
+    background-color: white;
+    color: black; 
+    padding: 10px 20px; 
+    border: none; 
+    text-decoration: underline;
+    cursor: pointer; 
+    float: right;
+}
+.SS_back_button:hover {
+    font-weight: 600;
 }

@@ -131,14 +131,14 @@ const SSWarrantyList = () => {
     };
 
     return (
-        <div className="ss_manage_warranty_all_container">
-            <div className="ss_manage_warranty_sidebar">
+        <div className="ss_manage_content_all_container">
+            <div className="ss_manage_content_sidebar">
                 <SalesStaffSidebar currentPage="salesstaff_manage_warranty" />
             </div>
-            <div className="ss_manage_warranty_content">
-                <div className="manager_manage_diamond_header">
-                    <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
-                    <div className="manager_manage_diamond_search_section">
+            <div className="ss_manage_content_content">
+                <div className="ss_manage_content_header">
+                    <img className="ss_manage_content_logo" src={logo} alt="Logo" />
+                    <div className="ss_manage_content_search_section">
                         <input
                             type="text"
                             className="manager_manage_diamond_search_bar"
@@ -149,7 +149,7 @@ const SSWarrantyList = () => {
                         />
                     </div>
                 </div>
-                <hr className="manager_header_line"></hr>
+                <hr className="ss_manage_content_line"></hr>
                 <div className="manager_manage_diamond_create_button_section">
                     <button className="manager_manage_diamond_create_button" onClick={() => navigate('/saleStaffAddNewWarranty')}>Add new Warranty</button>
                 </div>

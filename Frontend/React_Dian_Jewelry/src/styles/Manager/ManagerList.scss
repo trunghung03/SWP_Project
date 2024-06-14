@@ -20,7 +20,16 @@
 .manager_manage_diamond_sidebar {
     z-index: 2;
 }
-
+.ds_header_pagination_list{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.3%;
+}
+.manager_header_pagination_list{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.3%;
+}
 .manager_button_pagination {
     background-color: initial; /* Set your initial background color */
     color: initial; /* Set your initial text color */
@@ -181,7 +190,7 @@
     cursor: pointer;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     &:hover{
-        background-color: #d3c5c5;
+        background-color: #e9eef0;
     }
 
 }
@@ -317,4 +326,3 @@
 .manager_manage_diamond_modal_actions button:first-child:hover {
     background-color: #777;
 }
-

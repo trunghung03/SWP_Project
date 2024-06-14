@@ -62,7 +62,7 @@ export const getShellMaterialById = async (shellMaterialId) => {
     }
 };
 export const fetchUserByUserId = async (id) => {
-    return axios.get(`https://localhost:7184/api/employees/salesstaff/orderlists`, { params: { id } })
+    return axios.get(`https://localhost:7184/api/accounts/${id}`)
     .then((response) => {
       return response.data;
     })

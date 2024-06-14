@@ -4,8 +4,6 @@ import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderDetail.scss";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { getOrderDetailsByOrderId } from "../../../services/TrackingOrderService.js";
-import swal from "sweetalert";
-import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import { getProductDetail } from "../../../services/ProductService.js";
 import logo from "../../../assets/img/logoN.png";
 import { useLocation } from "react-router-dom";
@@ -15,19 +13,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Paper from "@mui/material/Paper";
-import { Button, CardActionArea, CardActions } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { Icon } from "@mui/material";
-// Import specific icons from Material-UI
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import WarrantyIcon from "@mui/icons-material/EventAvailable";
-import { Container, Typography, Stack, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { getShellDetail } from "../../../services/ManagerService/ManagerShellService.js";
 //order detail, warranty, product (main diamond => certi),
 
@@ -102,24 +94,13 @@ const SSOrderDetail = () => {
       <div className="ss_manage_orderdetail_sidebar">
         <SalesStaffSidebar currentPage="salesstaff_manage_orderdetail" />
       </div>
-      <div className="ss_manage_orderdetail_content">
-        <div className="manager_manage_diamond_header">
-          <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
-          <div className="manager_manage_diamond_search_section">
-            <i className="fas fa-search manager_manage_search_icon"></i>
-            <input
-              type="text"
-              className="manager_manage_diamond_search_bar"
-              placeholder="Search by ID or Role..."
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
-              // onKeyUp={handleSearchKeyPress}
-            />
-          </div>
+      <div className="ss_manage_content_content">
+        <div className="ss_manage_content_header">
+          <img className="ss_manage_content_logo" src={logo} alt="Logo" />
         </div>
-       <div className="ss_order_detail_container">
-          {/* Content outside the Box but inside the Container */}
-          {/* <Typography variant="h6">Order Detail</Typography> */}
+        <hr className="ss_manage_content_line"></hr>
+        <button className="SS_back_button" onClick={() => navigate('/sales-staff-order-list')}>Back</button>
+       <div className="ss_order_detail_container"> 
           <div>
             <div
               style={{
@@ -143,7 +124,6 @@ const SSOrderDetail = () => {
                       label="Age"
                       onChange={handleChange}
                     >
-                      <MenuItem value={orderStatus}>Unpaid</MenuItem>
                       <MenuItem value={orderStatus}>Paid</MenuItem>
                       <MenuItem value={orderStatus}>Preparing</MenuItem>
                       <MenuItem value={orderStatus}>Delivering</MenuItem>

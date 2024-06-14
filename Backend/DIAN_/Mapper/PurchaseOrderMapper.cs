@@ -1,6 +1,7 @@
 ﻿using DIAN_.DTOs.OrderDetailDto;
 using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Models;
+using MailKit.Search;
 
 namespace DIAN_.Mapper
 {
@@ -120,6 +121,7 @@ namespace DIAN_.Mapper
         {
             return new PurchaseOrderDetailDto
         {
+            OrderId = dto.OrderId,
             UserId = dto.UserId,
             Date = DateTime.Now,
             Name = dto.Name,

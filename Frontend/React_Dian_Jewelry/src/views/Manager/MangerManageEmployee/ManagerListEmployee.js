@@ -238,10 +238,10 @@ const ManagerEmployeeList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <div className="manager_header_pagination_list">
-          <h3 className="manager_title_employees" style={{ textAlign: "center" }}>
+        <h3 className="manager_title_employees" style={{ alignItems: "flex-end" }}>
             Employees
           </h3>
+        <div className="manager_header_pagination_list"  style={{ textAlign: 'right' }}>
           <div className="manager_manage_diamond_pagination">
             <button
               className="manager_button_pagination"

@@ -21,6 +21,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 
 const getPromotionStatus = async (endDate, id) => {
   try {
@@ -37,7 +40,24 @@ const getPromotionStatus = async (endDate, id) => {
     return false;
   }
 };
-
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 const PromotionButton = ({ endDate, id }) => {
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -272,6 +292,7 @@ const ManagerPromotionList = () => {
           </div>
           <div className="manager_manage_diamond_pagination">
             <button
+              className="manager_button_pagination"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
@@ -289,6 +310,7 @@ const ManagerPromotionList = () => {
               </button>
             ))}
             <button
+              className="manager_button_pagination"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
@@ -296,34 +318,33 @@ const ManagerPromotionList = () => {
             </button>
           </div>
         </div>
-        {/* Table diamond list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
                   <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell align="justify">Name</StyledTableCell>
-                  <StyledTableCell align="justify">Code</StyledTableCell>
-                  <StyledTableCell align="justify">Discount</StyledTableCell>
-                  <StyledTableCell align="justify">Description</StyledTableCell>
-                  <StyledTableCell align="justify">Start Date</StyledTableCell>
-                  <StyledTableCell align="justify">End Date</StyledTableCell>
-                  <StyledTableCell align="justify">Status</StyledTableCell>
+                  <StyledTableCell align="center">Name</StyledTableCell>
+                  <StyledTableCell align="center">Code</StyledTableCell>
+                  <StyledTableCell align="center">Discount</StyledTableCell>
+                  <StyledTableCell align="center">Description</StyledTableCell>
+                  <StyledTableCell align="center">Start Date</StyledTableCell>
+                  <StyledTableCell align="center">End Date</StyledTableCell>
+                  <StyledTableCell align="center">Status</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {promotionList.length > 0 ? (
                   currentPromotion.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell>{item.id}</TableCell>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.code}</TableCell>
-                      <TableCell>{item.amount}</TableCell>
-                      <TableCell>{item.description}</TableCell>
-                      <TableCell>{item.startDate}</TableCell>
-                      <TableCell>{item.endDate}</TableCell>
-                      <TableCell>
+                    <TableRow className="manager_manage_table_body_row" key={item.id}>
+                      <TableCell align="center">{item.id}</TableCell>
+                      <TableCell align="center">{item.name}</TableCell>
+                      <TableCell align="center">{item.code}</TableCell>
+                      <TableCell align="center">{item.amount}</TableCell>
+                      <TableCell align="center">{item.description}</TableCell>
+                      <TableCell align="center">{item.startDate}</TableCell>
+                      <TableCell align="center">{item.endDate}</TableCell>
+                      <TableCell align="center">
                         <PromotionButton endDate={item.endDate} id={item.id} />
                       </TableCell>
                     </TableRow>
