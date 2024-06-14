@@ -13,6 +13,9 @@ import missionImage from '../../assets/img/blogMission.png';
 import conflictFreeIcon from '../../assets/img/blog1.svg';
 import recycledMetalsIcon from '../../assets/img/blog2.svg';
 import givingBackIcon from '../../assets/img/blog3.svg';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function Blog() {
   const [articles, setArticles] = useState([]);
@@ -116,6 +119,7 @@ function Blog() {
 
   return (
     <div className="Blog">
+      <HeaderComponent />
       <SubNav items={navItems} />
 
       <div className="blog_main_container row">
@@ -271,6 +275,8 @@ function Blog() {
       <BlogInspired openInstagram={openInstagram} />
 
       <ScrollToTop />
+
+      <FooterComponent />
     </div>
   );
 }

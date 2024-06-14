@@ -7,6 +7,9 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Static/FAQs.scss';
 import contact from '../../assets/img/contact.webp';
 import faqsImg from '../../assets/img/faqs.png';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function FAQs() {
   const navItems = ['Home', 'Frequently Asked Questions'];
@@ -80,6 +83,7 @@ function FAQs() {
 
   return (
     <div className="FAQs">
+      <HeaderComponent/>
       <SubNav items={navItems} />
 
       {/* Main title */}
@@ -120,6 +124,7 @@ function FAQs() {
       </div>
       <br></br><br></br><br></br>
       <ScrollToTop />
+      <FooterComponent/>
     </div>
   );
 }

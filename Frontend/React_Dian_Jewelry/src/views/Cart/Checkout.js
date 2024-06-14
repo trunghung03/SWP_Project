@@ -12,6 +12,9 @@ import { UserContext } from '../../services/UserContext';
 import vnpay from '../../assets/img/vnpay.webp';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -298,6 +301,7 @@ function Checkout() {
 
     return (
         <div className="Checkout">
+            <HeaderComponent/>
             <SubNav items={navItems} />
 
             <div className="checkout_header">
@@ -454,6 +458,7 @@ function Checkout() {
             </div>
 
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

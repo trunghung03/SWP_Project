@@ -8,6 +8,9 @@ import Question from '../../components/Question/Question.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList } from '../../services/ProductService.js';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function DiamondJewelry() {
     const location = useLocation();
@@ -71,11 +74,13 @@ function DiamondJewelry() {
 
     return (
         <div className="DiamondJewelry">
+            <HeaderComponent/>
             <SubNav items={navItems} />
             <News /> <br />
             <ProductList products={products} resetKey={category} />
             <Question />
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

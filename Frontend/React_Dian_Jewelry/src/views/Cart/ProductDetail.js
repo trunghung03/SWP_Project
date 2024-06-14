@@ -9,6 +9,9 @@ import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductList } from '../../services/ProductService';
 import { useCart } from '../../services/CartService';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function ProductDetail() {
     useEffect(() => {
@@ -186,6 +189,7 @@ function ProductDetail() {
 
     return (
         <div id="product_detail" className="product_detail">
+            <HeaderComponent />
             <SubNav items={navItems} />
             <br />
             <div className="product_detail_container">
@@ -323,6 +327,7 @@ function ProductDetail() {
                 </div>
             </div>
             <ScrollToTop />
+            <FooterComponent />
         </div>
     );
 }

@@ -5,12 +5,15 @@ import '../../styles/Static/Contact.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { Link } from 'react-router-dom';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function Contact() {
   const navItems = ['Home', 'Contact'];
   return (
     <div className="Contact">
-
+      <HeaderComponent />
       <SubNav items={navItems} />
 
       {/* Contact */}
@@ -19,7 +22,7 @@ function Contact() {
         <div className="contact_grid">
           <div className="contact_card">
             <div className="contact_icon">
-            <i className="fas fa-map-marker-alt"></i>
+              <i className="fas fa-map-marker-alt"></i>
             </div>
             <h3 className="contact_card_title">ADDRESS</h3>
             <p className="contact_card_description"> Lot E2a-7, Street D1 High-Tech Park, Long Thanh My Ward, Thu Duc, City. Ho Chi Minh.</p>
@@ -49,6 +52,7 @@ function Contact() {
       </div>
 
       <ScrollToTop></ScrollToTop>
+      <FooterComponent />
 
     </div>
   );

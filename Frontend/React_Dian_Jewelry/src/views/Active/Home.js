@@ -8,6 +8,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
 import '../../styles/Active/Home.scss';
 import brilliant1 from '../../assets/img/brilliant1.png';
 import brilliant2 from '../../assets/img/brilliant2.png';
@@ -166,6 +168,7 @@ const Home = () => {
 
   return (
     <div className="Home">
+      <HeaderComponent />
       {/* Slider */}
       <div className="slider-container">
         <Slider {...settings}>
@@ -431,6 +434,7 @@ const Home = () => {
 
 
       <ScrollToTop />
+      <FooterComponent />
     </div>
   );
 }
