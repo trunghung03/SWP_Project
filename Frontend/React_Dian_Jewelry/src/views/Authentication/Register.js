@@ -14,6 +14,34 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+
+        const allCartItems = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('cartItems')) {
+                allCartItems[key] = localStorage.getItem(key);
+            }
+        }
+
+        localStorage.clear();
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
+        localStorage.removeItem('email');
+        localStorage.removeItem('points');
+
+        if (rememberedEmail && rememberedPassword) {
+            localStorage.setItem('rememberedEmail', rememberedEmail);
+            localStorage.setItem('rememberedPassword', rememberedPassword);
+        }
+
+        for (const key in allCartItems) {
+            localStorage.setItem(key, allCartItems[key]);
+        }
+    }, []);
+
+    useEffect(() => {
         const togglePassword = document.getElementById('togglePassword');
         const handleTogglePassword = () => {
             const password = document.getElementById('password');

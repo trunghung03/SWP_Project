@@ -9,9 +9,9 @@ import rightImage from '../../assets/img/right.jpeg';
 import rightImage2 from '../../assets/img/right2.jpg';
 import rightImage3 from '../../assets/img/right3.jpg';
 import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import { useCart } from '../../services/CartService';
-import { UserContext } from '../../services/UserContext'; 
+import { UserContext } from '../../services/UserContext';
 
 const Login = () => {
     const { setUser } = useContext(UserContext);
@@ -27,10 +27,31 @@ const Login = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');
 
+        const allCartItems = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('cartItems')) {
+                allCartItems[key] = localStorage.getItem(key);
+            }
+        }
+
+        localStorage.clear();
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
+        localStorage.removeItem('email');
+        localStorage.removeItem('points');
+
+
         if (rememberedEmail && rememberedPassword) {
+            localStorage.setItem('rememberedEmail', rememberedEmail);
+            localStorage.setItem('rememberedPassword', rememberedPassword);
             setEmail(rememberedEmail);
             setPassword(rememberedPassword);
             setRememberMe(true);
+        }
+
+        for (const key in allCartItems) {
+            localStorage.setItem(key, allCartItems[key]);
         }
     }, []);
 
@@ -128,6 +149,7 @@ const Login = () => {
         }
     };
 
+
     const handleSuccessfulLogin = async (token, userType, customerId) => {
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
@@ -189,7 +211,7 @@ const Login = () => {
                         localStorage.setItem("address", userInfoRes.data.address);
                         localStorage.setItem("phone", userInfoRes.data.phoneNumber);
 
-                        setUser({ 
+                        setUser({
                             firstName: userInfoRes.data.firstName,
                             lastName: userInfoRes.data.lastName,
                             email: userInfoRes.data.email,
@@ -322,7 +344,6 @@ const Login = () => {
                     </Slider>
                 </div>
             </div>
-
         </div>
     );
 };
