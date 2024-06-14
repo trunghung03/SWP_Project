@@ -7,7 +7,7 @@ import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffS
 import { createContent } from "../../../services/SalesStaffService/SSContentService.js";
 import { UserContext } from "../../../services/UserContext.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
-
+import Button from "@mui/material/Button";
 function SSContentList() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -75,7 +75,7 @@ function SSContentList() {
       swal("Success", "Content added successfully", "success");
 
       localStorage.removeItem("contentData");
-      localStorage.removeItem('richTextContent');
+      localStorage.removeItem("richTextContent");
       navigate("/sales-staff-content-list");
     } catch (error) {
       console.error("Error creating content:", error);
@@ -133,7 +133,11 @@ function SSContentList() {
           <img className="ss_add_content_logo" src={logo} alt="Logo" />
         </div>
         <hr className="ss_add_content_line"></hr>
-        <h3 className="ss_add_content_title">Add New Content</h3>
+        <h3
+          className="ss_add_content_title"
+        >
+          Add New Ideal Content
+        </h3>
         <div className="ss_back_container">
           <button
             className="ss_add_content_back_button"
@@ -168,7 +172,9 @@ function SSContentList() {
                       required
                       className="ss_add_title_input"
                     >
-                      <option value="" disabled selected>Select a tag</option>
+                      <option value="" disabled selected>
+                        Select a tag
+                      </option>
                       <option value="Information">Information</option>
                       <option value="Education">Education</option>
                       <option value="Blog">Blog</option>
@@ -206,13 +212,15 @@ function SSContentList() {
                   <label className="ss_add_content_label">
                     Write your content:
                   </label>
-                  <button
-                    onClick={() => window.open("/rich-text-page", "_blank")}
-                    className="ss-navigate-button"
-                  >
-                    <i className="fa fa-external-link-alt"></i> Edit in new
-                    window
-                  </button>
+                  <div className="ss_new_window_button">
+                    <button
+                      onClick={() => window.open("/rich-text-page", "_blank")}
+                      className="ss-navigate-button"
+                    >
+                      <i className="fa fa-external-link-alt"></i> Edit in new
+                      window
+                    </button>
+                  </div>
                 </div>
                 <RichTextEditor
                   className="ss_add_rich_text"
@@ -256,9 +264,24 @@ function SSContentList() {
                   }}
                 /> */}
             </div>
-            <button type="submit" className="ss_add_content_submit_button">
+            {/* <button type="submit" className="ss_add_content_submit_button">
               Submit
-            </button>
+            </button> */}
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                backgroundColor: "#2244a1", // Example background color
+                color: "white", // Example text color
+                padding: "10px 20px", // Example padding
+                fontSize: "16px", // Example font size
+                borderRadius: "5px", // Example border radius
+                marginLeft: "87%",
+                marginTop: "30px",
+              }}
+            >
+              Submit
+            </Button>
           </form>
         </div>
       </div>

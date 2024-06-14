@@ -1,20 +1,10 @@
-﻿using DIAN_.DTOs.CollectionDTO;
-using DIAN_.DTOs.PromotionDto;
-using DIAN_.DTOs.PurchaseOrderDTOs;
+﻿using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
-using DIAN_.Repository;
 using DIAN_.Services;
 using DIAN_.VnPay;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Serilog;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.X9;
 
 
 namespace DIAN_.Controllers
@@ -67,7 +57,8 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
                 return Ok(purchaseOrderInfo.ToPurchaseOrderDetail());
-            }catch(Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
@@ -93,7 +84,8 @@ namespace DIAN_.Controllers
                 if (purchaseOrder == null) { return BadRequest("Error! Please try again!"); }
 
                 return Ok(purchaseOrder);
-            }catch(Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
 
         [HttpPost("checkout")]
@@ -104,7 +96,8 @@ namespace DIAN_.Controllers
                 var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
 
                 return Ok(createdOrderResult);
-            }catch(Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
 
 
@@ -121,7 +114,8 @@ namespace DIAN_.Controllers
 
                 }
                 return orders;
-            }catch(Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
 
         [HttpPost("apply-coupon")]
@@ -131,7 +125,8 @@ namespace DIAN_.Controllers
             {
                 var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
                 return Ok(updatedTotalPrice);
-            }catch(Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
 
         [HttpPost("check-used-points")]
@@ -141,7 +136,8 @@ namespace DIAN_.Controllers
             {
                 var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
                 return Ok(updatedTotalPrice);
-            }catch(Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
 
         [HttpPost("request-vnpay-payment")]

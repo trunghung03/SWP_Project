@@ -42,6 +42,7 @@ import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
 import SSWarrantyList from './SalesStaff/SalesStaffManageWarranty/SSWarrantyList';
 import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
+import SSOrderDetail from './SalesStaff/SalesStaffManageOrder/SSOrderDetail';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmployee';
 import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
@@ -51,6 +52,10 @@ import ManagerAddEmployee from './Manager/MangerManageEmployee/ManagerAddEmploye
 import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct';
 import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPromotion';
 import RichTextPage from './SalesStaff/SalesStaffManageContent/SSRichTextPage';
+
+
+
+
 const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgotPassword' || location.pathname === '/resetPassword';
@@ -117,6 +122,7 @@ function App() {
 
             {/* Sales Staff */}
             <Route path="/sales-staff-order-list" element={<SSOrderList />} />
+            <Route path="/sales-staff-manage-order-detail" element={<SSOrderDetail/>} />
             <Route path="/sales-staff-content-list" element={<SSContentList />} />
             <Route path="/sales-staff-add-content" element={<SSAddContent />} />
             <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>

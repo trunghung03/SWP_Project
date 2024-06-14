@@ -9,11 +9,37 @@
     padding: 10px 8% 0 8%;
     overflow-x: hidden;
 }
-
+.manager_title_employees{
+    margin: 10px 13px;
+}
+.manager_title_employees:hover {
+    text-decoration: underline;
+    color: #635343; /* Change color on hover */
+    cursor: pointer; /* Change cursor to pointer on hover */
+  }
 .manager_manage_diamond_sidebar {
     z-index: 2;
 }
 
+.manager_button_pagination {
+    background-color: initial; /* Set your initial background color */
+    color: initial; /* Set your initial text color */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+}
+
+.manager_button_pagination:hover {
+    text-decoration: underline;
+    background-color: #1c1c1c; 
+    color: white;
+    cursor: pointer;
+}
+.manager_order_active:hover {
+    background-color: #1c1c1c; 
+    color: white;
+    cursor: pointer;
+    transform: translateY(-5px); /* Move the element up by 5px */
+    transition: transform 0.2s ease-in-out; /* Smooth transition effect */
+}
 //Header
 .manager_manage_diamond_header {
     display: flex;
@@ -90,12 +116,6 @@
     &:hover{
         color: #0092f7;
     }
-}
-.manager_manage_diamond_row {
-    transition: background-color 0.3s ease;
-}
-.manager_manage_diamond_row:hover {
-    background-color: #c5c3c2; 
 }
 //Add diamond button
 .manager_manage_diamond_create_button_section {
@@ -191,6 +211,7 @@
 .manager_manage_diamond_pagination {
     display: flex;
     justify-content: flex-end;
+    margin: 10px 10px;
 }
 
 .manager_manage_diamond_pagination button {

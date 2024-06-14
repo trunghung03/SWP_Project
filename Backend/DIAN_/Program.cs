@@ -25,13 +25,21 @@ builder.Services.AddCors();
 
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-
 builder.Services.AddControllers()
        .AddJsonOptions(options =>
        {
            options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
-       });
+      });
+builder.Services.AddControllers();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
+    options.AddPolicy("RequireSalesStaffRole", policy => policy.RequireRole("SalesStaff"));
+    options.AddPolicy("RequireDeliveryStaffRole", policy => policy.RequireRole("DeliveryStaff"));
+    options.AddPolicy("RequiresManagerRole", policy => policy.RequireRole("Manager"));
+});
 
 //builder.Services.AddControllers().AddJsonOptions(x =>
 //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
