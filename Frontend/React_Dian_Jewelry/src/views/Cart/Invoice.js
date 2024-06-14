@@ -17,7 +17,7 @@ function Invoice() {
     const [loading, setLoading] = useState(true);
 
     const orderId = location.state?.orderId || localStorage.getItem('orderId');
-    const paymentMethod = location.state?.paymentMethod || 'Not selected';
+    const paymentMethod = location.state?.paymentMethod || localStorage.getItem('paymentMethod') || 'Not selected';
     const discount = location.state?.appliedDiscount || localStorage.getItem('orderDiscount');
     const orderDate = new Date(localStorage.getItem('orderDate')).toLocaleDateString('en-GB');
     const totalPrice = location.state?.totalPrice || localStorage.getItem('orderTotalPrice');
@@ -34,6 +34,7 @@ function Invoice() {
                     }))
                 );
                 const detailedOrderDetails = await Promise.all(productDetailsPromises);
+                console.log('detailedOrderDetails:', detailedOrderDetails);
                 setOrderDetails(detailedOrderDetails);
                 setLoading(false);
             } catch (error) {
@@ -95,18 +96,20 @@ function Invoice() {
                                             <li>Bank account: <strong>050124800983 Sacombank</strong></li>
                                             <li>Transfer content (important): <strong>DIAN{orderId}</strong></li>
                                             <li>Order will be cancel after 2 days if do not transfer</li>
-                                            <li>Keep track your order at tracking orders section after transfer</li>
+                                            <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
                                             <img src={qr} className="qr" alt="QR Code" />
                                         </ul>
                                     ) : paymentMethod === "Cash" ? (
                                         <ul>
                                             <li>Order will be prepare about four days</li>
                                             <li>Keep track your order at tracking orders section</li>
-                                            <li>Contact hotline <strong> 0795795959 </strong> to transact directly at store</li>
+                                            <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
                                         </ul>
                                     ) : paymentMethod === "VNPAY" ? (
                                         <ul>
-                                            <li>VNPAY</li>
+                                            <li>Order will be prepare about four days</li>
+                                            <li>Keep track your order at tracking orders section</li>
+                                            <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
                                         </ul>
                                     ) : null}
                                 </div>
