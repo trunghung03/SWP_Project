@@ -6,12 +6,16 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import diamondPriceMidImage1 from '../../assets/img/holdDiamond.jpeg';
 import diamondPriceMidImage2 from '../../assets/img/gia.webp';
 import diamondPriceMidImage3 from '../../assets/img/gia2.jpg';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function DiamondPrice() {
   const navItems = ['Home', 'Diamond Price'];
 
   return (
     <div className="DiamondPrice">
+      <HeaderComponent/>
       <SubNav items={navItems} />
 
       {/* Main image  */}
@@ -540,6 +544,7 @@ function DiamondPrice() {
       </div>
 
       <ScrollToTop />
+      <FooterComponent/>
     </div>
   );
 }

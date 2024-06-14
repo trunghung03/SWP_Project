@@ -8,6 +8,9 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function Cart() {
     const navigate = useNavigate();
@@ -84,6 +87,7 @@ function Cart() {
 
     return (
         <div className="cart">
+            <HeaderComponent/>
             <SubNav items={navItems} />
             <div className="cart_main_container">
                 <div className="cart_header">
@@ -161,6 +165,7 @@ function Cart() {
                 </div>
             )}
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

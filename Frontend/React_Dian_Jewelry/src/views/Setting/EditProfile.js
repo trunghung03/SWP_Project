@@ -8,6 +8,9 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { getUserInfo, updateCustomerInfo } from '../../services/UserService';
 import { UserContext } from '../../services/UserContext';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -118,6 +121,7 @@ function EditProfile() {
 
   return (
     <div className="EditProfile">
+      <HeaderComponent/>
       <SubNav items={navItems} />
 
       <div className="edit_profile_container">
@@ -202,6 +206,7 @@ function EditProfile() {
       </div>
 
       <ScrollToTop />
+      <FooterComponent/>
     </div>
   );
 }

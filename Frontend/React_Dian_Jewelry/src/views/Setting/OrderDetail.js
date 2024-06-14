@@ -6,6 +6,9 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Setting/OrderDetail.scss';
 import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellMaterialById } from '../../services/TrackingOrderService';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function OrderDetail() {
     const navigate = useNavigate();
@@ -74,6 +77,7 @@ function OrderDetail() {
 
     return (
         <div className="OrderDetail">
+            <HeaderComponent/>
             <SubNav items={navItems} />
 
             <div className="order_detail_container">
@@ -159,6 +163,7 @@ function OrderDetail() {
             </div>
 
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

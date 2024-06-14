@@ -23,6 +23,9 @@ import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 const Introduce = () => {
   const navItems = ['Home', 'Introduce'];
@@ -92,6 +95,7 @@ const Introduce = () => {
 
   return (
     <div className="Introduce">
+      <HeaderComponent/>
       <SubNav items={navItems} />
 
       {/* Main title */}
@@ -209,6 +213,7 @@ const Introduce = () => {
         </div>
       </div>
       <ScrollToTop></ScrollToTop>
+      <FooterComponent/>
     </div>
   );
 }

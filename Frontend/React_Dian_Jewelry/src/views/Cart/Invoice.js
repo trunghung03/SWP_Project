@@ -8,6 +8,9 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { getOrderDetailsByOrderId } from '../../services/CheckoutService.js';
 import { getProductDetail } from '../../services/ProductService.js';
 import qr from '../../assets/img/qr.jpg';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function Invoice() {
     const navItems = ['Home', 'Cart', 'Checkout', 'Invoice'];
@@ -50,6 +53,7 @@ function Invoice() {
 
     return (
         <div className="Invoice">
+            <HeaderComponent/>
             <SubNav items={navItems} />
             <div className="invoice_container">
                 <div className="invoice_order_summary">
@@ -119,6 +123,7 @@ function Invoice() {
                 </div>
             </div>
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

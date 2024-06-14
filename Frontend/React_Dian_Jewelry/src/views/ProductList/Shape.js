@@ -18,6 +18,9 @@ import marquise from '../../assets/img/marquise.png';
 import asscher from '../../assets/img/asscher.png';
 import heart from '../../assets/img/heart.png';
 import '../../styles/ProductList/Shape.scss';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function Shape() {
     const navigate = useNavigate();
@@ -52,6 +55,7 @@ function Shape() {
 
     return (
         <div className="Shape">
+            <HeaderComponent/>
             <SubNav items={navItems} />
             <br />
             {/* Diamond shape  */}
@@ -122,6 +126,7 @@ function Shape() {
             <ProductList products={products} resetKey={shape} />
             <Question />
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

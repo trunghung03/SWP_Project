@@ -8,6 +8,9 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList, getCollectionDetail } from '../../services/ProductService.js';
 import '../../styles/ProductList/Collection.scss';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function Collection() {
     const location = useLocation();
@@ -60,6 +63,7 @@ function Collection() {
 
     return (
         <div className="Collection">
+            <HeaderComponent/>
             <SubNav items={navItems} />
             <div className="collection_list_main_image">
                 <div className="collection_list_content">
@@ -73,6 +77,7 @@ function Collection() {
             <ProductList products={products} resetKey={collection} />
             <Question />
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

@@ -6,6 +6,9 @@ import '../../styles/Setting/OrderHistory.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { getAllOrders } from '../../services/TrackingOrderService';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -75,6 +78,7 @@ function OrderHistory() {
 
     return (
         <div className="OrderHistory">
+            <HeaderComponent/>
             <SubNav items={navItems} />
 
             <div className="order_history_container">
@@ -156,6 +160,7 @@ function OrderHistory() {
             </div>
 
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 }

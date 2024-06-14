@@ -5,6 +5,9 @@ import ProductList from '../../components/ProductCard/ProductCard.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Question from '../../components/Question/Question.js';
 import '../../styles/ProductList/Search.scss';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 const Search = () => {
     const location = useLocation();
@@ -16,6 +19,7 @@ const Search = () => {
 
     return (
         <div className="Search">
+            <HeaderComponent/>
             <SubNav items={navItems} />
             <br />
 
@@ -28,6 +32,7 @@ const Search = () => {
             <ProductList products={products} resetKey={resetKey} />
             <Question />
             <ScrollToTop />
+            <FooterComponent/>
         </div>
     );
 };

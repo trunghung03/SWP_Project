@@ -7,6 +7,9 @@ import BlogInspired from '../../components/BlogInspired/BlogInspired.js';
 import { getArticleById, getAllArticles } from '../../services/BlogService.js';
 import '../../styles/Active/BlogDetail.scss';
 import blogLogo from '../../assets/img/blogLogo.png';
+import HeaderComponent from '../../components/Header/HeaderComponent';
+import FooterComponent from '../../components/Footer/FooterComponent';
+
 
 function BlogDetail() {
     const navigate = useNavigate();
@@ -59,6 +62,7 @@ function BlogDetail() {
 
     return (
         <div className="BlogDetail">
+            <HeaderComponent />
             <SubNav items={navItems} />
 
             <div className='blog_detail_main_container'>
@@ -134,6 +138,7 @@ function BlogDetail() {
 
             <BlogInspired openInstagram={openInstagram} />
             <ScrollToTop />
+            <FooterComponent />
         </div>
     );
 }
