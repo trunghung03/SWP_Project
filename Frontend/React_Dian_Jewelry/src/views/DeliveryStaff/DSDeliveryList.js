@@ -80,7 +80,9 @@ const DSDeliveryList = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  const viewDetail = (orderId) => {
+    navigate(`/sales-staff-manage-order-detail/${orderId}`);
+  };
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
       // Check if the Enter key was pressed
@@ -219,14 +221,7 @@ const DSDeliveryList = () => {
                       <TableCell align="center">
                         <InfoIcon
                           style={{ cursor: "pointer" }}
-                          onClick={() =>
-                            navigate("/delivery-staff-delivery-detail", {
-                              state: {
-                                orderId: item.orderId,
-                                orderStatus: item.orderStatus,
-                              },
-                            })
-                          }
+                          onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>
                     </TableRow>

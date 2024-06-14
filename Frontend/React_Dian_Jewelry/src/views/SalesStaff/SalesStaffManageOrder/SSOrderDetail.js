@@ -3,8 +3,6 @@ import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffS
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderDetail.scss";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { getOrderDetailsByOrderId } from "../../../services/TrackingOrderService.js";
-import { getProductDetail } from "../../../services/ProductService.js";
 import logo from "../../../assets/img/logoN.png";
 import { useLocation } from "react-router-dom";
 import { styled } from "@mui/material/styles";
@@ -20,68 +18,39 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
-import { getShellDetail } from "../../../services/ManagerService/ManagerShellService.js";
-//order detail, warranty, product (main diamond => certi),
+import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
+import { useParams } from 'react-router-dom';
 
 const SSOrderDetail = () => {
-  const [orderDetails, setOrderDetails] = useState([]);
-  const [order, setOrders] = useState([]);
-  const [productName, setProductName] = useState("");
-  const [productSize, setProductSize] = useState("");
+  const [orderDetails, setOrderDetails] = useState({});
+  const { orderId } = useParams();
+  const[status, setStatus] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [lineTotal, setLineTotal] = useState("");
   const searchParams = new URLSearchParams(location.search);
-  const orderId = searchParams.get("orderId");
-  const [orderStatus, setStatus] = useState(
-    (location.state && location.state.orderStatus) || "defaultStatus"
-  );
-  const [warranty, setWarranty] = useState("");
-  const [certificate, setCertificate] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [shellName, setShellName] = useState("");
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (orderId) {
-          // Fetch the order details
-          const data = await getOrderDetailsByOrderId(orderId);
-          const filteredDetails = data.filter(
-            (detail) => detail.orderId === orderId
-          );
-          setOrderDetails(filteredDetails);
-          if (filteredDetails.length > 0) {
-            if (filteredDetails[0].productId) {
-              const productDetail = await getProductDetail(
-                filteredDetails[0].productId
-              );
-              // Set the product detail in state, or handle it as needed
-              console.log(productDetail); // For demonstration, replace this with your state update or other logic
-            }
-            // Assuming detail is derived from filteredDetails, e.g., detail = filteredDetails[0]
-            const detail = filteredDetails[0]; // Adjust this line based on how you actually get 'detail'
-            if (detail && detail.shellMaterialId) {
-              const shellName = await getShellDetail(detail.shellMaterialId);
-              setShellName(shellName); // Assuming you have a state setter for shellName
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    console.log("orderId:", orderId); // Log the orderId
+    if (orderId) {
+      getBillDetail(orderId)
+        .then(data => {
+          console.log("orderDetails:", data); // Log the orderDetails after fetching
+          setOrderDetails(data);
+        })
+        .catch(error => {
+          console.error("Failed to fetch order details:", error);
+        });
+    }
   }, [orderId]);
+
+  if (!orderDetails) {
+    return <div>Loading...</div>;
+  }
+  console.log("orderId: " ,orderDetails.orderId);
+  console.log("orderId: " ,orderDetails.productName);
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -110,7 +79,7 @@ const SSOrderDetail = () => {
                 paddingTop: "1%",
               }}
             >
-              <p className="ss_order_detail_p_tag">#23423423423</p>
+              <p className="ss_order_detail_p_tag">{orderDetails.orderId}</p>
               <div className="ss_button_status">
                 <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
@@ -120,14 +89,14 @@ const SSOrderDetail = () => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={orderStatus}
+                      value={orderDetails.orderStatus}
                       label="Age"
                       onChange={handleChange}
                     >
-                      <MenuItem value={orderStatus}>Paid</MenuItem>
-                      <MenuItem value={orderStatus}>Preparing</MenuItem>
-                      <MenuItem value={orderStatus}>Delivering</MenuItem>
-                      <MenuItem value={orderStatus}>Delivered</MenuItem>
+                      <MenuItem value={orderDetails.orderStatus}>Paid</MenuItem>
+                      <MenuItem value={orderDetails.orderStatus}>Preparing</MenuItem>
+                      <MenuItem value={orderDetails.orderStatus}>Delivering</MenuItem>
+                      <MenuItem value={orderDetails.orderStatus}>Delivered</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -135,7 +104,7 @@ const SSOrderDetail = () => {
             </div>
             <div class="ss_detail_card">
               <div class="ss_detail_card_left">
-                <h3 className="ss_detail_card_name">Engagement Ring</h3>
+                <h3 className="ss_detail_card_name">{orderDetails.productName}</h3>
                 <img
                   src="https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fa6b8799f188d4d38a8ed85460df45a29"
                   alt="Engagement Ring"

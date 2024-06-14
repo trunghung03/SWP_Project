@@ -7,3 +7,67 @@
     flex-grow: 1;
     padding: 10px 8% 0 8%;
 }
+.manager_manage_diamond_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.manager_header_line {
+    width: 150%;
+    margin-left: -15%;
+    z-index: 1;
+    color: gray;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_logo {
+    height: 60px;
+    width: 120px;
+    max-width: 120px;
+    margin-bottom: 5px;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_search_section {
+    display: flex;
+    align-items: center;
+    //background-color: white;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_search_section input {
+    background-color: white;
+    border: none;
+    width: 220px;
+    height: 28px;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_search_section input:focus {
+    background-color: white;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 220px;
+}
+
+.manager_manage_diamond_header .manager_manage_diamond_search_bar {
+    padding: 10px;
+    border-radius: 7px;
+    margin-top: 5px;
+    background-color: white;
+    cursor: pointer; 
+    transition: background 0.3s ease, color 0.3s ease;
+    &:hover {
+        background:#c5c3c2; // Change background on hover
+        color: black; // Change text color on hover
+    }
+}
+.manager_manage_search_icon{
+    font-size: 12px;
+    cursor: pointer; 
+    transition: background 0.3s ease, color 0.3s ease;
+    &:hover{
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    }
+    
+}

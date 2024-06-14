@@ -1,4 +1,6 @@
-﻿using DIAN_.Models;
+﻿using DIAN_.DTOs.OrderDetailDto;
+using DIAN_.Helper;
+using DIAN_.Models;
 
 namespace DIAN_.Interfaces
 {
@@ -10,5 +12,7 @@ namespace DIAN_.Interfaces
         Task<Orderdetail?> CreateAsync(Orderdetail orderdetail);
         Task<Orderdetail?> UpdateAsync(Orderdetail orderdetail, int id);
         Task<Orderdetail?> DeleteAsync(int id);
+
+        Task<List<OrderBillDto>> ViewOrderBillAsync(int orderId);
     }
 }

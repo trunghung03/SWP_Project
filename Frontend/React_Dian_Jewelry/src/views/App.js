@@ -245,14 +245,14 @@ function App() {
 
             {/* Sales Staff */}
             <Route path="/sales-staff-order-list" element={<SSOrderList />} />
-            <Route path="/sales-staff-manage-order-detail" element={<SSOrderDetail/>} />
+            <Route path="/sales-staff-manage-order-detail/:orderId" element={<SSOrderDetail/>} />
             <Route path="/sales-staff-content-list" element={<SSContentList />} />
             <Route path="/sales-staff-add-content" element={<SSAddContent />} />
             <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>
             <Route path="/rich-text-page" element={<RichTextPage/>} />
             {/* Delivery Staff */}
             <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
-            <Route path="/delivery-staff-delivery-detail" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
+            <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
 
           </Routes>
         </CartProvider>

@@ -43,4 +43,13 @@ export const getSalesStaffOrderList = async (staffId) => {
     return error;
   });
 }
+export const getBillDetail = async (orderId) => {
+  return axios.get(`https://localhost:7184/api/employees/view-order-detail-bill`, { params: { orderId } })
+  .then((response) => {
+    return response.data;
+  })
+  .catch(function (error) {
+    return error;
+  });
+}
 

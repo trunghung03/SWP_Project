@@ -18,18 +18,35 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../styles/DeliveryStaff/DSOrderDetail.scss";
+import { getBillDetail } from "../../services/SalesStaffService/SSOrderService.js";
+import { useParams } from 'react-router-dom';
+
+
 function DSDeliveryDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [orderStatus, setStatus] = useState(
-    (location.state && location.state.orderStatus) || "defaultStatus"
-  );
+  const { orderId } = useParams();
+  const [orderDetails, setOrderDetails] = useState({});
+  const[status, setStatus] = useState('');
+
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
   useEffect(() => {
-    // Add your code here
-  }, []);
+    console.log("orderId:", orderId); // Log the orderId
+    if (orderId) {
+      getBillDetail(orderId)
+        .then(data => {
+          console.log("orderDetails:", data); // Log the orderDetails after fetching
+          setOrderDetails(data);
+        })
+        .catch(error => {
+          console.error("Failed to fetch order details:", error);
+        });
+    }
+  }, [orderId]);
+  console.log("orderId: " ,orderDetails.orderId);
+  console.log("orderId: " ,orderDetails.productName);
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -63,12 +80,12 @@ function DSDeliveryDetail() {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={orderStatus}
+                      value={orderDetails.orderStatus}
                       label="Age"
                       onChange={handleChange}
                     >
-                      <MenuItem value={orderStatus}>Delivering</MenuItem>
-                      <MenuItem value={orderStatus}>Delivered</MenuItem>
+                      <MenuItem value={orderDetails.orderStatus}>Delivering</MenuItem>
+                      <MenuItem value={orderDetails.orderStatus}>Delivered</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>

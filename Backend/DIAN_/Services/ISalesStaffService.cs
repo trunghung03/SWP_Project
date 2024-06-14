@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.PurchaseOrderDTOs;
+using DIAN_.Helper;
 using DIAN_.Models;
 
 namespace DIAN_.Services
@@ -16,5 +17,7 @@ namespace DIAN_.Services
         Task<Warranty> PrepareWarranty(int orderId);     //prepare pdf
 
         Task<string> GeneratePdfAsync(Diamond diamond); //gen pdf?
+
+
     }
 }

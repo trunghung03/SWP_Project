@@ -4,6 +4,7 @@ import '../../styles/Manager/ManagerStatistic.scss';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { AllCurrentProduct, GetSoldCategory, TotalValue, TotalOrders,TotalCustomers } from '../../services/ManagerService/ManagerStatisticService.js';
+import logo from "../../assets/img/logoN.png";
 
 const ManagerStatitic = () => {
   const budget = 24000;
@@ -136,6 +137,11 @@ const ManagerStatitic = () => {
         <ManagerSidebar currentPage="manager_statitic" />
       </div>
       <div className="manager_statitic_content">
+      <div className="manager_manage_diamond_header">
+          <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
+        </div>
+        <hr className="manager_header_line"></hr>
+        <h3>Dian Statistic</h3>
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div style={{ textAlign: 'center', flex: '1', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>

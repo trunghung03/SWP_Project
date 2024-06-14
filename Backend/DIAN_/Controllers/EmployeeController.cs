@@ -20,13 +20,15 @@ namespace UserApplication.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ISalesStaffService _salesStaffService;
         private readonly IDeliveryStaffService _deliveryStaffService;
+        private readonly IOrderDetailRepository _orderDetailRepository;
         public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository, 
-            ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService)
+            ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService, IOrderDetailRepository orderDetailRepository)
         {
             _tokenService = tokenService;
             _employeeRepository = employeeRepository;
             _salesStaffService = salesStaffService;
             _deliveryStaffService = deliveryStaffService;
+            _orderDetailRepository = orderDetailRepository;
         }
 
         [HttpPost("login")]
@@ -279,6 +281,21 @@ namespace UserApplication.Controllers
                 }
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpGet("view-order-detail-bill")]
+        public async Task<IActionResult> ViewOrderBillAsync(int orderId)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var result = await _orderDetailRepository.ViewOrderBillAsync(orderId);
+
+                return Ok(result);
+            }catch(Exception)
             {
                 throw;
             }

@@ -1,4 +1,6 @@
-﻿using DIAN_.Interfaces;
+﻿using DIAN_.DTOs.OrderDetailDto;
+using DIAN_.DTOs.ProductDTOs;
+using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -76,5 +78,52 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return updateDetail;
         }
+        public async Task<List<OrderBillDto>> ViewOrderBillAsync(int orderId)
+        {
+            var orderBills = await _context.Purchaseorders
+                .Where(po => po.OrderId == orderId)
+                .SelectMany(po => po.Orderdetails, (po, od) => new { po, od })
+                .SelectMany(
+                    combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
+                    (combined, p) => new { combined.po, combined.od, p })
+                .SelectMany(
+                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondId).DefaultIfEmpty(),
+                    (combined, d) => new { combined.po, combined.od, combined.p, d })
+                .GroupBy(x => x.po.OrderId)
+                .Select(g => new OrderBillDto
+                {
+                    OrderId = orderId,
+                    UserId = g.First().po.UserId,
+                    FirstName = g.First().po.User.FirstName,
+                    LastName = g.First().po.User.LastName,
+                    PhoneNumber = g.First().po.User.PhoneNumber,
+                    Address = g.First().po.User.Address,
+                    Note = g.First().po.Note,
+                    PaymentMethod = g.First().po.PaymentMethod,
+                    PayWithPoint = g.First().po.PayWithPoint,
+                    TotalPrice = g.First().po.TotalPrice,
+                    Date = g.First().po.Date,
+                    OrderStatus = g.First().po.OrderStatus,
+                    PromotionCode = g.First().po.Promotion.Code,
+                    PromotionAmount = g.First().po.Promotion.Amount,
+                    ProductDetails = g.Select(x => new OrderBillProductDetailDto
+                    {
+                        ProductName = x.p.Name,
+                        ProductImageLink = x.p.ImageLinkList,
+                        ProductCode = x.p.ProductCode,
+                        ProductDescription = x.p.Description,
+                        Size = x.od.Size ?? 0m,
+                        LineTotal = x.od.LineTotal,
+                        CertificateScan = x.d.CertificateScan,
+                        WarrantyStartDate = x.od.Warranty.StartDate,
+                        WarrantyEndDate = x.od.Warranty.EndDate,
+                    }).ToList()
+                }).ToListAsync();
+
+            return orderBills; // This should now correctly indicate a non-nullable return type
+        }
+
+
+
     }
 }

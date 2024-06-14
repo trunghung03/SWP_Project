@@ -4,11 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderList.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import {
-  getAllOrders,
-  getOrderById,
-  fetchUserByUserId,
-} from "../../../services/TrackingOrderService.js";
+import {getOrderById} from "../../../services/TrackingOrderService.js";
 import logo from "../../../assets/img/logoN.png";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -48,6 +44,9 @@ const SSOrderList = () => {
     console.log("More details for item:", item);
     // Implement the logic to show more details about the item
     // This could be opening a modal, redirecting to another page, etc.
+  };
+  const viewDetail = (orderId) => {
+    navigate(`/sales-staff-manage-order-detail/${orderId}`);
   };
 
   const handleSort = (e) => {
@@ -230,14 +229,7 @@ const SSOrderList = () => {
                       <TableCell  align="center">
                         <InfoIcon
                           style={{ cursor: "pointer" }}
-                          onClick={() =>
-                            navigate("/sales-staff-manage-order-detail", {
-                              state: {
-                                orderId: item.orderId,
-                                orderStatus: item.orderStatus,
-                              },
-                            })
-                          }
+                          onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>
                     </TableRow>
