@@ -26,18 +26,10 @@ const fetchWarrantyDetail = async (id) => {
 
 // create new warranty
 
-const createWarranty = async (orderDetailId, startDate, endDate, status) => {
-  return axios.post(`${API_BASE_URL_WARRANTY}/warranties/addwarranty`, {
-    orderDetailId, startDate, endDate, status
-  })
-    .then((response) => {
-      return response.data;
-    })
-    .catch(function (error) {
-      return error;
-    });
+const createWarranty = async (data) => {
+  const response = await axios.post(`${API_BASE_URL_WARRANTY}/warranties/addwarranty`, data);
+  return response.data;
 };
-
 // update warranty
 const updateWarranty = async (id) => {
   return axios.put(`${API_BASE_URL_WARRANTY}/warranties/update/${id}`, {
@@ -62,4 +54,4 @@ const deleteWarranty = async (id,data) => {
     });
 };
 
-export { fetchAllWarranty, updateWarranty, deleteWarranty,fetchWarrantyDetail };
+export { fetchAllWarranty, updateWarranty, deleteWarranty,fetchWarrantyDetail, createWarranty };

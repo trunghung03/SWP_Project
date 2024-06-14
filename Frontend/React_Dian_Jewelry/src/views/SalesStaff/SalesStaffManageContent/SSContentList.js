@@ -40,8 +40,8 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
         <p className="ss_manage_content_content_date">{new Date(date).toLocaleDateString()}</p>
       </div>
       <div className="ss_manage_content_content_actions">
-        <i className="fas fa-pen"></i>
-        <i className="fas fa-trash" onClick={handleDeleteClick}></i>
+        <i className="fas fa-pen" style={{ color: '#69706e' }}></i>
+        <i className="fas fa-trash" onClick={handleDeleteClick} style={{ color: '#69706e' }}></i>
       </div>
     </div>
   );
@@ -129,7 +129,7 @@ function SSContentList() {
         </div>
         <hr className="ss_manage_content_line"></hr>
         <div className="ss_manage_content_create_button_section">
-          <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-add-content')}>Create new blog</button>
+          <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-manage-order-detail')}>Create new blog</button>
         </div>
         <div className="ss_manage_content_content_list">
           {contents.map((content) => (

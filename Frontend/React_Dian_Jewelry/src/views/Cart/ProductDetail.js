@@ -250,7 +250,7 @@ function ProductDetail() {
                         <button className="add_to_cart_btn" onClick={handleAddToCart}>
                             <i className="fas fa-shopping-cart"></i> Add to cart
                         </button>
-                    </div>
+                    </div>  
                     <hr className="product_detail_line" />
                     <div className="product_delivery_detail">
                         <p><i className="fas fa-phone"></i> <a href='tel:0795795959'>0795 795 959</a></p>

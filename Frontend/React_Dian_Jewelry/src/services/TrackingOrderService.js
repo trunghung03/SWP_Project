@@ -61,3 +61,23 @@ export const getShellMaterialById = async (shellMaterialId) => {
         throw error;
     }
 };
+export const fetchUserByUserId = async (id) => {
+    return axios.get(`https://localhost:7184/api/employees/salesstaff/orderlists`, { params: { id } })
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+  }
+
+
+  export const getAssignOrders = async (id) => {
+    return axios.get(`https://localhost:7184/api/employees/salesstaff/orderlists?staffId={id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+  }

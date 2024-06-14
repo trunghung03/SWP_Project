@@ -180,6 +180,7 @@ import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
 import SSWarrantyList from './SalesStaff/SalesStaffManageWarranty/SSWarrantyList';
 import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
+import SSOrderDetail from './SalesStaff/SalesStaffManageOrder/SSOrderDetail';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmployee';
 import ManagerShellList from './Manager/ManagerManageShell/ManagerShellList';
@@ -243,12 +244,12 @@ function App() {
             <Route path="/manager-add-promotion" element={<ProtectedRoute path="/manager-add-promotion" element={ManagerAddPromotion} />} />
 
             {/* Sales Staff */}
-            <Route path="/sales-staff-order-list" element={<ProtectedRoute path="/sales-staff-order-list" element={SSOrderList} />} />
-            <Route path="/sales-staff-content-list" element={<ProtectedRoute path="/sales-staff-content-list" element={SSContentList} />} />
-            <Route path="/sales-staff-add-content" element={<ProtectedRoute path="/sales-staff-add-content" element={SSAddContent} />} />
-            <Route path="/sales-staff-warranty-list" element={<ProtectedRoute path="/sales-staff-warranty-list" element={SSWarrantyList} />} />
-            <Route path="/rich-text-page" element={<ProtectedRoute path="/rich-text-page" element={RichTextPage} />} />
-
+            <Route path="/sales-staff-order-list" element={<SSOrderList />} />
+            <Route path="/sales-staff-manage-order-detail" element={<SSOrderDetail/>} />
+            <Route path="/sales-staff-content-list" element={<SSContentList />} />
+            <Route path="/sales-staff-add-content" element={<SSAddContent />} />
+            <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>
+            <Route path="/rich-text-page" element={<RichTextPage/>} />
             {/* Delivery Staff */}
             <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
             <Route path="/delivery-staff-delivery-detail" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />

@@ -179,7 +179,7 @@ namespace UserApplication.Controllers
         }
 
         [HttpGet("salesstaff/orderlists")]
-        public async Task<IActionResult> ViewListOrdersAssign([FromQuery] int staffId)
+        public async Task<IActionResult> ViewListOrdersAssign( int staffId)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace UserApplication.Controllers
 
         //For delivery staff
         [HttpGet("deliverystaff/orderlists")]
-        public async Task<IActionResult> ViewListDeliveryOrders([FromQuery] int staffId)
+        public async Task<IActionResult> ViewListDeliveryOrders(int staffId)
         {
             try
             {

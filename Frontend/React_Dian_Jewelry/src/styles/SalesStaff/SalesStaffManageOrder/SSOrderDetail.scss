@@ -1,0 +1,115 @@
+.ss_manage_orderdetail_all_container {
+    display: flex;
+    width: 100%;
+}
+
+.ss_manage_orderdetail_content {
+    flex-grow: 1;
+    padding: 15px 6% 6% 8%;
+}
+.ss_order_detail_p_tag{
+    margin-left: 3.5%;
+    margin-top: 2%;
+    font-weight: 500;
+    font-size: large;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+}
+.ss_button_status{
+    margin-top: 7px;
+    margin-right: 4%;
+}
+.ss_detail_card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 4%;
+    border: 0.5px solid #cccccc;
+    margin-left: 5%;
+    margin-right: 10%;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif; /* Đặt lại font-family */
+}
+.ss_detail_card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+.ss_detail_card_left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+}
+.ss_detail_card img {
+    width: 80%;
+    height: auto;
+}
+.ss_detail_card_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    width: 60%;
+    position: relative;
+    text-align: center; /* Canh giữa nội dung */
+}
+.ss_detail_card_content p {
+    margin: 10px 0;
+    font-size: 1.2em; /* Tăng kích thước chữ */
+    font-family: 'Roboto', sans-serif; /* Đổi font chữ */
+}
+.ss_detail_card_price {
+    font-size: 1.5em; /* Tăng kích thước chữ cho giá */
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}
+.ss_detail_card_left img {
+    width: 50%; /* Đặt chiều rộng tối đa cho hình ảnh */
+    height: 85%; /* Để chiều cao tự động theo tỉ lệ */
+    border-radius: 5px; /* Để làm tròn góc hình ảnh */
+    overflow: hidden; /* Đảm bảo hình ảnh được hiển thị trong vùng bao quanh được làm tròn */
+  }
+.ss_detail_card_size {
+    color: #555;
+    text-decoration: underline;
+}
+.ss_detail_card_name{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.manager-header-line {
+    width: calc(100% - 40px); /* Adjust to match padding */
+    border: 1px solid #ccc;
+    margin: 20px 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.ss_order_detail_container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border: 0.5px solid #cccccc;
+}
+.ss_detail_confirmbutton button {
+    width: 95%;
+    padding: 10px 20px;
+    margin-bottom: 3%;
+    margin-left:3%;
+    border: 0.5px solid #8bc4f0;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-radius: 20px; /* Adjust the radius for more or less rounded corners */
+}
+
+.ss_detail_confirmbutton button:hover {
+    border: 1.3px solid #8bc4f0;
+    background-color: #ebf5ff;
+}
