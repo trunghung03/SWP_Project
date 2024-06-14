@@ -10,6 +10,60 @@ import { createPurchaseOrder, createOrderDetails, getPromotionByCode, requestVNP
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
 import vnpay from '../../assets/img/vnpay.webp';
+import { styled } from '@mui/material/styles';
+import Switch from '@mui/material/Switch';
+
+const IOSSwitch = styled((props) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+    width: 50,
+    height: 20,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+        padding: 0,
+        margin: 2,
+        transitionDuration: '300ms',
+        '&.Mui-checked': {
+            transform: 'translateX(30px)',
+            color: '#fff',
+            '& + .MuiSwitch-track': {
+                backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#f4b798',
+                opacity: 1,
+                border: 0,
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: 0.5,
+            },
+        },
+        '&.Mui-focusVisible .MuiSwitch-thumb': {
+            color: '#33cf4d',
+            border: '6px solid #fff',
+        },
+        '&.Mui-disabled .MuiSwitch-thumb': {
+            color:
+                theme.palette.mode === 'light'
+                    ? theme.palette.grey[100]
+                    : theme.palette.grey[600],
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+            opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        boxSizing: 'border-box',
+        width: 16,
+        height: 16,
+    },
+    '& .MuiSwitch-track': {
+        borderRadius: 26 / 2,
+        backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#f4b798',
+        opacity: 1,
+        transition: theme.transitions.create(['background-color'], {
+            duration: 500,
+        }),
+    },
+}));
+
 
 function Checkout() {
     const navItems = ['Home', 'Cart', 'Checkout'];
@@ -182,7 +236,6 @@ function Checkout() {
             localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
             localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
 
-            // Update points
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
                 ...prevUser,
@@ -206,13 +259,13 @@ function Checkout() {
                     orderId,
                     fullName,
                     description: 'Payment for order ' + orderId,
-                    amount: Math.floor(totalPrice * 25000), 
+                    amount: Math.floor(totalPrice * 25000),
                     createdDate: date,
                 };
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
-                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } }); 
+                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } });
                 console.log(orderId, paymentMethod, usePoints, cartItems);
             }
         } catch (error) {
@@ -282,7 +335,7 @@ function Checkout() {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 onKeyDown={(e) => e.key === 'e' && e.preventDefault()}
-                                onWheel={handlePhoneWheel} 
+                                onWheel={handlePhoneWheel}
                             />
                         </div>
                         <div className="form_group_address_note">
@@ -372,19 +425,12 @@ function Checkout() {
                     </div>
                     {points > 0 && (
                         <>
-                            <h5 className="checkout_summary_point_title"><i className="fas fa-coins"></i>Point</h5>
                             <div className="use_point_method">
-                                <input
-                                    className="use_point"
-                                    type="checkbox"
-                                    id="usePoint"
-                                    name="usePoint"
-                                    value="Use Point"
+                                <h5 className="checkout_summary_point_title"><i className="fas fa-coins"></i>Use {points} points:</h5>
+                                <IOSSwitch
                                     checked={usePoints}
                                     onChange={handlePointsClick}
                                 />
-                                <label htmlFor="usePoint">Use {points} points</label>
-                                <p>(1 point = 1$)</p>
                             </div>
                         </>
                     )}

@@ -134,17 +134,26 @@ namespace DIAN_.Controllers
 
             // Define the mapping from category ID to super-category
             var superCategoryMapping = new Dictionary<int, string>
-                {
-                    { 1, "Rings" },
-                    { 5, "Rings" },
-                    { 9, "Rings" },
-                    { 2, "Earrings" },
-                    { 6, "Earrings" },
-                    { 3, "Bracelets" },
-                    { 7, "Bracelets" },
-                    { 4, "Necklaces" },
-                    { 8, "Necklaces" }
-                };
+    {
+        { 1, "Rings" },
+        { 5, "Rings" },
+        { 9, "Rings" },
+        { 2, "Earrings" },
+        { 6, "Earrings" },
+        { 3, "Bracelets" },
+        { 7, "Bracelets" },
+        { 4, "Necklaces" },
+        { 8, "Necklaces" }
+    };
+
+            // Define the list of super-categories and their respective sub-categories
+            var superCategories = new Dictionary<string, int[]>
+    {
+        { "Rings", new[] { 1, 5, 9 } },
+        { "Earrings", new[] { 2, 6 } },
+        { "Bracelets", new[] { 3, 7 } },
+        { "Necklaces", new[] { 4, 8 } }
+    };
 
             // Group by category and count the number of products sold in each category
             var soldProductCount = await query
@@ -156,29 +165,42 @@ namespace DIAN_.Controllers
                 })
                 .ToListAsync();
 
-            // Group by super-category and aggregate counts
-            var superCategoryCounts = soldProductCount
-                .GroupBy(s => superCategoryMapping[(int)s.CategoryId])
-                .Select(g => new
+            // Initialize the result with all super-categories set to 0
+            var superCategoryCounts = superCategories.ToDictionary(
+                sc => sc.Key,
+                sc => new
                 {
-                    SuperCategory = g.Key,
-                    Count = g.Sum(x => x.Count),
-                    Categories = g.Select(x => x.CategoryId).ToArray()
-                })
-                .ToList();
+                    SuperCategory = sc.Key,
+                    Count = 0,
+                    Categories = sc.Value
+                });
+
+            // Update the counts based on soldProductCount
+            foreach (var sold in soldProductCount)
+            {
+                var superCategory = superCategoryMapping[(int)sold.CategoryId];
+                superCategoryCounts[superCategory] = new
+                {
+                    SuperCategory = superCategory,
+                    Count = superCategoryCounts[superCategory].Count + sold.Count,
+                    Categories = superCategoryCounts[superCategory].Categories
+                };
+            }
 
             // Calculate the total number of sold products
-            int totalSoldProducts = superCategoryCounts.Sum(s => s.Count);
+            int totalSoldProducts = superCategoryCounts.Values.Sum(s => s.Count);
 
             // Calculate the percentage of products sold for each super-category
-            var categoryPercent = superCategoryCounts.Select(s => new
+            var categoryPercent = superCategoryCounts.Values.Select(s => new
             {
                 Categories = s.Categories,
-                Percentage = (double)s.Count / totalSoldProducts * 100
+                Percentage = totalSoldProducts > 0 ? (double)s.Count / totalSoldProducts : 0
             }).ToList();
 
             return Ok(categoryPercent);
         }
+
+
 
 
         [HttpGet("monthlyPurchaseOrderCount")]
