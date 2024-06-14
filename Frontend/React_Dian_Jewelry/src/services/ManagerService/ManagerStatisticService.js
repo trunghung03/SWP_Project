@@ -11,7 +11,20 @@ const GetSoldCategory = async (startMonth,endMonth) => {
 };
 
 const TotalOrders = async (year) => {
-    const response = await axios.get(`${API_BASE_URL}/stat/monthlyPurchaseOrderCount?${year}`);
+    const response = await axios.get(`${API_BASE_URL}/stat/monthlyPurchaseOrderCount?year=${year}`);
     return response.data;
 };
-export { AllCurrentProduct,GetSoldCategory,TotalOrders };
+
+const TotalValue = async (year) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/monthlyTotalValue?year=${year}`);
+    return response.data;
+};
+
+
+
+const TotalCustomers = async (year) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/customers`);
+    return response.data;
+};
+
+export { AllCurrentProduct,GetSoldCategory,TotalOrders,TotalValue,TotalCustomers };
