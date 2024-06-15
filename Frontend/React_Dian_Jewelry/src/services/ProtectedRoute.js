@@ -2,63 +2,36 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const rolesPermissions = {
-    Admin: ['/admin-customer-list', '/admin-employee-list', '/admin-add-employee', '/login', '/register'],
-    Manager: ['/manager-statistic', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion', '/login', '/register'],
-    SalesStaff: ['/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page', '/login', '/register'],
-    DeliveryStaff: ['/delivery-staff-delivery-list', '/delivery-staff-delivery-detail', '/login', '/register'],
-    Customer: ['/','/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce'],
+    Admin: ['/admin-customer-list', '/admin-employee-list', '/admin-add-employee'],
+    Manager: ['/manager-statistic', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
+    SalesStaff: ['/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page'],
+    DeliveryStaff: ['/delivery-staff-delivery-list', '/delivery-staff-delivery-detail'],
+    Customer: ['/', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce'],
     Guest: ['/','/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/login', '/register', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce']
 };
 
 const restrictedPages = {
-    Admin: ['/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    Manager: ['/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    SalesStaff: ['/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    DeliveryStaff: ['/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    Customer: ['/forgot-password', '/reset-password'],
+    Admin: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    Manager: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    SalesStaff: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    DeliveryStaff: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    Customer: ['/login', '/register', '/forgot-password', '/reset-password'],
     Guest: ['/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail']
 };
 
 const ProtectedRoute = ({ element: Component, path, ...rest }) => {
     const role = localStorage?.getItem('role');
     const navigate = useNavigate();
-    var allowedPages = rolesPermissions.Guest;
-    var restricted= restrictedPages.Guest;
-    if(role){
-        switch(role){
-            case 'ADMIN':
-                allowedPages = rolesPermissions?.Admin 
-                restricted = restrictedPages?.Admin 
-                break;
-            case 'MANAGER':
-                allowedPages = rolesPermissions?.Manager
-                restricted = restrictedPages?.Manager
-                break;
-            case 'SALESSTAFF':
-                allowedPages = rolesPermissions?.SalesStaff
-                restricted = restrictedPages?.SalesStaff
-                break;
-            case 'DELIVERYSTAFF':
-                allowedPages = rolesPermissions?.DeliveryStaff
-                restricted = restrictedPages?.DeliveryStaff
-                break;
-            default:
-                allowedPages = rolesPermissions?.Customer
-                restricted = restrictedPages?.Customer
-                break;
-
-        }
-    }
-
-
+    const allowedPages = role ? rolesPermissions[role] : rolesPermissions.Guest;
+    const restricted = role ? restrictedPages[role] : restrictedPages.Guest;
+    
     useEffect(() => {
-        if (!allowedPages?.includes(path) || restricted?.includes(path)) {
+        if (!allowedPages.includes(path) || restricted.includes(path)) {
             alert("You don't have permission to access this page!");
             navigate(-1);
         }
     }, [allowedPages, restricted, path, navigate]);
 
-    return allowedPages?.includes(path) && !restricted?.includes(path) ? <Component {...rest} /> : null;
-};
+    return allowedPages?.includes(path) && !restricted?.includes(path) ? <Component {...rest} /> : null;};
 
 export default ProtectedRoute;

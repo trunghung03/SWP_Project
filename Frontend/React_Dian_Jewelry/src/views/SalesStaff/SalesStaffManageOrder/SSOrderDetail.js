@@ -79,7 +79,7 @@ const SSOrderDetail = () => {
                 paddingTop: "1%",
               }}
             >
-              <p className="ss_order_detail_p_tag">{orderDetails.orderId}</p>
+              <p className="ss_order_detail_p_tag">#{orderId}</p>
               <div className="ss_button_status">
                 <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>

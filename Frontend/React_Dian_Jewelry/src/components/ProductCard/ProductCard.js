@@ -26,7 +26,7 @@ const SpecialCard = () => {
     const navigate = useNavigate();
 
     const handleShopNowClick = () => {
-        navigate('/diamond-jewelry');
+        navigate('/diamond-jewelry', { state: { category: 'all' } });
     };
 
     return (

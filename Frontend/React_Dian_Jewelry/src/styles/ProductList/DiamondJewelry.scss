@@ -1,0 +1,36 @@
+.filters_and_products {
+    display: flex;
+    flex-direction: column;
+    margin-top: 90px;
+}
+
+.filters_products {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: -20px;
+
+    .filter_group {
+        margin: 0 20px;
+        width: 120px;
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        .MuiFormControl-root {
+            width: 90%;
+        }
+    }
+
+    .filter_group_sort{
+        margin: 0 20px;
+        width: 200px;
+    }
+
+    .filter_group_remove{
+        margin: 0 20px;
+        color: #1c1c1c;
+        border: 1px solid #1c1c1c;
+    }
+}

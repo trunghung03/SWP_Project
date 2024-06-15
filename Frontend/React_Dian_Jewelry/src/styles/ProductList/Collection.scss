@@ -7,7 +7,7 @@
     background: url('../../assets/img/CollectionImg.jpg') no-repeat center center;
     background-size: cover;
     width: 100%;
-    height: 380px;
+    height: 400px;
     color: #1c1c1c;
 }
 
@@ -17,4 +17,41 @@
 
 .collection_list_content p{
     font-size: 18px;
+}
+
+.collection_filters_and_products {
+    display: flex;
+    flex-direction: column;
+    margin-top: 90px;
+}
+
+.collection_filters_products {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: -20px;
+
+    .collection_filter_group {
+        margin: 0 20px;
+        width: 120px;
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        .MuiFormControl-root {
+            width: 90%;
+        }
+    }
+
+    .collection_filter_group_sort{
+        margin: 0 20px;
+        width: 200px;
+    }
+
+    .collection_filter_group_remove{
+        margin: 0 20px;
+        color: #1c1c1c;
+        border: 1px solid #1c1c1c;
+    }
 }
