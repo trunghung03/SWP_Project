@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderList.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import {getOrderById} from "../../../services/TrackingOrderService.js";
+import { getOrderById } from "../../../services/TrackingOrderService.js";
 import logo from "../../../assets/img/logoN.png";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
+import { TableHead } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import InfoIcon from "@mui/icons-material/Info";
@@ -20,16 +19,15 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { getSalesStaffOrderList } from "../../../services/SalesStaffService/SSOrderService.js";
+import { getSalesStaffOrderList, getPurchaseOrderByStatus } from "../../../services/SalesStaffService/SSOrderService.js";
 
 const SSOrderList = () => {
   const navigate = useNavigate();
   const [orderList, setOrderList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [userDetails, setUserDetails] = useState([]);
-  const [items, setItems] = useState([]);
   const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -45,37 +43,56 @@ const SSOrderList = () => {
     // Implement the logic to show more details about the item
     // This could be opening a modal, redirecting to another page, etc.
   };
+
   const viewDetail = (orderId) => {
     navigate(`/sales-staff-manage-order-detail/${orderId}`);
   };
 
-  const handleSort = (e) => {
-    const orderStatus = e.target.value;
-    setSortOrder(orderStatus);
+  const handleChange = async (event) => {
+    const selectedValue = event.target.value;
+    setSortOrder(selectedValue);
+    console.log("Selected status:", selectedValue);
+
+    if (selectedValue === "default") {
+      fetchAllOrders();
+    } else {
+      try {
+        const orders = await getPurchaseOrderByStatus(selectedValue);
+        console.log("Fetched orders:", orders);
+        if (Array.isArray(orders)) {
+          setOrderList(orders);
+        } else if (orders) {
+          setOrderList([orders]);
+        } else {
+          setOrderList([]);
+          console.error("Expected an array but got:", orders);
+        }
+      } catch (error) {
+        console.error("Failed to fetch orders by status:", error);
+        swal("Error", "Failed to fetch orders by status", "error");
+      }
+    }
   };
 
-  const handleChange = (event) => {
-    setSortOrder(event.target.value);
+  const fetchAllOrders = async () => {
+    try {
+      const orders = await getSalesStaffOrderList(employeeId);
+      console.log("Fetched all orders:", orders);
+      if (Array.isArray(orders)) {
+        setOrderList(orders);
+      } else {
+        setOrderList([]);
+        console.error("Expected an array but got:", orders);
+      }
+    } catch (error) {
+      console.error("Failed to fetch order list:", error);
+      swal("Error", "Failed to fetch order list", "error");
+    }
   };
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
   useEffect(() => {
-    getSalesStaffOrderList(employeeId)
-      .then(data => {
-        setOrderList(data);
-      })
-      .catch(error => {
-        console.error("Failed to fetch order list:", error);
-      });
-  }, []);
+    fetchAllOrders();
+  }, [employeeId]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 6;
@@ -88,10 +105,7 @@ const SSOrderList = () => {
       ? orderList
       : orderList.filter((order) => order.orderStatus === sortOrder);
 
-  const currentOrder = filteredOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
+  const currentOrder = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
@@ -101,14 +115,18 @@ const SSOrderList = () => {
 
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
-      // Check if the Enter key was pressed
       try {
-        const orderId = e.target.value; // Assuming the input value is the order ID
+        const orderId = e.target.value;
         const orderDetails = await getOrderById(orderId);
-        console.log(orderDetails); // Do something with the order details, e.g., display them
+        console.log(orderDetails);
+        // Assuming you want to set the state to show the search result
+        if (orderDetails) {
+          setOrderList([orderDetails]);
+        } else {
+          setOrderList([]);
+        }
       } catch (error) {
         console.error("Failed to fetch order details:", error);
-        // Handle error (e.g., show an error message to the user)
       }
     }
   };
@@ -122,7 +140,6 @@ const SSOrderList = () => {
         <div className="ss_manage_content_header">
           <img className="ss_manage_content_logo" src={logo} alt="Logo" />
           <div className="ss_manage_content_search_section">
-            {/* <i className="fas fa-search manager_manage_search_icon"></i> */}
             <input
               type="text"
               className="ss_manage_content_search_bar"
@@ -138,10 +155,8 @@ const SSOrderList = () => {
           Order List
         </h3>
         <div className="ss_header_pagination_list">
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
-            <InputLabel id="demo-simple-select-standard-label">
-              Status
-            </InputLabel>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
+            <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
@@ -149,9 +164,6 @@ const SSOrderList = () => {
               onChange={handleChange}
               label="Status"
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value="default">Default</MenuItem>
               <MenuItem value="unpaid">Unpaid</MenuItem>
               <MenuItem value="paid">Paid</MenuItem>
@@ -172,9 +184,7 @@ const SSOrderList = () => {
               <button
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
+                className={index + 1 === currentPage ? "manager_order_active" : ""}
               >
                 {index + 1}
               </button>
@@ -187,7 +197,6 @@ const SSOrderList = () => {
               &gt;
             </button>
           </div>
-
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -195,48 +204,32 @@ const SSOrderList = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">Order ID</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Customer Name
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Created Date
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Shipping Address
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Phone number
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Order Status
-                  </StyledTableCell>
+                  <StyledTableCell align="center">Customer Name</StyledTableCell>
+                  <StyledTableCell align="center">Created Date</StyledTableCell>
+                  <StyledTableCell align="center">Shipping Address</StyledTableCell>
+                  <StyledTableCell align="center">Phone number</StyledTableCell>
+                  <StyledTableCell align="center">Order Status</StyledTableCell>
                   <StyledTableCell align="center">Detail</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orderList.length > 0 ? (
+                {currentOrder.length > 0 ? (
                   currentOrder.map((item) => (
-                    <TableRow
-                      className="manager_manage_table_body_row"
-                      key={item.orderId}
-                    >
-                      <TableCell align="center">#{item.orderId}</TableCell>
+                    <TableRow className="manager_manage_table_body_row" key={item.orderId}>
+                      <TableCell align="center">{item.orderId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
                       <TableCell align="center">{item.date}</TableCell>
                       <TableCell align="center">{item.shippingAddress}</TableCell>
                       <TableCell align="center">{item.phoneNumber}</TableCell>
                       <TableCell align="center">{item.orderStatus}</TableCell>
-                      <TableCell  align="center">
-                        <InfoIcon
-                          style={{ cursor: "pointer" }}
-                          onClick={() => viewDetail(item.orderId)}
-                        />
+                      <TableCell align="center">
+                        <InfoIcon style={{ cursor: "pointer" }} onClick={() => viewDetail(item.orderId)} />
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="10">No order found</TableCell>
+                    <TableCell colSpan="7" align="center">No order found</TableCell>
                   </TableRow>
                 )}
               </TableBody>

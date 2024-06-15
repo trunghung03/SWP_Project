@@ -4,7 +4,7 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
 
 //get list orders
 
-export const fetchAllOrders = async () => {
+ const fetchAllOrders = async () => {
   return axios.get(`${API_BASE_URL_ORDER}/purchaseorders/all`)
   .then((response) => {
     return response.data;
@@ -16,7 +16,7 @@ export const fetchAllOrders = async () => {
 
 //get order detail by id
 
-export const fetchOrderDetail = async (id) => {
+ const fetchOrderDetail = async (id) => {
   return axios.get(`${API_BASE_URL_ORDER}/purchaseorders/${id}`)
   .then((response) => {
     return response.data;
@@ -25,7 +25,7 @@ export const fetchOrderDetail = async (id) => {
     return error;
   });
 }
-export const fetchUserByUserId = async (id) => {
+ const fetchUserByUserId = async (id) => {
   return axios.get(`https://localhost:7184/api/accounts/${id}`)
   .then((response) => {
     return response.data;
@@ -34,7 +34,7 @@ export const fetchUserByUserId = async (id) => {
     return error;
   });
 }
-export const getSalesStaffOrderList = async (staffId) => {
+ const getSalesStaffOrderList = async (staffId) => {
   return axios.get(`https://localhost:7184/api/employees/salesstaff/orderlists`, { params: { staffId } })
   .then((response) => {
     return response.data;
@@ -43,13 +43,12 @@ export const getSalesStaffOrderList = async (staffId) => {
     return error;
   });
 }
-export const getBillDetail = async (orderId) => {
-  return axios.get(`https://localhost:7184/api/employees/view-order-detail-bill`, { params: { orderId } })
-  .then((response) => {
-    return response.data;
-  })
-  .catch(function (error) {
-    return error;
-  });
+ const getBillDetail = async (orderId) => {
+  return axios.get(`https://localhost:7184/api/employees/view-order-detail-bill?orderId=${orderId}`)
 }
 
+ const getPurchaseOrderByStatus = async (status) => {
+  return axios.get(`${API_BASE_URL_ORDER}/purchaseorders/status/${status}`)
+}
+
+export {getPurchaseOrderByStatus,getBillDetail,getSalesStaffOrderList,fetchUserByUserId,fetchOrderDetail,fetchAllOrders}
