@@ -13,6 +13,6 @@ namespace DIAN_.Interfaces
         Task<Orderdetail?> UpdateAsync(Orderdetail orderdetail, int id);
         Task<Orderdetail?> DeleteAsync(int id);
 
-        Task<List<OrderBillDto>> ViewOrderBillAsync(int orderId);
+        Task<OrderBillDto?> ViewOrderBillAsync(int orderId);
     }
 }

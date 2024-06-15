@@ -78,9 +78,9 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return updateDetail;
         }
-        public async Task<List<OrderBillDto>> ViewOrderBillAsync(int orderId)
+        public async Task<OrderBillDto?> ViewOrderBillAsync(int orderId)
         {
-            var orderBills = await _context.Purchaseorders
+            var orderBill = await _context.Purchaseorders
                 .Where(po => po.OrderId == orderId)
                 .SelectMany(po => po.Orderdetails, (po, od) => new { po, od })
                 .SelectMany(
@@ -118,9 +118,9 @@ namespace DIAN_.Repository
                         WarrantyStartDate = x.od.Warranty.StartDate,
                         WarrantyEndDate = x.od.Warranty.EndDate,
                     }).ToList()
-                }).ToListAsync();
+                }).FirstOrDefaultAsync(); // Changed ToListAsync to FirstOrDefaultAsync
 
-            return orderBills; // This should now correctly indicate a non-nullable return type
+            return orderBill; // Now returns a single OrderBillDto object or null if not found
         }
 
 
