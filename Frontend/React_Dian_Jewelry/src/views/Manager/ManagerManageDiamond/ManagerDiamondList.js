@@ -20,9 +20,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
@@ -232,7 +232,7 @@ const ManagerDiamondList = () => {
               placeholder="Search by ID or Shape..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
@@ -245,6 +245,31 @@ const ManagerDiamondList = () => {
           >
             Add new diamond
           </button>
+          <div className="manager_manage_diamond_pagination">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={
+                  index + 1 === currentPage ? "manager_order_active" : ""
+                }
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
         </div>
 
         {/* Table diamond list */}
@@ -267,15 +292,20 @@ const ManagerDiamondList = () => {
               <TableBody>
                 {currentOrders.length > 0 ? (
                   currentOrders.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.diamondId}>
-                     <TableCell align="center">{item.diamondId}</TableCell>
-                     <TableCell align="center">{item.shape}</TableCell>
-                     <TableCell align="center">{item.color}</TableCell>
-                     <TableCell align="center">{item.clarity}</TableCell>
-                     <TableCell align="center">{item.carat}</TableCell>
-                     <TableCell align="center">{item.cut}</TableCell>
-                     <TableCell align="center">{item.amountAvailable}</TableCell>
-                     <TableCell align="center">
+                    <TableRow
+                      className="manager_manage_table_body_row"
+                      key={item.diamondId}
+                    >
+                      <TableCell align="center">{item.diamondId}</TableCell>
+                      <TableCell align="center">{item.shape}</TableCell>
+                      <TableCell align="center">{item.color}</TableCell>
+                      <TableCell align="center">{item.clarity}</TableCell>
+                      <TableCell align="center">{item.carat}</TableCell>
+                      <TableCell align="center">{item.cut}</TableCell>
+                      <TableCell align="center">
+                        {item.amountAvailable}
+                      </TableCell>
+                      <TableCell align="center">
                         {item.certificateScan ? (
                           <img
                             src={item.certificateScan}
@@ -306,31 +336,6 @@ const ManagerDiamondList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
         </div>
       </div>
 

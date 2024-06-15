@@ -281,7 +281,6 @@ const ManagerPromotionList = () => {
         <hr className="manager_header_line"></hr>
 
         <h3>List Of Promotional Codes</h3>
-        <div className="manager_header_pagination_list">
           <div className="manager_manage_diamond_create_button_section">
             <button
               className="manager_manage_diamond_create_button"
@@ -289,7 +288,6 @@ const ManagerPromotionList = () => {
             >
               Add new promotional code
             </button>
-          </div>
           <div className="manager_manage_diamond_pagination">
             <button
               className="manager_button_pagination"
@@ -316,7 +314,7 @@ const ManagerPromotionList = () => {
             >
               &gt;
             </button>
-          </div>
+        </div>
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>

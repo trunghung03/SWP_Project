@@ -66,14 +66,14 @@ namespace DIAN_.Services
             return displayOrderDtos;
         }
 
-        public async Task<List<PurchaseOrderDTO>> ViewListOrdersByStatus(string status)
+        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status)
         {
             var orders = await _purchaseOrderRepository.GetPurchaseOrderStatusAsync(status);
             if (orders == null)
             {
                 throw new Exception("No orders found with the given status.");
             }
-            return orders.Select(orders => PurchaseOrderMapper.ToPurchaseOrderDTO(orders)).ToList();
+            return orders.Select(orders => PurchaseOrderMapper.ToPurchaseOrderDetail(orders)).ToList();
         }
     }
 }

@@ -129,17 +129,17 @@
 //Add diamond button
 .manager_manage_diamond_create_button_section {
     display: flex;
-    justify-content: flex-start;
-    padding-right: 20px;
-    margin-top: 35px;
+    justify-content: space-between;
+    padding-right: 15px;
+    margin-top: 30px;
 }
 
 .manager_manage_diamond_create_button {
     background-color: #1c1c1c;
     color: white;
-    padding: 8px 30px;
+    padding: 5px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 11px;
     cursor: pointer;
     font-size: 15px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -154,6 +154,7 @@
 
 //Table diamond
 .manager_manage_diamond_table_wrapper {
+    margin-top: 1%;
     flex-grow: 1;
 }
 

@@ -81,8 +81,8 @@ const DSDeliveryList = () => {
     setCurrentPage(pageNumber);
   };
   const viewDetail = (orderId) => {
-    navigate(`/sales-staff-manage-order-detail/${orderId}`);
-  };
+    navigate(`/delivery-staff-delivery-detail/${orderId}`);
+  };  
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
       // Check if the Enter key was pressed
@@ -147,13 +147,8 @@ const DSDeliveryList = () => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="default">Default</MenuItem> //mot chinh lai deli
-              chi thay dc delivering, delivered
-              <MenuItem value="unpaid">Unpaid</MenuItem>
-              <MenuItem value="paid">Paid</MenuItem>
-              <MenuItem value="preparing">Preparing</MenuItem>
-              <MenuItem value="delivering">Delivering</MenuItem>
-              <MenuItem value="delivered">Delivered</MenuItem>
+              <MenuItem value="Delivering">Delivering</MenuItem>
+              <MenuItem value="Delivered">Delivered</MenuItem>
             </Select>
           </FormControl>
           <div className="manager_manage_diamond_pagination">

@@ -27,7 +27,7 @@ const SSOrderList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
-
+  const [currentOrder, setCurrentOrder] = useState([]);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -37,12 +37,6 @@ const SSOrderList = () => {
       fontSize: 14,
     },
   }));
-
-  const handleMoreDetails = (item) => {
-    console.log("More details for item:", item);
-    // Implement the logic to show more details about the item
-    // This could be opening a modal, redirecting to another page, etc.
-  };
 
   const viewDetail = (orderId) => {
     navigate(`/sales-staff-manage-order-detail/${orderId}`);
@@ -58,13 +52,13 @@ const SSOrderList = () => {
     } else {
       try {
         const orders = await getPurchaseOrderByStatus(selectedValue);
-        console.log("Fetched orders:", orders);
-        if (Array.isArray(orders)) {
-          setOrderList(orders);
+        console.log("Fetched orders:", orders?.data);
+        if (orders) {
+          setOrderList([...orders?.data]);
         } else if (orders) {
-          setOrderList([orders]);
+          setOrderList(orders?.data);
         } else {
-          setOrderList([]);
+          setOrderList(orders?.data);
           console.error("Expected an array but got:", orders);
         }
       } catch (error) {
@@ -95,7 +89,11 @@ const SSOrderList = () => {
   }, [employeeId]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
+  
+ const [totalPages, setTotalPages] = useState(0);
+  useEffect(() => {
+    console.log(orderList);
+    const ordersPerPage = 6;
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
@@ -103,12 +101,10 @@ const SSOrderList = () => {
   const filteredOrders =
     sortOrder === "default"
       ? orderList
-      : orderList.filter((order) => order.orderStatus === sortOrder);
-
-  const currentOrder = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
-
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-
+      : orderList?.filter((order) => order.orderStatus === sortOrder);
+      setTotalPages(Math.ceil(filteredOrders.length / ordersPerPage));
+    setCurrentOrder(filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder));
+  },[orderList,currentPage])
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -160,16 +156,16 @@ const SSOrderList = () => {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              value={sortOrder}
               onChange={handleChange}
+              value={sortOrder}
               label="Status"
             >
               <MenuItem value="default">Default</MenuItem>
-              <MenuItem value="unpaid">Unpaid</MenuItem>
-              <MenuItem value="paid">Paid</MenuItem>
-              <MenuItem value="preparing">Preparing</MenuItem>
-              <MenuItem value="delivering">Delivering</MenuItem>
-              <MenuItem value="delivered">Delivered</MenuItem>
+              <MenuItem value="Unpaid">Unpaid</MenuItem>
+              <MenuItem value="Paid">Paid</MenuItem>
+              <MenuItem value="Preparing">Preparing</MenuItem>
+              <MenuItem value="Delivering">Delivering</MenuItem>
+              <MenuItem value="Delivered">Delivered</MenuItem>
             </Select>
           </FormControl>
           <div className="manager_manage_diamond_pagination">

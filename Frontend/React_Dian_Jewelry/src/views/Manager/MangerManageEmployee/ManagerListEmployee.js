@@ -241,10 +241,8 @@ const ManagerEmployeeList = () => {
         <h3 className="manager_title_employees" style={{ alignItems: "flex-end" }}>
             Employees
           </h3>
-        <div className="manager_header_pagination_list"  style={{ textAlign: 'right' }}>
-          <div className="manager_manage_diamond_pagination">
+        <div className="manager_manage_diamond_pagination">
             <button
-              className="manager_button_pagination"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
@@ -262,34 +260,17 @@ const ManagerEmployeeList = () => {
               </button>
             ))}
             <button
-              className="manager_button_pagination"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
               &gt;
             </button>
           </div>
-        </div>
-
-        {/* <div className="manager_manage_diamond_create_button_section">
-                    <button className="manager_manage_diamond_create_button" onClick={() => navigate('/managerAddEmployee')}>Add new employee</button>
-                </div> */}
-
-        {/* Table diamond list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  {/* <tr className="manager_manage_diamond_row">
-                <th>ID</th>
-                <th>Role</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Address</th>
-                <th>Phone number</th>
-                {/* <th>Action</th> */}
-                  {/* </tr> */}
                   <StyledTableCell>ID</StyledTableCell>
                   <StyledTableCell align="justify">Role</StyledTableCell>
                   <StyledTableCell align="justify">Email</StyledTableCell>

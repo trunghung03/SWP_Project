@@ -155,15 +155,37 @@ const AdminCustomerList = () => {
               placeholder="Search by Email or Name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
         <hr className="manager_header_line"></hr>
         <h3>List Of Customer Accounts</h3>
-
-        {/* chinh tu day tro xuong */}
-
+        <div className="manager_manage_diamond_pagination">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={
+                  index + 1 === currentPage ? "manager_order_active" : ""
+                }
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -195,7 +217,7 @@ const AdminCustomerList = () => {
                           onClick={() => handleStatus(item.customerId)}
                           style={{
                             backgroundColor: item.status
-                              ? "#41c974"
+                              ? "#1fd655"
                               : "#c94143",
                             color: "white",
                           }}
@@ -214,31 +236,6 @@ const AdminCustomerList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
         </div>
       </div>
     </div>

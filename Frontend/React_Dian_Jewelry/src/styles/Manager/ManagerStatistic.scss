@@ -12,6 +12,10 @@
     justify-content: space-between;
     align-items: center;
 }
+.manager_manage_statistic_title{
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    text-align: center;
+}
 
 .manager_header_line {
     width: 150%;
@@ -70,4 +74,25 @@
     transition-duration: 150ms;
     }
     
+}
+
+.manager_manage_report_div{
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.manager_manage_report_div:hover{
+    background-color: #f3f4f6;
+    border: 1px solid black;
+    cursor: pointer;
+}
+.manager_manage_display_chart{
+    flex: 2;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.manager_manage_display_chart:hover{
+    border: 1px solid black;
+    cursor: pointer;
 }

@@ -258,18 +258,43 @@ const ManagerProductList = () => {
         </div>
         <hr className="manager_product_header_line"></hr>
         <h3>List Of Products</h3>
-        <div className="manager_manage_product_create_button_section">
+        <div className="manager_manage_diamond_create_button_section">
           <button
-            className="manager_manage_product_create_button"
+            className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-product")}
           >
             Add new product
           </button>
+          <div className="manager_manage_diamond_pagination">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={
+                  index + 1 === currentPage ? "manager_order_active" : ""
+                }
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
         </div>
 
         {/* Table diamond list */}
         <div className="manager_manage_product_table_wrapper">
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} style={{marginTop:10}}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
@@ -334,37 +359,12 @@ const ManagerProductList = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="13">No product found</TableCell>
+                    <TableCell colSpan="7">No product found</TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </TableContainer>
-          <div className="manager_manage_product_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
         </div>
       </div>
 

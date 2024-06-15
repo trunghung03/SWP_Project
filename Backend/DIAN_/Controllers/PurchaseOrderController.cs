@@ -101,22 +101,22 @@ namespace DIAN_.Controllers
         }
 
 
-        // Endpoint to view orders by status
-        [HttpGet("status/{status}")]
-        public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
-        {
-            try
-            {
-                var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
-                if (orders == null)
-                {
-                    return NotFound($"Cannot find {status} order");
+        //// Endpoint to view orders by status
+        //[HttpGet("status/{status}")]
+        //public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
+        //{
+        //    try
+        //    {
+        //        var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
+        //        if (orders == null)
+        //        {
+        //            return NotFound($"Cannot find {status} order");
 
-                }
-                return orders;
-            }
-            catch (Exception) { throw; }
-        }
+        //        }
+        //        return orders;
+        //    }
+        //    catch (Exception) { throw; }
+        //}
 
         [HttpPost("apply-coupon")]
         public async Task<ActionResult<decimal>> ApplyCoupon(string code, decimal totalPrice)

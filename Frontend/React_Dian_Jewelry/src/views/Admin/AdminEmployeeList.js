@@ -21,7 +21,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import IconButton from '@mui/material/IconButton';
 
 const AdminEmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -167,53 +166,6 @@ const AdminEmployeeList = () => {
           >
             Create new employee
           </button>
-        </div>
-        <div className="manager_manage_diamond_table_wrapper">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell>Role</StyledTableCell>
-                  <StyledTableCell>Email</StyledTableCell>
-                  <StyledTableCell>Full Name</StyledTableCell>
-                  <StyledTableCell>Phone number</StyledTableCell>
-                  <StyledTableCell>Address</StyledTableCell>
-                  <StyledTableCell>Status</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-  {employeeList.length > 0 ? (
-    currentEmployee.map((item) => (
-      <TableRow key={item.employeeId}>
-        <TableCell>{item.employeeId}</TableCell>
-        <TableCell>{item.role}</TableCell>
-        <TableCell>{item.email}</TableCell>
-        <TableCell>{`${item.firstName} ${item.lastName}`}</TableCell>
-        <TableCell>{item.phoneNumber}</TableCell>
-        <TableCell>{item.address}</TableCell>
-        <TableCell>
-          <Button
-            onClick={() => handleStatus(item.employeeId)}
-            variant="contained"
-            style={{
-              backgroundColor: item.status ? "#41c974" : "#c94143",
-              color: "white",
-            }}
-          >
-            {item.status ? "Active" : "Deactive"}
-          </Button>
-        </TableCell>
-      </TableRow>
-    ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan="7">No Employee found</TableCell>
-    </TableRow>
-  )}
-</TableBody>
-            </Table>
-          </TableContainer>
           <div className="manager_manage_diamond_pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -239,6 +191,58 @@ const AdminEmployeeList = () => {
               &gt;
             </button>
           </div>
+        </div>
+        <div className="manager_manage_diamond_table_wrapper">
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">ID</StyledTableCell>
+                  <StyledTableCell align="center">Role</StyledTableCell>
+                  <StyledTableCell align="center">Email</StyledTableCell>
+                  <StyledTableCell align="center">Full Name</StyledTableCell>
+                  <StyledTableCell align="center">Phone number</StyledTableCell>
+                  <StyledTableCell align="center">Address</StyledTableCell>
+                  <StyledTableCell align="center">Status</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {employeeList.length > 0 ? (
+                  currentEmployee.map((item) => (
+                    <TableRow
+                      className="manager_manage_table_body_row"
+                      key={item.employeeId}
+                    >
+                      <TableCell align="center">{item.employeeId}</TableCell>
+                      <TableCell align="center">{item.role}</TableCell>
+                      <TableCell align="center">{item.email}</TableCell>
+                      <TableCell align="center">{`${item.firstName} ${item.lastName}`}</TableCell>
+                      <TableCell align="center">{item.phoneNumber}</TableCell>
+                      <TableCell align="center">{item.address}</TableCell>
+                      <TableCell align="center">
+                        <Button
+                          onClick={() => handleStatus(item.employeeId)}
+                          variant="contained"
+                          style={{
+                            backgroundColor: item.status
+                              ? "#1fd655"
+                              : "#c94143",
+                            color: "white",
+                          }}
+                        >
+                          {item.status ? "Active" : "Deactive"}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan="7">No Employee found</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </div>
     </div>

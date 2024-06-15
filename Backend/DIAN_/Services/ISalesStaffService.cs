@@ -6,7 +6,7 @@ namespace DIAN_.Services
 {
     public interface ISalesStaffService
     {
-        Task<List<PurchaseOrderDTO>> ViewListOrdersByStatus(string status);
+        Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status);
 
         Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int staffId);
 

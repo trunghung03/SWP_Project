@@ -44,11 +44,41 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
   });
 }
  const getBillDetail = async (orderId) => {
-  return axios.get(`https://localhost:7184/api/employees/view-order-detail-bill?orderId=${orderId}`)
+  return axios.get(`https://localhost:7184/api/employees/view-order-detail-bill`, { params: { orderId } })
+  .then((response) => {
+    return response.data;
+  })
+  .catch(function (error) {
+    return error;
+  });
 }
 
  const getPurchaseOrderByStatus = async (status) => {
-  return axios.get(`${API_BASE_URL_ORDER}/purchaseorders/status/${status}`)
+  return axios.get(`${API_BASE_URL_ORDER}/employees/status/${status}`)
 }
 
 export {getPurchaseOrderByStatus,getBillDetail,getSalesStaffOrderList,fetchUserByUserId,fetchOrderDetail,fetchAllOrders}
+export const sendEmail = async (data) => {
+  const response = await axios.post(`https://localhost:7184/api/accounts/send-email`, data);
+  return response.data;
+};
+
+export const salesStaffUpdateOrderStatus = async (status, orderId) => {
+  return axios.get(`https://localhost:7184/api/employees/salesstaff/updatestatus`, { params: { status, orderId } })
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+};
+
+export const deliStaffUpdateOrderStatus = async (status, orderId) => {
+  return axios.get(`https://localhost:7184/api/employees/deliverystaff/updatestatus`, { params: { status, orderId } })
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+};

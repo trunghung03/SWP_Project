@@ -194,6 +194,22 @@ namespace UserApplication.Controllers
                 throw;
             }
         }
+        [HttpGet("status/{status}")]
+        public async Task<IActionResult> ViewListOrdersByStatus(string status)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var orders = await _salesStaffService.ViewListOrdersByStatus(status);
+
+                return Ok(orders);
+            }catch(Exception)
+            {
+                throw;
+            }
+        }
+
 
         [HttpPut("salesstaff/updatestatus")]
         public async Task<IActionResult> SalesStaffUpdateOrderStatus(string status, int orderId)
