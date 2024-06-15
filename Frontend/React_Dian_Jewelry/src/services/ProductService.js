@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // const API_BASE_URL = 'https://localhost:7184/api';
-REACT_APP_API_BASE_URL='https://diandiamond.azurewebsites.net/api';
+const REACT_APP_API_BASE_URL='https://diandiamond.azurewebsites.net/api';
 
 const getProductList = () => {
     return axios.get(`${REACT_APP_API_BASE_URL}/products/list`);
