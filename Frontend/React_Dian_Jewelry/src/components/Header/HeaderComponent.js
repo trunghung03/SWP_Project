@@ -6,15 +6,15 @@ import '../Header/HeaderComponent.scss';
 import logo from '../../assets/img/logoN.png';
 import mainImgDiamondJewelry from '../../assets/img/nav1.jpg';
 import mainImgWeddingJewelry from '../../assets/img/nav2.jpeg';
-import ringCategory from '../../assets/img/ringCategory.jpg';
-import wRingCategory from '../../assets/img/wRingCategory.jpg';
-import engagementCategory from '../../assets/img/engagementCategory.jpg';
-import earringCategory from '../../assets/img/earringCategory.webp';
-import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
-import braceletCategory from '../../assets/img/braceletCategory.webp';
-import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
-import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
-import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
+import ringCategory from '../../assets/img/ringNav.webp';
+import wRingCategory from '../../assets/img/weddingRingNav.png';
+import engagementCategory from '../../assets/img/engagementNav.jpg';
+import earringCategory from '../../assets/img/earingsNav.jpeg';
+import wEarringCategory from '../../assets/img/wEaringNav.webp';
+import braceletCategory from '../../assets/img/braceletNav.png';
+import wBraceletCategory from '../../assets/img/wBraceletnav.jpg';
+import necklaceCategory from '../../assets/img/necklaceNav.jpg';
+import wNecklaceCategory from '../../assets/img/wNecklaceNav.webp';
 
 const HeaderComponent = () => {
     const { user } = useContext(UserContext);

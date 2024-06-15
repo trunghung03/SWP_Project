@@ -111,14 +111,14 @@ function Shape() {
 
     return (
         <div className="Shape">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
             <br />
             {/* Diamond shape  */}
             <div className="s_diamond_shape_container">
                 <div className="s_diamond_shape_grid">
                     <div className="s_diamond_shape_column">
-                        <div  onClick={() => handleNavigate('/shape', { shape: 'Round' })}>
+                        <div onClick={() => handleNavigate('/shape', { shape: 'Round' })}>
                             <img src={round} alt="Round" className="s_diamond_shape_image" />
                             <p className="s_diamond_shape_name">Round</p>
                         </div>
@@ -216,6 +216,7 @@ function Shape() {
                             label="Clarity"
                             onChange={(e) => setClarity(e.target.value)}
                         >
+                            <MenuItem value="FL">FL</MenuItem>
                             <MenuItem value="IF">IF</MenuItem>
                             <MenuItem value="VVS1">VVS1</MenuItem>
                             <MenuItem value="VVS2">VVS2</MenuItem>
@@ -223,6 +224,9 @@ function Shape() {
                             <MenuItem value="VS2">VS2</MenuItem>
                             <MenuItem value="SI1">SI1</MenuItem>
                             <MenuItem value="SI2">SI2</MenuItem>
+                            <MenuItem value="I1">I1 </MenuItem>
+                            <MenuItem value="I2">I2</MenuItem>
+                            <MenuItem value="I3">I3</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl className="shape_filter_group" size="small">
@@ -234,10 +238,28 @@ function Shape() {
                             label="Carat"
                             onChange={(e) => setCarat(e.target.value)}
                         >
-                            <MenuItem value="0.5">0.5</MenuItem>
-                            <MenuItem value="1.0">1.0</MenuItem>
-                            <MenuItem value="1.5">1.5</MenuItem>
-                            <MenuItem value="2.0">2.0</MenuItem>
+                            <MenuItem value="0.02">0.02 ct</MenuItem>
+                            <MenuItem value="0.03">0.03 ct</MenuItem>
+                            <MenuItem value="0.04">0.04 ct</MenuItem>
+                            <MenuItem value="0.05">0.05 ct</MenuItem>
+                            <MenuItem value="0.10">0.10 ct</MenuItem>
+                            <MenuItem value="0.20">0.20 ct</MenuItem>
+                            <MenuItem value="0.30">0.30 ct</MenuItem>
+                            <MenuItem value="0.40">0.40 ct</MenuItem>
+                            <MenuItem value="0.50">0.50 ct</MenuItem>
+                            <MenuItem value="0.60">0.60 ct</MenuItem>
+                            <MenuItem value="0.70">0.70 ct</MenuItem>
+                            <MenuItem value="0.80">0.80 ct</MenuItem>
+                            <MenuItem value="0.90">0.90 ct</MenuItem>
+                            <MenuItem value="1">1 ct</MenuItem>
+                            <MenuItem value="1.5">1.5 ct</MenuItem>
+                            <MenuItem value="2">2 ct</MenuItem>
+                            <MenuItem value="2.5">2.5 ct</MenuItem>
+                            <MenuItem value="3">3 ct</MenuItem>
+                            <MenuItem value="3.5">3.5 ct</MenuItem>
+                            <MenuItem value="4">4 ct</MenuItem>
+                            <MenuItem value="4.5">4.5 ct</MenuItem>
+                            <MenuItem value="5">5 ct</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl className="shape_filter_group" size="small">
@@ -256,10 +278,26 @@ function Shape() {
                             <MenuItem value="H">H</MenuItem>
                             <MenuItem value="I">I</MenuItem>
                             <MenuItem value="J">J</MenuItem>
+                            <MenuItem value="K">K</MenuItem>
+                            <MenuItem value="L">L</MenuItem>
+                            <MenuItem value="M">M</MenuItem>
+                            <MenuItem value="N">N</MenuItem>
+                            <MenuItem value="O">O</MenuItem>
+                            <MenuItem value="P">P</MenuItem>
+                            <MenuItem value="Q">Q</MenuItem>
+                            <MenuItem value="R">R</MenuItem>
+                            <MenuItem value="S">S</MenuItem>
+                            <MenuItem value="T">T</MenuItem>
+                            <MenuItem value="U">U</MenuItem>
+                            <MenuItem value="V">V</MenuItem>
+                            <MenuItem value="W">W</MenuItem>
+                            <MenuItem value="X">X</MenuItem>
+                            <MenuItem value="Y">Y</MenuItem>
+                            <MenuItem value="Z">Z</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
-                <ProductList key={resetKey} products={products} />
+                <ProductList products={products}  key={resetKey} />
             </div>
             <Question />
             <ScrollToTop />
