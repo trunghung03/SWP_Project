@@ -8,10 +8,14 @@ import '../../styles/Authentication/Login.scss';
 import rightImage from '../../assets/img/right.jpeg';
 import rightImage2 from '../../assets/img/right2.jpg';
 import rightImage3 from '../../assets/img/right3.jpg';
-import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo } from '../../services/UserService';
-import { jwtDecode } from 'jwt-decode';
+import { customerLoginApi, employeeLoginApi, getUserInfo, getEmployeeInfo, googleLoginApi } from '../../services/UserService';
+import { jwtDecode } from 'jwt-decode'; 
 import { useCart } from '../../services/CartService';
-import { UserContext } from '../../services/UserContext';
+import { UserContext } from '../../services/UserContext'; 
+import { GoogleLogin } from 'react-google-login';
+import { gapi } from 'gapi-script';
+
+
 
 const Login = () => {
     const { setUser } = useContext(UserContext);
@@ -22,7 +26,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { setCartItemsForUser } = useCart();
-
+    const clientID = "801507159871-cnsbfjcva7ll2i18lhj13rv0mqorbhb0.apps.googleusercontent.com";
     useEffect(() => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');
@@ -239,6 +243,18 @@ const Login = () => {
 
         setLoading(false);
     };
+    useEffect(() => {
+    function start(){
+        gapi.client.init({
+            clientId:clientID,
+            scope:''
+        })
+    }
+
+    gapi.load('client:auth2',start)
+    },[])
+
+
 
     useEffect(() => {
         const togglePassword = document.getElementById('togglePassword');
@@ -270,6 +286,37 @@ const Login = () => {
         prevArrow: <div className="login_slider_arrow login_slider_prev"><i className="login_right_arrow fas fa-chevron-left"></i></div>
     };
 
+    const onSuccess =  async(res) => {
+    
+     
+
+      const body = {
+        "email": res.profileObj.email,
+        "password": "123",
+        "lastName": res.profileObj.familyName,
+        "firstName": res.profileObj.givenName,
+        "address": "",
+        "phoneNumber": "",
+        "points": 0
+      }
+
+      const userInfoRes = await googleLoginApi(body);
+      localStorage.setItem("token", userInfoRes.data.token);
+      
+        if(userInfoRes.status == 200){
+            setUser({ 
+                firstName:res.profileObj.givenName,
+                lastName: res.profileObj.familyName,
+                email:  res.profileObj.email,
+                points: 0,
+            });
+            localStorage.setItem("firstName", res.profileObj.givenName);
+            navigate('/home');
+        }
+    }
+    const onFailure =(res) => {
+
+    }
     return (
         <div className="main_container">
             <div className="login_wrapper">
@@ -324,9 +371,11 @@ const Login = () => {
                         </div>
                         <div className="google_section text-center">
                             <hr className="line" />
-                            <button type="button" className="google_login btn btn-block">
+                            <GoogleLogin clientId={clientID} buttonText='Login' onSuccess={onSuccess}
+                             onFailure={onFailure} cookiePolicy='single_host_origin' isSignedIn={false} />
+                            {/* <button type="button" className="google_login btn btn-block">
                                 <i className="icon_gg fab fa-google"></i> Sign in with Google Account
-                            </button>
+                            </button> */}
                         </div>
                     </form>
                 </div>

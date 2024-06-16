@@ -2,6 +2,12 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://localhost:7184/api';
 
+
+
+const googleLoginApi = (body) => {
+    return axios.post(`${API_BASE_URL}/accounts/login-gg`,body);
+}
+
 const customerLoginApi = (email, password) => {
     return axios.post(`${API_BASE_URL}/accounts/login`, { email, password });
 }
@@ -35,6 +41,7 @@ export {
     employeeLoginApi, 
     getUserInfo, 
     getEmployeeInfo, 
+    googleLoginApi,
     updateCustomerInfo, 
     forgotPasswordApi, 
     resetPasswordApi  

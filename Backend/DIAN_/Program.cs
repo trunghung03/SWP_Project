@@ -10,8 +10,8 @@ using DIAN_.Extensions;
 using DIAN_.CustomExceptionMiddleware;
 using DIAN_.Helper;
 using Hangfire;
-using System.ComponentModel;
 using Microsoft.AspNetCore.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,18 +19,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
-
-
-builder.Services.AddCors();
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddControllers()
-       .AddJsonOptions(options =>
-       {
-           options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
-      });
-builder.Services.AddControllers();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -41,17 +41,17 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequiresManagerRole", policy => policy.RequireRole("Manager"));
 });
 
-//builder.Services.AddControllers().AddJsonOptions(x =>
-//    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
 
+// Configure email settings
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
 
+// Configure database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -59,14 +59,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddHttpClient();
 
-
+// Register repositories and services
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IShellMaterialRepository,ShellRepository>();
-builder.Services.AddScoped<IPromotionRepository,PromotionRepository>();
+builder.Services.AddScoped<IShellMaterialRepository, ShellRepository>();
+builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ISizeRepository, SizeRepository>();
@@ -84,15 +84,6 @@ builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>(
 builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
 
 
-//builder.Services.AddHangfire(configuration => configuration
-//                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-//                .UseSimpleAssemblyNameTypeSerializer()
-//                .UseRecommendedSerializerSettings()
-//                .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"),
-//                new Hangfire.SqlServer.SqlServerStorageOptions()
-//                {
-//                    //TODO: Change hangfire sql server option
-//                }));
 
 
 var app = builder.Build();
@@ -103,14 +94,15 @@ app.UseCors(builder => builder
     .AllowAnyHeader());
 
 app.UseSwagger();
+
 // Configure the HTTP request pipeline.
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
+app.UseDeveloperExceptionPage();
 
-//var logger = app.Services.GetRequiredService<ILoggerManager>(); 
 app.ConfigureCustomExceptionMiddleware();
 app.UseExceptionHandler(opt => { });
 
@@ -118,10 +110,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-//app.UseHangfireDashboard();
-
 app.UseRouting();
 
 app.MapControllers();
 
 app.Run();
+
+

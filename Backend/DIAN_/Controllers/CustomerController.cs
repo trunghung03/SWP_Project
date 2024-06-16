@@ -13,6 +13,7 @@ using DIAN_.Helper;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity.Data;
 using DIAN_.DTOs.AccountDTO;
+using Google.Apis.Auth;
 
 namespace UserApplication.Controllers
 {
@@ -24,13 +25,16 @@ namespace UserApplication.Controllers
         private readonly IEmailService _emailService;
         private readonly ICustomerService _customerService;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IConfiguration _configuration;
+
         public CustomerController(ITokenService tokenService, ICustomerRepository customerRepository,
-            IEmailService emailService, ICustomerService customerService)
+            IEmailService emailService, ICustomerService customerService, IConfiguration configuration)
         {
             _tokenService = tokenService;
             _customerRepository = customerRepository;
             _emailService = emailService;
             _customerService = customerService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -50,7 +54,7 @@ namespace UserApplication.Controllers
                         Token = _tokenService.CreateCustomerToken(customer)
                     });
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -74,10 +78,28 @@ namespace UserApplication.Controllers
                         Token = _tokenService.CreateCustomerToken(customer)
                     });
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
+        }
+
+        [HttpPost("login-gg")]
+        public async Task<IActionResult> LoginGG(RegisterUserDto user)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); };
+            var customer = await _customerRepository.GetByEmailAsync(user.Email);
+
+            if (customer == null)
+                customer = await _customerRepository.RegisterAsync(user);
+
+
+            return Ok(
+                new NewUserDto
+                {
+                    Email = customer.Email,
+                    Token = _tokenService.CreateCustomerToken(customer)
+                });
         }
 
         [HttpGet]
@@ -276,5 +298,7 @@ namespace UserApplication.Controllers
                 throw;
             }
         }
+
+
     }
 }
