@@ -6,9 +6,15 @@ import './SubNav.scss';
 const SubNav = ({ items }) => {
     const navigate = useNavigate();
 
-    const handleNavigation = (link) => {
-        if (link) {
-            navigate(link);
+    const handleNavigation = (item) => {
+        if (item.name === 'Diamond Jewelry') {
+            navigate('/diamond-jewelry', { state: { category: 'all' } });
+        } 
+        else if (item.name === 'Wedding Jewelry') {
+            navigate('/diamond-jewelry', { state: { category: 'weddingJewelry' } });
+        }
+        else if (item.link) {
+            navigate(item.link);
         }
     };
 
@@ -19,7 +25,7 @@ const SubNav = ({ items }) => {
                     <React.Fragment key={index}>
                         <span
                             className="nav-item"
-                            onClick={() => handleNavigation(item.link)}
+                            onClick={() => handleNavigation(item)}
                             style={{ cursor: 'pointer' }}
                         >
                             {item.name}

@@ -17,7 +17,7 @@ function Invoice() {
         { name: 'Home', link: '/home' },
         { name: 'Cart', link: '/cart' },
         { name: 'Checkout', link: '' },
-        { name: 'Invoice', link: '/invoice' }
+        { name: 'Invoice', link: '' }
     ];
     const navigate = useNavigate();
     const location = useLocation();

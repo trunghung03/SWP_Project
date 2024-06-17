@@ -26,7 +26,7 @@ function Shape() {
     const navigate = useNavigate();
     const location = useLocation();
     const [products, setProducts] = useState([]);
-    const [navItems, setNavItems] = useState(['Home', 'Diamond Jewelry', 'Shapes']);
+    const [navItems, setNavItems] = useState([]);
     const [shape, setShape] = useState('');
     const [clarity, setClarity] = useState('');
     const [carat, setCarat] = useState('');
@@ -43,7 +43,11 @@ function Shape() {
 
         if (shape) {
             setShape(shape);
-            setNavItems(['Home', 'Diamond Jewelry', 'Shapes', shape]);
+            setNavItems([
+                { name: 'Home', link: '/home' },
+                { name: 'Diamond Jewelry', link: '' },
+                { name: shape, link: '' }
+            ]);
         }
 
         getProductList()

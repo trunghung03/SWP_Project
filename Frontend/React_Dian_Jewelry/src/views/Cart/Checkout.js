@@ -72,7 +72,7 @@ function Checkout() {
     const navItems = [
         { name: 'Home', link: '/home' },
         { name: 'Cart', link: '/cart' },
-        { name: 'Checkout', link: '/checkout' }
+        { name: 'Checkout', link: '' }
     ];
     const navigate = useNavigate();
     const customerId = localStorage.getItem('customerId');

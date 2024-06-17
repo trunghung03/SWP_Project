@@ -34,6 +34,8 @@ import AdminAddEmployee from './Admin/AdminAddEmployee';
 import ManagerStatistic from './Manager/ManagerStatistic';
 import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
+import ManagerCollectionList from './Manager/ManagerManageDiamond/ManagerDiamondList';
+import ManagerAddCollection from './Manager/ManagerManageDiamond/ManagerAddDiamond';
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
 import DSDeliveryDetail from './DeliveryStaff/DSDeliveryDetail';
 import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';

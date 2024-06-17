@@ -188,12 +188,12 @@ function ProductDetail() {
         setShowSpecifications(!showSpecifications);
     };
 
-    // const navItems = ['Home', 'Diamond Jewelry', product.name];
     const navItems = [
         { name: 'Home', link: '/home' },
         { name: 'Diamond Jewelry', link: '' },
         { name: product.name, link: ''}
     ];
+    
     const images = product.imageLinkList ? product.imageLinkList.split(';') : [];
 
     let sizeGuideImage;
