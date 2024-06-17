@@ -10,7 +10,10 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 
 
 function Contact() {
-  const navItems = ['Home', 'Contact'];
+  const navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'Contact', link: '/contact' }
+  ];
   return (
     <div className="Contact">
       <HeaderComponent />

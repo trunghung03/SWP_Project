@@ -13,7 +13,12 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 
 
 function Invoice() {
-    const navItems = ['Home', 'Cart', 'Checkout', 'Invoice'];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Cart', link: '/cart' },
+        { name: 'Checkout', link: '' },
+        { name: 'Invoice', link: '' }
+    ];
     const navigate = useNavigate();
     const location = useLocation();
     const [orderDetails, setOrderDetails] = useState([]);

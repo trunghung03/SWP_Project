@@ -1,0 +1,3 @@
+[submodule "PricingService"]
+	path = PricingService
+	url = https://github.com/trunghung03/PricingService

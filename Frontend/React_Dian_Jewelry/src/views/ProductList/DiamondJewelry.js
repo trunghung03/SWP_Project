@@ -16,7 +16,7 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 function DiamondJewelry() {
     const location = useLocation();
     const [products, setProducts] = useState([]);
-    const [navItems, setNavItems] = useState(['Home', 'Diamond Jewelry']);
+    const [navItems, setNavItems] = useState([]);
     const [category, setCategory] = useState('');
     const [clarity, setClarity] = useState('');
     const [carat, setCarat] = useState('');
@@ -44,20 +44,26 @@ function DiamondJewelry() {
         setCategory(category || '');
 
         if (category) {
-            let navItems = ['Home', 'Diamond Jewelry'];
+            let navItems = [
+                { name: 'Home', link: '/home' },
+                { name: 'Diamond Jewelry', link: '' }
+            ];
 
             if (category === 'weddingEarrings' || category === 'weddingBracelet' || category === 'weddingNecklace' || category === 'engagementRing' || category === 'weddingRing') {
-                navItems.push('Wedding Jewelry', category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim());
+                navItems.push({ name: 'Wedding Jewelry', link: '' });
+                navItems.push({ name: category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim(), link: '' });
             } else if (category === 'weddingJewelry') {
-                navItems.push('Wedding Jewelry');
+                navItems.push({ name: 'Wedding Jewelry', link: '' });
             } else if (category === 'all') {
-                navItems = ['Home', 'Diamond Jewelry'];
+                navItems = [
+                    { name: 'Home', link: '/home' },
+                    { name: 'Diamond Jewelry', link: '' }
+                ];
             } else {
-                navItems.push(category.charAt(0).toUpperCase() + category.slice(1));
+                navItems.push({ name: category.charAt(0).toUpperCase() + category.slice(1), link: '' });
             }
             setNavItems(navItems);
-
-            // Reset filters whenever the category changes
+            
             setClarity('');
             setCarat('');
             setColor('');
@@ -75,7 +81,10 @@ function DiamondJewelry() {
                 })
                 .catch(error => console.log('Error fetching products:', error));
         } else {
-            setNavItems(['Home', 'Diamond Jewelry']);
+            setNavItems([
+                { name: 'Home', link: '/home' },
+                { name: 'Diamond Jewelry', link: '' }
+            ]);
             getProductList()
                 .then(response => {
                     setProducts(response.data);
@@ -109,6 +118,7 @@ function DiamondJewelry() {
             })
             .catch(error => console.log('Error fetching products:', error));
     }, [clarity, carat, color, shape, category]);
+
 
     useEffect(() => {
         if (sort) {

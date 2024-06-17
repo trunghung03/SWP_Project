@@ -26,7 +26,10 @@ function Blog() {
   const [searchActive, setSearchActive] = useState(false);
   const navigate = useNavigate();
 
-  const navItems = ['Home', 'Blog'];
+  const navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'Blog', link: '/blog' }
+  ];
 
   useEffect(() => {
     getAllArticles()

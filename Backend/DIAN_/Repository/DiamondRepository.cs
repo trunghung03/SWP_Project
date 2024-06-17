@@ -32,11 +32,15 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
-        public async Task<List<Diamond>> GetAllDiamondsAsync()
+        public async Task<List<Diamond>> GetAllDiamondsAsync(DiamondQuery query)
         {
-            return await _context.Diamonds
+            var skipNumber= (query.PageNumber - 1) * query.PageSize;
+
+            return await _context.Diamonds.Where(s => s.Status).Skip(skipNumber).Take(query.PageSize).ToListAsync();
+
+           /* return await _context.Diamonds
                .Where(s => s.Status)
-               .ToListAsync();
+               .ToListAsync();*/
         }
 
         public async Task<Diamond?> GetDiamondByIdAsync(int id)

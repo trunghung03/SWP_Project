@@ -60,7 +60,11 @@ function OrderDetail() {
         navigate('/product-detail', { state: { id: productId } });
     };
 
-    const navItems = ['Home', 'Setting', 'Order History', `Order ${orderNumber}`];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Order History', link: '/order-history' },
+        { name: `Order ${orderNumber}`, link: '' },
+    ];
     const menuItems = [
         { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
         { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },

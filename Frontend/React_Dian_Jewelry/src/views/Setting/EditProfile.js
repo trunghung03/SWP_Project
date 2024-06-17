@@ -45,7 +45,11 @@ function EditProfile() {
     }
   }, []);
 
-  const navItems = ['Home', 'Setting', 'Edit Profile'];
+
+  const navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'Edit Profile', link: '/edit-profile' }
+  ];
   const menuItems = [
     { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
     { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
