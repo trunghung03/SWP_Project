@@ -68,5 +68,15 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return updateCollection;
         }
+
+        public async Task<bool> UpdateCollectionStatus(int id)
+        {
+            var collection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
+            if (collection == null) return false;
+            if (collection.Status == true) collection.Status = false;
+            else if (collection.Status == false) collection.Status = true;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
