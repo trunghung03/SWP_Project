@@ -6,7 +6,7 @@ import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js
 import { createDiamond } from '../../../services/ManagerService/ManagerDiamondService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
 
-const ManagerAddDiamond = () => {
+const ManagerAddCollection = () => {
     const navigate = useNavigate();
     const [diamondData, setDiamondData] = useState({
         shape: '',
@@ -109,4 +109,4 @@ const ManagerAddDiamond = () => {
     );
 };
 
-export default ManagerAddDiamond;
+export default ManagerAddCollection;

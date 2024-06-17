@@ -37,7 +37,6 @@ namespace DIAN_.Repository
         public async Task<List<Collection>> GetAllAsync()
         {
             var collections = await _context.Collections
-                .Where(c => c.Status == true)
                 .ToListAsync();
 
             return collections;
@@ -46,7 +45,6 @@ namespace DIAN_.Repository
         public async Task<Collection?> GetByIdAsync(int id)
         {
             var collection = await _context.Collections
-                .Where(c => c.Status == true)
                 .FirstOrDefaultAsync(c => c.CollectionId == id);
 
             if (collection == null) { return null; }
@@ -73,8 +71,7 @@ namespace DIAN_.Repository
         {
             var collection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
             if (collection == null) return false;
-            if (collection.Status == true) collection.Status = false;
-            else if (collection.Status == false) collection.Status = true;
+            collection.Status = !collection.Status; // Toggles the status
             await _context.SaveChangesAsync();
             return true;
         }

@@ -34,8 +34,8 @@ import AdminAddEmployee from './Admin/AdminAddEmployee';
 import ManagerStatistic from './Manager/ManagerStatistic';
 import ManagerDiamondList from './Manager/ManagerManageDiamond/ManagerDiamondList';
 import ManagerAddDiamond from './Manager/ManagerManageDiamond/ManagerAddDiamond';
-import ManagerCollectionList from './Manager/ManagerManageDiamond/ManagerDiamondList';
-import ManagerAddCollection from './Manager/ManagerManageDiamond/ManagerAddDiamond';
+import ManagerCollectionList from './Manager/ManagerManageCollection/ManagerCollectionList';
+import ManagerAddCollection from './Manager/ManagerManageCollection/ManagerAddCollection';
 import DSDeliveryList from './DeliveryStaff/DSDeliveryList';
 import DSDeliveryDetail from './DeliveryStaff/DSDeliveryDetail';
 import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
@@ -105,7 +105,7 @@ function App() {
             <Route path="/manager-promotional-list" element={<ProtectedRoute path="/manager-promotional-list" element={ManagerPromotionList} />} />
             <Route path="/manager-add-promotion" element={<ProtectedRoute path="/manager-add-promotion" element={ManagerAddPromotion} />} />
             <Route path="/manager-collection-list" element={<ProtectedRoute path="/manager-collection-list" element={ManagerCollectionList} />} />
-            <Route path="/manager-add-collection" element={<ProtectedRoute path="/manager-add-collection" element={ManagerAddCollection} />} />
+            <Route path="/manager-add-collection" element={<ProtectedRoute path="/manager-add-collection" element={ManagerAddCollection}/>} />
 
             {/* Sales Staff */}
             <Route path="/sales-staff-order-list" element={<SSOrderList />} />
