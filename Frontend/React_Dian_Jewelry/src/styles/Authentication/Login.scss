@@ -226,3 +226,35 @@ input {
   color: white;
   font-size: 23px;
 }
+
+.google_section .google_login_btn {
+  border: 1px solid #797979 !important;
+  box-shadow: none!important;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border-radius: 5px !important;
+  color: #1c1c1c !important;
+
+}
+
+.google_section .google_login_btn:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  color: #797979;
+}
+
+// .shop_now_btn {
+//   background-color: #1c1c1c;
+//   color: white;
+//   border: none;
+//   padding: 7px 55px;
+//   cursor: pointer;
+//   border-radius: 30px;
+//   font-size: 13px;
+//   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+// }
+
+// .shop_now_btn:hover {
+//   background-color: #797979;
+//   transform: translateY(-5px);
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+// }

@@ -3,7 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
+import ringSizeGuide from '../../assets/img/sgRing.jpg';
+import braceletSizeGuide from '../../assets/img/sgBracelet.jpg';
+import earringSizeGuide from '../../assets/img/sgEaring.jpeg';
+import necklaceSizeGuide from '../../assets/img/sgNecklace.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
@@ -11,7 +14,6 @@ import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMateri
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
-
 
 function ProductDetail() {
     useEffect(() => {
@@ -166,10 +168,12 @@ function ProductDetail() {
 
     const openSizeGuide = () => {
         setShowSizeGuide(true);
+        document.body.classList.add('no-scroll');
     };
 
     const closeSizeGuide = () => {
         setShowSizeGuide(false);
+        document.body.classList.remove('no-scroll');
     };
 
     const handleShellChange = (e) => {
@@ -184,11 +188,27 @@ function ProductDetail() {
         setShowSpecifications(!showSpecifications);
     };
 
-    const navItems = ['Home', 'Diamond Jewelry', product.name];
+    // const navItems = ['Home', 'Diamond Jewelry', product.name];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Diamond Jewelry', link: '' },
+        { name: product.name, link: ''}
+    ];
     const images = product.imageLinkList ? product.imageLinkList.split(';') : [];
 
+    let sizeGuideImage;
+    if ([1, 5, 9].includes(product.categoryId)) {
+        sizeGuideImage = ringSizeGuide;
+    } else if ([2, 6].includes(product.categoryId)) {
+        sizeGuideImage = earringSizeGuide;
+    } else if ([3, 7].includes(product.categoryId)) {
+        sizeGuideImage = braceletSizeGuide;
+    } else if ([4, 8].includes(product.categoryId)) {
+        sizeGuideImage = necklaceSizeGuide;
+    }
+
     return (
-        <div id="product_detail" className="product_detail">
+        <div id="product_detail" className={`product_detail ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
             <br />

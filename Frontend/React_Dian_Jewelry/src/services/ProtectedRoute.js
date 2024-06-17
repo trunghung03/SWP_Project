@@ -21,17 +21,39 @@ const restrictedPages = {
 
 const ProtectedRoute = ({ element: Component, path, ...rest }) => {
     const role = localStorage?.getItem('role');
+    const customerId = localStorage?.getItem('customerId');
     const navigate = useNavigate();
     const allowedPages = role ? rolesPermissions[role] : rolesPermissions.Guest;
     const restricted = role ? restrictedPages[role] : restrictedPages.Guest;
-    
+
     useEffect(() => {
-        if (!allowedPages.includes(path) || restricted.includes(path)) {
+        let fromCart = localStorage.getItem('fromCart');
+        let fromCheckout = localStorage.getItem('fromCheckout');
+        const cartKey = `cartItems${customerId}`;
+        const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+        if (path === '/checkout' && (fromCart !== 'true' || cartItems.length === 0)) {
+            alert("You don't have permission to access this page!");
+            navigate(-1);
+        } else if (path === '/invoice' && fromCheckout !== 'true') {
+            alert("You don't have permission to access this page!");
+            navigate(-1);
+        } else if (!allowedPages.includes(path) || restricted.includes(path)) {
             alert("You don't have permission to access this page!");
             navigate(-1);
         }
-    }, [allowedPages, restricted, path, navigate]);
+    }, [allowedPages, restricted, path, navigate, customerId]);
 
-    return allowedPages?.includes(path) && !restricted?.includes(path) ? <Component {...rest} /> : null;};
+    useEffect(() => {
+        if (path !== '/checkout') {
+            localStorage.removeItem('fromCart');
+        }
+        if (path !== '/invoice') {
+            localStorage.removeItem('fromCheckout');
+        }
+    }, [path]);
+
+    return allowedPages?.includes(path) && !restricted?.includes(path) ? <Component {...rest} /> : null;
+};
 
 export default ProtectedRoute;

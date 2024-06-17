@@ -69,7 +69,11 @@ const IOSSwitch = styled((props) => (
 
 
 function Checkout() {
-    const navItems = ['Home', 'Cart', 'Checkout'];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Cart', link: '/cart' },
+        { name: 'Checkout', link: '/checkout' }
+    ];
     const navigate = useNavigate();
     const customerId = localStorage.getItem('customerId');
     const [cartItems, setCartItems] = useState([]);
@@ -267,6 +271,7 @@ function Checkout() {
                     button: "OK",
                 });
     
+                localStorage.setItem('fromCheckout', 'true');
                 navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } });
             }
     
