@@ -16,6 +16,7 @@ const modules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
+    [{ 'align': [] }],
     ["link", "image", "video"],
     ["clean"],
     ["code-block"],
