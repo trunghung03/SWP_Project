@@ -146,6 +146,7 @@ const ManagerCollectionList = () => {
     const { name, value } = e.target;
     setEditedCollection({ ...editedCollection, [name]: value });
   };
+
   const handleUpdate = async () => {
     const requiredFields = ['name', 'description', 'status'];
     for (let field of requiredFields) {
@@ -161,11 +162,11 @@ const ManagerCollectionList = () => {
         return;
     }
 
-    const collectionToUpdate = { ...editedCollection, status: true };
+    const CollectionToUpdate = { ...editedCollection, status: true };
 
     try {
-        console.log("Sending update request with data:", collectionToUpdate);
-        await updateCollectionById(collectionToUpdate.collectionId, collectionToUpdate);
+        console.log("Sending update request with data:", CollectionToUpdate);
+        await updateCollectionById(CollectionToUpdate.collectionId, CollectionToUpdate);
         const updatedItems = await ShowAllCollection();
         setCollectionItems(updatedItems);
         setEditMode(false);
