@@ -12,6 +12,11 @@
 
         public int PageNumber { get; set; } = 1;
 
-        public int PageSize { get; set; } = 20;
+        private int _pageSize = 5;
+        public int PageSize
+        {
+            get => _pageSize;
+            set => _pageSize = (value > 0) ? value : 5;
+        }
     }
 }
