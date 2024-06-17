@@ -194,14 +194,14 @@ namespace UserApplication.Controllers
                 throw;
             }
         }
-        [HttpGet("status/{status}")]
-        public async Task<IActionResult> ViewListOrdersByStatus(string status)
+        [HttpGet("salesstaff/status/{status}")]
+        public async Task<IActionResult> ViewListOrdersByStatus(string status, int id)
         {
             try
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-                var orders = await _salesStaffService.ViewListOrdersByStatus(status);
+                var orders = await _salesStaffService.ViewListOrdersByStatus(status, id);
 
                 return Ok(orders);
             }catch(Exception)

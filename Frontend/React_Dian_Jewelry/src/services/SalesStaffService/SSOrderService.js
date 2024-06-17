@@ -53,8 +53,8 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
   });
 }
 
- const getPurchaseOrderByStatus = async (status) => {
-  return axios.get(`${API_BASE_URL_ORDER}/employees/status/${status}`)
+ const getPurchaseOrderByStatus = async (status, id) => {
+  return axios.get(`${API_BASE_URL_ORDER}/employees/salesstaff/status/${status}`,{params:{id}})
 }
 
 export {getPurchaseOrderByStatus,getBillDetail,getSalesStaffOrderList,fetchUserByUserId,fetchOrderDetail,fetchAllOrders}

@@ -52,7 +52,7 @@ const SSOrderList = () => {
       fetchAllOrders();
     } else {
       try {
-        const orders = await getPurchaseOrderByStatus(selectedValue);
+        const orders = await getPurchaseOrderByStatus(selectedValue, employeeId);
         console.log("Fetched orders:", orders?.data);
         if (orders) {
           setOrderList([...orders?.data]);
@@ -175,7 +175,8 @@ const SSOrderList = () => {
               <MenuItem value="Paid">Paid</MenuItem>
               <MenuItem value="Preparing">Preparing</MenuItem>
               <MenuItem value="Delivering">Delivering</MenuItem>
-              <MenuItem value="Delivered">Delivered</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+              <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </FormControl>
           <div className="manager_manage_diamond_pagination">

@@ -10,6 +10,7 @@ namespace DIAN_.Mapper
         {
             return new Collection()
             {
+                CollectionId = collectionDto.CollectionId,
                 Name = collectionDto.Name,
                 Description = collectionDto.Description,
                 Status = true,
