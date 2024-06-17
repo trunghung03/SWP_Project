@@ -12,6 +12,7 @@ namespace DIAN_.DTOs.CollectionDTO
         public string? Name { get; set; }
         [Required]
         public string? Description { get; set; }
+        public bool Status { get; set; }
 
         public List<ProductListDTO> Products { get; set; } = new List<ProductListDTO>();
     }

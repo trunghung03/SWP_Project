@@ -27,7 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] = useState([]);
+  const [collectionItems, setCollectionItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedDiamond, setEditedDiamond] = useState({});
@@ -56,7 +56,7 @@ const ManagerDiamondList = () => {
     const fetchData = async () => {
       try {
         const response = await ShowAllDiamond();
-        setCartItems(response);
+        setCollectionItems(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -70,8 +70,8 @@ const ManagerDiamondList = () => {
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = cartItems.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(cartItems.length / ordersPerPage);
+  const currentOrders = collectionItems.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(collectionItems.length / ordersPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -86,7 +86,7 @@ const ManagerDiamondList = () => {
       if (isInteger(searchQuery.trim())) {
         try {
           const response = await getDiamondDetail(searchQuery.trim());
-          setCartItems([response]);
+          setCollectionItems([response]);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching diamond:", error);
@@ -96,11 +96,11 @@ const ManagerDiamondList = () => {
         try {
           const response = await getDiamondByShape(searchQuery.trim());
           if (Array.isArray(response)) {
-            setCartItems(response);
+            setCollectionItems(response);
           } else if (response) {
-            setCartItems([response]);
+            setCollectionItems([response]);
           } else {
-            setCartItems([]);
+            setCollectionItems([]);
           }
 
           setCurrentPage(1);
@@ -111,7 +111,7 @@ const ManagerDiamondList = () => {
       } else {
         try {
           const response = await ShowAllDiamond();
-          setCartItems(response);
+          setCollectionItems(response);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -133,7 +133,7 @@ const ManagerDiamondList = () => {
         try {
           await deleteDiamondById(diamondId);
           const response = await ShowAllDiamond();
-          setCartItems(response);
+          setCollectionItems(response);
           swal(
             "Deleted successfully!",
             "The diamond has been deleted.",
@@ -197,7 +197,7 @@ const ManagerDiamondList = () => {
       );
       console.log("Update response:", response.data);
       const updatedItems = await ShowAllDiamond();
-      setCartItems(updatedItems);
+      setCollectionItems(updatedItems);
       setEditMode(false);
       swal(
         "Updated successfully!",
