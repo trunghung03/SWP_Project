@@ -48,7 +48,10 @@ function OrderHistory() {
         setCurrentPage(1);
     }, [filterStatus, orders]);
 
-    const navItems = ['Home', 'Setting', 'Order History'];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Order History', link: '/order-history' }
+    ];
     const menuItems = [
         { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
         { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
@@ -78,7 +81,7 @@ function OrderHistory() {
 
     return (
         <div className="OrderHistory">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
 
             <div className="order_history_container">
@@ -102,65 +105,65 @@ function OrderHistory() {
                 </div>
 
                 {/* <div className=""> */}
-                    <div className="order_history_table_wrapper">
-                        <div className="order_filter">
-                            <select id="orderFilter" className="order_filter_select" value={filterStatus} onChange={handleFilterChange}>
-                                <option value="All">All</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Preparing">Preparing</option>
-                                <option value="Delivering">Delivering</option>
-                                <option value="Success">Success</option>
-                                <option value="Cancel">Cancel</option>
-                            </select>
-                        </div>
-
-                        <table className="order_history_table table">
-                            <thead>
-                                <tr>
-                                    <th>Order Date</th>
-                                    <th>Order ID</th>
-                                    <th>Total Price</th>
-                                    <th>Status</th>
-                                    <th>Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentOrders.map((order) => (
-                                    <tr key={order.orderId}>
-                                        <td>{formatDate(order.date)}</td>
-                                        <td>{order.orderId}</td>
-                                        <td>{order.totalPrice}$</td>
-                                        <td>{order.orderStatus}</td>
-                                        <td>
-                                            <i className="order_history_detail_icon fas fa-external-link-alt" onClick={() => handleDetailClick(order.orderId)} style={{ cursor: 'pointer' }}></i>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <div className="order_history_pagination">
-                            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                                &lt;
-                            </button>
-                            {Array.from({ length: totalPages }, (_, index) => (
-                                <button
-                                    key={index + 1}
-                                    onClick={() => handlePageChange(index + 1)}
-                                    className={index + 1 === currentPage ? 'order_active' : ''}
-                                >
-                                    {index + 1}
-                                </button>
-                            ))}
-                            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                                &gt;
-                            </button>
-                        </div>
+                <div className="order_history_table_wrapper">
+                    <div className="order_filter">
+                        <select id="orderFilter" className="order_filter_select" value={filterStatus} onChange={handleFilterChange}>
+                            <option value="All">All</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Preparing">Preparing</option>
+                            <option value="Delivering">Delivering</option>
+                            <option value="Success">Success</option>
+                            <option value="Cancel">Cancel</option>
+                        </select>
                     </div>
+
+                    <table className="order_history_table table">
+                        <thead>
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Order ID</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentOrders.map((order) => (
+                                <tr key={order.orderId}>
+                                    <td>{formatDate(order.date)}</td>
+                                    <td>{order.orderId}</td>
+                                    <td>{order.totalPrice}$</td>
+                                    <td>{order.orderStatus}</td>
+                                    <td>
+                                        <i className="order_history_detail_icon fas fa-external-link-alt" onClick={() => handleDetailClick(order.orderId)} style={{ cursor: 'pointer' }}></i>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <div className="order_history_pagination">
+                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                            &lt;
+                        </button>
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <button
+                                key={index + 1}
+                                onClick={() => handlePageChange(index + 1)}
+                                className={index + 1 === currentPage ? 'order_active' : ''}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                            &gt;
+                        </button>
+                    </div>
+                </div>
                 {/* </div> */}
             </div>
 
             <ScrollToTop />
-            <FooterComponent/>
+            <FooterComponent />
         </div>
     );
 }

@@ -12,7 +12,10 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 
 
 function FAQs() {
-  const navItems = ['Home', 'Frequently Asked Questions'];
+  const navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'Frequently Asked Questions', link: '/FAQS' }
+];
   const navigate = useNavigate();
 
   const handleContactClick = () => {

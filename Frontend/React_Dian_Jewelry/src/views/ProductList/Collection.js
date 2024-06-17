@@ -16,7 +16,7 @@ function Collection() {
     const location = useLocation();
     const [products, setProducts] = useState([]);
     const [collectionInfo, setCollectionInfo] = useState({});
-    const [navItems, setNavItems] = useState(['Home', 'Diamond Jewelry', 'Collection Name']);
+    const [navItems, setNavItems] = useState([]);
     const [collection, setCollection] = useState('');
     const [clarity, setClarity] = useState('');
     const [carat, setCarat] = useState('');
@@ -41,7 +41,11 @@ function Collection() {
         if (collection) {
             const collectionId = collectionMap[collection];
             setCollection(collection);
-            setNavItems(['Home', 'Diamond Jewelry', 'Collections', collection.charAt(0).toUpperCase() + collection.slice(1).replace(/([A-Z])/g, ' $1').trim()]);
+            setNavItems([
+                { name: 'Home', link: '/home' },
+                { name: 'Diamond Jewelry', link: '' },
+                { name: collection.charAt(0).toUpperCase() + collection.slice(1).replace(/([A-Z])/g, ' $1').trim(), link: '' }
+            ]);
 
             getCollectionDetail(collectionId)
                 .then(response => {
@@ -52,7 +56,7 @@ function Collection() {
             getProductList()
                 .then(response => {
                     let filteredProducts = response.data.filter(product => product.collectionId === collectionId);
-                    
+
                     if (clarity !== '') {
                         filteredProducts = filteredProducts.filter(product => product.clarity === clarity);
                     }
@@ -71,7 +75,10 @@ function Collection() {
                 })
                 .catch(error => console.log('Error fetching products:', error));
         } else {
-            setNavItems(['Home', 'Diamond Jewelry', 'Collections']);
+            setNavItems([
+                { name: 'Home', link: '/home' },
+                { name: 'Diamond Jewelry', link: '' }
+            ]);
             getProductList()
                 .then(response => {
                     setProducts(response.data);

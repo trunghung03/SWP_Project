@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import sizeGuideImage from '../../assets/img/sizeGuide.jpg';
+import sizeGuideImage from '../../assets/img/sgRing.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
@@ -14,7 +14,10 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 
 function Cart() {
     const navigate = useNavigate();
-    const navItems = ['Home', 'Cart'];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Cart', link: '/cart' }
+    ];
     const [showSizeGuide, setShowSizeGuide] = useState(false);
     const customerId = localStorage.getItem('customerId');
     const { cartItems, removeFromCart, updateCartItem } = useCart();
@@ -64,11 +67,13 @@ function Cart() {
             return;
         }
 
+        localStorage.setItem('fromCart', 'true');
         navigate('/checkout', { state: { cartItems: updatedCartItems } });
     };
 
+
     const handleContinueShopping = () => {
-        navigate('/diamond-jewelry');
+        navigate('/diamond-jewelry', { state: { category: 'all' } });
     };
 
     const handleSizeChange = (e, index) => {
@@ -87,7 +92,7 @@ function Cart() {
 
     return (
         <div className="cart">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
             <div className="cart_main_container">
                 <div className="cart_header">
@@ -101,43 +106,49 @@ function Cart() {
 
                 <div className="cart_container">
                     <div className="cart_items">
-                        {cartItems.map((item, index) => {
-                            const firstImage = item.image.split(';')[0];
-                            return (
-                                <div className="cart_item" key={index}>
-                                    <img src={firstImage} className="cart_item_image" alt={item.name} />
-                                    <div className="cart_item_details">
-                                        <div className="cart_item_header">
-                                            <h5 className="cart_item_name">{item.name}</h5>
-                                            <div className="cart_item_links">
-                                                <a onClick={() => handleViewProduct(item.productId)} className="cart_item_view">VIEW</a>
-                                                <span> | </span>
-                                                <a className="cart_item_remove" onClick={() => removeFromCart(index)}>REMOVE</a>
+                        {cartItems.length === 0 ? (
+                            <div className="cart_empty_message">
+                                Nothing here... Let's add something to the cart!
+                            </div>
+                        ) : (
+                            cartItems.map((item, index) => {
+                                const firstImage = item.image.split(';')[0];
+                                return (
+                                    <div className="cart_item" key={index}>
+                                        <img src={firstImage} className="cart_item_image" alt={item.name} />
+                                        <div className="cart_item_details">
+                                            <div className="cart_item_header">
+                                                <h5 className="cart_item_name">{item.name}</h5>
+                                                <div className="cart_item_links">
+                                                    <a onClick={() => handleViewProduct(item.productId)} className="cart_item_view">VIEW</a>
+                                                    <span> | </span>
+                                                    <a className="cart_item_remove" onClick={() => removeFromCart(index)}>REMOVE</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <p className="cart_item_description">
-                                            Shell: {item.selectedShellName}<br />
-                                        </p>
-                                        <div className="cart_item_actions">
-                                            <div className="cart_size_guide_container">
-                                                <select
-                                                    className="cart_ring_size_detail"
-                                                    value={item.selectedSize || ''}
-                                                    onChange={(e) => handleSizeChange(e, index)}
-                                                >
-                                                    <option value="">Size</option>
-                                                    {item.sizes.map((size, sizeIndex) => (
-                                                        <option key={sizeIndex} value={size}>Size {size}</option>
-                                                    ))}
-                                                </select>
-                                                <button onClick={openSizeGuide} className="cart_size_guide_detail">Size guide</button>
+                                            <p className="cart_item_description">
+                                                Shell: {item.selectedShellName}<br />
+                                            </p>
+                                            <div className="cart_item_actions">
+                                                <div className="cart_size_guide_container">
+                                                    <select
+                                                        className="cart_ring_size_detail"
+                                                        value={item.selectedSize || ''}
+                                                        onChange={(e) => handleSizeChange(e, index)}
+                                                    >
+                                                        <option value="">Size</option>
+                                                        {item.sizes.map((size, sizeIndex) => (
+                                                            <option key={sizeIndex} value={size}>Size {size}</option>
+                                                        ))}
+                                                    </select>
+                                                    <button onClick={openSizeGuide} className="cart_size_guide_detail">Size guide</button>
+                                                </div>
                                             </div>
+                                            <div className="cart_item_price">{Math.floor(item.price)}$</div>
                                         </div>
-                                        <div className="cart_item_price">{Math.floor(item.price)}$</div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })
+                        )}
                     </div>
 
                     <div className="cart_summary">
@@ -165,7 +176,7 @@ function Cart() {
                 </div>
             )}
             <ScrollToTop />
-            <FooterComponent/>
+            <FooterComponent />
         </div>
     );
 }

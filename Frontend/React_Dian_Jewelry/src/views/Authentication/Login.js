@@ -371,11 +371,8 @@ const Login = () => {
                         </div>
                         <div className="google_section text-center">
                             <hr className="line" />
-                            <GoogleLogin clientId={clientID} buttonText='Login' onSuccess={onSuccess}
+                            <GoogleLogin className='google_login_btn' clientId={clientID} buttonText='Login with Google' onSuccess={onSuccess}
                              onFailure={onFailure} cookiePolicy='single_host_origin' isSignedIn={false} />
-                            {/* <button type="button" className="google_login btn btn-block">
-                                <i className="icon_gg fab fa-google"></i> Sign in with Google Account
-                            </button> */}
                         </div>
                     </form>
                 </div>

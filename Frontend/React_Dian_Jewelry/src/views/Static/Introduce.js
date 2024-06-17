@@ -28,7 +28,10 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 
 
 const Introduce = () => {
-  const navItems = ['Home', 'Introduce'];
+  const navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'Introduce', link: '/introduce' }
+  ];
   const navigate = useNavigate();
 
   const cardData = [
@@ -95,7 +98,7 @@ const Introduce = () => {
 
   return (
     <div className="Introduce">
-      <HeaderComponent/>
+      <HeaderComponent />
       <SubNav items={navItems} />
 
       {/* Main title */}
@@ -146,7 +149,7 @@ const Introduce = () => {
         </div>
       </div>
 
-      
+
 
       {/* Reason  */}
       <Reason></Reason>
@@ -213,7 +216,7 @@ const Introduce = () => {
         </div>
       </div>
       <ScrollToTop></ScrollToTop>
-      <FooterComponent/>
+      <FooterComponent />
     </div>
   );
 }

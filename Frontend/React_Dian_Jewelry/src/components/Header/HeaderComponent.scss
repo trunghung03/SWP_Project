@@ -185,9 +185,6 @@ body {
     margin: -2px -5px -5px -5px;
 }
 
-.navbar-collapse {
-    // margin-bottom: -5px;
-}
 
 .search_section input {
     background-color: #ededed;
@@ -489,4 +486,8 @@ li:focus {
 .wedding_dropdown_section .dropdown-menu:hover ~ .header_spe_nav_link {
     color: #797979;
     text-decoration: none;
+}
+
+.dropdown-item{
+    cursor: pointer;
 }

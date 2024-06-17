@@ -5,14 +5,13 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
 import "../../../styles/Manager/ManagerList.scss";
 import {
-  ShowAllEmployee,
-  getEmployeeDetail,
-  deleteEpmloyeeById,
-  updateEmployeeById,
-  getEmployeeByRole,
-} from "../../../services/ManagerService/ManagerEmployeeService.js";
+  ShowAllDiamond,
+  getDiamondDetail,
+  deleteDiamondById,
+  updateDiamondById,
+  getDiamondByShape,
+} from "../../../services/ManagerService/ManagerDiamondService.js";
 import logo from "../../../assets/img/logoN.png";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -21,15 +20,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const ManagerEmployeeList = () => {
+const ManagerDiamondList = () => {
   const navigate = useNavigate();
 
-  const [employeeList, setEmployeeList] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [editedEmployee, setEditedEmployee] = useState({});
-  const [originalEmployee, setOriginalEmployee] = useState({});
+  const [editedDiamond, setEditedDiamond] = useState({});
+  const [originalDiamond, setOriginalDiamond] = useState({});
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -49,11 +51,12 @@ const ManagerEmployeeList = () => {
       border: 0,
     },
   }));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ShowAllEmployee();
-        setEmployeeList(response);
+        const response = await ShowAllDiamond();
+        setCartItems(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -67,11 +70,8 @@ const ManagerEmployeeList = () => {
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentEmployee = employeeList.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
-  const totalPages = Math.ceil(employeeList.length / ordersPerPage);
+  const currentOrders = cartItems.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(cartItems.length / ordersPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -85,33 +85,33 @@ const ManagerEmployeeList = () => {
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
         try {
-          const response = await getEmployeeDetail(searchQuery.trim());
-          setEmployeeList([response]);
+          const response = await getDiamondDetail(searchQuery.trim());
+          setCartItems([response]);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching diamond:", error);
-          swal("Employee not found!", "Please try another one.", "error");
+          swal("Diamond not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
         try {
-          const response = await getEmployeeByRole(searchQuery.trim());
+          const response = await getDiamondByShape(searchQuery.trim());
           if (Array.isArray(response)) {
-            setEmployeeList(response);
+            setCartItems(response);
           } else if (response) {
-            setEmployeeList([response]);
+            setCartItems([response]);
           } else {
-            setEmployeeList([]);
+            setCartItems([]);
           }
 
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching diamond:", error);
-          swal("Employee not found!", "Please try another one.", "error");
+          swal("Diamond not found!", "Please try another one.", "error");
         }
       } else {
         try {
-          const response = await ShowAllEmployee();
-          setEmployeeList(response);
+          const response = await ShowAllDiamond();
+          setCartItems(response);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -121,9 +121,9 @@ const ManagerEmployeeList = () => {
   };
 
   // Delete diamond by id
-  const handleDelete = async (employeeID) => {
+  const handleDelete = async (diamondId) => {
     swal({
-      title: "Are you sure to delete this employee account?",
+      title: "Are you sure to delete this diamond?",
       text: "This action cannot be undone",
       icon: "warning",
       buttons: true,
@@ -131,19 +131,19 @@ const ManagerEmployeeList = () => {
     }).then(async (willDelete) => {
       if (willDelete) {
         try {
-          await deleteEpmloyeeById(employeeID);
-          const response = await ShowAllEmployee();
-          setEmployeeList(response);
+          await deleteDiamondById(diamondId);
+          const response = await ShowAllDiamond();
+          setCartItems(response);
           swal(
             "Deleted successfully!",
-            "Employee has been deleted.",
+            "The diamond has been deleted.",
             "success"
           );
         } catch (error) {
           console.error("Error deleting diamond:", error);
           swal(
             "Something went wrong!",
-            "Failed to delete the employee. Please try again.",
+            "Failed to delete the diamond. Please try again.",
             "error"
           );
         }
@@ -152,56 +152,56 @@ const ManagerEmployeeList = () => {
   };
 
   // Update by id
-  const handleEdit = (employee) => {
+  const handleEdit = (diamond) => {
     setEditMode(true);
-    setEditedEmployee(employee);
-    setOriginalEmployee(employee);
+    setEditedDiamond(diamond);
+    setOriginalDiamond(diamond);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedEmployee({ ...editedEmployee, [name]: value });
+    setEditedDiamond({ ...editedDiamond, [name]: value });
   };
 
   const handleUpdate = async () => {
     const requiredFields = [
-      "role",
-      "email",
-      "password",
-      "lastName",
-      "firstName",
-      "address",
-      "phoneNumber",
+      "shape",
+      "color",
+      "clarity",
+      "cut",
+      "carat",
+      "certificateScan",
+      "amountAvailable",
     ];
     for (let field of requiredFields) {
-      if (!editedEmployee[field]) {
+      if (!editedDiamond[field]) {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
         return;
       }
     }
 
     const isEqual =
-      JSON.stringify(originalEmployee) === JSON.stringify(editedEmployee);
+      JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
     }
 
-    const employeeToUpdate = { ...editedEmployee, status: true };
+    const diamondToUpdate = { ...editedDiamond, status: true };
 
     try {
-      console.log("Sending update request with data:", employeeToUpdate);
-      const response = await updateEmployeeById(
-        employeeToUpdate.employeeId,
-        employeeToUpdate
+      console.log("Sending update request with data:", diamondToUpdate);
+      const response = await updateDiamondById(
+        diamondToUpdate.diamondId,
+        diamondToUpdate
       );
       console.log("Update response:", response.data);
-      const updatedItems = await ShowAllEmployee();
-      setEmployeeList(updatedItems);
+      const updatedItems = await ShowAllDiamond();
+      setCartItems(updatedItems);
       setEditMode(false);
       swal(
         "Updated successfully!",
-        "Employee information has been updated.",
+        "The diamond information has been updated.",
         "success"
       );
     } catch (error) {
@@ -220,17 +220,16 @@ const ManagerEmployeeList = () => {
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
-        <ManagerSidebar currentPage="manager_employee" />
+        <ManagerSidebar currentPage="manager_manage_collection" />
       </div>
       <div className="manager_manage_diamond_content">
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
           <div className="manager_manage_diamond_search_section">
-            <i className="fas fa-search manager_manage_search_icon"></i>
             <input
               type="text"
               className="manager_manage_diamond_search_bar"
-              placeholder="Search by ID or Role..."
+              placeholder="Search by ID or Shape..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
@@ -238,10 +237,15 @@ const ManagerEmployeeList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3 className="manager_title_employees" style={{ alignItems: "flex-end" }}>
-            Employees
-          </h3>
-        <div className="manager_manage_diamond_pagination">
+        <h3>List Of Diamonds</h3>
+        <div className="manager_manage_diamond_create_button_section">
+          <button
+            className="manager_manage_diamond_create_button"
+            onClick={() => navigate("/manager-add-diamond")}
+          >
+            Add new diamond
+          </button>
+          <div className="manager_manage_diamond_pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -266,54 +270,67 @@ const ManagerEmployeeList = () => {
               &gt;
             </button>
           </div>
+        </div>
+
+        {/* Table diamond list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell align="justify">Role</StyledTableCell>
-                  <StyledTableCell align="justify">Email</StyledTableCell>
-                  <StyledTableCell align="justify">Full Name</StyledTableCell>
-                  <StyledTableCell align="justify">Address</StyledTableCell>
-                  <StyledTableCell align="justify">
-                    Phone number
-                  </StyledTableCell>
-                  {/* <StyledTableCell align="justify">Action</StyledTableCell> */}
+                  <StyledTableCell align="center">ID</StyledTableCell>
+                  <StyledTableCell align="center">Shape</StyledTableCell>
+                  <StyledTableCell align="center">Color</StyledTableCell>
+                  <StyledTableCell align="center">Clarity</StyledTableCell>
+                  <StyledTableCell align="center">Carat</StyledTableCell>
+                  <StyledTableCell align="center">Cut</StyledTableCell>
+                  <StyledTableCell align="center">Quantity</StyledTableCell>
+                  <StyledTableCell align="center">Certificate</StyledTableCell>
+                  <StyledTableCell align="center">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {employeeList.length > 0 ? (
-                  currentEmployee.map((item) => (
+                {currentOrders.length > 0 ? (
+                  currentOrders.map((item) => (
                     <TableRow
                       className="manager_manage_table_body_row"
-                      key={item.employeeId}
+                      key={item.diamondId}
                     >
-                      <TableCell>{item.employeeId}</TableCell>
-                      <TableCell>{item.role}</TableCell>
-                      <TableCell>{item.email}</TableCell>
-                      <TableCell>
-                        {item.firstName} {item.lastName}
+                      <TableCell align="center">{item.diamondId}</TableCell>
+                      <TableCell align="center">{item.shape}</TableCell>
+                      <TableCell align="center">{item.color}</TableCell>
+                      <TableCell align="center">{item.clarity}</TableCell>
+                      <TableCell align="center">{item.carat}</TableCell>
+                      <TableCell align="center">{item.cut}</TableCell>
+                      <TableCell align="center">
+                        {item.amountAvailable}
                       </TableCell>
-                      <TableCell>{item.address}</TableCell>
-                      <TableCell>{item.phoneNumber}</TableCell>
-                      {/* <TableCell>
-                        <i
-                          className="fas fa-pen"
-                          onClick={() => handleEdit(item)}
-                          style={{ cursor: "pointer", marginRight: "10px" }}
-                        ></i>
-                        <i
-                          className="fas fa-trash"
-                          onClick={() => handleDelete(item.employeeId)}
-                          style={{ cursor: "pointer" }}
-                        ></i>
-                      </TableCell> */}
+                      <TableCell align="center">
+                        {item.certificateScan ? (
+                          <img
+                            src={item.certificateScan}
+                            alt="Certificate"
+                            style={{ width: "60px", height: "auto" }}
+                          />
+                        ) : (
+                          "No certificate"
+                        )}
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={() => handleEdit(item)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDelete(item.diamondId)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="10">No employee found</TableCell>
+                    <TableCell colSpan="9">No diamond found</TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -333,74 +350,74 @@ const ManagerEmployeeList = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Employee Information</h4>
+              <h4>Edit Diamond Information</h4>
               <div className="manager_manage_diamond_form_group">
-                <label>Role</label>
+                <label>Shape</label>
                 <input
                   type="text"
-                  name="role"
-                  value={editedEmployee.role}
+                  name="shape"
+                  value={editedDiamond.shape}
                   onChange={handleChange}
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Email</label>
+                <label>Color</label>
                 <input
                   type="text"
-                  name="email"
-                  value={editedEmployee.email}
+                  name="color"
+                  value={editedDiamond.color}
                   onChange={handleChange}
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Password</label>
+                <label>Clarity</label>
                 <input
                   type="text"
-                  name="password"
-                  value={editedEmployee.password}
+                  name="clarity"
+                  value={editedDiamond.clarity}
                   onChange={handleChange}
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Last name</label>
+                <label>Carat</label>
                 <input
                   type="text"
-                  name="lastName"
-                  value={editedEmployee.lastName}
+                  name="carat"
+                  value={editedDiamond.carat}
                   onChange={handleChange}
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>First name</label>
+                <label>Cut</label>
                 <input
                   type="text"
-                  name="firstName"
-                  value={editedEmployee.firstName}
+                  name="cut"
+                  value={editedDiamond.cut}
                   onChange={handleChange}
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Addresss</label>
+                <label>Quantity</label>
                 <input
                   type="text"
-                  name="address"
-                  value={editedEmployee.address}
+                  name="amountAvailable"
+                  value={editedDiamond.amountAvailable}
                   onChange={handleChange}
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Phone number</label>
+                <label>Certificate</label>
                 <input
                   type="text"
-                  name="phoneNumber"
-                  value={editedEmployee.phoneNumber}
+                  name="certificateScan"
+                  value={editedDiamond.certificateScan}
                   onChange={handleChange}
                 />
               </div>
-              {/* <div className="manager_manage_diamond_modal_actions">
+              <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
@@ -409,4 +426,4 @@ const ManagerEmployeeList = () => {
   );
 };
 
-export default ManagerEmployeeList;
+export default ManagerDiamondList;

@@ -88,6 +88,10 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-receipt"></i>
                                 <span>Manage Promotional</span>
                             </li>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_collection' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-collection-list')}>
+                                <i className="fas fa-leaf"></i>
+                                <span>Manage Collection</span>
+                            </li>
                             <div className="manager_sidebar_sign_out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                                 <span>Sign Out</span>
@@ -115,6 +119,9 @@ class ManagerSidebar extends Component {
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_promotional' ? 'selected' : ''}`} data-tooltip="Manage Promotional" onClick={() => this.props.navigate('/manager-promotional-list')}>
                                 <i className="fas fa-receipt"></i>
+                            </li>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_collection' ? 'selected' : ''}`} data-tooltip="Manage Collection" onClick={() => this.props.navigate('/manager-collection-list')}>
+                                <i className="fas fa-leaf"></i>
                             </li>
                             <div className="manager_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>

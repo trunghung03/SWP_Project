@@ -13,13 +13,16 @@ const Search = () => {
     const location = useLocation();
     const products = location.state?.products || [];
     const searchQuery = location.state?.searchQuery || '';
-    const resetKey = searchQuery + products.length; 
+    const resetKey = searchQuery + products.length;
 
-    const navItems = ['Home', 'Search'];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Search' }
+    ];
 
     return (
         <div className="Search">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
             <br />
 
@@ -32,7 +35,7 @@ const Search = () => {
             <ProductList products={products} resetKey={resetKey} />
             <Question />
             <ScrollToTop />
-            <FooterComponent/>
+            <FooterComponent />
         </div>
     );
 };

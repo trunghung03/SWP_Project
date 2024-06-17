@@ -175,7 +175,7 @@ const ManagerStatitic = () => {
   return (
     <div className="manager_statitic_all_container">
       <div className="manager_statitic_sidebar">
-        <ManagerSidebar currentPage="manager_statitic" />
+        <ManagerSidebar currentPage="manager_statistic" />
       </div>
       <div className="manager_statitic_content">
         <div className="manager_manage_diamond_header">
