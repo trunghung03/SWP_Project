@@ -11,7 +11,10 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 
 
 function DiamondPrice() {
-  const navItems = ['Home', 'Diamond Price'];
+  const navItems = [
+    { name: 'Home', link: '/home' },
+    { name: 'Diamond Price', link: '/diamond-price' }
+  ];
 
   return (
     <div className="DiamondPrice">

@@ -23,7 +23,7 @@ function BlogDetail() {
     };
 
     useEffect(() => {
-        window.scrollTo(0, 0); 
+        window.scrollTo(0, 0);
     }, [articleID]);
 
     useEffect(() => {
@@ -44,7 +44,11 @@ function BlogDetail() {
         return <div>Loading...</div>;
     }
 
-    const navItems = ['Home', 'Blog', article.title];
+    const navItems = [
+        { name: 'Home', link: '/home' },
+        { name: 'Blog', link: '/blog' },
+        { name: article.title }
+    ];
 
     const parseHTMLContent = (htmlString) => {
         const tempDiv = document.createElement('div');

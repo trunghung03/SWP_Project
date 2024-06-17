@@ -102,14 +102,16 @@ function App() {
             <Route path="/manager-add-employee" element={<ProtectedRoute path="/manager-add-employee" element={ManagerAddEmployee} />} />
             <Route path="/manager-promotional-list" element={<ProtectedRoute path="/manager-promotional-list" element={ManagerPromotionList} />} />
             <Route path="/manager-add-promotion" element={<ProtectedRoute path="/manager-add-promotion" element={ManagerAddPromotion} />} />
+            <Route path="/manager-collection-list" element={<ProtectedRoute path="/manager-collection-list" element={ManagerCollectionList} />} />
+            <Route path="/manager-add-collection" element={<ProtectedRoute path="/manager-add-collection" element={ManagerAddCollection} />} />
 
             {/* Sales Staff */}
             <Route path="/sales-staff-order-list" element={<SSOrderList />} />
-            <Route path="/sales-staff-manage-order-detail/:orderId" element={<SSOrderDetail/>} />
+            <Route path="/sales-staff-manage-order-detail/:orderId" element={<SSOrderDetail />} />
             <Route path="/sales-staff-content-list" element={<SSContentList />} />
             <Route path="/sales-staff-add-content" element={<SSAddContent />} />
-            <Route path="/sales-staff-warranty-list" element={<SSWarrantyList/>}/>
-            <Route path="/rich-text-page" element={<RichTextPage/>} />
+            <Route path="/sales-staff-warranty-list" element={<SSWarrantyList />} />
+            <Route path="/rich-text-page" element={<RichTextPage />} />
             {/* Delivery Staff */}
             <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
             <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />

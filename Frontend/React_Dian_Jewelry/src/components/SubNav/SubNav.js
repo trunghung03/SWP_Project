@@ -7,7 +7,9 @@ const SubNav = ({ items }) => {
     const navigate = useNavigate();
 
     const handleNavigation = (link) => {
-        navigate(link);
+        if (link) {
+            navigate(link);
+        }
     };
 
     return (
@@ -15,7 +17,11 @@ const SubNav = ({ items }) => {
             <div className="sub_nav">
                 {items.map((item, index) => (
                     <React.Fragment key={index}>
-                        <span className="nav-item" onClick={() => handleNavigation(item.link)} style={{ cursor: 'pointer' }}>
+                        <span
+                            className="nav-item"
+                            onClick={() => handleNavigation(item.link)}
+                            style={{ cursor: 'pointer' }}
+                        >
                             {item.name}
                         </span>
                         {index < items.length - 1 && <span style={{ color: '#838a96' }}>  |  </span>}

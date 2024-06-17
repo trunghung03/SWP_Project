@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const rolesPermissions = {
     Admin: ['/admin-customer-list', '/admin-employee-list', '/admin-add-employee'],
-    Manager: ['/manager-statistic', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
+    Manager: ['/manager-statistic','/manager-collection-list', '/manager-add-collection', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
     SalesStaff: ['/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page'],
     DeliveryStaff: ['/delivery-staff-delivery-list', '/delivery-staff-delivery-detail'],
     Customer: ['/', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce'],
