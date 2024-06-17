@@ -84,9 +84,12 @@ namespace DIAN_.Repository
 
         public async Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status)
         {
-            var orders = await _context.Purchaseorders.Where(po => po.OrderStatus == status).ToListAsync();
+            var orders = await _context.Purchaseorders
+                                       .Where(po => po.OrderStatus.ToLower() == status.ToLower())
+                                       .ToListAsync();
             return orders;
         }
+
 
         public async Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, string status)
         {

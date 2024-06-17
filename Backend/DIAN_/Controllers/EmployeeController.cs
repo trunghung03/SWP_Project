@@ -252,7 +252,7 @@ namespace UserApplication.Controllers
 
                 var order = await _deliveryStaffService.UpdateDeliveryStatus(status, orderId);
 
-                return Ok(order);
+                return Ok(order.OrderStatus);
             }catch(Exception)
             {
                 throw;

@@ -20,7 +20,6 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("{id:int}")]   
-        [Authorize(Roles = "SalesStaf,Admin,Manager")]
         public async Task<IActionResult> GetArticleById(int id)
         {
             try
@@ -86,7 +85,6 @@ namespace DIAN_.Controllers
         }
 
         [HttpPost("addcontent")]
-        [Authorize(Roles="SalesStaff")]
         public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDto articleDto)
         {
             try
@@ -113,7 +111,6 @@ namespace DIAN_.Controllers
         }
 
         [HttpPut("update/{id:int}")]
-        [Authorize(Roles = "SalesStaff")]
         public async Task<IActionResult> UpdateArticleById([FromRoute] int id, [FromBody] UpdateArticleRequestDto articleDto)
         {
             try
@@ -138,7 +135,6 @@ namespace DIAN_.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
-        [Authorize(Roles = "SalesStaff")]
         public async Task<IActionResult> DeleteArticle([FromRoute] int id)
         {
             try

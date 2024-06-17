@@ -64,7 +64,7 @@ export const sendEmail = async (data) => {
 };
 
 export const salesStaffUpdateOrderStatus = async (status, orderId) => {
-  return axios.get(`https://localhost:7184/api/employees/salesstaff/updatestatus`, { params: { status, orderId } })
+  return axios.put(`https://localhost:7184/api/employees/salesstaff/updatestatus`, {}, { params: { status, orderId } })
     .then((response) => {
       return response.data;
     })
@@ -74,7 +74,7 @@ export const salesStaffUpdateOrderStatus = async (status, orderId) => {
 };
 
 export const deliStaffUpdateOrderStatus = async (status, orderId) => {
-  return axios.get(`https://localhost:7184/api/employees/deliverystaff/updatestatus`, { params: { status, orderId } })
+  return axios.put(`https://localhost:7184/api/employees/deliverystaff/updatestatus`, {}, { params: { status, orderId } })
     .then((response) => {
       return response.data;
     })

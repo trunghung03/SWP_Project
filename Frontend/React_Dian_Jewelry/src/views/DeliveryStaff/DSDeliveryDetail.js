@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import logo from "../../assets/img/logoN.png";
 import swal from 'sweetalert';
 import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
-import { getOrderById } from "../../services/TrackingOrderService.js";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
@@ -13,7 +12,6 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import FormControl from "@mui/material/FormControl";
 import { Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -46,18 +44,16 @@ function DSDeliveryDetail() {
         });
     }
   }, [orderId]);
-  console.log("orderId: ", orderDetails.orderId);
-  console.log("orderId: ", orderDetails.productName);
-
   const handleSubmit = async () => {
     try {
       await deliStaffUpdateOrderStatus(status, orderId);
       swal("Success", "Update order status successfully", "success");
+      console.log('status: ', status);
       console.log('Order status updated successfully');
     } catch (error) {
       console.error('Failed to update order status:', error);
     }
-  };
+  };  
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -76,8 +72,6 @@ function DSDeliveryDetail() {
           Back
         </button>
         <div className="ss_order_detail_container">
-          {/* Content outside the Box but inside the Container */}
-          {/* <Typography variant="h6">Order Detail</Typography> */}
           <div>
             <div
               style={{
@@ -102,7 +96,7 @@ function DSDeliveryDetail() {
                       onChange={handleChange}
                     >
                       <MenuItem value="Delivering">Delivering</MenuItem>
-                      <MenuItem value="Delivered">Delivered</MenuItem>
+                      <MenuItem value="Completed">Completed</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>

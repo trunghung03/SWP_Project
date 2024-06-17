@@ -23,25 +23,40 @@ namespace DIAN_.Services
         public async Task<Purchaseorder> UpdateDeliveryStatus(string status, int orderId)
         {
             var order = await _orderRepository.GetPurchasrOrderById(orderId);
-            var customerId = order.UserId;
             if (order == null)
             {
                 throw new Exception("Order not found");
             }
 
-            order.OrderStatus = status;
-            if (order != null && order.OrderStatus == "Completed")
+            var customerId = order.UserId;
+            Console.WriteLine("customer id: " + customerId);
+
+            if (status.Equals("Completed", StringComparison.OrdinalIgnoreCase))
             {
-                var points = (int)(order.TotalPrice * (decimal)0.03);
-                var updateCustomerPointDto = new UpdateCustomerPointDto { 
+                Console.WriteLine("price: " + order.TotalPrice);
+                Console.WriteLine("status: " + status);
+                var pointsToAdd = (int)(order.TotalPrice * (decimal)0.03);
+
+                // Retrieve the current points for the customer
+                var customer = await _customerRepository.GetByIdAsync(customerId);
+
+                // Add the new points to the existing points
+                var newTotalPoints = customer.Points + pointsToAdd;
+
+                var updateCustomerPointDto = new UpdateCustomerPointDto
+                {
                     CustomerId = customerId,
-                    Point = points
+                    Point = newTotalPoints // Set the total new points
                 };
-                await _customerRepository.UpdateCustomerPoint(order.UserId, updateCustomerPointDto);
+
+                Console.WriteLine("point: " + pointsToAdd);
+                await _customerRepository.UpdateCustomerPoint(customerId, updateCustomerPointDto);
             }
             var result = await _orderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
             return result;
         }
+
+
 
         //View list of delivery orders (get list is assigned)
         public async Task<List<PurchaseOrderDetailDto>> ViewListDeliveryOrders(int deliStaffId)

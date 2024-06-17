@@ -48,7 +48,7 @@ namespace DIAN_.Services
                 throw new Exception("Order not found.");
             }
 
-            order.OrderStatus = status;
+            //order.OrderStatus = status;
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
             return updatedOrder;
