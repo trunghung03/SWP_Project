@@ -5,6 +5,7 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace DIAN_.Controllers
 {
     [ApiController]
@@ -18,7 +19,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllDiamondsAsync()
+        public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery query)
         {
             try
             {
@@ -26,7 +27,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _diamondRepository.GetAllDiamondsAsync();
+                var result = await _diamondRepository.GetAllDiamondsAsync(query);
 
                 if (!result.Any())
                 {
