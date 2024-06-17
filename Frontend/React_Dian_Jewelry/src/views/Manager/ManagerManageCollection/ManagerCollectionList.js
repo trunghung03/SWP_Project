@@ -146,69 +146,60 @@ const ManagerCollectionList = () => {
     const { name, value } = e.target;
     setEditedCollection({ ...editedCollection, [name]: value });
   };
-
   const handleUpdate = async () => {
-    const requiredFields = [
-      'name',
-      'description',
-      'status'
-    ];
+    const requiredFields = ['name', 'description', 'status'];
     for (let field of requiredFields) {
-      if (!editedCollection[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
+        if (!editedCollection[field]) {
+            swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+            return;
+        }
     }
 
-    const isEqual =
-      JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
+    const isEqual = JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
     if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
-      return;
+        swal("No changes detected!", "You have not made any changes.", "error");
+        return;
     }
 
-    const CollectionToUpdate = { ...editedCollection, status: true };
+    const collectionToUpdate = { ...editedCollection, status: true };
 
     try {
-      console.log("Sending update request with data:", CollectionToUpdate);
-      const response = await updateCollectionById(
-        CollectionToUpdate.CollectionId,
-        CollectionToUpdate
-      );
-      console.log("Update response:", response.data);
-      const updatedItems = await ShowAllCollection();
-      setCollectionItems(updatedItems);
-      setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The Collection information has been updated.",
-        "success"
-      );
+        console.log("Sending update request with data:", collectionToUpdate);
+        await updateCollectionById(collectionToUpdate.collectionId, collectionToUpdate);
+        const updatedItems = await ShowAllCollection();
+        setCollectionItems(updatedItems);
+        setEditMode(false);
+        swal(
+            "Updated successfully!",
+            "The Collection information has been updated.",
+            "success"
+        );
     } catch (error) {
-      console.error(
-        "Error updating Collection:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
+        console.error(
+            "Error updating Collection:",
+            error.response ? error.response.data : error.message
+        );
+        swal(
+            "Something went wrong!",
+            "Failed to update. Please try again.",
+            "error"
+        );
     }
-  };
+};
+
 
   return (
-    <div className="manager_manage_product_all_container">
-      <div className="manager_manage_product_sidebar">
+    <div className="manager_manage_diamond_all_container">
+      <div className="manager_manage_diamond_sidebar">
         <ManagerSidebar currentPage="manager_manage_collection" />
       </div>
-      <div className="manager_manage_product_content">
-        <div className="manager_manage_product_header">
-          <img className="manager_manage_product_logo" src={logo} alt="Logo" />
-          <div className="manager_manage_product_search_section">
+      <div className="manager_manage_diamond_content">
+        <div className="manager_manage_diamond_header">
+          <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
+          <div className="manager_manage_diamond_search_section">
             <input
               type="text"
-              className="manager_manage_product_search_bar"
+              className="manager_manage_diamond_search_bar"
               placeholder="Search by ID or Shape..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -218,14 +209,14 @@ const ManagerCollectionList = () => {
         </div>
         <hr className="manager_header_line"></hr>
         <h3>List Of Collections</h3>
-        <div className="manager_manage_product_create_button_section">
+        <div className="manager_manage_diamond_create_button_section">
           <button
-            className="manager_manage_product_create_button"
-            onClick={() => navigate("/manager-add-product")}
+            className="manager_manage_diamond_create_button"
+            onClick={() => navigate("/manager-add-collection")}
           >
-            Add new Collection
+            Add new collection
           </button>
-          <div className="manager_manage_product_pagination">
+          <div className="manager_manage_diamond_pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -253,7 +244,7 @@ const ManagerCollectionList = () => {
         </div>
 
         {/* Table Collection list */}
-        <div className="manager_manage_product_table_wrapper">
+        <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
@@ -261,6 +252,7 @@ const ManagerCollectionList = () => {
                   <StyledTableCell align="center">ID</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Description</StyledTableCell>
+                  <StyledTableCell align="center">Update</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -274,6 +266,11 @@ const ManagerCollectionList = () => {
                       <TableCell align="center">{item.collectionId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
                       <TableCell align="center">{item.description}</TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={() => handleEdit(item)}>
+                          <EditIcon />
+                        </IconButton>
+                        </TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={() => handleStatus(item.collectionId)}
@@ -304,34 +301,34 @@ const ManagerCollectionList = () => {
       {/* Update modal */}
       {editMode && (
         <div
-          className="manager_manage_Collection_modal_overlay"
+          className="manager_manage_diamond_modal_overlay"
           onClick={() => setEditMode(false)}
         >
           <div
-            className="manager_manage_Collection_update_modal"
+            className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="manager_manage_Collection_modal_content">
+            <div className="manager_manage_diamond_modal_content">
               <h4>Edit Collection Information</h4>
-              <div className="manager_manage_Collection_form_group">
+              <div className="manager_manage_diamond_form_group">
                 <label>Name</label>
                 <input
                   type="text"
-                  name="shape"
-                  value={editedCollection.shape}
+                  name="name"
+                  value={editedCollection.name}
                   onChange={handleChange}
                 />
               </div>
-              <div className="manager_manage_Collection_form_group">
+              <div className="manager_manage_diamond_form_group">
                 <label>Description</label>
                 <input
                   type="text"
-                  name="color"
-                  value={editedCollection.color}
+                  name="amountAvailable"
+                  value={editedCollection.description}
                   onChange={handleChange}
                 />
               </div>
-              <div className="manager_manage_Collection_modal_actions">
+              <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
               </div>

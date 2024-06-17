@@ -12,12 +12,18 @@ const searchCollectionById = async (id) => {
     const response = await axios.get(`${API_BASE_URL}/collections/${id}`);
     return response.data;
 };
-const updateCollectionById = async (id) => {
-    const response = await axios.put(`${API_BASE_URL}/collections/${id}`);
+
+const addCollection = async (data) => {
+    const response = await axios.post(`${API_BASE_URL}/collections`,data);
+    return response.data;
+};
+
+const updateCollectionById = async (id,data) => {
+    const response = await axios.put(`${API_BASE_URL}/collections/${id}`,data);
     return response.data;
 };
 const changeStatus = async (id) => {
     const response = await axios.put(`${API_BASE_URL}/collections/update/${id}`);
     return response.data;
 }
-export { ShowAllCollection, deleteCollectionById , searchCollectionById , updateCollectionById , changeStatus}
+export { ShowAllCollection, deleteCollectionById , searchCollectionById , addCollection ,updateCollectionById , changeStatus}
