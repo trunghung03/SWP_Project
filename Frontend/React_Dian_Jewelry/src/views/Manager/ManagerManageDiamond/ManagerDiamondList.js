@@ -27,7 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
 
-  const [collectionItems, setCollectionItems] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedDiamond, setEditedDiamond] = useState({});
@@ -81,7 +81,7 @@ const ManagerDiamondList = () => {
       if (isInteger(searchQuery.trim())) {
         try {
           const response = await getDiamondDetail(searchQuery.trim());
-          setCollectionItems([response]);
+          setCartItems([response]);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching diamond:", error);
@@ -91,11 +91,11 @@ const ManagerDiamondList = () => {
         try {
           const response = await getDiamondByShape(searchQuery.trim());
           if (Array.isArray(response)) {
-            setCollectionItems(response);
+            setCartItems(response);
           } else if (response) {
-            setCollectionItems([response]);
+            setCartItems([response]);
           } else {
-            setCollectionItems([]);
+            setCartItems([]);
           }
 
           setCurrentPage(1);
@@ -176,7 +176,7 @@ const ManagerDiamondList = () => {
     const diamondToUpdate = { ...editedDiamond, status: true };
 
     try {
-      console.log("Sending update reque st with data:", diamondToUpdate);
+      console.log("Sending update request with data:", diamondToUpdate);
       const response = await updateDiamondById(
         diamondToUpdate.diamondId,
         diamondToUpdate
