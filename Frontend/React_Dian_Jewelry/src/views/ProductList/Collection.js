@@ -13,13 +13,11 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 
-
 function Collection() {
     const location = useLocation();
     const [products, setProducts] = useState([]);
     const [collectionInfo, setCollectionInfo] = useState({});
     const [navItems, setNavItems] = useState([]);
-    const [collection, setCollection] = useState('');
     const [clarity, setClarity] = useState('');
     const [carat, setCarat] = useState('');
     const [color, setColor] = useState('');
@@ -27,26 +25,13 @@ function Collection() {
     const [shape, setShape] = useState('');
     const [resetKey, setResetKey] = useState(Date.now());
 
-    const collectionMap = {
-        luxuriousLustre: 1,
-        radiantReflections: 2,
-        majesticMementos: 3,
-        blissfulBaubles: 4,
-        timelessTreasures: 5,
-        divineDiamonds: 6,
-        majesticMystique: 7,
-        vintageVirtue: 8
-    };
-
     useEffect(() => {
-        const { collection } = location.state || {};
-        if (collection) {
-            const collectionId = collectionMap[collection];
-            setCollection(collection);
+        const { collectionId } = location.state || {};
+        if (collectionId) {
             setNavItems([
                 { name: 'Home', link: '/home' },
                 { name: 'Diamond Jewelry', link: '' },
-                { name: collection.charAt(0).toUpperCase() + collection.slice(1).replace(/([A-Z])/g, ' $1').trim(), link: '' }
+                { name: 'Collection', link: '' }
             ]);
 
             getCollectionDetail(collectionId)

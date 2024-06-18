@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../styles/Static/Introduce.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
-import mainImg from '../../assets/img/introduceMain.png';
 import beginning from '../../assets/img/beginning.png';
 import transpapency from '../../assets/img/transparency.jpg';
 import sustainability from '../../assets/img/sustainability.jpg';
@@ -26,8 +25,7 @@ import Reason from '../../components/Reason/Reason.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-
-
+const videoUrl = 'https://cdn.builder.io/o/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fe0e14f01688242cda1248f61fa4bd547%2Fcompressed?apiKey=b47f39b49d994f41bd8e68fa9258a402&token=e0e14f01688242cda1248f61fa4bd547&alt=media&optimized=true';
 
 const Introduce = () => {
   const navItems = [
@@ -104,7 +102,11 @@ const Introduce = () => {
       <SubNav items={navItems} />
 
       {/* Main title */}
-      <div className="banner-container" style={{ backgroundImage: `url(${mainImg})` }}>
+      <div className="banner-container">
+        <video className="banner-video" autoPlay loop muted>
+          <source src={videoUrl} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         <div className="banner-content">
           <h2>JEWELRY REDEFINED</h2>
           <p>We are pioneers. We are disruptors. We are innovators. Join us in transforming the jewelry industry for good.</p>
@@ -132,18 +134,18 @@ const Introduce = () => {
           <p>Our mission to cultivate a more transparent, sustainable, compassionate, and inclusive jewelry industry has been at the core of everything we do from day one. By fostering a culture of respect and integrity, we aim to inspire a movement towards a more equitable and sustainable future in jewelry manufacturing and retail. Join us as we will lead the change.</p>
         </div>
         <h4 className="misson_title">OUR MISSION PILLARS</h4>
-        <div className="mission_columns">
-          <div className="mission_column1">
+        <div className="mission_columns row">
+          <div className="mission_column1 col-md-4">
             <img src={transpapency} alt="Transparency" />
             <h3 className="mission_sub_title_1">TRANSPARENCY</h3>
             <p className="mission_sub_description_1">We know where our precious metals and gemstones come from and how our jewelry is made. And we share that information with you, so you can feel good about the jewelry you're wearing.</p>
           </div>
-          <div className="mission_column2">
+          <div className="mission_column2 col-md-4">
             <img src={sustainability} alt="Sustainability" />
             <h3 className="mission_sub_title_2">SUSTAINABILITY</h3>
             <p className="mission_sub_description_2">We use recycled and sustainable materials, apply energy-efficient practices, and minimize our carbon footprint.</p>
           </div>
-          <div className="mission_column3">
+          <div className="mission_column3 col-md-4">
             <img src={inclusion} alt="Inclusion" />
             <h3 className="mission_sub_title_3">INCLUSION</h3>
             <p className="mission_sub_description_3">We support and invest in our diverse teams to ensure every employee knows that they belong, and our designs are always crafted with inclusivity in mind.</p>

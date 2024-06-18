@@ -155,7 +155,7 @@ body {
     left: 20px;
     width: 0;
     border: 1px solid #797979;
-    transition: width 0.6s ease, left 0.6s ease;
+    transition: width 0.6s ease, left 0.6s ease, opacity 0.5s ease-in,;
     opacity: 0;
 }
 
@@ -170,6 +170,34 @@ body {
     left: 20px;
     opacity: 1;
 }
+
+.navbar-nav .nav-item .header_spe_nav_link:hover::before,
+.diamond_dropdown_section:hover .nav-link::before,
+.wedding_dropdown_section:hover .nav-link::before,
+.diamond_dropdown_menu:hover ~ .nav-link::before,
+.wedding_dropdown_menu:hover ~ .nav-link::before {
+    width: calc(100% - 57px);
+    left: 20px;
+    opacity: 1;
+}
+
+.navbar-nav .nav-item .header_spe_nav_link:hover::before,
+.diamond_dropdown_section:hover .nav-link,
+.wedding_dropdown_section:hover .nav-link,
+.diamond_dropdown_menu:hover ~ .nav-link,
+.wedding_dropdown_menu:hover ~ .nav-link {
+    color: #797979;
+}
+
+.diamond_dropdown_section:hover .dropdown-menu,
+.wedding_dropdown_section:hover .dropdown-menu,
+.diamond_dropdown_section .dropdown-menu:hover,
+.wedding_dropdown_section .dropdown-menu:hover {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 .navbar-nav .nav-item .nav-link:hover {
     color: #797979;
