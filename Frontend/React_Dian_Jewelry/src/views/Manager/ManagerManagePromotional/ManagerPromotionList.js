@@ -23,6 +23,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { Refresh } from "@mui/icons-material";
 
 
 const getPromotionStatus = async (endDate, id) => {
@@ -197,6 +198,7 @@ const ManagerPromotionList = () => {
         }
       }
     }
+    
   };
 
   // Update by id
@@ -259,6 +261,16 @@ const ManagerPromotionList = () => {
     }
   };
 
+  const backList = async () =>{
+    try {
+      const response = await ShowAllPromotion();
+      setPromotionList(response);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -276,6 +288,10 @@ const ManagerPromotionList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleSearchKeyPress}
             />
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => backList()}
+            >Show all promotions</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>

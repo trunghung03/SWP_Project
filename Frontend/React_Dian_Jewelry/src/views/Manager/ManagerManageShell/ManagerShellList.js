@@ -209,6 +209,15 @@ const ManagerShellList = () => {
     }
   };
 
+  const backList = async () =>{
+    try {
+      const response = await ShowAllShell();
+      setShellItems(response);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -226,6 +235,10 @@ const ManagerShellList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => backList()}
+            >Show all shells</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>

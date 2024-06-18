@@ -188,6 +188,15 @@ const ManagerCollectionList = () => {
     }
 };
 
+const backList = async () =>{
+  try {
+    const response = await ShowAllCollection();
+    setCollectionItems(response);
+    setCurrentPage(1);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -201,11 +210,15 @@ const ManagerCollectionList = () => {
             <input
               type="text"
               className="manager_manage_diamond_search_bar"
-              placeholder="Search by ID or Shape..."
+              placeholder="Search by ID... "
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => backList()}
+            >Show all collections</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>

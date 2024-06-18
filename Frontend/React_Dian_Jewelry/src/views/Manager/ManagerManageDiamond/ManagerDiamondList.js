@@ -27,7 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] = useState([]);
+  const [diamondList, setDiamondList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedDiamond, setEditedDiamond] = useState({});
@@ -58,7 +58,7 @@ const ManagerDiamondList = () => {
   const fetchData = async (page) => {
     try {
       const response = await ShowAllDiamond(page);
-      setCartItems(response.data);
+      setDiamondList(response.data);
       setPagination(response.pagination);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -81,7 +81,7 @@ const ManagerDiamondList = () => {
       if (isInteger(searchQuery.trim())) {
         try {
           const response = await getDiamondDetail(searchQuery.trim());
-          setCartItems([response]);
+          setDiamondList([response]);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching diamond:", error);
@@ -91,11 +91,11 @@ const ManagerDiamondList = () => {
         try {
           const response = await getDiamondByShape(searchQuery.trim());
           if (Array.isArray(response)) {
-            setCartItems(response);
+            setDiamondList(response);
           } else if (response) {
-            setCartItems([response]);
+            setDiamondList([response]);
           } else {
-            setCartItems([]);
+            setDiamondList([]);
           }
 
           setCurrentPage(1);
@@ -138,6 +138,15 @@ const ManagerDiamondList = () => {
     });
   };
 
+  const backList = async () =>{
+    try {
+      const response = await ShowAllDiamond();
+      setDiamondList(response.data);
+      setPagination(response.pagination);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
   const handleEdit = (diamond) => {
     setEditMode(true);
     setEditedDiamond(diamond);
@@ -288,6 +297,10 @@ const ManagerDiamondList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => backList()}
+            >Show all diamonds</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>
@@ -320,8 +333,8 @@ const ManagerDiamondList = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cartItems.length > 0 ? (
-                  cartItems.map((item) => (
+                {diamondList.length > 0 ? (
+                  diamondList.map((item) => (
                     <StyledTableRow key={item.diamondId}>
                       <StyledTableCell align="center">
                         {item.diamondId}

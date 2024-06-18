@@ -216,6 +216,15 @@ const ManagerEmployeeList = () => {
       );
     }
   };
+  const backList = async () =>{
+    try {
+      const response = await ShowAllEmployee();
+      setEmployeeList(response);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -235,6 +244,10 @@ const ManagerEmployeeList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => backList()}
+            >Show all employees</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>

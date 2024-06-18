@@ -237,6 +237,16 @@ const ManagerProductList = () => {
     }
   };
 
+  const backList = async () =>{
+    try {
+      const response = await ShowAllProduct();
+      setProductItems(response);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   return (
     <div className="manager_manage_product_all_container">
       <div className="manager_manage_product_sidebar">
@@ -254,6 +264,10 @@ const ManagerProductList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => backList()}
+            >Show all products</button>
           </div>
         </div>
         <hr className="manager_product_header_line"></hr>
