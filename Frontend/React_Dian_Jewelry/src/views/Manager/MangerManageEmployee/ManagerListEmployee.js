@@ -216,7 +216,7 @@ const ManagerEmployeeList = () => {
       );
     }
   };
-  const backList = async () =>{
+  const backList = async () => {
     try {
       const response = await ShowAllEmployee();
       setEmployeeList(response);
@@ -252,33 +252,33 @@ const ManagerEmployeeList = () => {
         </div>
         <hr className="manager_header_line"></hr>
         <h3 className="manager_title_employees" style={{ alignItems: "flex-end" }}>
-            Employees
-          </h3>
+          Employees
+        </h3>
         <div className="manager_manage_diamond_pagination">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={
+                index + 1 === currentPage ? "manager_order_active" : ""
+              }
             >
-              &lt;
+              {index + 1}
             </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
+        </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -297,20 +297,21 @@ const ManagerEmployeeList = () => {
               </TableHead>
               <TableBody>
                 {employeeList.length > 0 ? (
-                  currentEmployee.map((item) => (
-                    <TableRow
-                      className="manager_manage_table_body_row"
-                      key={item.employeeId}
-                    >
-                      <TableCell>{item.employeeId}</TableCell>
-                      <TableCell>{item.role}</TableCell>
-                      <TableCell>{item.email}</TableCell>
-                      <TableCell>
-                        {item.firstName} {item.lastName}
-                      </TableCell>
-                      <TableCell>{item.address}</TableCell>
-                      <TableCell>{item.phoneNumber}</TableCell>
-                      {/* <TableCell>
+                  currentEmployee.map((item) => {
+                    if (item.role !== 'Admin') {
+                      return <TableRow
+                        className="manager_manage_table_body_row"
+                        key={item.employeeId}
+                      >
+                        <TableCell>{item.employeeId}</TableCell>
+                        <TableCell>{item.role}</TableCell>
+                        <TableCell>{item.email}</TableCell>
+                        <TableCell>
+                          {item.firstName} {item.lastName}
+                        </TableCell>
+                        <TableCell>{item.address}</TableCell>
+                        <TableCell>{item.phoneNumber}</TableCell>
+                        {/* <TableCell>
                         <i
                           className="fas fa-pen"
                           onClick={() => handleEdit(item)}
@@ -322,8 +323,9 @@ const ManagerEmployeeList = () => {
                           style={{ cursor: "pointer" }}
                         ></i>
                       </TableCell> */}
-                    </TableRow>
-                  ))
+                      </TableRow>
+                    }
+                  })
                 ) : (
                   <TableRow>
                     <TableCell colSpan="10">No employee found</TableCell>
