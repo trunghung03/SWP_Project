@@ -2,6 +2,7 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
@@ -102,6 +103,28 @@ namespace DIAN_.Controllers
                 return Ok(collection);
             }
             catch(Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateCollectionStatus(int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var result = await _collectionRepository.UpdateCollectionStatus(id);
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
             {
                 throw;
             }

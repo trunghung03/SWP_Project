@@ -82,10 +82,10 @@ namespace DIAN_.Repository
             return order;
         }
 
-        public async Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status)
+        public async Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status, int employeeId)
         {
             var orders = await _context.Purchaseorders
-                                       .Where(po => po.OrderStatus.ToLower() == status.ToLower())
+                                       .Where(po => po.OrderStatus.ToLower() == status.ToLower() && po.SaleStaff == employeeId)
                                        .ToListAsync();
             return orders;
         }

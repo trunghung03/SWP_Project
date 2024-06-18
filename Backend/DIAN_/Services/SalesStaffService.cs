@@ -66,9 +66,9 @@ namespace DIAN_.Services
             return displayOrderDtos;
         }
 
-        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status)
+        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status, int id)
         {
-            var orders = await _purchaseOrderRepository.GetPurchaseOrderStatusAsync(status);
+            var orders = await _purchaseOrderRepository.GetPurchaseOrderStatusAsync(status, id);
             if (orders == null)
             {
                 throw new Exception("No orders found with the given status.");

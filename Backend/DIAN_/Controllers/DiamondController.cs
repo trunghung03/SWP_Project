@@ -4,7 +4,9 @@ using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DIAN_.Controllers
 {
@@ -13,6 +15,7 @@ namespace DIAN_.Controllers
     public class DiamondController : ControllerBase
     {
         private readonly IDiamondRepository _diamondRepository;
+
         public DiamondController(IDiamondRepository diamondRepository)
         {
             this._diamondRepository = diamondRepository;
@@ -27,21 +30,30 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _diamondRepository.GetAllDiamondsAsync(query);
 
-                if (!result.Any())
+                var (diamonds, totalCount) = await _diamondRepository.GetAllDiamondsAsync(query);
+
+                if (!diamonds.Any())
                 {
                     return NotFound("Diamond does not exist");
                 }
 
-                var diamondDtos = result.Select(diamond => diamond.ToDiamondDTO()).ToList();
-                return Ok(diamondDtos);
+                var diamondDtos = diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList();
+
+                var pagination = new
+                {
+                    currentPage = query.PageNumber,
+                    pageSize = query.PageSize,
+                    totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize),
+                    totalCount
+                };
+
+                return Ok(new { data = diamondDtos, pagination });
             }
             catch (Exception)
             {
                 throw;
             }
-           
         }
 
         [HttpGet("{id:int}")]
@@ -49,11 +61,11 @@ namespace DIAN_.Controllers
         {
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
+
                 var diamond = await _diamondRepository.GetDiamondByIdAsync(id);
                 if (diamond == null)
                 {
@@ -61,9 +73,9 @@ namespace DIAN_.Controllers
                 }
                 return Ok(diamond.ToDiamondDTO());
             }
-            catch(Exception)
+            catch (Exception)
             {
-               throw;
+                throw;
             }
         }
 
@@ -76,14 +88,15 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _diamondRepository.GetDiamondByShapeAsync(shape);
 
-                if (!result.Any())
+                var diamonds = await _diamondRepository.GetDiamondByShapeAsync(shape);
+
+                if (!diamonds.Any())
                 {
                     return NotFound("Diamond does not exist");
                 }
 
-                var diamondDtos = result.Select(diamond => diamond.ToDiamondDTO()).ToList();
+                var diamondDtos = diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList();
                 return Ok(diamondDtos);
             }
             catch (Exception)
@@ -99,13 +112,6 @@ namespace DIAN_.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    foreach (var state in ModelState)
-                    {
-                        foreach (var error in state.Value.Errors)
-                        {
-                            Console.WriteLine($"Error: {error.ErrorMessage}");
-                        }
-                    }
                     return BadRequest(ModelState);
                 }
 
@@ -119,19 +125,21 @@ namespace DIAN_.Controllers
             }
         }
 
-
-        [HttpPut]
-        [Route("update/{id:int}")]  
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto updateDto)
         {
             try
             {
                 if (!ModelState.IsValid)
+                {
                     return BadRequest(ModelState);
+                }
 
                 var diamondModel = await _diamondRepository.UpdateDiamondAsync(updateDto.ToDiamondFromUpdateDTO(id), id);
                 if (diamondModel == null)
+                {
                     return NotFound("Diamond does not exist");
+                }
                 return Ok(diamondModel.ToDiamondDTO());
             }
             catch (Exception)
@@ -140,17 +148,21 @@ namespace DIAN_.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("delete/{id:int}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<IActionResult> DeleteDiamondAsync([FromRoute] int id)
         {
             try
             {
                 if (!ModelState.IsValid)
+                {
                     return BadRequest(ModelState);
+                }
+
                 var diamond = await _diamondRepository.DeleteDiamondAsync(id);
                 if (diamond == null)
+                {
                     return NotFound("Diamond does not exist");
+                }
                 return Ok(diamond.ToDiamondDTO());
             }
             catch (Exception)
@@ -159,5 +171,4 @@ namespace DIAN_.Controllers
             }
         }
     }
-
 }

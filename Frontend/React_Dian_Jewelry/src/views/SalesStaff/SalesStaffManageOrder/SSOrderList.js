@@ -28,6 +28,7 @@ const SSOrderList = () => {
   const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
   const [currentOrder, setCurrentOrder] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -51,7 +52,7 @@ const SSOrderList = () => {
       fetchAllOrders();
     } else {
       try {
-        const orders = await getPurchaseOrderByStatus(selectedValue);
+        const orders = await getPurchaseOrderByStatus(selectedValue, employeeId);
         console.log("Fetched orders:", orders?.data);
         if (orders) {
           setOrderList([...orders?.data]);
@@ -109,22 +110,31 @@ const SSOrderList = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleSearchKeyPress = async (e) => {
+  const handleSearchKeyPress = (e) => {
     if (e.key === "Enter") {
-      try {
-        const orderId = e.target.value;
-        const orderDetails = await getOrderById(orderId);
-        console.log(orderDetails);
-        // Assuming you want to set the state to show the search result
-        if (orderDetails) {
-          setOrderList([orderDetails]);
+      const searchValue = e.target.value.toLowerCase();
+      if (searchValue.trim() === "") {
+        setIsSearch(false);
+        fetchAllOrders();
+      } else {
+        const filteredOrders = currentOrder.filter(order =>
+          order.orderId.toString().toLowerCase().includes(searchValue) ||
+          order.name.toLowerCase().includes(searchValue)
+        );
+        if (filteredOrders.length > 0) {
+          setOrderList(filteredOrders);
+          setIsSearch(true); 
         } else {
-          setOrderList([]);
+          setOrderList([]); 
+          setIsSearch(true); 
         }
-      } catch (error) {
-        console.error("Failed to fetch order details:", error);
       }
     }
+  };
+  const handleBackClick = () => {
+    setSearchQuery("");
+    setIsSearch(false);
+    fetchAllOrders();
   };
 
   return (
@@ -165,7 +175,8 @@ const SSOrderList = () => {
               <MenuItem value="Paid">Paid</MenuItem>
               <MenuItem value="Preparing">Preparing</MenuItem>
               <MenuItem value="Delivering">Delivering</MenuItem>
-              <MenuItem value="Delivered">Delivered</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+              <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </FormControl>
           <div className="manager_manage_diamond_pagination">
@@ -231,6 +242,11 @@ const SSOrderList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && (
+              <button className="SS_back_button" onClick={handleBackClick}>
+                Back to Order List
+              </button>
+            )}
         </div>
       </div>
     </div>

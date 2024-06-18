@@ -2,11 +2,15 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://localhost:7184/api';
 
-const ShowAllDiamond = async () => {
-  const response = await axios.get(`${API_BASE_URL}/diamonds/all`);
+const ShowAllDiamond = async (pageNumber = 1, pageSize = 6) => {
+  const response = await axios.get(`${API_BASE_URL}/diamonds/all`, {
+    params: {
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+    },
+  });
   return response.data;
 };
-
 const getDiamondDetail = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/${id}`);
   return response.data;
@@ -30,4 +34,4 @@ const createDiamond = async (data) => {
   return response.data;
 };
 
-export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond,getDiamondByShape};
+export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape };

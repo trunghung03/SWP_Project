@@ -3,36 +3,30 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import { createDiamond } from '../../../services/ManagerService/ManagerDiamondService.js';
+import { addCollection } from '../../../services/ManagerService/ManagerCollectionService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
 
-const ManagerAddDiamond = () => {
+const ManagerAddCollection = () => {
     const navigate = useNavigate();
-    const [diamondData, setDiamondData] = useState({
-        shape: '',
-        carat: '',
-        cut: '',
-        clarity: '',
-        color: '',
-        price: '',
-        amountAvailable: '',
-        certificateScan: ''
+    const [collectionData, setCollectionData] = useState({
+        name: '',
+        description: ''
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setDiamondData({ ...diamondData, [name]: value });
+        setCollectionData({ ...collectionData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const diamondDataWithStatus = { ...diamondData, status: true };
-            await createDiamond(diamondDataWithStatus);
-            swal("Success", "Diamond added successfully", "success");
-            navigate('/manager-diamond-list');
+            const collectionDataWithStatus = { ...collectionData, status: true };
+            await addCollection(collectionDataWithStatus);
+            swal("Success", "Collection added successfully", "success");
+            navigate('/manager-collection-list');
         } catch (error) {
-            console.error("Error creating diamond:", error);
+            console.error("Error creating collection:", error);
             if (error.response) {
                 console.error("Response data:", error.response.data);
                 console.error("Response status:", error.response.status);
@@ -43,7 +37,7 @@ const ManagerAddDiamond = () => {
                     }
                 }
             }
-            swal("Something is wrong!", "Failed to add diamond. Please try again.", "error");
+            swal("Something is wrong!", "Failed to add collection. Please try again.", "error");
         }
     };
 
@@ -58,50 +52,23 @@ const ManagerAddDiamond = () => {
                 </div>
                 <hr className="manager_add_diamond_header_line" />
                 <div className="manager_add_diamond_title_back">
-                    <h3 className="manager_add_diamond_title">Add New Diamond</h3>
-                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/manager-diamond-list')}>
+                    <h3 className="manager_add_diamond_title">Add New Collection</h3>
+                    <button className="manager_add_diamond_back_button" onClick={() => navigate('/manager-collection-list')}>
                         &lt; Back
                     </button>
                 </div>
                 <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Shape</label>
-                            <input type="text" name="shape" value={diamondData.shape} onChange={handleChange} required />
+                            <label>Name</label>
+                            <input type="text" name="name" value={collectionData.name} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
-                            <label>Cut</label>
-                            <input type="text" name="cut" value={diamondData.cut} onChange={handleChange} required />
+                            <label>Description</label>
+                            <input type="text" name="description" value={collectionData.description} onChange={handleChange} required />
                         </div>
                     </div>
-                    <div className="manager_add_diamond_form_row">
-                        <div className="manager_add_diamond_form_group">
-                            <label>Carat</label>
-                            <input type="number" step="0.01" name="carat" value={diamondData.carat} onChange={handleChange} required />
-                        </div>
-                        <div className="manager_add_diamond_form_group">
-                            <label>Clarity</label>
-                            <input type="text" name="clarity" value={diamondData.clarity} onChange={handleChange} required />
-                        </div>
-                    </div>
-                    <div className="manager_add_diamond_form_row">
-                        <div className="manager_add_diamond_form_group">
-                            <label>Price</label>
-                            <input type="number" name="price" value={diamondData.price} onChange={handleChange} required />
-                        </div>
-                        <div className="manager_add_diamond_form_group">
-                            <label>Quantity</label>
-                            <input type="number" name="amountAvailable" value={diamondData.amountAvailable} onChange={handleChange} required />
-                        </div>
-                    </div>
-                    <div className="manager_add_diamond_form_group">
-                        <label>Color</label>
-                        <input type="text" name="color" value={diamondData.color} onChange={handleChange} required />
-                    </div>
-                    <div className="manager_add_diamond_form_group">
-                        <label>Certificate</label>
-                        <input type="text" name="certificateScan" value={diamondData.certificateScan} onChange={handleChange} required />
-                    </div>
+                    
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
             </div>
@@ -109,4 +76,4 @@ const ManagerAddDiamond = () => {
     );
 };
 
-export default ManagerAddDiamond;
+export default ManagerAddCollection;

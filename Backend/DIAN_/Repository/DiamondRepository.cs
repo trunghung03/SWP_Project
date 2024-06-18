@@ -1,18 +1,22 @@
 ﻿using DIAN_.Helper;
 using DIAN_.Interfaces;
-using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DIAN_.Repository
 {
     public class DiamondRepository : IDiamondRepository
     {
         private readonly ApplicationDbContext _context;
+
         public DiamondRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public async Task<Diamond> AddDiamondAsync(Diamond diamond)
         {
             await _context.Diamonds.AddAsync(diamond);
@@ -32,16 +36,20 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
-        public async Task<List<Diamond>> GetAllDiamondsAsync(DiamondQuery query)
+        public async Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
-            var skipNumber= (query.PageNumber - 1) * query.PageSize;
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            var diamonds = await _context.Diamonds
+                .Where(s => s.Status)
+                .Skip(skipNumber)
+                .Take(query.PageSize)
+                .ToListAsync();
 
-            return await _context.Diamonds.Where(s => s.Status).Skip(skipNumber).Take(query.PageSize).ToListAsync();
+            var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
 
-           /* return await _context.Diamonds
-               .Where(s => s.Status)
-               .ToListAsync();*/
+            return (diamonds, totalCount);
         }
+
 
         public async Task<Diamond?> GetDiamondByIdAsync(int id)
         {

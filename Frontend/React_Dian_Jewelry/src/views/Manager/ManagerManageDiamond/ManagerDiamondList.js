@@ -32,6 +32,9 @@ const ManagerDiamondList = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedDiamond, setEditedDiamond] = useState({});
   const [originalDiamond, setOriginalDiamond] = useState({});
+  const [pagination, setPagination] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -52,32 +55,24 @@ const ManagerDiamondList = () => {
     },
   }));
 
+  const fetchData = async (page) => {
+    try {
+      const response = await ShowAllDiamond(page);
+      setCartItems(response.data);
+      setPagination(response.pagination);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ShowAllDiamond();
-        setCartItems(response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
-
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = cartItems.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(cartItems.length / ordersPerPage);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Search diamond by id
   const handleSearchKeyPress = async (e) => {
     const isInteger = (value) => {
       return /^-?\d+$/.test(value);
@@ -109,18 +104,11 @@ const ManagerDiamondList = () => {
           swal("Diamond not found!", "Please try another one.", "error");
         }
       } else {
-        try {
-          const response = await ShowAllDiamond();
-          setCartItems(response);
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+        fetchData(1);
       }
     }
   };
 
-  // Delete diamond by id
   const handleDelete = async (diamondId) => {
     swal({
       title: "Are you sure to delete this diamond?",
@@ -132,8 +120,7 @@ const ManagerDiamondList = () => {
       if (willDelete) {
         try {
           await deleteDiamondById(diamondId);
-          const response = await ShowAllDiamond();
-          setCartItems(response);
+          fetchData(currentPage);
           swal(
             "Deleted successfully!",
             "The diamond has been deleted.",
@@ -151,7 +138,6 @@ const ManagerDiamondList = () => {
     });
   };
 
-  // Update by id
   const handleEdit = (diamond) => {
     setEditMode(true);
     setEditedDiamond(diamond);
@@ -190,14 +176,13 @@ const ManagerDiamondList = () => {
     const diamondToUpdate = { ...editedDiamond, status: true };
 
     try {
-      console.log("Sending update request with data:", diamondToUpdate);
+      console.log("Sending update reque st with data:", diamondToUpdate);
       const response = await updateDiamondById(
         diamondToUpdate.diamondId,
         diamondToUpdate
       );
       console.log("Update response:", response.data);
-      const updatedItems = await ShowAllDiamond();
-      setCartItems(updatedItems);
+      fetchData(currentPage);
       setEditMode(false);
       swal(
         "Updated successfully!",
@@ -215,6 +200,75 @@ const ManagerDiamondList = () => {
         "error"
       );
     }
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    const totalPages = pagination.totalPages;
+    const currentPage = pagination.currentPage;
+
+    const startPage = Math.max(1, currentPage - 1);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    if (startPage > 1) {
+      pages.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={1 === currentPage ? "manager_order_active" : ""}
+        >
+          1
+        </button>
+      );
+      if (startPage > 2) {
+        pages.push(<span key="dots1">...</span>);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={i === currentPage ? "manager_order_active" : ""}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(<span key="dots2">...</span>);
+      }
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={totalPages === currentPage ? "manager_order_active" : ""}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return (
+      <div className="manager_manage_diamond_pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+        {pages}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -245,31 +299,7 @@ const ManagerDiamondList = () => {
           >
             Add new diamond
           </button>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          {renderPagination()}
         </div>
 
         {/* Table diamond list */}
@@ -290,22 +320,31 @@ const ManagerDiamondList = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentOrders.length > 0 ? (
-                  currentOrders.map((item) => (
-                    <TableRow
-                      className="manager_manage_table_body_row"
-                      key={item.diamondId}
-                    >
-                      <TableCell align="center">{item.diamondId}</TableCell>
-                      <TableCell align="center">{item.shape}</TableCell>
-                      <TableCell align="center">{item.color}</TableCell>
-                      <TableCell align="center">{item.clarity}</TableCell>
-                      <TableCell align="center">{item.carat}</TableCell>
-                      <TableCell align="center">{item.cut}</TableCell>
-                      <TableCell align="center">
+                {cartItems.length > 0 ? (
+                  cartItems.map((item) => (
+                    <StyledTableRow key={item.diamondId}>
+                      <StyledTableCell align="center">
+                        {item.diamondId}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {item.shape}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {item.color}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {item.clarity}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {item.carat}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {item.cut}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
                         {item.amountAvailable}
-                      </TableCell>
-                      <TableCell align="center">
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
                         {item.certificateScan ? (
                           <img
                             src={item.certificateScan}
@@ -315,8 +354,8 @@ const ManagerDiamondList = () => {
                         ) : (
                           "No certificate"
                         )}
-                      </TableCell>
-                      <TableCell align="center">
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
@@ -325,13 +364,15 @@ const ManagerDiamondList = () => {
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </TableCell>
-                    </TableRow>
+                      </StyledTableCell>
+                    </StyledTableRow>
                   ))
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan="9">No diamond found</TableCell>
-                  </TableRow>
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={9} align="center">
+                      No diamond found
+                    </StyledTableCell>
+                  </StyledTableRow>
                 )}
               </TableBody>
             </Table>
