@@ -30,7 +30,7 @@
 	('OUR BEGINNING', 'In 2019, after witnessing the gap in ethical and sustainable options within the diamond industry, visionary entrepreneur Danielle Taylor embarked on a mission to redefine the narrative. Inspired by Beth Gerstein''s journey, Danielle envisioned a diamond jewelry brand that not only symbolized love but also upheld principles of environmental stewardship and ethical sourcing. With a shared commitment to sustainability, Danielle partnered with renowned jeweler Michael Adams to establish DIAN Diamond Jewelry in 2022. Together, they pioneered innovative approaches to diamond sourcing and transparency, leveraging cutting-edge technology to trace each gemstone''s origin. By offering consumers the assurance of ethical practices and environmental responsibility, DIAN quickly gained recognition as a leader in sustainable luxury jewelry, inspiring a new generation of conscientious consumers to adorn themselves with diamonds that shine with integrity and purpose.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=600,height=258,quality=100,format=auto/https://www.brilliantearth.com/bee2-ui/img/mission/about/Mission_About_Static.jpg', 'About', 1);
 
 	-- Insert dummy data into PROMOTION table
-	INSERT INTO PROMOTION ([Name], Amount, ValidFrom, ValidTo, [Description], Code, , Status) VALUES
+	INSERT INTO PROMOTION ([Name], Amount, ValidFrom, ValidTo, [Description], Code, Status) VALUES
 	('Spring Sale', 20.00, GETDATE(), DATEADD(month, 1, GETDATE()), '20% off all items for Spring', 'SPRING20',  1),
 	('Summer Sale', 15.00, GETDATE(), DATEADD(month, 2, GETDATE()), '15% off all items for Summer', 'SUMMER15',  1),
 	('Fall Sale', 10.00, GETDATE(), DATEADD(month, 3, GETDATE()), '10% off all items for Fall', 'FALL10', 1),
@@ -134,16 +134,16 @@
     ('Heart', 'F', 'VS1', 1.05, 'Ideal', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 9, 1);
 
 	-- Insert dummy data into COLLECTIONS table
-INSERT INTO COLLECTION (CollectionID, [Name], Status, [Description])
+INSERT INTO COLLECTION (CollectionID, [Name], Status, [Description], CollectionImage)
 VALUES
-(1, 'Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.'),
-(2, 'Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.'),
-(3, 'Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.'),
-(4, 'Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.'),
-(5, 'Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.'),
-(6, 'Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.'),
-(7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.'),
-(8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.');
+(1, 'Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(2, 'Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(3, 'Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(4, 'Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(5, 'Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(6, 'Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
+(8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg');
 
 
 	-- Insert dummy data into PRODUCT table

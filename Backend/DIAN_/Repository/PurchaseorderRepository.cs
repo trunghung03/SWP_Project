@@ -125,5 +125,13 @@ namespace DIAN_.Repository
             }
             return null;
         }
+
+        public async Task<List<Purchaseorder>> DeliveryGetPurchaseOrderStatusAsync(string status, int id)
+        {
+            var orders = await _context.Purchaseorders
+                                      .Where(po => po.OrderStatus.ToLower() == status.ToLower() && po.DeliveryStaff == id)
+                                      .ToListAsync();
+            return orders;
+        }
     }
 }

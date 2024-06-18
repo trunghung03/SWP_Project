@@ -14,6 +14,7 @@ namespace DIAN_.Mapper
                 Name = collectionDto.Name,
                 Description = collectionDto.Description,
                 Status = true,
+                CollectionImage = collectionDto.ImageLink
             };
         }
 
@@ -24,6 +25,7 @@ namespace DIAN_.Mapper
                 Name = updateCollectionDTO.Name,
                 Description = updateCollectionDTO.Description,
                 Status = updateCollectionDTO.Status ?? true,
+                CollectionImage = updateCollectionDTO.ImageLink
             };
         }
 
@@ -35,6 +37,7 @@ namespace DIAN_.Mapper
                 Name = collection.Name,
                 Description = collection.Description,
                 Status = collection.Status,
+                ImageLink = collection.CollectionImage,
                 Products = collection.Products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList()
             };
         }

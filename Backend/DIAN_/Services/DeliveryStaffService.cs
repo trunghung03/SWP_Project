@@ -3,6 +3,7 @@ using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Services
@@ -69,6 +70,16 @@ namespace DIAN_.Services
             var displayOrderDtos = orders.Select(order => PurchaseOrderMapper.ToPurchaseOrderDetail(order)).ToList();
 
             return displayOrderDtos;
+        }
+
+        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status, int deliveryId)
+        {
+            var orders = await _orderRepository.DeliveryGetPurchaseOrderStatusAsync(status, deliveryId);
+            if (orders == null)
+            {
+                throw new Exception("No orders found with the given status.");
+            }
+            return orders.Select(orders => PurchaseOrderMapper.ToPurchaseOrderDetail(orders)).ToList();
         }
     }
 }

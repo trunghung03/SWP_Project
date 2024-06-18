@@ -10,5 +10,7 @@ namespace DIAN_.DTOs.CategoryDTO
         public string? Name { get; set; }
         [Required] 
         public string? Description { get; set; }
+
+        public string? ImageLink { get; set; }
     }
 }

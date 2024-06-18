@@ -90,7 +90,8 @@ CREATE TABLE COLLECTION (
 	CollectionID INT PRIMARY KEY,	
 	Name NVARCHAR(128) NOT NULL,
     Status BIT NOT NULL DEFAULT 1,
-	Description  NVARCHAR(MAX) NOT NULL
+	Description  NVARCHAR(MAX) NOT NULL,
+    CollectionImage NVARCHAR(MAX),
 );
 
 -- Category table

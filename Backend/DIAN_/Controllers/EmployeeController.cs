@@ -194,7 +194,7 @@ namespace UserApplication.Controllers
                 throw;
             }
         }
-        [HttpGet("salesstaff/status/{status}")]
+        [HttpGet("salesstaff/status/{status}")] 
         public async Task<IActionResult> ViewListOrdersByStatus(string status, int id)
         {
             try
@@ -209,7 +209,22 @@ namespace UserApplication.Controllers
                 throw;
             }
         }
+        [HttpGet("deliverystaff/status/{status}")]
+        public async Task<IActionResult> ViewListDeliveryOrdersByStatus(string status, int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
+                var orders = await _deliveryStaffService.ViewListOrdersByStatus(status, id);
+
+                return Ok(orders);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         [HttpPut("salesstaff/updatestatus")]
         public async Task<IActionResult> SalesStaffUpdateOrderStatus(string status, int orderId)
