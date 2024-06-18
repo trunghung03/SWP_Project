@@ -11,6 +11,7 @@ import Reason from '../../components/Reason/Reason.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import '../../styles/Active/Home.scss';
+import { getCollectionList } from '../../services/ProductService';
 import brilliant1 from '../../assets/img/brilliant1.png';
 import brilliant2 from '../../assets/img/brilliant2.png';
 import brilliant3 from '../../assets/img/brilliant3.png';
@@ -33,21 +34,10 @@ import slide3 from '../../assets/img/slide1.png';
 import slide2 from '../../assets/img/slide2.png';
 import slide1 from '../../assets/img/slide3.png';
 import ringCategory from '../../assets/img/ringCategory.jpg';
-import wRingCategory from '../../assets/img/wRingCategory.jpg';
-import engagementCategory from '../../assets/img/engagementCategory.jpg';
-import earringCategory from '../../assets/img/earringCategory.webp';
-import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
-import braceletCategory from '../../assets/img/braceletCategory.webp';
-import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
-import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
-import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import impression from '../../assets/img/impression.png';
 import proposal from '../../assets/img/proposal.png';
 import bb from '../../assets/img/bb.png';
 import trending from '../../assets/img/trending.png';
-import conflictFreeIcon from '../../assets/img/blog1.svg';
-import recycledMetalsIcon from '../../assets/img/blog2.svg';
-import givingBackIcon from '../../assets/img/blog3.svg';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -85,6 +75,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [animate, setAnimate] = useState(false);
+  const [collections, setCollections] = useState([]);
+  const [activeTab, setActiveTab] = useState('newArrivals');
 
   const settings = {
     dots: true,
@@ -109,18 +101,6 @@ const Home = () => {
   const handleNavigate = (path, state) => {
     navigate(path, { state });
   };
-
-  const cardData = [
-    { name: "Ring", img: ringCategory, category: 'ring' },
-    { name: "Earrings", img: earringCategory, category: 'earrings' },
-    { name: "Bracelet", img: braceletCategory, category: 'bracelet' },
-    { name: "Wedding Ring", img: wRingCategory, category: 'weddingRing' },
-    { name: "Necklace", img: necklaceCategory, category: 'necklace' },
-    { name: "Wedding Earrings", img: wEarringCategory, category: 'weddingEarrings' },
-    { name: "Wedding Bracelet", img: wBraceletCategory, category: 'weddingBracelet' },
-    { name: "Wedding Necklace", img: wNecklaceCategory, category: 'weddingNecklace' },
-    { name: "Engagement Ring", img: engagementCategory, category: 'engagementRing' }
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -183,6 +163,52 @@ const Home = () => {
     };
   }, []);
 
+  useEffect(() => {
+    getCollectionList().then(response => {
+      setCollections(response.data);
+    }).catch(error => {
+      console.error('Error fetching collections:', error);
+    });
+  }, []);
+
+  const products = [
+    {
+      id: 1,
+      image: earringC,
+      name: 'Diamond earrings',
+      oldPrice: '$200.00',
+      newPrice: '$189.00',
+      tag: 'NEW',
+    },
+    {
+      id: 2,
+      image: ringC,
+      name: 'Geometric gold ring',
+      oldPrice: '$180.00',
+      newPrice: '$159.00',
+      tag: '',
+    },
+    {
+      id: 3,
+      image: braceletC,
+      name: 'Gemstone earrings',
+      oldPrice: '$200.00',
+      newPrice: '$189.00',
+      tag: 'HOT',
+    },
+    {
+      id: 4,
+      image: necklaceC,
+      name: 'Gold diamond ring',
+      newPrice: '$289.00',
+      tag: '',
+    },
+  ];
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="Home">
       <HeaderComponent />
@@ -203,11 +229,6 @@ const Home = () => {
             <img src={slide3} alt="Slide 3" />
           </div>
         </Slider>
-        {/* <div className="dot-container">
-          {[0, 1, 2].map((_, index) => (
-            <span key={index} className={`dot ${index === currentSlide ? 'active' : ''}`} onClick={() => setCurrentSlide(index)}></span>
-          ))}
-        </div> */}
       </div>
 
       {/* Under slider  */}
@@ -378,58 +399,31 @@ const Home = () => {
         </div>
       </div>
 
-
-
-      {/* Collection  */}
+      {/* Collection */}
       <div className="featured_jewelry_container">
         <div className="left_section">
           <h1 className="featured_title">Our Collections</h1>
-          <p className="featured_description">View our outstanding jewelry collections, where artistry meets
-            timeless elegance. Each piece of jewelry is exquisitely crafted, bringing the splendor and class.</p>
-          <button onClick={() => handleNavigate('/diamondJewelry')} className="shop_now_btn" >Shop now</button>
+          <p className="featured_description">View our outstanding jewelry collections, where artistry meets timeless elegance. Each piece of jewelry is exquisitely crafted, bringing the splendor and class.</p>
+          <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'all' })} className="shop_now_btn">Shop now</button>
           <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
           <i id="right" className="fa-solid fa-angle-right nav_arrow right_arrow" role="button"></i>
         </div>
         <div className="right_section wrapper">
           <ul className="carousel">
-            {cardData.map((card, index) => (
-              <li key={index} className="home_product_card card" onClick={() => handleNavigate('/diamond-jewelry', { category: card.category })}>
-                <img src={card.img} alt={card.name} className="home_product_image" />
-                <p className="home_product_name">{card.name}</p>
+            {collections.map((collection, index) => (
+              <li key={index} className="home_product_card card" onClick={() => handleNavigate('/collection', { collectionId: collection.collectionId })}>
+                <div className="home_product_icon_wrapper" data-tooltip="View collection">
+                  <i className="far fa-eye home_product_icon_eye"></i>
+                </div>
+                <img src={collection.imageLink} alt={collection.name} className="home_product_image" />
+                <p className="home_product_name">{collection.name}</p>
+                <div className="home_collection_hover_effect"></div>
               </li>
             ))}
           </ul>
         </div>
       </div>
 
-      {/* Trending */}
-      <div className="trending_container">
-        <div className="trending_text">trendy collection</div>
-        <div className="trending_white">                                 </div>
-        <div className="row">
-          <div className="col-md-4">
-            <img src={trending} alt="Trending" className="trending_image" />
-          </div>
-          <div className="col-md-8 trending_right">
-            <h2 className="trending_title">Our Mission</h2>
-            <p className="trending_subtitle">We are passionate about cultivating a more transparent, sustainable, and compassionate jewelry industry for the world.</p>
-            <div className="row trending_features">
-              <div className="trending_icon_wrap col-md-2 text-center">
-                <img src={conflictFreeIcon} alt="Conflict Free" className="trending_icon" />
-                <p className="trending_feature_text">Beyond<br></br> Conflict Free</p>
-              </div>
-              <div className="trending_icon_wrap col-md-2 text-center">
-                <img src={recycledMetalsIcon} alt="Recycled Metals" className="trending_icon" />
-                <p className="trending_feature_text">Recycled<br></br> Precious Metals</p>
-              </div>
-              <div className="trending_icon_wrap col-md-2 text-center">
-                <img src={givingBackIcon} alt="Giving Back" className="trending_icon" />
-                <p className="trending_feature_text">Giving<br></br> Back</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Best & Belove */}
       <div className="bb_container">
@@ -443,25 +437,84 @@ const Home = () => {
         </div>
       </div>
 
+
+      {/* Trending */}
+      <div className="trending_container">
+        <div className="trending_text">trendy collection</div>
+        <div className="trending_white">                                 </div>
+        <div className="row">
+          <div className="col-md-6 ">
+            <img src={trending} alt="Trending" className="trending_image" />
+          </div>
+          <div className="col-md-6 trending_right">
+            <h2 className="trending_title">Trending Jewelry</h2>
+            <div className="trending_product_card_section row">
+              <div className="trending_product_card card">
+                <img src={ringCategory} alt="Product 1" className="product_image" />
+                <p className="trending_product_name">Susererr earring</p>
+                <p className="trending_product_price"><del>$400.00 </del>    $359.00</p>
+                <button className="view_detail_button">View detail</button>
+              </div>
+              <div className="trending_product_card card">
+                <img src={ringCategory} alt="Product 2" className="product_image" />
+                <p className="trending_product_name">Geometric gold ring</p>
+                <p className="trending_product_price"><del>$250.00 </del>    $219.00</p>
+                <button className="view_detail_button">View detail</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {/* Feature */}
+      <div className="home_feature_container">
+        <div className="home_feature_navbar">
+          <button
+            className="home_feature_navlink"
+            onClick={() => handleTabClick('newArrivals')}
+          >
+            New arrivals
+          </button>
+          <button
+            className="home_feature_navlink"
+            onClick={() => handleTabClick('bestSellers')}
+          >
+            Best sellers
+          </button>
+        </div>
+        <div className="home_feature_products">
+          {products.map((product) => (
+            <div key={product.id} className="home_feature_product_card">
+              {product.tag && <span className={`home_feature_tag ${product.tag.toLowerCase()}`}>{product.tag}</span>}
+              <img src={product.image} alt={product.name} className="home_feature_product_image" />
+              <p className="home_feature_product_name">{product.name}</p>
+              {product.oldPrice && <p className="home_feature_old_price">{product.oldPrice}</p>}
+              <p className="home_feature_new_price">{product.newPrice}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Impression */}
-      <div className="impression_container">
+      {/* <div className="impression_container">
         <img src={impression} alt="Make An Impression" className="impression_image" />
         <div className="impression_content">
           <h2 className="impression_title">Make An Impression</h2>
           <p className="impression_description">The best jewelry embraces extravagance. Discover truly remarkable, one-of-a-kind pieces that are sure to leave them speechless.</p>
           <button onClick={() => handleNavigate('/collection', { collection: 'majesticMystique' })} className="impression_shop_now_button">SHOP MAJESTIC MYSTIQUE COLLECTION</button>
         </div>
-      </div>
+      </div> */}
 
       {/* Proposal */}
-      <div className="proposal_container">
+      {/* <div className="proposal_container">
         <img src={proposal} alt="An Unforgettable Proposal" className="proposal_image" />
         <div className="proposal_content">
           <h2 className="proposal_title">An Unforgettable Proposal</h2>
           <p className="proposal_description">Glamourous details and matching bands—we have the perfect rings to seal the deal.</p>
           <button onClick={() => handleNavigate('/collection', { collection: 'vintageVirtue' })} className="proposal_shop_now_button">SHOP VINTAGE VIRTUE COLLECTION</button>
         </div>
-      </div>
+      </div> */}
 
       {/* Reason */}
       <Reason></Reason>
@@ -497,7 +550,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
 
       <ScrollToTop />
       <FooterComponent />

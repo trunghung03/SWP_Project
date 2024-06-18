@@ -21,7 +21,7 @@
 }
 
 .contact_card {
-    width: 277px;
+    width: 22%;
     height: 200px;
     padding: 25px 18px 20px 18px;
     text-align: center;
@@ -55,6 +55,14 @@
 }
 
 .contact_card a:hover{
+    color: #797979 !important;
+}
+
+.contact_card_title p{
+    color: #1c1c1c !important;
+}
+
+.contact_card_title:hover p{
     color: #797979 !important;
 }
 

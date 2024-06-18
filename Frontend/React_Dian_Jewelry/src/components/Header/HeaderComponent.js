@@ -25,7 +25,7 @@ const HeaderComponent = () => {
     const weddingMenuRef = useRef(null);
     const diamondMenuTimeoutRef = useRef(null);
     const weddingMenuTimeoutRef = useRef(null);
-    const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry); 
+    const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -49,7 +49,7 @@ const HeaderComponent = () => {
         for (const key in allCartItems) {
             localStorage.setItem(key, allCartItems[key]);
         }
-        window.location.href='/login';
+        window.location.href = '/login';
     };
 
     const handleSearchKeyPress = async (e) => {
@@ -98,7 +98,10 @@ const HeaderComponent = () => {
                             <Link to='tel:0795795959'>
                                 <p className="contact_phone"><i className="fas fa-phone-alt"></i>0795 795 959</p>
                             </Link>
-                            <p className="contact_address"><i className="fas fa-map-marker-alt"></i> D1 Street, Long Thanh My, Thu Duc City, Ho Chi Minh City</p>
+
+                            <a href="https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+%C4%90%E1%BA%A1i+h%E1%BB%8Dc+FPT+TP.+HCM/@10.8411278,106.8092999,19z/data=!4m6!3m5!1s0x31752731176b07b1:0xb752b24b379bae5e!8m2!3d10.8411276!4d106.809883!16s%2Fg%2F11j2zx_fz_?entry=ttu" target="_blank" rel="noopener noreferrer">
+                                <p className="contact_address"><i className="fas fa-map-marker-alt"></i> D1 Street, Long Thanh My, Thu Duc City, Ho Chi Minh City</p>
+                            </a>
                         </div>
                     </div>
                     <div className="col-md-4 text-center">

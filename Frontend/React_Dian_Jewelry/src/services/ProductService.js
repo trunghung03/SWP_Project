@@ -6,6 +6,10 @@ const getProductList = () => {
     return axios.get(`${API_BASE_URL}/products/list`);
 };
 
+const getCollectionList = () => {
+    return axios.get(`${API_BASE_URL}/collections`);
+};
+
 const getProductDetail = (id) => {
     return axios.get(`${API_BASE_URL}/products/${id}`);
 };
@@ -26,4 +30,4 @@ const getProductsByIds = (ids) => {
     return axios.get(`${API_BASE_URL}/products/list`, { params: { ids: ids.join(',') } });
 };
 
-export { getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds };
+export { getProductList, getCollectionList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds };

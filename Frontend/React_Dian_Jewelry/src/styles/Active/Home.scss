@@ -203,7 +203,7 @@ body {
 .shape_title {
     font-size: 26px;
     color: #1c1c1c;
-    margin-top: 60px;
+    margin-top: 80px;
     margin-bottom: -25px;
     font-weight: bold;
     text-align: center;
@@ -261,19 +261,18 @@ body {
 
 // End shape 
 
-
-/* Feature jewelry */
+/* Collection */
 .featured_jewelry_container {
     display: flex;
     justify-content: center;
-    margin: 0 0 120px -75px;
+    margin: -20px 0 100px -75px;
     position: relative;
 }
 
 .left_section {
     width: 30%;
     text-align: center;
-    padding: 0 3%;
+    padding: 0 3% 0 4%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -290,7 +289,7 @@ body {
 .featured_description {
     font-size: 14px;
     margin: 20px 15px 20px 15px;
-    color: #565e6c;
+    color: #797979;
 }
 
 .shop_now_btn {
@@ -320,18 +319,13 @@ body {
 
 .home_product_card {
     width: 210px;
-    height: 300px;
+    height: 350px;
     text-align: center;
     border: 1px solid #e0e0e0;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     position: relative;
-}
-
-.home_product_card:hover .home_product_image,
-.home_product_name:hover {
-    transform: scale(1.1);
 }
 
 .home_product_image {
@@ -343,24 +337,92 @@ body {
 
 .home_product_name {
     position: absolute;
-    bottom: 10px;
-    font-size: 15px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.4);
+    bottom: -20px;
+    font-size: 14px;
+    color: #1c1c1c;
     border-radius: 5px;
-    padding: 3px 20px 5px 20px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    padding: 0 10px;
+    width: 100%;
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    z-index: 1;
+    font-weight: bold;
+    opacity: 0;
+}
+
+.home_collection_hover_effect {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #1c1c1c;
+    transition: height 0.3s ease-in-out;
+    z-index: 0;
+}
+
+.home_product_card:hover .home_collection_hover_effect {
+    height: 13%;
 }
 
 .home_product_card:hover .home_product_name {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    transform: translateY(-16px);
+    opacity: 1;
 }
 
+.home_product_card:hover .home_product_image {
+    transform: scale(1.05);
+}
 
-.featured_jewelry_container {
+.home_product_icon_eye {
+    display: flex;
     align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 70px !important;
+    left: 62px !important;
+    font-size: 17px !important;
+    color: #1c1c1c !important;
+    background-color: white !important;
+    border-radius: 30%;
+    width: 45px !important;
+    height: 45px !important;
+    padding: 1px 0.5px 0 0 !important;
+    transition: opacity 0.3s ease-in-out, transform 0.4s ease-in-out !important;
+    opacity: 0;
+    box-shadow: none !important;
+    position: relative;
 }
+
+.home_product_card:hover .home_product_icon_eye {
+    opacity: 1;
+    transform: translateY(-55px);
+}
+
+.home_product_icon_wrapper {
+    position: relative;
+}
+
+.home_product_icon_wrapper[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + -40px);
+    top: 25px;
+    background-color: #1c1c1c;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+    font-size: 12px;
+}
+
+.home_product_icon_wrapper:hover::after {
+    opacity: 1;
+}
+
 
 .nav_arrow {
     position: absolute;
@@ -430,7 +492,7 @@ body {
 .wrapper .carousel {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% / 3) - -15px);
+    grid-auto-columns: calc((100% / 3) - -25px);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
@@ -496,18 +558,13 @@ body {
     font-size: 1.31rem;
 }
 
-ol,
-ul {
-    padding-left: 6rem;
-}
+// End collection 
 
-/* End feature jewelry */
-
-//Trending
+/* Trending */
 .trending_container {
     position: relative;
     background-color: #f4f2ee;
-    margin: 100px 0 90px 0;
+    margin: 100px 0 0 0;
     border-bottom: 95px solid #f8dcce;
     border-left: 70px solid #f8dcce;
     border-right: 70px solid white;
@@ -516,13 +573,14 @@ ul {
 .trending_text {
     position: absolute;
     top: 95%;
-    left: 15%;
+    left: 27%;
     font-size: 112px;
     font-weight: 600;
     color: white;
     z-index: 10;
     transform-origin: left top 0;
     transition: transform 0.7s ease-in-out;
+    white-space: nowrap;
 }
 
 .trending_white {
@@ -538,40 +596,26 @@ ul {
 }
 
 .trending_image {
-    height: 550px;
+    height: 500px;
     object-fit: cover;
+    width: 100%;
 }
 
 .trending_title {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-.trending_subtitle {
-    font-size: 17px;
-    margin-bottom: 40px;
-}
-
-.trending_features {
+.trending_product_card_section {
+    text-align: center;
     display: flex;
-    justify-content: space-between;
-}
-
-.trending_icon {
-    width: 50px;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-.trending_feature_text {
-    font-size: 16px;
-    font-weight: 600;
+    justify-content: center;
+    margin-left: -6%;
 }
 
 .trending_right {
     text-align: center;
-    padding: 20px 10%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -581,7 +625,61 @@ ul {
     margin: 0 0;
 }
 
+.trending_product_card {
+    width: 30%;
+    margin: 0 10px;
+    border: none;
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border-radius: 0;
+}
+
+.trending_product_card img{
+    transition: all 0.3s ease-in-out;
+    transform-origin: bottom; 
+}
+
+.trending_product_name {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 17px;
+    color: #1c1c1c;
+}
+
+.trending_product_price {
+    margin-top: -10px;
+    font-size: 17px;
+    color: #797979;
+}
+
+.view_detail_button {
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 15px;
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    white-space: nowrap;
+}
+
+.trending_product_card:hover .view_detail_button {
+    bottom: 105px;
+    opacity: 1;
+}
+
+.trending_product_card:hover img{
+    transform: scale(1.05);
+}
+
 //End trending
+
 
 /* Category */
 .category_container {
@@ -630,7 +728,7 @@ ul {
     align-items: center;
     opacity: 0;
     background: #f8dcce;
-    margin: 29px 25px;
+    margin: 29px 22px;
 }
 
 .category_image_wrapper_large:hover .category_hover_content {
@@ -732,7 +830,7 @@ ul {
     align-items: center;
     opacity: 0;
     background: #f8dcce;
-    margin: 14px 23px;
+    margin: 14px 22px;
 }
 
 .category_image_wrapper_small:hover .category_hover_content_small {
@@ -872,6 +970,124 @@ ul {
 
 /* End Best & Beloved */
 
+/* Feature */
+.home_feature_container {
+    margin: 120px 0;
+    padding: 0 5%;
+}
+
+.home_feature_navbar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.home_feature_navbar button {
+    font-size: 26px;
+}
+
+.home_feature_navlink {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1c1c1c;
+    margin: 0 15px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: color 0.3s;
+}
+
+.home_feature_navlink:hover {
+    color: #797979;
+}
+
+.home_feature_navlink {
+    font-size: 13.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.home_feature_navlink::before {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 8px;
+    width: 0;
+    border: 1px solid #797979;
+    transition: width 0.6s ease, left 0.6s ease, opacity 0.5s ease-in, ;
+    opacity: 0;
+}
+
+.home_feature_navlink:hover::before {
+    width: calc(100% - 15px);
+    left: 8px;
+    opacity: 1;
+}
+
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #797979;
+}
+
+
+.home_feature_products {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.home_feature_product_card {
+    width: 220px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.home_feature_product_card:hover {
+    transform: translateY(-10px);
+}
+
+.home_feature_tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #d4af37;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.home_feature_product_image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.home_feature_product_name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1c1c1c;
+}
+
+.home_feature_old_price {
+    font-size: 14px;
+    color: #797979;
+    text-decoration: line-through;
+}
+
+.home_feature_new_price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #d4af37;
+}
+
+/* End feature*/
+
 // Impression
 .impression_container {
     position: relative;
@@ -933,6 +1149,7 @@ ul {
     position: relative;
     width: 100%;
     margin-top: 40px;
+    margin-bottom: 110px;
 }
 
 .proposal_image {
@@ -992,7 +1209,7 @@ ul {
     color: #1c1c1c;
     padding: 40px 4% 90px 4%;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 120px;
 }
 
 .brilliant_title {

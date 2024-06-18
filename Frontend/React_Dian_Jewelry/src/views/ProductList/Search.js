@@ -7,6 +7,8 @@ import Question from '../../components/Question/Question.js';
 import '../../styles/ProductList/Search.scss';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 
 const Search = () => {
@@ -35,6 +37,7 @@ const Search = () => {
             <ProductList products={products} resetKey={resetKey} />
             <Question />
             <ScrollToTop />
+            <Insta />
             <FooterComponent />
         </div>
     );
