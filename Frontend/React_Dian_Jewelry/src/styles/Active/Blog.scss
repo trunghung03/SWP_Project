@@ -107,7 +107,7 @@
 }
 
 
-.blog_read_this_button:hover{
+.blog_read_this_button:hover {
     background-color: rgb(225, 225, 225);
     color: #1c1c1c;
 }
@@ -307,7 +307,7 @@
     transform: translateY(-4px);
 }
 
-.small_blog_read_more:hover  i {
+.small_blog_read_more:hover i {
     transform: translateX(7px);
 }
 
@@ -416,3 +416,22 @@
     margin: 0 0;
 }
 
+.blog_inspired_title {
+    position: relative;
+    text-align: center;
+}
+
+.blog_inspired_title h4 {
+    font-size: 22px;
+    color: #1c1c1c;
+}
+
+.blog_inspired_title p {
+    color: #797979;
+}
+
+.blog_inspired_grid {
+    display: flex;
+    justify-content: center;
+  }
+  

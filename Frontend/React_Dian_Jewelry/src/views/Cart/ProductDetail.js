@@ -14,10 +14,12 @@ import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMateri
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 function ProductDetail() {
     useEffect(() => {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 220);
     }, []);
 
     const location = useLocation();
@@ -39,10 +41,8 @@ function ProductDetail() {
         const productDetailElement = document.getElementById('product_detail');
         if (productDetailElement) {
             const topPos = productDetailElement.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo({
-                top: topPos,
-                behavior: 'smooth'
-            });
+            window.scrollTo(0, 220);
+
         }
         navigate('/product-detail', { state: { id: productId } });
     };
@@ -147,7 +147,8 @@ function ProductDetail() {
                 sizes: product.sizes.map(size => size.toString()),
                 selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
                 selectedShellName: selectedShell,
-                diamondId: product.mainDiamondId
+                diamondId: product.mainDiamondId,
+                categoryId: product.categoryId
             };
             addToCart(productToSave);
             navigateToCart();
@@ -191,9 +192,9 @@ function ProductDetail() {
     const navItems = [
         { name: 'Home', link: '/home' },
         { name: 'Diamond Jewelry', link: '' },
-        { name: product.name, link: ''}
+        { name: product.name, link: '' }
     ];
-    
+
     const images = product.imageLinkList ? product.imageLinkList.split(';') : [];
 
     let sizeGuideImage;
@@ -270,7 +271,7 @@ function ProductDetail() {
                         <button className="add_to_cart_btn" onClick={handleAddToCart}>
                             <i className="fas fa-shopping-cart"></i> Add to cart
                         </button>
-                    </div>  
+                    </div>
                     <hr className="product_detail_line" />
                     <div className="product_delivery_detail">
                         <p><i className="fas fa-phone"></i> <a href='tel:0795795959'>0795 795 959</a></p>
@@ -347,6 +348,7 @@ function ProductDetail() {
                 </div>
             </div>
             <ScrollToTop />
+            <Insta />
             <FooterComponent />
         </div>
     );

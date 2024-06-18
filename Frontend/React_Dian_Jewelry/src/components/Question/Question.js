@@ -11,6 +11,26 @@ const Question = () => {
 
     return (
         <div className="question_component">
+            {/* Question */}
+            <div className="question-container">
+                <div className="question_content">
+                    <div className="question_text">
+                        <h3>Have a question about DIAN Jewelry?</h3>
+                        <p>Get answers day or night.</p>
+                    </div>
+                    <div className="vertical_line"> </div>
+                    <div className="contact-info">
+                        <div className="contact_item">
+                            <a href='tel:0795795959'><i className="fas fa-phone-alt"></i> 0795 795 959</a>
+                        </div>
+                        <br />
+                        <div className="contact_item">
+                            <a href='mailto:diamonddianjewelry@gmail.com'><i className="fas fa-envelope"></i> diamonddianjewelry@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* FAQs */}
             <div className="faqs_container">
                 <div className="row">
@@ -39,25 +59,7 @@ const Question = () => {
                 </div>
             </div>
 
-            {/* Question */}
-            <div className="question-container">
-                <div className="question_content">
-                    <div className="question_text">
-                        <h3>Have a question about DIAN Jewelry?</h3>
-                        <p>Get answers day or night.</p>
-                    </div>
-                    <div className="vertical_line"> </div>
-                    <div className="contact-info">
-                        <div className="contact_item">
-                            <a href='tel:0795795959'><i className="fas fa-phone-alt"></i> 0795 795 959</a>
-                        </div>
-                        <br />
-                        <div className="contact_item">
-                            <a href='mailto:diamonddianjewelry@gmail.com'><i className="fas fa-envelope"></i> diamonddianjewelry@gmail.com</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     );
 }

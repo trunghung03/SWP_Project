@@ -25,6 +25,8 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 
 const Introduce = () => {
@@ -216,6 +218,7 @@ const Introduce = () => {
         </div>
       </div>
       <ScrollToTop></ScrollToTop>
+      <Insta />
       <FooterComponent />
     </div>
   );

@@ -11,10 +11,10 @@ const BlogInspired = ({ openInstagram }) => {
   return (
     <div className="blog_inspired_container">
       <div className="row">
-        <div className='blog_inspired_title'>
+        {/* <div className='blog_inspired_title'>
           <h4>Get Inspired</h4>
           <p>Tag us on instagram @dianjewelry</p>
-        </div>
+        </div> */}
         <div className="blog_inspired_grid">
           <div className="col-md-2 blog_inspired_column">
             <div className="blog_inspired_image" onClick={openInstagram}>

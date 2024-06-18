@@ -3,14 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import sizeGuideImage from '../../assets/img/sgRing.jpg';
+import ringSizeGuide from '../../assets/img/sgRing.jpg';
+import braceletSizeGuide from '../../assets/img/sgBracelet.jpg';
+import earringSizeGuide from '../../assets/img/sgEaring.jpeg';
+import necklaceSizeGuide from '../../assets/img/sgNecklace.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
-
 
 function Cart() {
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ function Cart() {
         { name: 'Cart', link: '/cart' }
     ];
     const [showSizeGuide, setShowSizeGuide] = useState(false);
+    const [sizeGuideImage, setSizeGuideImage] = useState(null);
     const customerId = localStorage.getItem('customerId');
     const { cartItems, removeFromCart, updateCartItem } = useCart();
     const [filteredCartItems, setFilteredCartItems] = useState([]);
@@ -29,12 +32,35 @@ function Cart() {
         setFilteredCartItems(storedCartItems);
     }, [customerId, cartItems]);
 
-    const openSizeGuide = () => {
+    const openSizeGuide = (categoryId) => {
+        switch (categoryId) {
+            case 1:
+            case 5:
+            case 9:
+                setSizeGuideImage(ringSizeGuide);
+                break;
+            case 2:
+            case 6:
+                setSizeGuideImage(earringSizeGuide);
+                break;
+            case 3:
+            case 7:
+                setSizeGuideImage(braceletSizeGuide);
+                break;
+            case 4:
+            case 8:
+                setSizeGuideImage(necklaceSizeGuide);
+                break;
+            default:
+                setSizeGuideImage(null);
+        }
         setShowSizeGuide(true);
+        document.body.classList.add('no-scroll');
     };
 
     const closeSizeGuide = () => {
         setShowSizeGuide(false);
+        document.body.classList.remove('no-scroll');
     };
 
     const handleCheckoutPage = () => {
@@ -71,7 +97,6 @@ function Cart() {
         navigate('/checkout', { state: { cartItems: updatedCartItems } });
     };
 
-
     const handleContinueShopping = () => {
         navigate('/diamond-jewelry', { state: { category: 'all' } });
     };
@@ -91,7 +116,7 @@ function Cart() {
     };
 
     return (
-        <div className="cart">
+        <div className={`cart ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
             <div className="cart_main_container">
@@ -140,7 +165,7 @@ function Cart() {
                                                             <option key={sizeIndex} value={size}>Size {size}</option>
                                                         ))}
                                                     </select>
-                                                    <button onClick={openSizeGuide} className="cart_size_guide_detail">Size guide</button>
+                                                    <button onClick={() => openSizeGuide(item.categoryId)} className="cart_size_guide_detail">Size guide</button>
                                                 </div>
                                             </div>
                                             <div className="cart_item_price">{Math.floor(item.price)}$</div>

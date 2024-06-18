@@ -9,6 +9,8 @@ import contact from '../../assets/img/contact.webp';
 import faqsImg from '../../assets/img/faqs.png';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 
 function FAQs() {
@@ -127,6 +129,7 @@ function FAQs() {
       </div>
       <br></br><br></br><br></br>
       <ScrollToTop />
+      <Insta />
       <FooterComponent/>
     </div>
   );

@@ -10,7 +10,6 @@ import blogLogo from '../../assets/img/blogLogo.png';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 
-
 function BlogDetail() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -50,20 +49,6 @@ function BlogDetail() {
         { name: article.title }
     ];
 
-    const parseHTMLContent = (htmlString) => {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlString;
-
-        const mainTitle = tempDiv.querySelector('.main-title')?.outerHTML || '';
-        const content = tempDiv.querySelector('.testtest')?.outerHTML || '';
-        const images = [...tempDiv.querySelectorAll('img')].map(img => img.outerHTML).join('');
-        const styles = tempDiv.querySelector('style')?.outerHTML || '';
-
-        return { mainTitle, content, images, styles };
-    };
-
-    const { mainTitle, content, images, styles } = parseHTMLContent(article.content);
-
     return (
         <div className="BlogDetail">
             <HeaderComponent />
@@ -79,11 +64,9 @@ function BlogDetail() {
                     <div className='blog_detail_main_image'>
                         <img src={article.image} alt={article.title} className="blog_detail_image" />
                     </div>
-                    <style dangerouslySetInnerHTML={{ __html: styles }} />
-                    <div dangerouslySetInnerHTML={{ __html: mainTitle }} />
-                    <div className='test' dangerouslySetInnerHTML={{ __html: content }} />
-                    <div dangerouslySetInnerHTML={{ __html: images }} />
-                    {/* <p className="blog_detail_created_by">{article.content}</p> */}
+                    <div className='blog_detail_content_text'>
+                        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                    </div>
                 </div>
             </div>
 
@@ -140,6 +123,10 @@ function BlogDetail() {
                 </div>
             )}
 
+            <div className='blog_inspired_title'>
+                <h4>Get Inspired</h4>
+                <p>Tag us on instagram @dianjewelry</p>
+            </div>
             <BlogInspired openInstagram={openInstagram} />
             <ScrollToTop />
             <FooterComponent />

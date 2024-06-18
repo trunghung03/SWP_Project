@@ -1,6 +1,6 @@
 .blog_detail_main_container {
     margin: 40px 5%;
-    text-align: center;
+    // text-align: center;
 }
 
 .blog_detail_header {
@@ -38,7 +38,7 @@
 
 .blog_detail_content {
     margin-top: 20px;
-    text-align: center;
+    // text-align: center;
 }
 
 .blog_detail_text {
@@ -222,10 +222,28 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.test{
+.test {
     text-align: center;
 }
 
-.sub-title{
+.sub-title {
     font-weight: bold;
+}
+
+.blog_detail_content_text {
+    margin: 0 5%;
+}
+
+.blog_inspired_title {
+    position: relative;
+    text-align: center;
+}
+
+.blog_inspired_title h4 {
+    font-size: 22px;
+    color: #1c1c1c;
+}
+
+.blog_inspired_title p {
+    color: #797979;
 }

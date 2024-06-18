@@ -11,6 +11,8 @@ import { getProductList, getCollectionDetail } from '../../services/ProductServi
 import '../../styles/ProductList/Collection.scss';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 function Collection() {
     const location = useLocation();
@@ -271,6 +273,7 @@ function Collection() {
             </div>
             <Question />
             <ScrollToTop />
+            <Insta />
             <FooterComponent />
         </div>
     );

@@ -275,6 +275,10 @@ function Blog() {
         </div>
       </div>
 
+      <div className='blog_inspired_title'>
+          <h4>Get Inspired</h4>
+          <p>Tag us on instagram @dianjewelry</p>
+        </div>
       <BlogInspired openInstagram={openInstagram} />
 
       <ScrollToTop />

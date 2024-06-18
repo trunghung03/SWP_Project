@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../styles/Static/Contact.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
 import { Link } from 'react-router-dom';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
@@ -55,6 +56,7 @@ function Contact() {
       </div>
 
       <ScrollToTop></ScrollToTop>
+      <Insta />
       <FooterComponent />
 
     </div>

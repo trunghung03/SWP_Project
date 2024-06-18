@@ -21,6 +21,8 @@ import heart from '../../assets/img/heart.png';
 import '../../styles/ProductList/Shape.scss';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 function Shape() {
     const navigate = useNavigate();
@@ -305,6 +307,7 @@ function Shape() {
             </div>
             <Question />
             <ScrollToTop />
+            <Insta />
             <FooterComponent />
         </div>
     );

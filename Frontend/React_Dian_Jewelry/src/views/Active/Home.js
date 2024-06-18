@@ -15,12 +15,10 @@ import brilliant1 from '../../assets/img/brilliant1.png';
 import brilliant2 from '../../assets/img/brilliant2.png';
 import brilliant3 from '../../assets/img/brilliant3.png';
 import brilliant4 from '../../assets/img/brilliant4.png';
-import ring from '../../assets/img/ring.jpeg';
-import earings from '../../assets/img/earrings.jpg';
-import bracelet from '../../assets/img/bracelet.jpg';
-import weddingRing from '../../assets/img/weddingRing.jpg';
-import weddingEarings from '../../assets/img/weddingEarings.jpg';
-import weddingBracelet from '../../assets/img/weddingBracelet.webp';
+import ringC from '../../assets/img/homeRingC.jpg';
+import earringC from '../../assets/img/homeEarringsC.jpg';
+import braceletC from '../../assets/img/homeBraceletC.jpg';
+import necklaceC from '../../assets/img/homeNecklaceC.jpg';
 import round from '../../assets/img/round.png';
 import oval from '../../assets/img/oval.png';
 import emerald from '../../assets/img/emerald.png';
@@ -46,6 +44,10 @@ import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import impression from '../../assets/img/impression.png';
 import proposal from '../../assets/img/proposal.png';
 import bb from '../../assets/img/bb.png';
+import trending from '../../assets/img/trending.png';
+import conflictFreeIcon from '../../assets/img/blog1.svg';
+import recycledMetalsIcon from '../../assets/img/blog2.svg';
+import givingBackIcon from '../../assets/img/blog3.svg';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -119,6 +121,21 @@ const Home = () => {
     { name: "Wedding Necklace", img: wNecklaceCategory, category: 'weddingNecklace' },
     { name: "Engagement Ring", img: engagementCategory, category: 'engagementRing' }
   ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const missionText = document.querySelector('.trending_text');
+      if (missionText) {
+        const scrollPosition = window.scrollY;
+        missionText.style.transform = `translateX(${-scrollPosition * 0.1}px)`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const wrapper = document.querySelector(".wrapper");
@@ -293,11 +310,81 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Feature jewelry  */}
+      {/* Category */}
+      <div className="category_container text-center">
+        <h1 className="category_title">Shop By Categories</h1>
+        <p className="category_description">Explore our exclusive categories and find the perfect piece of jewelry that suits your style and preference. We have something special for every occasion here.</p>
+        <div className="category_grid container">
+          <div className="row">
+            <div className="category_large col-md-4">
+              <div className="category_item_large">
+                <div className="category_image_wrapper_large">
+                  <img src={earringC} alt="Earrings" />
+                  <p className="category_name_large">Earrings</p>
+                  <div className="category_hover_content">
+                    <p className="category_name_large_hover">Earrings</p>
+                    <div className="category_hover_text">
+                      <span className="category_large_letter">E</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'earrings' })} className="category_view_collection">VIEW COLLECTION</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="category_small_container col-md-4">
+              <div className="category_item_small">
+                <div className="category_image_wrapper_small ciwm1">
+                  <img src={ringC} alt="Ring" />
+                  <p className="category_name_small">Ring</p>
+                  <div className="category_hover_content_small">
+                    <p className="category_name_small_hover">Ring</p>
+                    <div className="category_hover_text_small">
+                      <span className="category_large_letter_small">R</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'ring' })} className="category_view_collection_small">VIEW COLLECTION</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="category_item_small">
+                <div className="category_image_wrapper_small ciwm2">
+                  <img src={braceletC} alt="Bracelet" />
+                  <p className="category_name_small">Bracelet</p>
+                  <div className="category_hover_content_small">
+                    <p className="category_name_small_hover">Bracelet</p>
+                    <div className="category_hover_text_small">
+                      <span className="category_large_letter_small">B</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'bracelet' })} className="category_view_collection_small">VIEW COLLECTION</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="category_large col-md-4">
+              <div className="category_item_large">
+                <div className="category_image_wrapper_large">
+                  <img src={necklaceC} alt="Necklace" />
+                  <p className="category_name_large">Necklace</p>
+                  <div className="category_hover_content">
+                    <p className="category_name_large_hover">Necklace</p>
+                    <div className="category_hover_text">
+                      <span className="category_large_letter">N</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'necklace' })} className="category_view_collection">VIEW COLLECTION</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      {/* Collection  */}
       <div className="featured_jewelry_container">
         <div className="left_section">
-          <h1 className="featured_title">Shop By Category</h1>
-          <p className="featured_description">Explore our outstanding jewelry categories and collections, where artistry meets
+          <h1 className="featured_title">Our Collections</h1>
+          <p className="featured_description">View our outstanding jewelry collections, where artistry meets
             timeless elegance. Each piece of jewelry is exquisitely crafted, bringing the splendor and class.</p>
           <button onClick={() => handleNavigate('/diamondJewelry')} className="shop_now_btn" >Shop now</button>
           <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
@@ -315,54 +402,33 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Collection  */}
-      <div className="collections_container text-center">
-        <h1 className="collections_title">Our Collections</h1>
-        <div className="collections_grid">
-          <div className="collection_column1">
-            <div onClick={() => handleNavigate('/collection', { collection: 'luxuriousLustre' })} className="collection_item">
-              <div className="collection_image_wrapper">
-                <img src={ring} alt="Luxurious Lustre" />
-                <p className="collection_name">Luxurious Lustre</p>
-              </div>
-            </div>
-            <div onClick={() => handleNavigate('/collection', { collection: 'radiantReflections' })} className="collection_item">
-              <div className="collection_image_wrapper">
-                <img src={bracelet} alt="Radiant Reflections" />
-                <p className="collection_name">Radiant Reflections</p>
-              </div>
-            </div>
+      {/* Trending */}
+      <div className="trending_container">
+        <div className="trending_text">trendy collection</div>
+        <div className="trending_white">                                 </div>
+        <div className="row">
+          <div className="col-md-4">
+            <img src={trending} alt="Trending" className="trending_image" />
           </div>
-          <div className="collection_column2">
-            <div onClick={() => handleNavigate('/collection', { collection: 'majesticMementos' })} className="collection_item">
-              <div className="collection_image_wrapper">
-                <img src={weddingEarings} alt="Majestic Mementos" />
-                <p className="collection_name">Majestic Mementos</p>
+          <div className="col-md-8 trending_right">
+            <h2 className="trending_title">Our Mission</h2>
+            <p className="trending_subtitle">We are passionate about cultivating a more transparent, sustainable, and compassionate jewelry industry for the world.</p>
+            <div className="row trending_features">
+              <div className="trending_icon_wrap col-md-2 text-center">
+                <img src={conflictFreeIcon} alt="Conflict Free" className="trending_icon" />
+                <p className="trending_feature_text">Beyond<br></br> Conflict Free</p>
               </div>
-            </div>
-            <div onClick={() => handleNavigate('/collection', { collection: 'blissfulBaubles' })} className="collection_item">
-              <div className="collection_image_wrapper">
-                <img src={weddingRing} alt="Blissful Baubles" />
-                <p className="collection_name">Blissful Baubles</p>
+              <div className="trending_icon_wrap col-md-2 text-center">
+                <img src={recycledMetalsIcon} alt="Recycled Metals" className="trending_icon" />
+                <p className="trending_feature_text">Recycled<br></br> Precious Metals</p>
               </div>
-            </div>
-          </div>
-          <div className="collection_column3">
-            <div onClick={() => handleNavigate('/collection', { collection: 'timelessTreasures' })} className="collection_item">
-              <div className="collection_image_wrapper">
-                <img src={weddingBracelet} alt="Timeless Treasures" />
-                <p className="collection_name">Timeless Treasures</p>
-              </div>
-            </div>
-            <div onClick={() => handleNavigate('/collection', { collection: 'divineDiamonds' })} className="collection_item">
-              <div className="collection_image_wrapper">
-                <img src={earings} alt="Divine Diamonds" />
-                <p className="collection_name">Divine Diamonds</p>
+              <div className="trending_icon_wrap col-md-2 text-center">
+                <img src={givingBackIcon} alt="Giving Back" className="trending_icon" />
+                <p className="trending_feature_text">Giving<br></br> Back</p>
               </div>
             </div>
           </div>
         </div>
-        <button onClick={() => navigate('/diamond-jewelry')} className="collection_shop_now_btn">Shop now</button>
       </div>
 
       {/* Best & Belove */}
@@ -373,7 +439,7 @@ const Home = () => {
             <h2 className="bb_title">Best & Beloved</h2>
             <p className="bb_description">Our most coveted engagement rings, as chosen by you.</p>
           </div>
-          <button onClick={() => handleNavigate('/collection', { collection: 'engagementRings' })} className="bb_shop_now_button">Shop now</button>
+          <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'engagementRing' })} className="bb_shop_now_button">Shop now</button>
         </div>
       </div>
 

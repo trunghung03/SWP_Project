@@ -12,6 +12,8 @@ import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList } from '../../services/ProductService.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 function DiamondJewelry() {
     const location = useLocation();
@@ -300,6 +302,7 @@ function DiamondJewelry() {
             </div>
             <Question />
             <ScrollToTop />
+            <Insta />
             <FooterComponent />
         </div>
     );
