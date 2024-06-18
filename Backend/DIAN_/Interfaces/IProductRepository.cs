@@ -12,7 +12,7 @@ namespace DIAN_.Interfaces
         Task<List<ProductListDTO>> GetListAsync();
         Task<ProductDTO> GetByIdAsync(int id);
         Task<ProductDTO> CreateAsync(Product product);
-        Task<ProductDTO> UpdateAsync(ProductDTO product);
+        Task<Product> UpdateProductAsync(Product product, int id);
         Task DeleteAsync(int id);
         Task<ProductDetailDTO> GetDetailAsync(int id);
         Task <List<ProductDTO>> GetAllAsync(ProductQuery query);

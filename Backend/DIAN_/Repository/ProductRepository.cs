@@ -126,14 +126,8 @@ namespace DIAN_.Repository
             // Map the DTO properties to the entity
             product.Name = productDTO.Name;
             product.Description = productDTO.Description;
-            product.Price = productDTO.Price;
             product.LaborCost = productDTO.LaborPrice;
             product.ImageLinkList = productDTO.ImageLinkList;
-            product.MainDiamondId = productDTO.MainDiamondId;
-            product.SubDiamondAmount = productDTO.SubDiamondAmount;
-            product.ProductCode = productDTO.ProductCode;
-            product.MainDiamondAmount = productDTO.MainDiamondAmount;
-            product.ShellAmount = productDTO.ShellAmount;
             product.CollectionId = productDTO.CollectionId;
 
             _context.Products.Update(product);
@@ -142,5 +136,21 @@ namespace DIAN_.Repository
             return product.ToProductDTO();
         }
 
+        public async Task<Product> UpdateProductAsync(Product product, int id)
+        {
+            var existingProduct =await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            if (existingProduct != null)
+            {
+                existingProduct.Name = product.Name;
+                existingProduct.Description = product.Description;
+                existingProduct.LaborCost = product.LaborCost;
+                existingProduct.ImageLinkList = product.ImageLinkList;
+                existingProduct.CollectionId = product.CollectionId;
+                existingProduct.CategoryId = product.CategoryId;
+                await _context.SaveChangesAsync();
+                return existingProduct;
+            }
+            return null;
+        }
     }
 }

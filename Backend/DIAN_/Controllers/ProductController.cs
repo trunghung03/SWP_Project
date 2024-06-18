@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Helper;
+using DIAN_.DTOs.PromotionDto;
+using DIAN_.Repository;
 
 namespace DIAN_.Controllers
 {
@@ -109,32 +111,18 @@ namespace DIAN_.Controllers
         {
             try
             {
-                var product = await _productRepo.GetByIdAsync(id);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var product = await _productRepo.UpdateProductAsync(updateDTO.ToProductFromUpdateDTO(id), id);
                 if (product == null)
                 {
-                    return NotFound();
+                    return NotFound("Promotion does not exist");
                 }
-
-                var productDTO = new ProductDTO
-                {
-                    ProductId = id, // Ensure the ID is set correctly
-                    Name = updateDTO.Name,
-                    Description = updateDTO.Description,
-                    Price = updateDTO.Price,
-                    LaborPrice = updateDTO.LaborPrice,
-                    ImageLinkList = updateDTO.ImageLinkList,
-                    MainDiamondId = updateDTO.MainDiamondId,
-                    SubDiamondAmount = updateDTO.SubDiamondAmount,
-                    ProductCode = updateDTO.ProductCode,
-                    MainDiamondAmount = updateDTO.MainDiamondAmount,
-                    ShellAmount = updateDTO.ShellAmount,
-                    CollectionId = updateDTO.CollectionId,
-
-                };
-
-                var updatedProduct = await _productRepo.UpdateAsync(productDTO);
-                return Ok(updatedProduct);
-            }catch(Exception)
+                return Ok(product);
+            }
+            catch (Exception)
             {
                 throw;
             }
