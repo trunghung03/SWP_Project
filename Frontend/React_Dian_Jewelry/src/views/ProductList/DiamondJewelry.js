@@ -5,7 +5,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
 import '../../styles/ProductList/DiamondJewelry.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
-import News from '../../components/News/News.js';
 import Question from '../../components/Question/Question.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import ProductList from '../../components/ProductCard/ProductCard.js';
@@ -13,6 +12,11 @@ import { getProductList } from '../../services/ProductService.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
+
+import ringBanner from '../../assets/img/ringBanner.png';
+import earringsBanner from '../../assets/img/earringsBanner.png';
+import braceletBanner from '../../assets/img/braceletBanner.png';
+import necklaceBanner from '../../assets/img/necklaceBanner.png';
 
 
 function DiamondJewelry() {
@@ -26,6 +30,9 @@ function DiamondJewelry() {
     const [sort, setSort] = useState('');
     const [shape, setShape] = useState('');
     const [resetKey, setResetKey] = useState(Date.now());
+    const [bannerImage, setBannerImage] = useState('');
+    const [bannerText, setBannerText] = useState('');
+    const [transitionKey, setTransitionKey] = useState(Date.now());
 
     const categoryMap = {
         all: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -39,6 +46,20 @@ function DiamondJewelry() {
         weddingBracelet: [7],
         weddingNecklace: [8],
         engagementRing: [9]
+    };
+
+    const categoryBannerMap = {
+        all: { image: ringBanner, text: 'Jewelry' },
+        ring: { image: ringBanner, text: 'Rings' },
+        earrings: { image: earringsBanner, text: 'Earrings' },
+        bracelet: { image: braceletBanner, text: 'Bracelets' },
+        necklace: { image: necklaceBanner, text: 'Necklaces' },
+        weddingJewelry: { image: ringBanner, text: 'Wedding Jewelry' },
+        weddingRing: { image: ringBanner, text: 'Wedding Rings' },
+        weddingEarrings: { image: ringBanner, text: 'Wedding Earrings' },
+        weddingBracelet: { image: ringBanner, text: 'Wedding Bracelets' },
+        weddingNecklace: { image: ringBanner, text: 'Wedding Necklaces' },
+        engagementRing: { image: ringBanner, text: 'Engagement Rings' },
     };
 
     useEffect(() => {
@@ -65,13 +86,19 @@ function DiamondJewelry() {
                 navItems.push({ name: category.charAt(0).toUpperCase() + category.slice(1), link: '' });
             }
             setNavItems(navItems);
-            
+
             setClarity('');
             setCarat('');
             setColor('');
             setSort('');
             setShape('');
             setResetKey(Date.now());
+
+            if (categoryBannerMap[category]) {
+                setBannerImage(categoryBannerMap[category].image);
+                setBannerText(categoryBannerMap[category].text);
+            }
+            setTransitionKey(Date.now());
 
             getProductList()
                 .then(response => {
@@ -87,6 +114,9 @@ function DiamondJewelry() {
                 { name: 'Home', link: '/home' },
                 { name: 'Diamond Jewelry', link: '' }
             ]);
+            setBannerImage(categoryBannerMap.all.image);
+            setBannerText(categoryBannerMap.all.text);
+            setTransitionKey(Date.now());
             getProductList()
                 .then(response => {
                     setProducts(response.data);
@@ -121,7 +151,6 @@ function DiamondJewelry() {
             .catch(error => console.log('Error fetching products:', error));
     }, [clarity, carat, color, shape, category]);
 
-
     useEffect(() => {
         if (sort) {
             const sortedProducts = [...products].sort((a, b) => {
@@ -152,11 +181,22 @@ function DiamondJewelry() {
         setResetKey(Date.now());
     };
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            document.querySelector('.news_banner_main_wrapper').classList.add('visible');
+        }, 10);
+        return () => clearTimeout(timeout);
+    }, [transitionKey]);
+
     return (
         <div className="DiamondJewelry">
             <HeaderComponent />
             <SubNav items={navItems} />
-            <News />
+            <div key={transitionKey} className="news_banner_main_wrapper">
+                <div className="news_banner_image">
+                    <img src={bannerImage} alt={bannerText} />
+                </div>
+            </div>
             <div className="filters_and_products">
                 <div className="filters_products">
                     {(clarity || carat || color || sort) && (

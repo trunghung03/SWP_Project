@@ -11,7 +11,6 @@ import { UserContext } from '../../services/UserContext';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 
-
 function EditProfile() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -45,6 +44,12 @@ function EditProfile() {
     }
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: document.querySelector('.edit_profile_container').offsetTop,
+      behavior: 'smooth',
+    });
+  }, []);
 
   const navItems = [
     { name: 'Home', link: '/home' },

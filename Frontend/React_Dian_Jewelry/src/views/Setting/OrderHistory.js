@@ -48,6 +48,13 @@ function OrderHistory() {
         setCurrentPage(1);
     }, [filterStatus, orders]);
 
+    useEffect(() => {
+        window.scrollTo({
+          top: document.querySelector('.order_history_container').offsetTop,
+          behavior: 'smooth',
+        });
+      }, []);
+
     const navItems = [
         { name: 'Home', link: '/home' },
         { name: 'Order History', link: '/order-history' }
