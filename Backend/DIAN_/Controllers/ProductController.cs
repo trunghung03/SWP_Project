@@ -28,10 +28,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 var products = await _productRepo.GetListAsync();
 
                 return Ok(products);
@@ -46,10 +42,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 var product = await _productRepo.GetByIdAsync(id);
                 if (product == null)
                 {
@@ -117,10 +109,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 // Check if the MainDiamondId exists
                 var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
                 if (!mainDiamondExists)
@@ -173,7 +161,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var products = await _productRepo.GetAllAsync(query);
                 return Ok(products);
             }catch(Exception)
@@ -187,7 +174,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
                 await _productRepo.DeleteAsync(id);
                 return NoContent();
             }catch(Exception)
@@ -200,7 +186,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var productDetail = await _productRepo.GetDetailAsync(id);
                 if (productDetail == null)
                 {
@@ -217,7 +202,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var products = await _productRepo.GetByNameAsync(name);
                 return Ok(products);
             }catch(Exception)

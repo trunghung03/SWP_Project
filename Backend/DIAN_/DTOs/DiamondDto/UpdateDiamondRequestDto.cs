@@ -4,34 +4,35 @@ namespace DIAN_.DTOs.DiamondDto
 {
     public class UpdateDiamondRequestDto
     {
-        [Required(ErrorMessage = "Shape is required.")]
-        [StringLength(50, ErrorMessage = "Shape must not exceed 50 characters.")]
+        [Required]
+        [StringLength(50)]
         public string Shape { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Color is required.")]
-        [StringLength(50, ErrorMessage = "Color must not exceed 50 characters.")]
+        [Required]
+        [StringLength(50)]
         public string Color { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Clarity is required.")]
-        [StringLength(50, ErrorMessage = "Clarity must not exceed 50 characters.")]
+        [Required]
+        [StringLength(50)]
         public string Clarity { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Cut is required.")]
-        [StringLength(50, ErrorMessage = "Cut must not exceed 50 characters.")]
+        [Required]
+        [StringLength(50)]
         public string Cut { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Carat is required.")]
-        [Range(0.01, 40.00, ErrorMessage = "Carat must be between 0.01 and 40.00.")]
+        [Required]
+        [Range(0.01, 40.00)]
         public decimal Carat { get; set; }
 
-        [Required(ErrorMessage = "Certificate scan is required.")]
+        
+
+        [Required]
         public string CertificateScan { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Amount available is required.")]
+        [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Amount Available cannot be smaller than 0")]
         public int AmountAvailable { get; set; }
 
-        [Required(ErrorMessage = "Status is required.")]
-        public bool Status { get; set; } = true;
+        public bool Status { get; set; } = true; // Thêm thuộc tính Status với giá trị mặc định là true
     }
 }

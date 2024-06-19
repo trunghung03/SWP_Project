@@ -64,10 +64,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 var shell = shellDTO.ToShellMaterial();
                 var createdShell = await _shellRepo.CreateAsync(shell);
                 return CreatedAtAction(nameof(GetById), new { id = createdShell.ShellMaterialId }, createdShell);
@@ -79,10 +75,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 var existingShell = await _shellRepo.GetByIdAsync(id);
                 if (existingShell == null)
                 {

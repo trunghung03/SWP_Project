@@ -4,18 +4,16 @@ namespace DIAN_.DTOs.WarrantyDTO
 {
     public class CreateWarrantyRequestDto
     {
-        [Required(ErrorMessage = "OrderDetailId is required.")]
+        [Required]
         public int OrderDetailId { get; set; }
 
-        [Required(ErrorMessage = "StartDate is required.")]
-        [DataType(DataType.Date, ErrorMessage = "StartDate must be a valid date.")]
+        [Required]
         public DateTime StartDate { get; set; }
 
-        [Required(ErrorMessage = "EndDate is required.")]
-        [DataType(DataType.Date, ErrorMessage = "EndDate must be a valid date.")]
+        [Required]
         public DateTime EndDate { get; set; }
 
-        [Required(ErrorMessage = "Status is required.")]
+        [Required]
         public bool Status { get; set; }
     }
 }

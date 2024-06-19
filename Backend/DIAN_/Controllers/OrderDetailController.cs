@@ -20,7 +20,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var details = await _orderDetailRepository.GetAllAsync();
                 return Ok(details);
             }catch(Exception)
@@ -34,7 +33,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var detail = await _orderDetailRepository.GetByIdAsync(id);
                 if (detail == null) return NotFound();
                 return Ok(detail);
@@ -49,7 +47,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
                 var details = await _orderDetailRepository.GetByOrderIdAsync(id);
                 if (details == null) return NotFound();
                 return Ok(details);
@@ -64,7 +61,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
                 var orderDetail = await _orderDetailRepository.CreateAsync(orderDetailDto.FromCreateToOrderDetail());
                 if (orderDetail == null) return NotFound();
                 return CreatedAtAction(nameof(GetByOrderDetailId), new { id = orderDetail.OrderDetailId }, orderDetail);
@@ -79,7 +75,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
                 var orderDetail = await _orderDetailRepository.UpdateAsync(orderDetailDto.FromUpdateToOrderDetail(), id);
                 if (orderDetail == null) return NotFound();
                 return Ok(orderDetail);
@@ -94,7 +89,6 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
                 var orderDetail = await _orderDetailRepository.DeleteAsync(id);
                 if (orderDetail == null) return NotFound();
                 return NoContent();
