@@ -1,5 +1,4 @@
 ﻿using DIAN_.DTOs.OrderDetailDto;
-using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
@@ -104,8 +103,8 @@ namespace DIAN_.Repository
                     TotalPrice = g.First().po.TotalPrice,
                     Date = g.First().po.Date,
                     OrderStatus = g.First().po.OrderStatus,
-                    PromotionCode = g.First().po.Promotion.Code,
-                    PromotionAmount = g.First().po.Promotion.Amount,
+                    PromotionCode = g.First().po.Promotion != null ? g.First().po.Promotion.Code : null,
+                    PromotionAmount = g.First().po.Promotion != null ? g.First().po.Promotion.Amount : null,
                     ProductDetails = g.Select(x => new OrderBillProductDetailDto
                     {
                         ProductName = x.p.Name,
@@ -114,13 +113,13 @@ namespace DIAN_.Repository
                         ProductDescription = x.p.Description,
                         Size = x.od.Size ?? 0m,
                         LineTotal = x.od.LineTotal,
-                        CertificateScan = x.d.CertificateScan,
-                        WarrantyStartDate = x.od.Warranty.StartDate,
-                        WarrantyEndDate = x.od.Warranty.EndDate,
+                        CertificateScan = x.d != null ? x.d.CertificateScan : null,
+                        WarrantyStartDate = x.od.Warranty != null ? x.od.Warranty.StartDate : null,
+                        WarrantyEndDate = x.od.Warranty != null ? x.od.Warranty.EndDate : null,
                     }).ToList()
-                }).FirstOrDefaultAsync(); // Changed ToListAsync to FirstOrDefaultAsync
+                }).FirstOrDefaultAsync();
 
-            return orderBill; // Now returns a single OrderBillDto object or null if not found
+            return orderBill; 
         }
 
 

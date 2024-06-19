@@ -7,7 +7,10 @@ namespace UserApplication.Dtos.Account
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        [Required] 
+        [Required]
+        [StringLength(20, MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$")]
         public string Password { get; set; }
     }
 }

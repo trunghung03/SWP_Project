@@ -24,6 +24,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var article = await _articleRepository.GetArticleByIdAsync(id);
                 if (article == null)
                 {
@@ -67,6 +71,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var articles = await _articleRepository.GetArticleByTitleAsync(title);
                 if (articles == null || articles.Count == 0)
                 {
@@ -139,6 +147,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var article = await _articleRepository.DeleteArticleAsync(id);
                 if (article == null)
                 {

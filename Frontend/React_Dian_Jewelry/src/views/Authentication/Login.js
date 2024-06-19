@@ -318,7 +318,12 @@ const Login = () => {
       navigate("/home");
     }
   };
-  const onFailure = (res) => {};
+  const onFailure = (res) => { };
+
+  const handleGuestLogin = () => {
+    navigate("/home");
+  };
+
   return (
     <div className="main_container">
       <div className="login_wrapper">
@@ -407,6 +412,13 @@ const Login = () => {
                 
                  
                 />
+              </div>
+              <div
+                className="guest_login_section text-center"
+                onClick={handleGuestLogin}
+                style={{ cursor: "pointer" }}
+              >
+                Sign in as guest
               </div>
             </form>
          

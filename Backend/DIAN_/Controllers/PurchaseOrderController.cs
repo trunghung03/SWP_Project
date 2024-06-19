@@ -2,7 +2,6 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
-using DIAN_.Services;
 using DIAN_.VnPay;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +37,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
                 return Ok(purchaseOrders);
             }
@@ -51,6 +54,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var purchaseOrderInfo = await _purchaseOrderRepo.GetPurchaseOrderInfoAsync(id);
                 if (purchaseOrderInfo == null)
                 {
@@ -65,6 +72,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var order = purchaseOrderDTO.ToCreatePurchaseOrder();
                 var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
                 return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
@@ -93,6 +104,7 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
                 var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
 
                 return Ok(createdOrderResult);
@@ -145,6 +157,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var paymentUrl = await Task.Run(() => _vnPayService.CreatePaymentUrl(HttpContext, model));
 
                 if (string.IsNullOrEmpty(paymentUrl))

@@ -47,29 +47,33 @@ const ManagerProductList = () => {
       fontSize: 14,
     },
   }));
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await ShowAllProduct();
         setProductItems(response);
+    
         const categoryMap = {};
         const collectionMap = {};
         const mainDiamondMap = {};
+    
         for (const product of response) {
-          if (!categoryMap[product.categoryId]) {
+          if (product.categoryId !== null && !categoryMap[product.categoryId]) {
             const category = await getProductCategory(product.categoryId);
             categoryMap[product.categoryId] = category.name;
           }
-          if (!collectionMap[product.collectionId]) {
+    
+          if (product.collectionId !== null && !collectionMap[product.collectionId]) {
             const collection = await getProductCollection(product.collectionId);
             collectionMap[product.collectionId] = collection.name;
           }
-          if (!mainDiamondMap[product.mainDiamondId]) {
+    
+          if (product.mainDiamondId !== null && !mainDiamondMap[product.mainDiamondId]) {
             const mainDiamond = await getProductDiamond(product.mainDiamondId);
             mainDiamondMap[product.mainDiamondId] = mainDiamond.shape;
           }
         }
+    
         setCategories(categoryMap);
         setCollections(collectionMap);
         setMainDiamonds(mainDiamondMap);
@@ -77,9 +81,10 @@ const ManagerProductList = () => {
         console.error("Error fetching data:", error);
       }
     };
-
+    
     fetchData();
   }, []);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 6;
@@ -167,10 +172,10 @@ const ManagerProductList = () => {
   };
 
   // Update by id
-  const handleEdit = (diamond) => {
+  const handleEdit = (product) => {
     setEditMode(true);
-    setEditedProduct(diamond);
-    setOriginalProduct(diamond);
+    setEditedProduct(product);
+    setOriginalProduct(product);
   };
 
   const handleChange = (e) => {
@@ -180,16 +185,10 @@ const ManagerProductList = () => {
 
   const handleUpdate = async () => {
     const requiredFields = [
-      "productCode",
       "name",
-      "price",
       "description",
-      "mainDiamondId",
       "laborPrice",
       "imageLinkList",
-      "subDiamondAmount",
-      "mainDiamondAmount",
-      "shellAmount",
       "collectionId",
       "categoryId",
     ];
@@ -237,7 +236,7 @@ const ManagerProductList = () => {
     }
   };
 
-  const backList = async () =>{
+  const backList = async () => {
     try {
       const response = await ShowAllProduct();
       setProductItems(response);
@@ -308,15 +307,13 @@ const ManagerProductList = () => {
 
         {/* Table diamond list */}
         <div className="manager_manage_product_table_wrapper">
-          <TableContainer component={Paper} style={{marginTop:10}}>
+          <TableContainer component={Paper} style={{ marginTop: 10 }}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                <StyledTableCell align="center">ID</StyledTableCell>
+                  <StyledTableCell align="center">ID</StyledTableCell>
                   <StyledTableCell align="center">Code</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Price</StyledTableCell>
-                  <StyledTableCell align="center">Labor</StyledTableCell>
                   <StyledTableCell align="center">Description</StyledTableCell>
                   <StyledTableCell align="center">Diamond</StyledTableCell>
                   <StyledTableCell align="center">Main & Sub Diamond Amount</StyledTableCell>
@@ -324,25 +321,25 @@ const ManagerProductList = () => {
                   <StyledTableCell align="center">Images</StyledTableCell>
                   <StyledTableCell align="center">Category</StyledTableCell>
                   <StyledTableCell align="center">Collection</StyledTableCell>
+                  <StyledTableCell align="center">Price</StyledTableCell>
+                  <StyledTableCell align="center">Labor</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {productItems.length > 0 ? (
-                  productItems.map((item) => (
+                {currentOrders.length > 0 ? (
+                  currentOrders.map((item) => (
                     <TableRow className="manager_manage_table_body_row" key={item.productId}>
-                     <TableCell align="center">{item.productId}</TableCell>
-                     <TableCell align="center">{item.productCode}</TableCell>
-                     <TableCell align="center">{item.name}</TableCell>
-                     <TableCell align="center">{item.price}</TableCell>
-                     <TableCell align="center">{item.laborPrice}</TableCell>
-                     <TableCell align="center">{item.description}</TableCell>
-                     <TableCell align="center">{mainDiamonds[item.mainDiamondId]}</TableCell>
-                     <TableCell align="center">
+                      <TableCell align="center">{item.productId}</TableCell>
+                      <TableCell align="center">{item.productCode}</TableCell>
+                      <TableCell align="center">{item.name}</TableCell>
+                      <TableCell align="center">{item.description}</TableCell>
+                      <TableCell align="center">{mainDiamonds[item.mainDiamondId]}</TableCell>
+                      <TableCell align="center">
                         {item.mainDiamondAmount} / {item.subDiamondAmount}
                       </TableCell>
-                     <TableCell align="center">{item.shellAmount}</TableCell>
-                     <TableCell align="center">
+                      <TableCell align="center">{item.shellAmount}</TableCell>
+                      <TableCell align="center">
                         {item.imageLinkList ? (
                           <img
                             src={item.imageLinkList.split(";")[0]}
@@ -359,13 +356,13 @@ const ManagerProductList = () => {
                       </TableCell>
                       <TableCell align="center">{categories[item.categoryId]}</TableCell>
                       <TableCell align="center">{collections[item.collectionId]}</TableCell>
+                      <TableCell align="center">{item.laborPrice}</TableCell>
+                      <TableCell align="center">{item.price}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton
-                          onClick={() => handleDelete(item.productId)}
-                        >
+                        <IconButton onClick={() => handleDelete(item.productId)}>
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>
@@ -377,6 +374,7 @@ const ManagerProductList = () => {
                   </TableRow>
                 )}
               </TableBody>
+
             </Table>
           </TableContainer>
         </div>
@@ -395,15 +393,6 @@ const ManagerProductList = () => {
             <div className="manager_manage_product_modal_content">
               <h4>Edit Product Information</h4>
               <div className="manager_manage_product_form_group">
-                <label>Product Code</label>
-                <input
-                  type="text"
-                  name="productCode"
-                  value={editedProduct.productCode}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_product_form_group">
                 <label>Name</label>
                 <input
                   type="text"
@@ -413,29 +402,11 @@ const ManagerProductList = () => {
                 />
               </div>
               <div className="manager_manage_product_form_group">
-                <label>Price</label>
-                <input
-                  type="text"
-                  name="price"
-                  value={editedProduct.price}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_product_form_group">
                 <label>Description</label>
                 <input
                   type="text"
                   name="description"
                   value={editedProduct.description}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_product_form_group">
-                <label>Main Diamond ID</label>
-                <input
-                  type="text"
-                  name="mainDiamondId"
-                  value={editedProduct.mainDiamondId}
                   onChange={handleChange}
                 />
               </div>
@@ -457,36 +428,6 @@ const ManagerProductList = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="manager_manage_product_form_group">
-                <label>Main Diamond Amount</label>
-                <input
-                  type="text"
-                  name="mainDiamondAmount"
-                  value={editedProduct.mainDiamondAmount}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="manager_manage_product_form_group">
-                <label>Sub Diamond Amount</label>
-                <input
-                  type="text"
-                  name="subDiamondAmount"
-                  value={editedProduct.subDiamondAmount}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="manager_manage_product_form_group">
-                <label>Shell Amount</label>
-                <input
-                  type="text"
-                  name="shellAmount"
-                  value={editedProduct.shellAmount}
-                  onChange={handleChange}
-                />
-              </div>
-
               <div className="manager_manage_product_form_group">
                 <label>Collection ID</label>
                 <input
