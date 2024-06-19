@@ -61,7 +61,7 @@ namespace DIAN_.Controllers
 
                 var collection = await _collectionRepository.CreateAsync(collectionDTO.FromCreateDtoToCollection());
 
-                if (collection == null) { return BadRequest("Duplicate category! Please try again!"); }
+                if (collection != null) { return BadRequest("Duplicate category! Please try again!"); }
 
                 return CreatedAtAction(nameof(GetById), new { id = collection.CollectionId }, collection);
             }

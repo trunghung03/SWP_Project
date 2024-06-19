@@ -5,7 +5,9 @@ namespace UserApplication.Dtos.Account
     public class NewUserDto
     {
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
+        [Required]
         public string Token { get; set; }
     }
 }
