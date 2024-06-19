@@ -49,6 +49,7 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var promotion = await _promotionRepository.GetPromotionByCodeAsync(code);
                 if (promotion == null)
                 {
@@ -173,6 +174,7 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if(!ModelState.IsValid) return BadRequest(ModelState);
                 var promotions = await _promotionRepository.GetPromotionByCodeForStaffAsync(code);
                 if (promotions == null || promotions.Count == 0)
                 {

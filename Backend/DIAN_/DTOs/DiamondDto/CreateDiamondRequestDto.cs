@@ -4,37 +4,38 @@ namespace DIAN_.DTOs.DiamondDto
 {
     public class CreateDiamondRequestDto
     {
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "Shape is required.")]
+        [StringLength(50, ErrorMessage = "Shape must not exceed 50 characters.")]
         public string Shape { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Color is required.")]
+        [StringLength(100, ErrorMessage = "Color must not exceed 100 characters.")]
         public string Color { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "Clarity is required.")]
+        [StringLength(50, ErrorMessage = "Clarity must not exceed 50 characters.")]
         public string Clarity { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "Cut is required.")]
+        [StringLength(50, ErrorMessage = "Cut must not exceed 50 characters.")]
         public string Cut { get; set; } = string.Empty;
 
-        [Required]
-        [Range(0.01, 40.00)]
+        [Required(ErrorMessage = "Carat is required.")]
+        [Range(0.01, 40.00, ErrorMessage = "Carat must be between 0.01 and 40.00.")]
         public decimal Carat { get; set; }
 
-        [Required]
-        [Range(0, Double.MaxValue, ErrorMessage = "Cost cannot be smaller than 0")]
+        [Required(ErrorMessage = "Cost is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Cost cannot be smaller than 0.")]
         public decimal Cost { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Certificate scan is required.")]
         public string CertificateScan { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Amount available is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Amount available cannot be smaller than 0.")]
         public int AmountAvailable { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Status is required.")]
         public bool Status { get; set; }
     }
 }

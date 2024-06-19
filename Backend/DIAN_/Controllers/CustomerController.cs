@@ -8,7 +8,6 @@ using UserApplication.Interfaces;
 using DIAN_.DTOs.Account;
 using DIAN_.Repository;
 using DIAN_.Interfaces;
-using DIAN_.Services;
 using DIAN_.Helper;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity.Data;
@@ -215,6 +214,7 @@ namespace UserApplication.Controllers
         {
             try
             {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
                 if (Request.Form.Files.Any())
                 {
                     mailRequest.Attachments = Request.Form.Files;

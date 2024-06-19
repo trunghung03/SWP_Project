@@ -44,6 +44,10 @@ namespace DIAN_.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
                 if (warranty == null)
                 {
