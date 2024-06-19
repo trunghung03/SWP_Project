@@ -54,33 +54,61 @@ namespace DIAN_.Controllers
             }
         }
 
+        /* [HttpPost]
+         public async Task<IActionResult> Create([FromForm] CreateProductRequestDTO productDTO)
+         {
+             try
+             {
+                 var imageLinks = new List<string>();
+                 var savePath = @"C:\Users\Admin\Documents\SWP_Project\Backend\DIAN_\Images";
+
+                 if (productDTO.ImageFiles != null && productDTO.ImageFiles.Count > 0)
+                 {
+                     foreach (var file in productDTO.ImageFiles)
+                     {
+                         var fileName = Path.GetFileName(file.FileName);
+                         var filePath = Path.Combine(savePath, fileName);
+                         using (var stream = new FileStream(filePath, FileMode.Create))
+                         {
+                             await file.CopyToAsync(stream);
+                         }
+                         // Assuming the URL path structure
+                         var fileUrl = $"/images/{fileName}";
+                         imageLinks.Add(fileUrl); // Store file URL
+                     }
+                 }
+
+                 // Join the image links with a semicolon
+                 var imageLinkList = string.Join(";", imageLinks);
+
+                 // Check if the MainDiamondId exists
+                 var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
+                 if (!mainDiamondExists)
+                 {
+                     return BadRequest("The specified MainDiamondId does not exist.");
+                 }
+
+                 // Check if the ProCode already exists
+                 var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
+                 if (proCodeExists)
+                 {
+                     return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
+                 }
+
+                 var product = productDTO.ToProductFromCreateDTO(imageLinkList);
+                 var createdProduct = await _productRepo.CreateAsync(product);
+
+                 return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+             }catch(Exception)
+             {
+                 throw;
+             }
+         }*/
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateProductRequestDTO productDTO)
+        public async Task<IActionResult> Create([FromBody] CreateProductRequestDTO productDTO)
         {
             try
             {
-                var imageLinks = new List<string>();
-                var savePath = @"C:\Users\Admin\Documents\SWP_Project\Backend\DIAN_\Images";
-
-                if (productDTO.ImageFiles != null && productDTO.ImageFiles.Count > 0)
-                {
-                    foreach (var file in productDTO.ImageFiles)
-                    {
-                        var fileName = Path.GetFileName(file.FileName);
-                        var filePath = Path.Combine(savePath, fileName);
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-                        // Assuming the URL path structure
-                        var fileUrl = $"/images/{fileName}";
-                        imageLinks.Add(fileUrl); // Store file URL
-                    }
-                }
-
-                // Join the image links with a semicolon
-                var imageLinkList = string.Join(";", imageLinks);
-
                 // Check if the MainDiamondId exists
                 var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
                 if (!mainDiamondExists)
@@ -95,11 +123,12 @@ namespace DIAN_.Controllers
                     return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
                 }
 
-                var product = productDTO.ToProductFromCreateDTO(imageLinkList);
+                var product = productDTO.ToProductFromCreateDTO();
                 var createdProduct = await _productRepo.CreateAsync(product);
 
                 return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
-            }catch(Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }
