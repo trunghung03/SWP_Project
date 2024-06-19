@@ -1,3 +1,26 @@
+.google_login_btn {
+  background-color: white;
+  color: #4285f4; // Google blue color for text
+  border: 1px solid #4285f4;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 10px 0;
+  width: 100%; // Make it full width to match the layout
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+
+  .google-icon {
+    margin-right: 10px;
+  }
+}
 input {
   height: 30px;
 }

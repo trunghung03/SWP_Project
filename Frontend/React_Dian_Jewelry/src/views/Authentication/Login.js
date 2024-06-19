@@ -8,6 +8,7 @@ import "../../styles/Authentication/Login.scss";
 import rightImage from "../../assets/img/right.jpeg";
 import rightImage2 from "../../assets/img/right2.jpg";
 import rightImage3 from "../../assets/img/right3.jpg";
+
 import {
   customerLoginApi,
   employeeLoginApi,
@@ -30,8 +31,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setCartItemsForUser } = useCart();
-  const clientID =
-    "801507159871-cnsbfjcva7ll2i18lhj13rv0mqorbhb0.apps.googleusercontent.com";
+  
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
     const rememberedPassword = localStorage.getItem("rememberedPassword");
@@ -246,16 +246,7 @@ const Login = () => {
 
     setLoading(false);
   };
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId: clientID,
-        scope: "",
-      });
-    }
-
-    gapi.load("client:auth2", start);
-  }, []);
+ 
 
   useEffect(() => {
     const togglePassword = document.getElementById("togglePassword");
@@ -296,28 +287,34 @@ const Login = () => {
     ),
   };
 
-  const onSuccess = async (res) => {
+  const onSuccess = async(res) => {
+   
+    const decoded = jwtDecode(res.credential);
+
+    
+
     const body = {
-      email: res.profileObj.email,
+      email: decoded.email,
       password: "123",
-      lastName: res.profileObj.familyName,
-      firstName: res.profileObj.givenName,
+      lastName: decoded.family_name,
+      firstName: decoded.given_name,
       address: "",
       phoneNumber: "",
       points: 0,
     };
-
+    
     const userInfoRes = await googleLoginApi(body);
     localStorage.setItem("token", userInfoRes.data.token);
-
-    if (userInfoRes.status == 200) {
+    
+    if (userInfoRes.status === 200) {
       setUser({
-        firstName: res.profileObj.givenName,
-        lastName: res.profileObj.familyName,
-        email: res.profileObj.email,
+        firstName: decoded.given_name,
+        lastName: decoded.family_name,
+        email: decoded.email,
         points: 0,
       });
-      localStorage.setItem("firstName", res.profileObj.givenName);
+      localStorage.setItem("firstName", decoded.given_name);
+      localStorage.setItem("lastName", decoded.family_name);
       navigate("/home");
     }
   };
@@ -326,7 +323,7 @@ const Login = () => {
     <div className="main_container">
       <div className="login_wrapper">
         <div className="left_side">
-          <GoogleOAuthProvider clientId={clientID}>
+        
             <form className="sign_in_form" onSubmit={handleLogin}>
               <h3 className="sign_in_title">Sign in</h3>
               {error && <div className="alert alert-danger">{error}</div>}
@@ -403,16 +400,16 @@ const Login = () => {
                 <hr className="line" />
                 <GoogleLogin
                   className="google_login_btn"
-                  clientId={clientID}
+              
                   buttonText="Login with Google"
                   onSuccess={onSuccess}
                   onFailure={onFailure}
-                  cookiePolicy="single_host_origin"
-                  isSignedIn={false}
+                
+                 
                 />
               </div>
             </form>
-          </GoogleOAuthProvider>
+         
         </div>
         <div className="right_side">
           <Slider {...sliderSettings}>
