@@ -38,9 +38,20 @@ const getProductCollection = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/collections/${id}`);
   return response.data;
 };
+
+const getAllCategories = async () =>{
+  const response = await axios.get(`${API_BASE_URL}/categories`)
+  return response.data;
+}
+
 const getProductDiamond = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/${id}`);
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getProductCollection,getProductDiamond, getProductByName };
+const getAllCollection = async () => {
+  const response = await axios.get(`${API_BASE_URL}/collections`);
+  return response.data;
+};
+
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getAllCollection,getProductCollection,getProductDiamond, getAllCategories,getProductByName };
