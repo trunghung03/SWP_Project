@@ -1,6 +1,6 @@
 ﻿using DIAN_.VnPay;
 
-namespace DIAN_.Services
+namespace DIAN_.Interfaces
 {
     public interface IVnPayService
     {

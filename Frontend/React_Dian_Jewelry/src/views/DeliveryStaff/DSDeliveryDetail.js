@@ -117,7 +117,6 @@ function DSDeliveryDetail() {
                   </div>
                 </div>
               ))}
-            {/* <hr className="manager_header_line"></hr> */}
             <div style={{ margin: "4.3%", padding: "10px" }}>
               <div style={{ marginBottom: "10px" }}>
                 <AccountCircleIcon /> Name: {orderDetails.firstName}{" "}

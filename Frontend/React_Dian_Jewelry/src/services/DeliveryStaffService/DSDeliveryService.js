@@ -16,21 +16,22 @@ const updateDeliveryStatus = (id, data) => {
   return axios.put(`${API_BASE_URL}/purchaseorders/${id}`, data);
 };
 
-export const getDeliveryStaffOrderList = async (staffId) => {
-  return axios
-    .get(`https://localhost:7184/api/employees/deliverystaff/orderlists`, {
-      params: { staffId },
-    })
-    .then((response) => {
-      return response.data;
-    })
-    .catch(function (error) {
-      return error;
-    });
-};
+const getDeliveryStaffOrderList = async (staffId) => {
+  return axios.get(`${API_BASE_URL}/employees/deliverystaff/orderlists`, { params: { staffId } })
+  .then((response) => {
+    return response.data;
+  })
+  .catch(function (error) {
+    return error;
+  });
+}
+const getDeliPurchaseOrderByStatus = async (status, id) => {
+  return axios.get(`${API_BASE_URL}/employees/deliverystaff/status/${status}`,{params:{id}})
+}
 export {
   getDeliveryOrderDetail,
   getAllDeliveryOrder,
   updateDeliveryStatus,
-
+  getDeliPurchaseOrderByStatus,
+  getDeliveryStaffOrderList
 };

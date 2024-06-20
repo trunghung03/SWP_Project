@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/img/logo.png';
 import '../../../styles/SalesStaff/SalesStaffManageContent/SSContentList.scss';
 import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffSidebar.js';
-import { getContentList, getContentByTitle } from '../../../services/SalesStaffService/SSContentService.js';
+import { getContentList, getContentByTitle, deleteContentById } from '../../../services/SalesStaffService/SSContentService.js';
 
 // Content card
 const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete }) => {
@@ -27,7 +27,6 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
       }
     });
   };
-
   return (
     <div className="ss_manage_content_content_card" style={{ cursor: 'pointer' }}>
       <img src={image} alt={title} />
@@ -50,8 +49,9 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
 function SSContentList() {
   const [contents, setContents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
-
+  const [currentPage, setCurrentPage] = useState(1);
   const fetchData = async () => {
     try {
       const response = await getContentList();
@@ -72,6 +72,7 @@ function SSContentList() {
           const response = await getContentByTitle(searchQuery.trim());
           if (response.data.length > 0) {
             setContents(response.data);
+            setIsSearch(true);
           } else {
             swal("Blog not found!", "Please try another title.", "error");
             fetchData();
@@ -85,28 +86,41 @@ function SSContentList() {
       }
     }
   };
+  const handleBackClick = () => {
+    setSearchQuery("");
+    setIsSearch(false);
+    getContentList();
+  };
 
- const handleDelete = async (articleID) => {
-//     swal({
-//         title: "Are you sure to delete this article?",
-//         text: "This action cannot be undone",
-//         icon: "warning",
-//         buttons: true,
-//         dangerMode: true,
-//     }).then(async (willDelete) => {
-//         if (willDelete) {
-//             try {
-//                 await deleteContentById(productID);
-//                 const response = await S();
-//                 setEmployeeList(response);
-//                 swal("Deleted successfully!", "The employee has been deleted.", "success");
-//             } catch (error) {
-//                 console.error("Error deleting diamond:", error);
-//                 swal("Something went wrong!", "Failed to delete the employee. Please try again.", "error");
-//             }
-//         }
-//     });
- };
+  const handleDelete = async (contentId) => {
+    swal({
+      title: "Are you sure to delete this content?",
+      text: "This action cannot be undone",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        try {
+          await deleteContentById(contentId);
+          fetchData(currentPage);
+          swal(
+            "Deleted successfully!",
+            "The diamond has been deleted.",
+            "success"
+          );
+        } catch (error) {
+          console.error("Error deleting diamond:", error);
+          swal(
+            "Something went wrong!",
+            "Failed to delete the diamond. Please try again.",
+            "error"
+          );
+        }
+      }
+    });
+  };
+
 
   return (
     <div className="ss_manage_content_all_container">
@@ -123,11 +137,16 @@ function SSContentList() {
               placeholder="Search by title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
+        {isSearch && (
+              <button className="SS_back_button" onClick={handleBackClick}>
+                Back to Content List
+              </button>
+            )}
         <div className="ss_manage_content_create_button_section">
           <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-add-content')}>Create new blog</button>
         </div>

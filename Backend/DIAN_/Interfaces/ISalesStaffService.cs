@@ -2,7 +2,7 @@
 using DIAN_.Helper;
 using DIAN_.Models;
 
-namespace DIAN_.Services
+namespace DIAN_.Interfaces
 {
     public interface ISalesStaffService
     {
@@ -11,6 +11,8 @@ namespace DIAN_.Services
         Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int staffId);
 
         Task<Purchaseorder> UpdateOrderStatus(string status, int orderId);
+
+        Task DeleteUnpaidOrdersOlderThan3Days();
 
         Task<bool> PrepareCertificate(int orderId); //prepare pdf
 

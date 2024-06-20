@@ -24,6 +24,7 @@ import { getSalesStaffOrderList, getPurchaseOrderByStatus } from "../../../servi
 const SSOrderList = () => {
   const navigate = useNavigate();
   const [orderList, setOrderList] = useState([]);
+  const [initialOrderList, setInitialOrderList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
@@ -75,8 +76,10 @@ const SSOrderList = () => {
       console.log("Fetched all orders:", orders);
       if (Array.isArray(orders)) {
         setOrderList(orders);
+        setInitialOrderList(orders);
       } else {
         setOrderList([]);
+        setInitialOrderList(orders);
         console.error("Expected an array but got:", orders);
       }
     } catch (error) {
@@ -115,9 +118,9 @@ const SSOrderList = () => {
       const searchValue = e.target.value.toLowerCase();
       if (searchValue.trim() === "") {
         setIsSearch(false);
-        fetchAllOrders();
+       setOrderList(initialOrderList);
       } else {
-        const filteredOrders = currentOrder.filter(order =>
+        const filteredOrders = initialOrderList.filter(order =>
           order.orderId.toString().toLowerCase().includes(searchValue) ||
           order.name.toLowerCase().includes(searchValue)
         );
@@ -134,7 +137,7 @@ const SSOrderList = () => {
   const handleBackClick = () => {
     setSearchQuery("");
     setIsSearch(false);
-    fetchAllOrders();
+    fetchAllOrders(initialOrderList);
   };
 
   return (

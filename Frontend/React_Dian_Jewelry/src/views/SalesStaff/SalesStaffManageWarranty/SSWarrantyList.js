@@ -33,6 +33,7 @@ const SSWarrantyList = () => {
   const navigate = useNavigate();
   const [warrantyList, setWarrantyList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedWarranty, setEditedWarranty] = useState({});
   const [originalWarranty, setOriginalWarranty] = useState({});
