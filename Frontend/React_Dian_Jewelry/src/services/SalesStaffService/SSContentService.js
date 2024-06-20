@@ -1,6 +1,7 @@
+
 import axios from 'axios';
 
-const API_BASE_URL = 'https://localhost:7184/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const getContentList = () => {
     return axios.get(`${API_BASE_URL}/articles`);
@@ -8,6 +9,10 @@ const getContentList = () => {
 
 const getContentByTitle = (title) => {
     return axios.get(`${API_BASE_URL}/articles/${title}`);
+};
+
+const getContentById = (id) => {
+    return axios.get(`${API_BASE_URL}/articles/${id}`);
 };
 
 const deleteContentById = (id) => {
@@ -19,7 +24,10 @@ const createContent = async (data) => {
     return response.data;
 };
 
+const updateContentById = (id, data) => {
+    return axios.put(`${API_BASE_URL}/articles/update/${id}`, data);
+  };
 
-export { getContentList, getContentByTitle, deleteContentById, createContent};
+export { getContentList, getContentByTitle, deleteContentById, createContent, updateContentById, getContentById};
 
 

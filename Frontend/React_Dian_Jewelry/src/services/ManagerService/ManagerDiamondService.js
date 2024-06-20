@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://localhost:7184/api';
+// const API_BASE_URL = 'https://localhost:7184/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const ShowAllDiamond = async (pageNumber = 1, pageSize = 6) => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/all`, {

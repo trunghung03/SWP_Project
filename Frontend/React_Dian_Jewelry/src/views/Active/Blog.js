@@ -206,7 +206,7 @@ function Blog() {
             placeholder="Search blog..."
             value={searchTerm}
             onChange={handleSearchChange}
-            onKeyPress={handleSearchKeyPress}
+            onKeyUp={handleSearchKeyPress}
           />
           <i className="fas fa-search"></i>
         </div>

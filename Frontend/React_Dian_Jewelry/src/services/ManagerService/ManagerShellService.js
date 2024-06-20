@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_BASE_URL = 'https://localhost:7184/api';
+// const API_BASE_URL = 'https://localhost:7184/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const ShowAllShell = async () => {
     const response = await axios.get(`${API_BASE_URL}/shellmaterials`);
     return response.data;

@@ -21,7 +21,9 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
+    "browserify-fs": "^1.0.0",
     "chart.js": "^4.4.3",
+    "dotenv": "^16.4.5",
     "draft-js": "^0.11.7",
     "gapi-script": "^1.2.0",
     "html2canvas": "^1.4.1",
@@ -30,6 +32,7 @@
     "jwt-decode": "^4.0.0",
     "mui": "^0.0.1",
     "passport-oauth2": "^1.8.0",
+    "path-browserify": "^1.0.1",
     "quill-image-resize-module": "^3.0.0",
     "quill-image-resize-module-react": "^3.0.0",
     "quill-resize-image": "^1.0.4",
@@ -76,6 +79,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "dotenv-webpack": "^8.1.0",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
   }
 }

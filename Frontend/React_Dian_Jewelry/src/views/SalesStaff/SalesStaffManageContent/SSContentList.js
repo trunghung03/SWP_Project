@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../../assets/img/logo.png';
+import logo from "../../../assets/img/logoN.png";
 import '../../../styles/SalesStaff/SalesStaffManageContent/SSContentList.scss';
 import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffSidebar.js';
 import { getContentList, getContentByTitle, deleteContentById } from '../../../services/SalesStaffService/SSContentService.js';
 
 // Content card
-const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete }) => {
+const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete, onUpdate }) => {
   const handleDeleteClick = () => {
     swal({
       title: "Are you sure to remove this blog?",
@@ -27,6 +27,9 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
       }
     });
   };
+  const handleUpdateClick = () => {
+    onUpdate(articleID);
+  };
   return (
     <div className="ss_manage_content_content_card" style={{ cursor: 'pointer' }}>
       <img src={image} alt={title} />
@@ -39,7 +42,7 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
         <p className="ss_manage_content_content_date">{new Date(date).toLocaleDateString()}</p>
       </div>
       <div className="ss_manage_content_content_actions">
-        <i className="fas fa-pen" style={{ color: '#69706e' }}></i>
+      <i className="fas fa-pen" onClick={handleUpdateClick} style={{ color: '#69706e' }}></i>
         <i className="fas fa-trash" onClick={handleDeleteClick} style={{ color: '#69706e' }}></i>
       </div>
     </div>
@@ -102,6 +105,10 @@ function SSContentList() {
       swal("Something is wrong!", "Failed to delete the blog. Please try again.", "error");
     }
   };
+  const handleUpdate = (id) => {
+    navigate(`/sales-staff-update-content/${id}`);
+  };
+  
 
   return (
     <div className="ss_manage_content_all_container">
@@ -132,9 +139,10 @@ function SSContentList() {
           <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-add-content')}>Create new blog</button>
         </div>
         <div className="ss_manage_content_content_list">
-          {contents.map((content) => (
-            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} />
+        {contents.map((content) => (
+            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} onUpdate={handleUpdate}/>
           ))}
+          
         </div>
       </div>
     </div>

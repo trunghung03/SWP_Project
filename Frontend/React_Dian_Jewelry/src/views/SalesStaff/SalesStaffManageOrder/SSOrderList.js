@@ -19,7 +19,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { getSalesStaffOrderList, getPurchaseOrderByStatus } from "../../../services/SalesStaffService/SSOrderService.js";
+import {
+  getSalesStaffOrderList,
+  getPurchaseOrderByStatus,
+} from "../../../services/SalesStaffService/SSOrderService.js";
 
 const SSOrderList = () => {
   const navigate = useNavigate();
@@ -53,7 +56,10 @@ const SSOrderList = () => {
       fetchAllOrders();
     } else {
       try {
-        const orders = await getPurchaseOrderByStatus(selectedValue, employeeId);
+        const orders = await getPurchaseOrderByStatus(
+          selectedValue,
+          employeeId
+        );
         console.log("Fetched orders:", orders?.data);
         if (orders) {
           setOrderList([...orders?.data]);
@@ -93,22 +99,22 @@ const SSOrderList = () => {
   }, [employeeId]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  
- const [totalPages, setTotalPages] = useState(0);
+
+  const [totalPages, setTotalPages] = useState(0);
   useEffect(() => {
     console.log(orderList);
     const ordersPerPage = 6;
 
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
 
-  const filteredOrders =
-    sortOrder === "default"
-      ? orderList
-      : orderList?.filter((order) => order.orderStatus === sortOrder);
-      setTotalPages(Math.ceil(filteredOrders.length / ordersPerPage));
+    const filteredOrders =
+      sortOrder === "default"
+        ? orderList
+        : orderList?.filter((order) => order.orderStatus === sortOrder);
+    setTotalPages(Math.ceil(filteredOrders.length / ordersPerPage));
     setCurrentOrder(filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder));
-  },[orderList,currentPage])
+  }, [orderList, currentPage]);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -118,18 +124,19 @@ const SSOrderList = () => {
       const searchValue = e.target.value.toLowerCase();
       if (searchValue.trim() === "") {
         setIsSearch(false);
-       setOrderList(initialOrderList);
+        setOrderList(initialOrderList);
       } else {
-        const filteredOrders = initialOrderList.filter(order =>
-          order.orderId.toString().toLowerCase().includes(searchValue) ||
-          order.name.toLowerCase().includes(searchValue)
+        const filteredOrders = initialOrderList.filter(
+          (order) =>
+            order.orderId.toString().toLowerCase().includes(searchValue) ||
+            order.name.toLowerCase().includes(searchValue)
         );
         if (filteredOrders.length > 0) {
           setOrderList(filteredOrders);
-          setIsSearch(true); 
+          setIsSearch(true);
         } else {
-          setOrderList([]); 
-          setIsSearch(true); 
+          setOrderList([]);
+          setIsSearch(true);
         }
       }
     }
@@ -164,8 +171,13 @@ const SSOrderList = () => {
           Order List
         </h3>
         <div className="ss_header_pagination_list">
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
-            <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
+          <FormControl
+            variant="standard"
+            sx={{ m: 1, minWidth: 120, height: 30 }}
+          >
+            <InputLabel id="demo-simple-select-standard-label">
+              Status
+            </InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
@@ -194,7 +206,9 @@ const SSOrderList = () => {
               <button
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
-                className={index + 1 === currentPage ? "manager_order_active" : ""}
+                className={
+                  index + 1 === currentPage ? "manager_order_active" : ""
+                }
               >
                 {index + 1}
               </button>
@@ -214,9 +228,13 @@ const SSOrderList = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">Order ID</StyledTableCell>
-                  <StyledTableCell align="center">Customer Name</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Customer Name
+                  </StyledTableCell>
                   <StyledTableCell align="center">Created Date</StyledTableCell>
-                  <StyledTableCell align="center">Shipping Address</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Shipping Address
+                  </StyledTableCell>
                   <StyledTableCell align="center">Phone number</StyledTableCell>
                   <StyledTableCell align="center">Order Status</StyledTableCell>
                   <StyledTableCell align="center">Detail</StyledTableCell>
@@ -225,31 +243,43 @@ const SSOrderList = () => {
               <TableBody>
                 {currentOrder.length > 0 ? (
                   currentOrder.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.orderId}>
+                    <TableRow
+                      className="manager_manage_table_body_row"
+                      key={item.orderId}
+                    >
                       <TableCell align="center">{item.orderId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{item.date}</TableCell>
-                      <TableCell align="center">{item.shippingAddress}</TableCell>
+                      <TableCell align="center">
+                        {new Date(item.date).toLocaleDateString("en-CA")}
+                      </TableCell>
+                      <TableCell align="center">
+                        {item.shippingAddress}
+                      </TableCell>
                       <TableCell align="center">{item.phoneNumber}</TableCell>
                       <TableCell align="center">{item.orderStatus}</TableCell>
                       <TableCell align="center">
-                        <InfoIcon style={{ cursor: "pointer" }} onClick={() => viewDetail(item.orderId)} />
+                        <InfoIcon
+                          style={{ cursor: "pointer" }}
+                          onClick={() => viewDetail(item.orderId)}
+                        />
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="7" align="center">No order found</TableCell>
+                    <TableCell colSpan="7" align="center">
+                      No order found
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </TableContainer>
           {isSearch && (
-              <button className="SS_back_button" onClick={handleBackClick}>
-                Back to Order List
-              </button>
-            )}
+            <button className="SS_back_button" onClick={handleBackClick}>
+              Back to Order List
+            </button>
+          )}
         </div>
       </div>
     </div>

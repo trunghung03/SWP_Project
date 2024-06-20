@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL_WARRANTY = 'https://localhost:7184/api';
-
+// const API_BASE_URL_WARRANTY = 'https://localhost:7184/api';
+const API_BASE_URL_WARRANTY = process.env.REACT_APP_API_BASE_URL;
 //Get warranty lists
 
 const fetchAllWarranty = async () => {
