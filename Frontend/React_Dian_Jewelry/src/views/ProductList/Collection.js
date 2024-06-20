@@ -16,7 +16,7 @@ import Insta from '../../components/BlogInspired/BlogInspired.js';
 function Collection() {
     const location = useLocation();
     const [products, setProducts] = useState([]);
-    const [collectionInfo, setCollectionInfo] = useState({});
+    const [collectionInfo, setCollectionInfo] = useState(JSON.parse(localStorage.getItem('collectionInfo')) || {});
     const [navItems, setNavItems] = useState([]);
     const [clarity, setClarity] = useState('');
     const [carat, setCarat] = useState('');
@@ -24,25 +24,27 @@ function Collection() {
     const [sort, setSort] = useState('');
     const [shape, setShape] = useState('');
     const [resetKey, setResetKey] = useState(Date.now());
+    const [transitionKey, setTransitionKey] = useState(Date.now());
 
     useEffect(() => {
         const { collectionId } = location.state || {};
-        if (collectionId) {
-            setNavItems([
-                { name: 'Home', link: '/home' },
-                { name: 'Diamond Jewelry', link: '' },
-                { name: 'Collection', link: '' }
-            ]);
-
-            getCollectionDetail(collectionId)
+        if (collectionId || collectionInfo.id) {
+            const id = collectionId || collectionInfo.id;
+            getCollectionDetail(id)
                 .then(response => {
                     setCollectionInfo(response.data);
+                    localStorage.setItem('collectionInfo', JSON.stringify(response.data));
+                    setNavItems([
+                        { name: 'Home', link: '/home' },
+                        { name: 'Diamond Jewelry', link: '' },
+                        { name: response.data.name }
+                    ]);
                 })
                 .catch(error => console.log('Error fetching collection details:', error));
 
             getProductList()
                 .then(response => {
-                    let filteredProducts = response.data.filter(product => product.collectionId === collectionId);
+                    let filteredProducts = response.data.filter(product => product.collectionId === id);
 
                     if (clarity !== '') {
                         filteredProducts = filteredProducts.filter(product => product.clarity === clarity);
@@ -72,7 +74,6 @@ function Collection() {
                 })
                 .catch(error => console.log('Error fetching products:', error));
         }
-
     }, [location.state, clarity, carat, color, shape]);
 
     useEffect(() => {
@@ -105,11 +106,18 @@ function Collection() {
         setResetKey(Date.now());
     };
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            document.querySelector('.collection_list_main_image').classList.add('visible');
+        }, 10);
+        return () => clearTimeout(timeout);
+    }, [transitionKey]);
+
     return (
         <div className="Collection">
             <HeaderComponent />
             <SubNav items={navItems} />
-            <div className="collection_list_main_image">
+            <div key={transitionKey} className="collection_list_main_image">
                 <div className="collection_list_content">
                     <h2 className="collection_list_title">{collectionInfo.name}</h2>
                     <p>{collectionInfo.description}</p>

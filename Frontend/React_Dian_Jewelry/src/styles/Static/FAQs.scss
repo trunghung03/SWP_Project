@@ -1,6 +1,6 @@
 //Main title
 .faqs_banner_container {
-    height: 350px;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,10 +17,39 @@
 
 // End main title 
 
+// FAQ Search Section
+.faqs_search_section {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: -30px;
+  position: relative;
+}
+
+.faqs_search_input {
+  width: 50%;
+  height: 40px;
+  padding: 10px 20px;
+  border: 1px solid #1c1c1c;
+  font-size: 16px;
+  outline: none;
+  line-height: 100px; 
+}
+
+.faqs_search_button {
+  height: 40px;
+  width: 50px;
+  border: none;
+  background-color: #1c1c1c;
+  color: white;
+  font-size: 16px;
+}
+
+
 // Main FAQS 
 .main_faqs_container {
     padding: 20px 60px;
-    margin: 20px;
+    margin: 0 20px 20px 20px;
     border-radius: 8px;
   }
   
@@ -66,6 +95,8 @@
   
   
 // End Main FAQS 
+
+
 
 // Still need help
 .faqs_help_container {

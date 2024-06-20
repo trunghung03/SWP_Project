@@ -38,7 +38,16 @@ function Shape() {
 
     const handleNavigate = (path, state) => {
         navigate(path, { state });
+        setTimeout(() => {
+            const element = document.getElementById('productShapeScrollto');
+            const offset = element.offsetTop - 50; 
+            window.scrollTo({
+                top: offset,
+                behavior: 'smooth'
+            });
+        }, 0);
     };
+
 
     useEffect(() => {
         const { shape } = location.state || {};
@@ -114,7 +123,17 @@ function Shape() {
         setSort('');
         setResetKey(Date.now());
     };
+
+    useEffect(() => {
+        const element = document.getElementById('productShapeScrollto');
+        const offset = element.offsetTop - 50; 
+        window.scrollTo({
+            top: offset,
+            behavior: 'smooth'
+        });
+    }, []);
     
+
 
     return (
         <div className="Shape">
@@ -186,8 +205,8 @@ function Shape() {
                     </div>
                 </div>
             </div>
-            <div className="shape_filters_and_products">
-                <div className="shape_filters_products">
+            <div className="shape_filters_and_products" id="productShapeScrollto">
+                <div className="shape_filters_products " >
                     {(clarity || carat || color || sort) && (
                         <Button
                             onClick={handleRemoveFilters}
@@ -304,7 +323,7 @@ function Shape() {
                         </Select>
                     </FormControl>
                 </div>
-                <ProductList products={products}  key={resetKey} />
+                <ProductList products={products} key={resetKey} />
             </div>
             <Question />
             <ScrollToTop />

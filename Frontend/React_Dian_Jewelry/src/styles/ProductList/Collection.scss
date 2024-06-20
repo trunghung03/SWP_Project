@@ -2,21 +2,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 58% 0 8%;
+    padding: 0 65% 0 7%;
     background-color: #f6f6f6;
     background: url('../../assets/img/CollectionImg.jpg') no-repeat center center;
     background-size: cover;
     width: 100%;
     height: 430px;
     color: #1c1c1c;
+    opacity: 0; 
+    transition: opacity 1.4s ease-in-out, transform 1.2s ease-in-out; 
+    margin-top: -20px;
+}
+
+.collection_list_main_image.visible {
+    opacity: 1; 
+    transform: translateY(20px);
 }
 
 .collection_list_title {
     font-weight: bold;
+    color: #1c1c1c;
 }
 
-.collection_list_content p{
-    font-size: 18px;
+.collection_list_content p {
+    font-size: 15px;
+    color: #1c1c1c;
 }
 
 .collection_filters_and_products {
@@ -44,12 +54,12 @@
         }
     }
 
-    .collection_filter_group_sort{
+    .collection_filter_group_sort {
         margin: 0 20px;
         width: 200px;
     }
 
-    .collection_filter_group_remove{
+    .collection_filter_group_remove {
         margin: 0 20px;
         color: #1c1c1c;
         border: 1px solid #1c1c1c;

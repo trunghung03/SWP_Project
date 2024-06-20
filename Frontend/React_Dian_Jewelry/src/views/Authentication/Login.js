@@ -21,7 +21,6 @@ import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
-
 const Login = () => {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
@@ -31,7 +30,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setCartItemsForUser } = useCart();
-  
+
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
     const rememberedPassword = localStorage.getItem("rememberedPassword");
@@ -246,7 +245,6 @@ const Login = () => {
 
     setLoading(false);
   };
- 
 
   useEffect(() => {
     const togglePassword = document.getElementById("togglePassword");
@@ -287,11 +285,8 @@ const Login = () => {
     ),
   };
 
-  const onSuccess = async(res) => {
-   
+  const onSuccess = async (res) => {
     const decoded = jwtDecode(res.credential);
-
-    
 
     const body = {
       email: decoded.email,
@@ -302,22 +297,47 @@ const Login = () => {
       phoneNumber: "",
       points: 0,
     };
-    
+
     const userInfoRes = await googleLoginApi(body);
     localStorage.setItem("token", userInfoRes.data.token);
-    
+    let userGGInfoRes = await getUserInfo(decoded.email);
+
     if (userInfoRes.status === 200) {
       setUser({
         firstName: decoded.given_name,
         lastName: decoded.family_name,
         email: decoded.email,
-        points: 0,
+        points:  userGGInfoRes.data.points,
       });
       localStorage.setItem("firstName", decoded.given_name);
       localStorage.setItem("lastName", decoded.family_name);
+      localStorage.setItem("role", "Customer");
+      localStorage.setItem("customerId", userGGInfoRes.data.customerId);
+
+
+      // let userInfoRes = await getUserInfo(email);
+      //     if (userInfoRes && userInfoRes.data) {
+      //       localStorage.setItem("customerId", userInfoRes.data.customerId);
+      //       localStorage.setItem("email", userInfoRes.data.email);
+      //       localStorage.setItem("firstName", userInfoRes.data.firstName);
+      //       localStorage.setItem("lastName", userInfoRes.data.lastName);
+      //       localStorage.setItem("points", userInfoRes.data.points);
+      //       localStorage.setItem("address", userInfoRes.data.address);
+      //       localStorage.setItem("phone", userInfoRes.data.phoneNumber);
+
+      //       setUser({
+      //         firstName: userInfoRes.data.firstName,
+      //         lastName: userInfoRes.data.lastName,
+      //         email: userInfoRes.data.email,
+      //         points: userInfoRes.data.points,
+      //       });
+
+      //       setCartItemsForUser(userInfoRes.data.customerId);
+      //     }
       navigate("/home");
     }
   };
+
   const onFailure = (res) => { };
 
   const handleGuestLogin = () => {
@@ -328,100 +348,104 @@ const Login = () => {
     <div className="main_container">
       <div className="login_wrapper">
         <div className="left_side">
-        
-            <form className="sign_in_form" onSubmit={handleLogin}>
-              <h3 className="sign_in_title">Sign in</h3>
-              {error && <div className="alert alert-danger">{error}</div>}
-              <div className="email_section">
-                <label className="email_label" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  placeholder="Enter email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="password_section mb-3 position-relative">
-                <label className="password_label" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  placeholder="Enter password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <span className="password_eye">
-                  <i
-                    className="far fa-eye"
-                    id="togglePassword"
-                    style={{ cursor: "pointer" }}
-                  ></i>
-                </span>
-              </div>
-              <div className="remember_forgot_section mb-3">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                <label className="remember_me">Remember me</label>
-                <Link className="forgot_password_link" to="/forgot-password">
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="submit_section">
-                <button
-                  type="submit"
-                  className="sign_in_button btn btn-block"
-                  disabled={loading}
-                >
-                  {loading && (
-                    <i
-                      className="fas fa-spinner fa-spin"
-                      style={{ marginRight: "5px" }}
-                    ></i>
-                  )}
-                  Sign in
-                </button>
-              </div>
-              <div className="sign_up_section">
-                <span>
-                  Don't have an account?{" "}
-                  <Link className="sign_up_link" to="/register">
-                    Sign up
-                  </Link>
-                </span>
-              </div>
-              <div className="google_section text-center">
-                <hr className="line" />
-                <GoogleLogin
-                  className="google_login_btn "
-              
-                  buttonText="Login with Google"
-                  onSuccess={onSuccess}
-                  onFailure={onFailure}
-                
-                 
-                />
-              </div>
-              <div
-                className="guest_login_section text-center"
-                onClick={handleGuestLogin}
-                style={{ cursor: "pointer" }}
+          <form className="sign_in_form" onSubmit={handleLogin}>
+            <h3 className="sign_in_title">Sign in</h3>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <div className="email_section">
+              <label className="email_label" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                placeholder="Enter email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="password_section mb-3 position-relative">
+              <label className="password_label" htmlFor="password">
+                Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                placeholder="Enter password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <span className="password_eye">
+                <i
+                  className="far fa-eye"
+                  id="togglePassword"
+                  style={{ cursor: "pointer" }}
+                ></i>
+              </span>
+            </div>
+            <div className="remember_forgot_section mb-3">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label className="remember_me">Remember me</label>
+              <Link className="forgot_password_link" to="/forgot-password">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="submit_section">
+              <button
+                type="submit"
+                className="sign_in_button btn btn-block"
+                disabled={loading}
               >
-                Sign in as guest
-              </div>
-            </form>
-         
+                {loading && (
+                  <i
+                    className="fas fa-spinner fa-spin"
+                    style={{ marginRight: "5px" }}
+                  ></i>
+                )}
+                Sign in
+              </button>
+            </div>
+            <div className="sign_up_section">
+              <span>
+                Don't have an account?{" "}
+                <Link className="sign_up_link" to="/register">
+                  Sign up
+                </Link>
+              </span>
+            </div>
+            <div className="google_section text-center">
+              <hr className="line" />
+              <GoogleLogin
+                className="google_login_btn"
+                buttonText="Login with Google"
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+                render={(renderProps) => (
+                  <button
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    className="google_custom_btn"
+                  >
+                    <i className="fab fa-google google-icon"></i> Login with Google
+                  </button>
+                )}
+              />
+            </div>
+            <div
+              className="guest_login_section text-center"
+              onClick={handleGuestLogin}
+              style={{ cursor: "pointer" }}
+            >
+              Sign in as guest
+            </div>
+          </form>
         </div>
         <div className="right_side">
           <Slider {...sliderSettings}>
@@ -429,7 +453,11 @@ const Login = () => {
               <img className="right_image" src={rightImage} alt="Ring photo" />
             </div>
             <div>
-              <img className="right_image" src={rightImage2} alt="Ring photo" />
+              <img
+                className="right_image"
+                src={rightImage2}
+                alt="Ring photo"
+              />
             </div>
             <div>
               <img className="right_image" src={rightImage3} alt="" />

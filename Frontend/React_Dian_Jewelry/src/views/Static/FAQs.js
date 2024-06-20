@@ -6,18 +6,16 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Static/FAQs.scss';
 import contact from '../../assets/img/contact.webp';
-import faqsImg from '../../assets/img/faqs.png';
+import faqsImg from '../../assets/img/faq.png';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-
-
 
 function FAQs() {
   const navItems = [
     { name: 'Home', link: '/home' },
     { name: 'Frequently Asked Questions', link: '/FAQS' }
-];
+  ];
   const navigate = useNavigate();
 
   const handleContactClick = () => {
@@ -25,6 +23,7 @@ function FAQs() {
   };
 
   const [activeIndex, setActiveIndex] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const toggleFAQ = index => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -85,6 +84,9 @@ function FAQs() {
     }
   ];
 
+  const filteredFaqs = faqs.filter(faq =>
+    faq.question.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="FAQs">
@@ -98,11 +100,27 @@ function FAQs() {
         </div>
       </div>
       <br></br><br></br>
+      
+       {/* Search Section */}
+       <div className="faqs_search_section">
+        <input
+          type="text"
+          className="faqs_search_input"
+          placeholder="Search FAQs..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+        <button className="faqs_search_button">
+          <i className="fas fa-search"></i>
+        </button>
+      </div>
+      <br></br><br></br>
+
       {/* Main FAQs section */}
       <div className="main_faqs_container">
         <h2 className="main_faqs_title">Frequently Asked Questions</h2>
-        <p className="main_faqs_number">({faqs.length} questions)</p>
-        {faqs.map((faq, index) => (
+        <p className="main_faqs_number">({filteredFaqs.length} questions)</p>
+        {filteredFaqs.map((faq, index) => (
           <div key={index}>
             <hr className="main_faqs_line" />
             <div className="main_faqs_question" onClick={() => toggleFAQ(index)}>
@@ -114,6 +132,7 @@ function FAQs() {
         <hr className="main_faqs_line" />
       </div>
       <br></br><br></br>
+      
       {/* Still need help */}
       <div className="faqs_help_container">
         <div className="faqs_help_content">

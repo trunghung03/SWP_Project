@@ -1,26 +1,4 @@
-.google_login_btn {
-  background-color: white;
-  color: #4285f4; // Google blue color for text
-  border: 1px solid #4285f4;
-  border-radius: 4px;
-  font-size: 16px;
-  padding: 10px 0;
-  width: 100%; // Make it full width to match the layout
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 
-  &:hover {
-    background-color: #f1f1f1;
-  }
-
-  .google-icon {
-    margin-right: 10px;
-  }
-}
 input {
   height: 30px;
 }
@@ -53,7 +31,7 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 50px;
+  padding: 35px 50px;
 }
 
 .right_side {
@@ -63,7 +41,7 @@ input {
 }
 
 .right_image {
-  height: 90vh;
+  height: 93vh;
   width: 100%;
   object-fit: cover;
   margin-bottom: -6px;
@@ -252,4 +230,23 @@ input {
 .login_right_arrow {
   color: white;
   font-size: 23px;
+}
+
+.nsm7Bb-HzV7m-LgbsSe jVeSEe i5vt6e-Ia7Qfc uaxL4e-RbRzK{
+  max-width: 150% !important;
+  width: 150% !important;
+}
+
+.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{
+  max-width: 150% !important;
+  width: 100% !important;
+}
+
+.nsm7Bb-HzV7m-LgbsSe-MJoBVe{
+  max-width: 150% !important;
+  width: 100% !important;
+}
+
+.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{
+  width: 150% !important;
 }
