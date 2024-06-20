@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../../assets/img/logo.png';
+import logo from "../../../assets/img/logoN.png";
 import '../../../styles/SalesStaff/SalesStaffManageContent/SSContentList.scss';
 import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffSidebar.js';
-import { getContentList, getContentByTitle } from '../../../services/SalesStaffService/SSContentService.js';
+import { getContentList, getContentByTitle, deleteContentById } from '../../../services/SalesStaffService/SSContentService.js';
 
 // Content card
-const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete }) => {
+const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete, onUpdate }) => {
   const handleDeleteClick = () => {
     swal({
       title: "Are you sure to remove this blog?",
@@ -27,7 +27,9 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
       }
     });
   };
-
+  const handleUpdateClick = () => {
+    onUpdate(articleID);
+  };
   return (
     <div className="ss_manage_content_content_card" style={{ cursor: 'pointer' }}>
       <img src={image} alt={title} />
@@ -40,7 +42,7 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
         <p className="ss_manage_content_content_date">{new Date(date).toLocaleDateString()}</p>
       </div>
       <div className="ss_manage_content_content_actions">
-        <i className="fas fa-pen" style={{ color: '#69706e' }}></i>
+      <i className="fas fa-pen" onClick={handleUpdateClick} style={{ color: '#69706e' }}></i>
         <i className="fas fa-trash" onClick={handleDeleteClick} style={{ color: '#69706e' }}></i>
       </div>
     </div>
@@ -50,8 +52,9 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
 function SSContentList() {
   const [contents, setContents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
-
+  const [currentPage, setCurrentPage] = useState(1);
   const fetchData = async () => {
     try {
       const response = await getContentList();
@@ -72,6 +75,7 @@ function SSContentList() {
           const response = await getContentByTitle(searchQuery.trim());
           if (response.data.length > 0) {
             setContents(response.data);
+            setIsSearch(true);
           } else {
             swal("Blog not found!", "Please try another title.", "error");
             fetchData();
@@ -85,28 +89,26 @@ function SSContentList() {
       }
     }
   };
+  const handleBackClick = () => {
+    setSearchQuery("");
+    setIsSearch(false);
+    getContentList();
+  };
 
- const handleDelete = async (articleID) => {
-//     swal({
-//         title: "Are you sure to delete this article?",
-//         text: "This action cannot be undone",
-//         icon: "warning",
-//         buttons: true,
-//         dangerMode: true,
-//     }).then(async (willDelete) => {
-//         if (willDelete) {
-//             try {
-//                 await deleteContentById(productID);
-//                 const response = await S();
-//                 setEmployeeList(response);
-//                 swal("Deleted successfully!", "The employee has been deleted.", "success");
-//             } catch (error) {
-//                 console.error("Error deleting diamond:", error);
-//                 swal("Something went wrong!", "Failed to delete the employee. Please try again.", "error");
-//             }
-//         }
-//     });
- };
+  const handleDelete = async (id) => {
+    try {
+      await deleteContentById(id);
+      swal("Remove successfully!", "The blog has been deleted.", "success");
+      fetchData(); // Re-fetch the content list after deletion
+    } catch (error) {
+      console.error("Error deleting content:", error);
+      swal("Something is wrong!", "Failed to delete the blog. Please try again.", "error");
+    }
+  };
+  const handleUpdate = (id) => {
+    navigate(`/sales-staff-update-content/${id}`);
+  };
+  
 
   return (
     <div className="ss_manage_content_all_container">
@@ -123,18 +125,24 @@ function SSContentList() {
               placeholder="Search by title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
+        {isSearch && (
+              <button className="SS_back_button" onClick={handleBackClick}>
+                Back to Content List
+              </button>
+            )}
         <div className="ss_manage_content_create_button_section">
           <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-add-content')}>Create new blog</button>
         </div>
         <div className="ss_manage_content_content_list">
-          {contents.map((content) => (
-            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} />
+        {contents.map((content) => (
+            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} onUpdate={handleUpdate}/>
           ))}
+          
         </div>
       </div>
     </div>

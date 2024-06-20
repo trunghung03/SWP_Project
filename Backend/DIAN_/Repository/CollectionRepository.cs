@@ -16,7 +16,7 @@ namespace DIAN_.Repository
         public async Task<Collection?> CreateAsync(Collection collection)
         {
             // Check for duplicates
-            if (await _context.Collections.AnyAsync(c => c.Name == collection.Name)) { return null; }
+            if (await _context.Collections.AnyAsync(c => c.Name == collection.Name && c.CollectionId==collection.CollectionId)) { return null; }
 
             await _context.Collections.AddAsync(collection);
             await _context.SaveChangesAsync();

@@ -20,6 +20,10 @@ namespace DIAN_.Interfaces
         //just can view the purchaseorder must have the same delivery staff id
         Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId);
 
+        Task<Purchaseorder?> DeleteOrder(int orderid);
+
+        Task<List<Purchaseorder>> GetUnpaidOrdersOlderThan(DateTime cutoffDate);
+
         //Use w point or not
         Task<Purchaseorder?> CheckUsedPoint(bool payWithPoint, int userId);
     }

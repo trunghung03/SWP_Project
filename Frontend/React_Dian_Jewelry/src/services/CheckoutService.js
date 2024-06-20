@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:7184/api';
+// const API_URL = 'https://localhost:7184/api';
+const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const createPurchaseOrder = async (orderData, promotionCode) => {
     try {

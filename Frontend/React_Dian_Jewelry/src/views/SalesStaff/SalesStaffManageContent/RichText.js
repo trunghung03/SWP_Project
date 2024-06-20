@@ -1,9 +1,8 @@
 import React from "react";
 import ReactQuill, { Quill } from "react-quill"; // Corrected import
 import "react-quill/dist/quill.snow.css";
-// import ImageResize from "quill-image-resize-module"; 
-// Quill.register("modules/imageResize", ImageResize);
-
+import ImageResize from "quill-image-resize-module-react";
+Quill.register("modules/imageResize", ImageResize);
 const modules = {
   toolbar: [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -16,16 +15,18 @@ const modules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    [{ 'align': [] }],
+    [{ align: [] }],
     ["link", "image", "video"],
     ["clean"],
     ["code-block"],
   ],
-  // imageResize: {
-  //   // Add the image resize module to the modules list
-  //   parchment: Quill.import("parchment"),
-  //   modules: ["Resize", "DisplaySize", "Toolbar"],
-  // },
+  clipboard: {
+    matchVisual: false,
+  },
+  imageResize: {
+    parchment: Quill.import("parchment"),
+    modules: ["Resize", "DisplaySize"],
+  },
 };
 
 const formats = [
@@ -44,13 +45,17 @@ const formats = [
   "image",
   "video",
   "code-block",
+  "align",
 ];
 
 function RichTextEditor({ value, onChange }) {
   return (
     <div className="ss_container">
       <div className="ss_row">
-        <div className="ss_editor">
+        <div
+          className="ss_editor"
+          style={{ overflowY: "auto", maxHeight: "1000px" }} // Adjust maxHeight as needed
+        >
           <ReactQuill
             theme="snow"
             value={value}
@@ -63,6 +68,7 @@ function RichTextEditor({ value, onChange }) {
         <div
           className="ss_preview"
           dangerouslySetInnerHTML={{ __html: value }}
+          style={{ overflowY: "auto", maxHeight: "1000px" }} // Adjust maxHeight as needed
         ></div>
       </div>
     </div>

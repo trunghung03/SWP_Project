@@ -109,7 +109,6 @@ const SSOrderDetail = () => {
                           <MenuItem value="Paid">Paid</MenuItem>
                           <MenuItem value="Preparing">Preparing</MenuItem>
                           <MenuItem value="Delivering">Delivering</MenuItem>
-                          <MenuItem value="Delivered">Delivered</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>

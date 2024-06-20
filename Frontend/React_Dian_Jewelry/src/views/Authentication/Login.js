@@ -309,31 +309,9 @@ const Login = () => {
         email: decoded.email,
         points:  userGGInfoRes.data.points,
       });
-      localStorage.setItem("firstName", decoded.given_name);
-      localStorage.setItem("lastName", decoded.family_name);
       localStorage.setItem("role", "Customer");
       localStorage.setItem("customerId", userGGInfoRes.data.customerId);
-
-
-      // let userInfoRes = await getUserInfo(email);
-      //     if (userInfoRes && userInfoRes.data) {
-      //       localStorage.setItem("customerId", userInfoRes.data.customerId);
-      //       localStorage.setItem("email", userInfoRes.data.email);
-      //       localStorage.setItem("firstName", userInfoRes.data.firstName);
-      //       localStorage.setItem("lastName", userInfoRes.data.lastName);
-      //       localStorage.setItem("points", userInfoRes.data.points);
-      //       localStorage.setItem("address", userInfoRes.data.address);
-      //       localStorage.setItem("phone", userInfoRes.data.phoneNumber);
-
-      //       setUser({
-      //         firstName: userInfoRes.data.firstName,
-      //         lastName: userInfoRes.data.lastName,
-      //         email: userInfoRes.data.email,
-      //         points: userInfoRes.data.points,
-      //       });
-
-      //       setCartItemsForUser(userInfoRes.data.customerId);
-      //     }
+      localStorage.setItem("Google", "Yes");
       navigate("/home");
     }
   };

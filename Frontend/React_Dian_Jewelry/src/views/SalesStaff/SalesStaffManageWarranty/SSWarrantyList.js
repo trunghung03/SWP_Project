@@ -11,7 +11,7 @@ import {
   deleteWarranty,
   fetchWarrantyDetail,
 } from "../../../services/SalesStaffService/SSWarrantyService.js";
-import logo from "../../../assets/img/logo.png";
+import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -33,6 +33,7 @@ const SSWarrantyList = () => {
   const navigate = useNavigate();
   const [warrantyList, setWarrantyList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedWarranty, setEditedWarranty] = useState({});
   const [originalWarranty, setOriginalWarranty] = useState({});
@@ -275,8 +276,8 @@ const SSWarrantyList = () => {
                   warrantyList.map((item) => (
                     <TableRow className="manager_manage_table_body_row" key={item.orderDetailId}>
                       <TableCell align="center">{item.orderDetailId}</TableCell>
-                      <TableCell align="center">{item.startDate}</TableCell>
-                      <TableCell align="center">{item.endDate}</TableCell>
+                      <TableCell align="center">{new Date(item.startDate).toLocaleDateString('en-CA')}</TableCell>
+                      <TableCell align="center">{new Date(item.endDate).toLocaleDateString('en-CA')}</TableCell>
                       <TableCell align="center">
                         {item.status !== undefined
                           ? item.status.toString()

@@ -1,6 +1,6 @@
 ﻿using DIAN_.Helper;
 
-namespace DIAN_.Services
+namespace DIAN_.Interfaces
 {
     public interface IEmailService
     {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL_ORDER = 'https://localhost:7184/api';
-
+// const API_BASE_URL_ORDER = 'https://localhost:7184/api';
+const API_BASE_URL_ORDER = process.env.REACT_APP_API_BASE_URL;
 //get list orders
 
  const fetchAllOrders = async () => {
@@ -26,7 +26,7 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
   });
 }
  const fetchUserByUserId = async (id) => {
-  return axios.get(`https://localhost:7184/api/accounts/${id}`)
+  return axios.get(`${API_BASE_URL_ORDER}/accounts/${id}`)
   .then((response) => {
     return response.data;
   })
@@ -35,7 +35,7 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
   });
 }
  const getSalesStaffOrderList = async (staffId) => {
-  return axios.get(`https://localhost:7184/api/employees/salesstaff/orderlists`, { params: { staffId } })
+  return axios.get(`${API_BASE_URL_ORDER}/employees/salesstaff/orderlists`, { params: { staffId } })
   .then((response) => {
     return response.data;
   })
@@ -44,7 +44,7 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
   });
 }
  const getBillDetail = async (orderId) => {
-  return axios.get(`https://localhost:7184/api/employees/view-order-detail-bill`, { params: { orderId } })
+  return axios.get(`${API_BASE_URL_ORDER}/employees/view-order-detail-bill`, { params: { orderId } })
   .then((response) => {
     return response.data;
   })
@@ -59,12 +59,12 @@ const API_BASE_URL_ORDER = 'https://localhost:7184/api';
 
 export {getPurchaseOrderByStatus,getBillDetail,getSalesStaffOrderList,fetchUserByUserId,fetchOrderDetail,fetchAllOrders}
 export const sendEmail = async (data) => {
-  const response = await axios.post(`https://localhost:7184/api/accounts/send-email`, data);
+  const response = await axios.post(`${API_BASE_URL_ORDER}/accounts/send-email`, data);
   return response.data;
 };
 
 export const salesStaffUpdateOrderStatus = async (status, orderId) => {
-  return axios.put(`https://localhost:7184/api/employees/salesstaff/updatestatus`, {}, { params: { status, orderId } })
+  return axios.put(`${API_BASE_URL_ORDER}/employees/salesstaff/updatestatus`, {}, { params: { status, orderId } })
     .then((response) => {
       return response.data;
     })
@@ -74,7 +74,7 @@ export const salesStaffUpdateOrderStatus = async (status, orderId) => {
 };
 
 export const deliStaffUpdateOrderStatus = async (status, orderId) => {
-  return axios.put(`https://localhost:7184/api/employees/deliverystaff/updatestatus`, {}, { params: { status, orderId } })
+  return axios.put(`${API_BASE_URL_ORDER}/employees/deliverystaff/updatestatus`, {}, { params: { status, orderId } })
     .then((response) => {
       return response.data;
     })

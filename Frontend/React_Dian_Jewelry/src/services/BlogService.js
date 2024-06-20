@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:7184/api/articles';
-
+// const API_URL = 'https://localhost:7184/api/articles';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 export const getAllArticles = async () => {
     try {
-        const response = await axios.get(API_URL);
+        const response = await axios.get(`${API_BASE_URL}/articles`);
         return response.data;
     } catch (error) {
         console.error('Error fetching articles:', error);
@@ -14,7 +14,7 @@ export const getAllArticles = async () => {
 
 export const searchArticlesByTitle = async (title) => {
     try {
-        const response = await axios.get(`${API_URL}/${title}`);
+        const response = await axios.get(`${API_BASE_URL}/articles/${title}`);
         return response.data;
     } catch (error) {
         console.error('Error searching articles by title:', error);
@@ -24,7 +24,7 @@ export const searchArticlesByTitle = async (title) => {
 
 export const getArticleById = async (id) => {
     try {
-        const response = await axios.get(`${API_URL}/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/articles//${id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching article by ID:', error);

@@ -42,6 +42,7 @@ import SSOrderList from './SalesStaff/SalesStaffManageOrder/SSOrderList';
 import SSContentList from './SalesStaff/SalesStaffManageContent/SSContentList';
 import SSWarrantyList from './SalesStaff/SalesStaffManageWarranty/SSWarrantyList';
 import SSAddContent from './SalesStaff/SalesStaffManageContent/SSAddContent';
+import SSUpdateContent from './SalesStaff/SalesStaffManageContent/SSUpdateContent';
 import SSOrderDetail from './SalesStaff/SalesStaffManageOrder/SSOrderDetail';
 import ManagerProductList from './Manager/ManagerManageProduct/ManagerProductList';
 import ManagerEmployeeList from './Manager/MangerManageEmployee/ManagerListEmployee';
@@ -53,6 +54,7 @@ import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct'
 import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPromotion';
 import RichTextPage from './SalesStaff/SalesStaffManageContent/SSRichTextPage';
 import ProtectedRoute from '../services/ProtectedRoute';
+// import Notification from './Notification/Notify';
 
 function App() {
   return (
@@ -112,6 +114,7 @@ function App() {
             <Route path="/sales-staff-manage-order-detail/:orderId" element={<SSOrderDetail />} />
             <Route path="/sales-staff-content-list" element={<SSContentList />} />
             <Route path="/sales-staff-add-content" element={<SSAddContent />} />
+            <Route path="/sales-staff-update-content/:id" element={<SSUpdateContent />} />
             <Route path="/sales-staff-warranty-list" element={<SSWarrantyList />} />
             <Route path="/rich-text-page" element={<RichTextPage />} />
             
@@ -119,6 +122,7 @@ function App() {
             <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
             <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
 
+            {/* <Route path="/notification" element={<Notification/>} /> */}
           </Routes>
         </CartProvider>
       </UserProvider>

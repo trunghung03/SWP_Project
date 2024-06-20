@@ -1,7 +1,7 @@
 ﻿using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Models;
 
-namespace DIAN_.Services
+namespace DIAN_.Interfaces
 {
     public interface IDeliveryStaffService
     {
@@ -10,6 +10,6 @@ namespace DIAN_.Services
         Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status, int deliveryId);
 
         //update status to completed, also update customer point
-        Task<Purchaseorder> UpdateDeliveryStatus(string status, int orderId); 
+        Task<Purchaseorder> UpdateDeliveryStatus(string status, int orderId);
     }
 }

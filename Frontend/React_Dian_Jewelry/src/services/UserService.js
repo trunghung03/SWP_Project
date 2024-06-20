@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://localhost:7184/api';
-
-
+// const API_BASE_URL = 'https://localhost:7184/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const googleLoginApi = (body) => {
     return axios.post(`${API_BASE_URL}/accounts/login-gg`,body);

@@ -16,21 +16,19 @@ import TableContainer from "@mui/material/TableContainer"; // Import TableContai
 import Paper from "@mui/material/Paper"; // Import Paper
 import TableHead from "@mui/material/TableHead"; // Import TableHead
 import InfoIcon from "@mui/icons-material/Info";
-import {
-  getAllOrders,
-  getOrderById,
-  fetchUserByUserId,
-  getAssignOrders,
-} from "../../services/TrackingOrderService.js";
+import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
-import { getDeliveryStaffOrderList } from "../../services/DeliveryStaffService/DSDeliveryService.js";
+import { getDeliveryStaffOrderList, getDeliPurchaseOrderByStatus } from "../../services/DeliveryStaffService/DSDeliveryService.js";
 const DSDeliveryList = () => {
   const navigate = useNavigate();
   const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
   const [orderList, setOrderList] = useState([]);
+  const [initialOrderList, setInitialOrderList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [userDetails, setUserDetails] = useState({});
+  const [isSearch, setIsSearch] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState([]);
+  
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -41,80 +39,114 @@ const DSDeliveryList = () => {
     },
   }));
 
-  const handleMoreDetails = (item) => {
-    console.log("More details for item:", item);
-    // Implement the logic to show more details about the item
-    // This could be opening a modal, redirecting to another page, etc.
+  const viewDetail = (orderId) => {
+    navigate(`/delivery-staff-delivery-detail/${orderId}`);
+  };  
+  
+  const handleChange = async (event) => {
+    const selectedValue = event.target.value;
+    setSortOrder(selectedValue);
+    console.log("Selected status:", selectedValue);
+
+    if (selectedValue === "default") {
+      fetchAllOrders();
+    } else {
+      try {
+        const orders = await getDeliPurchaseOrderByStatus(selectedValue, employeeId);
+        console.log("Fetched orders:", orders?.data);
+        if (orders) {
+          setOrderList([...orders?.data]);
+        } else if (orders) {
+          setOrderList(orders?.data);
+        } else {
+          setOrderList(orders?.data);
+          console.error("Expected an array but got:", orders);
+        }
+      } catch (error) {
+        console.error("Failed to fetch orders by status:", error);
+        swal("Error", "Failed to fetch orders by status", "error");
+      }
+    }
   };
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
+  const fetchAllOrders = async () => {
+    try {
+      const orders = await getDeliveryStaffOrderList(employeeId);
+      console.log("Fetched all orders:", orders);
+      if (Array.isArray(orders)) {
+        setOrderList(orders);
+        setInitialOrderList(orders);
+      } else {
+        setOrderList([]);
+        setInitialOrderList(orders);
+        console.error("Expected an array but got:", orders);
+      }
+    } catch (error) {
+      console.error("Failed to fetch order list:", error);
+      swal("Error", "Failed to fetch order list", "error");
+    }
+  };
+
+  useEffect(() => {
+    fetchAllOrders();
+  }, [employeeId]);
+  
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
+  const [totalPages, setTotalPages] = useState(0);
+  useEffect(() => {
+    console.log(orderList);
+    const ordersPerPage = 6;
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
 
   const filteredOrders =
-    sortOrder === "default"
-      ? orderList
-      : orderList.filter((order) => order.orderStatus === sortOrder);
+  sortOrder === "default"
+    ? orderList
+    : orderList?.filter((order) => order.orderStatus === sortOrder);
+    setTotalPages(Math.ceil(filteredOrders.length / ordersPerPage));
+  setCurrentOrder(filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder));
+},[orderList,currentPage])
+const handlePageChange = (pageNumber) => {
+  setCurrentPage(pageNumber);
+};
 
-  const currentOrder = filteredOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
 
-  const handleChange = (event) => {
-    setSortOrder(event.target.value);
-  };
-
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-  const viewDetail = (orderId) => {
-    navigate(`/delivery-staff-delivery-detail/${orderId}`);
-  };  
-  const handleSearchKeyPress = async (e) => {
-    if (e.key === "Enter") {
-      // Check if the Enter key was pressed
-      try {
-        const orderId = e.target.value; // Assuming the input value is the order ID
-        const orderDetails = await getOrderById(orderId);
-        console.log(orderDetails); // Do something with the order details, e.g., display them
-      } catch (error) {
-        console.error("Failed to fetch order details:", error);
-        // Handle error (e.g., show an error message to the user)
+const handleSearchKeyPress = (e) => {
+  if (e.key === "Enter") {
+    const searchValue = e.target.value.toLowerCase();
+    if (searchValue.trim() === "") {
+      setIsSearch(false);
+     setOrderList(initialOrderList);
+    } else {
+      const filteredOrders = initialOrderList.filter(order =>
+        order.orderId.toString().toLowerCase().includes(searchValue) ||
+        order.name.toLowerCase().includes(searchValue)
+      );
+      if (filteredOrders.length > 0) {
+        setOrderList(filteredOrders);
+        setIsSearch(true); 
+      } else {
+        setOrderList([]); 
+        setIsSearch(true); 
       }
     }
-  };
-  useEffect(() => {
-    getDeliveryStaffOrderList(employeeId)
-      .then((data) => {
-        setOrderList(data);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch order list:", error);
-      });
-  }, []);
+  }
+};
+const handleBackClick = () => {
+  setSearchQuery("");
+  setIsSearch(false);
+  fetchAllOrders(initialOrderList);
+};
+
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
         <DeliveryStaffSidebar currentPage="deliverystaff_manage_order" />
       </div>
-      <div className="manager_manage_diamond_content">
-        <div className="manager_manage_diamond_header">
-          <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
+      <div className="ss_manage_content_content">
+        <div className="ss_manage_content_header">
+          <img className="ss_manage_content_logo" src={logo} alt="Logo" />
           <div className="ss_manage_content_search_section">
-            {/* <i className="fas fa-search manager_manage_search_icon"></i> */}
             <input
               type="text"
               className="ss_manage_content_search_bar"
@@ -125,30 +157,25 @@ const DSDeliveryList = () => {
             />
           </div>
         </div>
-        <hr className="manager_header_line"></hr>
+        <hr className="ss_manage_content_line"></hr>
         <h3 className="manager_title_employees" style={{ textAlign: "center" }}>
           Order List
         </h3>
-        <div className="ds_header_pagination_list">
-          <FormControl
-            variant="standard"
-            sx={{ m: 1, minWidth: 120, height: 30 }}
-          >
-            <InputLabel id="demo-simple-select-standard-label">
-              Status
-            </InputLabel>
+        <div className="ss_header_pagination_list">
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
+            <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              value={sortOrder}
               onChange={handleChange}
+              value={sortOrder}
               label="Status"
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
+              <MenuItem value="default">Default</MenuItem>
+              <MenuItem value="Preparing">Preparing</MenuItem>
               <MenuItem value="Delivering">Delivering</MenuItem>
-              <MenuItem value="Delivered">Delivered</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+              <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </FormControl>
           <div className="manager_manage_diamond_pagination">
@@ -163,9 +190,7 @@ const DSDeliveryList = () => {
               <button
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
+                className={index + 1 === currentPage ? "manager_order_active" : ""}
               >
                 {index + 1}
               </button>
@@ -179,7 +204,6 @@ const DSDeliveryList = () => {
             </button>
           </div>
         </div>
-
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -229,8 +253,12 @@ const DSDeliveryList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && (
+              <button className="SS_back_button" onClick={handleBackClick}>
+                Back to Order List
+              </button>
+            )}
         </div>
-        {/* chinh tu day tro xuong */}
       </div>
     </div>
   );

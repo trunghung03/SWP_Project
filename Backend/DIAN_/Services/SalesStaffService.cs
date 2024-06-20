@@ -1,9 +1,13 @@
-﻿using DIAN_.DTOs.PurchaseOrderDTOs;
+﻿using Castle.Core.Resource;
+using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.Repository;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DIAN_.Services
 {
@@ -14,15 +18,19 @@ namespace DIAN_.Services
         private readonly IWarrantyRepository _warrantyRepository;
         private readonly IDiamondRepository _diamondRepository;
         private readonly IEmployeeRepository _employeeRepository;
-
+        private readonly IHubContext<NotificationsHub> _hubContext;
+        private readonly ILogger<SalesStaffService> _logger;
         public SalesStaffService(IPurchaseOrderRepository purchaseOrderRepository, IOrderDetailRepository orderDetailRepository,
-            IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository)
+            IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository,
+            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
             _warrantyRepository = warrantyRepository;
             _diamondRepository = diamondRepository;
             _employeeRepository = employeeRepository;
+            _hubContext = hubContext;
+            _logger = logger;
         }
 
         public Task<string> GeneratePdfAsync(Diamond diamond)
@@ -51,6 +59,15 @@ namespace DIAN_.Services
             //order.OrderStatus = status;
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
+            var connectionId = NotificationsHub.GetConnectionIdForCustomer(order.UserId);
+            if (connectionId != null)
+            {
+                _logger.LogInformation("start notify customer");
+                _logger.LogInformation("Excuting {SaleStaffService} {orderId}", nameof(SalesStaffService), status);
+                _logger.LogInformation("end notify customer");
+                await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                
+            }
             return updatedOrder;
         }
 
@@ -75,5 +92,16 @@ namespace DIAN_.Services
             }
             return orders.Select(orders => PurchaseOrderMapper.ToPurchaseOrderDetail(orders)).ToList();
         }
+        public async Task DeleteUnpaidOrdersOlderThan3Days()
+        {
+            var cutoffDate = DateTime.Now.AddDays(-3);
+            var unpaidOrders = await _purchaseOrderRepository.GetUnpaidOrdersOlderThan(cutoffDate);
+            foreach (var order in unpaidOrders)
+            {
+                await _purchaseOrderRepository.DeleteOrder(order.OrderId);
+            }
+        }
+
+
     }
 }
