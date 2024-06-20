@@ -26,6 +26,7 @@ const HeaderComponent = () => {
     const diamondMenuTimeoutRef = useRef(null);
     const weddingMenuTimeoutRef = useRef(null);
     const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
+    const [showNotifications, setShowNotifications] = useState(false);
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -86,6 +87,14 @@ const HeaderComponent = () => {
         setHoveredImage(imageSrc);
     };
 
+    const notifications = [
+        { id: 1, title: 'Title 1', description: 'Description for title 1 Description for title 1 Description for title 1', time: '1 hour ago' },
+        { id: 2, title: 'Title 2', description: 'Description for title 2222222222222222222222222222222', time: '2 hours ago' },
+        { id: 3, title: 'Title 3', description: 'Description for title 3', time: '3 hours ago' },
+        { id: 4, title: 'Title 4', description: 'Description for title 4', time: '4 hours ago' },
+        { id: 5, title: 'Title 5', description: 'Description for title 5', time: '5 hours ago' },
+    ];
+
     return (
         <header className="header">
             <div className="top_announcement">
@@ -93,7 +102,7 @@ const HeaderComponent = () => {
             </div>
             <div className="top_header container-fluid">
                 <div className="row align-items-center" style={{ backgroundColor: 'white' }}>
-                    <div className="col-md-4">
+                    <div className="col-md-5">
                         <div className="contact_info">
                             <Link to='tel:0795795959'>
                                 <p className="contact_phone"><i className="fas fa-phone-alt"></i>0795 795 959</p>
@@ -104,12 +113,12 @@ const HeaderComponent = () => {
                             </a>
                         </div>
                     </div>
-                    <div className="col-md-4 text-center">
+                    <div className="col-md-2 text-center">
                         <Link to="/home">
                             <img className="logo" src={logo} alt="Logo" />
                         </Link>
                     </div>
-                    <div className="col-md-4 text-end">
+                    <div className="col-md-5 text-end">
                         <div className="header_icons">
                             <div className="search_section">
                                 <div className="search_bar_container">
@@ -123,6 +132,31 @@ const HeaderComponent = () => {
                                         onKeyPress={handleSearchKeyPress}
                                     />
                                 </div>
+                            </div>
+                            <div
+                                className="notification_icon"
+                                onMouseEnter={() => setShowNotifications(true)}
+                                onMouseLeave={() => setShowNotifications(false)}
+                            >
+                                <i className="icon_noti fas fa-bell"></i>
+                                <span className="notification_badge">5</span>
+                                {showNotifications && (
+                                    <div className="noti_dropdown_menu">
+                                        <div className='noti_header_wrapper'>
+                                            <div className="noti_header">Notifications</div>
+                                            <div className="noti_header_view">View all<i className="fas fa-arrow-right"></i></div>
+                                        </div>
+                                        {notifications.map((notification, index) => (
+                                            <div key={notification.id} className="noti_item" style={{ borderBottom: index === notifications.length - 1 ? 'none' : '1px solid #e0e0e0' }}>
+                                                <div className='each_noti'>
+                                                    <p className="noti_title">{notification.title}</p>
+                                                    <p className="noti_description">{notification.description}</p>
+                                                    <span className="noti_time">{notification.time}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <Link to="/cart" className="cart_icon">
                                 <i className="icon_cart fas fa-shopping-bag"></i>

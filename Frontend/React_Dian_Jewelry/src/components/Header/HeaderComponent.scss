@@ -67,8 +67,8 @@ body {
 }
 
 .logo {
-    width: 42%;
-    margin: 5px 0 0 0;
+    width: 80%;
+    margin: 8px 0 0 0;
 }
 
 .header_icons {
@@ -84,11 +84,24 @@ body {
 }
 
 .header_icons {
+    .fa-bell {
+        margin-top: 1px;
+        font-size: 19px;
+        color: #1c1c1c;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        margin-left: 25px;
+        margin-top: 3px;
+
+        &:hover {
+            color: #797979;
+        }
+    }
 
     .icon_cart {
         font-size: 18px;
         color: #1c1c1c;
-        margin: 0 25px;
+        margin: 0 28px;
         cursor: pointer;
         transition: color 0.3s ease;
 
@@ -106,13 +119,13 @@ body {
 
     .icon_account {
         color: #1c1c1c;
+        font-size: 17px;
 
         &:hover {
             color: #797979;
         }
     }
 }
-
 
 .header_icons i {
     font-size: 18px;
@@ -137,10 +150,138 @@ body {
     border-radius: 50%;
     padding: 2px 6px 2px 6px;
     font-size: 9px;
-    font-weight: bold;
+    max-width: 17px;
+    max-height: 17px;
+    width: 17px;
+    height: 17px;
 }
 
-//nav item animation
+//Noti section
+.notification_icon {
+    position: relative;
+}
+
+.notification_badge {
+    position: absolute;
+    top: -18%;
+    right: -28%;
+    background-color: #f8dcce;
+    color: #1c1c1c;
+    border-radius: 50%;
+    padding: 2px 6px 2px 6px;
+    max-width: 17px;
+    max-height: 17px;
+    font-size: 9px;
+}
+
+.noti_dropdown_menu {
+    position: absolute;
+    top: 26.5px;
+    right: -100px;
+    width: 372px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+    white-space: nowrap;
+    border: 1px solid rgb(195, 195, 195);
+    overflow: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.noti_header_wrapper {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 15px 10px 15px;
+}
+
+.noti_dropdown_menu .noti_header {
+    font-weight: bold;
+    text-align: start;
+    width: 100%;
+}
+
+.noti_dropdown_menu .noti_header_view,
+.noti_dropdown_menu .fa-arrow-right {
+    text-align: end;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 3px;
+    margin-top: 2px;
+}
+
+.noti_dropdown_menu .fa-arrow-right {
+    margin-left: 5px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.noti_dropdown_menu .noti_header_view:hover {
+    color: #797979;
+}
+
+.noti_header_view:hover i {
+    transform: translateX(7px);
+}
+
+.noti_dropdown_menu .noti_item {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.noti_dropdown_menu .noti_item p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.noti_dropdown_menu .noti_item span {
+    font-size: 12px;
+    color: #797979;
+}
+
+.each_noti {
+    width: 100%;
+    padding-bottom: 10px;
+    padding-top: 5px;
+    cursor: pointer;
+    padding: 5px 15px 5px 15px;
+}
+
+.each_noti:hover {
+    background-color: #f4f4f4;
+}
+
+.noti_title,
+.noti_description {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.noti_title {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: start;
+    max-width: 100%;
+}
+
+.noti_description {
+    font-size: 13px;
+    margin: 2px 0;
+    color: #797979;
+    text-align: start;
+    max-width: 100%;
+}
+
+.noti_time {
+    font-size: 12px;
+    color: #797979;
+    text-align: end;
+}
+
+
+//Nav item animation
 
 .navbar-nav .nav-item .nav-link {
     font-size: 13.5px;
@@ -155,7 +296,7 @@ body {
     left: 20px;
     width: 0;
     border: 1px solid #797979;
-    transition: width 0.6s ease, left 0.6s ease, opacity 0.5s ease-in,;
+    transition: width 0.6s ease, left 0.6s ease, opacity 0.5s ease-in, ;
     opacity: 0;
 }
 
@@ -174,8 +315,8 @@ body {
 .navbar-nav .nav-item .header_spe_nav_link:hover::before,
 .diamond_dropdown_section:hover .nav-link::before,
 .wedding_dropdown_section:hover .nav-link::before,
-.diamond_dropdown_menu:hover ~ .nav-link::before,
-.wedding_dropdown_menu:hover ~ .nav-link::before {
+.diamond_dropdown_menu:hover~.nav-link::before,
+.wedding_dropdown_menu:hover~.nav-link::before {
     width: calc(100% - 57px);
     left: 20px;
     opacity: 1;
@@ -184,35 +325,17 @@ body {
 .navbar-nav .nav-item .header_spe_nav_link:hover::before,
 .diamond_dropdown_section:hover .nav-link,
 .wedding_dropdown_section:hover .nav-link,
-.diamond_dropdown_menu:hover ~ .nav-link,
-.wedding_dropdown_menu:hover ~ .nav-link {
+.diamond_dropdown_menu:hover~.nav-link,
+.wedding_dropdown_menu:hover~.nav-link {
     color: #797979;
 }
 
-.diamond_dropdown_section:hover .dropdown-menu,
-.wedding_dropdown_section:hover .dropdown-menu,
-.diamond_dropdown_section .dropdown-menu:hover,
-.wedding_dropdown_section .dropdown-menu:hover {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
-.navbar-nav .nav-item .nav-link:hover {
-    color: #797979;
-}
-
-
-
-//end nav item animation
-
+//Navbar
 .navbar {
     border-bottom: 1px solid #e0e0e0;
     background-color: white;
     margin: -2px -5px -5px -5px;
 }
-
 
 .search_section input {
     background-color: #ededed;
@@ -229,7 +352,6 @@ body {
     box-shadow: none;
     width: 220px;
 }
-
 
 .search_bar_container {
     position: relative;
@@ -249,12 +371,11 @@ body {
     padding-left: 35px;
     padding-top: 0;
     padding-bottom: 0;
-    height: 30px; 
-    line-height: 35px; 
+    height: 30px;
+    line-height: 35px;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
-
 
 .account_dropdown_section {
     position: relative;
@@ -270,10 +391,20 @@ body {
 }
 
 .account_dropdown_menu {
+    top: 25px;
     left: auto;
     right: 0;
-    width: 230px;
+    width: auto;
     border-radius: 0;
+    white-space: nowrap;
+    min-width: 230px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.full_name,
+.point,
+.dropdown-item {
+    white-space: nowrap;
 }
 
 .icon_arrow {
@@ -349,6 +480,8 @@ li:focus {
     font-size: 15px;
 }
 
+
+//Diamond jewelry + wedding jewelry section
 .diamond_dropdown_section {
     position: relative;
     display: inline-block;
@@ -510,12 +643,12 @@ li:focus {
 
 .diamond_dropdown_section:hover .header_spe_nav_link,
 .wedding_dropdown_section:hover .header_spe_nav_link,
-.diamond_dropdown_section .dropdown-menu:hover ~ .header_spe_nav_link,
-.wedding_dropdown_section .dropdown-menu:hover ~ .header_spe_nav_link {
+.diamond_dropdown_section .dropdown-menu:hover~.header_spe_nav_link,
+.wedding_dropdown_section .dropdown-menu:hover~.header_spe_nav_link {
     color: #797979;
     text-decoration: none;
 }
 
-.dropdown-item{
+.dropdown-item {
     cursor: pointer;
 }
