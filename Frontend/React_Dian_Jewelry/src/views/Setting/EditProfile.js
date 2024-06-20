@@ -25,9 +25,12 @@ function EditProfile() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [storedPassword, setStoredPassword] = useState('');
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
+    const isGoogle = localStorage.getItem('Google');
+    setIsGoogleUser(Boolean(isGoogle));
     if (storedEmail) {
       getUserInfo(storedEmail).then((response) => {
         const userData = response.data;
@@ -79,7 +82,7 @@ function EditProfile() {
       return;
     }
 
-    if (isPasswordFormVisible) {
+    if (isPasswordFormVisible && !isGoogleUser) {
       if (!currentPassword || !newPassword || !confirmPassword) {
         swal("Please fill in all fields", "All password fields are required.", "error");
         return;
@@ -130,7 +133,7 @@ function EditProfile() {
 
   return (
     <div className="EditProfile">
-      <HeaderComponent/>
+      <HeaderComponent />
       <SubNav items={navItems} />
 
       <div className="edit_profile_container">
@@ -158,11 +161,23 @@ function EditProfile() {
           <form>
             <div className="edit_form_group">
               <label>First name *</label>
-              <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                disabled={isGoogleUser}
+                className={isGoogleUser ? "disabled_input" : ""}
+              />
             </div>
             <div className="edit_form_group">
               <label>Last name *</label>
-              <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                disabled={isGoogleUser}
+                className={isGoogleUser ? "disabled_input" : ""}
+              />
             </div>
             <div className="edit_form_group">
               <label>Email *</label>
@@ -179,43 +194,76 @@ function EditProfile() {
             <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save change</button>
           </form>
 
-          <hr className="edit_profile_line"></hr>
-
-          <h2 onClick={togglePasswordForm} className="toggle_password_form">
-            Change Password
-            <i className={`fas ${isPasswordFormVisible ? 'fa-chevron-up' : 'fa-chevron-down'} toggle_icon`}></i>
-          </h2>
-          {isPasswordFormVisible && (
-            <form>
-              <div className="edit_form_group full_width position-relative">
-                <label>Current password</label>
-                <input type="password" id="current_password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
-                <span className="edit_password_eye">
-                  <i className="far fa-eye" id="edit_current_password_eye" onClick={() => togglePasswordVisibility('current_password', 'edit_current_password_eye')} style={{ cursor: 'pointer' }}></i>
-                </span>
-              </div>
-              <div className="edit_form_group full_width position-relative">
-                <label>New password</label>
-                <input type="password" id="new_password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-                <span className="edit_password_eye">
-                  <i className="far fa-eye" id="edit_new_password_eye" onClick={() => togglePasswordVisibility('new_password', 'edit_new_password_eye')} style={{ cursor: 'pointer' }}></i>
-                </span>
-              </div>
-              <div className="edit_form_group full_width position-relative">
-                <label>Confirm new password</label>
-                <input type="password" id="confirm_password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                <span className="edit_password_eye">
-                  <i className="far fa-eye" id="edit_confirm_password_eye" onClick={() => togglePasswordVisibility('confirm_password', 'edit_confirm_password_eye')} style={{ cursor: 'pointer' }}></i>
-                </span>
-              </div>
-              <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save new password</button>
-            </form>
+          {!isGoogleUser && (
+            <>
+              <hr className="edit_profile_line"></hr>
+              <h2 onClick={togglePasswordForm} className="toggle_password_form">
+                Change Password
+                <i className={`fas ${isPasswordFormVisible ? 'fa-chevron-up' : 'fa-chevron-down'} toggle_icon`}></i>
+              </h2>
+              {isPasswordFormVisible && (
+                <form>
+                  <div className="edit_form_group full_width position-relative">
+                    <label>Current password</label>
+                    <input
+                      type="password"
+                      id="current_password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                    />
+                    <span className="edit_password_eye">
+                      <i
+                        className="far fa-eye"
+                        id="edit_current_password_eye"
+                        onClick={() => togglePasswordVisibility('current_password', 'edit_current_password_eye')}
+                        style={{ cursor: 'pointer' }}
+                      ></i>
+                    </span>
+                  </div>
+                  <div className="edit_form_group full_width position-relative">
+                    <label>New password</label>
+                    <input
+                      type="password"
+                      id="new_password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <span className="edit_password_eye">
+                      <i
+                        className="far fa-eye"
+                        id="edit_new_password_eye"
+                        onClick={() => togglePasswordVisibility('new_password', 'edit_new_password_eye')}
+                        style={{ cursor: 'pointer' }}
+                      ></i>
+                    </span>
+                  </div>
+                  <div className="edit_form_group full_width position-relative">
+                    <label>Confirm new password</label>
+                    <input
+                      type="password"
+                      id="confirm_password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <span className="edit_password_eye">
+                      <i
+                        className="far fa-eye"
+                        id="edit_confirm_password_eye"
+                        onClick={() => togglePasswordVisibility('confirm_password', 'edit_confirm_password_eye')}
+                        style={{ cursor: 'pointer' }}
+                      ></i>
+                    </span>
+                  </div>
+                  <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save new password</button>
+                </form>
+              )}
+            </>
           )}
         </div>
       </div>
 
       <ScrollToTop />
-      <FooterComponent/>
+      <FooterComponent />
     </div>
   );
 }

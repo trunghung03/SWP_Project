@@ -54,7 +54,7 @@ import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct'
 import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPromotion';
 import RichTextPage from './SalesStaff/SalesStaffManageContent/SSRichTextPage';
 import ProtectedRoute from '../services/ProtectedRoute';
-import Notification from './Notification/Notify';
+// import Notification from './Notification/Notify';
 
 function App() {
   return (
@@ -122,7 +122,7 @@ function App() {
             <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
             <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
 
-            <Route path="/notification" element={<Notification/>} />
+            {/* <Route path="/notification" element={<Notification/>} /> */}
           </Routes>
         </CartProvider>
       </UserProvider>

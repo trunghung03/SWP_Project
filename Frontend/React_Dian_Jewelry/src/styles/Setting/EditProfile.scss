@@ -2,7 +2,6 @@ body {
     overflow-x: hidden;
 }
 
-
 .edit_profile_container {
     display: flex;
     flex-direction: row;
@@ -133,9 +132,14 @@ body {
 
         .edit_email{
             background-color: #e2e2e2;
+            color: #5d5d5d;
         }
 
         .edit_email:focus{
+            background-color: #e2e2e2;
+        }
+
+        .disabled_input {
             background-color: #e2e2e2;
         }
     }
