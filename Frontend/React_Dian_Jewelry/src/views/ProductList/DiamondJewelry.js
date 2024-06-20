@@ -12,11 +12,17 @@ import { getProductList } from '../../services/ProductService.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-
+import allBanner from '../../assets/img/allBanner.png';
+import weddingBanner from '../../assets/img/weddingBanner.png';
 import ringBanner from '../../assets/img/ringBanner.png';
 import earringsBanner from '../../assets/img/earringsBanner.png';
 import braceletBanner from '../../assets/img/braceletBanner.png';
 import necklaceBanner from '../../assets/img/necklaceBanner.png';
+import weddingRingBanner from '../../assets/img/weddingRingBanner.png';
+import weddingEarringsBanner from '../../assets/img/weddingEarringsBanner.png';
+import weddingBraceletBanner from '../../assets/img/weddingBraceletBanner.png';
+import weddingNecklaceBanner from '../../assets/img/weddingNecklaceBanner.png';
+import engagementRingBanner from '../../assets/img/engagementRingBanner.png';
 
 
 function DiamondJewelry() {
@@ -49,17 +55,17 @@ function DiamondJewelry() {
     };
 
     const categoryBannerMap = {
-        all: { image: ringBanner, text: 'Jewelry' },
+        all: { image: allBanner, text: 'Jewelry' },
         ring: { image: ringBanner, text: 'Rings' },
         earrings: { image: earringsBanner, text: 'Earrings' },
         bracelet: { image: braceletBanner, text: 'Bracelets' },
         necklace: { image: necklaceBanner, text: 'Necklaces' },
-        weddingJewelry: { image: ringBanner, text: 'Wedding Jewelry' },
-        weddingRing: { image: ringBanner, text: 'Wedding Rings' },
-        weddingEarrings: { image: ringBanner, text: 'Wedding Earrings' },
-        weddingBracelet: { image: ringBanner, text: 'Wedding Bracelets' },
-        weddingNecklace: { image: ringBanner, text: 'Wedding Necklaces' },
-        engagementRing: { image: ringBanner, text: 'Engagement Rings' },
+        weddingJewelry: { image: weddingBanner, text: 'Wedding Jewelry' },
+        weddingRing: { image: weddingRingBanner, text: 'Wedding Rings' },
+        weddingEarrings: { image: weddingEarringsBanner, text: 'Wedding Earrings' },
+        weddingBracelet: { image: weddingBraceletBanner, text: 'Wedding Bracelets' },
+        weddingNecklace: { image: weddingNecklaceBanner, text: 'Wedding Necklaces' },
+        engagementRing: { image: engagementRingBanner, text: 'Engagement Rings' },
     };
 
     useEffect(() => {

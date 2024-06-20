@@ -20,7 +20,7 @@ import { jwtDecode } from "jwt-decode";
 import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { gapi } from "gapi-script";
+
 
 const Login = () => {
   const { setUser } = useContext(UserContext);
@@ -404,7 +404,7 @@ const Login = () => {
               <div className="google_section text-center">
                 <hr className="line" />
                 <GoogleLogin
-                  className="google_login_btn"
+                  className="google_login_btn "
               
                   buttonText="Login with Google"
                   onSuccess={onSuccess}

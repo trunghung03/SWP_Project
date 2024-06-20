@@ -114,6 +114,7 @@ function Shape() {
         setSort('');
         setResetKey(Date.now());
     };
+    
 
     return (
         <div className="Shape">
