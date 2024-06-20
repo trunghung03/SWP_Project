@@ -38,6 +38,13 @@ const ManagerProductList = () => {
   const [categories, setCategories] = useState({});
   const [collections, setCollections] = useState({});
   const [mainDiamonds, setMainDiamonds] = useState({});
+  const [paginationMetadata, setPaginationMetadata] = useState({
+    totalItems: 0,
+    pageSize: 1,
+    currentPage: 1,
+    totalPages: 1,
+  });
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -47,17 +54,19 @@ const ManagerProductList = () => {
       fontSize: 14,
     },
   }));
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (page = 1, pageSize = 6, name = '') => {
       try {
-        const response = await ShowAllProduct();
-        setProductItems(response);
+        const response = await ShowAllProduct(page, pageSize, name);
+        setProductItems(response.data.products);
+        setPaginationMetadata(response.data.paginationMetadata);
     
         const categoryMap = {};
         const collectionMap = {};
         const mainDiamondMap = {};
     
-        for (const product of response) {
+        for (const product of response.data.products) {
           if (product.categoryId !== null && !categoryMap[product.categoryId]) {
             const category = await getProductCategory(product.categoryId);
             categoryMap[product.categoryId] = category.name;
@@ -85,20 +94,21 @@ const ManagerProductList = () => {
     fetchData();
   }, []);
 
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
-
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = productItems.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(productItems.length / ordersPerPage);
-
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    const fetchData = async (page = 1, pageSize = 6, name = '') => {
+      try {
+        const response = await ShowAllProduct(page, pageSize, name);
+        setProductItems(response.data.products);
+        setPaginationMetadata(response.data.paginationMetadata);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData(pageNumber, paginationMetadata.pageSize, searchQuery);
+    setPaginationMetadata((prev) => ({ ...prev, currentPage: pageNumber }));
   };
 
-  // Search diamond by id
+  // Search product by ID or name
   const handleSearchKeyPress = async (e) => {
     const isInteger = (value) => {
       return /^-?\d+$/.test(value);
@@ -108,39 +118,23 @@ const ManagerProductList = () => {
         try {
           const response = await getProductDetail(searchQuery.trim());
           setProductItems([response]);
-          setCurrentPage(1);
+          setPaginationMetadata({
+            totalItems: 1,
+            pageSize: 1,
+            currentPage: 1,
+            totalPages: 1,
+          });
         } catch (error) {
           console.error("Error fetching product:", error);
           swal("Product not found!", "Please try another one.", "error");
         }
-      } else if (searchQuery.trim().toString()) {
-        try {
-          const response = await getProductByName(searchQuery.trim());
-          if (Array.isArray(response)) {
-            setProductItems(response);
-          } else if (response) {
-            setProductItems([response]);
-          } else {
-            setProductItems([]);
-          }
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching product:", error);
-          swal("Product not found!", "Please try another one.", "error");
-        }
-      } else {
-        try {
-          const response = await ShowAllProduct();
-          setProductItems(response);
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+      } else if (searchQuery.trim()) {
+        handlePageChange(1); // To search by name with pagination
       }
     }
   };
 
-  // Delete diamond by id
+  // Delete product by ID
   const handleDelete = async (productID) => {
     swal({
       title: "Are you sure to delete this product?",
@@ -152,15 +146,14 @@ const ManagerProductList = () => {
       if (willDelete) {
         try {
           await deleteProductById(productID);
-          const response = await ShowAllProduct();
-          setProductItems(response);
+          handlePageChange(1); // Refresh list after deletion
           swal(
             "Deleted successfully!",
             "The product has been deleted.",
             "success"
           );
         } catch (error) {
-          console.error("Error deleting diamond:", error);
+          console.error("Error deleting product:", error);
           swal(
             "Something went wrong!",
             "Failed to delete the product. Please try again.",
@@ -171,7 +164,7 @@ const ManagerProductList = () => {
     });
   };
 
-  // Update by id
+  // Update product by ID
   const handleEdit = (product) => {
     setEditMode(true);
     setEditedProduct(product);
@@ -210,13 +203,8 @@ const ManagerProductList = () => {
 
     try {
       console.log("Sending update request with data:", productToUpdate);
-      const response = await updateProductById(
-        productToUpdate.productId,
-        productToUpdate
-      );
-      console.log("Update response:", response.data);
-      const updatedItems = await ShowAllProduct();
-      setProductItems(updatedItems);
+      await updateProductById(productToUpdate.productId, productToUpdate);
+      handlePageChange(paginationMetadata.currentPage); // Refresh list after update
       setEditMode(false);
       swal(
         "Updated successfully!",
@@ -235,16 +223,6 @@ const ManagerProductList = () => {
       );
     }
   };
-
-  const backList = async () => {
-    try {
-      const response = await ShowAllProduct();
-      setProductItems(response);
-      setCurrentPage(1);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
 
   return (
     <div className="manager_manage_product_all_container">
@@ -265,8 +243,10 @@ const ManagerProductList = () => {
             />
             <button
               className="manager_manage_diamond_create_button"
-              onClick={() => backList()}
-            >Show all products</button>
+              onClick={() => handlePageChange(1)}
+            >
+              Show all products
+            </button>
           </div>
         </div>
         <hr className="manager_product_header_line"></hr>
@@ -280,32 +260,32 @@ const ManagerProductList = () => {
           </button>
           <div className="manager_manage_diamond_pagination">
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
+              onClick={() => handlePageChange(paginationMetadata.currentPage - 1)}
+              disabled={paginationMetadata.currentPage === 1}
             >
               &lt;
             </button>
-            {Array.from({ length: totalPages }, (_, index) => (
+            {Array.from({ length: paginationMetadata.totalPages }, (_, index) => (
               <button
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
+                  index + 1 === paginationMetadata.currentPage ? "manager_order_active" : ""
                 }
               >
                 {index + 1}
               </button>
             ))}
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(paginationMetadata.currentPage + 1)}
+              disabled={paginationMetadata.currentPage === paginationMetadata.totalPages}
             >
               &gt;
             </button>
           </div>
         </div>
 
-        {/* Table diamond list */}
+        {/* Table product list */}
         <div className="manager_manage_product_table_wrapper">
           <TableContainer component={Paper} style={{ marginTop: 10 }}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -327,8 +307,8 @@ const ManagerProductList = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentOrders.length > 0 ? (
-                  currentOrders.map((item) => (
+                {productItems.length > 0 ? (
+                  productItems.map((item) => (
                     <TableRow className="manager_manage_table_body_row" key={item.productId}>
                       <TableCell align="center">{item.productId}</TableCell>
                       <TableCell align="center">{item.productCode}</TableCell>
@@ -370,11 +350,10 @@ const ManagerProductList = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="7">No product found</TableCell>
+                    <TableCell colSpan="12">No product found</TableCell>
                   </TableRow>
                 )}
               </TableBody>
-
             </Table>
           </TableContainer>
         </div>
@@ -460,3 +439,4 @@ const ManagerProductList = () => {
 };
 
 export default ManagerProductList;
+

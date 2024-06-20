@@ -17,10 +17,12 @@ const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
 
-const ShowAllProduct = async () => {
-  const response = await axios.get(`${API_BASE_URL}/products/all`);
+const ShowAllProduct = async (page = 1, pageSize = 7, name = '') => {
+  const response = await axios.get(`${API_BASE_URL}/products/all`, {
+    params: { pageNumber: page, pageSize: pageSize, },
+  });
   return response.data;
-}
+};
 
 const deleteProductById = (id) => {
   return axios.delete(`${API_BASE_URL}/products/${id}`);

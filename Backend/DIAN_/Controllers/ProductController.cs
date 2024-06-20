@@ -173,12 +173,25 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
-                var products = await _productRepo.GetAllAsync(query);
-                return Ok(products);
-            }catch(Exception)
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var (products, paginationMetadata) = await _productRepo.GetAllAsync(query);
+
+                var response = new
+                {
+                    Products = products,
+                    PaginationMetadata = paginationMetadata
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception here
+                return StatusCode(500, "Internal server error");
             }
         }
 
