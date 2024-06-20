@@ -92,35 +92,16 @@ function SSContentList() {
     getContentList();
   };
 
-  const handleDelete = async (contentId) => {
-    swal({
-      title: "Are you sure to delete this content?",
-      text: "This action cannot be undone",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        try {
-          await deleteContentById(contentId);
-          fetchData(currentPage);
-          swal(
-            "Deleted successfully!",
-            "The diamond has been deleted.",
-            "success"
-          );
-        } catch (error) {
-          console.error("Error deleting diamond:", error);
-          swal(
-            "Something went wrong!",
-            "Failed to delete the diamond. Please try again.",
-            "error"
-          );
-        }
-      }
-    });
+  const handleDelete = async (id) => {
+    try {
+      await deleteContentById(id);
+      swal("Remove successfully!", "The blog has been deleted.", "success");
+      fetchData(); // Re-fetch the content list after deletion
+    } catch (error) {
+      console.error("Error deleting content:", error);
+      swal("Something is wrong!", "Failed to delete the blog. Please try again.", "error");
+    }
   };
-
 
   return (
     <div className="ss_manage_content_all_container">
