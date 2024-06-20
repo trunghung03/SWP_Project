@@ -88,7 +88,7 @@ builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>(
 builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
 
 
-builder.Services.AddScoped<IJobService, JobService>();
+//builder.Services.AddScoped<IJobService, JobService>();
 
 var app = builder.Build();
 
