@@ -51,7 +51,7 @@ namespace DIAN_.Mapper
             return new Purchaseorder
             {
                 UserId = dto.UserId,
-                Date = dto.Date,
+                Date = DateTime.Now,
                 Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
                 PaymentMethod = dto.PaymentMethod,
