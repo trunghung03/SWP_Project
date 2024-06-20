@@ -1,16 +1,17 @@
+using DIAN_.CustomExceptionMiddleware;
+using DIAN_.Extensions;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using DIAN_.Repository;
+using DIAN_.Services;
+using Hangfire;
+using HangfireBasicAuthenticationFilter;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using UserApplication.Interfaces;
 using UserApplication.Services;
-using DIAN_.Services;
-using NLog;
-using DIAN_.Extensions;
-using DIAN_.CustomExceptionMiddleware;
-using DIAN_.Helper;
-using Hangfire;
-using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
@@ -42,6 +44,8 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers();
+
+builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -84,7 +88,7 @@ builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>(
 builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
 
 
-
+builder.Services.AddScoped<IJobService, JobService>();
 
 var app = builder.Build();
 
@@ -102,6 +106,8 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 app.UseDeveloperExceptionPage();
+
+app.MapHub<NotificationsHub>("/notifications");
 
 app.ConfigureCustomExceptionMiddleware();
 app.UseExceptionHandler(opt => { });
