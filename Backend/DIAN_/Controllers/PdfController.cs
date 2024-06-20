@@ -10,9 +10,11 @@ namespace DIAN_.Controllers
     public class PdfController : ControllerBase
     {
         private readonly IWarrantyRepository _warrantyRepository;
-        public PdfController(IWarrantyRepository warrantyRepository)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public PdfController(IWarrantyRepository warrantyRepository, IHttpClientFactory httpClientFactory)
         {
             _warrantyRepository = warrantyRepository;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet("warranty")]
@@ -36,7 +38,16 @@ namespace DIAN_.Controllers
             // Convert HTML to PDF
             ConvertHtmlToPdf(htmlContent, outputPdfPath);
 
-            return Ok("PDF created successfully at " + Path.GetFullPath(outputPdfPath));
+            // Upload the PDF to Pixeldrain
+            string uploadUrl = await UploadPdfToPixeldrain(outputPdfPath);
+
+            // Delete the local PDF file
+            if (System.IO.File.Exists(outputPdfPath))
+            {
+                System.IO.File.Delete(outputPdfPath);
+            }
+
+            return Ok("PDF uploaded successfully to " + uploadUrl);
         }
 
         static void ConvertHtmlToPdf(string html, string outputPath)
@@ -46,6 +57,28 @@ namespace DIAN_.Controllers
             {
                 // Convert the HTML to PDF and write it to the output stream
                 HtmlConverter.ConvertToPdf(html, pdfDest);
+            }
+        }
+
+        private async Task<string> UploadPdfToPixeldrain(string filePath)
+        {
+            using (var client = _httpClientFactory.CreateClient())
+            using (var content = new MultipartFormDataContent())
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                content.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
+
+                var response = await client.PutAsync("https://pixeldrain.com/api/file", content);
+                response.EnsureSuccessStatusCode();
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                // Parse the response to get the URL
+                // Assuming the response contains a JSON object with a "link" field
+                var jsonResponse = System.Text.Json.JsonDocument.Parse(responseContent);
+                var fileId = jsonResponse.RootElement.GetProperty("link").GetString();
+
+                return "https://pixeldrain.com/u/" + fileId;
             }
         }
     }
