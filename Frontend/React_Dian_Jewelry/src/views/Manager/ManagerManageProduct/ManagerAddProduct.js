@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerAdd.scss';
-import { createProduct, getAllCategories, getAllCollection } from '../../../services/ManagerService/ManagerProductService.js';
+import { createProduct, getAllCategories, getAllCollection, getProductByName } from '../../../services/ManagerService/ManagerProductService.js';
 
 const ManagerAddProduct = () => {
     const navigate = useNavigate();
@@ -25,6 +25,8 @@ const ManagerAddProduct = () => {
 
     const [collections, setCollections] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [productList,setProductList] = useState([]);
+
 
     useEffect(() => {
         const fetchCollectionsAndCategories = async () => {
