@@ -111,7 +111,12 @@ namespace DIAN_.Repository
 
         public async Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId)
         {
-            var order = await _context.Purchaseorders.Where(po => po.DeliveryStaff == staffId).ToListAsync();
+            var order = await _context.Purchaseorders
+                .Where(po => po.DeliveryStaff == staffId &&
+                     (po.OrderStatus.ToLower() == "delivering" 
+                     || po.OrderStatus.ToLower() == "preparing" || po.OrderStatus.ToLower() == "completed"
+                     || po.OrderStatus.ToLower() == "cancelled"))
+                .ToListAsync();
             return order;
         }
 
@@ -133,5 +138,24 @@ namespace DIAN_.Repository
                                       .ToListAsync();
             return orders;
         }
+
+        public async Task<List<Purchaseorder>> GetUnpaidOrdersOlderThan(DateTime cutoffDate)
+        {
+            return await _context.Purchaseorders
+                .Where(po => po.Date < cutoffDate && po.OrderStatus == "Unpaid")
+                .ToListAsync();
+        }
+        public async Task<Purchaseorder?> DeleteOrder(int orderid)
+        {
+            var order = await _context.Purchaseorders.FirstOrDefaultAsync(po => po.OrderId == orderid);
+            if (order == null)
+            {
+                throw new Exception($"Order with id {orderid} not found.");
+            }
+            _context.Purchaseorders.Remove(order);
+            await _context.SaveChangesAsync();
+            return order;
+        }
+
     }
 }
