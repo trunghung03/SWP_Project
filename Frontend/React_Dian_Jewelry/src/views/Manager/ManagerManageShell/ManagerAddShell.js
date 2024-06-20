@@ -61,11 +61,11 @@ const ManagerAddShell = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Name</label>
-                            <input type="text" name="name" value={shellData.name} onChange={handleChange} required />
+                            <input placeholder="Add shell's name" type="text" name="name" value={shellData.name} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Amount Available</label>
-                            <input type="text" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
+                            <input placeholder="Add amount available" type="text" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

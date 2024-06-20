@@ -63,20 +63,20 @@ const ManagerAddCollection = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Collection ID</label>
-                            <input type="text" name="collectionId" value={collectionData.collectionId} onChange={handleChange} required />
+                            <input placeholder="Enter collection's id" type="text" name="collectionId" value={collectionData.collectionId} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Name</label>
-                            <input type="text" name="name" value={collectionData.name} onChange={handleChange} required />
+                            <input type="text" placeholder="Enter collection's name" name="name" value={collectionData.name} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Description</label>
-                        <input type="text" name="description" value={collectionData.description} onChange={handleChange} required />
+                        <input type="text" placeholder="Enter collection's description" name="description" value={collectionData.description} onChange={handleChange} required />
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Image Link</label>
-                        <input type="text" name="imageLink" value={collectionData.imageLink} onChange={handleChange} required />
+                        <input type="text" name="imageLink" placeholder="Enter collection's image link" value={collectionData.imageLink} onChange={handleChange} required />
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
