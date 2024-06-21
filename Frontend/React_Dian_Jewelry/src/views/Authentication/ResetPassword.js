@@ -53,6 +53,11 @@ const ResetPassword = () => {
         };
     }, []);
 
+    const isValidPassword = (password) => {
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,20}$/;
+        return passwordPattern.test(password);
+    };
+
     const handleResetPassword = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -61,6 +66,20 @@ const ResetPassword = () => {
             swal({
                 title: "Fields haven't filled in all yet!",
                 text: "Please fill in all fields first.",
+                icon: "error",
+                button: {
+                    text: "Ok",
+                    className: "swal-button"
+                },
+            });
+            setLoading(false);
+            return;
+        }
+
+        if (!isValidPassword(password)) {
+            swal({
+                title: "Password is too weak!",
+                text: "Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.",
                 icon: "error",
                 button: {
                     text: "Ok",

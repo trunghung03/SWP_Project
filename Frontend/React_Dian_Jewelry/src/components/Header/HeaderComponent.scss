@@ -392,8 +392,7 @@ body {
 
 .account_dropdown_menu {
     top: 25px;
-    left: auto;
-    right: 0;
+    left: -200px;
     width: auto;
     border-radius: 0;
     white-space: nowrap;
@@ -407,12 +406,12 @@ body {
     white-space: nowrap;
 }
 
-.icon_arrow {
-    cursor: pointer;
-    transition: transform 0.3s;
-    position: relative;
-    top: -3px;
-}
+// .icon_arrow {
+//     cursor: pointer;
+//     transition: transform 0.3s;
+//     position: relative;
+//     top: -3px;
+// }
 
 .icon_arrow_diamond,
 .icon_arrow_wedding {
@@ -511,7 +510,7 @@ li:focus {
     border-radius: 0;
     left: 0;
     right: 0;
-    top: 127%;
+    top: 38.5px;
     background-color: white;
     padding: 10px 40px 15px 40px;
 }
@@ -577,7 +576,7 @@ li:focus {
     border-radius: 0;
     left: -114%;
     right: 0;
-    top: 127%;
+    top: 38.5px;
     background-color: white;
     padding: 10px 40px 15px 40px;
 }
