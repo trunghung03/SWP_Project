@@ -141,6 +141,7 @@ const ManagerDiamondList = () => {
   const backList = async () =>{
     try {
       const response = await ShowAllDiamond();
+      setSearchQuery("");
       setDiamondList(response.data);
       setPagination(response.pagination);
     } catch (error) {

@@ -12,7 +12,7 @@ const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
 
-const ShowAllProduct = async (page = 1, pageSize = 6, name = '') => {
+const ShowAllProduct = async (pageNumber = 1, pageSize = 6, name = '') => {
   const response = await axios.get(`${API_BASE_URL}/products/all`, {
     params: {
       PageNumber: pageNumber,
@@ -56,4 +56,4 @@ const getAllCollection = async () => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getAllCollection,getProductCollection,getProductDiamond, getAllCategories,getProductByName };
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getAllCollection,getProductCollection,getProductDiamond, getAllCategories };
