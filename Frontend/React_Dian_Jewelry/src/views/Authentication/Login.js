@@ -9,6 +9,7 @@ import rightImage from "../../assets/img/right.jpeg";
 import rightImage2 from "../../assets/img/right2.jpg";
 import rightImage3 from "../../assets/img/right3.jpg";
 
+
 import {
   customerLoginApi,
   employeeLoginApi,

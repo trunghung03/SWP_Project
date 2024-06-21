@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const rolesPermissions = {
-    Admin: ['/admin-customer-list', '/admin-employee-list', '/admin-add-employee'],
-    Manager: ['/manager-statistic','/manager-collection-list', '/manager-add-collection', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
-    SalesStaff: ['/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page'],
-    DeliveryStaff: ['/delivery-staff-delivery-list', '/delivery-staff-delivery-detail'],
+    Admin: ['/','/admin-customer-list', '/admin-employee-list', '/admin-add-employee'],
+    Manager: ['/','/manager-statistic','/manager-collection-list', '/manager-add-collection', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
+    SalesStaff: ['/','/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page'],
+    DeliveryStaff: ['/','/delivery-staff-delivery-list', '/delivery-staff-delivery-detail'],
     Customer: ['/', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce'],
     Guest: ['/','/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/login', '/register', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce']
 };
@@ -31,6 +31,7 @@ const ProtectedRoute = ({ element: Component, path, ...rest }) => {
         let fromCheckout = localStorage.getItem('fromCheckout');
         const cartKey = `cartItems${customerId}`;
         const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+        const resetPasswordToken = localStorage.getItem('resetPasswordToken');
 
         if (path === '/checkout' && (fromCart !== 'true' || cartItems.length === 0)) {
             alert("You don't have permission to access this page!");
@@ -38,6 +39,11 @@ const ProtectedRoute = ({ element: Component, path, ...rest }) => {
         } else if (path === '/invoice' && fromCheckout !== 'true') {
             alert("You don't have permission to access this page!");
             navigate(-1);
+        } else if (path === '/reset-password') {
+            if (!resetPasswordToken) {
+                alert("You don't have permission to access this page!");
+                navigate(-1);
+            }
         } else if (!allowedPages.includes(path) || restricted.includes(path)) {
             alert("You don't have permission to access this page!");
             navigate(-1);

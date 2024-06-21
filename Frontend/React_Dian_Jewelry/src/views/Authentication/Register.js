@@ -113,10 +113,29 @@ const Register = () => {
                 return emailPattern.test(email);
             }
 
+            const isValidPassword = (password) => {
+                const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,20}$/;
+                return passwordPattern.test(password);
+            }
+
             if (!isValidEmail(email)) {
                 swal({
                     title: "Wrong email format!",
                     text: "Please enter a valid email.",
+                    icon: "error",
+                    button: {
+                        text: "Ok",
+                        className: "swal-button"
+                    },
+                });
+                setLoading(false);
+                return;
+            }
+
+            if (!isValidPassword(password)) {
+                swal({
+                    title: "Password is too weak!",
+                    text: "Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.",
                     icon: "error",
                     button: {
                         text: "Ok",
