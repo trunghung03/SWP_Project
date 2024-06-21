@@ -157,11 +157,11 @@ const ManagerProductList = () => {
     });
   };
 
-  const handleEdit = (product) => {
-    setEditMode(true);
-    setEditedProduct(product);
-    setOriginalProduct(product);
-  };
+const handleEdit = (product) => {
+  setEditMode(true);
+  setEditedProduct(product);
+  setOriginalProduct(product);
+};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
