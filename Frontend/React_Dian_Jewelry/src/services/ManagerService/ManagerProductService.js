@@ -9,7 +9,7 @@ const getProductDetail = async (id) => {
 };
 
 const getProductByName = async (name) => {
-  const response = await axios.get(`${API_BASE_URL}/products/all?Name=${name}`);
+  const response = await axios.get(`${API_BASE_URL}/products/all?Name=${name}&PageNumber=1&PageSize=6`);
   return response.data;
 };
 
@@ -17,12 +17,9 @@ const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
 
-const ShowAllProduct = async (pageNumber = 1, pageSize = 7) => {
+const ShowAllProduct = async (page = 1, pageSize = 6) => {
   const response = await axios.get(`${API_BASE_URL}/products/all`, {
-    params: {
-      PageNumber: pageNumber,
-      PageSize: pageSize,
-    },
+    params: { pageNumber: page, pageSize: pageSize, },
   });
   return response.data;
 };
