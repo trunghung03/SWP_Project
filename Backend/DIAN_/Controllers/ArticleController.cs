@@ -1,9 +1,6 @@
 ﻿using DIAN_.DTOs.ArticleDTO;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
-using DIAN_.Models;
-using DIAN_.Repository;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers

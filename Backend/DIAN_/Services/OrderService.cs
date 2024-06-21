@@ -1,18 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DIAN_.DTOs.Account;
 using DIAN_.DTOs.AccountDTO;
-using DIAN_.DTOs.OrderDetailDto;
-using DIAN_.DTOs.PromotionDto;
 using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
-using DIAN_.Models;
-using DIAN_.Repository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace DIAN_.Services
@@ -101,46 +90,5 @@ namespace DIAN_.Services
             return orderToDto.ToPurchaseOrderDTO();
         }
 
-        public async Task<decimal> ApplyCoupon(string couponCode) //not checkout yet, getPromoCodeAmount
-        {
-            var promotion = await _promotionRepository.GetPromotionByCodeAsync(couponCode);
-            if (promotion == null)
-            {
-                return 0;
-            }
-            else
-            {
-                if (promotion.Status)
-                {
-                    return promotion.Amount;
-                }
-            }
-            return 0;
-        }
-        public async Task<decimal> CheckUsedPoints(int userId, decimal totalPrice, bool usePoints)
-        {
-            if (usePoints)
-            {
-                var customer = await _customerRepository.GetByIdAsync(userId);
-                if (customer != null && customer.Points > 0)
-                {
-                    totalPrice -= customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
-                }
-            }
-            return totalPrice;
-        }
-
-        public async Task<decimal> ApplyCoupon(string couponCode, decimal totalPrice) // include totalPrice calculate
-        {
-            var promotion = await _promotionRepository.GetPromotionByCodeAsync(couponCode);
-            if (promotion != null && promotion.Status)
-            {
-                var promotionId = promotion.PromotionId;
-
-                    totalPrice -= promotion.Amount * totalPrice; // just apply,not pay yet
-                    return totalPrice;
-            }
-            return 0;
-        }
     }
 }

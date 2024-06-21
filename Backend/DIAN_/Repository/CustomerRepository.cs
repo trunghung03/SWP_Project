@@ -79,7 +79,8 @@ namespace DIAN_.Repository
             var customer = new Customer
             {
                 Email = user.Email,
-                Password = _passwordHasher.HashPassword(new Customer(), user.Password ?? string.Empty),
+                Password = _passwordHasher.HashPassword(null, user.Password),
+                //Password = _passwordHasher.HashPassword(new Customer(), user.Password ?? string.Empty),
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 Address = user.Address ?? null,
