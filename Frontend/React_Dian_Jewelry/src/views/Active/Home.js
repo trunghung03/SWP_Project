@@ -30,12 +30,13 @@ import princess from '../../assets/img/princess.png';
 import marquise from '../../assets/img/marquise.png';
 import asscher from '../../assets/img/asscher.png';
 import heart from '../../assets/img/heart.png';
-import slide3 from '../../assets/img/slide1.png';
+import slide3 from '../../assets/img/slide1.jpg';
 import slide2 from '../../assets/img/slide2.png';
-import slide1 from '../../assets/img/slide3.png';
-import ringCategory from '../../assets/img/ringCategory.jpg';
-import impression from '../../assets/img/impression.png';
-import proposal from '../../assets/img/proposal.png';
+import slide1 from '../../assets/img/slide3.webp';
+import slide3Small from '../../assets/img/slide3Small.webp';
+import slide2Small from '../../assets/img/slide2Small.webp';
+import slide1Small from '../../assets/img/slide1Small.jpg';
+import sliderBackground from '../../assets/img/homeBackground.png';
 import bb from '../../assets/img/bb.png';
 import trending from '../../assets/img/trending.png';
 
@@ -77,6 +78,7 @@ const Home = () => {
   const [animate, setAnimate] = useState(false);
   const [collections, setCollections] = useState([]);
   const [activeTab, setActiveTab] = useState('newArrivals');
+  const [displayProducts, setDisplayProducts] = useState([]);
 
   const settings = {
     dots: true,
@@ -171,62 +173,180 @@ const Home = () => {
     });
   }, []);
 
-  const products = [
+  const newProducts = [
     {
       id: 1,
       image: earringC,
       name: 'Diamond earrings',
-      oldPrice: '$200.00',
-      newPrice: '$189.00',
-      tag: 'NEW',
+      price: '$189.00',
     },
     {
       id: 2,
       image: ringC,
       name: 'Geometric gold ring',
-      oldPrice: '$180.00',
-      newPrice: '$159.00',
-      tag: '',
+      price: '$159.00',
     },
     {
       id: 3,
       image: braceletC,
       name: 'Gemstone earrings',
-      oldPrice: '$200.00',
-      newPrice: '$189.00',
-      tag: 'HOT',
+      price: '$189.00',
     },
     {
       id: 4,
       image: necklaceC,
       name: 'Gold diamond ring',
-      newPrice: '$289.00',
-      tag: '',
+      price: '$289.00',
+    },
+    {
+      id: 5,
+      image: earringC,
+      name: 'Diamond earrings',
+      price: '$189.00',
+    },
+    {
+      id: 6,
+      image: ringC,
+      name: 'Geometric gold ring',
+      price: '$159.00',
+    },
+    {
+      id: 7,
+      image: braceletC,
+      name: 'Gemstone earrings',
+      price: '$189.00',
+    },
+    {
+      id: 8,
+      image: necklaceC,
+      name: 'Gold diamond ring',
+      price: '$289.00',
     },
   ];
 
+  const sellProducts = [
+    {
+      id: 9,
+      image: earringC,
+      name: 'Silver earrings',
+      price: '$199.00',
+    },
+    {
+      id: 10,
+      image: ringC,
+      name: 'Modern gold ring',
+      price: '$169.00',
+    },
+    {
+      id: 11,
+      image: braceletC,
+      name: 'Classic earrings',
+      price: '$179.00',
+    },
+    {
+      id: 12,
+      image: necklaceC,
+      name: 'Platinum ring',
+      price: '$299.00',
+    },
+    {
+      id: 13,
+      image: earringC,
+      name: 'Ruby earrings',
+      price: '$189.00',
+    },
+    {
+      id: 14,
+      image: ringC,
+      name: 'Elegant gold ring',
+      price: '$159.00',
+    },
+    {
+      id: 15,
+      image: braceletC,
+      name: 'Diamond bracelet',
+      price: '$189.00',
+    },
+    {
+      id: 16,
+      image: necklaceC,
+      name: 'Sapphire necklace',
+      price: '$289.00',
+    },
+  ];
+
+
+  useEffect(() => {
+    setDisplayProducts(newProducts);
+  }, []);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    if (tab === 'newArrivals') {
+      setDisplayProducts(newProducts);
+    } else {
+      setDisplayProducts(sellProducts);
+    }
+  };
+
+  const getNavLinkClass = (tab) => {
+    return tab === activeTab ? 'home_feature_navlink active-tab' : 'home_feature_navlink';
   };
 
   return (
     <div className="Home">
       <HeaderComponent />
+
       {/* Slider */}
       <div className="slider-container">
         <Slider {...settings}>
           <div className="slide">
-            <img src={slide1} alt="Slide 1" />
-            {/* <div className={`slide-content ${animate ? 'animate-text' : ''}`}>
-              <h2 className="slide-title">TO LOVE AND CHERISH</h2>
-              <p className="slide-text"> Make it unforgettable with the beautiful pieces that’ll always be adored.</p>
-            </div> */}
+            <div className="slide-background">
+              <img src={sliderBackground} alt="Background" />
+            </div>
+            <div className="slide-content">
+              <img className="slide-img left-img" src={slide1} alt="Slide 1" />
+              <h1>DIAMOND <br></br>RINGS</h1>
+              <div className="slide-right-section">
+                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E  L  R  Y</p>
+                <div className="slide-small-image">
+                  <img src={slide1Small} alt="Small Slide 1" />
+                  <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'ring' })} className="slide-button">SHOP THIS CATEGORY</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="slide">
-            <img src={slide2} alt="Slide 2" />
+            <div className="slide-background">
+              <img src={sliderBackground} alt="Slide 2" />
+              <h1>NEW  <br></br>ARRIVAL</h1>
+            </div>
+            <div className="slide-content">
+              <img className="slide-img left-img" src={slide2} alt="Slide 2" />
+              <div className="slide-right-section">
+                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E  L  R  Y</p>
+                <div className="slide-small-image">
+                  <img src={slide2Small} alt="Small Slide 2" />
+                  <button onClick={() => handleNavigate('/collection', { collectionId: 1 })} className="slide-button">SHOP THIS COLLECTION</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="slide">
-            <img src={slide3} alt="Slide 3" />
+            <div className="slide-background">
+              <img src={sliderBackground} alt="Slide 3" />
+              <h1>ENGAGEMENT <br></br>RINGS</h1>
+            </div>
+            <div className="slide-content">
+              <img className="slide-img left-img" src={slide3} alt="Slide 3" />
+              <div className="slide-right-section">
+                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E  L  R  Y</p>
+                <div className="slide-small-image">
+                  <img src={slide3Small} alt="Small Slide 3" />
+                  <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'engagementRing' })} className="slide-button">SHOP THIS CATEGORY</button>
+                </div>
+              </div>
+            </div>
           </div>
         </Slider>
       </div>
@@ -311,7 +431,7 @@ const Home = () => {
             </a>
           </div>
           <div className="diamond_shape_column">
-            <a  onClick={() => handleNavigate('/shape', { shape: 'Marquise' })}>
+            <a onClick={() => handleNavigate('/shape', { shape: 'Marquise' })}>
               <img src={marquise} alt="Marquise" className="diamond_shape_image" />
               <p className="diamond_shape_name">Marquise</p>
             </a>
@@ -346,7 +466,7 @@ const Home = () => {
                     <p className="category_name_large_hover">Earrings</p>
                     <div className="category_hover_text">
                       <span className="category_large_letter">E</span>
-                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'earrings' })} className="category_view_collection">VIEW COLLECTION</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'earrings' })} className="category_view_collection">VIEW CATEGORY</span>
                     </div>
                   </div>
                 </div>
@@ -361,7 +481,7 @@ const Home = () => {
                     <p className="category_name_small_hover">Ring</p>
                     <div className="category_hover_text_small">
                       <span className="category_large_letter_small">R</span>
-                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'ring' })} className="category_view_collection_small">VIEW COLLECTION</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'ring' })} className="category_view_collection_small">VIEW CATEGORY</span>
                     </div>
                   </div>
                 </div>
@@ -374,7 +494,7 @@ const Home = () => {
                     <p className="category_name_small_hover">Bracelet</p>
                     <div className="category_hover_text_small">
                       <span className="category_large_letter_small">B</span>
-                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'bracelet' })} className="category_view_collection_small">VIEW COLLECTION</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'bracelet' })} className="category_view_collection_small">VIEW CATEGORY</span>
                     </div>
                   </div>
                 </div>
@@ -389,7 +509,7 @@ const Home = () => {
                     <p className="category_name_large_hover">Necklace</p>
                     <div className="category_hover_text">
                       <span className="category_large_letter">N</span>
-                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'necklace' })} className="category_view_collection">VIEW COLLECTION</span>
+                      <span onClick={() => handleNavigate('/diamond-jewelry', { category: 'necklace' })} className="category_view_collection">VIEW CATEGORY</span>
                     </div>
                   </div>
                 </div>
@@ -424,8 +544,7 @@ const Home = () => {
         </div>
       </div>
 
-
-      {/* Best & Belove */}
+      {/* Best & Beloved */}
       <div className="bb_container">
         <img src={bb} alt="Best & Beloved" className="bb_image" />
         <div className="bb_content">
@@ -437,26 +556,25 @@ const Home = () => {
         </div>
       </div>
 
-
       {/* Trending */}
       <div className="trending_container">
         <div className="trending_text">trendy collection</div>
         <div className="trending_white">                                 </div>
         <div className="row">
-          <div className="col-md-6 ">
+          <div className="col-lg-5 col-md-6 ">
             <img src={trending} alt="Trending" className="trending_image" />
           </div>
-          <div className="col-md-6 trending_right">
+          <div className="col-lg-7 col-md-6 trending_right">
             <h2 className="trending_title">Trending Jewelry</h2>
             <div className="trending_product_card_section row">
               <div className="trending_product_card card">
-                <img src={ringCategory} alt="Product 1" className="product_image" />
+                <img src={brilliant1} alt="Product 1" className="product_image" />
                 <p className="trending_product_name">Susererr earring</p>
                 <p className="trending_product_price"><del>$400.00 </del>    $359.00</p>
                 <button className="view_detail_button">View detail</button>
               </div>
               <div className="trending_product_card card">
-                <img src={ringCategory} alt="Product 2" className="product_image" />
+                <img src={brilliant1} alt="Product 2" className="product_image" />
                 <p className="trending_product_name">Geometric gold ring</p>
                 <p className="trending_product_price"><del>$250.00 </del>    $219.00</p>
                 <button className="view_detail_button">View detail</button>
@@ -466,55 +584,41 @@ const Home = () => {
         </div>
       </div>
 
-
       {/* Feature */}
-      <div className="home_feature_container">
-        <div className="home_feature_navbar">
-          <button
-            className="home_feature_navlink"
-            onClick={() => handleTabClick('newArrivals')}
-          >
-            New arrivals
-          </button>
-          <button
-            className="home_feature_navlink"
-            onClick={() => handleTabClick('bestSellers')}
-          >
-            Best sellers
-          </button>
-        </div>
-        <div className="home_feature_products">
-          {products.map((product) => (
-            <div key={product.id} className="home_feature_product_card">
-              {product.tag && <span className={`home_feature_tag ${product.tag.toLowerCase()}`}>{product.tag}</span>}
-              <img src={product.image} alt={product.name} className="home_feature_product_image" />
-              <p className="home_feature_product_name">{product.name}</p>
-              {product.oldPrice && <p className="home_feature_old_price">{product.oldPrice}</p>}
-              <p className="home_feature_new_price">{product.newPrice}</p>
-            </div>
-          ))}
+      <div className='home_feature_container_wrapper'>
+        <div className="home_feature_container container">
+          <div className="home_feature_navbar">
+            <button
+              className={getNavLinkClass('newArrivals')}
+              onClick={() => handleTabClick('newArrivals')}
+            >
+              New arrivals
+            </button>
+            <button
+              className={getNavLinkClass('bestSellers')}
+              onClick={() => handleTabClick('bestSellers')}
+            >
+              Best sellers
+            </button>
+          </div>
+
+          <div className="row">
+            {displayProducts.map((product) => (
+              <div key={product.id} className="col-md-3">
+                <div className="home_feature_product_card">
+                  <div className="home_feature_product_icon_wrapper" data-tooltip="View detail">
+                    <i className="far fa-eye home_feature_product_icon_eye" ></i>
+                  </div>
+                  <img src={product.image} alt={product.name} className="home_feature_product_image" />
+                  <p className='home_feature_product_detail'>VS1 | 0.2 | G</p>
+                  <p className="home_feature_product_name">{product.name}</p>
+                  <p className="home_feature_product_price">{product.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-
-      {/* Impression */}
-      {/* <div className="impression_container">
-        <img src={impression} alt="Make An Impression" className="impression_image" />
-        <div className="impression_content">
-          <h2 className="impression_title">Make An Impression</h2>
-          <p className="impression_description">The best jewelry embraces extravagance. Discover truly remarkable, one-of-a-kind pieces that are sure to leave them speechless.</p>
-          <button onClick={() => handleNavigate('/collection', { collection: 'majesticMystique' })} className="impression_shop_now_button">SHOP MAJESTIC MYSTIQUE COLLECTION</button>
-        </div>
-      </div> */}
-
-      {/* Proposal */}
-      {/* <div className="proposal_container">
-        <img src={proposal} alt="An Unforgettable Proposal" className="proposal_image" />
-        <div className="proposal_content">
-          <h2 className="proposal_title">An Unforgettable Proposal</h2>
-          <p className="proposal_description">Glamourous details and matching bands—we have the perfect rings to seal the deal.</p>
-          <button onClick={() => handleNavigate('/collection', { collection: 'vintageVirtue' })} className="proposal_shop_now_button">SHOP VINTAGE VIRTUE COLLECTION</button>
-        </div>
-      </div> */}
 
       {/* Reason */}
       <Reason></Reason>

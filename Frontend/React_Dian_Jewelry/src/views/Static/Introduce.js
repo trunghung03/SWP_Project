@@ -11,15 +11,6 @@ import inclusion from '../../assets/img/inclusion.jpg';
 import differ1 from '../../assets/img/difference1.png';
 import differ2 from '../../assets/img/difference2.png';
 import experience from '../../assets/img/experience.webp';
-import ringCategory from '../../assets/img/ringCategory.jpg';
-import wRingCategory from '../../assets/img/wRingCategory.jpg';
-import engagementCategory from '../../assets/img/engagementCategory.jpg';
-import earringCategory from '../../assets/img/earringCategory.webp';
-import wEarringCategory from '../../assets/img/wEarringCategory.jpg';
-import braceletCategory from '../../assets/img/braceletCategory.webp';
-import wBraceletCategory from '../../assets/img/wBraceletCategory.jpg';
-import necklaceCategory from '../../assets/img/necklaceCategory.jpg';
-import wNecklaceCategory from '../../assets/img/wNecklaceCategory.jpg';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
@@ -35,15 +26,15 @@ const Introduce = () => {
   const navigate = useNavigate();
 
   const cardData = [
-    { name: "Ring", img: ringCategory, category: 'ring' },
-    { name: "Earrings", img: earringCategory, category: 'earrings' },
-    { name: "Bracelet", img: braceletCategory, category: 'bracelet' },
-    { name: "Wedding Ring", img: wRingCategory, category: 'weddingRing' },
-    { name: "Necklace", img: necklaceCategory, category: 'necklace' },
-    { name: "Wedding Earrings", img: wEarringCategory, category: 'weddingEarrings' },
-    { name: "Wedding Bracelet", img: wBraceletCategory, category: 'weddingBracelet' },
-    { name: "Wedding Necklace", img: wNecklaceCategory, category: 'weddingNecklace' },
-    { name: "Engagement Ring", img: engagementCategory, category: 'engagementRing' }
+    { name: "Ring", img: experience, category: 'ring' },
+    { name: "Earrings", img: experience, category: 'earrings' },
+    { name: "Bracelet", img: experience, category: 'bracelet' },
+    { name: "Wedding Ring", img: experience, category: 'weddingRing' },
+    { name: "Necklace", img: experience, category: 'necklace' },
+    { name: "Wedding Earrings", img: experience, category: 'weddingEarrings' },
+    { name: "Wedding Bracelet", img: experience, category: 'weddingBracelet' },
+    { name: "Wedding Necklace", img: experience, category: 'weddingNecklace' },
+    { name: "Engagement Ring", img: experience, category: 'engagementRing' }
   ];
 
   useEffect(() => {

@@ -192,8 +192,8 @@ const HeaderComponent = () => {
                             </Link>
                             <div className="account_dropdown_section dropdown">
                                 <i className="icon_account fas fa-user"></i>
-                                <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                    aria-expanded="false"></i>
+                                {/* <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                    aria-expanded="false"></i> */}
                                 <ul className="account_dropdown_menu dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     {user.firstName ? (
                                         <>
