@@ -66,7 +66,7 @@ namespace DIAN_.Repository
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (customer == null) { return null; }
 
-            var verificationResult = _passwordHasher.VerifyHashedPassword(null, customer.Password, loginDto.Password);
+            var verificationResult = _passwordHasher.VerifyHashedPassword(customer, customer.Password, loginDto.Password);
             if (verificationResult == PasswordVerificationResult.Failed) { return null; }
 
             return customer;
@@ -80,6 +80,7 @@ namespace DIAN_.Repository
             {
                 Email = user.Email,
                 Password = _passwordHasher.HashPassword(null, user.Password),
+                //Password = _passwordHasher.HashPassword(new Customer(), user.Password ?? string.Empty),
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 Address = user.Address ?? null,

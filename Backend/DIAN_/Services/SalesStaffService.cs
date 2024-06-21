@@ -33,21 +33,6 @@ namespace DIAN_.Services
             _logger = logger;
         }
 
-        public Task<string> GeneratePdfAsync(Diamond diamond)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> PrepareCertificate(int orderId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Warranty> PrepareWarranty(int orderId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Purchaseorder> UpdateOrderStatus(string status, int orderId)
         {
             var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);

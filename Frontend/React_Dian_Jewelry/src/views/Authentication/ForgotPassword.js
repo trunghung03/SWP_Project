@@ -9,6 +9,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { forgotPasswordApi } from '../../services/UserService';
+import { Link } from 'react-router-dom'; 
 
 const ForgotPassword = () => {
     const [loading, setLoading] = useState(false);
@@ -104,7 +105,7 @@ const ForgotPassword = () => {
                                 Send verify email
                             </button>
                         </div>
-                        <a className="back_to_login" href="/login">&lt; Back to login</a>
+                        <Link className="back_to_login" to="/login">&lt; Back to login</Link> {/* Updated to Link component */}
                     </form>
                 </div>
 

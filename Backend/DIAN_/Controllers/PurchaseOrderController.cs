@@ -4,7 +4,6 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.VnPay;
 using Microsoft.AspNetCore.Mvc;
-using DIAN_.Services;
 
 
 namespace DIAN_.Controllers
@@ -68,22 +67,6 @@ namespace DIAN_.Controllers
             }
             catch (Exception) { throw; }
         }
-        [HttpPost]
-        public async Task<IActionResult> Create(CreatePurchaseOrderDTO purchaseOrderDTO)
-        {
-            try
-            {
-                if(!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var order = purchaseOrderDTO.ToCreatePurchaseOrder();
-                var createdOrder = await _purchaseOrderRepo.CreatePurchaseOrderAsync(order);
-                return CreatedAtAction(nameof(GetInfo), new { id = createdOrder.OrderId }, createdOrder.ToPurchaseOrderDTO());
-            }
-            catch (Exception) { throw; }
-
-        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePurchaseOrderDTO purchaseOrderDTO)
@@ -109,46 +92,6 @@ namespace DIAN_.Controllers
                 var createdOrderResult = _orderService.CreatePurchaseOrderAsync(purchaseOrderDTO, promotionCode);
 
                 return Ok(createdOrderResult);
-            }
-            catch (Exception) { throw; }
-        }
-
-
-        //// Endpoint to view orders by status
-        //[HttpGet("status/{status}")]
-        //public async Task<ActionResult<List<Purchaseorder>>> ViewOrderByStatus(string status)
-        //{
-        //    try
-        //    {
-        //        var orders = await _purchaseOrderRepo.GetPurchaseOrderStatusAsync(status);
-        //        if (orders == null)
-        //        {
-        //            return NotFound($"Cannot find {status} order");
-
-        //        }
-        //        return orders;
-        //    }
-        //    catch (Exception) { throw; }
-        //}
-
-        [HttpPost("apply-coupon")]
-        public async Task<ActionResult<decimal>> ApplyCoupon(string code, decimal totalPrice)
-        {
-            try
-            {
-                var updatedTotalPrice = await _orderService.ApplyCoupon(code, totalPrice);
-                return Ok(updatedTotalPrice);
-            }
-            catch (Exception) { throw; }
-        }
-
-        [HttpPost("check-used-points")]
-        public async Task<ActionResult<decimal>> CheckUsedPoints(int userId, decimal totalPrice, bool usedPoints)
-        {
-            try
-            {
-                var updatedTotalPrice = await _orderService.CheckUsedPoints(userId, totalPrice, usedPoints);
-                return Ok(updatedTotalPrice);
             }
             catch (Exception) { throw; }
         }

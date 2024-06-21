@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
@@ -27,6 +27,34 @@ const HeaderComponent = () => {
     const weddingMenuTimeoutRef = useRef(null);
     const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
     const [showNotifications, setShowNotifications] = useState(false);
+
+    useEffect(() => {
+        const role = localStorage.getItem('role');
+        if (['Admin', 'SalesStaff', 'Manager', 'DeliveryStaff'].includes(role)) {
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            const rememberedPassword = localStorage.getItem('rememberedPassword');
+            
+            const allCartItems = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('cartItems')) {
+                    allCartItems[key] = localStorage.getItem(key);
+                }
+            }
+
+            localStorage.clear();
+
+            if (rememberedEmail && rememberedPassword) {
+                localStorage.setItem('rememberedEmail', rememberedEmail);
+                localStorage.setItem('rememberedPassword', rememberedPassword);
+            }
+
+            for (const key in allCartItems) {
+                localStorage.setItem(key, allCartItems[key]);
+            }
+            window.location.href = '/login';
+        }
+    }, []);
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');

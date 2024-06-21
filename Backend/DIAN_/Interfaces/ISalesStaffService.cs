@@ -14,12 +14,6 @@ namespace DIAN_.Interfaces
 
         Task DeleteUnpaidOrdersOlderThan3Days();
 
-        Task<bool> PrepareCertificate(int orderId); //prepare pdf
-
-        Task<Warranty> PrepareWarranty(int orderId);     //prepare pdf
-
-        Task<string> GeneratePdfAsync(Diamond diamond); //gen pdf?
-
 
     }
 }
