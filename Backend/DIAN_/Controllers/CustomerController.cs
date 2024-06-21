@@ -44,21 +44,24 @@ namespace UserApplication.Controllers
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var customer = await _customerRepository.GetByEmailAsync(loginDto.Email);
+                var customer = await _customerRepository.LoginAsync(loginDto);
                 if (customer == null) { return Unauthorized("Invalid Email or Password!"); }
 
-                return Ok(
-                    new NewUserDto
-                    {
-                        Email = customer.Email,
-                        Token = _tokenService.CreateCustomerToken(customer)
-                    });
+                // Generate a new token for the logged-in customer
+                var token = _tokenService.CreateCustomerToken(customer);
+
+                return Ok(new NewUserDto
+                {
+                    Email = customer.Email,
+                    Token = token
+                });
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpPost("registercustomer")]
         public async Task<IActionResult> Register(RegisterUserDto user)
