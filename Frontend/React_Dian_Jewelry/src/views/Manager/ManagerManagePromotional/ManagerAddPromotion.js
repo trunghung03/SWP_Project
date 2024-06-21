@@ -92,7 +92,7 @@ const ManagerAddPromotion = () => {
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Amount</label>
+                            <label>Discount Percentage</label>
                             <input type="text" name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
                         </div>
                     </div>

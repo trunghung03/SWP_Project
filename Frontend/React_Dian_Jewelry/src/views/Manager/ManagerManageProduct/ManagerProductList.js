@@ -104,7 +104,7 @@ const ManagerProductList = () => {
     fetchData(pageNumber);
   };
 
-  const handleSearchKeyPress = async (e) => {
+  const handleSearchKeyPress = async (e,page = 1) => {
     const isInteger = (value) => {
       return /^-?\d+$/.test(value);
     };
@@ -125,7 +125,8 @@ const ManagerProductList = () => {
         }
       } else if (searchQuery.trim()) {
         try {
-          const response = await getProductByName(searchQuery.trim());
+          const response = await getProductByName(page, pagination.pageSize,searchQuery.trim());
+          console.log(response);
           if(Array.isArray(response)){
             setProductItems(response);
           }
@@ -378,6 +379,7 @@ return (
               </TableRow>
             </TableHead>
             <TableBody>
+              
               {productItems.length > 0 ? (
                 productItems.map((item) => (
                   <TableRow className="manager_manage_table_body_row" key={item.productId}>

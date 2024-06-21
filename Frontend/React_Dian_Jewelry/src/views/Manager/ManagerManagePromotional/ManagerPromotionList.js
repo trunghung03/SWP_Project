@@ -317,7 +317,7 @@ const ManagerPromotionList = () => {
                   <StyledTableCell>ID</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Code</StyledTableCell>
-                  <StyledTableCell align="center">Discount</StyledTableCell>
+                  <StyledTableCell align="center">Discount Percentage</StyledTableCell>
                   <StyledTableCell align="center">Description</StyledTableCell>
                   <StyledTableCell align="center">Start Date</StyledTableCell>
                   <StyledTableCell align="center">End Date</StyledTableCell>
