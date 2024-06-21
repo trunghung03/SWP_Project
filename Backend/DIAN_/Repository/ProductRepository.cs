@@ -48,7 +48,7 @@ namespace DIAN_.Repository
                 .AnyAsync(p => p.ProductCode == proCode);
         }
 
-        public async Task<(List<ProductDTO>, PaginationMetadata)> GetAllAsync(ProductQuery query)
+        public async Task<(List<ProductDTO>, int)> GetAllAsync(ProductQuery query)
         {
             var products = _context.Products
                 .Where(p => p.Status)
@@ -61,23 +61,15 @@ namespace DIAN_.Repository
                 products = products.Where(p => EF.Functions.Like(p.Name, $"%{query.Name}%"));
             }
 
-            var totalItems = await products.CountAsync();
-            var skip = (query.PageNumber - 1) * query.PageSize;
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
             var productList = await products
-                .Skip(skip)
+                .Skip(skipNumber)
                 .Take(query.PageSize)
                 .Select(p => p.ToProductDTO())
                 .ToListAsync();
 
-            var paginationMetadata = new PaginationMetadata
-            {
-                TotalItems = totalItems,
-                PageSize = query.PageSize,
-                CurrentPage = query.PageNumber,
-                TotalPages = (int)Math.Ceiling(totalItems / (double)query.PageSize)
-            };
-
-            return (productList, paginationMetadata);
+            var totalItems = await products.CountAsync();
+            return (productList, totalItems);
         }
         /*return await _context.Products.Where(p => p.Status)
                      .Include(p => p.Category).ThenInclude(c => c.Size)

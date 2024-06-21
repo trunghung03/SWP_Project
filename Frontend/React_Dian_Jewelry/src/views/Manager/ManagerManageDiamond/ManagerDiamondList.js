@@ -215,25 +215,28 @@ const ManagerDiamondList = () => {
     const pages = [];
     const totalPages = pagination.totalPages;
     const currentPage = pagination.currentPage;
-
-    const startPage = Math.max(1, currentPage - 1);
-    const endPage = Math.min(totalPages, currentPage + 2);
-
-    if (startPage > 1) {
-      pages.push(
-        <button
-          key={1}
-          onClick={() => handlePageChange(1)}
-          className={1 === currentPage ? "manager_order_active" : ""}
-        >
-          1
-        </button>
-      );
-      if (startPage > 2) {
-        pages.push(<span key="dots1">...</span>);
-      }
+  
+    // Ensure totalPages and currentPage are valid
+    if (totalPages <= 1) return null;
+  
+    // Always show the first page
+    pages.push(
+      <button
+        key={1}
+        onClick={() => handlePageChange(1)}
+        className={1 === currentPage ? "manager_order_active" : ""}
+      >
+        1
+      </button>
+    );
+  
+    if (currentPage > 3) {
+      pages.push(<span key="start-ellipsis">...</span>);
     }
-
+  
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+  
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <button
@@ -245,24 +248,24 @@ const ManagerDiamondList = () => {
         </button>
       );
     }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pages.push(<span key="dots2">...</span>);
-      }
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className={totalPages === currentPage ? "manager_order_active" : ""}
-        >
-          {totalPages}
-        </button>
-      );
+  
+    if (currentPage < totalPages - 2) {
+      pages.push(<span key="end-ellipsis">...</span>);
     }
-
+  
+    // Always show the last page
+    pages.push(
+      <button
+        key={totalPages}
+        onClick={() => handlePageChange(totalPages)}
+        className={totalPages === currentPage ? "manager_order_active" : ""}
+      >
+        {totalPages}
+      </button>
+    );
+  
     return (
-      <div className="manager_manage_diamond_pagination">
+      <div className="manager_manage_product_pagination">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -279,6 +282,8 @@ const ManagerDiamondList = () => {
       </div>
     );
   };
+  
+  
 
   return (
     <div className="manager_manage_diamond_all_container">

@@ -178,15 +178,22 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var (products, paginationMetadata) = await _productRepo.GetAllAsync(query);
+                var (products, totalItems) = await _productRepo.GetAllAsync(query);
 
-                var response = new
+                if (!products.Any())
                 {
-                    Products = products,
-                    PaginationMetadata = paginationMetadata
+                    return NotFound("Product does not exist");
+                }
+
+                var pagination = new
+                {
+                    currentPage = query.PageNumber,
+                    pageSize = query.PageSize,
+                    totalPages = (int)Math.Ceiling((double)totalItems / query.PageSize),
+                    totalCount = totalItems
                 };
 
-                return Ok(response);
+                return Ok(new { data = products, pagination });
             }
             catch (Exception ex)
             {

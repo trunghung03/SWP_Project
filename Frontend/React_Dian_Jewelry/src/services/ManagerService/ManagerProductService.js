@@ -17,9 +17,12 @@ const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
 
-const ShowAllProduct = async (page = 1, pageSize = 7, name = '') => {
+const ShowAllProduct = async (pageNumber = 1, pageSize = 7) => {
   const response = await axios.get(`${API_BASE_URL}/products/all`, {
-    params: { pageNumber: page, pageSize: pageSize, },
+    params: {
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+    },
   });
   return response.data;
 };

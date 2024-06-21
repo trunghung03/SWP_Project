@@ -12,7 +12,6 @@ import {
   getProductCollection,
   getProductCategory,
   getProductDiamond,
-  getProductByName,
 } from "../../../services/ManagerService/ManagerProductService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -38,11 +37,11 @@ const ManagerProductList = () => {
   const [categories, setCategories] = useState({});
   const [collections, setCollections] = useState({});
   const [mainDiamonds, setMainDiamonds] = useState({});
-  const [paginationMetadata, setPaginationMetadata] = useState({
-    totalItems: 0,
-    pageSize: 1,
+  const [pagination, setPagination] = useState({
     currentPage: 1,
+    pageSize: 6,
     totalPages: 1,
+    totalCount: 0,
   });
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -55,60 +54,50 @@ const ManagerProductList = () => {
     },
   }));
 
-  useEffect(() => {
-    const fetchData = async (page = 1, pageSize = 6, name = '') => {
-      try {
-        const response = await ShowAllProduct(page, pageSize, name);
-        setProductItems(response.data.products);
-        setPaginationMetadata(response.data.paginationMetadata);
-    
-        const categoryMap = {};
-        const collectionMap = {};
-        const mainDiamondMap = {};
-    
-        for (const product of response.data.products) {
-          if (product.categoryId !== null && !categoryMap[product.categoryId]) {
-            const category = await getProductCategory(product.categoryId);
-            categoryMap[product.categoryId] = category.name;
-          }
-    
-          if (product.collectionId !== null && !collectionMap[product.collectionId]) {
-            const collection = await getProductCollection(product.collectionId);
-            collectionMap[product.collectionId] = collection.name;
-          }
-    
-          if (product.mainDiamondId !== null && !mainDiamondMap[product.mainDiamondId]) {
-            const mainDiamond = await getProductDiamond(product.mainDiamondId);
-            mainDiamondMap[product.mainDiamondId] = mainDiamond.shape;
-          }
-        }
-    
-        setCategories(categoryMap);
-        setCollections(collectionMap);
-        setMainDiamonds(mainDiamondMap);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    
-    fetchData();
-  }, []);
+  const fetchData = async (page = 1) => {
+    try {
+      const response = await ShowAllProduct(page, pagination.pageSize, searchQuery);
+      setProductItems(response.data);
+      setPagination(response.pagination);
 
-  const handlePageChange = (pageNumber) => {
-    const fetchData = async (page = 1, pageSize = 6, name = '') => {
-      try {
-        const response = await ShowAllProduct(page, pageSize, name);
-        setProductItems(response.data.products);
-        setPaginationMetadata(response.data.paginationMetadata);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      const categoryMap = {};
+      const collectionMap = {};
+      const mainDiamondMap = {};
+
+      for (const product of response.data) {
+        if (product.categoryId !== null && !categoryMap[product.categoryId]) {
+          const category = await getProductCategory(product.categoryId);
+          categoryMap[product.categoryId] = category.name;
+        }
+
+        if (product.collectionId !== null && !collectionMap[product.collectionId]) {
+          const collection = await getProductCollection(product.collectionId);
+          collectionMap[product.collectionId] = collection.name;
+        }
+
+        if (product.mainDiamondId !== null && !mainDiamondMap[product.mainDiamondId]) {
+          const mainDiamond = await getProductDiamond(product.mainDiamondId);
+          mainDiamondMap[product.mainDiamondId] = mainDiamond.shape;
+        }
       }
-    };
-    fetchData(pageNumber, paginationMetadata.pageSize, searchQuery);
-    setPaginationMetadata((prev) => ({ ...prev, currentPage: pageNumber }));
+
+      setCategories(categoryMap);
+      setCollections(collectionMap);
+      setMainDiamonds(mainDiamondMap);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  // Search product by ID or name
+  useEffect(() => {
+    fetchData(pagination.currentPage);
+  }, [pagination.currentPage]);
+
+  const handlePageChange = (pageNumber) => {
+    setPagination((prev) => ({ ...prev, currentPage: pageNumber }));
+    fetchData(pageNumber);
+  };
+
   const handleSearchKeyPress = async (e) => {
     const isInteger = (value) => {
       return /^-?\d+$/.test(value);
@@ -118,23 +107,22 @@ const ManagerProductList = () => {
         try {
           const response = await getProductDetail(searchQuery.trim());
           setProductItems([response]);
-          setPaginationMetadata({
-            totalItems: 1,
-            pageSize: 1,
+          setPagination({
             currentPage: 1,
+            pageSize: 1,
             totalPages: 1,
+            totalCount: 1,
           });
         } catch (error) {
           console.error("Error fetching product:", error);
           swal("Product not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
-        handlePageChange(1); // To search by name with pagination
+        fetchData(1);
       }
     }
   };
 
-  // Delete product by ID
   const handleDelete = async (productID) => {
     swal({
       title: "Are you sure to delete this product?",
@@ -146,7 +134,7 @@ const ManagerProductList = () => {
       if (willDelete) {
         try {
           await deleteProductById(productID);
-          handlePageChange(1); // Refresh list after deletion
+          fetchData(pagination.currentPage);
           swal(
             "Deleted successfully!",
             "The product has been deleted.",
@@ -164,7 +152,6 @@ const ManagerProductList = () => {
     });
   };
 
-  // Update product by ID
   const handleEdit = (product) => {
     setEditMode(true);
     setEditedProduct(product);
@@ -202,9 +189,8 @@ const ManagerProductList = () => {
     const productToUpdate = { ...editedProduct, status: true };
 
     try {
-      console.log("Sending update request with data:", productToUpdate);
       await updateProductById(productToUpdate.productId, productToUpdate);
-      handlePageChange(paginationMetadata.currentPage); // Refresh list after update
+      fetchData(pagination.currentPage);
       setEditMode(false);
       swal(
         "Updated successfully!",
@@ -222,6 +208,91 @@ const ManagerProductList = () => {
         "error"
       );
     }
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    const totalPages = pagination.totalPages;
+    const currentPage = pagination.currentPage;
+  
+    if (totalPages <= 5) {
+      // Show all pages if total pages are less than or equal to 5
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={i === currentPage ? "manager_order_active" : ""}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+      // Show first page
+      pages.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={1 === currentPage ? "manager_order_active" : ""}
+        >
+          1
+        </button>
+      );
+  
+      if (currentPage > 3) {
+        pages.push(<span key="start-ellipsis">...</span>);
+      }
+  
+      // Show previous, current, and next page
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPages - 1, currentPage + 1);
+  
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={i === currentPage ? "manager_order_active" : ""}
+          >
+            {i}
+          </button>
+        );
+      }
+  
+      if (currentPage < totalPages - 2) {
+        pages.push(<span key="end-ellipsis">...</span>);
+      }
+  
+      // Show last page
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={totalPages === currentPage ? "manager_order_active" : ""}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+  
+    return (
+      <div className="manager_manage_diamond_pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+        {pages}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -243,7 +314,7 @@ const ManagerProductList = () => {
             />
             <button
               className="manager_manage_diamond_create_button"
-              onClick={() => handlePageChange(1)}
+              onClick={() => fetchData(1)}
             >
               Show all products
             </button>
@@ -258,31 +329,7 @@ const ManagerProductList = () => {
           >
             Add new product
           </button>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(paginationMetadata.currentPage - 1)}
-              disabled={paginationMetadata.currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: paginationMetadata.totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === paginationMetadata.currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(paginationMetadata.currentPage + 1)}
-              disabled={paginationMetadata.currentPage === paginationMetadata.totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          {renderPagination()}
         </div>
 
         {/* Table product list */}
@@ -439,4 +486,3 @@ const ManagerProductList = () => {
 };
 
 export default ManagerProductList;
-

@@ -15,7 +15,7 @@ namespace DIAN_.Interfaces
         Task<Product> UpdateProductAsync(Product product, int id);
         Task DeleteAsync(int id);
         Task<ProductDetailDTO> GetDetailAsync(int id);
-        Task<(List<ProductDTO>, PaginationMetadata)> GetAllAsync(ProductQuery query);
+        Task<(List<ProductDTO>, int)> GetAllAsync(ProductQuery query);
         Task<List<ProductListDTO>> GetByNameAsync(string name);
         Task<bool> ExistsMainDiamondAsync(int mainDiamondId);
         Task<bool> ExistsProCodeAsync(string proCode);
