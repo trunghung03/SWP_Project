@@ -7,9 +7,9 @@ namespace UserApplication.Dtos.Account
         [Required]
         [EmailAddress]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "Password is required.")]
-        [StringLength(100, ErrorMessage = "Password must be between 6 and 100 characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
+        //[Required(ErrorMessage = "Password is required.")]
+        //[StringLength(100, ErrorMessage = "Password must be between 6 and 100 characters long.", MinimumLength = 6)]
+        //[DataType(DataType.Password)]
         public string? Password { get; set; }
         [Required]
         public string? LastName { get; set; }

@@ -31,8 +31,8 @@ const DSDeliveryList = () => {
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      backgroundColor: '#f9c6bb',
+      color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -231,7 +231,7 @@ const handleBackClick = () => {
                     >
                       <TableCell align="center">{item.orderId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{item.date}</TableCell>
+                      <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")} </TableCell>
                       <TableCell align="center">
                         {item.shippingAddress}
                       </TableCell>

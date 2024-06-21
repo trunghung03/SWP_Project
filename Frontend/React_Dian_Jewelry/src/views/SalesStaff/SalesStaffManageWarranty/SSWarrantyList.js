@@ -40,14 +40,13 @@ const SSWarrantyList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      backgroundColor: '#f9c6bb',
+      color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
   }));
-
   const handleMoreDetails = (item) => {
     console.log("More details for item:", item);
     // Implement the logic to show more details about the item

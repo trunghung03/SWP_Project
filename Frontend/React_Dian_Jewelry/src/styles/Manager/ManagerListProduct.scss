@@ -38,29 +38,16 @@
 .manager_manage_product_header .manager_manage_product_search_section {
     display: flex;
     align-items: center;
+    //background-color: white;
 }
 
-.manager_manage_product_header .manager_manage_product_search_section input {
-    background-color: #f3f4f6;
-    border: none;
-    width: 220px;
-    height: 28px;
-}
-
-.manager_manage_product_header .manager_manage_product_search_section input:focus {
-    background-color: #f3f4f6;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    width: 220px;
-}
 
 .manager_manage_product_header .manager_manage_product_search_bar {
     padding: 10px;
     border-radius: 5px;
     margin-top: 5px;
-}
-
+    margin-right: 10px;
+    } 
 .manager_manage_product_all_container h3{
     text-align: center;
     font-weight: bold;
@@ -75,8 +62,8 @@
 }
 
 .manager_manage_diamond_create_button {
-    background-color: #1c1c1c;
-    color: white;
+    background-color: #edaca5;
+    color: black;
     padding: 5px 20px;
     border: none;
     border-radius: 11px;
@@ -172,9 +159,9 @@
 }
 
 .manager_manage_product_pagination .manager_order_active {
-    background-color: #1c1c1c;
+    background-color: #f9c6bb;
     color: white;
-    border: 1px solid #1c1c1c;
+    border: 1px solid #f9c6bb;
 }
 
 // Update modal

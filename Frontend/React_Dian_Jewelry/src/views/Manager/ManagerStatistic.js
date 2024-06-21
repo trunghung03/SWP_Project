@@ -273,8 +273,8 @@ const ManagerStatitic = () => {
                 </Select>
               </FormControl>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div className="manager_manage_display_chart">
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div clasName="manager_manage_display_chart"style={{ flex: '2', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
               <h3>Sales</h3>
               {loading ? (
                 <p>Loading...</p>
@@ -284,7 +284,7 @@ const ManagerStatitic = () => {
                 <p>No data available for the selected year</p>
               )}
             </div>
-            <div className="manager_manage_display_chart">
+            <div style={{ flex: '1', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
               <h3>Category Sold</h3>
               {allCatePercentages.length > 0 ? (
                 <Doughnut data={trafficSourceData} />
@@ -292,7 +292,7 @@ const ManagerStatitic = () => {
                 <p>Please choose the year to see report</p>
               )}
             </div>
-          </div>
+            </div>
         </div>
       </div>
     </div>

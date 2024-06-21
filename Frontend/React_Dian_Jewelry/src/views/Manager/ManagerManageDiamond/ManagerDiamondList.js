@@ -37,8 +37,8 @@ const ManagerDiamondList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      backgroundColor: '#f9c6bb',
+      color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -340,29 +340,29 @@ const ManagerDiamondList = () => {
               <TableBody>
                 {diamondList.length > 0 ? (
                   diamondList.map((item) => (
-                    <StyledTableRow key={item.diamondId}>
-                      <StyledTableCell align="center">
+                    <TableRow className="manager_manage_table_body_row" key={item.diamondId}>
+                      <TableCell align="center">
                         {item.diamondId}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.shape}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.color}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.clarity}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.carat}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.cut}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.amountAvailable}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         {item.certificateScan ? (
                           <img
                             src={item.certificateScan}
@@ -372,8 +372,8 @@ const ManagerDiamondList = () => {
                         ) : (
                           "No certificate"
                         )}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
@@ -382,8 +382,8 @@ const ManagerDiamondList = () => {
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </StyledTableCell>
-                    </StyledTableRow>
+                      </TableCell>
+                    </TableRow>
                   ))
                 ) : (
                   <StyledTableRow>

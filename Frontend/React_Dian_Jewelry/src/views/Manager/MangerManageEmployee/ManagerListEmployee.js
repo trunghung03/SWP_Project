@@ -12,7 +12,6 @@ import {
   getEmployeeByRole,
 } from "../../../services/ManagerService/ManagerEmployeeService.js";
 import logo from "../../../assets/img/logoN.png";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -32,7 +31,7 @@ const ManagerEmployeeList = () => {
   const [originalEmployee, setOriginalEmployee] = useState({});
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f8dcce',
+      backgroundColor: '#f9c6bb',
       color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
@@ -235,7 +234,6 @@ const ManagerEmployeeList = () => {
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
           <div className="manager_manage_diamond_search_section">
-            <i className="fas fa-search manager_manage_search_icon"></i>
             <input
               type="text"
               className="manager_manage_diamond_search_bar"

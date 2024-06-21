@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderList.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import { getOrderById } from "../../../services/TrackingOrderService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -35,8 +34,8 @@ const SSOrderList = () => {
   const [isSearch, setIsSearch] = useState(false);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      backgroundColor: '#f9c6bb',
+      color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
