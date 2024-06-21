@@ -54,9 +54,9 @@ const ManagerProductList = () => {
     },
   }));
 
-  const fetchData = async (page = 1) => {
+  const fetchData = async (page = 1, query = '') => {
     try {
-      const response = await ShowAllProduct(page, pagination.pageSize, searchQuery);
+      const response = await ShowAllProduct(page, pagination.pageSize, query);
       setProductItems(response.data);
       setPagination(response.pagination);
 
@@ -95,7 +95,7 @@ const ManagerProductList = () => {
 
   const handlePageChange = (pageNumber) => {
     setPagination((prev) => ({ ...prev, currentPage: pageNumber }));
-    fetchData(pageNumber);
+    fetchData(pageNumber, searchQuery);
   };
 
   const handleSearchKeyPress = async (e) => {
@@ -109,7 +109,7 @@ const ManagerProductList = () => {
           setProductItems([response]);
           setPagination({
             currentPage: 1,
-            pageSize: 1,
+            pageSize: 7,
             totalPages: 1,
             totalCount: 1,
           });
@@ -118,9 +118,14 @@ const ManagerProductList = () => {
           swal("Product not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
-        fetchData(1);
+        fetchData(1, searchQuery);
       }
     }
+  };
+
+  const handleShowAllProducts = () => {
+    setSearchQuery("");
+    fetchData(1);
   };
 
   const handleDelete = async (productID) => {
@@ -134,7 +139,7 @@ const ManagerProductList = () => {
       if (willDelete) {
         try {
           await deleteProductById(productID);
-          fetchData(pagination.currentPage);
+          fetchData(pagination.currentPage, searchQuery);
           swal(
             "Deleted successfully!",
             "The product has been deleted.",
@@ -190,7 +195,7 @@ const ManagerProductList = () => {
 
     try {
       await updateProductById(productToUpdate.productId, productToUpdate);
-      fetchData(pagination.currentPage);
+      fetchData(pagination.currentPage, searchQuery);
       setEditMode(false);
       swal(
         "Updated successfully!",
@@ -314,7 +319,7 @@ const ManagerProductList = () => {
             />
             <button
               className="manager_manage_diamond_create_button"
-              onClick={() => fetchData(1)}
+              onClick={handleShowAllProducts}
             >
               Show all products
             </button>
