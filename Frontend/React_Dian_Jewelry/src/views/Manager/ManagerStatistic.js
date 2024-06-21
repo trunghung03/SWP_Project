@@ -146,7 +146,7 @@ const ManagerStatitic = () => {
   };
 
   const trafficSourceData = {
-    labels: allCatePercentages.map((item) => item.category),
+    labels: ['Rings', 'Earrings','Bracelets','Necklaces'],
     datasets: [
       {
         data: allCatePercentages.map((item) => item.percentage),

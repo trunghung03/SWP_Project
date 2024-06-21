@@ -27,7 +27,6 @@ const ManagerAddProduct = () => {
     const [categories, setCategories] = useState([]);
     const [productList,setProductList] = useState([]);
 
-
     useEffect(() => {
         const fetchCollectionsAndCategories = async () => {
             try {
