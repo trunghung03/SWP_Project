@@ -35,6 +35,12 @@ function DiamondPrice() {
   ];
 
   const calculatePrice = () => {
+    if (!cut || !color || !carat || !clarity) {
+      setPrice('Please fill in all fields for the most accurate price');
+      setShowPrice(true);
+      return;
+    }
+
     setLoading(true);
     getDiamondPrice(cut, carat, clarity, color)
       .then(response => {
@@ -148,7 +154,7 @@ function DiamondPrice() {
         </form>
         {showPrice && (
           <div className="diamond_price_result">
-            <p>{price !== 'Diamond not found' ? `Price: ${price}` : price}</p>
+            <p>{price !== 'Diamond not found' && price !== 'Please fill in all fields for the most accurate price' ? `Price: ${price}` : price}</p>
           </div>
         )}
       </div>

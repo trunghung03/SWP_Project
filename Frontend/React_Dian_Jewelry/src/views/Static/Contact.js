@@ -22,7 +22,7 @@ function Contact() {
 
       {/* Contact */}
       <div className="contact_container">
-        <h2 className="contact_title">CONTACT DIAN JEWELRY</h2>
+        <h2 className="contact_title">Contact Dian Jewelry</h2>
         <div className="contact_grid">
           <div className="contact_card">
             <div className="contact_icon">
