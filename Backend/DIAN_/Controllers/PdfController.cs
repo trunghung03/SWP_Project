@@ -1,7 +1,11 @@
 ﻿using DIAN_.Interfaces;
+using DIAN_.Models;
+using DIAN_.Repository;
 using iText.Html2pdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace DIAN_.Controllers
 {
@@ -10,30 +14,38 @@ namespace DIAN_.Controllers
     public class PdfController : ControllerBase
     {
         private readonly IWarrantyRepository _warrantyRepository;
+        private readonly IDiamondRepository _diamondRepository;
         private readonly IHttpClientFactory _httpClientFactory;
-        public PdfController(IWarrantyRepository warrantyRepository, IHttpClientFactory httpClientFactory)
+        public PdfController(IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IHttpClientFactory httpClientFactory)
         {
             _warrantyRepository = warrantyRepository;
             _httpClientFactory = httpClientFactory;
+            _diamondRepository = diamondRepository;
         }
 
         [HttpGet("warranty")]
-        public async Task<IActionResult> WarrantyPdf()
+        public async Task<IActionResult> WarrantyPdf(int id)
         {
-            // Define the HTML content
-            string htmlContent = @"
-            <html>
-            <head>
-                <title>Sample HTML to PDF</title>
-            </head>
-            <body>
-                <h1>Hello, World!</h1>
-                <p>This is a sample HTML to PDF conversion using iText7.</p>
-            </body>
-            </html>";
+            // Retrieve warranty data from the repository
+            var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
+            
+            if (warranty == null)
+            {
+                return NotFound();
+            }
+
+            // Read the HTML template from warrantyTemplate.html
+            string htmlTemplatePath = "warrantyTemplate.html";
+            string htmlContent = await System.IO.File.ReadAllTextAsync(htmlTemplatePath);
+
+            // Replace placeholders in the HTML template with actual warranty data
+            htmlContent = htmlContent.Replace("{OrderDetailId}", warranty.OrderDetailId.ToString())
+                                     .Replace("{StartDate}", warranty.StartDate.ToString("yyyy-MM-dd"))
+                                     .Replace("{EndDate}", warranty.EndDate.ToString("yyyy-MM-dd"))
+                                     .Replace("{Status}", warranty.Status ? "Active" : "Inactive");
 
             // Define the output PDF file path
-            string outputPdfPath = "output.pdf";
+            string outputPdfPath = "warranty.pdf";
 
             // Convert HTML to PDF
             ConvertHtmlToPdf(htmlContent, outputPdfPath);
@@ -47,7 +59,48 @@ namespace DIAN_.Controllers
                 System.IO.File.Delete(outputPdfPath);
             }
 
-            return Ok("PDF uploaded successfully to " + uploadUrl);
+            return Ok(uploadUrl);
+        }
+
+        [HttpGet("certificate")]
+        public async Task<IActionResult> CertificatePdf(int id)
+        {
+            // Retrieve diamond data from the repository
+            var diamond = await _diamondRepository.GetDiamondByIdAsync(id);
+
+            if (diamond == null)
+            {
+                return NotFound();
+            }
+
+            // Read the HTML template from diamondTemplate.html
+            string htmlTemplatePath = "certificateTemplate.html";
+            string htmlContent = await System.IO.File.ReadAllTextAsync(htmlTemplatePath);
+
+            // Replace placeholders in the HTML template with actual diamond data
+            htmlContent = htmlContent.Replace("{DiamondId}", diamond.DiamondId.ToString())
+                                     .Replace("{Shape}", diamond.Shape)
+                                     .Replace("{Color}", diamond.Color)
+                                     .Replace("{Clarity}", diamond.Clarity)
+                                     .Replace("{Carat}", diamond.Carat?.ToString() ?? "N/A")
+                                     .Replace("{Cut}", diamond.Cut);
+
+            // Define the output PDF file path
+            string outputPdfPath = "certificate.pdf";
+
+            // Convert HTML to PDF
+            ConvertHtmlToPdf(htmlContent, outputPdfPath);
+
+            // Upload the PDF to Pixeldrain
+            string uploadUrl = await UploadPdfToPixeldrain(outputPdfPath);
+
+            // Delete the local PDF file
+            if (System.IO.File.Exists(outputPdfPath))
+            {
+                System.IO.File.Delete(outputPdfPath);
+            }
+
+            return Ok(uploadUrl);
         }
 
         static void ConvertHtmlToPdf(string html, string outputPath)
@@ -60,26 +113,34 @@ namespace DIAN_.Controllers
             }
         }
 
-        private async Task<string> UploadPdfToPixeldrain(string filePath)
+        static async Task<string> UploadPdfToPixeldrain(string filePath)
         {
-            using (var client = _httpClientFactory.CreateClient())
-            using (var content = new MultipartFormDataContent())
+            using (var client = new HttpClient())
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                content.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
+                // Create a MultipartFormDataContent object to hold the file and form data
+                using (var form = new MultipartFormDataContent())
+                {
+                    // Add the file content to the form
+                    form.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
 
-                var response = await client.PutAsync("https://pixeldrain.com/api/file", content);
-                response.EnsureSuccessStatusCode();
+                    // Perform the POST request to upload the file
+                    var response = await client.PostAsync("https://pixeldrain.com/api/file", form);
 
-                var responseContent = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        throw new HttpRequestException($"Failed to upload PDF. Status code: {response.StatusCode}, Response: {responseContent}");
+                    }
 
-                // Parse the response to get the URL
-                // Assuming the response contains a JSON object with a "link" field
-                var jsonResponse = System.Text.Json.JsonDocument.Parse(responseContent);
-                var fileId = jsonResponse.RootElement.GetProperty("link").GetString();
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonDocument = System.Text.Json.JsonDocument.Parse(jsonResponse);
+                    var fileId = jsonDocument.RootElement.GetProperty("id").GetString();
 
-                return "https://pixeldrain.com/u/" + fileId;
+                    return "https://pixeldrain.com/u/" + fileId;
+                }
             }
         }
+
     }
 }
