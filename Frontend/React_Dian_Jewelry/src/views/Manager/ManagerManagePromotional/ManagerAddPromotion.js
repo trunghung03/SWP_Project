@@ -83,11 +83,11 @@ const ManagerAddPromotion = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Start Date</label>
-                            <input type="text" name="startDate" placeholder='Enter start date (yyyy/MM/dd)' value={promotionData.startDate} onChange={handleChange} required />
+                            <input type="date" name="startDate" placeholder='Enter start date (yyyy/MM/dd)' value={promotionData.startDate} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>End Date</label>
-                            <input type="text" placeholder='Enter end date (yyyy/MM/dd)' name="endDate" value={promotionData.endDate} onChange={handleChange} required />
+                            <input type="date" placeholder='Enter end date (yyyy/MM/dd)' name="endDate" value={promotionData.endDate} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
