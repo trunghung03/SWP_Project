@@ -5,6 +5,7 @@
     padding: 40px 5%;
     justify-content: center;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .product_card {
@@ -16,6 +17,7 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     height: 360px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .product_card img {
@@ -83,36 +85,56 @@
     transform: translateY(-5px);
 }
 
-.product_view_button {
+.product_view_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 195px;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    padding: 3px 20px;
-    background-color: transparent;
+    top: -200px;
+    left: 190px;
+    font-size: 17px;
     color: #1c1c1c;
-    border: 1px solid #1c1c1c;
-    cursor: pointer;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    background-color: white;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    padding: 1px 0.5px 0 0;
+    transition: opacity 0.3s ease-in-out, transform 0.4s ease-in-out;
     opacity: 0;
-    visibility: hidden;
-    height: 0;
-    overflow: hidden;
-    font-size: 14px;
-    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    cursor: pointer;
 }
 
-.product_view_button:hover{
-    background-color: #1c1c1c;
-    color: white;
-}
-
-.product_card:hover .product_view_button {
+.product_card:hover .product_view_icon {
     opacity: 1;
-    visibility: visible;
-    height: auto;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(-45px);
 }
+
+.product_view_icon_wrapper {
+    position: relative;
+}
+
+.product_view_icon_wrapper[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + -150px);
+    top: -235px;
+    background-color: #1c1c1c;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+    font-size: 12px;
+}
+
+.product_view_icon_wrapper:hover::after {
+    opacity: 1;
+}
+
 
 .special_card {
     flex: 0 0 260px;

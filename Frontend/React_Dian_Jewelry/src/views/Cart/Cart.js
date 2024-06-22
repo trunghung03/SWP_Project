@@ -13,6 +13,8 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
+
 
 function Cart() {
     const navigate = useNavigate();
@@ -200,6 +202,8 @@ function Cart() {
                     </div>
                 </div>
             )}
+            <br></br><br></br>
+            <Insta />
             <ScrollToTop />
             <FooterComponent />
         </div>

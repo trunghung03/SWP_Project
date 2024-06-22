@@ -10,11 +10,12 @@ import sustainability from '../../assets/img/sustainability.jpg';
 import inclusion from '../../assets/img/inclusion.jpg';
 import differ1 from '../../assets/img/difference1.png';
 import differ2 from '../../assets/img/difference2.png';
-import experience from '../../assets/img/experience.webp';
+import experience from '../../assets/img/experience.jpg';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import Reason from '../../components/Reason/Reason.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 const videoUrl = 'https://cdn.builder.io/o/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fe0e14f01688242cda1248f61fa4bd547%2Fcompressed?apiKey=b47f39b49d994f41bd8e68fa9258a402&token=e0e14f01688242cda1248f61fa4bd547&alt=media&optimized=true';
 
@@ -24,18 +25,6 @@ const Introduce = () => {
     { name: 'Introduce', link: '/introduce' }
   ];
   const navigate = useNavigate();
-
-  const cardData = [
-    { name: "Ring", img: experience, category: 'ring' },
-    { name: "Earrings", img: experience, category: 'earrings' },
-    { name: "Bracelet", img: experience, category: 'bracelet' },
-    { name: "Wedding Ring", img: experience, category: 'weddingRing' },
-    { name: "Necklace", img: experience, category: 'necklace' },
-    { name: "Wedding Earrings", img: experience, category: 'weddingEarrings' },
-    { name: "Wedding Bracelet", img: experience, category: 'weddingBracelet' },
-    { name: "Wedding Necklace", img: experience, category: 'weddingNecklace' },
-    { name: "Engagement Ring", img: experience, category: 'engagementRing' }
-  ];
 
   useEffect(() => {
     const wrapper = document.querySelector(".wrapper");
@@ -144,8 +133,6 @@ const Introduce = () => {
         </div>
       </div>
 
-
-
       {/* Reason  */}
       <Reason></Reason>
 
@@ -155,7 +142,7 @@ const Introduce = () => {
           <h3>WE ARE HERE FOR YOU</h3>
           <div className="introduce_experience_underline"></div>
           <p>Appointments are relaxed, joyful, and tailored to you. Whether it's a milestone moment or an everyday luxury, we're here to help you start your stack, find your fit, and design the perfect piece.</p>
-          <button onClick={() => navigate('/diamond-jewelry')} className="introduce_shop_now_btn">Shop now</button>
+          <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'all' })} className="introduce_shop_now_btn">Shop now</button>
         </div>
         <div className="introduce_experience_right">
           <img src={experience} alt="Dian Jewelry" />
@@ -189,27 +176,10 @@ const Introduce = () => {
         </div>
       </div>
 
-      {/* Explore */}
-      <div className="explore_jewelry_container">
-        <div className="explore_left_section">
-          <h1 className="explore_title">Move To Explore</h1>
-          <p className="featured_description">Explore our outstanding jewelry categories and collections, where artistry meets
-            timeless elegance. Each piece of jewelry is exquisitely crafted, bringing the splendor and class.</p>
-          <button onClick={() => navigate('/diamondJewelry')} className="explore_shop_now_btn">Shop now</button>
-          <i id="left" className="fa-solid fa-angle-left nav_arrow explore_left_arrow" role="button"></i>
-          <i id="right" className="fa-solid fa-angle-right nav_arrow explore_right_arrow" role="button"></i>
-        </div>
-        <div className="explore_right_section wrapper">
-          <ul className="carousel">
-            {cardData.map((card, index) => (
-              <li key={index} className="explore_product_card card" onClick={() => handleNavigate('/diamond-jewelry', { category: card.category })}>
-                <img src={card.img} alt={card.name} className="explore_product_image" />
-                <p className="explore_product_name">{card.name}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <br></br>
+      <CollectionSlide />
+      <br></br><br></br><br></br><br></br><br></br>
+
       <ScrollToTop></ScrollToTop>
       <Insta />
       <FooterComponent />

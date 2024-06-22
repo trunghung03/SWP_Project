@@ -12,9 +12,11 @@ const ProductCard = ({ id, image, name, price, color, carat, clarity }) => {
     };
 
     return (
-        <div className="product_card">
+        <div className="product_card" onClick={handleViewClick}>
             <img src={image} alt={name} />
-            <button className="product_view_button" onClick={handleViewClick}>View Detail</button>
+            <div className="product_view_icon_wrapper"  data-tooltip="View detail">
+                <i className="far fa-eye product_view_icon"></i>
+            </div>
             <p className='product_card_detail'>{clarity} | {carat} | {color}</p>
             <h6 className='product_card_name'>{name}</h6>
             <p className='product_card_price'>{price}$</p>

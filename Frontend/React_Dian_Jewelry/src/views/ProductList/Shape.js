@@ -22,7 +22,7 @@ import '../../styles/ProductList/Shape.scss';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-
+import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 
 function Shape() {
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ function Shape() {
         navigate(path, { state });
         setTimeout(() => {
             const element = document.getElementById('productShapeScrollto');
-            const offset = element.offsetTop - 50; 
+            const offset = element.offsetTop - 50;
             window.scrollTo({
                 top: offset,
                 behavior: 'smooth'
@@ -126,13 +126,13 @@ function Shape() {
 
     useEffect(() => {
         const element = document.getElementById('productShapeScrollto');
-        const offset = element.offsetTop - 50; 
+        const offset = element.offsetTop - 50;
         window.scrollTo({
             top: offset,
             behavior: 'smooth'
         });
     }, []);
-    
+
 
 
     return (
@@ -325,6 +325,11 @@ function Shape() {
                 </div>
                 <ProductList products={products} key={resetKey} />
             </div>
+
+            <br></br><br></br>
+            <CollectionSlide />
+            <br></br><br></br>
+
             <Question />
             <ScrollToTop />
             <Insta />

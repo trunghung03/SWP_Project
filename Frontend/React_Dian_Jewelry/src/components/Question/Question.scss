@@ -1,7 +1,7 @@
 // Faqs 
 .faqs_container {
     padding: 40px 100px;
-    margin-bottom: 30px;
+    margin-bottom: 55px;
 }
 
 .top_line,
@@ -51,8 +51,9 @@
 
 .more_faqs_btn {
     background-color: transparent;
-    color: #1c1c1c;
-    border: 1px solid #1c1c1c;
+    color: white;
+    background-color: #1c1c1c;
+    border: none;
     padding: 7px 55px;
     cursor: pointer;
     border-radius: 30px;
@@ -62,7 +63,7 @@
 }
 
 .more_faqs_btn:hover {
-    background-color: #1c1c1c;
+    background-color: #797979;
     color: white;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -75,7 +76,7 @@
     background-color: #f8dcce;
     padding: 45px 20% 35px 10%;
     color: #1c1c1c;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     margin-top: 70px;
 }
 

@@ -1,0 +1,276 @@
+/* Collection */
+.featured_jewelry_container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 -15px -75px;
+  position: relative;
+}
+
+.left_section {
+  width: 30%;
+  text-align: center;
+  padding: 0 3% 0 4%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured_title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #1c1c1c;
+  margin-bottom: -10px;
+}
+
+.featured_description {
+  font-size: 14px;
+  margin: 20px 15px 20px 15px;
+  color: #797979;
+}
+
+.shop_now_btn {
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  padding: 7px 55px;
+  cursor: pointer;
+  border-radius: 30px;
+  font-size: 13px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.shop_now_btn:hover {
+  background-color: #797979;
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.right_section {
+  display: flex;
+  width: 60%;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+.home_product_card {
+  width: 210px;
+  height: 350px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.home_product_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.home_product_name {
+  position: absolute;
+  bottom: -20px;
+  font-size: 14px;
+  color: #1c1c1c;
+  border-radius: 5px;
+  width: 100%;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  z-index: 1;
+  font-weight: bold;
+  opacity: 0;
+}
+
+.home_collection_hover_effect {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #1c1c1c;
+  transition: height 0.3s ease-in-out;
+  z-index: 0;
+}
+
+.home_product_card:hover .home_collection_hover_effect {
+  height: 13%;
+}
+
+.home_product_card:hover .home_product_name {
+  color: white;
+  transform: translateY(-16px);
+  opacity: 1;
+}
+
+.home_product_card:hover .home_product_image {
+  transform: scale(1.05);
+}
+
+.home_product_icon_eye {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 70px !important;
+  left: 62px !important;
+  font-size: 17px !important;
+  color: #1c1c1c !important;
+  background-color: white !important;
+  border-radius: 50%;
+  width: 45px !important;
+  height: 45px !important;
+  padding: 1px 0.5px 0 0 !important;
+  transition: opacity 0.3s ease-in-out, transform 0.4s ease-in-out !important;
+  opacity: 0;
+  box-shadow: none !important;
+  position: relative;
+}
+
+.home_product_card:hover .home_product_icon_eye {
+  opacity: 1;
+  transform: translateY(-55px);
+}
+
+.home_product_icon_wrapper {
+  position: relative;
+}
+
+.home_product_icon_wrapper[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + -40px);
+  top: 25px;
+  background-color: #1c1c1c;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+  font-size: 12px;
+}
+
+.home_product_icon_wrapper:hover::after {
+  opacity: 1;
+}
+
+
+.nav_arrow {
+  padding: 13px 15px 10px 15px;
+  border-radius: 50%;
+}
+
+.right_arrow:hover,
+.left_arrow:hover {
+  background-color: #e0e0e0;
+}
+
+.wrapper {
+  max-width: 100%;
+  position: relative;
+}
+
+.wrapper i {
+  top: 50%;
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
+  font-size: 1.25rem;
+  position: absolute;
+  text-align: center;
+  line-height: 27px;
+  background: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.23);
+  transform: translateY(-50%);
+  transition: transform 0.1s linear;
+  z-index: 1;
+}
+
+.wrapper i:active {
+  transform: translateY(-50%) scale(0.85);
+}
+
+.wrapper i:first-child {
+  left: -30px;
+}
+
+.wrapper i:last-child {
+  left: 785px;
+}
+
+.wrapper .carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% / 3) - -25px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel.no-transition {
+  scroll-behavior: auto;
+}
+
+.carousel.dragging {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.carousel.dragging .card {
+  cursor: grab;
+  user-select: none;
+}
+
+.carousel :where(.card, .img) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel .card {
+  scroll-snap-align: start;
+  list-style: none;
+  background: #fff;
+  cursor: pointer;
+  flex-direction: column;
+  margin-right: -50px;
+  width: 93%;
+  max-width: 265px;
+  border-radius: 0;
+}
+
+.carousel .card .img {
+  height: 148px;
+  width: 148px;
+  border-radius: 50%;
+}
+
+.card .img img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border: 4px solid #fff;
+}
+
+.carousel .card h2 {
+  font-weight: 500;
+  font-size: 1.56rem;
+  margin: 30px 0 5px;
+}
+
+.carousel .card span {
+  color: #6A6D78;
+  font-size: 1.31rem;
+}
+
+// End collection 

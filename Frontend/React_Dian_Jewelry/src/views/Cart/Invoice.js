@@ -10,6 +10,7 @@ import { getProductDetail } from '../../services/ProductService.js';
 import qr from '../../assets/img/qr.jpg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
 
 
 function Invoice() {
@@ -127,6 +128,9 @@ function Invoice() {
                     )}
                 </div>
             </div>
+
+            <br></br><br></br>
+            <Insta />
             <ScrollToTop />
             <FooterComponent/>
         </div>

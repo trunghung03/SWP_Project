@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
@@ -12,9 +12,11 @@ import '../../styles/ProductList/Collection.scss';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
+import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 
 function Collection() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [collectionInfo, setCollectionInfo] = useState(JSON.parse(localStorage.getItem('collectionInfo')) || {});
     const [navItems, setNavItems] = useState([]);
@@ -104,6 +106,12 @@ function Collection() {
         setSort('');
         setShape('');
         setResetKey(Date.now());
+    };
+
+    const handleCollectionClick = (path, state) => {
+        setTransitionKey(Date.now());
+        window.scrollTo(0, 0);
+        navigate(path, { state });
     };
 
     useEffect(() => {
@@ -264,6 +272,11 @@ function Collection() {
                 </div>
                 <ProductList products={products} resetKey={resetKey} />
             </div>
+
+            <br></br><br></br>
+            <CollectionSlide onCollectionClick={handleCollectionClick} />
+            <br></br><br></br>
+
             <Question />
             <ScrollToTop />
             <Insta />

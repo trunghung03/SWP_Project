@@ -15,6 +15,7 @@ import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
+import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 
 
 function ProductDetail() {
@@ -309,6 +310,23 @@ function ProductDetail() {
                 </div>
             )}
 
+            <div className="also_like_container">
+                <h2 className="also_like_title">You May Also Like</h2>
+                <div className="also_like_wrapper">
+                    {alsoLikeProducts.map((product, index) => (
+                        <div key={index} className="also_like_card"  onClick={(e) => { e.stopPropagation(); navigateToProductDetail(product.productId); }}>
+                            <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
+                            <div className="also_product_view_icon_wrapper" data-tooltip="View detail">
+                                <i className="far fa-eye also_product_view_icon"></i>
+                            </div>
+                            <p className="also_like_detail">{product.clarity} | {product.carat} | {product.color}</p>
+                            <p className="also_like_name">{product.name}</p>
+                            <p className="also_like_price">{product.price}$</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div>
                 <div className="just_for_you_container">
                     <div className="just_for_you_text">
@@ -332,21 +350,12 @@ function ProductDetail() {
                         </div>
                     </div>
                 </div>
-                <div className="also_like_container">
-                    <h2 className="also_like_title">YOU MAY ALSO LIKE</h2>
-                    <div className="also_like_wrapper">
-                        {alsoLikeProducts.map((product, index) => (
-                            <div key={index} className="also_like_card">
-                                <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
-                                <button className="also_view_button" onClick={(e) => { e.stopPropagation(); navigateToProductDetail(product.productId); }}>View Detail</button>
-                                <p className="also_like_detail">{product.clarity} | {product.carat} | {product.color}</p>
-                                <p className="also_like_name">{product.name}</p>
-                                <p className="also_like_price">{product.price}$</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
             </div>
+
+            <br></br><br></br>
+            <CollectionSlide />
+            <br></br><br></br><br></br><br></br><br></br>
+
             <ScrollToTop />
             <Insta />
             <FooterComponent />

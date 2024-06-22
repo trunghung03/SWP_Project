@@ -295,7 +295,7 @@ const Login = () => {
         firstName: decoded.given_name,
         lastName: decoded.family_name,
         email: decoded.email,
-        points:  userGGInfoRes.data.points,
+        points: userGGInfoRes.data.points,
       });
       localStorage.setItem("role", "Customer");
       localStorage.setItem("customerId", userGGInfoRes.data.customerId);
@@ -388,28 +388,30 @@ const Login = () => {
             </div>
             <div className="google_section text-center">
               <hr className="line" />
-              <GoogleLogin
-                className="google_login_btn"
-                buttonText="Login with Google"
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                render={(renderProps) => (
-                  <button
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                    className="google_custom_btn"
-                  >
-                    <i className="fab fa-google google-icon"></i> Login with Google
-                  </button>
-                )}
-              />
-            </div>
-            <div
-              className="guest_login_section text-center"
-              onClick={handleGuestLogin}
-              style={{ cursor: "pointer" }}
-            >
-              Sign in as guest
+              <div className="google_guest_section">
+                <GoogleLogin
+                  className="google_login_btn"
+                  buttonText="Login with Google"
+                  onSuccess={onSuccess}
+                  onFailure={onFailure}
+                  render={(renderProps) => (
+                    <button
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                      className="google_custom_btn"
+                    >
+                      <i className="fab fa-google google-icon"></i> Login with Google
+                    </button>
+                  )}
+                />
+                <div
+                  className="guest_login_section"
+                  onClick={handleGuestLogin}
+                  style={{ cursor: "pointer" }}
+                >
+                  Sign in as guest
+                </div>
+              </div>
             </div>
           </form>
         </div>

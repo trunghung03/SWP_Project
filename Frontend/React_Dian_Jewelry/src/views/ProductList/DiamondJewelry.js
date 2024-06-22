@@ -11,6 +11,7 @@ import ProductList from '../../components/ProductCard/ProductCard.js';
 import { getProductList } from '../../services/ProductService.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 import allBanner from '../../assets/img/allBanner.png';
 import weddingBanner from '../../assets/img/weddingBanner.png';
@@ -346,6 +347,11 @@ function DiamondJewelry() {
                 </div>
                 <ProductList products={products} resetKey={resetKey} />
             </div>
+
+            <br></br><br></br>
+            <CollectionSlide />
+            <br></br><br></br>
+
             <Question />
             <ScrollToTop />
             <Insta />

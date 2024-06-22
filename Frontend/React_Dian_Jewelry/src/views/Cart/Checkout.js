@@ -14,6 +14,7 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Insta from '../../components/BlogInspired/BlogInspired.js';
 
 
 const IOSSwitch = styled((props) => (
@@ -155,7 +156,7 @@ function Checkout() {
 
     const handleInvoice = async () => {
         const { fullName, phone, address, note } = formData;
-    
+
         if (!fullName || !phone || !address) {
             swal({
                 title: "Please fill in all the required fields!",
@@ -165,7 +166,7 @@ function Checkout() {
             });
             return;
         }
-    
+
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(phone)) {
             swal({
@@ -176,7 +177,7 @@ function Checkout() {
             });
             return;
         }
-    
+
         if (paymentMethod === '') {
             swal({
                 title: "Have not chosen a payment method!",
@@ -186,14 +187,14 @@ function Checkout() {
             });
             return;
         }
-    
+
         setLoading(true);
-    
+
         const userId = parseInt(localStorage.getItem('customerId'), 10);
         const date = new Date().toISOString();
         const initialTotal = calculateTotal();
         const totalDiscount = voucherDiscount + pointsDiscount;
-    
+
         let remainingPoints = points;
         let appliedDiscount = totalDiscount;
         if (totalDiscount > initialTotal) {
@@ -202,7 +203,7 @@ function Checkout() {
         } else {
             remainingPoints = points - pointsDiscount;
         }
-    
+
         const orderData = {
             userId: userId,
             date: date,
@@ -218,11 +219,11 @@ function Checkout() {
             saleStaff: 0,
             deliveryStaff: 0
         };
-    
+
         try {
             const createdOrder = await createPurchaseOrder(orderData, voucherCode);
             const orderId = createdOrder.orderId;
-    
+
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
@@ -234,21 +235,21 @@ function Checkout() {
                 };
                 return createOrderDetails(orderDetail);
             });
-    
+
             await Promise.all(orderDetailsPromises);
-    
+
             localStorage.setItem('orderId', orderId);
             localStorage.setItem('orderDate', date);
             localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
             localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
             localStorage.setItem('paymentMethod', paymentMethod);
-    
+
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
                 ...prevUser,
                 points: remainingPoints
             }));
-    
+
             if (paymentMethod === 'VNPAY') {
                 const paymentData = {
                     orderId,
@@ -263,18 +264,18 @@ function Checkout() {
                 const cartKey = `cartItems${customerId}`;
                 localStorage.removeItem(cartKey);
                 updateCartContext([]);
-    
+
                 swal({
                     title: "Order successfully!",
                     text: "Thank you for your order.",
                     icon: "success",
                     button: "OK",
                 });
-    
+
                 localStorage.setItem('fromCheckout', 'true');
                 navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } });
             }
-    
+
         } catch (error) {
             console.error('Error creating purchase order:', error);
             if (error.response) {
@@ -289,7 +290,7 @@ function Checkout() {
             setLoading(false);
         }
     };
-    
+
 
     const handlePointsClick = () => {
         setUsePoints(!usePoints);
@@ -306,7 +307,7 @@ function Checkout() {
 
     return (
         <div className="Checkout">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
 
             <div className="checkout_header">
@@ -461,9 +462,10 @@ function Checkout() {
                     </div>
                 </div>
             </div>
-
+            <br></br><br></br>
+            <Insta />
             <ScrollToTop />
-            <FooterComponent/>
+            <FooterComponent />
         </div>
     );
 }

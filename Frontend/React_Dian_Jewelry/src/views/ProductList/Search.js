@@ -8,8 +8,7 @@ import '../../styles/ProductList/Search.scss';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-
-
+import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 
 const Search = () => {
     const location = useLocation();
@@ -35,6 +34,11 @@ const Search = () => {
             </div>
 
             <ProductList products={products} resetKey={resetKey} />
+
+            <br></br><br></br>
+            <CollectionSlide />
+            <br></br><br></br>
+
             <Question />
             <ScrollToTop />
             <Insta />
