@@ -169,9 +169,14 @@ const ManagerDiamondList = () => {
       "certificateScan",
       "amountAvailable",
     ];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedDiamond[field]) {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedDiamond[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
         return;
       }
     }
@@ -416,8 +421,10 @@ const ManagerDiamondList = () => {
                 <input
                   type="text"
                   name="shape"
+                  maxLength={20}
                   value={editedDiamond.shape}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -425,8 +432,10 @@ const ManagerDiamondList = () => {
                 <input
                   type="text"
                   name="color"
+                  maxLength={20}
                   value={editedDiamond.color}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -434,8 +443,10 @@ const ManagerDiamondList = () => {
                 <input
                   type="text"
                   name="clarity"
+                  maxLength={4}
                   value={editedDiamond.clarity}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -443,8 +454,10 @@ const ManagerDiamondList = () => {
                 <input
                   type="text"
                   name="carat"
+                  maxLength={6}
                   value={editedDiamond.carat}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -452,8 +465,10 @@ const ManagerDiamondList = () => {
                 <input
                   type="text"
                   name="cut"
+                  maxLength={20}
                   value={editedDiamond.cut}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -463,6 +478,8 @@ const ManagerDiamondList = () => {
                   name="amountAvailable"
                   value={editedDiamond.amountAvailable}
                   onChange={handleChange}
+                  maxLength={10}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -472,6 +489,8 @@ const ManagerDiamondList = () => {
                   name="certificateScan"
                   value={editedDiamond.certificateScan}
                   onChange={handleChange}
+                  maxLength={255}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_modal_actions">

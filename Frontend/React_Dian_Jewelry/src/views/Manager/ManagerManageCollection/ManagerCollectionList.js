@@ -149,10 +149,15 @@ const ManagerCollectionList = () => {
 
   const handleUpdate = async () => {
     const requiredFields = ['name', 'description', 'status'];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
         if (!editedCollection[field]) {
             swal("Please fill in all fields!", `Field cannot be empty.`, "error");
             return;
+        }
+        if (specialCharPattern.test(editedCollection[field])) {
+          swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+          return;
         }
     }
 
@@ -329,8 +334,10 @@ const backList = async () =>{
                 <input
                   type="text"
                   name="name"
+                  maxLength={100}
                   value={editedCollection.name}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -338,8 +345,10 @@ const backList = async () =>{
                 <input
                   type="text"
                   name="amountAvailable"
+                  maxLength={255}
                   value={editedCollection.description}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_modal_actions">

@@ -179,64 +179,64 @@ const ManagerPromotionList = () => {
   };
 
   // Update by id
-  const handleEdit = (Promotion) => {
-    setEditMode(true);
-    setEditedPromotion(Promotion);
-    setOriginalPromotion(Promotion);
-  };
+  // const handleEdit = (Promotion) => {
+  //   setEditMode(true);
+  //   setEditedPromotion(Promotion);
+  //   setOriginalPromotion(Promotion);
+  // };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedPromotion({ ...editedPromotion, [name]: value });
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setEditedPromotion({ ...editedPromotion, [name]: value });
+  // };
 
-  const handleUpdate = async () => {
-    const status = true;
-    const price = 0;
-    const requiredFields = ["name", "amountAvailable"];
-    for (let field of requiredFields) {
-      if (!editedPromotion[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
-    }
+  // const handleUpdate = async () => {
+  //   const status = true;
+  //   const price = 0;
+  //   const requiredFields = ["name", "amountAvailable"];
+  //   for (let field of requiredFields) {
+  //     if (!editedPromotion[field]) {
+  //       swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+  //       return;
+  //     }
+  //   }
 
-    const isEqual =
-      JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
-    if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
-      return;
-    }
+  //   const isEqual =
+  //     JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
+  //   if (isEqual) {
+  //     swal("No changes detected!", "You have not made any changes.", "error");
+  //     return;
+  //   }
 
-    const PromotionToUpdate = { ...editedPromotion, status: true };
+  //   const PromotionToUpdate = { ...editedPromotion, status: true };
 
-    try {
-      console.log("Sending update request with data:", PromotionToUpdate);
-      const response = await updatePromotionById(
-        PromotionToUpdate.PromotionMaterialId,
-        PromotionToUpdate
-      );
-      console.log("Update response:", response.data);
-      const updatensetPromotionList = await ShowAllPromotion();
-      setPromotionList(updatensetPromotionList);
-      setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The Promotion information has been updated.",
-        "success"
-      );
-    } catch (error) {
-      console.error(
-        "Error updating Promotion:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
-    }
-  };
+  //   try {
+  //     console.log("Sending update request with data:", PromotionToUpdate);
+  //     const response = await updatePromotionById(
+  //       PromotionToUpdate.PromotionMaterialId,
+  //       PromotionToUpdate
+  //     );
+  //     console.log("Update response:", response.data);
+  //     const updatensetPromotionList = await ShowAllPromotion();
+  //     setPromotionList(updatensetPromotionList);
+  //     setEditMode(false);
+  //     swal(
+  //       "Updated successfully!",
+  //       "The Promotion information has been updated.",
+  //       "success"
+  //     );
+  //   } catch (error) {
+  //     console.error(
+  //       "Error updating Promotion:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //     swal(
+  //       "Something went wrong!",
+  //       "Failed to update. Please try again.",
+  //       "error"
+  //     );
+  //   }
+  // };
 
   const backList = async () =>{
     try {
@@ -353,7 +353,7 @@ const ManagerPromotionList = () => {
         </div>
       </div>
 
-      {/* Update modal */}
+      {/* Update modal
       {editMode && (
         <div
           className="manager_manage_diamond_modal_overlay"
@@ -390,7 +390,7 @@ const ManagerPromotionList = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

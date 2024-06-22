@@ -177,15 +177,20 @@ const handleEdit = (product) => {
       "collectionId",
       "categoryId",
     ];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
+
     for (let field of requiredFields) {
       if (!editedProduct[field]) {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
         return;
       }
+      if (specialCharPattern.test(editedProduct[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
     }
 
-    const isEqual =
-      JSON.stringify(originalProduct) === JSON.stringify(editedProduct);
+    const isEqual = JSON.stringify(originalProduct) === JSON.stringify(editedProduct);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
@@ -428,8 +433,10 @@ const handleEdit = (product) => {
                 <input
                   type="text"
                   name="name"
+                  maxLength={100}
                   value={editedProduct.name}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_product_form_group">
@@ -437,8 +444,10 @@ const handleEdit = (product) => {
                 <input
                   type="text"
                   name="description"
+                  maxLength={255}
                   value={editedProduct.description}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_product_form_group">
@@ -448,6 +457,7 @@ const handleEdit = (product) => {
                   name="laborPrice"
                   value={editedProduct.laborPrice}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_product_form_group">
@@ -457,6 +467,7 @@ const handleEdit = (product) => {
                   name="imageLinkList"
                   value={editedProduct.imageLinkList}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_product_form_group">
@@ -466,6 +477,7 @@ const handleEdit = (product) => {
                   name="collectionId"
                   value={editedProduct.collectionId}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -476,6 +488,7 @@ const handleEdit = (product) => {
                   name="categoryID"
                   value={editedProduct.categoryId}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_product_modal_actions">

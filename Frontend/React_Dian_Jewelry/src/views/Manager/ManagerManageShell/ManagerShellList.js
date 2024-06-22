@@ -165,9 +165,14 @@ const ManagerShellList = () => {
     const status = true;
     const price = 0;
     const requiredFields = ["name", "amountAvailable"];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedShell[field]) {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedShell[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
         return;
       }
     }
@@ -287,7 +292,7 @@ const ManagerShellList = () => {
                 <TableRow>
                    <StyledTableCell align="center">ID</StyledTableCell>
                    <StyledTableCell align="center">Name</StyledTableCell>
-                   <StyledTableCell align="center">Amount Available</StyledTableCell>
+                   <StyledTableCell align="center">Amount Available (g)</StyledTableCell>
                    <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -340,6 +345,8 @@ const ManagerShellList = () => {
                   name="name"
                   value={editedShell.name}
                   onChange={handleChange}
+                  maxLength={100}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -349,6 +356,7 @@ const ManagerShellList = () => {
                   name="amountAvailable"
                   value={editedShell.amountAvailable}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_modal_actions">
