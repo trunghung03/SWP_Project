@@ -63,7 +63,7 @@ namespace DIAN_.Repository
             var employee = await _context.Employees.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (employee == null) { return null; }
 
-            var verificationResult = _passwordHasher.VerifyHashedPassword(null, employee.Password, loginDto.Password);
+            var verificationResult = _passwordHasher.VerifyHashedPassword(employee, employee.Password, loginDto.Password);
             if (verificationResult == PasswordVerificationResult.Failed) { return null; }
 
 

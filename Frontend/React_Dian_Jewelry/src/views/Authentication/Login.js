@@ -120,19 +120,6 @@ const Login = () => {
 
   const handleLoginResponse = (res, userInfo, userType) => {
     if (res && res.data && res.data.token) {
-      if (userInfo.password !== password) {
-        swal({
-          title: "Wrong password!",
-          text: "Please try again.",
-          icon: "error",
-          button: {
-            text: "Ok",
-            className: "swal-button",
-          },
-        });
-        setLoading(false);
-        return;
-      }
       if (!userInfo.status) {
         swal({
           title: "Account is deactivated!",

@@ -33,7 +33,7 @@ namespace UserApplication.Controllers
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var employee = await _employeeRepository.GetByEmailAsync(loginDto.Email);
+                var employee = await _employeeRepository.LoginAsync(loginDto);
                 if (employee == null) { return Unauthorized("Invalid Email or Password!"); }
 
                 return Ok(
