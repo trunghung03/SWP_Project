@@ -40,9 +40,9 @@ const SSOrderDetail = () => {
       const url = await getWarrantyURL(orderId);
       setWarrantyURL(url);
       const emailData = {
-        to: "mimitrucduyen@gmail.com",
+        toEmail: sendTo,  
         subject: "Your Warranty",
-        body: url, 
+        body: `Here is your warranty link: ${url}`,
       };
       await sendWarrantyEmail(emailData);
       swal("Success", "Warranty email sent successfully", "success");

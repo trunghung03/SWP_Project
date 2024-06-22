@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService";
+import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 
 const SSAddWarrantyPopup = ({ orderId }) => {
   const [startDate, setStartDate] = useState("");
@@ -20,19 +20,25 @@ const SSAddWarrantyPopup = ({ orderId }) => {
 
   const handleConfirm = async () => {
     const warranty = {
-      orderId,
+      orderDetailId: orderId, 
       startDate,
       endDate,
       status: true,
     };
 
+
     try {
       await createWarranty(warranty);
       console.log("Warranty added:", warranty);
+      alert("Warranty added successfully.");
       setOpen(false);
     } catch (error) {
-      console.error("Failed to add warranty:", error);
-      alert("Failed to add warranty. Please try again.");
+      if (error.response && error.response.status === 409) {
+        alert("There is an existing warranty.");
+      } else {
+        console.error("Failed to add warranty:", error);
+        alert("Failed to add warranty. Please try again.");
+      }
     }
   };
 

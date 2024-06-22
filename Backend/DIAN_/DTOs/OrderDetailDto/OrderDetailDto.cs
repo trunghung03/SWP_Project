@@ -13,5 +13,6 @@ namespace DIAN_.DTOs.OrderDetailDto
         public int? ShellMaterialId { get; set; }
         public int? SubDiamondId { get; set; }
         public decimal? Size { get; set; }
+
     }
 }
