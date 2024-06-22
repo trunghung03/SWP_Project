@@ -98,7 +98,10 @@ namespace DIAN_.Repository
             if (employee == null) return null;
 
             employee.Email = employeeDto.Email;
-            employee.Password = employeeDto.Password;
+            if (employeeDto.Password != null)
+            {
+                employee.Password = _passwordHasher.HashPassword(employee, employeeDto.Password);
+            }
             employee.LastName = employeeDto.LastName;
             employee.FirstName = employeeDto.FirstName;
             employee.Address = employeeDto.Address;

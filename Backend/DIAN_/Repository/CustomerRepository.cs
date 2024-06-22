@@ -131,7 +131,7 @@ namespace DIAN_.Repository
             {
                 return false;
             }
-            customer.Password = resetPasswordDto.Password;
+            customer.Password = _passwordHasher.HashPassword(customer, resetPasswordDto.Password);
             await _context.SaveChangesAsync();
 
             return true;
@@ -141,7 +141,7 @@ namespace DIAN_.Repository
         {
             var customer = await _context.Customers.Where(c => c.Email == user.Email).FirstOrDefaultAsync();
             if (customer == null) return false;
-            customer.Password = newPassword; 
+            customer.Password = _passwordHasher.HashPassword(customer, newPassword);
             _context.Customers.Update(customer);
             var result = await _context.SaveChangesAsync();
             return result > 0;
