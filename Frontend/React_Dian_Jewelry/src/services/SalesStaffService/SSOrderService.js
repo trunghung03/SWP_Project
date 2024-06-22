@@ -82,3 +82,12 @@ export const deliStaffUpdateOrderStatus = async (status, orderId) => {
       return error;
     });
 };
+export const sendWarrantyEmail = async (data) => {
+  const response = await axios.post(`${API_BASE_URL_ORDER}/accounts/send-email`, data);
+  return response.data;
+};
+
+export const getWarrantyURL = async (id) => {
+  return axios.get(`${API_BASE_URL_ORDER}/pdf/warranty`, { params: { id } })
+}
+

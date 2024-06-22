@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../assets/img/logo.png";
+import logo from "../../../assets/img/logoN.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
 import { createContent } from "../../../services/SalesStaffService/SSContentService.js";

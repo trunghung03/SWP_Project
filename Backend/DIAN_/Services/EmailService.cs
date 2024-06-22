@@ -24,22 +24,22 @@ namespace DIAN_.Services
             email.Subject = message.Subject;
             var builder = new BodyBuilder();
 
-            if (message.Attachments != null)
-            {
-                byte[] fileBytes;
-                foreach (var file in message.Attachments)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            file.CopyTo(ms);
-                            fileBytes = ms.ToArray();
-                        }
-                        builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
-                    }
-                }
-            }
+            //if (message.Attachments != null && message.Attachments.Any())
+            //{
+            //    byte[] fileBytes;
+            //    foreach (var file in message.Attachments)
+            //    {
+            //        if (file.Length > 0)
+            //        {
+            //            using (var ms = new MemoryStream())
+            //            {
+            //                file.CopyTo(ms);
+            //                fileBytes = ms.ToArray();
+            //            }
+            //            builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
+            //        }
+            //    }
+            //}
 
             builder.HtmlBody = message.Body;
             email.Body = builder.ToMessageBody();

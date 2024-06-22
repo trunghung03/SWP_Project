@@ -18,20 +18,39 @@ import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
 import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
-import { jsPDF } from "jspdf";
-import { salesStaffUpdateOrderStatus } from "../../../services/SalesStaffService/SSOrderService.js";
+import { salesStaffUpdateOrderStatus,
+   getWarrantyURL, sendWarrantyEmail
+ } from "../../../services/SalesStaffService/SSOrderService.js";
 import swal from "sweetalert";
-import html2canvas from 'html2canvas';
-import axios from 'axios';
+import SSAddWarrantyPopup from "./SSAddWarrantyPopup.js";
+
+
 const SSOrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState({});
   const { orderId } = useParams();
   const [status, setStatus] = useState("");
+  const [warrantyURL, setWarrantyURL] = useState('');
   const navigate = useNavigate();
+  const [sendTo, setSendTo] = useState('mimitrucduyen@gmail.com'); 
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
-
+  const handleSendEmail = async () => {
+    try {
+      const url = await getWarrantyURL(orderId);
+      setWarrantyURL(url);
+      const emailData = {
+        to: "mimitrucduyen@gmail.com",
+        subject: "Your Warranty",
+        body: url, 
+      };
+      await sendWarrantyEmail(emailData);
+      swal("Success", "Warranty email sent successfully", "success");
+    } catch (error) {
+      console.error("Failed to send warranty email:", error);
+      swal("Error", "Failed to send warranty email", "error");
+    }
+  };
   useEffect(() => {
     console.log("orderId:", orderId); // Log the orderId
     if (orderId) {
@@ -154,6 +173,8 @@ const SSOrderDetail = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <WarrantyIcon /> Warranty
+                    <SSAddWarrantyPopup orderId={orderDetails.orderId} />
+                    <button className="manager_manage_diamond_create_button" onClick={handleSendEmail}>Send Warranty Email</button>
                   </div>
                 </div>
                 <p style={{ textAlign: "right", marginRight: "10%" }}>

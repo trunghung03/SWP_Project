@@ -214,15 +214,19 @@ namespace UserApplication.Controllers
         }
 
         [HttpPost("send-email")]
-        public async Task<IActionResult> SendMail([FromForm] MailRequest mailRequest)
+        public async Task<IActionResult> SendMail(MailRequest mailRequest)
         {
             try
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
-                if (Request.Form.Files.Any())
-                {
-                    mailRequest.Attachments = Request.Form.Files;
-                }
+                //if (Request.Form.Files.Any())
+                //{
+                //    mailRequest.Attachments = Request.Form.Files;
+                //}
+                //else
+                //{
+                //    mailRequest.Attachments = null;
+                //}
 
                 await _emailService.SendEmailAsync(mailRequest);
                 return Ok();

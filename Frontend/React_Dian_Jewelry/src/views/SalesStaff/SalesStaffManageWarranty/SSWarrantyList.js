@@ -17,14 +17,9 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow"; // Import TableRow
-import FormControl from "@mui/material/FormControl"; // Import FormControl
-import InputLabel from "@mui/material/InputLabel"; // Import InputLabel
-import Select from "@mui/material/Select"; // Import Select
-import MenuItem from "@mui/material/MenuItem"; // Import MenuItem
 import TableContainer from "@mui/material/TableContainer"; // Import TableContainer
 import Paper from "@mui/material/Paper"; // Import Paper
 import TableHead from "@mui/material/TableHead"; // Import TableHead
-import InfoIcon from "@mui/icons-material/Info";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -45,20 +40,6 @@ const SSWarrantyList = () => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
-    },
-  }));
-  const handleMoreDetails = (item) => {
-    console.log("More details for item:", item);
-    // Implement the logic to show more details about the item
-    // This could be opening a modal, redirecting to another page, etc.
-  };
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
     },
   }));
 
@@ -224,12 +205,6 @@ const SSWarrantyList = () => {
         <hr className="ss_manage_content_line"></hr>
         <h1 style={{ alignItems: "center" }}>Warranty List</h1>
         <div className="manager_manage_diamond_create_button_section">
-          <button
-            className="manager_manage_diamond_create_button"
-            onClick={() => navigate("/saleStaffAddNewWarranty")}
-          >
-            Add new Warranty
-          </button>
           <div className="manager_manage_diamond_pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
