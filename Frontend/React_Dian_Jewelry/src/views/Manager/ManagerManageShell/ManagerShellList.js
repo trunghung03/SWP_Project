@@ -10,6 +10,7 @@ import {
   deleteShellById,
   updateShellById,
   getShellByName,
+  createShell
 } from "../../../services/ManagerService/ManagerShellService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -32,10 +33,16 @@ const ManagerShellList = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedShell, setEditedShell] = useState({});
   const [originalShell, setOriginalShell] = useState({});
+  const [addMode, setAddMode] = useState(false);
+  const [newShell, setNewShell] = useState({
+    name: '',
+    amountAvailable: ''
+  });
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: '#f9c6bb',
-    color: '1c1c1c',
+      color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -51,6 +58,7 @@ const ManagerShellList = () => {
       border: 0,
     },
   }));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -159,6 +167,7 @@ const ManagerShellList = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedShell({ ...editedShell, [name]: value });
+    setNewShell({ ...newShell, [name]: value });
   };
 
   const handleUpdate = async () => {
@@ -214,7 +223,36 @@ const ManagerShellList = () => {
     }
   };
 
-  const backList = async () =>{
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const requiredFields = ["name", "amountAvailable"];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
+    for (let field of requiredFields) {
+      if (!newShell[field]) {
+        swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(newShell[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
+    }
+
+    const shellDataWithStatus = { ...newShell, status: true };
+
+    try {
+      await createShell(shellDataWithStatus);
+      swal("Success", "Shell added successfully", "success");
+      setAddMode(false);
+      const response = await ShowAllShell();
+      setShellItems(response);
+    } catch (error) {
+      console.error("Error creating shell:", error);
+      swal("Something went wrong!", "Failed to add shell. Please try again.", "error");
+    }
+  };
+
+  const backList = async () => {
     try {
       const response = await ShowAllShell();
       setShellItems(response);
@@ -222,7 +260,8 @@ const ManagerShellList = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
+  };
+
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -253,7 +292,7 @@ const ManagerShellList = () => {
         <div className="manager_manage_diamond_create_button_section">
           <button
             className="manager_manage_diamond_create_button"
-            onClick={() => navigate("/manager-add-shell")}
+            onClick={() => setAddMode(true)}
           >
             Add new shell
           </button>
@@ -284,26 +323,26 @@ const ManagerShellList = () => {
           </div>
         </div>
 
-        {/* Table diamond list */}
+        {/* Table shell list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                   <StyledTableCell align="center">ID</StyledTableCell>
-                   <StyledTableCell align="center">Name</StyledTableCell>
-                   <StyledTableCell align="center">Amount Available (g)</StyledTableCell>
-                   <StyledTableCell align="center">Action</StyledTableCell>
+                  <StyledTableCell align="center">ID</StyledTableCell>
+                  <StyledTableCell align="center">Name</StyledTableCell>
+                  <StyledTableCell align="center">Amount Available (g)</StyledTableCell>
+                  <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {shellItems.length > 0 ? (
                   shellItems.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.shellMaterialId}>
-                     <TableCell align="center">{item.shellMaterialId}</TableCell>
-                     <TableCell align="center">{item.name}</TableCell>
-                     <TableCell align="center">{item.amountAvailable}</TableCell>
-                     <TableCell align="center">
+                    <StyledTableRow key={item.shellMaterialId}>
+                      <StyledTableCell align="center">{item.shellMaterialId}</StyledTableCell>
+                      <StyledTableCell align="center">{item.name}</StyledTableCell>
+                      <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
+                      <StyledTableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
@@ -312,13 +351,13 @@ const ManagerShellList = () => {
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </TableCell>
-                    </TableRow>
+                      </StyledTableCell>
+                    </StyledTableRow>
                   ))
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan="10">No shell found</TableCell>
-                  </TableRow>
+                  <StyledTableRow>
+                    <StyledTableCell colSpan="4" align="center">No shell found</StyledTableCell>
+                  </StyledTableRow>
                 )}
               </TableBody>
             </Table>
@@ -362,6 +401,51 @@ const ManagerShellList = () => {
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add new shell modal */}
+      {addMode && (
+        <div
+          className="manager_manage_diamond_modal_overlay"
+          onClick={() => setAddMode(false)}
+        >
+          <div
+            className="manager_manage_diamond_update_modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="manager_manage_diamond_modal_content">
+              <h4>Add New Shell</h4>
+              <div className="manager_manage_diamond_form_group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  maxLength={100}
+                  placeholder="Enter shell's name"
+                  value={newShell.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Amount Available</label>
+                <input
+                  type="text"
+                  name="amountAvailable"
+                  placeholder="Enter amount available"
+                  maxLength={10}
+                  value={newShell.amountAvailable}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_modal_actions">
+                <button onClick={() => setAddMode(false)}>Cancel</button>
+                <button onClick={handleSubmit}>Confirm</button>
               </div>
             </div>
           </div>
