@@ -98,13 +98,13 @@ const Introduce = () => {
         <div className="introduce_beginning_left">
           <h3>OUR BEGINNING</h3>
           <div className="introduce_beginning_underline"></div>
-          <p>In 2004, Co-Founder and CEO Beth Gerstein couldn’t find a diamond engagement ring that was ethical, sustainable, and traceable. She wanted the sparkling symbol of her commitment to represent more than love: the perfect piece would also respect the planet and protect its future. On a mission to make the jewelry industry more sustainable and ethical, Beth — alongside Eric Grossberg — founded Dian Jewelry in 2005.</p>
-          <p>From that first step through today, we've revolutionized the way jewelry is sourced, crafted, sold, and worn. We do not compromise between quality and conscience — and neither do our customers.</p>
+          <p>In 2003, Co-Founders Duyen, Minh, Duy, Hung, and Tran couldn't find diamond jewelry that was ethical, sustainable, and traceable. Each passionate about beautiful jewelry and a better world, they decided to act. In 2004, they founded Dian Jewelry, combining Duyen's vision, Minh's design expertise, Duy's commitment to sustainability, Hung's craftsmanship, and Tran's marketing savvy.</p>
+          <p>Today, Dian Jewelry revolutionizes how jewelry is sourced, crafted, sold, and worn, never compromising on quality or conscience.</p>
         </div>
         <div className="introduce_beginning_right">
           <img src={beginning} alt="Dian Jewelry" />
-          <p className="beginning_left_desc">“We started Dian Jewelry in 2005 to raise the ethical standards of the diamond industry and to create a new way to buy beautiful fine jewelry.”</p>
-          <p className="beginning_credit">— Beth Gerstein, CEO & Co-Founder</p>
+          <p className="beginning_left_desc">“We started Dian Jewelry in 2004 to raise the ethical standards of the diamond industry and to create a new way to buy beautiful fine jewelry.”</p>
+          <p className="beginning_credit">—says Duyen.</p>
         </div>
       </div>
 
