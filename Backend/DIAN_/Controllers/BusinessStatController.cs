@@ -1,9 +1,9 @@
 ﻿using DIAN_.DTOs.BusinessStatDTO;
+using DIAN_.DTOs.ProductDTOs;
+using DIAN_.DTOs.StatDto;
 using DIAN_.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace DIAN_.Controllers
 {
@@ -245,7 +245,63 @@ namespace DIAN_.Controllers
 
             return Ok(monthlyValues);
         }
+        [HttpGet("top-10-selling-products")]
+        public async Task<ActionResult<IEnumerable<ProductStatisticDto>>> GetTop10SellingProducts(DateTime startDate, DateTime endDate)
+        {
+            var topProducts = await _context.Orderdetails
+                .Include(od => od.Product)
+                .Where(od => od.Order.Date >= startDate && od.Order.Date <= endDate)
+                .GroupBy(od => od.ProductId)
+                .Select(g => new
+                {
+                    ProductId = g.Key,
+                    ItemSold = g.Count(),
+                    LineTotal = g.Sum(od => od.LineTotal)
+                })
+                .OrderByDescending(g => g.ItemSold)
+                .Take(10)
+                .Join(_context.Products,
+                    g => g.ProductId,
+                    p => p.ProductId,
+                    (g, p) => new ProductStatisticDto
+                    {
+                        LineTotal = g.LineTotal,
+                        ProductCode = p.ProductCode,
+                        Name = p.Name,
+                        ItemSold = g.ItemSold
+                    })
+                .ToListAsync();
 
+            return Ok(topProducts);
+        }
+
+
+        [HttpGet("daily-statistics")]
+        public async Task<ActionResult<TodayStatisticDto>> GetDailyStatistics(DateTime date)
+        {
+            var startDate = date.Date;
+            var endDate = date.Date.AddDays(1);
+
+            var ordersOnDate = await _context.Purchaseorders
+                .Where(o => o.Date >= startDate && o.Date < endDate)
+                .Include(o => o.Orderdetails)
+                .ToListAsync();
+
+            var totalOrders = ordersOnDate.Count;
+            var totalCustomers = ordersOnDate.Select(o => o.UserId).Distinct().Count();
+            var totalSales = ordersOnDate.Sum(o => o.TotalPrice);
+            var profit = totalSales - ordersOnDate.Sum(o => o.Orderdetails.Sum(d => d.LineTotal * 0.8m));
+
+            var statistics = new TodayStatisticDto
+            {
+                TotalOrders = totalOrders,
+                TotalCustomers = totalCustomers,
+                TotalSales = totalSales,
+                Profit = profit
+            };
+
+            return Ok(statistics);
+        }
 
     }
 }

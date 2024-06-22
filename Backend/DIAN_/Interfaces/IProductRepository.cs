@@ -19,5 +19,6 @@ namespace DIAN_.Interfaces
         Task<List<ProductListDTO>> GetByNameAsync(string name);
         Task<bool> ExistsMainDiamondAsync(int mainDiamondId);
         Task<bool> ExistsProCodeAsync(string proCode);
+        Task<List<Product>> GetProductByCode(string code);
     }
 }

@@ -245,5 +245,25 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("code/{code}")]
+        public async Task<IActionResult> GetByCode([FromRoute] string code)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                var products = await _productRepo.GetProductByCode(code); // Adjusted to return a list
+                if (products == null || !products.Any())
+                {
+                    return NotFound();
+                }
+                var productDTOs = products.Select(product => product.ToProductDTO()).ToList(); // Convert each product to DTO
+                return Ok(productDTOs);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

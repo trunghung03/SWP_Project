@@ -97,6 +97,17 @@ namespace DIAN_.Repository
             return products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList();
         }
 
+        public async Task<List<Product>> GetProductByCode(string code)
+        {
+            var products = await _context.Products.Where(p => p.ProductCode.Contains(code)).ToListAsync();
+            if (products == null || !products.Any())
+            {
+                throw new KeyNotFoundException("Product does not exist");
+            }
+            return products;
+        }
+
+
         public async Task<ProductDetailDTO> GetDetailAsync(int id)
         {
             var product = await _context.Products
