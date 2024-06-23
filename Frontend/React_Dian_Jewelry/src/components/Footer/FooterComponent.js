@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import '../Footer/FooterComponent.scss';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../../assets/img/logoFooter.png';
+import vnpay from '../../assets/img/vnpay.webp';
+import bank from '../../assets/img/bankLogo.png';
+import cash from '../../assets/img/cashLogo.png';
 
 const FooterComponent = () => {
     useEffect(() => {
@@ -25,69 +29,96 @@ const FooterComponent = () => {
             }
         }
     }, []);
+
     const navigate = useNavigate();
+
     const handleNavigate = (path, state) => {
+        window.scrollTo(0, 0);
         navigate(path, { state });
+    };
+
+    const handleLinkClick = (event, scrollTo) => {
+        event.preventDefault();
+        window.scrollTo(0, scrollTo);
+        navigate(event.currentTarget.getAttribute('href'));
     };
 
     return (
         <>
             <footer className="footer">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-md-4">
-                            <h6>About Us</h6>
+                    <div className="row footer_column">
+                        <div className="col-sm-6 col-md-3 footer_first_column">
+                            <img src={logo}></img>
+                            <h6>Contact us for support</h6>
                             <ul className="footer_content">
-                                <li><Link to="/introduce">Our story</Link></li>
-                                <li><Link to="/introduce">Our mission</Link></li>
-                                <li><Link to="/introduce">The difference</Link></li>
-                            </ul>
-                            <br />
-                            <h6>Education Blog</h6>
-                            <ul className="footer_content">
-                                <li><Link to="#">Link 1</Link></li>
-                                <li><Link to="#">Link 2</Link></li>
-                                <li><Link to="#">Link 3</Link></li>
-                                <li><Link to="#">Link 4</Link></li>
+                                <li><i className="fas fa-phone-volume"></i><Link to='tel:0795795959'>0795 795 959</Link></li>
+                                <li><i className="fas fa-envelope"></i><Link to='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</Link></li>
                             </ul>
                         </div>
-                        <div className="col-md-4">
-                            <h6>Service</h6>
+                        <div className="col-sm-6 col-md-2 footer_2_column">
+                            <h6>Categories</h6>
                             <ul className="footer_content">
-                                <li><Link to="/FAQs">FAQs</Link></li>
-                                <li><Link to="/order-history">Tracking orders</Link></li>
-                                <li><Link to="/edit-profile">My profile</Link></li>
-                            </ul>
-                            <br />
-                            <h6>Collections</h6>
-                            <ul className="footer_content">
-                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'blissfulBaubles' })}>Blissful Baubles</a></li>
-                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'timelessTreasures' })}>Timeless Treasures</a></li>
-                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'majesticMystique' })} >Majestic Mystique</a></li>
-                                <li><a href="" onClick={() => handleNavigate('/collection', { collection: 'vintageVirtue' })}>Vintage Virtue</a></li>
+                                <li onClick={() => handleNavigate('/diamond-jewelry', { category: 'all' })}>
+                                    <Link to="/diamond-jewelry">Diamond jewelry</Link>
+                                </li>
+                                <li onClick={() => handleNavigate('/diamond-jewelry', { category: 'weddingJewelry' })}>
+                                    <Link to="/diamond-jewelry">Wedding jewelry</Link>
+                                </li>
+                                <li onClick={() => handleNavigate('/diamond-jewelry', { category: 'ring' })}>
+                                    <Link to="/diamond-jewelry">Ring collection</Link>
+                                </li>
+                                <li onClick={() => handleNavigate('/diamond-jewelry', { category: 'earrings' })}>
+                                    <Link to="/diamond-jewelry">Earrings collection</Link>
+                                </li>
+                                <li onClick={() => handleNavigate('/diamond-jewelry', { category: 'bracelet' })}>
+                                    <Link to="/diamond-jewelry">Bracelet collection</Link>
+                                </li>
                             </ul>
                         </div>
-                        <div className="col-md-4">
-                            <h6>Contact Us</h6>
+                        <div className="col-sm-6 col-md-2 footer_3_column">
+                            <h6>Account</h6>
                             <ul className="footer_content">
-                                <li><Link to='tel:0795795959'>0795 795 959</Link></li>
-                                <li><Link to='mailto:diamonddianjewelry@gmail.com'>diamonddianjewelry@gmail.com</Link></li>
-                                <li><Link to="/contact"> </Link></li>
+                                <li><Link to="/edit-profile" onClick={(e) => handleLinkClick(e, 160)}>My profile</Link></li>
+                                <li><Link to="/order-history" onClick={(e) => handleLinkClick(e, 160)}>Order history</Link></li>
+                                <li><Link to="/order-history" onClick={(e) => handleLinkClick(e, 160)}>Tracking order</Link></li>
+                                <li><Link to="" onClick={(e) => handleLinkClick(e, 0)}>Notifications</Link></li>
+                                <li><Link to="/cart" onClick={(e) => handleLinkClick(e, 0)}>Shopping cart</Link></li>
                             </ul>
-                            <br />
-                            <h6>Social Media</h6>
-                            <ul className="footer_content social_media_icon" style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '20px' }}>
+                        </div>
+                        <div className="col-sm-6 col-md-2 footer_4_column">
+                            <h6>Information</h6>
+                            <ul className="footer_content">
+                                <li><Link to="/FAQs" onClick={(e) => handleLinkClick(e, 0)}>Questions</Link></li>
+                                <li><Link to="/blog" onClick={(e) => handleLinkClick(e, 0)}>Articles</Link></li>
+                                <li><Link to="/introduce" onClick={(e) => handleLinkClick(e, 0)}>About us</Link></li>
+                                <li><Link to="/contact" onClick={(e) => handleLinkClick(e, 0)}>Contact us</Link></li>
+                                <li><Link to="/price-list" onClick={(e) => handleLinkClick(e, 0)}>Diamond price</Link></li>
+                            </ul>
+                        </div>
+                        <div className="col-sm-12 col-md-3 footer_last_column">
+                            <h6>Connect with us</h6>
+                            <ul className="footer_content social_media_icon" style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '16px' }}>
                                 <li><Link to="https://www.facebook.com/profile.php?id=61560517631582" target="_blank"><i className="fb fab fa-facebook-f" target="_blank"></i></Link></li>
                                 <li><Link to="https://www.instagram.com/dian_jewelryy" target="_blank"><i className="ins fab fa-instagram"></i></Link></li>
                                 <li><Link to="https://www.tiktok.com/@dianjewelry" target="_blank"><i className="tik fab fa-tiktok"></i></Link></li>
                                 <li><Link to="/home" target="_blank"><i className="gg fab fa-google"></i></Link></li>
                             </ul>
+                            <h6 className='footer_last_column_title_2'>Secure payment</h6>
+                            <ul className="footer_content">
+                                <img className='footer_vnpay' src={vnpay}></img>
+                                <img className='footer_bank' src={bank}></img>
+                                <img className='footer_cash' src={cash}></img>
+                            </ul>
                         </div>
                     </div>
                     <hr className="hr_footer" />
                     <div className="copyright row">
-                        <div className="col-md-12 text-center">
-                            <p>Copyright ©2024 Dian Jewelry | <Link className="tos_link" id="tosLink" to="#tos"><strong>Terms of Service & Privacy Policy</strong></Link></p>
+                        <div className="col-sm-12 col-md-6">
+                            <p>© Copyright 2024 by Dian Jewelry</p>
+                        </div>
+                        <div className="col-sm-12 col-md-6 tos_col">
+                            <Link className="footer_tos_link" id="tosLink" to="#tos">Terms of Service & Privacy Policy</Link>
                         </div>
                     </div>
                 </div>

@@ -1,19 +1,12 @@
 /* Footer */
 .footer {
     background-color: #fff7f4;
-    padding: 40px 0 25px 0;
+    padding: 90px 0 30px 0;
     position: relative;
     bottom: 0;
     left: 0;
     width: 100%;
     border-top: 1px solid #e0e0e0;
-}
-
-.footer h6 {
-    color: #1c1c1c;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
 }
 
 .footer ul {
@@ -22,7 +15,7 @@
 }
 
 .footer ul li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .footer ul li a {
@@ -37,7 +30,7 @@
 .footer hr {
     border: 0;
     border-top: 1px solid #7d6f68;
-    margin: 30px -20% 25px -20%;
+    margin: 30px 0 30px 0;
 }
 
 .footer p {
@@ -62,28 +55,22 @@
     margin-top: -4px;
 }
 
-.footer_content a{
+.footer_content .fa-phone-volume,
+.footer_content .fa-envelope {
+    font-size: 15px;
+    margin-right: 10px;
+    color: #1c1c1c;
+}
+
+.footer_content a {
     cursor: pointer;
     color: #7d6f68;
     text-decoration: none;
 }
 
-.social_media_icon i {
-    font-size: 24px;
-    margin-top: 12px;
-}
-
-.social_media_icon .ins {
-    font-size: 30px;
-    margin-top: 9px;
-}
-
-.social_media_icon i:hover {
-    color: #1c1c1c;
-}
 
 .footer ul li a {
-    color: #7d6f68 ;
+    color: #7d6f68;
     text-decoration: none;
     display: inline-block;
     transition: transform 0.3s ease;
@@ -92,6 +79,25 @@
 .footer ul li a:hover {
     color: #1c1c1c;
     transform: translateY(-2px);
+}
+
+.copyright p {
+    font-size: 16px;
+}
+
+.copyright .tos_col {
+    text-align: end;
+    padding-right: 25px;
+    font-size: 16px;
+}
+
+.tos_col .footer_tos_link {
+    color: #7d6f68;
+    text-decoration: none;
+}
+
+.tos_col .footer_tos_link:hover {
+    color: #1c1c1c;
 }
 
 /* Modal CSS */
@@ -147,4 +153,89 @@
 .tos_title,
 .tos_introduce {
     text-align: center;
+}
+
+
+//End modal
+
+.footer_first_column img {
+    width: 140px;
+}
+
+.footer_first_column h6 {
+    color: #1c1c1c;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 30px 0 20px 0;
+}
+
+.footer_last_column h6 {
+    color: #1c1c1c;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+}
+
+.footer_last_column .footer_last_column_title_2 {
+    margin-top: -3px;
+    margin-bottom: 13px;
+}
+
+.footer_2_column h6,
+.footer_3_column h6,
+.footer_4_column h6 {
+    color: #1c1c1c;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+}
+
+.footer_last_column .footer_vnpay {
+    width: 40px;
+    margin-right: 12px;
+    margin-top: -16px;
+}
+
+.footer_last_column .footer_bank {
+    width: 120px;
+    margin-top: -11px;
+    margin-right: 10px;
+}
+
+.footer_last_column .footer_cash {
+    width: 40px;
+    margin-top: -11px;
+}
+
+
+//Social media icon
+
+.social_media_icon .fb,
+.social_media_icon .ins,
+.social_media_icon .tik,
+.social_media_icon .gg {
+    font-size: 19px;
+    margin-top: 12px;
+    border: 1px solid #d4d4d4;
+    padding: 14px 16px 15px 16px;
+    border-radius: 50%;
+    color: #1c1c1c;
+    transition: all 0.3s ease;
+}
+
+.social_media_icon .fb {
+    padding: 16px 19px 15px 19px;
+    font-size: 17px;
+}
+
+.social_media_icon .gg {
+    padding: 15px 16px 14px 16px;
+}
+
+.social_media_icon i:hover {
+    color: white;
+    background-color: #f4b798;
+    border: 1px solid #f4b798;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.16);
 }
