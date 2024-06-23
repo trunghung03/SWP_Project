@@ -9,14 +9,14 @@ using System.Text;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/pdf")]
+    [Route("api/pixeldrain")]
     [ApiController]
-    public class PdfController : ControllerBase
+    public class PixeldrainController : ControllerBase
     {
         private readonly IWarrantyRepository _warrantyRepository;
         private readonly IDiamondRepository _diamondRepository;
         private readonly IHttpClientFactory _httpClientFactory;
-        public PdfController(IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IHttpClientFactory httpClientFactory)
+        public PixeldrainController(IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IHttpClientFactory httpClientFactory)
         {
             _warrantyRepository = warrantyRepository;
             _httpClientFactory = httpClientFactory;
@@ -103,6 +103,47 @@ namespace DIAN_.Controllers
             return Ok(uploadUrl);
         }
 
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFileToPixeldrain(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded or file is empty.");
+            }
+
+            // Save the uploaded file to a temporary location
+            string tempFilePath = Path.GetTempFileName();
+            string fileName = file.FileName;
+
+            try
+            {
+                using (var stream = new FileStream(tempFilePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Upload the file to Pixeldrain
+                string uploadUrl = await UploadPdfToPixeldrain(tempFilePath, fileName);
+
+                return Ok(uploadUrl);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+            }
+            finally
+            {
+                // Delete the temporary file
+                if (System.IO.File.Exists(tempFilePath))
+                {
+                    System.IO.File.Delete(tempFilePath);
+                }
+            }
+        }
+
+
+
+
         static void ConvertHtmlToPdf(string html, string outputPath)
         {
             // Create a stream to write the PDF
@@ -113,7 +154,7 @@ namespace DIAN_.Controllers
             }
         }
 
-        static async Task<string> UploadPdfToPixeldrain(string filePath)
+        static async Task<string> UploadPdfToPixeldrain(string filePath, string fileName = null)
         {
             using (var client = new HttpClient())
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -123,6 +164,12 @@ namespace DIAN_.Controllers
                 {
                     // Add the file content to the form
                     form.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
+
+                    // Add the file name to the form if provided
+                    if (fileName != null)
+                    {
+                        form.Add(new StringContent(fileName), "name");
+                    }
 
                     // Perform the POST request to upload the file
                     var response = await client.PostAsync("https://pixeldrain.com/api/file", form);
