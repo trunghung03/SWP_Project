@@ -1,0 +1,57 @@
+.transaction_fail_main_container {
+    margin-bottom: 130px;
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transaction_fail_content, .transaction_fail_image {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.transaction_fail_main_container img {
+    width: 100%;
+}
+
+.transaction_fail_hr {
+    background-color: #1c1c1c;
+    border: 2px solid #1c1c1c;
+    opacity: 1;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.transaction_fail_content {
+    justify-content: center;
+    padding-right: 30px;
+}
+
+.transaction_fail_button_wrapper{
+    display: flex;
+    margin-top: 20px;
+}
+
+.transaction_fail_shop_button{
+    margin-right: 3%;
+}
+
+.transaction_fail_button_wrapper button {
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    padding: 7px 55px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 13px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 47%;
+}
+
+.transaction_fail_button_wrapper button:hover {
+    background-color: #797979;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

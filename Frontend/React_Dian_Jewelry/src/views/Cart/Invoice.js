@@ -57,6 +57,11 @@ function Invoice() {
         }
     }, [orderId]);
 
+    useEffect(() => {
+        window.scrollTo(0, 160);
+    }, []);
+
+
     return (
         <div className="Invoice">
             <HeaderComponent/>

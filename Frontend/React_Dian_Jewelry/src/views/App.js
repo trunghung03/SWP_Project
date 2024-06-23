@@ -28,6 +28,7 @@ import Invoice from './Cart/Invoice';
 import EditProfile from './Setting/EditProfile';
 import OrderHistory from './Setting/OrderHistory';
 import OrderDetail from './Setting/OrderDetail';
+import VNPayResultHandler from '../services/VNPAYService';
 import AdminCustomerList from './Admin/AdminCustomerList';
 import AdminEmployeeList from './Admin/AdminEmployeeList';
 import AdminAddEmployee from './Admin/AdminAddEmployee';
@@ -54,6 +55,7 @@ import ManagerAddProduct from './Manager/ManagerManageProduct/ManagerAddProduct'
 import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPromotion';
 import RichTextPage from './SalesStaff/SalesStaffManageContent/SSRichTextPage';
 import ProtectedRoute from '../services/ProtectedRoute';
+import TransactionFail from './Cart/TransactionFail';
 // import Notification from './Notification/Notify';
 
 function App() {
@@ -88,6 +90,9 @@ function App() {
             <Route path="/edit-profile" element={<ProtectedRoute path="/edit-profile" element={EditProfile} />} />
             <Route path="/order-history" element={<ProtectedRoute path="/order-history" element={OrderHistory} />} />
             <Route path="/order-detail" element={<ProtectedRoute path="/order-detail" element={OrderDetail} />} />
+            <Route path="/transaction-fail" element={<ProtectedRoute path="/transaction-fail" element={TransactionFail} />} />
+            <Route path="/vnpay-result" element={<ProtectedRoute path="/vnpay-result" element={VNPayResultHandler} />} />
+
 
             {/* Admin */}
             <Route path="/admin-customer-list" element={<ProtectedRoute path="/admin-customer-list" element={AdminCustomerList} />} />

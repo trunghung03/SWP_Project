@@ -162,20 +162,20 @@ function DiamondPrice() {
       {/* Middle content */}
       <div className="diamond_price_middle_content">
         <div className="diamond_price_image_wrapper">
-          <img src={diamondPriceMidImage1} alt="Diamond Image 1" className="diamond_price_mid_image" />
+          <img src={diamondPriceMidImage1} alt="Diamond Image" className="diamond_price_mid_image" />
         </div>
         <p className="diamond_price_mid_content">
           Diamond price list is based on glass (mm), water color (color) and cleanliness. If you want to buy diamond jewelry but don't know the price of natural diamonds today, please quickly search for the price below. Our system can help you track current diamonds price on the market.
           Loose diamonds or natural diamonds with international inspection certificates today range in price from 5 million to hundreds of millions, especially large to super large diamonds cost up to billions of dong. According to some market research experts, they depend mainly on 4C standards, and there are also a number of other standards such as symmetry, luminescence, cleanliness, certificates...
         </p>
         <div className="diamond_price_image_wrapper">
-          <img src={diamondPriceMidImage2} alt="Diamond Image 2" className="diamond_price_mid_image" />
+          <img src={diamondPriceMidImage2} alt="GIA certificate" className="diamond_price_mid_image" />
         </div>
         <p className="diamond_price_mid_content">
           In addition, the price list of artificial or natural diamonds at PNJ, DOJI, Diamond World... stores also varies somewhat depending on the reputation and reputation of the brand. In general, the price list of diamonds on the market is very diverse and can fluctuate depending on the economic market situation at home and abroad. Furthermore, consumer interest and demand for artificially cultured moissanite diamonds has increased. A sharp decrease is also a core factor determining diamond prices.
         </p>
         <div className="diamond_price_image_wrapper">
-          <img src={diamondPriceMidImage3} alt="Diamond Image 3" className="diamond_price_mid_image3" />
+          <img src={diamondPriceMidImage3} alt="GIA certificate" className="diamond_price_mid_image3" />
         </div>
         <p className="diamond_price_mid_content last_mid_content">
           Confirmation from the Gemological Institute of America GIA - Dian Jewelry is the place to sell genuine natural GIA diamonds

@@ -1,18 +1,18 @@
 //Main title
 .faqs_banner_container {
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    background-size: cover;
-    background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background-size: cover;
+  background-position: center;
 }
 
 .faqs_banner_content h2 {
-    color: white;
-    font-weight: bold;
+  color: white;
+  font-weight: bold;
 }
 
 // End main title 
@@ -33,7 +33,7 @@
   border: 1px solid #1c1c1c;
   font-size: 16px;
   outline: none;
-  line-height: 100px; 
+  line-height: 100px;
 }
 
 .faqs_search_button {
@@ -48,107 +48,126 @@
 
 // Main FAQS 
 .main_faqs_container {
-    padding: 20px 60px;
-    margin: 0 20px 20px 20px;
-    border-radius: 8px;
-  }
-  
-  .main_faqs_title {
-    text-align: center;
-    font-size: 26px;
-    color: #1c1c1c;
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  
-  .main_faqs_number {
-    text-align: center;
-    color: #666;
-    font-size: 16px;
-    margin-bottom: 30px;
-  }
-  
-  .main_faqs_question {
-    cursor: pointer;
-    padding: 10px;
-    background-color: white;
-    border-radius: 5px;
-  }
-  
-  .main_faqs_sub_title {
-    font-size: 18px;
-    color: black;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .main_faqs_description {
-    font-size: 16px;
-    color: #444;
-    padding: 10px 0 0 0;
-  }
+  padding: 20px 60px;
+  margin: 0 20px 20px 20px;
+  border-radius: 8px;
+}
 
-  .main_faqs_line{
-        margin-top: 10px;
-  }
-  
-  
+.main_faqs_title {
+  text-align: center;
+  font-size: 26px;
+  color: #1c1c1c;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.main_faqs_number {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.main_faqs_question {
+  cursor: pointer;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.main_faqs_sub_title {
+  font-size: 18px;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main_faqs_description {
+  font-size: 16px;
+  color: #444;
+  padding: 10px 0 0 0;
+}
+
+.main_faqs_line {
+  margin-top: 10px;
+}
+
+
 // End Main FAQS 
 
 
 
 // Still need help
 .faqs_help_container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f4f2ee;
-    color: white;
-    margin: 20px 80px 60px 80px;
-    border-radius: 10px;
-    padding: 0 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f2ee;
+  color: white;
+  margin: 20px 80px 60px 80px;
+  border-radius: 10px;
+  padding: 0 0 0 0;
 }
 
 .faqs_help_content {
-    flex: 1;
-    padding: 0 70px 0 70px;
+  flex: 1;
+  padding: 0 70px 0 70px;
 }
 
 .faqs_help_title {
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #1c1c1c;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #1c1c1c;
 }
 
 .faqs_help_description {
-    margin-bottom: 20px;
-    color: #1c1c1c;
+  margin-bottom: 20px;
+  color: #1c1c1c;
 }
 
 .faqs_help_image img {
-    width: 450px;
-    height: 310px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+  width: 450px;
+  height: 310px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .faqs_help_btn {
-    background-color: #1c1c1c;
-    color: white;
-    border: none;
-    padding: 7px 55px;
-    cursor: pointer;
-    border-radius: 30px;
-    font-size: 13px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    margin-top: 5px;
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  padding: 7px 55px;
+  cursor: pointer;
+  border-radius: 30px;
+  font-size: 13px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin-top: 5px;
 }
 
 .faqs_help_btn:hover {
-    background-color: #797979;
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #797979;
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 // End still need help
+
+
+.faqs_view_more_button {
+  color: #1c1c1c;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  padding: 5px;
+  transition: color 0.3s;
+  font-size: 17px;
+  cursor: pointer;
+  margin: 50px auto 0 auto;
+  display: block;
+}
+
+.faqs_view_more_button:hover {
+  color: #797979;
+}

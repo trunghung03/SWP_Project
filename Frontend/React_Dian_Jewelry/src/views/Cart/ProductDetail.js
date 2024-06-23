@@ -16,7 +16,7 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
-
+import GIA from '../../assets/img/gia2.jpg';
 
 function ProductDetail() {
     useEffect(() => {
@@ -314,7 +314,7 @@ function ProductDetail() {
                 <h2 className="also_like_title">You May Also Like</h2>
                 <div className="also_like_wrapper">
                     {alsoLikeProducts.map((product, index) => (
-                        <div key={index} className="also_like_card"  onClick={(e) => { e.stopPropagation(); navigateToProductDetail(product.productId); }}>
+                        <div key={index} className="also_like_card" onClick={(e) => { e.stopPropagation(); navigateToProductDetail(product.productId); }}>
                             <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
                             <div className="also_product_view_icon_wrapper" data-tooltip="View detail">
                                 <i className="far fa-eye also_product_view_icon"></i>
@@ -355,6 +355,13 @@ function ProductDetail() {
             <br></br><br></br>
             <CollectionSlide />
             <br></br><br></br><br></br><br></br><br></br>
+
+            <div className="GIA_image_wrapper">
+                <img src={GIA} alt="GIA certificate" className="GIA_image" />
+            </div>
+            <p className="GIA_content">
+                Confirmation from the Gemological Institute of America GIA - Dian Jewelry is the place to sell genuine natural GIA diamonds
+            </p>
 
             <ScrollToTop />
             <Insta />

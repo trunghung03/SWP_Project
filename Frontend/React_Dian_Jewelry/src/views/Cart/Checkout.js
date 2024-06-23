@@ -260,6 +260,9 @@ function Checkout() {
                 };
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
+                const cartKey = `cartItems${customerId}`;
+                localStorage.removeItem(cartKey);
+                updateCartContext([]);
             } else {
                 const cartKey = `cartItems${customerId}`;
                 localStorage.removeItem(cartKey);

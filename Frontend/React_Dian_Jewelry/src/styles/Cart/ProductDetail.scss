@@ -564,3 +564,19 @@
 .no-scroll {
     overflow: hidden;
 }
+
+.GIA_image_wrapper, .GIA_content{
+    text-align: center;
+}
+
+.GIA_image_wrapper img{
+    width: 900px;
+    height: 1100px;
+    border: 1px solid #cac9cd;
+    border-radius: 5px;
+}
+
+.GIA_content{
+    margin: 20px 0 140px 0;
+    font-style: italic;
+}

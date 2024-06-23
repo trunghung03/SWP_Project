@@ -6,17 +6,17 @@ const rolesPermissions = {
     Manager: ['/','/manager-statistic','/manager-collection-list', '/manager-add-collection', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
     SalesStaff: ['/','/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page'],
     DeliveryStaff: ['/','/delivery-staff-delivery-list', '/delivery-staff-delivery-detail'],
-    Customer: ['/', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce'],
+    Customer: ['/', '/vnpay-result', '/transaction-fail' , '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce'],
     Guest: ['/','/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/login', '/register', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce']
 };
 
 const restrictedPages = {
-    Admin: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    Manager: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    SalesStaff: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
-    DeliveryStaff: ['/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    Admin: ['/vnpay-result', '/transaction-fail' ,'/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    Manager: ['/vnpay-result', '/transaction-fail' ,'/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    SalesStaff: ['/vnpay-result', '/transaction-fail' ,'/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
+    DeliveryStaff: ['/vnpay-result', '/transaction-fail' ,'/login', '/register', '/home', '/blog', '/blog-detail', '/search', '/product-detail', '/cart', '/FAQs', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection', '/shape', '/price-list', '/contact', '/introduce', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail'],
     Customer: ['/login', '/register', '/forgot-password', '/reset-password'],
-    Guest: ['/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail']
+    Guest: ['/vnpay-result', '/transaction-fail' , '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail']
 };
 
 const ProtectedRoute = ({ element: Component, path, ...rest }) => {
@@ -36,10 +36,12 @@ const ProtectedRoute = ({ element: Component, path, ...rest }) => {
         if (path === '/checkout' && (fromCart !== 'true' || cartItems.length === 0)) {
             alert("You don't have permission to access this page!");
             navigate(-1);
-        } else if (path === '/invoice' && fromCheckout !== 'true') {
-            alert("You don't have permission to access this page!");
-            navigate(-1);
-        } else if (path === '/reset-password') {
+        } 
+        // else if (path === '/invoice' && fromCheckout !== 'true') {
+        //     alert("You don't have permission to access this page!");
+        //     navigate(-1);
+        // } 
+        else if (path === '/reset-password') {
             if (!resetPasswordToken) {
                 alert("You don't have permission to access this page!");
                 navigate(-1);
