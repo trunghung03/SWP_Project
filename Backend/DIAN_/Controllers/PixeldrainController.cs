@@ -59,7 +59,7 @@ namespace DIAN_.Controllers
                 System.IO.File.Delete(outputPdfPath);
             }
 
-            return Ok(uploadUrl);
+            return Ok(new { url = uploadUrl });
         }
 
         [HttpGet("certificate")]

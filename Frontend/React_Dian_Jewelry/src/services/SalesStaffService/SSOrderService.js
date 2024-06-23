@@ -87,7 +87,9 @@ export const sendWarrantyEmail = async (data) => {
   return response.data;
 };
 
-export const getWarrantyURL = async (id) => {
-  return axios.get(`${API_BASE_URL_ORDER}/pdf/warranty`, { params: { id } })
-}
+export const getWarrantyURL = async (orderId) => {
+  const response = await axios.get(`${API_BASE_URL_ORDER}/pixeldrain/warranty?id=${orderId}`);
+  return response.data;
+};
+
 

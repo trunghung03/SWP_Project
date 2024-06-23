@@ -50,7 +50,7 @@ const SSOrderDetail = () => {
   const handleSendEmail = async () => {
     try {
       const response = await getWarrantyURL(orderId);
-      const url = response.data.url;
+      const url = response.url;
       console.log('Warranty URL:', url);
       const emailData = {
         toEmail: orderDetails.email, 
