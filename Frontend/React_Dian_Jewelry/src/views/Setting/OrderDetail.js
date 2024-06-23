@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -13,6 +13,7 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 function OrderDetail() {
     const navigate = useNavigate();
     const location = useLocation();
+    const orderDetailContainerRef = useRef(null);
     const { orderNumber } = location.state || {};
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -60,6 +61,15 @@ function OrderDetail() {
         navigate('/product-detail', { state: { id: productId } });
     };
 
+    useEffect(() => {
+        if (orderDetailContainerRef.current) {
+            window.scrollTo({
+                top: orderDetailContainerRef.current.offsetTop,
+                behavior: 'smooth',
+            });
+        }
+    }, [orderDetails]);
+
     const navItems = [
         { name: 'Home', link: '/home' },
         { name: 'Order History', link: '/order-history' },
@@ -81,10 +91,10 @@ function OrderDetail() {
 
     return (
         <div className="OrderDetail">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
 
-            <div className="order_detail_container">
+            <div className="order_detail_container" ref={orderDetailContainerRef}>
                 <div className="order_history_setting_menu">
                     <div className="order_history_setting_menu_section">
                         <div className="order_history_setting_full_name">{`${firstName} ${lastName}`}</div>
@@ -167,7 +177,7 @@ function OrderDetail() {
             </div>
 
             <ScrollToTop />
-            <FooterComponent/>
+            <FooterComponent />
         </div>
     );
 }

@@ -8,7 +8,7 @@ import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { getAllOrders } from '../../services/TrackingOrderService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
-
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -82,8 +82,8 @@ function OrderHistory() {
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
 
-    const handleFilterChange = (e) => {
-        setFilterStatus(e.target.value);
+    const handleFilterChange = (event) => {
+        setFilterStatus(event.target.value);
     };
 
     return (
@@ -111,17 +111,27 @@ function OrderHistory() {
                     </div>
                 </div>
 
-                {/* <div className=""> */}
                 <div className="order_history_table_wrapper">
                     <div className="order_filter">
-                        <select id="orderFilter" className="order_filter_select" value={filterStatus} onChange={handleFilterChange}>
-                            <option value="All">All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Preparing">Preparing</option>
-                            <option value="Delivering">Delivering</option>
-                            <option value="Success">Success</option>
-                            <option value="Cancel">Cancel</option>
-                        </select>
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="orderFilterLabel">Status</InputLabel>
+                            <Select
+                                labelId="orderFilterLabel"
+                                id="orderFilter"
+                                value={filterStatus}
+                                label="Filter"
+                                onChange={handleFilterChange}
+                            >
+                                <MenuItem value="All">All</MenuItem>
+                                <MenuItem value="Pending">Pending</MenuItem>
+                                <MenuItem value="Unpaid">Unpaid</MenuItem>
+                                <MenuItem value="Paid">Paid</MenuItem>
+                                <MenuItem value="Preparing">Preparing</MenuItem>
+                                <MenuItem value="Delivering">Delivering</MenuItem>
+                                <MenuItem value="Completed">Completed</MenuItem>
+                                <MenuItem value="Cancelled">Cancelled</MenuItem>
+                            </Select>
+                        </FormControl>
                     </div>
 
                     <table className="order_history_table table">
@@ -166,7 +176,6 @@ function OrderHistory() {
                         </button>
                     </div>
                 </div>
-                {/* </div> */}
             </div>
 
             <ScrollToTop />
@@ -176,4 +185,3 @@ function OrderHistory() {
 }
 
 export default OrderHistory;
-

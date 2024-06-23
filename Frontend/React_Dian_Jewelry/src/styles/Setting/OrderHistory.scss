@@ -10,7 +10,7 @@ body {
 }
 
 .order_history_setting_menu {
-    width: 257px;
+    width: 265px;
     background-color: #fff7f4;
     padding: 40px 0 50px 0;
     border-right: 1px solid #e0e0e0;
@@ -84,6 +84,7 @@ body {
 
 .order_filter{
     margin-bottom: 10px;
+    width: 160px !important;
 }
 
 .order_filter_select{
@@ -115,13 +116,13 @@ body {
         }
 
         th {
-            background-color: #1c1c1c;
+            background-color: #f8dcce;
             padding: 10px 15px;
             text-align: left;
             border: 1px solid #777777;
             font-size: 14px;
             text-align: center;
-            color: white;
+            color: #1c1c1c;
         }
     }
 

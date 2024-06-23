@@ -294,7 +294,6 @@ function Checkout() {
         }
     };
 
-
     const handlePointsClick = () => {
         setUsePoints(!usePoints);
     };
@@ -403,38 +402,46 @@ function Checkout() {
 
                     <h5 className="checkout_summary_payment_title"><i className="fas fa-credit-card"></i>Payment method</h5>
                     <div className="payment_methods">
-                        <div className="payment_method" onClick={() => setPaymentMethod('Cash')} >
+                        <div className="payment_method">
                             <input
                                 type="radio"
                                 id="cash"
                                 name="paymentMethod"
                                 checked={paymentMethod === 'Cash'}
+                                onChange={() => setPaymentMethod('Cash')}
                             />
-                            <label htmlFor="cash">Cash</label>
-                            <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>
+                            <p className='payment_label' htmlFor="cash">Cash</p>
+                            {paymentMethod === 'Cash' && <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>}
                         </div>
-                        <div className="payment_method" onClick={() => setPaymentMethod('Bank Transfer')}>
+                        <div className="payment_method">
                             <input
                                 type="radio"
                                 id="bankTransfer"
                                 name="paymentMethod"
                                 checked={paymentMethod === 'Bank Transfer'}
+                                onChange={() => setPaymentMethod('Bank Transfer')}
                             />
-                            <label htmlFor="bankTransfer">Bank Transfer</label>
-                            <p>(Make a transfer to the shop's account number. Order will be processed after successful transfer)</p>
+                            <p className='payment_label' htmlFor="bankTransfer">Bank Transfer</p>
+                            {paymentMethod === 'Bank Transfer' && <p>(Make a transfer to the shop's account number. Order will be processed after successful transfer)</p>}
                         </div>
-                        <div className="payment_method" onClick={() => setPaymentMethod('VNPAY')}>
+                        <div className="payment_method">
                             <input
                                 type="radio"
                                 id="vnpay"
                                 name="paymentMethod"
                                 checked={paymentMethod === 'VNPAY'}
+                                onChange={() => setPaymentMethod('VNPAY')}
                             />
-                            <label htmlFor="vnpay">VNPAY</label>
-                            <img src={vnpay} style={{ width: "30px", marginLeft: "8px", marginBottom: "14px" }}></img>
-                            <p className="vnpay_p">(Use VNPAY for online payment. Order will be processed after successful payment)</p>
+                            <div className='payment_vnpay_wrapper'>
+                                <p className='payment_label' htmlFor="vnpay">VNPAY</p>
+                                <img src={vnpay} style={{ width: "30px", marginTop: "-34px", marginBottom: "10px", marginLeft: "-17px" }} alt="VNPAY" />
+                            </div>
+                            {paymentMethod === 'VNPAY' && (
+                                <>
+                                    <p>(Use VNPAY for online payment. Order will be processed after successful payment)</p>
+                                </>
+                            )}
                         </div>
-
                     </div>
                     {points > 0 && (
                         <>

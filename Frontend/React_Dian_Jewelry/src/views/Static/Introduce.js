@@ -104,7 +104,6 @@ const Introduce = () => {
         <div className="introduce_beginning_right">
           <img src={beginning} alt="Dian Jewelry" />
           <p className="beginning_left_desc">“We started Dian Jewelry in 2004 to raise the ethical standards of the diamond industry and to create a new way to buy beautiful fine jewelry.”</p>
-          <p className="beginning_credit">—says Duyen.</p>
         </div>
       </div>
 

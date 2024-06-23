@@ -12,7 +12,6 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 
-
 function Invoice() {
     const navItems = [
         { name: 'Home', link: '/home' },
@@ -25,15 +24,19 @@ function Invoice() {
     const [orderDetails, setOrderDetails] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const orderId = location.state?.orderId || localStorage.getItem('orderId');
+
+    const orderId =  parseInt(localStorage.getItem('orderId'));
     const paymentMethod = location.state?.paymentMethod || localStorage.getItem('paymentMethod') || 'Not selected';
     const discount = location.state?.appliedDiscount || localStorage.getItem('orderDiscount');
     const orderDate = new Date(localStorage.getItem('orderDate')).toLocaleDateString('en-GB');
     const totalPrice = location.state?.totalPrice || localStorage.getItem('orderTotalPrice');
 
+    console.log('Order ID:', orderId);
+
     useEffect(() => {
         const fetchOrderDetails = async () => {
             try {
+                console.log('Fetching order details for order ID:', orderId);
                 const orderDetailsData = await getOrderDetailsByOrderId(orderId);
                 const productDetailsPromises = orderDetailsData.map((detail) =>
                     getProductDetail(detail.productId).then((product) => ({
@@ -61,10 +64,9 @@ function Invoice() {
         window.scrollTo(0, 160);
     }, []);
 
-
     return (
         <div className="Invoice">
-            <HeaderComponent/>
+            <HeaderComponent />
             <SubNav items={navItems} />
             <div className="invoice_container">
                 <div className="invoice_order_summary">
@@ -137,7 +139,7 @@ function Invoice() {
             <br></br><br></br>
             <Insta />
             <ScrollToTop />
-            <FooterComponent/>
+            <FooterComponent />
         </div>
     );
 }

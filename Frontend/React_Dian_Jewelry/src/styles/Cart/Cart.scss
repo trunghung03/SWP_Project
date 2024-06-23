@@ -57,20 +57,11 @@
     max-width: 87%;
 }
 
-.cart_item_size_guide {
-    font-size: 14px;
-    color: #0f2770;
-    text-decoration: underline;
-    cursor: pointer;
-    margin-right: 20px;
-    margin-left: 20px;
-}
-
 .cart_item_image {
-    width: 200px;
-    height: 180px;
+    width: 190px;
+    height: 175px;
     border-radius: 8px;
-    margin-right: 20px;
+    margin-right: 25px;
     margin-left: -10px;
 }
 
@@ -115,14 +106,14 @@
 }
 
 .cart_ring_size_detail {
-    border-radius: 5px;
+    border-radius: 0;
     padding: 1px 0 2px 10px;
     font-size: 15px;
     outline: none;
 }
 
 .cart_item_price {
-    font-size: 23px;
+    font-size: 20px;
     font-weight: bold;
     margin: 48px 0 0 0;
     text-align: end;
