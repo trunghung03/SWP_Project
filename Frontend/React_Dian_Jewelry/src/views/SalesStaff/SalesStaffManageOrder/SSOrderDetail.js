@@ -29,27 +29,9 @@ const SSOrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState({});
   const { orderId } = useParams();
   const [status, setStatus] = useState("");
-  const [warrantyURL, setWarrantyURL] = useState('');
   const navigate = useNavigate();
-  const [sendTo, setSendTo] = useState('mimitrucduyen@gmail.com'); 
   const handleChange = (event) => {
     setStatus(event.target.value);
-  };
-  const handleSendEmail = async () => {
-    try {
-      const url = await getWarrantyURL(orderId);
-      setWarrantyURL(url);
-      const emailData = {
-        toEmail: sendTo,  
-        subject: "Your Warranty",
-        body: `Here is your warranty link: ${url}`,
-      };
-      await sendWarrantyEmail(emailData);
-      swal("Success", "Warranty email sent successfully", "success");
-    } catch (error) {
-      console.error("Failed to send warranty email:", error);
-      swal("Error", "Failed to send warranty email", "error");
-    }
   };
   useEffect(() => {
     console.log("orderId:", orderId); // Log the orderId
@@ -65,7 +47,24 @@ const SSOrderDetail = () => {
     }
   }, [orderId]);
   
-
+  const handleSendEmail = async () => {
+    try {
+      const response = await getWarrantyURL(orderId);
+      const url = response.data.url;
+      console.log('Warranty URL:', url);
+      const emailData = {
+        toEmail: orderDetails.email, 
+        subject: "Your Warranty",
+        body: `Here is your warranty link: ${url}`, 
+      };
+      console.log('emaildata: ' , emailData);
+      await sendWarrantyEmail(emailData);
+      swal("Success", "Warranty email sent successfully", "success");
+    } catch (error) {
+      console.error("Failed to send warranty email:", error);
+      swal("Error", "Failed to send warranty email", "error");
+    }
+  };
   const handleSubmit = async () => {
     try {
       await salesStaffUpdateOrderStatus(status, orderId);

@@ -95,6 +95,7 @@ namespace DIAN_.Repository
                     UserId = g.First().po.UserId,
                     FirstName = g.First().po.User.FirstName,
                     LastName = g.First().po.User.LastName,
+                    Email = g.First().po.User.Email, // Include the email here
                     PhoneNumber = g.First().po.User.PhoneNumber,
                     Address = g.First().po.User.Address,
                     Note = g.First().po.Note,
@@ -119,8 +120,9 @@ namespace DIAN_.Repository
                     }).ToList()
                 }).FirstOrDefaultAsync();
 
-            return orderBill; 
+            return orderBill;
         }
+
 
 
 
