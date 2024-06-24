@@ -301,5 +301,36 @@ namespace DIAN_.Controllers
             }
         }
 
+        [HttpGet("newest-lite")]
+        public async Task<IActionResult> GetLast8ProductsLite()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var products = await _productRepo.GetLast8ProductsAsync();
+                if (products == null || !products.Any())
+                {
+                    return NotFound();
+                }
+
+                var productDTOs = products.Select(p => new 
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name
+                }).ToList();
+
+                return Ok(productDTOs);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }

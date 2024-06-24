@@ -1,6 +1,7 @@
 ﻿using DIAN_.DTOs.BusinessStatDTO;
 using DIAN_.DTOs.ProductDTOs;
 using DIAN_.DTOs.StatDto;
+using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -246,8 +247,11 @@ namespace DIAN_.Controllers
             return Ok(monthlyValues);
         }
         [HttpGet("top-10-selling-products")]
-        public async Task<ActionResult<IEnumerable<ProductStatisticDto>>> GetTop10SellingProducts(DateTime startDate, DateTime endDate)
+        public async Task<ActionResult<IEnumerable<ProductStatisticDto>>> GetTop10SellingProducts(DateTime? startDate, DateTime? endDate)
         {
+            DateTime effectiveStartDate = startDate ?? DateTime.MinValue;
+            DateTime effectiveEndDate = endDate ?? DateTime.Now;
+
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
                 .Where(od => od.Order.Date >= startDate && od.Order.Date <= endDate)
@@ -273,6 +277,44 @@ namespace DIAN_.Controllers
                 .ToListAsync();
 
             return Ok(topProducts);
+        }
+
+        [HttpGet("top-8-selling-products")]
+        public async Task<ActionResult<IEnumerable<ProductListDTO>>> GetTop8SellingProducts(DateTime? startDate, DateTime? endDate)
+        {
+            DateTime effectiveStartDate = startDate ?? DateTime.MinValue;
+            DateTime effectiveEndDate = endDate ?? DateTime.Now;
+
+            var topProducts = await _context.Orderdetails
+                .Include(od => od.Product)
+                .ThenInclude(p => p.MainDiamond)
+                .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
+                .GroupBy(od => od.ProductId)
+                .Select(g => new
+                {
+                    ProductId = g.Key,
+                    ItemSold = g.Count(),
+                })
+                .OrderByDescending(g => g.ItemSold)
+                .Take(8)
+                .Join(_context.Products,
+                    g => g.ProductId,
+                    p => p.ProductId,
+                    (g, p) => p)
+                .ToListAsync();
+
+            var diamondIds = topProducts.Select(tp => tp.MainDiamondId).Distinct().ToList();
+            var diamonds = await _context.Diamonds
+                                         .Where(d => diamondIds.Contains(d.DiamondId))
+                                         .ToListAsync();
+
+            var productDTOs = topProducts.Select(tp =>
+            {
+                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == tp.MainDiamondId);
+                return tp.ToProductListDTO(diamond);
+            }).ToList();
+
+            return Ok(productDTOs);
         }
 
 
