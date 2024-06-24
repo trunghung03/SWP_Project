@@ -275,11 +275,22 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var productDTOs = await _productRepo.GetLast8ProductsAsync();
-                if (productDTOs == null || !productDTOs.Any())
+                var products = await _productRepo.GetLast8ProductsAsync();
+                if (products == null || !products.Any())
                 {
                     return NotFound();
                 }
+
+                var diamondIds = products.Select(p => p.MainDiamondId).Distinct().ToList();
+                var diamonds = await _context.Diamonds
+                                             .Where(d => diamondIds.Contains(d.DiamondId))
+                                             .ToListAsync();
+
+                var productDTOs = products.Select(p =>
+                {
+                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.MainDiamondId);
+                    return p.ToProductListDTO(diamond);
+                }).ToList();
 
                 return Ok(productDTOs);
             }
