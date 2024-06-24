@@ -9,6 +9,7 @@ namespace DIAN_.Mapper
         {
             return new Product
             {
+                ProductId = id,
                 Name = updateDTO.Name,
                 Description = updateDTO.Description,
                 LaborCost = updateDTO.LaborPrice,
@@ -16,10 +17,8 @@ namespace DIAN_.Mapper
                 CollectionId = updateDTO.CollectionId,
                 CategoryId = updateDTO.CategoryId,
             };
-            
-
-            
         }
+
         public static ProductDTO ToProductDTO(this Product product)
         {
             var sizes = new List<decimal>();
@@ -44,9 +43,9 @@ namespace DIAN_.Mapper
                 Description = product.Description,
                 MainDiamondId = product.MainDiamondId ?? 0,
                 ImageLinkList = product.ImageLinkList,
-                SubDiamondAmount = product.SubDiamondAmount ?? 0, 
-                MainDiamondAmount= product.MainDiamondAmount ?? 0,
-                ShellAmount= product.ShellAmount ?? 0,
+                SubDiamondAmount = product.SubDiamondAmount ?? 0,
+                MainDiamondAmount = product.MainDiamondAmount ?? 0,
+                ShellAmount = product.ShellAmount ?? 0,
                 CollectionId = product.CollectionId,
                 Sizes = sizes,
                 CategoryId = product.CategoryId,
@@ -70,6 +69,7 @@ namespace DIAN_.Mapper
                 Clarity = diamond?.Clarity ?? string.Empty,
             };
         }
+
         public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
         {
             var sizes = new List<decimal>();
@@ -93,11 +93,12 @@ namespace DIAN_.Mapper
                 Description = product.Description,
                 Carat = diamond?.Carat ?? 0,
                 SubDiamondColors = subDiamondColors,
-                Sizes= sizes,
-                CategoryId=product.CategoryId,
+                Sizes = sizes,
+                CategoryId = product.CategoryId,
             };
         }
-        public static Product ToProductFromCreateDTO (this CreateProductRequestDTO productRequestDTO)
+
+        public static Product ToProductFromCreateDTO(this CreateProductRequestDTO productRequestDTO)
         {
             return new Product
             {
@@ -115,6 +116,6 @@ namespace DIAN_.Mapper
                 CategoryId = productRequestDTO.CategoryId,
                 Status = true
             };
-        }       
+        }
     }
 }

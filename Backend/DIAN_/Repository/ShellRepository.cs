@@ -2,6 +2,7 @@
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Repository
@@ -14,48 +15,50 @@ namespace DIAN_.Repository
             _context = context;
         }
 
-        public async Task<ShellMaterialDTO> CreateAsync(Shellmaterial shell)
+        public async Task<Shellmaterial> CreateAsync(Shellmaterial shell)
         {
             await _context.Shellmaterials.AddAsync(shell);
             await _context.SaveChangesAsync();
-            return shell.ToShellMaterialDTO();
+            return shell;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<Shellmaterial?> DeleteAsync(int id)
         {
-            var shell = await _context.Shellmaterials.FindAsync(id);
+            var shell = await _context.Shellmaterials.FirstOrDefaultAsync(s => s.ShellMaterialId == id);
             if (shell != null)
             {
                 shell.Status = false;
                 await _context.SaveChangesAsync();
+                return shell;
             }
+            throw new KeyNotFoundException("Shell does not exist");
         }
 
-        public async Task<ShellMaterialDTO?> GetByIdAsync(int id)
+        public async Task<Shellmaterial?> GetByIdAsync(int id)
         {
             var shell = await _context.Shellmaterials
                 .Where(s => s.Status && s.ShellMaterialId == id)
                 .FirstOrDefaultAsync();
             if (shell == null)
             {
-                return null;
+                throw new KeyNotFoundException("Shell does not exist");
             }
-            return shell.ToShellMaterialDTO();
+            return shell;
         }
 
 
 
-        public async Task<List<ShellMaterialDTO>> GetAllAsync()
+        public async Task<List<Shellmaterial>> GetAllAsync()
         {
-            return await _context.Shellmaterials
+            var shells = await _context.Shellmaterials
                 .Where(s => s.Status)
-                .Select(s => s.ToShellMaterialDTO())
                 .ToListAsync();
+            return shells;
         }
 
-        public async Task<ShellMaterialDTO?> UpdateAsync(ShellMaterialDTO shellDTO)
+        public async Task<Shellmaterial?> UpdateAsync(Shellmaterial shellDTO, int id)
         {
-            var shell = await _context.Shellmaterials.FindAsync(shellDTO.ShellMaterialId);
+            var shell = await _context.Shellmaterials.FirstOrDefaultAsync(s => s.ShellMaterialId == id);
             if (shell == null)
             {
                 return null;
@@ -67,7 +70,7 @@ namespace DIAN_.Repository
             _context.Shellmaterials.Update(shell);
             await _context.SaveChangesAsync();
 
-            return shell.ToShellMaterialDTO();
+            return shell;
         }
         public async Task<List<string>> GetListNamesAsync()
         {
