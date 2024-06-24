@@ -30,7 +30,7 @@ const HeaderComponent = () => {
 
     useEffect(() => {
         const role = localStorage.getItem('role');
-        if (['Admin', 'SalesStaff', 'Manager', 'DeliveryStaff'].includes(role)) {
+        if (['Admin', 'SalesStaff', 'Manager', 'DeliveryStaff', 'Customer'].includes(role)) {
             const rememberedEmail = localStorage.getItem('rememberedEmail');
             const rememberedPassword = localStorage.getItem('rememberedPassword');
             
@@ -52,7 +52,6 @@ const HeaderComponent = () => {
             for (const key in allCartItems) {
                 localStorage.setItem(key, allCartItems[key]);
             }
-            window.location.href = '/login';
         }
     }, []);
 

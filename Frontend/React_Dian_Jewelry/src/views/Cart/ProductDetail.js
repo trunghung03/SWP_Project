@@ -43,13 +43,13 @@ function ProductDetail() {
         if (productDetailElement) {
             const topPos = productDetailElement.getBoundingClientRect().top + window.pageYOffset;
             window.scrollTo(0, 220);
-
         }
         navigate('/product-detail', { state: { id: productId } });
     };
 
     useEffect(() => {
         const { id } = location.state || {};
+        console.log("Product ID from state:", id); // Add this line to debug the ID
         if (id) {
             getProductDetail(id).then(response => {
                 const productData = response.data;

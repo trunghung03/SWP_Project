@@ -82,7 +82,7 @@ const CollectionSlide = ({ onCollectionClick }) => {
         <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
         <ul className="carousel">
           {collections.map((collection, index) => (
-            <li key={index} className="home_product_card card" onClick={() => onCollectionClick('/collection', { collectionId: collection.collectionId })}>
+            <li key={index} className="home_product_card card" onClick={() => handleNavigate('/collection', { collectionId: collection.collectionId })}>
               <div className="home_product_icon_wrapper" data-tooltip="View collection">
                 <i className="far fa-eye home_product_icon_eye"></i>
               </div>

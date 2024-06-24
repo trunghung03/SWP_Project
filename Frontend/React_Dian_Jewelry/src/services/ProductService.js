@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// const API_BASE_URL = 'https://localhost:7184/api';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const getProductList = () => {
@@ -31,4 +30,12 @@ const getProductsByIds = (ids) => {
     return axios.get(`${API_BASE_URL}/products/list`, { params: { ids: ids.join(',') } });
 };
 
-export { getProductList, getCollectionList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds };
+const getNewestProducts = () => {
+    return axios.get(`${API_BASE_URL}/products/newest`);
+};
+
+const getTopSellingProducts = () => {
+    return axios.get(`${API_BASE_URL}/stat/top-8-selling-products`);
+};
+
+export { getProductList, getCollectionList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds, getNewestProducts, getTopSellingProducts };
