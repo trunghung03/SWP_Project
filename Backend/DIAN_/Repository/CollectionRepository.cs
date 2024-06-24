@@ -75,5 +75,12 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<Collection> GetLatestCollectionAsync()
+        {
+            return await _context.Collections
+                .OrderByDescending(c => c.CollectionId)
+                .FirstOrDefaultAsync();
+        }
     }
 }
