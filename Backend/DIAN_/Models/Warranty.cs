@@ -13,7 +13,7 @@ public partial class Warranty
 
     public DateTime EndDate { get; set; }
 
-    public bool Status { get; set; }
+    public string Status { get; set; }
 
     public virtual Orderdetail OrderDetail { get; set; }
 }

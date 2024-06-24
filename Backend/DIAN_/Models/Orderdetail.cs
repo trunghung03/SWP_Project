@@ -17,8 +17,6 @@ public partial class Orderdetail
 
     public int? ShellMaterialId { get; set; }
 
-    public int? SubDiamondId { get; set; }
-
     public decimal? Size { get; set; }
 
     public bool Status { get; set; }
@@ -28,8 +26,6 @@ public partial class Orderdetail
     public virtual Product Product { get; set; }
 
     public virtual Shellmaterial ShellMaterial { get; set; }
-
-    public virtual Diamond SubDiamond { get; set; }
 
     public virtual Warranty Warranty { get; set; }
 }

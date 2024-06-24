@@ -28,7 +28,7 @@ namespace DIAN_.Controllers
         {
             // Retrieve warranty data from the repository
             var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
-            
+
             if (warranty == null)
             {
                 return NotFound();
@@ -42,7 +42,7 @@ namespace DIAN_.Controllers
             htmlContent = htmlContent.Replace("{OrderDetailId}", warranty.OrderDetailId.ToString())
                                      .Replace("{StartDate}", warranty.StartDate.ToString("yyyy-MM-dd"))
                                      .Replace("{EndDate}", warranty.EndDate.ToString("yyyy-MM-dd"))
-                                     .Replace("{Status}", warranty.Status ? "Active" : "Inactive");
+                                     .Replace("{Status}", warranty.Status.ToString() ?? "Active");
 
             // Define the output PDF file path
             string outputPdfPath = "warranty.pdf";
@@ -51,15 +51,22 @@ namespace DIAN_.Controllers
             ConvertHtmlToPdf(htmlContent, outputPdfPath);
 
             // Upload the PDF to Pixeldrain
-            string uploadUrl = await UploadPdfToPixeldrain(outputPdfPath);
+            var uploadResult = await UploadPdfToPixeldrain(outputPdfPath);
+            dynamic result = uploadResult;
+            string uploadUrl = result.url;
 
-            // Delete the local PDF file
-            if (System.IO.File.Exists(outputPdfPath))
+            if (!string.IsNullOrEmpty(uploadUrl))
             {
-                System.IO.File.Delete(outputPdfPath);
+                // Delete the local PDF file
+                if (System.IO.File.Exists(outputPdfPath))
+                {
+                    System.IO.File.Delete(outputPdfPath);
+                }
+
+                return Ok(new { url = uploadUrl });
             }
 
-            return Ok(new { url = uploadUrl });
+            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload PDF to Pixeldrain.");
         }
 
         [HttpGet("certificate")]
@@ -92,16 +99,24 @@ namespace DIAN_.Controllers
             ConvertHtmlToPdf(htmlContent, outputPdfPath);
 
             // Upload the PDF to Pixeldrain
-            string uploadUrl = await UploadPdfToPixeldrain(outputPdfPath);
+            var uploadResult = await UploadPdfToPixeldrain(outputPdfPath);
+            dynamic result = uploadResult;
+            string uploadUrl = result.url;
 
-            // Delete the local PDF file
-            if (System.IO.File.Exists(outputPdfPath))
+            if (!string.IsNullOrEmpty(uploadUrl))
             {
-                System.IO.File.Delete(outputPdfPath);
+                // Delete the local PDF file
+                if (System.IO.File.Exists(outputPdfPath))
+                {
+                    System.IO.File.Delete(outputPdfPath);
+                }
+
+                return Ok(new { url = uploadUrl });
             }
 
-            return Ok(uploadUrl);
+            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload PDF to Pixeldrain.");
         }
+
 
         [HttpPost("upload")]
         public async Task<IActionResult> UploadFileToPixeldrain(IFormFile file)
@@ -111,7 +126,6 @@ namespace DIAN_.Controllers
                 return BadRequest("No file uploaded or file is empty.");
             }
 
-            // Save the uploaded file to a temporary location
             string tempFilePath = Path.GetTempFileName();
             string fileName = file.FileName;
 
@@ -122,10 +136,10 @@ namespace DIAN_.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                // Upload the file to Pixeldrain
-                string uploadUrl = await UploadPdfToPixeldrain(tempFilePath, fileName);
+                // Upload the file to Pixeldrain and receive an object with the URL
+                var uploadResult = await UploadPdfToPixeldrain(tempFilePath, fileName);
 
-                return Ok(uploadUrl);
+                return Ok(uploadResult);
             }
             catch (Exception ex)
             {
@@ -133,15 +147,12 @@ namespace DIAN_.Controllers
             }
             finally
             {
-                // Delete the temporary file
                 if (System.IO.File.Exists(tempFilePath))
                 {
                     System.IO.File.Delete(tempFilePath);
                 }
             }
         }
-
-
 
 
         static void ConvertHtmlToPdf(string html, string outputPath)
@@ -154,24 +165,20 @@ namespace DIAN_.Controllers
             }
         }
 
-        static async Task<string> UploadPdfToPixeldrain(string filePath, string fileName = null)
+        static async Task<object> UploadPdfToPixeldrain(string filePath, string fileName = null)
         {
             using (var client = new HttpClient())
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                // Create a MultipartFormDataContent object to hold the file and form data
                 using (var form = new MultipartFormDataContent())
                 {
-                    // Add the file content to the form
                     form.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
 
-                    // Add the file name to the form if provided
                     if (fileName != null)
                     {
                         form.Add(new StringContent(fileName), "name");
                     }
 
-                    // Perform the POST request to upload the file
                     var response = await client.PostAsync("https://pixeldrain.com/api/file", form);
 
                     if (!response.IsSuccessStatusCode)
@@ -184,10 +191,12 @@ namespace DIAN_.Controllers
                     var jsonDocument = System.Text.Json.JsonDocument.Parse(jsonResponse);
                     var fileId = jsonDocument.RootElement.GetProperty("id").GetString();
 
-                    return "https://pixeldrain.com/u/" + fileId;
+                    // Return an object with the URL
+                    return new { url = "https://pixeldrain.com/u/" + fileId };
                 }
             }
         }
+
 
     }
 }

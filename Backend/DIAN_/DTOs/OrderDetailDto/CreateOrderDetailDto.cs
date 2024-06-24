@@ -17,9 +17,6 @@ namespace DIAN_.DTOs.OrderDetailDto
         [Range(1, int.MaxValue, ErrorMessage = "Shell Material ID must be a positive number.")]
         public int? ShellMaterialId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Sub Diamond ID must be a positive number.")]
-        public int? SubDiamondId { get; set; }
-
         [Range(0.01, double.MaxValue, ErrorMessage = "Size must be greater than 0.")]
         public decimal? Size { get; set; }
 

@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/logoN.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import { createContent } from "../../../services/SalesStaffService/SSContentService.js";
+import { createContent, uploadImage } from "../../../services/SalesStaffService/SSContentService.js";
 import { UserContext } from "../../../services/UserContext.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
 import Button from "@mui/material/Button";
+
 function SSContentList() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -22,7 +23,7 @@ function SSContentList() {
       localStorage.getItem("richTextContent") ||
       "",
     image: "",
-    imageUrl: "",
+    // imageUrl: "",
     tag: "",
     date: new Date().toISOString(),
     employee: employeeId,
@@ -35,30 +36,52 @@ function SSContentList() {
     setContentData({ ...contentData, [name]: value });
   };
 
-  const handleImageUpload = (event) => {
-    if (event.target.files.length === 0) {
+  // const handleImageUpload = (event) => {
+  //   if (event.target.files.length === 0) {
+  //     console.error("No file selected.");
+  //     return;
+  //   }
+
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   const preview = document.getElementById("imagePreview");
+
+  //   if (!file.type.startsWith("image/")) {
+  //     console.error("Selected file is not an image.");
+  //     return;
+  //   }
+
+  //   reader.onload = () => {
+  //     setImageBase64(reader.result);
+  //     setContentData((prevData) => ({ ...prevData, image: reader.result }));
+  //     preview.src = reader.result;
+  //     preview.style.display = "block";
+  //   };
+
+  //   reader.readAsDataURL(file);
+  // };
+  const handleImageUpload = async (event) => { // Added event parameter
+    const file = event.target.files[0];
+    if (!file) {
       console.error("No file selected.");
       return;
     }
+  
+    const formData = new FormData();
+    formData.append("image", file); // Adjust the key according to your API's expectation
 
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const preview = document.getElementById("imagePreview");
-
-    if (!file.type.startsWith("image/")) {
-      console.error("Selected file is not an image.");
-      return;
+    try {
+      const response = await uploadImage(formData); // Changed to use formData
+      const url = response.url;
+      console.log('url:', url);
+      setContentData(prevContentData => ({
+        ...prevContentData,
+        image: url,
+      }));
+    } catch (error) {
+      console.error("Upload error:", error);
     }
-
-    reader.onload = () => {
-      setImageBase64(reader.result);
-      setContentData((prevData) => ({ ...prevData, image: reader.result }));
-      preview.src = reader.result;
-      preview.style.display = "block";
-    };
-
-    reader.readAsDataURL(file);
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,7 +91,7 @@ function SSContentList() {
         date: new Date().toISOString(),
         status: true,
         employee: parseInt(employeeId),
-        image: contentData.imageUrl || contentData.image,
+        image: contentData.image,
       };
       console.log("Formatted Content Data:", formattedContentData);
       await createContent(formattedContentData);
@@ -98,6 +121,7 @@ function SSContentList() {
       );
     }
   };
+
 
   useEffect(() => {
     localStorage.setItem("richTextContent", contentData.content);
@@ -238,22 +262,22 @@ function SSContentList() {
             </div>
             <div className="ss_add_displayed_image_div2">
               <label className="ss_add_content_label_image">Image URL:</label>
-              <input
+              {/* <input
                 className="ss_enter_image"
                 type="text"
                 name="imageUrl"
                 value={contentData.imageUrl}
                 onChange={handleChange}
                 placeholder="Enter the image URL"
-              />
-              {/* <label className="ss_add_content_label">Image:</label>
+              /> */}
+              <label className="ss_add_content_label">Image:</label>
                 <input
                   type="file"
                   name="image"
                   accept="image/*"
                   onChange={handleImageUpload}
                 />
-                <img
+                {/* <img
                   id="imagePreview"
                   src="#"
                   alt="Image Preview"

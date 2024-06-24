@@ -28,6 +28,12 @@ const updateContentById = (id, data) => {
     return axios.put(`${API_BASE_URL}/articles/update/${id}`, data);
   };
 
-export { getContentList, getContentByTitle, deleteContentById, createContent, updateContentById, getContentById};
+const uploadImage = async (data) => {
+    const response = await axios.post(`${API_BASE_URL}/pixeldrain/upload`, data);
+    return response.data;
+};
+
+
+export { getContentList, getContentByTitle, deleteContentById, createContent, updateContentById, getContentById, uploadImage};
 
 
