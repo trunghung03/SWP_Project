@@ -7,7 +7,7 @@ const ShowAllPromotion = async () => {
   };
   
   const updatePromotionById = (id, data) => {
-    return axios.put(`${API_BASE_URL}/Promotionmaterials/${id}`, data);
+    return axios.put(`${API_BASE_URL}/promotions/update/${id}`, data);
   };
   const getPromotionDetail = async (id) => {
     const response = await axios.get(`${API_BASE_URL}/promotions/${id}`);
