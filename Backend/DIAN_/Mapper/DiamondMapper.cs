@@ -58,6 +58,13 @@ namespace DIAN_.Mapper
                 Status = updateDiamond.Status,
             };
         }
+        public static Diamond ToDiamondFromUpdateCertificate(this UpdateCertificateDto updateCertificate, int id)
+        {
+            return new Diamond
+            {
+                CertificateScan = updateCertificate.CertificateScan,
+            };
+        }
         //public static DiamondDetailDto ToDiamondDetailDTO(this Diamond diamond)
         //{
         //    return new DiamondDetailDto

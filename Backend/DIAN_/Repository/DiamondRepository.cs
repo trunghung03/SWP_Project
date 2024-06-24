@@ -92,5 +92,17 @@ namespace DIAN_.Repository
             }
             throw new KeyNotFoundException("Diamond does not exist");
         }
+
+        public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
+        {
+           var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
+            if (existingDiamond != null)
+            {
+                existingDiamond.CertificateScan = diamondModel.CertificateScan;
+                await _context.SaveChangesAsync();
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
     }
 }
