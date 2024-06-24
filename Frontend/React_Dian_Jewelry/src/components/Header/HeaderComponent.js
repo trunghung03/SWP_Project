@@ -30,7 +30,7 @@ const HeaderComponent = () => {
 
     useEffect(() => {
         const role = localStorage.getItem('role');
-        if (['Admin', 'SalesStaff', 'Manager', 'DeliveryStaff', 'Customer'].includes(role)) {
+        if (['Admin', 'SalesStaff', 'Manager', 'DeliveryStaff'].includes(role)) {
             const rememberedEmail = localStorage.getItem('rememberedEmail');
             const rememberedPassword = localStorage.getItem('rememberedPassword');
             
