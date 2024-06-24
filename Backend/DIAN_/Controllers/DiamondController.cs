@@ -117,13 +117,14 @@ namespace DIAN_.Controllers
 
                 var diamond = diamondDto.ToDiamondFromCreateDTO();
                 var result = await _diamondRepository.AddDiamondAsync(diamond);
-                return Ok(result.ToDiamondDTO());
+                return Ok(new { diamondId = result.DiamondId, diamond = result.ToDiamondDTO() });
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto updateDto)
