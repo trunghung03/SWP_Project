@@ -171,5 +171,28 @@ namespace DIAN_.Repository
             }
             return null;
         }
+
+        public async Task<IEnumerable<ProductListDTO>> GetLast8ProductsAsync()
+        {
+            var products = await _context.Products
+                                         .OrderByDescending(p => p.ProductId) // Order by ProductId to get the latest products
+                                         .Take(8)
+                                         .ToListAsync();
+
+            var diamonds = await _context.Diamonds
+                                         .Where(d => products.Select(p => p.MainDiamondId).Contains(d.DiamondId))
+                                         .ToListAsync();
+
+            var productDTOs = products.Select(p =>
+            {
+                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.MainDiamondId);
+
+                if (diamond == null) return null;
+
+                return p.ToProductListDTO(diamond);
+            }).ToList();
+
+            return productDTOs;
+        }
     }
 }
