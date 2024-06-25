@@ -9,14 +9,6 @@
     padding: 10px 8% 0 8%;
     overflow-x: hidden;
 }
-.manager_title_employees{
-    margin: 10px 13px;
-}
-.manager_title_employees:hover {
-    text-decoration: underline;
-    color: #635343; /* Change color on hover */
-    cursor: pointer; /* Change cursor to pointer on hover */
-  }
 .manager_manage_diamond_sidebar {
     z-index: 2;
 }
@@ -100,7 +92,7 @@
     display: flex;
     justify-content: space-between;
     padding-right: 15px;
-    margin-top: 30px;
+    // margin-top: 30px;
 }
 
 .manager_manage_diamond_create_button {

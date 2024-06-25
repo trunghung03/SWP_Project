@@ -39,6 +39,7 @@ const SSOrderDetail = () => {
         .then((data) => {
           console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
+          setStatus(data.orderStatus); // Set status from fetched order details
         })
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
@@ -118,14 +119,16 @@ const SSOrderDetail = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={orderDetails.orderStatus}
-                          label="Age"
+                          value={status}
+                          label="Status"
                           onChange={handleChange}
                         >
                           <MenuItem value ="UnPaid">UnPaid</MenuItem>
                           <MenuItem value="Paid">Paid</MenuItem>
                           <MenuItem value="Preparing">Preparing</MenuItem>
                           <MenuItem value="Delivering">Delivering</MenuItem>
+                          <MenuItem value="Completed">Completed</MenuItem>
+                          <MenuItem value="Cancelled">Cancelled</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>

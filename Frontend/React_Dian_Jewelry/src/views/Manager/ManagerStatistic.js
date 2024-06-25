@@ -7,7 +7,9 @@ import {
   AllCurrentProduct,
   GetSoldCategory,
   TotalValue,
+  ShowProfitByYear,
   TotalOrders,
+  DailyStats,
   TotalCustomers,
 } from "../../services/ManagerService/ManagerStatisticService.js";
 import logo from "../../assets/img/logoN.png";
@@ -15,7 +17,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
 
 const ManagerStatitic = () => {
   const budget = 24000;
@@ -28,6 +29,8 @@ const ManagerStatitic = () => {
   const [totalValue, setTotalValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalCustomers, setTotalCustomers] = useState(null);
+  const [valueByDate, setValueByDate] = useState(null);
+  const [profitByYear, setProfitByYear] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,29 +47,53 @@ const ManagerStatitic = () => {
     fetchData();
   }, []);
 
+  const dailyStats = async (date) => {
+    if (date) {
+      const dailyValues = await DailyStats(date);
+      setValueByDate(dailyValues);
+    }
+  };
+
+  const handleDateChange = (event) => {
+    const selectedDate = event.target.value;
+    dailyStats(selectedDate);
+  };
+
+  const profitYear = async (event) => {
+    const year = event.target.value;
+    setSelectedYear(year);
+    if (year) {
+      setLoading(true);
+      try {
+        const profit = await ShowProfitByYear(year);
+        setProfitByYear(profit);
+        console.log("Profit Data:", profit); // Check the fetched data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setProfitByYear(Array(12).fill(0)); // Default to zero data
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const handleYearChange = async (event) => {
     const year = event.target.value;
     setSelectedYear(year);
-
     if (year) {
       const startMonth = `01-${year}`;
       const endMonth = `12-${year}`;
-
-      // Reset the data when year changes
       setAllCatePercentages([]);
       setTotalOrders(null);
       setTotalValue(null);
       setLoading(true);
-
       try {
         const categoryPercentages = await GetSoldCategory(startMonth, endMonth);
         setAllCatePercentages(
           categoryPercentages.length > 0 ? categoryPercentages : []
         );
-
         const soldOrders = await TotalOrders(year);
         setTotalOrders(soldOrders.length > 0 ? soldOrders : Array(12).fill(0));
-
         const soldValue = await TotalValue(year);
         setTotalValue(soldValue.length > 0 ? soldValue : Array(12).fill(0));
       } catch (error) {
@@ -117,6 +144,45 @@ const ManagerStatitic = () => {
     ],
   };
 
+  const profitData = {
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    datasets: [
+      {
+        label: "Profit",
+        data: profitByYear || Array(12).fill(0),
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const profitOptions = {
+    scales: {
+      y: {
+        min: -5500,
+        max: 2500,
+        stepSize: 500,
+      },
+      x: {
+        // Add customizations for x-axis if needed
+      },
+    },
+  };
+
   const options = {
     scales: {
       "y-axis-1": {
@@ -146,7 +212,7 @@ const ManagerStatitic = () => {
   };
 
   const trafficSourceData = {
-    labels: ['Rings', 'Earrings','Bracelets','Necklaces'],
+    labels: ['Rings', 'Earrings', 'Bracelets', 'Necklaces'],
     datasets: [
       {
         data: allCatePercentages.map((item) => item.percentage),
@@ -202,9 +268,29 @@ const ManagerStatitic = () => {
                 borderRadius: "8px",
               }}
             >
-              <h3>Budget</h3>
-              <p style={{ fontSize: "24px" }}>${budget.toLocaleString()}</p>
-              <p style={{ color: "green" }}>↑ 12% Since last month</p>
+              <input type="date" onChange={handleDateChange}></input>
+              <h3>Date profit report</h3>
+              <p style={{ fontSize: "20px" }}>
+                Total Orders:
+                {valueByDate?.totalOrders !== undefined ? valueByDate.totalOrders : "N/A"}
+              </p>
+              <p style={{ fontSize: "20px" }}>
+                Total Customers:
+                {valueByDate?.totalCustomers !== undefined ? valueByDate.totalCustomers : "N/A"}
+              </p>
+              <p style={{ fontSize: "20px" }}>
+                Total Sales Value:
+                {valueByDate?.totalSales !== undefined ? valueByDate.totalSales : "N/A"}
+              </p>
+              <p style={{ fontSize: "20px", color: valueByDate?.profit > 0 ? "green" : "red" }}>
+                Profit:
+                {valueByDate?.profit !== undefined ? valueByDate.profit : "N/A"}
+              </p>
+
+              <p style={{ fontSize: "20px" }}>
+                Prime Cost:
+                {valueByDate?.primeCost !== undefined ? valueByDate.primeCost : "N/A"}
+              </p>
             </div>
             <div
               className="manager_manage_report_div"
@@ -253,28 +339,28 @@ const ManagerStatitic = () => {
             </div>
           </div>
           <div className="manager_manage_report_filter">
-            <i className="fas fa-filter" style={{paddingTop: 30}}></i>
-              <FormControl sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="listYear-label">Year</InputLabel>
-                <Select
-                  labelId="listYear-label"
-                  id="listYear"
-                  name='year'
-                  onChange={handleYearChange}
-                  autoWidth
-                  label="Year"
-                  required
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="2023">2023</MenuItem>
-                  <MenuItem value="2024">2024</MenuItem>
-                </Select>
-              </FormControl>
+            <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <InputLabel id="listYear-label">Year</InputLabel>
+              <Select
+                labelId="listYear-label"
+                id="listYear"
+                name='year'
+                onChange={handleYearChange}
+                autoWidth
+                label="Year"
+                required
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="2023">2023</MenuItem>
+                <MenuItem value="2024">2024</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div clasName="manager_manage_display_chart"style={{ flex: '2', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+            <div clasName="manager_manage_display_chart" style={{ flex: '2', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
               <h3>Sales</h3>
               {loading ? (
                 <p>Loading...</p>
@@ -292,7 +378,39 @@ const ManagerStatitic = () => {
                 <p>Please choose the year to see report</p>
               )}
             </div>
-            </div>
+          </div>
+          <div className="manager_manage_report_filter">
+            <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <InputLabel id="listYear-label">Year</InputLabel>
+              <Select
+                labelId="listYear-label"
+                id="listYear"
+                name='year'
+                onChange={profitYear}
+                autoWidth
+                label="Year"
+                required
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="2023">2023</MenuItem>
+                <MenuItem value="2024">2024</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div style={{ marginTop: "20px", border: "1px solid #ddd", borderRadius: "8px", padding: "20px" }}>
+            <h3>Profit</h3>
+            {loading ? (
+              <p>Loading...</p>
+            ) : profitByYear ? (
+              <Bar data={profitData} options={profitOptions} />
+            ) : (
+              <p>No data available for the selected year</p>
+            )}
+          </div>
+
         </div>
       </div>
     </div>
@@ -300,3 +418,4 @@ const ManagerStatitic = () => {
 };
 
 export default ManagerStatitic;
+
