@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
+import '../../../styles/SalesStaff/SalesStaffManageOrder/SSAddWarrantyPopup.scss';
 
 const SSAddWarrantyPopup = ({ orderId }) => {
   const [startDate, setStartDate] = useState("");
@@ -45,36 +46,40 @@ const SSAddWarrantyPopup = ({ orderId }) => {
   return (
     <div>
       <button
-        className="manager_manage_diamond_create_button"
+        className="salesstaff_manage_send_email_button"
         onClick={() => setOpen(true)}
       >
-        Add new Warranty
+        Add Warranty
       </button>
-      <Popup open={open} onClose={() => setOpen(false)} modal>
-        <div className="popup-content">
-          <h2>Add New Warranty</h2>
+      <Popup open={open} onClose={() => setOpen(false)} modal className="ss_popup_div">
+        <div className="popup-content" style={{border:'none'}}>
+          <h4 style={{fontWeight:'bold', textAlign:'center', marginBottom:'10px'}}>Add Warranty</h4>
           <form>
-            <div>
-              <label>Order ID:</label>
+            <div style={{marginLeft:'8px', marginBottom:'13px'}}>
+              <label>Order ID: </label>
               <input
                 type="text"
                 value={orderId}
                 readOnly
+                style={{marginLeft:'10px', paddingLeft:'10px', borderRadius: '5px solid black'}}
               />
             </div>
-            <div>
-              <label>Start Date:</label>
+            <div style={{marginLeft:'8px', marginBottom:'13px'}}>
+              <label>Start Date: </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={handleStartDateChange}
+                style={{marginLeft:'10px', paddingLeft:'10px', borderRadius: '5px solid black'}}
               />
             </div>
-            <div>
-              <label>End Date:</label>
-              <input type="date" value={endDate} readOnly />
+            <div style={{marginLeft:'8px', marginBottom:'13px'}}>
+              <label>End Date: </label>
+              <input type="date" value={endDate} readOnly
+               style={{marginLeft:'10px', paddingLeft:'10px', borderRadius: '5px solid black'}}
+              />
             </div>
-            <button type="button" onClick={handleConfirm}>
+            <button className="salesstaff_manage_send_email_confirm_button" style={{alignItems:'flex-end'}} type="button" onClick={handleConfirm}>
               Confirm
             </button>
           </form>

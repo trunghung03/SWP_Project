@@ -338,7 +338,7 @@ const ManagerShellList = () => {
               <TableBody>
                 {shellItems.length > 0 ? (
                   shellItems.map((item) => (
-                    <StyledTableRow key={item.shellMaterialId}>
+                    <TableRow className="manager_manage_table_body_row" key={item.shellMaterialId}>
                       <StyledTableCell align="center">{item.shellMaterialId}</StyledTableCell>
                       <StyledTableCell align="center">{item.name}</StyledTableCell>
                       <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
@@ -352,12 +352,12 @@ const ManagerShellList = () => {
                           <DeleteIcon />
                         </IconButton>
                       </StyledTableCell>
-                    </StyledTableRow>
+                    </TableRow>
                   ))
                 ) : (
-                  <StyledTableRow>
+                  <TableRow>
                     <StyledTableCell colSpan="4" align="center">No shell found</StyledTableCell>
-                  </StyledTableRow>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>

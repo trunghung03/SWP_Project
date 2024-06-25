@@ -239,7 +239,7 @@ const handleBackClick = () => {
                       <TableCell align="center">{item.orderStatus}</TableCell>
                       <TableCell align="center">
                         <InfoIcon
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer", color: "#ff6a6a"}}
                           onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>

@@ -4,7 +4,6 @@ import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderDetail.scss";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import logo from "../../../assets/img/logoN.png";
-import { useLocation } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -170,10 +169,10 @@ const SSOrderDetail = () => {
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
                   </div>
-                  <div style={{ marginBottom: "10px" }}>
-                    <WarrantyIcon /> Warranty
+                  <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
+                    <WarrantyIcon /> Warranty:
                     <SSAddWarrantyPopup orderId={orderDetails.orderId} />
-                    <button className="manager_manage_diamond_create_button" onClick={handleSendEmail}>Send Warranty Email</button>
+                    <button className="salesstaff_manage_send_email_button" onClick={handleSendEmail}>Send via Email</button>
                   </div>
                 </div>
                 <p style={{ textAlign: "right", marginRight: "10%" }}>

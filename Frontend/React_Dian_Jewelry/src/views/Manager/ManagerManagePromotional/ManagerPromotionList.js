@@ -7,8 +7,8 @@ import "../../../styles/Manager/ManagerList.scss";
 import {
   ShowAllPromotion,
   getPromotionDetail,
-  updatePromotionById,
   getPromotionByName,
+  updatePromotionById
 } from "../../../services/ManagerService/ManagerPromotionService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
