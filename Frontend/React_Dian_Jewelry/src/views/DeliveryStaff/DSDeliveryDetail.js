@@ -7,8 +7,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import FormControl from "@mui/material/FormControl";
 import { Box } from "@mui/material";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -24,7 +22,7 @@ function DSDeliveryDetail() {
   const navigate = useNavigate();
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState({});
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('Deli');
 
   const handleChange = (event) => {
     setStatus(event.target.value);
@@ -36,7 +34,7 @@ function DSDeliveryDetail() {
         .then((data) => {
           console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
-          console.log("status", status);
+          setStatus(data.orderStatus); // Set status from fetched order details
         })
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
@@ -143,7 +141,7 @@ function DSDeliveryDetail() {
             </p>
             {/* <hr className="manager_header_line"></hr> */}
             <div className="ss_detail_confirmbutton">
-              <button onClick={handleSubmit}>Confirm</button>
+              <button onClick={handleSubmit}>Done</button>
             </div>
           </div>
         </div>
