@@ -23,9 +23,9 @@ const createContent = async (data) => {
     const response = await axios.post(`${API_BASE_URL}/articles/addcontent`, data);
     return response.data;
 };
-
-const updateContentById = (id, data) => {
-    return axios.put(`${API_BASE_URL}/articles/update/${id}`, data);
+const updateContentById = async (id, contentData) => {
+    const response = await axios.put(`${API_BASE_URL}/articles/update/${id}`, contentData);
+    return response.data;
   };
 
 const uploadImage = async (data) => {

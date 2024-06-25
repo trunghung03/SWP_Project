@@ -5,20 +5,19 @@ import logo from "../../../assets/img/logo.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
 import { updateContentById, getContentById } from "../../../services/SalesStaffService/SSContentService.js";
-import { UserContext } from "../../../services/UserContext.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
 import Button from "@mui/material/Button";
 
 function SSUpdateContent() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+
   const { id } = useParams();
   const [contentData, setContentData] = useState({
     title: "",
     tag: "",
-    date: "",
     content: "",
     imageUrl: "",
+    createdBy: "",
   });
 
   useEffect(() => {
@@ -45,18 +44,22 @@ function SSUpdateContent() {
     try {
       const formattedContentData = {
         ...contentData,
-        date: new Date(contentData.date).toISOString(),
         status: true,
-        employee: parseInt(user.employeeId),
+        
       };
+
+      if (!formattedContentData.imageUrl) {
+        formattedContentData.imageUrl = contentData.imageUrl; // Sử dụng URL hiện tại nếu không có URL mới
+      }
+
       await updateContentById(id, formattedContentData);
       swal("Success", "Content updated successfully", "success");
       navigate("/sales-staff-content-list");
     } catch (error) {
-      console.error("Error updating content:", error);
+      console.error("Error updating content:", error.response?.data || error.message);
       swal(
         "Something is wrong!",
-        "Failed to update content. Please try again.",
+        `Failed to update content. Error: ${error.response?.data?.message || error.message}`,
         "error"
       );
     }
@@ -141,28 +144,15 @@ function SSUpdateContent() {
                   </div>
                 </div>
                 <div className="ss_add_creator_date">
-                  <div className="ss_add_date_creator_div3 ">
-                    {/* <div className="ss_add_subdiv3">
-                      <label className="ss_add_content_label">Date:</label>
-                      <input
-                        name="date"
-                        className="ss_add_title_input"
-                        type="date"
-                        value={contentData}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div> */}
-                    <div className="ss_add_subdiv3">
-                      <label className="ss_add_content_label">Creator:</label>
-                      <input
-                        name="creator"
-                        className="ss_add_title_input"
-                        type="text"
-                        value={`${user.firstName} ${user.lastName}`}
-                        readOnly
-                      />
-                    </div>
+                  <div className="ss_add_subdiv3">
+                    <label className="ss_add_content_label">Creator:</label>
+                    <input
+                      name="createdBy"
+                      className="ss_add_title_input"
+                      type="text"
+                      value={contentData.createdBy}
+                      readOnly
+                    />
                   </div>
                 </div>
               </div>

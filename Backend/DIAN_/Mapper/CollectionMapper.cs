@@ -41,5 +41,13 @@ namespace DIAN_.Mapper
                 Products = collection.Products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList()
             };
         }
+        public static NewestCollectionDTO ToNewestCollectionDTO(this Collection collection)
+        {
+            return new NewestCollectionDTO
+            {
+                CollectionId = collection.CollectionId,
+                Name = collection.Name
+            };
+        }
     }
 }

@@ -127,5 +127,28 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("newest")]
+        public async Task<IActionResult> GetNewestCollection()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var collection = await _collectionRepository.GetNewestCollectionAsync();
+                if (collection == null)
+                {
+                    return NotFound();
+                }
+
+                var collectionDto = collection.ToNewestCollectionDTO();
+                return Ok(collectionDto);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
