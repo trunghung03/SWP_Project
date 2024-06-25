@@ -17,7 +17,7 @@ import necklaceCategory from '../../assets/img/necklaceNav.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceNav.webp';
 
 const HeaderComponent = () => {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const { cartItems } = useCart();
@@ -28,12 +28,13 @@ const HeaderComponent = () => {
     const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
     const [showNotifications, setShowNotifications] = useState(false);
 
+
     useEffect(() => {
         const role = localStorage.getItem('role');
         if (['Admin', 'SalesStaff', 'Manager', 'DeliveryStaff'].includes(role)) {
             const rememberedEmail = localStorage.getItem('rememberedEmail');
             const rememberedPassword = localStorage.getItem('rememberedPassword');
-            
+
             const allCartItems = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
@@ -42,6 +43,14 @@ const HeaderComponent = () => {
                 }
             }
 
+            console.log('Before clearing:');
+            console.log('role:', localStorage.getItem('role'));
+            console.log('firstName:', localStorage.getItem('firstName'));
+            console.log('lastName:', localStorage.getItem('lastName'));
+            console.log('points:', localStorage.getItem('points'));
+            console.log('email:', localStorage.getItem('email'));
+
+            console.log('Clearing local storage...');
             localStorage.clear();
 
             if (rememberedEmail && rememberedPassword) {
@@ -52,8 +61,22 @@ const HeaderComponent = () => {
             for (const key in allCartItems) {
                 localStorage.setItem(key, allCartItems[key]);
             }
+
+            console.log('After clearing:');
+            console.log('role:', localStorage.getItem('role'));
+            console.log('firstName:', localStorage.getItem('firstName'));
+            console.log('lastName:', localStorage.getItem('lastName'));
+            console.log('points:', localStorage.getItem('points'));
+            console.log('email:', localStorage.getItem('email'));
+
+            setUser({
+                firstName: localStorage.getItem('firstName') || '',
+                lastName: localStorage.getItem('lastName') || '',
+                email: localStorage.getItem('email') || '',
+                points: localStorage.getItem('points') || 0,
+            });
         }
-    }, []);
+    }, [setUser]);
 
     const handleLogout = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');

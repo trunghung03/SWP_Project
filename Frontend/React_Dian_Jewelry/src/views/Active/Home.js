@@ -11,7 +11,6 @@ import Reason from '../../components/Reason/Reason.js';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
-import ProductCard from '../../components/ProductCard/ProductCard'; // Import ProductCard
 import '../../styles/Active/Home.scss';
 import brilliant1 from '../../assets/img/brilliant1.png';
 import brilliant2 from '../../assets/img/brilliant2.png';
