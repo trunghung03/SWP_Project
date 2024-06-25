@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import logo from "../../assets/img/logoN.png";
 import swal from 'sweetalert';
 import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
@@ -23,7 +22,6 @@ import { deliStaffUpdateOrderStatus } from "../../services/SalesStaffService/SSO
 
 function DSDeliveryDetail() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState({});
   const [status, setStatus] = useState('');
@@ -38,6 +36,7 @@ function DSDeliveryDetail() {
         .then((data) => {
           console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
+          console.log("status", status);
         })
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
@@ -91,8 +90,8 @@ function DSDeliveryDetail() {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={orderDetails.orderStatus}
-                      label="Age"
+                      value={status}
+                      label="Status"
                       onChange={handleChange}
                     >
                       <MenuItem value="Delivering">Delivering</MenuItem>
@@ -131,12 +130,12 @@ function DSDeliveryDetail() {
               <div style={{ marginBottom: "10px" }}>
                 <PaymentIcon /> Payment Method: {orderDetails.paymentMethod}
               </div>
-              <div style={{ marginBottom: "10px" }}>
+              {/* <div style={{ marginBottom: "10px" }}>
                 <VerifiedUserIcon /> Certificate:
               </div>
               <div style={{ marginBottom: "10px" }}>
                 <WarrantyIcon /> Warranty
-              </div>
+              </div> */}
             </div>
             {/* <hr className="manager_header_line"></hr> */}
             <p style={{ textAlign: "right", marginRight: "10%" }}>

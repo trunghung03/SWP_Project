@@ -377,32 +377,33 @@ namespace DIAN_.Controllers
 
 
         [HttpGet("monthly-profit-statistics")]
-        public async Task<ActionResult<IEnumerable<MonthlyProfitDto>>> GetMonthlyProfitStatistics()
+        public async Task<ActionResult<IEnumerable<MonthlyProfitDto>>> GetMonthlyProfitStatistics([FromQuery] int? year)
         {
-            var currentYear = DateTime.Now.Year;
+            var targetYear = year ?? DateTime.Now.Year; // Use provided year or default to current year
             var monthlyProfits = Enumerable.Range(1, 12).Select(month => new MonthlyProfitDto
             {
-                Month = new DateTime(currentYear, month, 1).ToString("MMMM"),
-                Profit = 0 
+                Month = new DateTime(targetYear, month, 1).ToString("MMMM"),
+                Profit = 0 // Initialize all months with 0 profit
             }).ToList();
 
             var purchaseOrders = await _context.Purchaseorders
                 .Include(po => po.Orderdetails)
-                .Where(po => po.Date.Year == currentYear)
+                .Where(po => po.Date.Year == targetYear) // Filter orders by the selected year
                 .ToListAsync();
 
             foreach (var order in purchaseOrders)
             {
-                var monthIndex = order.Date.Month - 1;
+                var monthIndex = order.Date.Month - 1; // Adjust for zero-based index
                 var totalSales = order.TotalPrice;
-                var primeCost = order.Orderdetails.Sum(od => od.LineTotal) * 0.8m; 
+                var primeCost = order.Orderdetails.Sum(od => od.LineTotal) * 0.8m; // Assuming prime cost is 80% of line total
                 var profit = totalSales - primeCost;
 
-                monthlyProfits[monthIndex].Profit += profit;
+                monthlyProfits[monthIndex].Profit += profit; // Accumulate profit for each month
             }
 
             return Ok(monthlyProfits);
         }
+
 
     }
 }
