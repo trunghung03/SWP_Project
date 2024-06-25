@@ -32,7 +32,10 @@ const Search = () => {
                     <p>{`(${products.length} Results)`}</p>
                 </div>
             </div>
-
+            <br></br>
+            <div className='search_product_list_note_wrapper'>
+                <p className='search_product_list_note'>Note: Jewelry prices displayed are for reference only and will vary based on market prices</p>
+            </div>
             <ProductList products={products} resetKey={resetKey} />
 
             <br></br><br></br>

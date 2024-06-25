@@ -39,7 +39,7 @@ import slide1Small from '../../assets/img/slide1Small.jpg';
 import sliderBackground from '../../assets/img/homeBackground.png';
 import bb from '../../assets/img/bb.png';
 import trending from '../../assets/img/trending.png';
-import { getNewestProducts, getTopSellingProducts } from '../../services/ProductService.js';
+import { getNewestProducts, getTopSellingProducts, getNewestCollections } from '../../services/ProductService.js';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -82,6 +82,7 @@ const Home = () => {
   const [newProducts, setNewProducts] = useState([]);
   const [topSellingProducts, setTopSellingProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
+  const [newestCollection, setNewestCollection] = useState(null);
 
   const settings = {
     dots: true,
@@ -144,6 +145,13 @@ const Home = () => {
     }).catch(error => {
       console.error('Error fetching top selling products:', error);
     });
+
+    getNewestCollections().then(response => {
+      const newestCollection = response.data;
+      setNewestCollection(newestCollection);
+    }).catch(error => {
+      console.error('Error fetching newest collections:', error);
+    });
   }, []);
 
   const handleTabClick = (tab) => {
@@ -197,7 +205,9 @@ const Home = () => {
                 <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E   L  R  Y</p>
                 <div className="slide-small-image">
                   <img src={slide2Small} alt="Small Slide 2" />
-                  <button onClick={() => handleNavigate('/collection', { collectionId: 1 })} className="slide-button">SHOP THIS COLLECTION</button>
+                  {newestCollection && (
+                    <button onClick={() => handleNavigate('/collection', { collectionId: newestCollection.collectionId })} className="slide-button">SHOP THIS COLLECTION</button>
+                  )}
                 </div>
               </div>
             </div>

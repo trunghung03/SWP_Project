@@ -35,7 +35,7 @@ function Collection() {
             getCollectionDetail(id)
                 .then(response => {
                     setCollectionInfo(response.data);
-                    localStorage.setItem('collectionInfo', JSON.stringify(response.data));
+                    // localStorage.setItem('collectionInfo', JSON.stringify(response.data));
                     setNavItems([
                         { name: 'Home', link: '/home' },
                         { name: 'Diamond Jewelry', link: '' },
@@ -132,6 +132,9 @@ function Collection() {
                 </div>
             </div>
             <div className="collection_filters_and_products">
+                <div className='product_list_note_wrapper'>
+                    <p className='product_list_note'>Note: Jewelry prices displayed are for reference only and will vary based on market prices</p>
+                </div>
                 <div className="collection_filters_products">
                     {(clarity || carat || color || sort || shape) && (
                         <Button

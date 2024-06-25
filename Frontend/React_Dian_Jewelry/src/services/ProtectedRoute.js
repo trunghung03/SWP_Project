@@ -37,10 +37,10 @@ const ProtectedRoute = ({ element: Component, path, ...rest }) => {
             alert("You don't have permission to access this page!");
             navigate(-1);
         } 
-        // else if (path === '/invoice' && fromCheckout !== 'true') {
-        //     alert("You don't have permission to access this page!");
-        //     navigate(-1);
-        // } 
+        else if (path === '/invoice' && fromCheckout !== 'true') {
+            alert("You don't have permission to access this page!");
+            navigate(-1);
+        } 
         else if (path === '/reset-password') {
             if (!resetPasswordToken) {
                 alert("You don't have permission to access this page!");

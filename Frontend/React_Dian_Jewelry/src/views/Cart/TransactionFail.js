@@ -24,6 +24,11 @@ function TrasactionFail() {
 
     useEffect(() => {
         window.scrollTo(0, 160);
+
+        const orderId = parseInt(localStorage.getItem('orderId'));
+        const invoiceKey = `invoice${orderId}`;
+        localStorage.removeItem(invoiceKey);
+        localStorage.removeItem('orderId');
     }, []);
 
     return (

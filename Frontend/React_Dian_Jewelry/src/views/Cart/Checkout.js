@@ -101,6 +101,7 @@ function Checkout() {
         const cartKey = `cartItems${customerId}`;
         const storedCartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
         setCartItems(storedCartItems);
+        window.scrollTo(0, 230);
     }, [customerId]);
 
     useEffect(() => {
@@ -212,7 +213,7 @@ function Checkout() {
             paymentMethod: paymentMethod,
             shippingAddress: address,
             totalPrice: initialTotal,
-            orderStatus: "Pending",
+            orderStatus: "Unpaid",
             promotionId: appliedVoucher ? promotionId : null,
             payWithPoint: usePoints,
             note: note || "None",
@@ -227,7 +228,7 @@ function Checkout() {
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
-                    lineTotal: totalPrice,
+                    lineTotal: item.price,
                     productId: item.productId,
                     shellMaterialId: item.selectedShellId,
                     subDiamondId: item.diamondId,
@@ -238,11 +239,17 @@ function Checkout() {
 
             await Promise.all(orderDetailsPromises);
 
+            const invoiceData = {
+                orderId,
+                orderDate: date,
+                orderTotalPrice: Math.floor(totalPrice),
+                orderDiscount: Math.floor(appliedDiscount),
+                paymentMethod,
+                cartItems
+            };
+
             localStorage.setItem('orderId', orderId);
-            localStorage.setItem('orderDate', date);
-            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
-            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
-            localStorage.setItem('paymentMethod', paymentMethod);
+            localStorage.setItem(`invoice${orderId}`, JSON.stringify(invoiceData));
 
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
@@ -260,14 +267,7 @@ function Checkout() {
                 };
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
-                const cartKey = `cartItems${customerId}`;
-                localStorage.removeItem(cartKey);
-                updateCartContext([]);
             } else {
-                const cartKey = `cartItems${customerId}`;
-                localStorage.removeItem(cartKey);
-                updateCartContext([]);
-
                 swal({
                     title: "Order successfully!",
                     text: "Thank you for your order.",
@@ -276,7 +276,7 @@ function Checkout() {
                 });
 
                 localStorage.setItem('fromCheckout', 'true');
-                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } });
+                navigate('/invoice', { state: { orderId } });
             }
 
         } catch (error) {

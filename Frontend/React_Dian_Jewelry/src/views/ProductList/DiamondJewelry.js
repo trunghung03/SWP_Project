@@ -205,6 +205,9 @@ function DiamondJewelry() {
                 </div>
             </div>
             <div className="filters_and_products">
+                <div className='product_list_note_wrapper'>
+                    <p className='product_list_note'>Note: Jewelry prices displayed are for reference only and will vary based on market prices</p>
+                </div>
                 <div className="filters_products">
                     {(clarity || carat || color || sort) && (
                         <Button

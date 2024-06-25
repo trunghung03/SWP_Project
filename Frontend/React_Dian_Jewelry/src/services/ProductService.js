@@ -38,4 +38,8 @@ const getTopSellingProducts = () => {
     return axios.get(`${API_BASE_URL}/stat/top-8-selling-products`);
 };
 
-export { getProductList, getCollectionList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds, getNewestProducts, getTopSellingProducts };
+const getNewestCollections = () => {
+    return axios.get(`${API_BASE_URL}/collections/newest`);
+};
+
+export { getProductList, getCollectionList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds, getNewestProducts, getTopSellingProducts, getNewestCollections };

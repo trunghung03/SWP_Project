@@ -17,6 +17,7 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 import GIA from '../../assets/img/gia2.jpg';
+import { getDiamondPrice } from '../../services/PricingService';
 
 function ProductDetail() {
     useEffect(() => {
@@ -37,6 +38,8 @@ function ProductDetail() {
     const [showSpecifications, setShowSpecifications] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
     const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
+    const [diamondPrice, setDiamondPrice] = useState(null);
+    const [shellPrice, setShellPrice] = useState(0);
 
     const navigateToProductDetail = (productId) => {
         const productDetailElement = document.getElementById('product_detail');
@@ -49,7 +52,7 @@ function ProductDetail() {
 
     useEffect(() => {
         const { id } = location.state || {};
-        console.log("Product ID from state:", id); // Add this line to debug the ID
+        console.log("Product ID from state:", id); 
         if (id) {
             getProductDetail(id).then(response => {
                 const productData = response.data;
@@ -68,6 +71,16 @@ function ProductDetail() {
 
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
                     setAlsoLikeProducts(relatedProducts.slice(0, 4));
+
+                    // Fetch diamond price
+                    return getDiamondPrice(
+                        diamondResponse.data.cut,
+                        diamondResponse.data.carat,
+                        diamondResponse.data.clarity,
+                        diamondResponse.data.color
+                    );
+                }).then(priceResponse => {
+                    setDiamondPrice(Math.round(priceResponse.data.price));
                 }).catch(error => {
                     console.error('Error fetching product, diamond, or collection details:', error);
                 });
@@ -143,7 +156,7 @@ function ProductDetail() {
                 name: product.name,
                 image: product.imageLinkList,
                 code: product.productCode,
-                price: product.price,
+                price: diamondPrice + shellPrice,
                 selectedSize,
                 sizes: product.sizes.map(size => size.toString()),
                 selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
@@ -179,7 +192,9 @@ function ProductDetail() {
     };
 
     const handleShellChange = (e) => {
-        setSelectedShell(e.target.value);
+        const selectedShell = shellMaterials.find(shell => shell.name === e.target.value);
+        setSelectedShell(selectedShell.name);
+        setShellPrice(selectedShell.price);
     };
 
     const handleSizeChange = (e) => {
@@ -253,7 +268,7 @@ function ProductDetail() {
                         ))}
                     </p>
                     <div className="price_size_container">
-                        <p className="product_price_detail">{product.price}$</p>
+                        <p className="product_price_detail">{diamondPrice !== null ? `${diamondPrice + shellPrice}$` : 'Loading...'}</p>
                         <div className="size_guide_container">
                             <button onClick={openSizeGuide} className="size_guide_detail">Size guide</button>
                             <select
@@ -269,7 +284,11 @@ function ProductDetail() {
                         </div>
                     </div>
                     <div className="product_actions_detail">
-                        <button className="add_to_cart_btn" onClick={handleAddToCart}>
+                        <button 
+                            className="add_to_cart_btn" 
+                            onClick={handleAddToCart} 
+                            disabled={diamondPrice === null}
+                        >
                             <i className="fas fa-shopping-cart"></i> Add to cart
                         </button>
                     </div>
