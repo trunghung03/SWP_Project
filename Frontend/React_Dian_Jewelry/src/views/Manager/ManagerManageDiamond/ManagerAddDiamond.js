@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import { createDiamond } from '../../../services/ManagerService/ManagerDiamondService.js';
+import { ShowAllDiamond, createDiamond,getCertificateById,updateCertificateById } from '../../../services/ManagerService/ManagerDiamondService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
 import InputNumber from 'rc-input-number';
 
@@ -17,7 +17,7 @@ const ManagerAddDiamond = () => {
         color: '',
         price: '',
         amountAvailable: '',
-        certificateScan: ''
+        certificateScan: 'null' 
     });
 
     const handleChange = (e) => {
@@ -30,6 +30,8 @@ const ManagerAddDiamond = () => {
         try {
             const diamondDataWithStatus = { ...diamondData, status: true };
             await createDiamond(diamondDataWithStatus);
+            const certificate = await getCertificateById(diamondDataWithStatus.diamondId);
+            await updateCertificateById(diamondDataWithStatus.diamondId,certificate);
             swal("Success", "Diamond added successfully", "success");
             navigate('/manager-diamond-list');
         } catch (error) {
@@ -97,7 +99,7 @@ const ManagerAddDiamond = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Carat</label>
-                            <input type="number" placeholder="Enter diamond's carat" min={2.0} max={5.1} name="carat" value={diamondData.carat} onChange={handleChange} required />
+                            <input type="number" max={5.2} placeholder="Enter diamond's carat"  name="carat" value={diamondData.carat} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Clarity</label>
@@ -144,12 +146,6 @@ const ManagerAddDiamond = () => {
 
                         </select>
                     </div>
-
-                    <div className="manager_add_diamond_form_group">
-                        <label>Certificate</label>
-                        <input type="text" placeholder="Enter diamond's Certificate file" name="certificateScan" value={diamondData.certificateScan} onChange={handleChange} required />
-                    </div>
-
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
             </div>

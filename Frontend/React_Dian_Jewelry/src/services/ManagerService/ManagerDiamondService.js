@@ -12,6 +12,14 @@ const ShowAllDiamond = async (pageNumber = 1, pageSize = 6) => {
   });
   return response.data;
 };
+const getCertificateById= async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/pixeldrain/certificate?id=${id}`);
+  return response.data;
+}
+const updateCertificateById = async(id,data) =>{
+  const response = await axios.put(`${API_BASE_URL}/diamonds/updatecertificate/${id}`,data);
+  return response.data;
+}
 const getDiamondDetail = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/${id}`);
   return response.data;
@@ -35,4 +43,4 @@ const createDiamond = async (data) => {
   return response.data;
 };
 
-export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape };
+export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape,getCertificateById,updateCertificateById };

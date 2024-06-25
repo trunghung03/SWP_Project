@@ -21,9 +21,18 @@ const TotalValue = async (year) => {
     return response.data;
 };
 
-const TotalCustomers = async (year) => {
+const TotalCustomers = async () => {
     const response = await axios.get(`${API_BASE_URL}/stat/customers`);
     return response.data;
 };
 
-export { AllCurrentProduct,GetSoldCategory,TotalOrders,TotalValue,TotalCustomers };
+const DailyStats = async (date) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/daily-statistics?date=${date}`);
+    return response.data;
+};
+
+const ShowProfitByYear = async (year) =>{
+    const response = await axios.get(`${API_BASE_URL}/stat/monthly-profit-statistics?year=${year}`);
+    return response.data;
+}
+export { AllCurrentProduct,GetSoldCategory,TotalOrders,TotalValue,TotalCustomers, DailyStats, ShowProfitByYear };
