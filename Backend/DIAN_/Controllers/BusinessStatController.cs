@@ -5,6 +5,7 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace DIAN_.Controllers
 {
@@ -349,10 +350,12 @@ namespace DIAN_.Controllers
             return Ok(statistics);
         }
         [HttpGet("30days-statistics")]
-        public async Task<ActionResult<IEnumerable<DailyStatisticDto>>> GetDailyStatisticsGrouped([FromQuery] DateTime monthYear)
+        public async Task<ActionResult<IEnumerable<DailyStatisticDto>>> GetDailyStatisticsGrouped([FromQuery] string monthYear)
         {
-            // Determine the start and end of the specified month
-            var startDate = new DateTime(monthYear.Year, monthYear.Month, 1);
+            if (!DateTime.TryParseExact(monthYear, "yyyy/MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var startDate))
+            {
+                return BadRequest("Invalid date format. Please use yyyy/MM format.");
+            }
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
             var purchaseOrders = await _context.Purchaseorders
@@ -362,43 +365,47 @@ namespace DIAN_.Controllers
 
             var groupedStatistics = purchaseOrders
                 .GroupBy(po => po.Date.Date)
-                .Select(group => new DailyStatisticDto
+                .ToDictionary(group => group.Key, group => new DailyStatisticDto
                 {
                     Date = group.Key,
                     TotalSales = group.Sum(po => po.TotalPrice),
                     PrimeCost = group.SelectMany(po => po.Orderdetails).Sum(od => od.LineTotal) * 0.8m,
                     Profit = group.Sum(po => po.TotalPrice) - group.SelectMany(po => po.Orderdetails).Sum(od => od.LineTotal) * 0.8m
-                })
-                .OrderBy(stat => stat.Date)
+                });
+
+            var allDaysStatistics = Enumerable.Range(0, endDate.Day)
+                .Select(day => startDate.AddDays(day))
+                .Select(date => groupedStatistics.ContainsKey(date) ? groupedStatistics[date] : new DailyStatisticDto { Date = date, TotalSales = 0, PrimeCost = 0, Profit = 0 })
                 .ToList();
 
-            return Ok(groupedStatistics);
+            return Ok(allDaysStatistics);
         }
+
 
 
         [HttpGet("monthly-profit-statistics")]
         public async Task<ActionResult<IEnumerable<MonthlyProfitDto>>> GetMonthlyProfitStatistics([FromQuery] int? year)
         {
-            var targetYear = year ?? DateTime.Now.Year; // Use provided year or default to current year
+            var targetYear = year ?? DateTime.Now.Year; 
             var monthlyProfits = Enumerable.Range(1, 12).Select(month => new MonthlyProfitDto
             {
                 Month = new DateTime(targetYear, month, 1).ToString("MMMM"),
-                Profit = 0 // Initialize all months with 0 profit
+                Profit = 0 
             }).ToList();
 
             var purchaseOrders = await _context.Purchaseorders
                 .Include(po => po.Orderdetails)
-                .Where(po => po.Date.Year == targetYear) // Filter orders by the selected year
+                .Where(po => po.Date.Year == targetYear)
                 .ToListAsync();
 
             foreach (var order in purchaseOrders)
             {
-                var monthIndex = order.Date.Month - 1; // Adjust for zero-based index
+                var monthIndex = order.Date.Month - 1; 
                 var totalSales = order.TotalPrice;
-                var primeCost = order.Orderdetails.Sum(od => od.LineTotal) * 0.8m; // Assuming prime cost is 80% of line total
+                var primeCost = order.Orderdetails.Sum(od => od.LineTotal) * 0.8m; 
                 var profit = totalSales - primeCost;
 
-                monthlyProfits[monthIndex].Profit += profit; // Accumulate profit for each month
+                monthlyProfits[monthIndex].Profit += profit;
             }
 
             return Ok(monthlyProfits);
