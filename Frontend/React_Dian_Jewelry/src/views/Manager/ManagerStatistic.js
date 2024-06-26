@@ -12,6 +12,7 @@ import {
   DailyStats,
   TotalCustomers,
   getDateStatistic,
+  getTopTen,
 } from "../../services/ManagerService/ManagerStatisticService.js";
 import { styled } from "@mui/material/styles";
 import logo from "../../assets/img/logoN.png";
@@ -36,9 +37,7 @@ const RenderProfitData = ({profitData, profitOptions}) => {
 
 
 const ManagerStatitic = () => {
-  const budget = 24000;
   const taskProgress = 75.5;
-  const totalProfit = 15000;
   const [allCatePercentages, setAllCatePercentages] = useState([]);
   const [totalProduct, setTotalProduct] = useState(null);
   const [selectedYear, setSelectedYear] = useState("");
@@ -49,6 +48,7 @@ const ManagerStatitic = () => {
   const [valueByDate, setValueByDate] = useState(null);
   const [currentMonthStats, setCurrentMonthStats] = useState([]);
   const [profitByYear, setProfitByYear] = useState(null);
+  const [topTen,setTopTen] = useState([]);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -77,6 +77,8 @@ const ManagerStatitic = () => {
         setTotalProduct(allProduct);
         const customers = await TotalCustomers();
         setTotalCustomers(customers);
+        const topProducts = await getTopTen();
+        setTopTen(topProducts);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -453,7 +455,7 @@ const ManagerStatitic = () => {
               )}
             </div>
           </div>
-          <div className="manager_manage_report_filter">
+          <div className="manager_manage_report_filter" >
             <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
             <FormControl sx={{ m: 1, minWidth: 80 }}>
               <InputLabel id="listYear-label">Year</InputLabel>
@@ -485,7 +487,42 @@ const ManagerStatitic = () => {
                 <p>No data available for the selected year</p>
               )}
             </div>
-            <div className="manager_manage_diamond_table_wrapper">
+          </div>
+          <div className="manager_manage_diamond_table_wrapper">
+              <h3>Best Seller Products</h3>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Line Total</StyledTableCell>
+                      <StyledTableCell align="center">Product Code</StyledTableCell>
+                      <StyledTableCell align="center">Name</StyledTableCell>
+                      <StyledTableCell align="center">Items Sold</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {topTen.length > 0 ? (
+                      topTen.map((item) => (
+                        <TableRow
+                          className="manager_manage_table_body_row"
+                          key={item.productCode}
+                        >
+                          <TableCell align="center">{item.productCode}</TableCell>
+                          <TableCell align="center">{item.name}</TableCell>
+                          <TableCell align="center">{item.lineTotal}</TableCell>
+                          <TableCell align="center">{item.itemSold}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan="9">No data to display</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          <div className="manager_manage_diamond_table_wrapper">
               <input type="month" onChange={MonthYearStats}></input>
               <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -519,7 +556,6 @@ const ManagerStatitic = () => {
                 </Table>
               </TableContainer>
             </div>
-          </div>
         </div>
       </div>
     </div>

@@ -29,9 +29,9 @@ const ManagerAddDiamond = () => {
         e.preventDefault();
         try {
             const diamondDataWithStatus = { ...diamondData, status: true };
-            await createDiamond(diamondDataWithStatus);
-            const certificate = await getCertificateById(diamondDataWithStatus.diamondId);
-            await updateCertificateById(diamondDataWithStatus.diamondId,certificate);
+            const dataRes = await createDiamond(diamondDataWithStatus);
+            const certificate = await getCertificateById(dataRes.diamondId);
+            await updateCertificateById(dataRes.diamondId,{certificateScan: certificate.url});
             swal("Success", "Diamond added successfully", "success");
             navigate('/manager-diamond-list');
         } catch (error) {

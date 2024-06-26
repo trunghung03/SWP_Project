@@ -36,8 +36,14 @@ const getDateStatistic = async (date) => {
     return response.data;
 }
 
+const getTopTen = async () => {
+    const response = await axios.get(`${API_BASE_URL}/stat/top-10-selling-products`);
+    return response.data;
+}
+
+
 const ShowProfitByYear = async (year) => {
     const response = await axios.get(`${API_BASE_URL}/stat/monthly-profit-statistics?year=${year}`);
     return response.data;
 }
-export { AllCurrentProduct, GetSoldCategory, TotalOrders, TotalValue, TotalCustomers, DailyStats, ShowProfitByYear, getDateStatistic };
+export { AllCurrentProduct, GetSoldCategory, TotalOrders, TotalValue, TotalCustomers, DailyStats, ShowProfitByYear, getDateStatistic, getTopTen };
