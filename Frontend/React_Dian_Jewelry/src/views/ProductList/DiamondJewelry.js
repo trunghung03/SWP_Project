@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
+import { Select, MenuItem, InputLabel, FormControl, Button, TextField } from '@mui/material';
 import '../../styles/ProductList/DiamondJewelry.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import Question from '../../components/Question/Question.js';
@@ -205,6 +205,9 @@ function DiamondJewelry() {
                 </div>
             </div>
             <div className="filters_and_products">
+                <div className='product_list_note_wrapper'>
+                    <p className='product_list_note'>Note: Jewelry prices displayed are for reference only and will vary based on market prices</p>
+                </div>
                 <div className="filters_products">
                     {(clarity || carat || color || sort) && (
                         <Button
@@ -217,6 +220,7 @@ function DiamondJewelry() {
                             Remove Filters
                         </Button>
                     )}
+
                     <FormControl className="filter_group_sort" size="small">
                         <InputLabel id="sortFilter-label">Sort</InputLabel>
                         <Select
@@ -232,6 +236,7 @@ function DiamondJewelry() {
                             <MenuItem value="Price (High to Low)">Price (High to Low)</MenuItem>
                         </Select>
                     </FormControl>
+
                     <FormControl className="filter_group" size="small">
                         <InputLabel id="clarityFilter-label">Clarity</InputLabel>
                         <Select
@@ -241,7 +246,6 @@ function DiamondJewelry() {
                             label="Clarity"
                             onChange={(e) => setClarity(e.target.value)}
                         >
-                            <MenuItem value="FL">FL</MenuItem>
                             <MenuItem value="IF">IF</MenuItem>
                             <MenuItem value="VVS1">VVS1</MenuItem>
                             <MenuItem value="VVS2">VVS2</MenuItem>
@@ -250,8 +254,6 @@ function DiamondJewelry() {
                             <MenuItem value="SI1">SI1</MenuItem>
                             <MenuItem value="SI2">SI2</MenuItem>
                             <MenuItem value="I1">I1 </MenuItem>
-                            <MenuItem value="I2">I2</MenuItem>
-                            <MenuItem value="I3">I3</MenuItem>
                         </Select>
                     </FormControl>
 
@@ -271,58 +273,9 @@ function DiamondJewelry() {
                             <MenuItem value="H">H</MenuItem>
                             <MenuItem value="I">I</MenuItem>
                             <MenuItem value="J">J</MenuItem>
-                            <MenuItem value="K">K</MenuItem>
-                            <MenuItem value="L">L</MenuItem>
-                            <MenuItem value="M">M</MenuItem>
-                            <MenuItem value="N">N</MenuItem>
-                            <MenuItem value="O">O</MenuItem>
-                            <MenuItem value="P">P</MenuItem>
-                            <MenuItem value="Q">Q</MenuItem>
-                            <MenuItem value="R">R</MenuItem>
-                            <MenuItem value="S">S</MenuItem>
-                            <MenuItem value="T">T</MenuItem>
-                            <MenuItem value="U">U</MenuItem>
-                            <MenuItem value="V">V</MenuItem>
-                            <MenuItem value="W">W</MenuItem>
-                            <MenuItem value="X">X</MenuItem>
-                            <MenuItem value="Y">Y</MenuItem>
-                            <MenuItem value="Z">Z</MenuItem>
                         </Select>
                     </FormControl>
 
-                    <FormControl className="filter_group" size="small">
-                        <InputLabel id="caratFilter-label">Carat</InputLabel>
-                        <Select
-                            labelId="caratFilter-label"
-                            id="caratFilter"
-                            value={carat}
-                            label="Carat"
-                            onChange={(e) => setCarat(e.target.value)}
-                        >
-                            <MenuItem value="0.02">0.02 ct</MenuItem>
-                            <MenuItem value="0.03">0.03 ct</MenuItem>
-                            <MenuItem value="0.04">0.04 ct</MenuItem>
-                            <MenuItem value="0.05">0.05 ct</MenuItem>
-                            <MenuItem value="0.10">0.10 ct</MenuItem>
-                            <MenuItem value="0.20">0.20 ct</MenuItem>
-                            <MenuItem value="0.30">0.30 ct</MenuItem>
-                            <MenuItem value="0.40">0.40 ct</MenuItem>
-                            <MenuItem value="0.50">0.50 ct</MenuItem>
-                            <MenuItem value="0.60">0.60 ct</MenuItem>
-                            <MenuItem value="0.70">0.70 ct</MenuItem>
-                            <MenuItem value="0.80">0.80 ct</MenuItem>
-                            <MenuItem value="0.90">0.90 ct</MenuItem>
-                            <MenuItem value="1">1 ct</MenuItem>
-                            <MenuItem value="1.5">1.5 ct</MenuItem>
-                            <MenuItem value="2">2 ct</MenuItem>
-                            <MenuItem value="2.5">2.5 ct</MenuItem>
-                            <MenuItem value="3">3 ct</MenuItem>
-                            <MenuItem value="3.5">3.5 ct</MenuItem>
-                            <MenuItem value="4">4 ct</MenuItem>
-                            <MenuItem value="4.5">4.5 ct</MenuItem>
-                            <MenuItem value="5">5 ct</MenuItem>
-                        </Select>
-                    </FormControl>
                     <FormControl className="filter_group" size="small">
                         <InputLabel id="shapeFilter-label">Shape</InputLabel>
                         <Select
@@ -344,6 +297,16 @@ function DiamondJewelry() {
                             <MenuItem value="Heart">Heart</MenuItem>
                         </Select>
                     </FormControl>
+
+                    <TextField
+                        className="filter_group"
+                        size="small"
+                        id="caratFilter"
+                        label="Carat"
+                        type="number"
+                        value={carat}
+                        onChange={(e) => setCarat(e.target.value)}
+                    />
                 </div>
                 <ProductList products={products} resetKey={resetKey} />
             </div>

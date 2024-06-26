@@ -6,7 +6,7 @@ const AllCurrentProduct = async () => {
     return response.data;
 };
 
-const GetSoldCategory = async (startMonth,endMonth) => {
+const GetSoldCategory = async (startMonth, endMonth) => {
     const response = await axios.get(`${API_BASE_URL}/stat/products/soldpercentage?startMonthYear=${startMonth}&endMonthYear=${endMonth}`);
     return response.data;
 };
@@ -31,8 +31,13 @@ const DailyStats = async (date) => {
     return response.data;
 };
 
-const ShowProfitByYear = async (year) =>{
+const getDateStatistic = async (date) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/30days-statistics?monthYear=${date}`);
+    return response.data;
+}
+
+const ShowProfitByYear = async (year) => {
     const response = await axios.get(`${API_BASE_URL}/stat/monthly-profit-statistics?year=${year}`);
     return response.data;
 }
-export { AllCurrentProduct,GetSoldCategory,TotalOrders,TotalValue,TotalCustomers, DailyStats, ShowProfitByYear };
+export { AllCurrentProduct, GetSoldCategory, TotalOrders, TotalValue, TotalCustomers, DailyStats, ShowProfitByYear, getDateStatistic };

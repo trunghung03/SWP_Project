@@ -200,30 +200,34 @@ input {
     width: 100%;
 }
 
-.last_name_wrapper input{
+.last_name_wrapper input {
     width: 100%;
+}
+
+// /* Modal CSS */
+body.modal-open {
+    overflow: hidden;
 }
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 10;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow-y: hidden;
     background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
-    padding: 5px 30px 20px 30px;
+    margin: 3% auto;
+    padding: 20px 30px 50px 30px;
     border: 1px solid #888;
-    width: 110%;
-    max-width: 580px;
-    position: relative;
+    width: 80%;
+    max-width: 900px;
+    overflow-y: hidden;
 }
 
 .close {
@@ -240,37 +244,15 @@ input {
     cursor: pointer;
 }
 
-.confirm-btn {
-    display: block;
-    margin: 20px 0 5px 77%;
-    padding: 5px 20px 8px 20px;
-    background-color: #1c1c1c;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.confirm-btn:hover {
-    background-color: #797979;
-}
-
 .tos_title,
 .tos_introduce {
     text-align: center;
 }
 
-.swal-button {
-    background-color: #1c1c1c;
+.tos_title{
+    font-weight: bold;
 }
 
-.swal-button:focus {
-    box-shadow: none;
-}
-
-.swal-button:hover {
-    background-color: #797979 !important;
-}
 
 .icon_gg {
     font-size: 17px;
@@ -280,24 +262,24 @@ input {
 /* Slider customization */
 .slick-slider {
     width: 100%;
-  }
-  
-  .slick-dots {
+}
+
+.slick-dots {
     bottom: 10px;
-  }
-  
-  .slick-dots li button:before {
+}
+
+.slick-dots li button:before {
     font-size: 12px;
     color: #fff;
-  }
-  
-  .slick-prev:before,
-  .slick-next:before {
+}
+
+.slick-prev:before,
+.slick-next:before {
     color: #fff;
     left: 50px;
-  }
-  
-  .login_slider_arrow {
+}
+
+.login_slider_arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -305,22 +287,22 @@ input {
     z-index: 10;
     font-size: 24px;
     color: white;
-  }
-  
-  .slick-prev {
+}
+
+.slick-prev {
     left: 10px;
     z-index: 2;
     top: 53%;
-  }
-  
-  .slick-next {
+}
+
+.slick-next {
     right: 8px;
     z-index: 2;
     top: 53%;
-  }
-  
-  .login_left_arrow,
-  .login_right_arrow {
+}
+
+.login_left_arrow,
+.login_right_arrow {
     color: white;
     font-size: 23px;
-  }
+}

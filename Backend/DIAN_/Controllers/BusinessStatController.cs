@@ -408,7 +408,9 @@ namespace DIAN_.Controllers
                 monthlyProfits[monthIndex].Profit += profit;
             }
 
-            return Ok(monthlyProfits);
+            var profitsArray = monthlyProfits.Select(mp => mp.Profit).ToArray();
+
+            return Ok(profitsArray);
         }
 
 

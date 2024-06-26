@@ -32,7 +32,7 @@
 .collection_filters_and_products {
     display: flex;
     flex-direction: column;
-    margin-top: 90px;
+    margin-top: 110px;
 }
 
 .collection_filters_products {
@@ -64,4 +64,9 @@
         color: #1c1c1c;
         border: 1px solid #1c1c1c;
     }
+}
+
+.product_list_note_wrapper{
+    text-align: center;
+    font-style: italic;
 }

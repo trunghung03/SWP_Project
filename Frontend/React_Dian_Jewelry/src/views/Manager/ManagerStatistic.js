@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ManagerSidebar from "../../components/ManagerSidebar/ManagerSidebar.js";
 import "../../styles/Manager/ManagerStatistic.scss";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
 import "chart.js/auto";
 import {
   AllCurrentProduct,
@@ -11,12 +11,29 @@ import {
   TotalOrders,
   DailyStats,
   TotalCustomers,
+  getDateStatistic,
 } from "../../services/ManagerService/ManagerStatisticService.js";
+import { styled } from "@mui/material/styles";
 import logo from "../../assets/img/logoN.png";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+
+const RenderProfitData = ({profitData, profitOptions}) => {
+  console.log("RenderProfitData:::", profitData);
+  return (
+    <Line data={profitData} options={profitOptions} />
+  )
+}
+
 
 const ManagerStatitic = () => {
   const budget = 24000;
@@ -30,7 +47,28 @@ const ManagerStatitic = () => {
   const [loading, setLoading] = useState(false);
   const [totalCustomers, setTotalCustomers] = useState(null);
   const [valueByDate, setValueByDate] = useState(null);
+  const [currentMonthStats, setCurrentMonthStats] = useState([]);
   const [profitByYear, setProfitByYear] = useState(null);
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: '#f9c6bb',
+      color: '1c1c1c',
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +84,14 @@ const ManagerStatitic = () => {
 
     fetchData();
   }, []);
+
+  const MonthYearStats = async (event) => {
+    const monthYear = event.target.value;
+    const formattedMonthYear = monthYear.replace("-", "/");
+    const response = await getDateStatistic(formattedMonthYear);
+    setCurrentMonthStats(response);
+  }
+
 
   const dailyStats = async (date) => {
     if (date) {
@@ -68,6 +114,33 @@ const ManagerStatitic = () => {
         const profit = await ShowProfitByYear(year);
         setProfitByYear(profit);
         console.log("Profit Data:", profit); // Check the fetched data
+
+        setProfitData({
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          datasets: [
+            {
+              label: "Profit",
+              data: profit,
+              backgroundColor: "rgba(255, 99, 132, 0.6)",
+              borderColor: "rgba(255, 99, 132, 1)",
+              borderWidth: 1,
+            },
+          ],
+        })
+
       } catch (error) {
         console.error("Error fetching data:", error);
         setProfitByYear(Array(12).fill(0)); // Default to zero data
@@ -144,7 +217,7 @@ const ManagerStatitic = () => {
     ],
   };
 
-  const profitData = {
+  const [profitData, setProfitData] = useState({
     labels: [
       "Jan",
       "Feb",
@@ -162,13 +235,14 @@ const ManagerStatitic = () => {
     datasets: [
       {
         label: "Profit",
+        type: "line",
         data: profitByYear || Array(12).fill(0),
         backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
     ],
-  };
+  });
 
   const profitOptions = {
     scales: {
@@ -400,17 +474,52 @@ const ManagerStatitic = () => {
               </Select>
             </FormControl>
           </div>
-          <div style={{ marginTop: "20px", border: "1px solid #ddd", borderRadius: "8px", padding: "20px" }}>
-            <h3>Profit</h3>
-            {loading ? (
-              <p>Loading...</p>
-            ) : profitByYear ? (
-              <Bar data={profitData} options={profitOptions} />
-            ) : (
-              <p>No data available for the selected year</p>
-            )}
+          <div style={{ flex: '1', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+            <div style={{ marginTop: "20px", border: "1px solid #ddd", borderRadius: "8px", padding: "20px" }}>
+              <h3>Profit</h3>
+              {loading ? (
+                <p>Loading...</p>
+              ) : profitByYear ? (
+                <Line data={profitData} options={profitOptions} />
+              ) : (
+                <p>No data available for the selected year</p>
+              )}
+            </div>
+            <div className="manager_manage_diamond_table_wrapper">
+              <input type="month" onChange={MonthYearStats}></input>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Date</StyledTableCell>
+                      <StyledTableCell align="center">Total Sales</StyledTableCell>
+                      <StyledTableCell align="center">Prime Cost</StyledTableCell>
+                      <StyledTableCell align="center">Profit</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {currentMonthStats.length > 0 ? (
+                      currentMonthStats.map((item) => (
+                        <TableRow
+                          className="manager_manage_table_body_row"
+                          key={item.date}
+                        >
+                          <TableCell align="center">{item.date}</TableCell>
+                          <TableCell align="center">{item.totalSales}</TableCell>
+                          <TableCell align="center">{item.primeCost}</TableCell>
+                          <TableCell align="center">{item.profit}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan="9">No Empty Date Statistic found</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
           </div>
-
         </div>
       </div>
     </div>
