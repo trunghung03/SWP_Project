@@ -248,14 +248,14 @@ namespace DIAN_.Controllers
             return Ok(monthlyValues);
         }
         [HttpGet("top-10-selling-products")]
-        public async Task<ActionResult<IEnumerable<ProductStatisticDto>>> GetTop10SellingProducts(DateTime startDate, DateTime endDate)
+        public async Task<ActionResult<IEnumerable<ProductStatisticDto>>> GetTop10SellingProducts(DateTime? startDate, DateTime? endDate)
         {
-            //DateTime effectiveStartDate = startDate ?? DateTime.MinValue;
-            //DateTime effectiveEndDate = endDate ?? DateTime.Now;
+            DateTime effectiveStartDate = startDate ?? DateTime.MinValue;
+            DateTime effectiveEndDate = endDate ?? DateTime.Now;
 
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
-                .Where(od => od.Order.Date >= startDate && od.Order.Date <= endDate)
+                .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
                 {
