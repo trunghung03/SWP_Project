@@ -16,7 +16,6 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 
-
 const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -67,7 +66,6 @@ const IOSSwitch = styled((props) => (
         }),
     },
 }));
-
 
 function Checkout() {
     const navItems = [
@@ -402,7 +400,7 @@ function Checkout() {
 
                     <h5 className="checkout_summary_payment_title"><i className="fas fa-credit-card"></i>Payment method</h5>
                     <div className="payment_methods">
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('Cash')}>
                             <input
                                 type="radio"
                                 id="cash"
@@ -413,7 +411,7 @@ function Checkout() {
                             <p className='payment_label' htmlFor="cash">Cash</p>
                             {paymentMethod === 'Cash' && <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>}
                         </div>
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('Bank Transfer')}>
                             <input
                                 type="radio"
                                 id="bankTransfer"
@@ -424,7 +422,7 @@ function Checkout() {
                             <p className='payment_label' htmlFor="bankTransfer">Bank Transfer</p>
                             {paymentMethod === 'Bank Transfer' && <p>(Make a transfer to the shop's account number. Order will be processed after successful transfer)</p>}
                         </div>
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('VNPAY')}>
                             <input
                                 type="radio"
                                 id="vnpay"

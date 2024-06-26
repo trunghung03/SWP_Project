@@ -244,7 +244,6 @@ function DiamondJewelry() {
                             label="Clarity"
                             onChange={(e) => setClarity(e.target.value)}
                         >
-                            <MenuItem value="FL">FL</MenuItem>
                             <MenuItem value="IF">IF</MenuItem>
                             <MenuItem value="VVS1">VVS1</MenuItem>
                             <MenuItem value="VVS2">VVS2</MenuItem>
@@ -253,8 +252,6 @@ function DiamondJewelry() {
                             <MenuItem value="SI1">SI1</MenuItem>
                             <MenuItem value="SI2">SI2</MenuItem>
                             <MenuItem value="I1">I1 </MenuItem>
-                            <MenuItem value="I2">I2</MenuItem>
-                            <MenuItem value="I3">I3</MenuItem>
                         </Select>
                     </FormControl>
 
@@ -274,22 +271,6 @@ function DiamondJewelry() {
                             <MenuItem value="H">H</MenuItem>
                             <MenuItem value="I">I</MenuItem>
                             <MenuItem value="J">J</MenuItem>
-                            <MenuItem value="K">K</MenuItem>
-                            <MenuItem value="L">L</MenuItem>
-                            <MenuItem value="M">M</MenuItem>
-                            <MenuItem value="N">N</MenuItem>
-                            <MenuItem value="O">O</MenuItem>
-                            <MenuItem value="P">P</MenuItem>
-                            <MenuItem value="Q">Q</MenuItem>
-                            <MenuItem value="R">R</MenuItem>
-                            <MenuItem value="S">S</MenuItem>
-                            <MenuItem value="T">T</MenuItem>
-                            <MenuItem value="U">U</MenuItem>
-                            <MenuItem value="V">V</MenuItem>
-                            <MenuItem value="W">W</MenuItem>
-                            <MenuItem value="X">X</MenuItem>
-                            <MenuItem value="Y">Y</MenuItem>
-                            <MenuItem value="Z">Z</MenuItem>
                         </Select>
                     </FormControl>
 

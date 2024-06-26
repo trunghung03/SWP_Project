@@ -551,6 +551,10 @@ transform: scale(0.97);
     cursor: pointer;
 }
 
+.category_view_collection:hover, .category_view_collection_small:hover{
+    color: #797979;
+}
+
 .category_image_wrapper_large:hover .category_large_letter {
     transform: scale(1.5);
 }

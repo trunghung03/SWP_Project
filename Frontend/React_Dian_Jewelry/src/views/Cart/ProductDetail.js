@@ -316,6 +316,7 @@ function ProductDetail() {
                         <p className="product_specification_carat"><strong>Carat:</strong> {diamond.carat}</p>
                         <p className="product_specification_clarity"><strong>Clarity:</strong> {diamond.clarity}</p>
                         <p className="product_specification_sub_diamond_amount"><strong>Sub Diamond Amount:</strong> {product.subDiamondAmount}</p>
+                        <p className="product_specification_main_diamond_amount"><strong>Main diamond amount:</strong> {product.mainDiamondAmount}</p>
                         <p className="product_specification_collection"><strong>Collection:</strong> {collection.name}</p>
                     </>
                 )}

@@ -428,7 +428,7 @@ const Home = () => {
                 <div key={index} className="trending_product_card card" onClick={() => handleProductClick(product.productId)}>
                   <img src={product.imageLinkList} alt={product.name} className="product_image" />
                   <p className="trending_product_name">{product.name}</p>
-                  <p className="trending_product_price"><del>${product.originalPrice}</del>    ${product.price}</p>
+                  <p className="trending_product_price"><del>{product.originalPrice}$</del>    {product.price}$</p>
                   {/* <button className="view_detail_button">View detail</button> */}
                 </div>
               ))}
@@ -463,9 +463,9 @@ const Home = () => {
                     <i className="far fa-eye home_feature_product_icon_eye" ></i>
                   </div>
                   <img src={product.imageLinkList} alt={product.name} className="home_feature_product_image" />
-                  <p className='home_feature_product_detail'>VS1 | 0.2 | G</p>
+                  <p className='home_feature_product_detail'>{product.clarity} | {product.carat} | {product.color}</p>
                   <p className="home_feature_product_name">{product.name}</p>
-                  <p className="home_feature_product_price">{product.price}</p>
+                  <p className="home_feature_product_price">{product.price}$</p>
                 </div>
               </div>
             ))}
