@@ -28,10 +28,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const RenderProfitData = ({ profitData, profitOptions }) => {
-  console.log("RenderProfitData:::", profitData);
-  return <Line data={profitData} options={profitOptions} />;
-};
+// const RenderProfitData = ({ profitData, profitOptions }) => {
+//   console.log("RenderProfitData:::", profitData);
+//   return <Line data={profitData} options={profitOptions} />;
+// };
 
 const ManagerStatitic = () => {
   const taskProgress = 75.5;
@@ -67,7 +67,10 @@ const ManagerStatitic = () => {
     },
   }));
 
+
   useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().toISOString().slice(0, 7);
     const fetchData = async () => {
       try {
         const allProduct = await AllCurrentProduct();
@@ -76,6 +79,9 @@ const ManagerStatitic = () => {
         setTotalCustomers(customers);
         const topProducts = await getTopTen();
         setTopTen(topProducts);
+        await handleYearChange({ target: { value: currentYear.toString() } });
+        await profitYear({ target: { value: currentYear.toString() } });
+        await MonthYearStats({ target: { value: currentMonth } });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -100,6 +106,7 @@ const ManagerStatitic = () => {
 
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
+    console.log("Date: "+selectedDate);
     dailyStats(selectedDate);
   };
 
@@ -328,7 +335,7 @@ const ManagerStatitic = () => {
             className="manager_statis_input_date"
             type="date"
             onChange={handleDateChange}
-            style={{marginLeft:'4.2%'}}
+            style={{ marginLeft: '4.2%' }}
           ></input>
           <div>
             <div
@@ -341,37 +348,36 @@ const ManagerStatitic = () => {
               {/* <h3>Today's Report</h3> */}
               <div className="manager_manage_report_div">
                 <p style={{ fontSize: "20px" }}>Total Orders:</p>
-                <p style={{textAlign:"center"}}>{valueByDate?.totalOrders !== undefined
+                <p style={{ textAlign: "center" }}>{valueByDate?.totalOrders !== undefined
                   ? valueByDate.totalOrders
                   : "N/A"}</p>
               </div>
               <div className="manager_manage_report_div">
                 <p style={{ fontSize: "20px" }}>Total Customers:</p>
-               <p style={{textAlign:"center"}}> {valueByDate?.totalCustomers !== undefined
+                <p style={{ textAlign: "center" }}> {valueByDate?.totalCustomers !== undefined
                   ? valueByDate.totalCustomers
                   : "N/A"}</p>
               </div>
               <div className="manager_manage_report_div">
                 <p style={{ fontSize: "20px" }}>Total Sales Value: </p>
-                <p style={{textAlign:"center"}}>{valueByDate?.totalSales !== undefined
+                <p style={{ textAlign: "center" }}>{valueByDate?.totalSales !== undefined
                   ? valueByDate.totalSales
                   : "N/A"}</p>
               </div>
               <div className="manager_manage_report_div">
                 <p
                   style={{
-                    fontSize: "20px",
-                    color: valueByDate?.profit > 0 ? "green" : "red",
+                    fontSize: "20px"
                   }}
                 >
                   {" "}
                   Profit:{" "}
                 </p>
-                <p style={{textAlign:"center"}}>{valueByDate?.profit !== undefined ? valueByDate.profit : "N/A"}</p>
+                <p style={{ textAlign: "center", fontSize: "15px", color: valueByDate?.profit > 0 ? "green" : "red" }}>{valueByDate?.profit !== undefined ? valueByDate.profit : "N/A"}</p>
               </div>
               <div className="manager_manage_report_div">
                 <p style={{ fontSize: "20px" }}>Prime Cost: </p>
-                <p style={{textAlign:"center"}}>{valueByDate?.primeCost !== undefined
+                <p style={{ textAlign: "center" }}>{valueByDate?.primeCost !== undefined
                   ? valueByDate.primeCost
                   : "N/A"}</p>
               </div>
@@ -562,7 +568,7 @@ const ManagerStatitic = () => {
               className="manager_statis_input_date"
               type="month"
               onChange={MonthYearStats}
-              style={{margin:"10px"}}
+              style={{ margin: "10px" }}
             ></input>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 700 }} aria-label="customized table">
