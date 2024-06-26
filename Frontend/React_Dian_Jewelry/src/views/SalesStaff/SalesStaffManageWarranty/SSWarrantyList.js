@@ -167,7 +167,7 @@ const SSWarrantyList = () => {
       return;
     }
 
-    const warrantyToUpdate = { ...editedWarranty, status: true };
+    const warrantyToUpdate = { ...editedWarranty };
 
     try {
       console.log("Sending update request with data:", warrantyToUpdate);
@@ -196,6 +196,11 @@ const SSWarrantyList = () => {
       );
     }
   };
+  const isExpired = (endDate) => {
+    const today = new Date().toLocaleDateString('en-CA');
+    const formattedEndDate = new Date(endDate).toLocaleDateString('en-CA');
+    return new Date(today) > new Date(formattedEndDate);
+  };
 
   return (
     <div className="ss_manage_content_all_container">
@@ -218,7 +223,7 @@ const SSWarrantyList = () => {
         </div>
         <hr className="ss_manage_content_line"></hr>
         <h3 style={{ textAlign: 'center' }}>Warranty List</h3>
-        <div className="manager_manage_diamond_create_button_section" style={{display:'flex', justifyContent:'flex-end'}}>
+        <div className="manager_manage_diamond_create_button_section" style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <div className="manager_manage_diamond_pagination" >
             <button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -265,11 +270,10 @@ const SSWarrantyList = () => {
                       <TableCell align="center">{item.orderDetailId}</TableCell>
                       <TableCell align="center">{new Date(item.startDate).toLocaleDateString('en-CA')}</TableCell>
                       <TableCell align="center">{new Date(item.endDate).toLocaleDateString('en-CA')}</TableCell>
-                      <TableCell align="center">
-                        {item.status !== undefined
-                          ? item.status.toString()
-                          : "N/A"}
+                      <TableCell align="center" style={{ color: isExpired(item.endDate) ? 'red' : 'inherit' }}>
+                        {isExpired(item.endDate) ? "Expired" : (item.status !== undefined ? item.status.toString() : "N/A")}
                       </TableCell>
+
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
@@ -291,10 +295,10 @@ const SSWarrantyList = () => {
             </Table>
           </TableContainer>
           {isSearch && ( // Conditionally render the back button
-              <button className="SS_back_button" onClick={handleBack}>
-                Back
-              </button>
-            )}
+            <button className="SS_back_button" onClick={handleBack}>
+              Back
+            </button>
+          )}
         </div>
       </div>
       {editMode && (
@@ -309,12 +313,16 @@ const SSWarrantyList = () => {
             <div className="manager_manage_diamond_modal_content">
               <div className="manager_manage_diamond_form_group">
                 <label>Status</label>
-                <input
-                  type="text"
-                  name="status"
-                  value={editedWarranty.status}
-                  onChange={handleChange}
-                />
+                {isExpired(editedWarranty.endDate) ? (
+                  <select name="status" value={editedWarranty.status} onChange={handleChange} disabled>
+                    <option value="Expired">Expired</option>
+                  </select>
+                ) : (
+                  <select name="status" value={editedWarranty.status} onChange={handleChange}>
+                    <option value="Active">Active</option>
+                    <option value="Deactive">Deactive</option>
+                  </select>
+                )}
               </div>
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>

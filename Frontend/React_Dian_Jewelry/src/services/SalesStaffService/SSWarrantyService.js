@@ -31,16 +31,8 @@ const createWarranty = async (data) => {
   return response.data;
 };
 // update warranty
-const updateWarranty = async (id) => {
-  return axios.put(`${API_BASE_URL_WARRANTY}/warranties/update/${id}`, {
-
-  })
-    .then((response) => {
-      return response.data;
-    })
-    .catch(function (error) {
-      return error;
-    });
+const updateWarranty = async (id,data) => {
+  return axios.put(`${API_BASE_URL_WARRANTY}/warranties/update/${id}`, data);
 };
 
 // delete warranty
