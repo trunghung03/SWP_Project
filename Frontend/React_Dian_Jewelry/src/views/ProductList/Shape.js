@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
+import { Select, MenuItem, InputLabel, FormControl, Button, TextField } from '@mui/material';
 import SubNav from '../../components/SubNav/SubNav.js';
 import Question from '../../components/Question/Question.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
@@ -47,7 +47,6 @@ function Shape() {
             });
         }, 0);
     };
-
 
     useEffect(() => {
         const { shape } = location.state || {};
@@ -132,8 +131,6 @@ function Shape() {
             behavior: 'smooth'
         });
     }, []);
-
-
 
     return (
         <div className="Shape">
@@ -255,39 +252,7 @@ function Shape() {
                             <MenuItem value="I1">I1 </MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl className="shape_filter_group" size="small">
-                        <InputLabel id="caratFilter-label">Carat</InputLabel>
-                        <Select
-                            labelId="caratFilter-label"
-                            id="caratFilter"
-                            value={carat}
-                            label="Carat"
-                            onChange={(e) => setCarat(e.target.value)}
-                        >
-                            <MenuItem value="0.02">0.02 ct</MenuItem>
-                            <MenuItem value="0.03">0.03 ct</MenuItem>
-                            <MenuItem value="0.04">0.04 ct</MenuItem>
-                            <MenuItem value="0.05">0.05 ct</MenuItem>
-                            <MenuItem value="0.10">0.10 ct</MenuItem>
-                            <MenuItem value="0.20">0.20 ct</MenuItem>
-                            <MenuItem value="0.30">0.30 ct</MenuItem>
-                            <MenuItem value="0.40">0.40 ct</MenuItem>
-                            <MenuItem value="0.50">0.50 ct</MenuItem>
-                            <MenuItem value="0.60">0.60 ct</MenuItem>
-                            <MenuItem value="0.70">0.70 ct</MenuItem>
-                            <MenuItem value="0.80">0.80 ct</MenuItem>
-                            <MenuItem value="0.90">0.90 ct</MenuItem>
-                            <MenuItem value="1">1 ct</MenuItem>
-                            <MenuItem value="1.5">1.5 ct</MenuItem>
-                            <MenuItem value="2">2 ct</MenuItem>
-                            <MenuItem value="2.5">2.5 ct</MenuItem>
-                            <MenuItem value="3">3 ct</MenuItem>
-                            <MenuItem value="3.5">3.5 ct</MenuItem>
-                            <MenuItem value="4">4 ct</MenuItem>
-                            <MenuItem value="4.5">4.5 ct</MenuItem>
-                            <MenuItem value="5">5 ct</MenuItem>
-                        </Select>
-                    </FormControl>
+
                     <FormControl className="shape_filter_group" size="small">
                         <InputLabel id="colorFilter-label">Color</InputLabel>
                         <Select
@@ -306,6 +271,16 @@ function Shape() {
                             <MenuItem value="J">J</MenuItem>
                         </Select>
                     </FormControl>
+
+                    <TextField
+                        className="shape_filter_group"
+                        size="small"
+                        id="caratFilter"
+                        label="Carat"
+                        type="number"
+                        value={carat}
+                        onChange={(e) => setCarat(e.target.value)}
+                    />
                 </div>
                 <ProductList products={products} key={resetKey} />
             </div>
