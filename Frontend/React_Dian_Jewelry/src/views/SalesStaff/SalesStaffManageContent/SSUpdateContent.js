@@ -5,12 +5,13 @@ import logo from "../../../assets/img/logo.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
 import { updateContentById, getContentById } from "../../../services/SalesStaffService/SSContentService.js";
+import { UserContext } from "../../../services/UserContext.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
 import Button from "@mui/material/Button";
 
 function SSUpdateContent() {
   const navigate = useNavigate();
-
+  const { user } = useContext(UserContext);
   const { id } = useParams();
   const [contentData, setContentData] = useState({
     title: "",
@@ -45,12 +46,8 @@ function SSUpdateContent() {
       const formattedContentData = {
         ...contentData,
         status: true,
-        
+        employee: parseInt(user.employeeId),
       };
-
-      if (!formattedContentData.imageUrl) {
-        formattedContentData.imageUrl = contentData.imageUrl; // Sử dụng URL hiện tại nếu không có URL mới
-      }
 
       await updateContentById(id, formattedContentData);
       swal("Success", "Content updated successfully", "success");
@@ -64,6 +61,8 @@ function SSUpdateContent() {
       );
     }
   };
+
+
 
   useEffect(() => {
     localStorage.setItem("richTextContent", contentData.content);
