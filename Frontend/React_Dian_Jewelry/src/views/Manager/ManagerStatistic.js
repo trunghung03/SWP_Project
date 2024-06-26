@@ -16,10 +16,10 @@ import {
 } from "../../services/ManagerService/ManagerStatisticService.js";
 import { styled } from "@mui/material/styles";
 import logo from "../../assets/img/logoN.png";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -28,13 +28,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const RenderProfitData = ({profitData, profitOptions}) => {
+const RenderProfitData = ({ profitData, profitOptions }) => {
   console.log("RenderProfitData:::", profitData);
-  return (
-    <Line data={profitData} options={profitOptions} />
-  )
-}
-
+  return <Line data={profitData} options={profitOptions} />;
+};
 
 const ManagerStatitic = () => {
   const taskProgress = 75.5;
@@ -48,12 +45,12 @@ const ManagerStatitic = () => {
   const [valueByDate, setValueByDate] = useState(null);
   const [currentMonthStats, setCurrentMonthStats] = useState([]);
   const [profitByYear, setProfitByYear] = useState(null);
-  const [topTen,setTopTen] = useState([]);
+  const [topTen, setTopTen] = useState([]);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
+      backgroundColor: "#f9c6bb",
+      color: "1c1c1c",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -92,8 +89,7 @@ const ManagerStatitic = () => {
     const formattedMonthYear = monthYear.replace("-", "/");
     const response = await getDateStatistic(formattedMonthYear);
     setCurrentMonthStats(response);
-  }
-
+  };
 
   const dailyStats = async (date) => {
     if (date) {
@@ -141,8 +137,7 @@ const ManagerStatitic = () => {
               borderWidth: 1,
             },
           ],
-        })
-
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
         setProfitByYear(Array(12).fill(0)); // Default to zero data
@@ -288,7 +283,7 @@ const ManagerStatitic = () => {
   };
 
   const trafficSourceData = {
-    labels: ['Rings', 'Earrings', 'Bracelets', 'Necklaces'],
+    labels: ["Rings", "Earrings", "Bracelets", "Necklaces"],
     datasets: [
       {
         data: allCatePercentages.map((item) => item.percentage),
@@ -319,56 +314,69 @@ const ManagerStatitic = () => {
       <div className="manager_statitic_sidebar">
         <ManagerSidebar currentPage="manager_statistic" />
       </div>
-      <div className="manager_statitic_content">
+      <div
+        className="manager_statitic_content"
+        style={{ backgroundColor: "#f9f9f9" }}
+      >
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
         </div>
         <hr className="manager_header_line"></hr>
         <h3 className="manager_manage_statistic_title">Statistic Report</h3>
         <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "20px",
-            }}
-          >
+          <input
+            className="manager_statis_input_date"
+            type="date"
+            onChange={handleDateChange}
+            style={{marginLeft:'4.2%'}}
+          ></input>
+          <div>
             <div
-              className="manager_manage_report_div"
+              className="manager_manage_report_div1"
               style={{
-                textAlign: "center",
-                flex: "1",
-                margin: "10px",
+                display: "flex",
                 padding: "20px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
               }}
             >
-              <input type="date" onChange={handleDateChange}></input>
-              <h3>Date profit report</h3>
-              <p style={{ fontSize: "20px" }}>
-                Total Orders:
-                {valueByDate?.totalOrders !== undefined ? valueByDate.totalOrders : "N/A"}
-              </p>
-              <p style={{ fontSize: "20px" }}>
-                Total Customers:
-                {valueByDate?.totalCustomers !== undefined ? valueByDate.totalCustomers : "N/A"}
-              </p>
-              <p style={{ fontSize: "20px" }}>
-                Total Sales Value:
-                {valueByDate?.totalSales !== undefined ? valueByDate.totalSales : "N/A"}
-              </p>
-              <p style={{ fontSize: "20px", color: valueByDate?.profit > 0 ? "green" : "red" }}>
-                Profit:
-                {valueByDate?.profit !== undefined ? valueByDate.profit : "N/A"}
-              </p>
-
-              <p style={{ fontSize: "20px" }}>
-                Prime Cost:
-                {valueByDate?.primeCost !== undefined ? valueByDate.primeCost : "N/A"}
-              </p>
+              {/* <h3>Today's Report</h3> */}
+              <div className="manager_manage_report_div">
+                <p style={{ fontSize: "20px" }}>Total Orders:</p>
+                <p style={{textAlign:"center"}}>{valueByDate?.totalOrders !== undefined
+                  ? valueByDate.totalOrders
+                  : "N/A"}</p>
+              </div>
+              <div className="manager_manage_report_div">
+                <p style={{ fontSize: "20px" }}>Total Customers:</p>
+               <p style={{textAlign:"center"}}> {valueByDate?.totalCustomers !== undefined
+                  ? valueByDate.totalCustomers
+                  : "N/A"}</p>
+              </div>
+              <div className="manager_manage_report_div">
+                <p style={{ fontSize: "20px" }}>Total Sales Value: </p>
+                <p style={{textAlign:"center"}}>{valueByDate?.totalSales !== undefined
+                  ? valueByDate.totalSales
+                  : "N/A"}</p>
+              </div>
+              <div className="manager_manage_report_div">
+                <p
+                  style={{
+                    fontSize: "20px",
+                    color: valueByDate?.profit > 0 ? "green" : "red",
+                  }}
+                >
+                  {" "}
+                  Profit:{" "}
+                </p>
+                <p style={{textAlign:"center"}}>{valueByDate?.profit !== undefined ? valueByDate.profit : "N/A"}</p>
+              </div>
+              <div className="manager_manage_report_div">
+                <p style={{ fontSize: "20px" }}>Prime Cost: </p>
+                <p style={{textAlign:"center"}}>{valueByDate?.primeCost !== undefined
+                  ? valueByDate.primeCost
+                  : "N/A"}</p>
+              </div>
             </div>
-            <div
+            {/* <div
               className="manager_manage_report_div"
               style={{
                 textAlign: "center",
@@ -384,8 +392,8 @@ const ManagerStatitic = () => {
                 {totalCustomers}
               </p>
               <p style={{ color: "red" }}></p>
-            </div>
-            <div
+            </div> */}
+            {/* <div
               className="manager_manage_report_div"
               style={{
                 textAlign: "center",
@@ -398,8 +406,8 @@ const ManagerStatitic = () => {
             >
               <h3>Task Progress</h3>
               <p style={{ fontSize: "24px" }}>{taskProgress}%</p>
-            </div>
-            <div
+            </div> */}
+            {/* <div
               className="manager_manage_report_div"
               style={{
                 textAlign: "center",
@@ -412,7 +420,7 @@ const ManagerStatitic = () => {
             >
               <h3>Total Products</h3>
               <p style={{ fontSize: "24px", color: "green" }}>{totalProduct}</p>
-            </div>
+            </div> */}
           </div>
           <div className="manager_manage_report_filter">
             <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
@@ -421,7 +429,7 @@ const ManagerStatitic = () => {
               <Select
                 labelId="listYear-label"
                 id="listYear"
-                name='year'
+                name="year"
                 onChange={handleYearChange}
                 autoWidth
                 label="Year"
@@ -435,8 +443,17 @@ const ManagerStatitic = () => {
               </Select>
             </FormControl>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div clasName="manager_manage_display_chart" style={{ flex: '2', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              clasName="manager_manage_display_chart"
+              style={{
+                flex: "2",
+                margin: "10px",
+                padding: "20px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+              }}
+            >
               <h3>Sales</h3>
               {loading ? (
                 <p>Loading...</p>
@@ -446,7 +463,15 @@ const ManagerStatitic = () => {
                 <p>No data available for the selected year</p>
               )}
             </div>
-            <div style={{ flex: '1', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+            <div
+              style={{
+                flex: "1",
+                margin: "10px",
+                padding: "20px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+              }}
+            >
               <h3>Category Sold</h3>
               {allCatePercentages.length > 0 ? (
                 <Doughnut data={trafficSourceData} />
@@ -455,14 +480,14 @@ const ManagerStatitic = () => {
               )}
             </div>
           </div>
-          <div className="manager_manage_report_filter" >
+          <div className="manager_manage_report_filter">
             <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
             <FormControl sx={{ m: 1, minWidth: 80 }}>
               <InputLabel id="listYear-label">Year</InputLabel>
               <Select
                 labelId="listYear-label"
                 id="listYear"
-                name='year'
+                name="year"
                 onChange={profitYear}
                 autoWidth
                 label="Year"
@@ -476,8 +501,16 @@ const ManagerStatitic = () => {
               </Select>
             </FormControl>
           </div>
-          <div style={{ flex: '1', margin: '10px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-            <div style={{ marginTop: "20px", border: "1px solid #ddd", borderRadius: "8px", padding: "20px" }}>
+          <div
+            style={{
+              flex: "1",
+              margin: "10px",
+              padding: "20px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+            }}
+          >
+            <div>
               <h3>Profit</h3>
               {loading ? (
                 <p>Loading...</p>
@@ -489,73 +522,84 @@ const ManagerStatitic = () => {
             </div>
           </div>
           <div className="manager_manage_diamond_table_wrapper">
-              <h3>Best Seller Products</h3>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell align="center">Line Total</StyledTableCell>
-                      <StyledTableCell align="center">Product Code</StyledTableCell>
-                      <StyledTableCell align="center">Name</StyledTableCell>
-                      <StyledTableCell align="center">Items Sold</StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {topTen.length > 0 ? (
-                      topTen.map((item) => (
-                        <TableRow
-                          className="manager_manage_table_body_row"
-                          key={item.productCode}
-                        >
-                          <TableCell align="center">{item.productCode}</TableCell>
-                          <TableCell align="center">{item.name}</TableCell>
-                          <TableCell align="center">{item.lineTotal}</TableCell>
-                          <TableCell align="center">{item.itemSold}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan="9">No data to display</TableCell>
+            <h3>Top 10 Selling Products</h3>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Line Total</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Product Code
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Name</StyledTableCell>
+                    <StyledTableCell align="center">Items Sold</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {topTen.length > 0 ? (
+                    topTen.map((item) => (
+                      <TableRow
+                        className="manager_manage_table_body_row"
+                        key={item.productCode}
+                      >
+                        <TableCell align="center">{item.productCode}</TableCell>
+                        <TableCell align="center">{item.name}</TableCell>
+                        <TableCell align="center">{item.lineTotal}</TableCell>
+                        <TableCell align="center">{item.itemSold}</TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan="9">No data to display</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
           <div className="manager_manage_diamond_table_wrapper">
-              <input type="month" onChange={MonthYearStats}></input>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell align="center">Date</StyledTableCell>
-                      <StyledTableCell align="center">Total Sales</StyledTableCell>
-                      <StyledTableCell align="center">Prime Cost</StyledTableCell>
-                      <StyledTableCell align="center">Profit</StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {currentMonthStats.length > 0 ? (
-                      currentMonthStats.map((item) => (
-                        <TableRow
-                          className="manager_manage_table_body_row"
-                          key={item.date}
-                        >
-                          <TableCell align="center">{item.date}</TableCell>
-                          <TableCell align="center">{item.totalSales}</TableCell>
-                          <TableCell align="center">{item.primeCost}</TableCell>
-                          <TableCell align="center">{item.profit}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan="9">No Empty Date Statistic found</TableCell>
+            <input
+              className="manager_statis_input_date"
+              type="month"
+              onChange={MonthYearStats}
+              style={{margin:"10px"}}
+            ></input>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Date</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Total Sales
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Prime Cost</StyledTableCell>
+                    <StyledTableCell align="center">Profit</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {currentMonthStats.length > 0 ? (
+                    currentMonthStats.map((item) => (
+                      <TableRow
+                        className="manager_manage_table_body_row"
+                        key={item.date}
+                      >
+                        <TableCell align="center">{item.date}</TableCell>
+                        <TableCell align="center">{item.totalSales}</TableCell>
+                        <TableCell align="center">{item.primeCost}</TableCell>
+                        <TableCell align="center">{item.profit}</TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan="9">
+                        No Empty Date Statistic found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
         </div>
       </div>
     </div>
@@ -563,4 +607,3 @@ const ManagerStatitic = () => {
 };
 
 export default ManagerStatitic;
-
