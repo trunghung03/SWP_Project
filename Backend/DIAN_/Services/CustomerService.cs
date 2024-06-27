@@ -33,7 +33,7 @@ namespace DIAN_.Services
             if (user == null) throw new ArgumentException("No account found with the provided email.");
 
             var token = _tokenService.CreateCustomerToken(user);
-            var callbackUrl = $"http://localhost:3000/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
+            var callbackUrl = $"https://diandiamondstore.com/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
             var message = new MailResetPassword
             {
                 ToEmail = user.Email,
