@@ -15,6 +15,7 @@ import braceletCategory from '../../assets/img/braceletNav.png';
 import wBraceletCategory from '../../assets/img/wBraceletnav.jpg';
 import necklaceCategory from '../../assets/img/necklaceNav.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceNav.webp';
+import { searchProducts } from '../../services/ProductService'; 
 
 const HeaderComponent = () => {
     const { user, setUser } = useContext(UserContext);
@@ -27,7 +28,6 @@ const HeaderComponent = () => {
     const weddingMenuTimeoutRef = useRef(null);
     const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
     const [showNotifications, setShowNotifications] = useState(false);
-
 
     useEffect(() => {
         const role = localStorage.getItem('role');
@@ -105,10 +105,13 @@ const HeaderComponent = () => {
 
     const handleSearchKeyPress = async (e) => {
         if (e.key === 'Enter' && searchQuery.trim()) {
-            const response = await fetch(`https://localhost:7184/api/products/search?name=${searchQuery}`);
-            const data = await response.json();
-            setSearchQuery('');
-            navigate('/search', { state: { products: data, searchQuery } });
+            try {
+                const response = await searchProducts(searchQuery);  // Use the searchProducts function
+                setSearchQuery('');
+                navigate('/search', { state: { products: response.data, searchQuery } });
+            } catch (error) {
+                console.error("Search error: ", error);
+            }
         }
     };
 
