@@ -1,17 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/logoN.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import { createContent } from "../../../services/SalesStaffService/SSContentService.js";
-import { UserContext } from "../../../services/UserContext.js";
+import {
+  createContent,
+  uploadImage,
+} from "../../../services/SalesStaffService/SSContentService.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
 import Button from "@mui/material/Button";
+
 function SSContentList() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
-  const [imageBase64, setImageBase64] = useState("");
   const employeeId = localStorage.getItem("employeeId");
   const firstName = localStorage.getItem("firstName");
   const lastName = localStorage.getItem("lastName");
@@ -22,42 +23,42 @@ function SSContentList() {
       localStorage.getItem("richTextContent") ||
       "",
     image: "",
-    imageUrl: "",
     tag: "",
     date: new Date().toISOString(),
     employee: employeeId,
     status: true,
     creator: `${firstName} ${lastName}`,
   });
+  const [imagePreview, setImagePreview] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setContentData({ ...contentData, [name]: value });
   };
 
-  const handleImageUpload = (event) => {
-    if (event.target.files.length === 0) {
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) {
       console.error("No file selected.");
       return;
     }
 
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const preview = document.getElementById("imagePreview");
+    const formData = new FormData();
+    formData.append("file", file); // Ensure the key matches your API's expected key
 
-    if (!file.type.startsWith("image/")) {
-      console.error("Selected file is not an image.");
-      return;
+    try {
+      const response = await uploadImage(formData);
+      const url = response.url;
+      console.log("Uploaded image URL:", url);
+      setContentData((prevContentData) => ({
+        ...prevContentData,
+        image: url,
+      }));
+      setImagePreview(URL.createObjectURL(file));
+    } catch (error) {
+      console.error("Upload error:", error);
     }
-
-    reader.onload = () => {
-      setImageBase64(reader.result);
-      setContentData((prevData) => ({ ...prevData, image: reader.result }));
-      preview.src = reader.result;
-      preview.style.display = "block";
-    };
-
-    reader.readAsDataURL(file);
+    event.target.value = null;
   };
 
   const handleSubmit = async (e) => {
@@ -68,7 +69,7 @@ function SSContentList() {
         date: new Date().toISOString(),
         status: true,
         employee: parseInt(employeeId),
-        image: contentData.imageUrl || contentData.image,
+        image: contentData.image,
       };
       console.log("Formatted Content Data:", formattedContentData);
       await createContent(formattedContentData);
@@ -133,11 +134,7 @@ function SSContentList() {
           <img className="ss_add_content_logo" src={logo} alt="Logo" />
         </div>
         <hr className="ss_add_content_line"></hr>
-        <h3
-          className="ss_add_content_title"
-        >
-          Add New Ideal Content
-        </h3>
+        <h3 className="ss_add_content_title">Add New Ideal Content</h3>
         <div className="ss_back_container">
           <button
             className="ss_add_content_back_button"
@@ -237,45 +234,65 @@ function SSContentList() {
               </div>
             </div>
             <div className="ss_add_displayed_image_div2">
-              <label className="ss_add_content_label_image">Image URL:</label>
+              <label className="ss_add_content_label">Content avatar:</label>
               <input
-                className="ss_enter_image"
-                type="text"
-                name="imageUrl"
-                value={contentData.imageUrl}
-                onChange={handleChange}
-                placeholder="Enter the image URL"
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{marginLeft:'1.5%'}}
               />
-              {/* <label className="ss_add_content_label">Image:</label>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-                <img
-                  id="imagePreview"
-                  src="#"
-                  alt="Image Preview"
+              
+              {imagePreview && (
+                <>
+                 <button
+                    onClick={() => {
+                      setImagePreview(""); 
+                      setContentData({ ...contentData, image: "" }); 
+                    }}
+                    style={{
+                      display: "block",
+                      marginTop: "1%",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "20px",
+                      marginLeft:"90%"
+                    }}
+                  >
+                    &#x2715; {/* Unicode character for "X" */}
+                  </button>
+                <div
+                  className="ss_image_preview"
                   style={{
-                    display: "none",
-                    marginTop: "10px",
-                    maxWidth: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
                   }}
-                /> */}
+                >
+                  <img
+                    src={imagePreview}
+                    alt="Content avatar"
+                    style={{
+                      width: "87%",
+                      height: "40%",
+                      margin: "auto",
+                    }}
+                  />
+                </div>
+                </>
+              )}   
             </div>
-            {/* <button type="submit" className="ss_add_content_submit_button">
-              Submit
-            </button> */}
             <Button
               type="submit"
               variant="contained"
               style={{
-                backgroundColor: "#2244a1", // Example background color
-                color: "white", // Example text color
-                padding: "10px 20px", // Example padding
-                fontSize: "16px", // Example font size
-                borderRadius: "5px", // Example border radius
+                backgroundColor: "#2244a1",
+                color: "white",
+                padding: "10px 20px",
+                fontSize: "16px",
+                borderRadius: "5px",
                 marginLeft: "87%",
                 marginTop: "30px",
               }}

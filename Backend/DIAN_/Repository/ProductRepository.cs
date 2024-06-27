@@ -7,7 +7,6 @@ using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Mapper;
 using DIAN_.DTOs.ProductDTOs;
-using Microsoft.AspNetCore.Http.HttpResults;
 using DIAN_.Helper;
 
 namespace DIAN_.Repository
@@ -17,23 +16,25 @@ namespace DIAN_.Repository
         private readonly ApplicationDbContext _context;
         public ProductRepository(ApplicationDbContext context)
         {
-            _context = context; 
-        }      
-        public async Task<ProductDTO> CreateAsync(Product product)
+            _context = context;
+        }
+        public async Task<Product> CreateAsync(Product product)
         {
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
-            return product.ToProductDTO();
+            return product;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<Product?> DeleteAsync(int id)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             if (product != null)
             {
                 product.Status = false;
                 await _context.SaveChangesAsync();
+                return product;
             }
+            return null;
         }
 
         public async Task<bool> ExistsMainDiamondAsync(int mainDiamondId)
@@ -48,7 +49,7 @@ namespace DIAN_.Repository
                 .AnyAsync(p => p.ProductCode == proCode);
         }
 
-        public async Task<(List<ProductDTO>, int)> GetAllAsync(ProductQuery query)
+        public async Task<(List<Product>, int)> GetAllAsync(ProductQuery query)
         {
             var products = _context.Products
                 .Where(p => p.Status)
@@ -65,17 +66,13 @@ namespace DIAN_.Repository
             var productList = await products
                 .Skip(skipNumber)
                 .Take(query.PageSize)
-                .Select(p => p.ToProductDTO())
                 .ToListAsync();
 
             var totalItems = await products.CountAsync();
             return (productList, totalItems);
         }
-        /*return await _context.Products.Where(p => p.Status)
-                     .Include(p => p.Category).ThenInclude(c => c.Size)
-                     .Select(p => p.ToProductDTO()).ToListAsync();*/
 
-        public async Task<ProductDTO> GetByIdAsync(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
             var product = await _context.Products.Where(p => p.Status && p.ProductId == id)
                           .Include(p => p.Category).ThenInclude(c => c.Size)
@@ -84,17 +81,16 @@ namespace DIAN_.Repository
             {
                 throw new Exception($"Product with id {id} not found.");
             }
-            return product.ToProductDTO();
+            return product;
         }
 
-        public async Task<List<ProductListDTO>> GetByNameAsync(string name)
+        public async Task<List<Product>> GetByNameAsync(string name)
         {
             var products = await _context.Products
                                   .Where(p => p.Status && p.Name.Contains(name))
                                   .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
                                   .ToListAsync();
-
-            return products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList();
+            return products;
         }
 
         public async Task<List<Product>> GetProductByCode(string code)
@@ -107,57 +103,33 @@ namespace DIAN_.Repository
             return products;
         }
 
-
-        public async Task<ProductDetailDTO> GetDetailAsync(int id)
+        public async Task<Product> GetDetailAsync(int id)
         {
             var product = await _context.Products
                                         .Include(p => p.MainDiamond)
                                         .Include(p => p.Category).ThenInclude(c => c.Size)
-                                        .Where(p => p.Status && p.ProductId == id) 
+                                        .Where(p => p.Status && p.ProductId == id)
                                         .FirstOrDefaultAsync();
 
             if (product == null)
             {
                 throw new KeyNotFoundException("Product does not exist");
             }
-
-            var subDiamondColors = await _context.Diamonds.Select(d => d.Color).ToListAsync();
-            return product.ToProductDetailDTO(product.MainDiamond, subDiamondColors);
+            return product;
         }
 
-        public async Task<List<ProductListDTO>> GetListAsync()
+        public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
                                  .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
                                  .ToListAsync();
 
-            return products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList();
-        }
-
-        public async Task<ProductDTO> UpdateAsync(ProductDTO productDTO)
-        {
-            var product = await _context.Products.FindAsync(productDTO.ProductId);
-            if (product == null)
-            {
-                throw new KeyNotFoundException("Product does not exist");
-            }
-
-            // Map the DTO properties to the entity
-            product.Name = productDTO.Name;
-            product.Description = productDTO.Description;
-            product.LaborCost = productDTO.LaborPrice;
-            product.ImageLinkList = productDTO.ImageLinkList;
-            product.CollectionId = productDTO.CollectionId;
-
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
-
-            return product.ToProductDTO();
+            return products;
         }
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
         {
-            var existingProduct =await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             if (existingProduct != null)
             {
                 existingProduct.Name = product.Name;

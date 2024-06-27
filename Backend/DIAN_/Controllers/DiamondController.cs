@@ -117,13 +117,14 @@ namespace DIAN_.Controllers
 
                 var diamond = diamondDto.ToDiamondFromCreateDTO();
                 var result = await _diamondRepository.AddDiamondAsync(diamond);
-                return Ok(result.ToDiamondDTO());
+                return Ok(new { diamondId = result.DiamondId, diamond = result.ToDiamondDTO() });
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateDiamondAsync([FromRoute] int id, [FromBody] UpdateDiamondRequestDto updateDto)
@@ -164,6 +165,28 @@ namespace DIAN_.Controllers
                     return NotFound("Diamond does not exist");
                 }
                 return Ok(diamond.ToDiamondDTO());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPut("updatecertificate/{id:int}")]
+        public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
+                if (diamondModel == null)
+                {
+                    return NotFound("Diamond does not exist");
+                }
+                return Ok(diamondModel.ToDiamondDTO());
             }
             catch (Exception)
             {

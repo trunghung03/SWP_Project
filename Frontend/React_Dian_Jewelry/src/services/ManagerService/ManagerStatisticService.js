@@ -6,7 +6,7 @@ const AllCurrentProduct = async () => {
     return response.data;
 };
 
-const GetSoldCategory = async (startMonth,endMonth) => {
+const GetSoldCategory = async (startMonth, endMonth) => {
     const response = await axios.get(`${API_BASE_URL}/stat/products/soldpercentage?startMonthYear=${startMonth}&endMonthYear=${endMonth}`);
     return response.data;
 };
@@ -21,9 +21,29 @@ const TotalValue = async (year) => {
     return response.data;
 };
 
-const TotalCustomers = async (year) => {
+const TotalCustomers = async () => {
     const response = await axios.get(`${API_BASE_URL}/stat/customers`);
     return response.data;
 };
 
-export { AllCurrentProduct,GetSoldCategory,TotalOrders,TotalValue,TotalCustomers };
+const DailyStats = async (date) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/daily-statistics?date=${date}`);
+    return response.data;
+};
+
+const getDateStatistic = async (date) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/30days-statistics?monthYear=${date}`);
+    return response.data;
+}
+
+const getTopTen = async () => {
+    const response = await axios.get(`${API_BASE_URL}/stat/top-10-selling-products`);
+    return response.data;
+}
+
+
+const ShowProfitByYear = async (year) => {
+    const response = await axios.get(`${API_BASE_URL}/stat/monthly-profit-statistics?year=${year}`);
+    return response.data;
+}
+export { AllCurrentProduct, GetSoldCategory, TotalOrders, TotalValue, TotalCustomers, DailyStats, ShowProfitByYear, getDateStatistic, getTopTen };

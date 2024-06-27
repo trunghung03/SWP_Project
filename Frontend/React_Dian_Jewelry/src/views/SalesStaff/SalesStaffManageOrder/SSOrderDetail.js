@@ -4,7 +4,6 @@ import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderDetail.scss";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import logo from "../../../assets/img/logoN.png";
-import { useLocation } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -40,6 +39,7 @@ const SSOrderDetail = () => {
         .then((data) => {
           console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
+          setStatus(data.orderStatus); // Set status from fetched order details
         })
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
@@ -119,14 +119,16 @@ const SSOrderDetail = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={orderDetails.orderStatus}
-                          label="Age"
+                          value={status}
+                          label="Status"
                           onChange={handleChange}
                         >
                           <MenuItem value ="UnPaid">UnPaid</MenuItem>
                           <MenuItem value="Paid">Paid</MenuItem>
                           <MenuItem value="Preparing">Preparing</MenuItem>
                           <MenuItem value="Delivering">Delivering</MenuItem>
+                          <MenuItem value="Completed">Completed</MenuItem>
+                          <MenuItem value="Cancelled">Cancelled</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
@@ -170,10 +172,10 @@ const SSOrderDetail = () => {
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
                   </div>
-                  <div style={{ marginBottom: "10px" }}>
-                    <WarrantyIcon /> Warranty
+                  <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
+                    <WarrantyIcon /> Warranty:
                     <SSAddWarrantyPopup orderId={orderDetails.orderId} />
-                    <button className="manager_manage_diamond_create_button" onClick={handleSendEmail}>Send Warranty Email</button>
+                    <button className="salesstaff_manage_send_email_button" onClick={handleSendEmail}>Send via Email</button>
                   </div>
                 </div>
                 <p style={{ textAlign: "right", marginRight: "10%" }}>

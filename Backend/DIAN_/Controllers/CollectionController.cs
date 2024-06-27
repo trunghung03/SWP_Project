@@ -127,18 +127,23 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-
-        [HttpGet("latest")]
-        public async Task<IActionResult> GetLatestCollection()
+        [HttpGet("newest")]
+        public async Task<IActionResult> GetNewestCollection()
         {
             try
             {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var collection = await _collectionRepository.GetNewestCollectionAsync();
+                if (collection == null)
+                {
+                    return NotFound();
+                }
 
-                var collection = await _collectionRepository.GetLatestCollectionAsync();
-                if (collection == null) return NotFound();
-
-                return Ok(collection);
+                var collectionDto = collection.ToNewestCollectionDTO();
+                return Ok(collectionDto);
             }
             catch (Exception)
             {

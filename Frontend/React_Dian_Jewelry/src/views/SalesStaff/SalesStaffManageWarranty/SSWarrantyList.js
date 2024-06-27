@@ -28,7 +28,7 @@ const SSWarrantyList = () => {
   const navigate = useNavigate();
   const [warrantyList, setWarrantyList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearch, setIsSearch] = useState(false);
+  const [isSearch, setIsSearch] = useState(false); // State to track if search is performed
   const [editMode, setEditMode] = useState(false);
   const [editedWarranty, setEditedWarranty] = useState({});
   const [originalWarranty, setOriginalWarranty] = useState({});
@@ -55,7 +55,6 @@ const SSWarrantyList = () => {
 
     fetchData();
   }, []);
-  console.log(warrantyList.status);
 
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 6;
@@ -78,6 +77,7 @@ const SSWarrantyList = () => {
           const response = await fetchWarrantyDetail(searchQuery.trim());
           setWarrantyList([response]);
           setCurrentPage(1);
+          setIsSearch(true); // Set search state to true when search is performed
         } catch (error) {
           console.error("Error fetching warranty:", error);
           swal("Warranty not found!", "Please try another one.", "error");
@@ -87,16 +87,30 @@ const SSWarrantyList = () => {
           const response = await fetchAllWarranty();
           setWarrantyList(response);
           setCurrentPage(1);
+          setIsSearch(false); // Reset search state when search query is empty
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
     }
   };
+
+  const handleBack = async () => {
+    try {
+      const response = await fetchAllWarranty();
+      setWarrantyList(response);
+      setCurrentPage(1);
+      setIsSearch(false); // Reset search state when back button is clicked
+      setSearchQuery(""); // Clear search query
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   // Delete diamond by id
   const handleDelete = async (orderDetailId) => {
     swal({
-      title: "Are you sure to delete this diamond?",
+      title: "Are you sure to delete this warranty?",
       text: "This action cannot be undone",
       icon: "warning",
       buttons: true,
@@ -114,7 +128,7 @@ const SSWarrantyList = () => {
             "success"
           );
         } catch (error) {
-          console.error("Error deleting diamond:", error);
+          console.error("Error deleting warranty:", error);
           swal(
             "Something went wrong!",
             "Failed to delete the warranty. Please try again.",
@@ -153,7 +167,7 @@ const SSWarrantyList = () => {
       return;
     }
 
-    const warrantyToUpdate = { ...editedWarranty, status: true };
+    const warrantyToUpdate = { ...editedWarranty };
 
     try {
       console.log("Sending update request with data:", warrantyToUpdate);
@@ -182,6 +196,11 @@ const SSWarrantyList = () => {
       );
     }
   };
+  const isExpired = (endDate) => {
+    const today = new Date().toLocaleDateString('en-CA');
+    const formattedEndDate = new Date(endDate).toLocaleDateString('en-CA');
+    return new Date(today) > new Date(formattedEndDate);
+  };
 
   return (
     <div className="ss_manage_content_all_container">
@@ -203,9 +222,9 @@ const SSWarrantyList = () => {
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h1 style={{ alignItems: "center" }}>Warranty List</h1>
-        <div className="manager_manage_diamond_create_button_section">
-          <div className="manager_manage_diamond_pagination">
+        <h3 style={{ textAlign: 'center' }}>Warranty List</h3>
+        <div className="manager_manage_diamond_create_button_section" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="manager_manage_diamond_pagination" >
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -231,7 +250,6 @@ const SSWarrantyList = () => {
             </button>
           </div>
         </div>
-
         {/* Table diamond list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -246,17 +264,16 @@ const SSWarrantyList = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {warrantyList.length > 0 ? (
-                  warrantyList.map((item) => (
+                {currentWarranty.length > 0 ? (
+                  currentWarranty.map((item) => (
                     <TableRow className="manager_manage_table_body_row" key={item.orderDetailId}>
                       <TableCell align="center">{item.orderDetailId}</TableCell>
                       <TableCell align="center">{new Date(item.startDate).toLocaleDateString('en-CA')}</TableCell>
                       <TableCell align="center">{new Date(item.endDate).toLocaleDateString('en-CA')}</TableCell>
-                      <TableCell align="center">
-                        {item.status !== undefined
-                          ? item.status.toString()
-                          : "N/A"}
+                      <TableCell align="center" style={{ color: isExpired(item.endDate) ? 'red' : 'inherit' }}>
+                        {isExpired(item.endDate) ? "Expired" : (item.status !== undefined ? item.status.toString() : "N/A")}
                       </TableCell>
+
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
@@ -277,6 +294,11 @@ const SSWarrantyList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && ( // Conditionally render the back button
+            <button className="SS_back_button" onClick={handleBack}>
+              Back
+            </button>
+          )}
         </div>
       </div>
       {editMode && (
@@ -291,12 +313,16 @@ const SSWarrantyList = () => {
             <div className="manager_manage_diamond_modal_content">
               <div className="manager_manage_diamond_form_group">
                 <label>Status</label>
-                <input
-                  type="text"
-                  name="status"
-                  value={editedWarranty.status}
-                  onChange={handleChange}
-                />
+                {isExpired(editedWarranty.endDate) ? (
+                  <select name="status" value={editedWarranty.status} onChange={handleChange} disabled>
+                    <option value="Expired">Expired</option>
+                  </select>
+                ) : (
+                  <select name="status" value={editedWarranty.status} onChange={handleChange}>
+                    <option value="Active">Active</option>
+                    <option value="Deactive">Deactive</option>
+                  </select>
+                )}
               </div>
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>

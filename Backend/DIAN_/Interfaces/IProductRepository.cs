@@ -9,14 +9,14 @@ namespace DIAN_.Interfaces
 {
     public interface IProductRepository
     {
-        Task<List<ProductListDTO>> GetListAsync();
-        Task<ProductDTO> GetByIdAsync(int id);
-        Task<ProductDTO> CreateAsync(Product product);
+        Task<List<Product>> GetListAsync();
+        Task<Product> GetByIdAsync(int id);
+        Task<Product> CreateAsync(Product product);
         Task<Product> UpdateProductAsync(Product product, int id);
-        Task DeleteAsync(int id);
-        Task<ProductDetailDTO> GetDetailAsync(int id);
-        Task<(List<ProductDTO>, int)> GetAllAsync(ProductQuery query);
-        Task<List<ProductListDTO>> GetByNameAsync(string name);
+        Task<Product?> DeleteAsync(int id);
+        Task<Product> GetDetailAsync(int id);
+        Task<(List<Product>, int)> GetAllAsync(ProductQuery query);
+        Task<List<Product>> GetByNameAsync(string name);
         Task<bool> ExistsMainDiamondAsync(int mainDiamondId);
         Task<bool> ExistsProCodeAsync(string proCode);
         Task<List<Product>> GetProductByCode(string code);

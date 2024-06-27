@@ -7,5 +7,7 @@
         public int TotalCustomers { get; set; }
         public decimal TotalSales { get; set; }
         public decimal Profit { get; set; }
+
+        public decimal PrimeCost { get; set; }
     }
 }

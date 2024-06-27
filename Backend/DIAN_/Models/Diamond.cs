@@ -23,9 +23,11 @@ public partial class Diamond
 
     public int AmountAvailable { get; set; }
 
+    public decimal Price { get; set; }
+
     public bool Status { get; set; }
 
-    public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
+    public virtual ICollection<Product> ProductMainDiamonds { get; set; } = new List<Product>();
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<Product> ProductSubDiamonds { get; set; } = new List<Product>();
 }

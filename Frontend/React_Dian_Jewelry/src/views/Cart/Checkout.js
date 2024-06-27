@@ -16,7 +16,6 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 
-
 const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -68,7 +67,6 @@ const IOSSwitch = styled((props) => (
     },
 }));
 
-
 function Checkout() {
     const navItems = [
         { name: 'Home', link: '/home' },
@@ -101,6 +99,7 @@ function Checkout() {
         const cartKey = `cartItems${customerId}`;
         const storedCartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
         setCartItems(storedCartItems);
+        window.scrollTo(0, 230);
     }, [customerId]);
 
     useEffect(() => {
@@ -212,7 +211,7 @@ function Checkout() {
             paymentMethod: paymentMethod,
             shippingAddress: address,
             totalPrice: initialTotal,
-            orderStatus: "Pending",
+            orderStatus: "Unpaid",
             promotionId: appliedVoucher ? promotionId : null,
             payWithPoint: usePoints,
             note: note || "None",
@@ -227,7 +226,7 @@ function Checkout() {
             const orderDetailsPromises = cartItems.map(item => {
                 const orderDetail = {
                     orderId: orderId,
-                    lineTotal: totalPrice,
+                    lineTotal: item.price,
                     productId: item.productId,
                     shellMaterialId: item.selectedShellId,
                     subDiamondId: item.diamondId,
@@ -238,11 +237,17 @@ function Checkout() {
 
             await Promise.all(orderDetailsPromises);
 
+            const invoiceData = {
+                orderId,
+                orderDate: date,
+                orderTotalPrice: Math.floor(totalPrice),
+                orderDiscount: Math.floor(appliedDiscount),
+                paymentMethod,
+                cartItems
+            };
+
             localStorage.setItem('orderId', orderId);
-            localStorage.setItem('orderDate', date);
-            localStorage.setItem('orderTotalPrice', Math.floor(totalPrice));
-            localStorage.setItem('orderDiscount', Math.floor(appliedDiscount));
-            localStorage.setItem('paymentMethod', paymentMethod);
+            localStorage.setItem(`invoice${orderId}`, JSON.stringify(invoiceData));
 
             localStorage.setItem('points', remainingPoints);
             setUser(prevUser => ({
@@ -260,14 +265,7 @@ function Checkout() {
                 };
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
-                const cartKey = `cartItems${customerId}`;
-                localStorage.removeItem(cartKey);
-                updateCartContext([]);
             } else {
-                const cartKey = `cartItems${customerId}`;
-                localStorage.removeItem(cartKey);
-                updateCartContext([]);
-
                 swal({
                     title: "Order successfully!",
                     text: "Thank you for your order.",
@@ -276,7 +274,7 @@ function Checkout() {
                 });
 
                 localStorage.setItem('fromCheckout', 'true');
-                navigate('/invoice', { state: { orderId, paymentMethod, usePoints, cartItems, appliedDiscount: Math.floor(appliedDiscount), totalPrice: Math.floor(totalPrice) } });
+                navigate('/invoice', { state: { orderId } });
             }
 
         } catch (error) {
@@ -402,7 +400,7 @@ function Checkout() {
 
                     <h5 className="checkout_summary_payment_title"><i className="fas fa-credit-card"></i>Payment method</h5>
                     <div className="payment_methods">
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('Cash')}>
                             <input
                                 type="radio"
                                 id="cash"
@@ -413,7 +411,7 @@ function Checkout() {
                             <p className='payment_label' htmlFor="cash">Cash</p>
                             {paymentMethod === 'Cash' && <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>}
                         </div>
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('Bank Transfer')}>
                             <input
                                 type="radio"
                                 id="bankTransfer"
@@ -424,7 +422,7 @@ function Checkout() {
                             <p className='payment_label' htmlFor="bankTransfer">Bank Transfer</p>
                             {paymentMethod === 'Bank Transfer' && <p>(Make a transfer to the shop's account number. Order will be processed after successful transfer)</p>}
                         </div>
-                        <div className="payment_method">
+                        <div className="payment_method" onClick={() => setPaymentMethod('VNPAY')}>
                             <input
                                 type="radio"
                                 id="vnpay"

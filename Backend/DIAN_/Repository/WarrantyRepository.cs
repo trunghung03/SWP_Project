@@ -27,7 +27,7 @@ namespace DIAN_.Repository
             var existingWarranty = await _context.Warranties.FirstOrDefaultAsync(x => x.OrderDetailId == id);
             if (existingWarranty != null)
             {
-                existingWarranty.Status = false;
+                existingWarranty.Status = "Inactive";
                 await _context.SaveChangesAsync();
                 return existingWarranty;
             }
@@ -38,7 +38,6 @@ namespace DIAN_.Repository
         {
 
             var warranties = await _context.Warranties
-                .Where(w => w.Status)
                 .Select(w => w.ToWarrantyDetailDto())
                 .ToListAsync();
 

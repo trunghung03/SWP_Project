@@ -13,6 +13,8 @@ public partial class Shellmaterial
 
     public decimal AmountAvailable { get; set; }
 
+    public decimal Price { get; set; }
+
     public bool Status { get; set; }
 
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();

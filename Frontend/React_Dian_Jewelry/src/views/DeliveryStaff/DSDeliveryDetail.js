@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import logo from "../../assets/img/logoN.png";
 import swal from 'sweetalert';
 import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
@@ -8,8 +7,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import FormControl from "@mui/material/FormControl";
 import { Box } from "@mui/material";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -23,10 +20,9 @@ import { deliStaffUpdateOrderStatus } from "../../services/SalesStaffService/SSO
 
 function DSDeliveryDetail() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState({});
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('Deli');
 
   const handleChange = (event) => {
     setStatus(event.target.value);
@@ -38,6 +34,7 @@ function DSDeliveryDetail() {
         .then((data) => {
           console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
+          setStatus(data.orderStatus); // Set status from fetched order details
         })
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
@@ -91,8 +88,8 @@ function DSDeliveryDetail() {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={orderDetails.orderStatus}
-                      label="Age"
+                      value={status}
+                      label="Status"
                       onChange={handleChange}
                     >
                       <MenuItem value="Delivering">Delivering</MenuItem>
@@ -131,12 +128,12 @@ function DSDeliveryDetail() {
               <div style={{ marginBottom: "10px" }}>
                 <PaymentIcon /> Payment Method: {orderDetails.paymentMethod}
               </div>
-              <div style={{ marginBottom: "10px" }}>
+              {/* <div style={{ marginBottom: "10px" }}>
                 <VerifiedUserIcon /> Certificate:
               </div>
               <div style={{ marginBottom: "10px" }}>
                 <WarrantyIcon /> Warranty
-              </div>
+              </div> */}
             </div>
             {/* <hr className="manager_header_line"></hr> */}
             <p style={{ textAlign: "right", marginRight: "10%" }}>
@@ -144,7 +141,7 @@ function DSDeliveryDetail() {
             </p>
             {/* <hr className="manager_header_line"></hr> */}
             <div className="ss_detail_confirmbutton">
-              <button onClick={handleSubmit}>Confirm</button>
+              <button onClick={handleSubmit}>Done</button>
             </div>
           </div>
         </div>

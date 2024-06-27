@@ -23,10 +23,12 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('firstName', user.firstName);
-    localStorage.setItem('lastName', user.lastName);
-    localStorage.setItem('email', user.email);
-    localStorage.setItem('points', user.points);
+    if (localStorage.getItem('role') === 'Customer') {
+      localStorage.setItem('firstName', user.firstName);
+      localStorage.setItem('lastName', user.lastName);
+      localStorage.setItem('email', user.email);
+      localStorage.setItem('points', user.points);
+    }
   }, [user]);
 
   return (

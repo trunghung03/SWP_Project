@@ -1,13 +1,11 @@
-﻿using DIAN_.Models;
-using DIAN_.DTOs.ProductDTOs;
+﻿using DIAN_.DTOs.ProductDTOs;
+using DIAN_.Helper;
+using DIAN_.Models;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DIAN_.Helper;
-using DIAN_.DTOs.PromotionDto;
-using DIAN_.Repository;
 
 namespace DIAN_.Controllers
 {
@@ -22,8 +20,8 @@ namespace DIAN_.Controllers
             _productRepo = productRepo;
             _context = context;
         }
-       
-        [HttpGet ("list")]
+
+        [HttpGet("list")]
         public async Task<IActionResult> GetList()
         {
             try
@@ -33,9 +31,9 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
-
-                return Ok(products);
-            }catch(Exception)
+                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -46,7 +44,7 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
@@ -55,69 +53,20 @@ namespace DIAN_.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(product);
-            }catch(Exception)
+                return Ok(product.ToProductDTO());
+            }
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        /* [HttpPost]
-         public async Task<IActionResult> Create([FromForm] CreateProductRequestDTO productDTO)
-         {
-             try
-             {
-                 var imageLinks = new List<string>();
-                 var savePath = @"C:\Users\Admin\Documents\SWP_Project\Backend\DIAN_\Images";
-
-                 if (productDTO.ImageFiles != null && productDTO.ImageFiles.Count > 0)
-                 {
-                     foreach (var file in productDTO.ImageFiles)
-                     {
-                         var fileName = Path.GetFileName(file.FileName);
-                         var filePath = Path.Combine(savePath, fileName);
-                         using (var stream = new FileStream(filePath, FileMode.Create))
-                         {
-                             await file.CopyToAsync(stream);
-                         }
-                         // Assuming the URL path structure
-                         var fileUrl = $"/images/{fileName}";
-                         imageLinks.Add(fileUrl); // Store file URL
-                     }
-                 }
-
-                 // Join the image links with a semicolon
-                 var imageLinkList = string.Join(";", imageLinks);
-
-                 // Check if the MainDiamondId exists
-                 var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
-                 if (!mainDiamondExists)
-                 {
-                     return BadRequest("The specified MainDiamondId does not exist.");
-                 }
-
-                 // Check if the ProCode already exists
-                 var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
-                 if (proCodeExists)
-                 {
-                     return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
-                 }
-
-                 var product = productDTO.ToProductFromCreateDTO(imageLinkList);
-                 var createdProduct = await _productRepo.CreateAsync(product);
-
-                 return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
-             }catch(Exception)
-             {
-                 throw;
-             }
-         }*/
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductRequestDTO productDTO)
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
@@ -146,7 +95,6 @@ namespace DIAN_.Controllers
             }
         }
 
-
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
@@ -161,13 +109,14 @@ namespace DIAN_.Controllers
                 {
                     return NotFound("Promotion does not exist");
                 }
-                return Ok(product);
+                return Ok(product.ToProductDTO());
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
         {
@@ -193,11 +142,10 @@ namespace DIAN_.Controllers
                     totalCount = totalItems
                 };
 
-                return Ok(new { data = products, pagination });
+                return Ok(new { data = products.Select(p => p.ToProductDTO()), pagination });
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -207,56 +155,74 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 await _productRepo.DeleteAsync(id);
                 return NoContent();
-            }catch(Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }
         }
+
         [HttpGet("detail/{id}")]
         public async Task<IActionResult> GetDetail([FromRoute] int id)
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var productDetail = await _productRepo.GetDetailAsync(id);
                 if (productDetail == null)
                 {
                     return NotFound();
                 }
-                return Ok(productDetail);
-            }catch(Exception)
+                return Ok(productDetail.ToProductDetailDTO(productDetail.MainDiamond, new List<string>()));
+            }
+            catch (Exception)
             {
                 throw;
             }
         }
+
         [HttpGet("search")]
         public async Task<IActionResult> GetByName([FromQuery] string name)
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 var products = await _productRepo.GetByNameAsync(name);
-                return Ok(products);
-            }catch(Exception)
+                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+            }
+            catch (Exception)
             {
                 throw;
             }
         }
+
         [HttpGet("code/{code}")]
         public async Task<IActionResult> GetByCode([FromRoute] string code)
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
-                var products = await _productRepo.GetProductByCode(code); // Adjusted to return a list
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var products = await _productRepo.GetProductByCode(code);
                 if (products == null || !products.Any())
                 {
                     return NotFound();
                 }
-                var productDTOs = products.Select(product => product.ToProductDTO()).ToList(); // Convert each product to DTO
+                var productDTOs = products.Select(product => product.ToProductDTO()).ToList();
                 return Ok(productDTOs);
             }
             catch (Exception)
@@ -296,41 +262,8 @@ namespace DIAN_.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        [HttpGet("newest-lite")]
-        public async Task<IActionResult> GetLast8ProductsLite()
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var products = await _productRepo.GetLast8ProductsAsync();
-                if (products == null || !products.Any())
-                {
-                    return NotFound();
-                }
-
-                var productDTOs = products.Select(p => new 
-                {
-                    ProductId = p.ProductId,
-                    Name = p.Name
-                }).ToList();
-
-                return Ok(productDTOs);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
     }
 }

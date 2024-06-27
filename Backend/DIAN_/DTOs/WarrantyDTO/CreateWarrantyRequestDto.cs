@@ -16,6 +16,6 @@ namespace DIAN_.DTOs.WarrantyDTO
         public DateTime EndDate { get; set; }
 
         [Required(ErrorMessage = "Status is required.")]
-        public bool Status { get; set; }
+        public string? Status { get; set; }
     }
 }

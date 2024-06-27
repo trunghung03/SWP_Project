@@ -24,7 +24,7 @@ export const searchArticlesByTitle = async (title) => {
 
 export const getArticleById = async (id) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/articles//${id}`);
+        const response = await axios.get(`${API_BASE_URL}/articles/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching article by ID:', error);

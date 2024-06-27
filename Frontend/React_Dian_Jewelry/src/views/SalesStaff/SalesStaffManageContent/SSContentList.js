@@ -27,9 +27,11 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
       }
     });
   };
+
   const handleUpdateClick = () => {
     onUpdate(articleID);
   };
+
   return (
     <div className="ss_manage_content_content_card" style={{ cursor: 'pointer' }}>
       <img src={image} alt={title} />
@@ -42,7 +44,7 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
         <p className="ss_manage_content_content_date">{new Date(date).toLocaleDateString()}</p>
       </div>
       <div className="ss_manage_content_content_actions">
-      <i className="fas fa-pen" onClick={handleUpdateClick} style={{ color: '#69706e' }}></i>
+        <i className="fas fa-pen" onClick={handleUpdateClick} style={{ color: '#69706e' }}></i>
         <i className="fas fa-trash" onClick={handleDeleteClick} style={{ color: '#69706e' }}></i>
       </div>
     </div>
@@ -51,14 +53,16 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
 
 function SSContentList() {
   const [contents, setContents] = useState([]);
+  const [fullContents, setFullContents] = useState([]); // To store the full list of contents
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
+
   const fetchData = async () => {
     try {
       const response = await getContentList();
       setContents(response.data);
+      setFullContents(response.data); // Save the full list
     } catch (error) {
       console.error("Error fetching content:", error);
     }
@@ -78,21 +82,23 @@ function SSContentList() {
             setIsSearch(true);
           } else {
             swal("Blog not found!", "Please try another title.", "error");
-            fetchData();
+            setContents(fullContents); // Reset to full list if search yields no results
           }
         } catch (error) {
           console.error("Error fetching content:", error);
           swal("Blog not found!", "Please try another title.", "error");
+          setContents(fullContents); // Reset to full list on error
         }
       } else {
-        fetchData();
+        setContents(fullContents); // Reset to full list if search query is empty
       }
     }
   };
+
   const handleBackClick = () => {
     setSearchQuery("");
     setIsSearch(false);
-    getContentList();
+    setContents(fullContents); // Reset to full list
   };
 
   const handleDelete = async (id) => {
@@ -105,10 +111,10 @@ function SSContentList() {
       swal("Something is wrong!", "Failed to delete the blog. Please try again.", "error");
     }
   };
+
   const handleUpdate = (id) => {
     navigate(`/sales-staff-update-content/${id}`);
   };
-  
 
   return (
     <div className="ss_manage_content_all_container">
@@ -130,20 +136,20 @@ function SSContentList() {
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        {isSearch && (
-              <button className="SS_back_button" onClick={handleBackClick}>
-                Back to Content List
-              </button>
-            )}
         <div className="ss_manage_content_create_button_section">
           <button className="ss_manage_content_create_button" onClick={() => navigate('/sales-staff-add-content')}>Create new blog</button>
         </div>
         <div className="ss_manage_content_content_list">
-        {contents.map((content) => (
-            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} onUpdate={handleUpdate}/>
+          {contents.map((content) => (
+            <SSContentCard key={content.articleID} {...content} onDelete={handleDelete} onUpdate={handleUpdate} />
           ))}
           
         </div>
+        {isSearch && (
+          <button className="SS_back_button" onClick={handleBackClick}>
+            Back to Content List
+          </button>
+        )}
       </div>
     </div>
   );

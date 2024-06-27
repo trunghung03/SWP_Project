@@ -79,14 +79,18 @@ namespace DIAN_.Repository
                 .Where(a => a.Status)
                 .FirstOrDefaultAsync(a => a.ContentId == id);
             if (existingArticle == null) return null;
+
+            // Only update the fields that are allowed to change
             existingArticle.Title = articleModel.Title;
             existingArticle.Content = articleModel.Content;
-            existingArticle.Image = articleModel.Image;
+            existingArticle.Image = string.IsNullOrEmpty(articleModel.Image) ? existingArticle.Image : articleModel.Image;
             existingArticle.Tag = articleModel.Tag;
+
             await _context.SaveChangesAsync();
 
             return existingArticle;
         }
+
 
     }
 }

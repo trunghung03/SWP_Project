@@ -158,7 +158,7 @@ const handleBackClick = () => {
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 className="manager_title_employees" style={{ textAlign: "center" }}>
+        <h3 style={{ textAlign: "center" , fontWeight:"unset"}}>
           Order List
         </h3>
         <div className="ss_header_pagination_list">
@@ -239,7 +239,7 @@ const handleBackClick = () => {
                       <TableCell align="center">{item.orderStatus}</TableCell>
                       <TableCell align="center">
                         <InfoIcon
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer", color: "#ff6a6a"}}
                           onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>

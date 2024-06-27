@@ -10,7 +10,7 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 import { Select, MenuItem, InputLabel, FormControl, Button, TextField, CircularProgress } from '@mui/material';
-import { getDiamondPrice } from '../../services/PricingService';
+import { getDiamondPrice, getShellMaterials, getShellMaterialById } from '../../services/PricingService';
 
 function DiamondPrice() {
   const [transitionKey, setTransitionKey] = useState(Date.now());
@@ -22,12 +22,27 @@ function DiamondPrice() {
   const [showPrice, setShowPrice] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [shellMaterials, setShellMaterials] = useState([]);
+  const [selectedShell, setSelectedShell] = useState('');
+  const [shellPrice, setShellPrice] = useState('');
+  const [shellLoading, setShellLoading] = useState(false);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       document.querySelector('.diamond_price_main_image').classList.add('visible');
     }, 10);
     return () => clearTimeout(timeout);
   }, [transitionKey]);
+
+  useEffect(() => {
+    getShellMaterials()
+      .then(response => {
+        setShellMaterials(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching shell materials:', error);
+      });
+  }, []);
 
   const navItems = [
     { name: 'Home', link: '/home' },
@@ -58,6 +73,26 @@ function DiamondPrice() {
         setPrice('Diamond not found');
         setShowPrice(true);
         setLoading(false);
+      });
+  };
+
+  const checkShellPrice = () => {
+    if (!selectedShell) {
+      setShellPrice('Please select a shell material');
+      return;
+    }
+
+    setShellLoading(true);
+    getShellMaterialById(selectedShell)
+      .then(response => {
+        const data = response.data;
+        setShellPrice(`Price: ${data.price}$`);
+        setShellLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching shell price:', error);
+        setShellPrice('Shell material not found');
+        setShellLoading(false);
       });
   };
 
@@ -159,6 +194,40 @@ function DiamondPrice() {
         )}
       </div>
 
+      {/* Shell Price Checker */}
+      <div className="diamond_price_title_container">
+        <h2 className="diamond_price_title">Shell Material Price Checker</h2>
+        <div className="diamond_price_form">
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="shell-label">Shell Material</InputLabel>
+            <Select
+              labelId="shell-label"
+              value={selectedShell}
+              onChange={(e) => setSelectedShell(e.target.value)}
+            >
+              {shellMaterials.map(shell => (
+                <MenuItem key={shell.shellMaterialId} value={shell.shellMaterialId}>
+                  {shell.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            onClick={checkShellPrice}
+            className="calculate_btn"
+            disabled={shellLoading}
+          >
+            {shellLoading ? <CircularProgress size={24} /> : 'Check'}
+          </Button>
+        </div>
+        {shellPrice && (
+          <div className="diamond_price_result">
+            <p>{shellPrice}</p>
+          </div>
+        )}
+      </div>
+      <br></br> <br></br> <br></br>
       {/* Middle content */}
       <div className="diamond_price_middle_content">
         <div className="diamond_price_image_wrapper">

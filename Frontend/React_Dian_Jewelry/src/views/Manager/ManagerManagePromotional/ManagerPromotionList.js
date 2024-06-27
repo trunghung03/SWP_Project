@@ -7,8 +7,8 @@ import "../../../styles/Manager/ManagerList.scss";
 import {
   ShowAllPromotion,
   getPromotionDetail,
-  updatePromotionById,
   getPromotionByName,
+  updatePromotionById
 } from "../../../services/ManagerService/ManagerPromotionService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -19,6 +19,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 
 
 const getPromotionStatus = async (endDate, id) => {
@@ -178,65 +180,68 @@ const ManagerPromotionList = () => {
     
   };
 
-  // Update by id
-  // const handleEdit = (Promotion) => {
-  //   setEditMode(true);
-  //   setEditedPromotion(Promotion);
-  //   setOriginalPromotion(Promotion);
-  // };
+ 
+  const handleEdit = (Promotion) => {
+    setEditMode(true);
+    setEditedPromotion(Promotion);
+    setOriginalPromotion(Promotion);
+  };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setEditedPromotion({ ...editedPromotion, [name]: value });
-  // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedPromotion({ ...editedPromotion, [name]: value });
+  };
 
-  // const handleUpdate = async () => {
-  //   const status = true;
-  //   const price = 0;
-  //   const requiredFields = ["name", "amountAvailable"];
-  //   for (let field of requiredFields) {
-  //     if (!editedPromotion[field]) {
-  //       swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-  //       return;
-  //     }
-  //   }
+  const handleUpdate = async () => {
+    const requiredFields = ["name","code","amount","description","validFrom","validTo"];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
+    for (let field of requiredFields) {
+      if (!editedPromotion[field]) {
+        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedPromotion[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
+    }
 
-  //   const isEqual =
-  //     JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
-  //   if (isEqual) {
-  //     swal("No changes detected!", "You have not made any changes.", "error");
-  //     return;
-  //   }
+    const isEqual =
+      JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
+    if (isEqual) {
+      swal("No changes detected!", "You have not made any changes.", "error");
+      return;
+    }
 
-  //   const PromotionToUpdate = { ...editedPromotion, status: true };
+    const PromotionToUpdate = { ...editedPromotion, status: true };
 
-  //   try {
-  //     console.log("Sending update request with data:", PromotionToUpdate);
-  //     const response = await updatePromotionById(
-  //       PromotionToUpdate.PromotionMaterialId,
-  //       PromotionToUpdate
-  //     );
-  //     console.log("Update response:", response.data);
-  //     const updatensetPromotionList = await ShowAllPromotion();
-  //     setPromotionList(updatensetPromotionList);
-  //     setEditMode(false);
-  //     swal(
-  //       "Updated successfully!",
-  //       "The Promotion information has been updated.",
-  //       "success"
-  //     );
-  //   } catch (error) {
-  //     console.error(
-  //       "Error updating Promotion:",
-  //       error.response ? error.response.data : error.message
-  //     );
-  //     swal(
-  //       "Something went wrong!",
-  //       "Failed to update. Please try again.",
-  //       "error"
-  //     );
-  //   }
-  // };
+    try {
+      console.log("Sending update request with data:", PromotionToUpdate);
+      const response = await updatePromotionById(
+        PromotionToUpdate.id,
+        PromotionToUpdate
+      );
+      console.log("Update response:", response.data);
+      const updatensetPromotionList = await ShowAllPromotion();
+      setPromotionList(updatensetPromotionList);
+      setEditMode(false);
+      swal(
+        "Updated successfully!",
+        "The Promotion information has been updated.",
+        "success"
+      );
+    } catch (error) {
+      console.error(
+        "Error updating Promotion:",
+        error.response ? error.response.data : error.message
+      );
+      swal(
+        "Something went wrong!",
+        "Failed to update. Please try again.",
+        "error"
+      );
+    }
+  };
 
   const backList = async () =>{
     try {
@@ -317,11 +322,12 @@ const ManagerPromotionList = () => {
                   <StyledTableCell>ID</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Code</StyledTableCell>
-                  <StyledTableCell align="center">Discount Percentage</StyledTableCell>
+                  <StyledTableCell align="center">Discount Percentage (%)</StyledTableCell>
                   <StyledTableCell align="center">Description</StyledTableCell>
                   <StyledTableCell align="center">Start Date</StyledTableCell>
                   <StyledTableCell align="center">End Date</StyledTableCell>
                   <StyledTableCell align="center">Status</StyledTableCell>
+                  <StyledTableCell align="center">Update</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -338,6 +344,11 @@ const ManagerPromotionList = () => {
                       <TableCell align="center">
                         <PromotionButton endDate={item.endDate} id={item.id} />
                       </TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={() => handleEdit(item)}>
+                          <EditIcon />
+                        </IconButton>
+                        </TableCell>
                     </TableRow>
                   ))
                 ) : (
@@ -353,7 +364,7 @@ const ManagerPromotionList = () => {
         </div>
       </div>
 
-      {/* Update modal
+       
       {editMode && (
         <div
           className="manager_manage_diamond_modal_overlay"
@@ -366,23 +377,76 @@ const ManagerPromotionList = () => {
             <div className="manager_manage_diamond_modal_content">
               <h4>Edit Promotion Information</h4>
               <div className="manager_manage_diamond_form_group">
-                <label>Promotion</label>
+                <label>Promotion Name</label>
                 <input
                   type="text"
                   name="name"
+                  maxLength={50}
                   value={editedPromotion.name}
                   onChange={handleChange}
+                  placeholder="Enter promotion's name"
+                  required
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Amount Available</label>
+                <label>Code</label>
                 <input
                   type="text"
-                  name="amountAvailable"
-                  value={editedPromotion.amountAvailable}
+                  name="code"
+                  maxLength={50}
+                  value={editedPromotion.code}
                   onChange={handleChange}
+                  placeholder="Enter promotion's code"
+                  required
                 />
               </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Description</label>
+                <input
+                  type="text"
+                  name="description"
+                  value={editedPromotion.description}
+                  onChange={handleChange}
+                  placeholder="Enter promotion's description"
+                  maxLength={255}
+                  required
+                />
+              </div>
+
+              <div className="manager_manage_diamond_form_group">
+                <label>Percentage</label>
+                <input
+                  type="number"
+                  name="amount"
+                  value={editedPromotion.amount}
+                  onChange={handleChange}
+                  placeholder="Enter promotion's percentage"
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>From</label>
+                <input
+                  type="date"
+                  name="validFrom"
+                  placeholder="Enter promotion's valid from"
+                  value={editedPromotion.validFrom}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>To</label>
+                <input
+                  type="date"
+                  name="validTo"
+                  placeholder="Enter promotion's valid to"
+                  value={editedPromotion.validTo}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+        
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
@@ -390,7 +454,7 @@ const ManagerPromotionList = () => {
             </div>
           </div>
         </div>
-      )} */}
+      )} 
     </div>
   );
 };

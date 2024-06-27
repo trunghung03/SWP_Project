@@ -391,6 +391,7 @@ transform: scale(0.97);
     overflow: hidden;
     padding: 0;
     border-radius: 0;
+    cursor: pointer;
 }
 
 .trending_product_card img {
@@ -548,6 +549,10 @@ transform: scale(0.97);
     margin-top: 165px;
     transition: transform 0.3s ease-in-out;
     cursor: pointer;
+}
+
+.category_view_collection:hover, .category_view_collection_small:hover{
+    color: #797979;
 }
 
 .category_image_wrapper_large:hover .category_large_letter {
@@ -822,6 +827,7 @@ transform: scale(0.97);
     transition: transform 0.3s ease-in-out;
     text-align: center;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .home_feature_product_image {

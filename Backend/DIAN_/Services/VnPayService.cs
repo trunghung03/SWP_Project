@@ -170,7 +170,7 @@ namespace DIAN_.Services
 
                                 _logger.LogInformation("check order status");
                                 _logger.LogInformation($"{purchaseorder.OrderStatus}");
-                                if (purchaseorder.OrderStatus == "Pending")
+                                if (purchaseorder.OrderStatus == "Unpaid")
                                 {
                                     _logger.LogInformation("start update status");
                                     UpdateOrderStatus order = new UpdateOrderStatus();

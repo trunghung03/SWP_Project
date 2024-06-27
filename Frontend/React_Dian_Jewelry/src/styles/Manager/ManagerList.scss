@@ -9,14 +9,6 @@
     padding: 10px 8% 0 8%;
     overflow-x: hidden;
 }
-.manager_title_employees{
-    margin: 10px 13px;
-}
-.manager_title_employees:hover {
-    text-decoration: underline;
-    color: #635343; /* Change color on hover */
-    cursor: pointer; /* Change cursor to pointer on hover */
-  }
 .manager_manage_diamond_sidebar {
     z-index: 2;
 }
@@ -38,7 +30,7 @@
 
 .manager_button_pagination:hover {
     text-decoration: underline;
-    background-color: #FFE4E1; 
+    background-color: #ff6a6a; 
     color: white;
     cursor: pointer;
 }
@@ -100,11 +92,11 @@
     display: flex;
     justify-content: space-between;
     padding-right: 15px;
-    margin-top: 30px;
+    // margin-top: 30px;
 }
 
 .manager_manage_diamond_create_button {
-    background-color: #f9c6bb;
+    background-color: #e47b7b;
     color: white;
     padding: 5px 20px;
     border: none;
@@ -115,7 +107,7 @@
 }
 
 .manager_manage_diamond_create_button:hover {
-    background-color: #797979;
+    background-color: #e49393;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

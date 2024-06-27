@@ -5,12 +5,11 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Invoice.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getOrderDetailsByOrderId } from '../../services/CheckoutService.js';
-import { getProductDetail } from '../../services/ProductService.js';
 import qr from '../../assets/img/qr.jpg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
+import { useCart } from '../../services/CartService';
 
 function Invoice() {
     const navItems = [
@@ -21,48 +20,38 @@ function Invoice() {
     ];
     const navigate = useNavigate();
     const location = useLocation();
-    const [orderDetails, setOrderDetails] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-
-    const orderId =  parseInt(localStorage.getItem('orderId'));
-    const paymentMethod = location.state?.paymentMethod || localStorage.getItem('paymentMethod') || 'Not selected';
-    const discount = location.state?.appliedDiscount || localStorage.getItem('orderDiscount');
-    const orderDate = new Date(localStorage.getItem('orderDate')).toLocaleDateString('en-GB');
-    const totalPrice = location.state?.totalPrice || localStorage.getItem('orderTotalPrice');
-
-    console.log('Order ID:', orderId);
+    const [invoiceData, setInvoiceData] = useState(null);
+    const { setCartItems: updateCartContext } = useCart();
 
     useEffect(() => {
-        const fetchOrderDetails = async () => {
-            try {
-                console.log('Fetching order details for order ID:', orderId);
-                const orderDetailsData = await getOrderDetailsByOrderId(orderId);
-                const productDetailsPromises = orderDetailsData.map((detail) =>
-                    getProductDetail(detail.productId).then((product) => ({
-                        ...detail,
-                        productName: product.data.name,
-                        productPrice: product.data.price,
-                    }))
-                );
-                const detailedOrderDetails = await Promise.all(productDetailsPromises);
-                console.log('detailedOrderDetails:', detailedOrderDetails);
-                setOrderDetails(detailedOrderDetails);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching purchase order:', error);
-                setLoading(false);
-            }
-        };
+        const orderId = parseInt(localStorage.getItem('orderId'));
+        const invoiceKey = `invoice${orderId}`;
+        const storedInvoiceData = JSON.parse(localStorage.getItem(invoiceKey));
 
-        if (orderId) {
-            fetchOrderDetails();
+        if (storedInvoiceData) {
+            setInvoiceData(storedInvoiceData);
+            localStorage.removeItem(invoiceKey);
+            localStorage.removeItem('orderId');
         }
-    }, [orderId]);
+
+        const customerId = localStorage.getItem('customerId');
+        const cartKey = `cartItems${customerId}`;
+        localStorage.removeItem(cartKey);
+        updateCartContext([]);
+
+    }, [location.state, updateCartContext]);
 
     useEffect(() => {
         window.scrollTo(0, 160);
     }, []);
+
+    if (!invoiceData) {
+        return <div>Loading...</div>;
+    }
+
+    const { orderId, orderDate, orderTotalPrice, orderDiscount, paymentMethod, cartItems } = invoiceData;
+
+    const formattedDate = new Date(orderDate).toLocaleDateString('en-GB');
 
     return (
         <div className="Invoice">
@@ -71,68 +60,64 @@ function Invoice() {
             <div className="invoice_container">
                 <div className="invoice_order_summary">
                     <h4 className="invoice_title">THANK YOU FOR YOUR ORDER</h4>
-                    {loading ? (
-                        <p>Loading...</p>
-                    ) : (
-                        <div className="invoice_content">
-                            <div className="invoice_left_section">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Detail</th>
-                                            <th>Sub Total</th>
+                    <div className="invoice_content">
+                        <div className="invoice_left_section">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Detail</th>
+                                        <th>Sub Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {cartItems.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{item.name}</td>
+                                            <td>{Math.floor(item.price)}$</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {orderDetails.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{item.productName}</td>
-                                                <td>{Math.floor(item.productPrice)}$</td>
-                                            </tr>
-                                        ))}
-                                        <tr>
-                                            <td>Discount</td>
-                                            <td>{Math.floor(discount)}$</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    ))}
+                                    <tr>
+                                        <td>Discount</td>
+                                        <td>{Math.floor(orderDiscount)}$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="invoice_right_section">
+                            <div className="invoice_top_right_section">
+                                <h5>Your order has been received</h5>
+                                <ul>
+                                    <li><span>•</span> Order number: <strong>{orderId}</strong></li>
+                                    <li><span>•</span> Date order: <strong>{formattedDate}</strong></li>
+                                    <li><span>•</span> Total price: <strong>{Math.floor(orderTotalPrice)}$</strong></li>
+                                    <li><span>•</span> Payment method: <strong>{paymentMethod}</strong></li>
+                                </ul>
                             </div>
-                            <div className="invoice_right_section">
-                                <div className="invoice_top_right_section">
-                                    <h5>Your order has been received</h5>
+                            <div className="invoice_bottom_right_section">
+                                {paymentMethod === "Bank Transfer" ? (
                                     <ul>
-                                        <li><span>•</span> Order number: <strong>{orderId}</strong></li>
-                                        <li><span>•</span> Date order: <strong>{orderDate}</strong></li>
-                                        <li><span>•</span> Total price: <strong>{Math.floor(totalPrice)}$</strong></li>
-                                        <li><span>•</span> Payment method: <strong>{paymentMethod}</strong></li>
+                                        <li>Bank account: <strong>050124800983 Sacombank</strong></li>
+                                        <li>Transfer content (important): <strong>DIAN{orderId}</strong></li>
+                                        <li>Order will be cancel after 2 days if do not transfer</li>
+                                        <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
+                                        <img src={qr} className="qr" alt="QR Code" />
                                     </ul>
-                                </div>
-                                <div className="invoice_bottom_right_section">
-                                    {paymentMethod === "Bank Transfer" ? (
-                                        <ul>
-                                            <li>Bank account: <strong>050124800983 Sacombank</strong></li>
-                                            <li>Transfer content (important): <strong>DIAN{orderId}</strong></li>
-                                            <li>Order will be cancel after 2 days if do not transfer</li>
-                                            <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
-                                            <img src={qr} className="qr" alt="QR Code" />
-                                        </ul>
-                                    ) : paymentMethod === "Cash" ? (
-                                        <ul>
-                                            <li>Order will be prepare about four days</li>
-                                            <li>Keep track your order at tracking orders section</li>
-                                            <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
-                                        </ul>
-                                    ) : paymentMethod === "VNPAY" ? (
-                                        <ul>
-                                            <li>Order will be prepare about four days</li>
-                                            <li>Keep track your order at tracking orders section</li>
-                                            <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
-                                        </ul>
-                                    ) : null}
-                                </div>
+                                ) : paymentMethod === "Cash" ? (
+                                    <ul>
+                                        <li>Order will be prepare about four days</li>
+                                        <li>Keep track your order at tracking orders section</li>
+                                        <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
+                                    </ul>
+                                ) : paymentMethod === "VNPAY" ? (
+                                    <ul>
+                                        <li>Order will be prepare about four days</li>
+                                        <li>Keep track your order at tracking orders section</li>
+                                        <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
+                                    </ul>
+                                ) : null}
                             </div>
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
 

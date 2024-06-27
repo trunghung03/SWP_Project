@@ -83,16 +83,11 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var existingShell = await _shellRepo.GetByIdAsync(id);
-                if (existingShell == null)
-                {
-                    return NotFound();
-                }
-
                 var shellToUpdate = shellDTO.ToShellMaterial(new Shellmaterial { ShellMaterialId = id });
-                var updatedShell = await _shellRepo.UpdateAsync(shellToUpdate.ToShellMaterialDTO());
+                var updatedShell = await _shellRepo.UpdateAsync(shellToUpdate, id);
                 return Ok(updatedShell);
-            }catch (Exception) { throw; }
+            }
+            catch (Exception) { throw; }
         }
 
         [HttpDelete("{id:int}")]

@@ -11,6 +11,7 @@ namespace DIAN_.Interfaces
         Task<Collection?> UpdateAsync(int id, Collection collection);
         Task<Collection?> DeleteAsync(int id);
         Task<bool> UpdateCollectionStatus(int id);
-        Task<Collection> GetLatestCollectionAsync();
+
+        Task<Collection?> GetNewestCollectionAsync();
     }
 }

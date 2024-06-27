@@ -17,7 +17,6 @@ namespace DIAN_.Repository
         {
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
             if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
-            if (!await _context.Diamonds.AnyAsync(s => s.DiamondId == orderdetail.SubDiamondId)) { return null; }
             await _context.AddAsync(orderdetail);
             await _context.SaveChangesAsync();
             return orderdetail;
@@ -59,7 +58,6 @@ namespace DIAN_.Repository
             if (updateDetail == null) { return null; }
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
             if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
-            if (!await _context.Diamonds.AnyAsync(s => s.DiamondId == orderdetail.SubDiamondId)) { return null; }
 
             // Assuming updateDetail and orderdetail are instances of the same class
             updateDetail.OrderId = orderdetail.OrderId;
@@ -68,7 +66,6 @@ namespace DIAN_.Repository
 
             // Copying nullable properties
             updateDetail.ShellMaterialId = orderdetail.ShellMaterialId ?? null;
-            updateDetail.SubDiamondId = orderdetail.SubDiamondId ?? null;
             updateDetail.Size = orderdetail.Size ?? null;
 
             // Copying non-nullable property

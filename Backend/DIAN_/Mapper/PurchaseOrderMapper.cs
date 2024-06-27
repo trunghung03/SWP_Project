@@ -75,7 +75,6 @@ namespace DIAN_.Mapper
                 LineTotal = dto.LineTotal,
                 ProductId = dto.ProductId,
                 ShellMaterialId = dto.ShellMaterialId,
-                SubDiamondId = dto.SubDiamondId,
                 Size = dto.Size
             };
         }

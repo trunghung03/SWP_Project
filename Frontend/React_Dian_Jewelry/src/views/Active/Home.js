@@ -12,7 +12,6 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 import '../../styles/Active/Home.scss';
-// import { getCollectionList } from '../../services/ProductService';
 import brilliant1 from '../../assets/img/brilliant1.png';
 import brilliant2 from '../../assets/img/brilliant2.png';
 import brilliant3 from '../../assets/img/brilliant3.png';
@@ -40,6 +39,7 @@ import slide1Small from '../../assets/img/slide1Small.jpg';
 import sliderBackground from '../../assets/img/homeBackground.png';
 import bb from '../../assets/img/bb.png';
 import trending from '../../assets/img/trending.png';
+import { getNewestProducts, getTopSellingProducts, getNewestCollections } from '../../services/ProductService.js';
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -77,9 +77,12 @@ const Home = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [animate, setAnimate] = useState(false);
-  // const [collections, setCollections] = useState([]);
   const [activeTab, setActiveTab] = useState('newArrivals');
   const [displayProducts, setDisplayProducts] = useState([]);
+  const [newProducts, setNewProducts] = useState([]);
+  const [topSellingProducts, setTopSellingProducts] = useState([]);
+  const [trendingProducts, setTrendingProducts] = useState([]);
+  const [newestCollection, setNewestCollection] = useState(null);
 
   const settings = {
     dots: true,
@@ -120,165 +123,35 @@ const Home = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const wrapper = document.querySelector(".wrapper");
-  //   const carousel = document.querySelector(".carousel");
-  //   const arrowBtns = document.querySelectorAll(".nav_arrow");
-  //   let isDragging = false, isAutoPlay = true, startX, startScrollLeft, timeoutId;
-
-  //   arrowBtns.forEach(btn => {
-  //     btn.addEventListener("click", () => {
-  //       const direction = btn.id === "left" ? -1 : 1;
-  //       const firstCardWidth = carousel.querySelector(".card").offsetWidth;
-  //       const scrollAmount = firstCardWidth;
-  //       carousel.scrollBy({
-  //         left: direction * scrollAmount,
-  //         behavior: 'smooth'
-  //       });
-  //     });
-  //   });
-
-  //   const dragStart = (e) => {
-  //     isDragging = true;
-  //     carousel.classList.add("dragging");
-  //     startX = e.pageX;
-  //     startScrollLeft = carousel.scrollLeft;
-  //   };
-
-  //   const dragging = (e) => {
-  //     if (!isDragging) return;
-  //     carousel.scrollLeft = startScrollLeft - (e.pageX - startX);
-  //   };
-
-  //   const dragStop = () => {
-  //     isDragging = false;
-  //     carousel.classList.remove("dragging");
-  //   };
-
-  //   carousel.addEventListener("mousedown", dragStart);
-  //   carousel.addEventListener("mousemove", dragging);
-  //   document.addEventListener("mouseup", dragStop);
-
-  //   return () => {
-  //     carousel.removeEventListener("mousedown", dragStart);
-  //     carousel.removeEventListener("mousemove", dragging);
-  //     document.removeEventListener("mouseup", dragStop);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   getCollectionList().then(response => {
-  //     setCollections(response.data);
-  //   }).catch(error => {
-  //     console.error('Error fetching collections:', error);
-  //   });
-  // }, []);
-
-  const newProducts = [
-    {
-      id: 1,
-      image: earringC,
-      name: 'Diamond earrings',
-      price: '$189.00',
-    },
-    {
-      id: 2,
-      image: ringC,
-      name: 'Geometric gold ring',
-      price: '$159.00',
-    },
-    {
-      id: 3,
-      image: braceletC,
-      name: 'Gemstone earrings',
-      price: '$189.00',
-    },
-    {
-      id: 4,
-      image: necklaceC,
-      name: 'Gold diamond ring',
-      price: '$289.00',
-    },
-    {
-      id: 5,
-      image: earringC,
-      name: 'Diamond earrings',
-      price: '$189.00',
-    },
-    {
-      id: 6,
-      image: ringC,
-      name: 'Geometric gold ring',
-      price: '$159.00',
-    },
-    {
-      id: 7,
-      image: braceletC,
-      name: 'Gemstone earrings',
-      price: '$189.00',
-    },
-    {
-      id: 8,
-      image: necklaceC,
-      name: 'Gold diamond ring',
-      price: '$289.00',
-    },
-  ];
-
-  const sellProducts = [
-    {
-      id: 9,
-      image: earringC,
-      name: 'Silver earrings',
-      price: '$199.00',
-    },
-    {
-      id: 10,
-      image: ringC,
-      name: 'Modern gold ring',
-      price: '$169.00',
-    },
-    {
-      id: 11,
-      image: braceletC,
-      name: 'Classic earrings',
-      price: '$179.00',
-    },
-    {
-      id: 12,
-      image: necklaceC,
-      name: 'Platinum ring',
-      price: '$299.00',
-    },
-    {
-      id: 13,
-      image: earringC,
-      name: 'Ruby earrings',
-      price: '$189.00',
-    },
-    {
-      id: 14,
-      image: ringC,
-      name: 'Elegant gold ring',
-      price: '$159.00',
-    },
-    {
-      id: 15,
-      image: braceletC,
-      name: 'Diamond bracelet',
-      price: '$189.00',
-    },
-    {
-      id: 16,
-      image: necklaceC,
-      name: 'Sapphire necklace',
-      price: '$289.00',
-    },
-  ];
-
-
   useEffect(() => {
-    setDisplayProducts(newProducts);
+    getNewestProducts().then(response => {
+      const productsWithOriginalPrice = response.data.map(product => ({
+        ...product,
+        originalPrice: product.price + 100
+      }));
+      setNewProducts(productsWithOriginalPrice);
+      setDisplayProducts(productsWithOriginalPrice);
+    }).catch(error => {
+      console.error('Error fetching newest products:', error);
+    });
+
+    getTopSellingProducts().then(response => {
+      const productsWithOriginalPrice = response.data.map(product => ({
+        ...product,
+        originalPrice: product.price + 100
+      }));
+      setTopSellingProducts(productsWithOriginalPrice);
+      setTrendingProducts(productsWithOriginalPrice.slice(-2));
+    }).catch(error => {
+      console.error('Error fetching top selling products:', error);
+    });
+
+    getNewestCollections().then(response => {
+      const newestCollection = response.data;
+      setNewestCollection(newestCollection);
+    }).catch(error => {
+      console.error('Error fetching newest collections:', error);
+    });
   }, []);
 
   const handleTabClick = (tab) => {
@@ -286,12 +159,16 @@ const Home = () => {
     if (tab === 'newArrivals') {
       setDisplayProducts(newProducts);
     } else {
-      setDisplayProducts(sellProducts);
+      setDisplayProducts(topSellingProducts);
     }
   };
 
   const getNavLinkClass = (tab) => {
     return tab === activeTab ? 'home_feature_navlink active-tab' : 'home_feature_navlink';
+  };
+
+  const handleProductClick = (id) => {
+    navigate('/product-detail', { state: { id } });
   };
 
   return (
@@ -325,10 +202,12 @@ const Home = () => {
             <div className="slide-content">
               <img className="slide-img left-img" src={slide2} alt="Slide 2" />
               <div className="slide-right-section">
-                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E  L  R  Y</p>
+                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E   L  R  Y</p>
                 <div className="slide-small-image">
                   <img src={slide2Small} alt="Small Slide 2" />
-                  <button onClick={() => handleNavigate('/collection', { collectionId: 1 })} className="slide-button">SHOP THIS COLLECTION</button>
+                  {newestCollection && (
+                    <button onClick={() => handleNavigate('/collection', { collectionId: newestCollection.collectionId })} className="slide-button">SHOP THIS COLLECTION</button>
+                  )}
                 </div>
               </div>
             </div>
@@ -341,7 +220,7 @@ const Home = () => {
             <div className="slide-content">
               <img className="slide-img left-img" src={slide3} alt="Slide 3" />
               <div className="slide-right-section">
-                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E  L  R  Y</p>
+                <p className="slide-text right-text">C  L  A  S  S  I   C     J  E  W  E  L  R  Y</p>
                 <div className="slide-small-image">
                   <img src={slide3Small} alt="Small Slide 3" />
                   <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'engagementRing' })} className="slide-button">SHOP THIS CATEGORY</button>
@@ -414,7 +293,7 @@ const Home = () => {
             </a>
           </div>
           <div className="diamond_shape_column">
-            <a honClick={() => handleNavigate('/shape', { shape: 'Pear' })}>
+            <a onClick={() => handleNavigate('/shape', { shape: 'Pear' })}>
               <img src={pear} alt="Pear" className="diamond_shape_image" />
               <p className="diamond_shape_name">Pear</p>
             </a>
@@ -522,7 +401,6 @@ const Home = () => {
 
       <CollectionSlide />
 
-
       {/* Best & Beloved */}
       <div className="bb_container">
         <img src={bb} alt="Best & Beloved" className="bb_image" />
@@ -546,18 +424,14 @@ const Home = () => {
           <div className="col-lg-7 col-md-6 trending_right">
             <h2 className="trending_title">Trending Jewelry</h2>
             <div className="trending_product_card_section row">
-              <div className="trending_product_card card">
-                <img src={brilliant1} alt="Product 1" className="product_image" />
-                <p className="trending_product_name">Susererr earring</p>
-                <p className="trending_product_price"><del>$400.00 </del>    $359.00</p>
-                <button className="view_detail_button">View detail</button>
-              </div>
-              <div className="trending_product_card card">
-                <img src={brilliant1} alt="Product 2" className="product_image" />
-                <p className="trending_product_name">Geometric gold ring</p>
-                <p className="trending_product_price"><del>$250.00 </del>    $219.00</p>
-                <button className="view_detail_button">View detail</button>
-              </div>
+              {trendingProducts.map((product, index) => (
+                <div key={index} className="trending_product_card card" onClick={() => handleProductClick(product.productId)}>
+                  <img src={product.imageLinkList} alt={product.name} className="product_image" />
+                  <p className="trending_product_name">{product.name}</p>
+                  <p className="trending_product_price"><del>{product.originalPrice}$</del>    {product.price}$</p>
+                  {/* <button className="view_detail_button">View detail</button> */}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -583,15 +457,15 @@ const Home = () => {
 
           <div className="row">
             {displayProducts.map((product) => (
-              <div key={product.id} className="col-md-3">
-                <div className="home_feature_product_card">
+              <div key={product.productId} className="col-md-3">
+                <div className="home_feature_product_card" onClick={() => handleProductClick(product.productId)}>
                   <div className="home_feature_product_icon_wrapper" data-tooltip="View detail">
                     <i className="far fa-eye home_feature_product_icon_eye" ></i>
                   </div>
-                  <img src={product.image} alt={product.name} className="home_feature_product_image" />
-                  <p className='home_feature_product_detail'>VS1 | 0.2 | G</p>
+                  <img src={product.imageLinkList} alt={product.name} className="home_feature_product_image" />
+                  <p className='home_feature_product_detail'>{product.clarity} | {product.carat} | {product.color}</p>
                   <p className="home_feature_product_name">{product.name}</p>
-                  <p className="home_feature_product_price">{product.price}</p>
+                  <p className="home_feature_product_price">{product.price}$</p>
                 </div>
               </div>
             ))}
