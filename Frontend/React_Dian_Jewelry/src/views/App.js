@@ -80,7 +80,7 @@ function App() {
             <Route path="/diamond-jewelry" element={<ProtectedRoute path="/diamond-jewelry" element={DiamondJewelry} />} />
             <Route path="/collection" element={<ProtectedRoute path="/collection" element={Collection} />} />
             <Route path="/shape" element={<ProtectedRoute path="/shape" element={Shape} />} />
-            <Route path="/price-list" element={<ProtectedRoute path="/price-list" element={PriceList} />} />
+            <Route path="/diamond-price" element={<ProtectedRoute path="/diamond-price" element={PriceList} />} />
             <Route path="/contact" element={<ProtectedRoute path="/contact" element={Contact} />} />
             <Route path="/introduce" element={<ProtectedRoute path="/introduce" element={Introduce} />} />
 

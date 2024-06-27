@@ -302,7 +302,7 @@ const HeaderComponent = () => {
                                 </div>
                             </li>
                             <li className="nav-item">
-                                <Link className="price_list nav-link" to="/price-list">DIAMOND PRICE</Link>
+                                <Link className="price_list nav-link" to="/diamond-price">DIAMOND PRICE</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="education nav-link" to="/blog">BLOG</Link>
