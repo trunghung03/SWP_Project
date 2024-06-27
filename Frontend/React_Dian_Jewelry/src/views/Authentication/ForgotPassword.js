@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import swal from 'sweetalert';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ForgotPassword.scss';
 import rightImage from '../../assets/img/right.jpeg';
@@ -9,7 +10,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { forgotPasswordApi } from '../../services/UserService';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const [loading, setLoading] = useState(false);
@@ -26,49 +27,25 @@ const ForgotPassword = () => {
                 try {
                     await forgotPasswordApi(email);
                     localStorage.setItem('resetPasswordEmail', email);
-                    swal({
-                        title: "Mail sent successfully!",
-                        text: "Check your email to reset your account password.",
-                        icon: "success",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        },
+                    toast.success("Mail sent! Check your email to reset your account password.", {
+                        position: "top-right"
                     });
                 } catch (error) {
-                    swal({
-                        title: "This email has not sign up an account!",
-                        text: "Please try another one.",
-                        icon: "error",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        },
+                    toast.error("This email has not signed up for an account!", {
+                        position: "top-right"
                     });
                 } finally {
                     setLoading(false);
                 }
             } else {
-                swal({
-                    title: "Wrong email format!",
-                    text: "Please enter a valid email.",
-                    icon: "error",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
+                toast.error("Wrong email format! Please enter a valid email.", {
+                    position: "top-right"
                 });
                 setLoading(false);
             }
         } else {
-            swal({
-                title: "Have not enter an email yet!",
-                text: "Please enter your email before submitting.",
-                icon: "error",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
+            toast.error("Have not entered an email yet! Please enter your email before submitting.", {
+                position: "top-right"
             });
             setLoading(false);
         }
@@ -89,6 +66,7 @@ const ForgotPassword = () => {
 
     return (
         <div className="fp_main_container container-fluid">
+            <ToastContainer /> {/* Add ToastContainer to render the toasts */}
             <div className="fp_wrapper">
                 {/* Left Side: Forgot Password Form */}
                 <div className="fp_left_side col-md-6 d-flex align-items-center justify-content-center">

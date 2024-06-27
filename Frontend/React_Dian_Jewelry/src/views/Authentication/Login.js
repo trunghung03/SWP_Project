@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import swal from "sweetalert";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,7 +9,6 @@ import "../../styles/Authentication/Login.scss";
 import rightImage from "../../assets/img/right.jpeg";
 import rightImage2 from "../../assets/img/right2.jpg";
 import rightImage3 from "../../assets/img/right3.jpg";
-
 
 import {
   customerLoginApi,
@@ -20,7 +20,7 @@ import {
 import { jwtDecode } from "jwt-decode";
 import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const { setUser } = useContext(UserContext);
@@ -74,14 +74,9 @@ const Login = () => {
     setLoading(true);
 
     if (!isValidEmail(email)) {
-      swal({
-        title: "Wrong email format!",
-        text: "Please enter a valid email.",
-        icon: "error",
-        button: {
-          text: "Ok",
-          className: "swal-button",
-        },
+      toast.error("Wrong email format! Please enter a valid email.", {
+        position: "top-right",
+        autoClose: 8000
       });
       setLoading(false);
       return;
@@ -103,14 +98,9 @@ const Login = () => {
           handleLoginResponse(res, employeeInfoRes.data, "employee");
         }
       } catch (error) {
-        swal({
-          title: "Email does not exist!",
-          text: "Please try another email or sign up an account with this email.",
-          icon: "error",
-          button: {
-            text: "Ok",
-            className: "swal-button",
-          },
+        toast.error("Wrong email or password! Please try again.", {
+          position: "top-right",
+          autoClose: 8000
         });
         console.error("Login failed: ", error);
         setLoading(false);
@@ -121,21 +111,9 @@ const Login = () => {
   const handleLoginResponse = (res, userInfo, userType) => {
     if (res && res.data && res.data.token) {
       if (!userInfo.status) {
-        swal({
-          title: "Account is deactivated!",
-          text: "Please contact us if this is a mistake.",
-          icon: "error",
-          buttons: {
-            contact: {
-              text: "Contact",
-              value: "contact",
-              className: "contact-alert-button",
-            },
-          },
-        }).then((value) => {
-          if (value === "contact") {
-            navigate("/contact");
-          }
+        toast.error("Account is deactivated! Please contact us if this is a mistake.", {
+          position: "top-right",
+          autoClose: 8000
         });
         setLoading(false);
         return;
@@ -312,6 +290,7 @@ const Login = () => {
 
   return (
     <div className="main_container">
+      <ToastContainer /> {/* Add ToastContainer to render the toasts */}
       <div className="login_wrapper">
         <div className="left_side">
           <form className="sign_in_form" onSubmit={handleLogin}>
