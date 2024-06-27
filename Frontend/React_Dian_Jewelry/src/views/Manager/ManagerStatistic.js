@@ -36,14 +36,14 @@ import Paper from "@mui/material/Paper";
 const ManagerStatitic = () => {
   const formatDate = (date) => {
     let d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
 
     return [year, month, day].join('-');
   };
@@ -54,7 +54,7 @@ const ManagerStatitic = () => {
     const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Ensure month is 2 digits
     return `${year}-${month}`;
   };
-  
+
   const taskProgress = 75.5;
   const [allCatePercentages, setAllCatePercentages] = useState([]);
   const [totalProduct, setTotalProduct] = useState(null);
@@ -92,6 +92,9 @@ const ManagerStatitic = () => {
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().toISOString().slice(0, 7);
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate);
+    console.log("Formatted Date: " + formattedDate);
     const fetchData = async () => {
       try {
         const allProduct = await AllCurrentProduct();
@@ -103,6 +106,7 @@ const ManagerStatitic = () => {
         await handleYearChange({ target: { value: currentYear.toString() } });
         await profitYear({ target: { value: currentYear.toString() } });
         await MonthYearStats({ target: { value: currentMonth } });
+        await dailyStats(formattedDate);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -113,7 +117,7 @@ const ManagerStatitic = () => {
 
   const MonthYearStats = async (event) => {
     const monthYear = event.target.value;
-    const formattedMonthYear = monthYear.replace("-", "/");
+    const formattedMonthYear = monthYear;
     const response = await getDateStatistic(formattedMonthYear);
     setCurrentMonthStats(response);
   };
@@ -127,7 +131,6 @@ const ManagerStatitic = () => {
 
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
-    console.log("Date: "+selectedDate);
     dailyStats(selectedDate);
   };
 
@@ -139,8 +142,6 @@ const ManagerStatitic = () => {
       try {
         const profit = await ShowProfitByYear(year);
         setProfitByYear(profit);
-        console.log("Profit Data:", profit); // Check the fetched data
-
         setProfitData({
           labels: [
             "Jan",
@@ -461,7 +462,7 @@ const ManagerStatitic = () => {
                 value={selectedYear}
                 onChange={handleYearChange}
                 autoWidth
-                 label="Year"
+                label="Year"
                 required
               >
                 <MenuItem value="">
@@ -540,6 +541,7 @@ const ManagerStatitic = () => {
               borderRadius: "8px",
             }}
           >
+
             <div>
               <h3>Profit</h3>
               {loading ? (
@@ -589,7 +591,7 @@ const ManagerStatitic = () => {
           </div>
           <div className="manager_manage_diamond_table_wrapper">
             <input
-              className="manager_statis_input_date" 
+              className="manager_statis_input_date"
               type="month"
               value={currentMonthStats}
               onChange={MonthYearStats}
