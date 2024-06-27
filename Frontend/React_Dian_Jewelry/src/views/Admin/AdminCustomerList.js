@@ -3,7 +3,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import AdminSidebar from "../../components/AdminSidebar/AdminSidebar.js";
 import "../../styles/Manager/ManagerList.scss";
 import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
 import logo from "../../assets/img/logoN.png";
 import {
   ShowAllCustomer,
@@ -23,12 +22,9 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
 const AdminCustomerList = () => {
-  const navigate = useNavigate();
   const [customerList, setCustomerList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [editMode, setEditMode] = useState(false);
-  const [editedCustomer, setEditedCustomer] = useState({});
-  const [originalCustomer, setOriginalCustomer] = useState({});
+  const [isSearch, setIsSearch] = useState(false);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -69,6 +65,7 @@ const AdminCustomerList = () => {
   // Search diamond by id
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
+      setIsSearch(true);
       if (searchQuery.trim().includes("@")) {
         try {
           const response = await getCustomerDetail(searchQuery.trim());
@@ -103,6 +100,19 @@ const AdminCustomerList = () => {
           console.error("Error fetching data:", error);
         }
       }
+    }
+  };
+
+
+  const handleBack = async () => {
+    try {
+      const response = await ShowAllCustomer();
+      setCustomerList(response);
+      setCurrentPage(1);
+      setIsSearch(false); // Reset search state when back button is clicked
+      setSearchQuery(""); // Clear search query
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -236,6 +246,11 @@ const AdminCustomerList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && ( // Conditionally render the back button
+            <button className="SS_back_button" onClick={handleBack}>
+              Back to show all customer
+            </button>
+          )}
         </div>
       </div>
     </div>

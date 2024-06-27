@@ -26,6 +26,7 @@ const AdminEmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const [isSearch, setIsSearch] = useState(false);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -68,6 +69,7 @@ const AdminEmployeeList = () => {
   // Search diamond by id
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
+      setIsSearch(true);
       if (searchQuery.trim().includes("@")) {
         try {
           const response = await getEmployeeByEmail(searchQuery.trim());
@@ -102,6 +104,17 @@ const AdminEmployeeList = () => {
           console.error("Error fetching data:", error);
         }
       }
+    }
+  };
+  const handleBack = async () => {
+    try {
+      const response = await ShowAllEmployee();
+      setEmployeeList(response);
+      setCurrentPage(1);
+      setIsSearch(false); // Reset search state when back button is clicked
+      setSearchQuery(""); // Clear search query
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -208,33 +221,35 @@ const AdminEmployeeList = () => {
               </TableHead>
               <TableBody>
                 {employeeList.length > 0 ? (
-                  currentEmployee.map((item) => (
-                    <TableRow
-                      className="manager_manage_table_body_row"
-                      key={item.employeeId}
-                    >
-                      <TableCell align="center">{item.employeeId}</TableCell>
-                      <TableCell align="center">{item.role}</TableCell>
-                      <TableCell align="center">{item.email}</TableCell>
-                      <TableCell align="center">{`${item.firstName} ${item.lastName}`}</TableCell>
-                      <TableCell align="center">{item.phoneNumber}</TableCell>
-                      <TableCell align="center">{item.address}</TableCell>
-                      <TableCell align="center">
-                        <Button
-                          onClick={() => handleStatus(item.employeeId)}
-                          variant="contained"
-                          style={{
-                            backgroundColor: item.status
-                              ? "#1fd655"
-                              : "#c94143",
-                            color: "white",
-                          }}
-                        >
-                          {item.status ? "Active" : "Deactive"}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  currentEmployee.map((item) => {
+                    if (item.role !== 'Admin') {
+                      return <TableRow
+                        className="manager_manage_table_body_row"
+                        key={item.employeeId}
+                      >
+                        <TableCell align="center">{item.employeeId}</TableCell>
+                        <TableCell align="center">{item.role}</TableCell>
+                        <TableCell align="center">{item.email}</TableCell>
+                        <TableCell align="center">{`${item.firstName} ${item.lastName}`}</TableCell>
+                        <TableCell align="center">{item.phoneNumber}</TableCell>
+                        <TableCell align="center">{item.address}</TableCell>
+                        <TableCell align="center">
+                          <Button
+                            onClick={() => handleStatus(item.employeeId)}
+                            variant="contained"
+                            style={{
+                              backgroundColor: item.status
+                                ? "#1fd655"
+                                : "#c94143",
+                              color: "white",
+                            }}
+                          >
+                            {item.status ? "Active" : "Deactive"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    }
+                  })
                 ) : (
                   <TableRow>
                     <TableCell colSpan="7">No Employee found</TableCell>
@@ -243,6 +258,11 @@ const AdminEmployeeList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && ( // Conditionally render the back button
+            <button className="SS_back_button" onClick={handleBack}>
+              Back
+            </button>
+          )}
         </div>
       </div>
     </div>
