@@ -352,9 +352,9 @@ namespace DIAN_.Controllers
         [HttpGet("30days-statistics")]
         public async Task<ActionResult<IEnumerable<DailyStatisticDto>>> GetDailyStatisticsGrouped([FromQuery] string monthYear)
         {
-            if (!DateTime.TryParseExact(monthYear, "yyyy/MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var startDate))
+            if (!DateTime.TryParseExact(monthYear, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var startDate))
             {
-                return BadRequest("Invalid date format. Please use yyyy/MM format.");
+                return BadRequest("Invalid date format. Please use yyyy-MM format.");
             }
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
