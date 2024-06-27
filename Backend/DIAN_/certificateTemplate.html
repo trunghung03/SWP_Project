@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>GIA Natural Diamond Dossier</title>
     <style>
         body {
@@ -10,6 +10,7 @@
             padding: 0;
             background-color: #f8f9fa;
         }
+
         .container {
             width: 80%;
             margin: 20px auto;
@@ -17,78 +18,96 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            /* justify-content: space-between; */
+            align-items: center;    
             margin-bottom: 20px;
             padding: 20px;
         }
-        .header img {
-            height: 130px;
-            width: auto;
-        }
+
+            .header img {
+                height: 130px;
+                width: auto;
+            }
+
         .form-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
         }
+
         .main-form {
             width: 35%;
             border: 1px solid #ccc;
             padding: 20px;
-            background-color: #ffffe0;
+            background-color: white;
+            background-image: linear-gradient( 45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent ), linear-gradient( -45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent );
+            background-size: 20px 20px;
             box-sizing: border-box;
             margin-bottom: 20px;
         }
+
         .grading-scales {
             width: 55%;
             font-size: 14px;
             color: #666;
             border: 1px solid #ccc;
             padding: 20px;
-            background-color: #ffffe0;
+            background-color: white;
+            background-image: linear-gradient( 45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent ), linear-gradient( -45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent );
+            background-size: 20px 20px;
             box-sizing: border-box;
         }
+
         h2 {
             font-size: 20px;
             color: #444;
             margin-bottom: 5px;
-            background-color: lightsalmon;
+            background-color: #a7996e;
         }
+
         .form p {
             font-size: 14px;
             color: #666;
         }
+
         .grading-scales h2 {
-            background-color: #d3b587;
-            color: #444;
+            background-color: #a7996e;
+            color: white;
             padding: 10px;
             text-align: center;
         }
+
         .scale {
             display: flex;
             justify-content: space-between;
             margin: 20px 0;
         }
-        .scale div {
-            flex: 1;
-            text-align: center;
-        }
-        .scale div:not(:last-child) {
-            border-right: 1px solid #ccc;
-        }
+
+            .scale div {
+                flex: 1;
+                text-align: center;
+            }
+
+                .scale div:not(:last-child) {
+                    border-right: 1px solid #ccc;
+                }
+
         .scale-category {
             display: flex;
             justify-content: space-between;
             border-bottom: 1px solid #ccc;
             padding: 10px 0;
         }
+
         .category-label {
             flex: 1;
             text-align: left;
             padding-left: 10px;
             font-weight: bold;
         }
+
         .category-values {
             flex: 2;
             text-align: center;
@@ -99,48 +118,102 @@
     <div class="container">
         <!-- Header outside the form -->
         <header class="header">
-            <div style="display: flex; align-items: center;">
-                <img src="GIA_Logo_CMYK.webp" alt="GIA Logo">
+            <div style="width: 37%; height: 100%; display:flex">
+                <div style="display: flex; align-items: center">
+                    <img style="width: 100%; height:40%" src="https://www.gia.edu/img/GIA_Logo.png" alt="GIA Logo" />
+                </div>
+                <div style="text-align: center; margin-left: 15px">
+                    <p style="font-size: 18px; color: #333; margin: 0; font-weight: 400;">FACSIMILE</p>
+                    <p style="font-size: 14px; color: #666; margin: 10px 0 0 0; text-align: left;">
+                        This is a digital representation of the original GIA Report. This
+                        representation might not be accepted in lieu of the original GIA
+                        Report in certain circumstances. The original GIA Report includes
+                        certain security features which are not reproducible on this
+                        facsimile.
+                    </p>
+                </div>
             </div>
-            <div style="text-align: center;">
-                <p style="font-size: 18px; color: #333; margin: 0;">FACSIMILE</p>
-                <p style="font-size: 14px; color: #666; margin: 10px 0 0 0;">This is a digital representation of the original GIA Report. This representation might not be accepted in lieu of the original GIA Report in certain circumstances. The original GIA Report includes certain security features which are not reproducible on this facsimile.</p>
+            <div style="margin-left: 30%">
+                <p style="text-align: center; color: #a7996e; font-size: 30px">GIA Report</p>
+                <p style="margin-left: 15px ;font-size: 25px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">#442423</p>
             </div>
         </header>
         <!-- Form containers -->
         <div class="form-container">
             <!-- Main form -->
             <form class="main-form">
-                <div style="font-size: 14px; color: #666;">
-                    <h2 style="font-size: 20px; color: #444; margin-bottom: 5px; background-color: lightsalmon;">GIA Natural Diamond Dossier</h2>
+                <div style="font-size: 14px; color: #666">
+                    <h2 style="
+                padding: 9px 8px;
+                font-size: 17px;
+                font-size: 20px;
+                color: white;
+                margin-bottom: 5px;
+                background-color: #a7996e;
+              ">
+                        GIA Natural Diamond Dossier
+                    </h2>
                     <p>January 28, 2020</p>
-                    <p>GIA Report Number: <span style="float: right;">1345651328</span></p>
-                    <p>Shape and Cutting Style: <span style="float: right;">Round Brilliant</span></p>
-                    <p>Measurements: <span style="float: right;">5.68 - 5.71 x 3.54 mm</span></p>
+                    <p>
+                        GIA Report Number: <span style="float: right">{DiamondId}</span>
+                    </p>
+                    <p>
+                        Shape and Cutting Style:
+                        <span style="float: right">Round Brilliant</span>
+                    </p>
+                    <p>
+                        Measurements:
+                        <span style="float: right">5.68 - 5.71 x 3.54 mm</span>
+                    </p>
                 </div>
                 <!-- Additional sections -->
-                <h2 style="font-size: 20px; color: #444; margin-top: 20px; background-color: lightsalmon;">Grading Results</h2>
-                <div style="font-size: 14px; color: #666;">
-                    <p>Carat Weight: <span style="float: right;">0.70 carat</span></p>
-                    <p>Color Grade: <span style="float: right;">I</span></p>
-                    <p>Clarity Grade: <span style="float: right;">Internally Flawless</span></p>
-                    <p>Cut Grade: <span style="float: right;">Excellent</span></p>
+                <h2 style="
+              padding: 9px 8px;
+              font-size: 17px;
+              font-size: 20px;
+              color: white;
+              margin-top: 20px;
+              background-color: #a7996e;
+            ">
+                    Grading Results
+                </h2>
+                <div style="font-size: 14px; color: #666">
+                    <p>Carat Weight: <span style="float: right">{Carat}</span></p>
+                    <p>Color Grade: <span style="float: right">{Color}</span></p>
+                    <p>Clarity Grade: <span style="float: right">{Clarity}</span></p>
+                    <p>Cut Grade: <span style="float: right">{Cut}</span></p>
                 </div>
-                <h2 style="font-size: 20px; color: #444; margin-top: 20px; background-color: lightsalmon;">Additional Grading Information</h2>
-                <div style="font-size: 14px; color: #666;">
-                    <p>Polish: <span style="float: right;">Excellent</span></p>
-                    <p>Symmetry: <span style="float: right;">Excellent</span></p>
-                    <p>Fluorescence: <span style="float: right;">None</span></p>
-                    <p>Clarity Characteristics: <span style="float: right;">Minor Details of Polish</span></p>
-                    <p>Inscription(s): <span style="float: right;">GIA 1345651328</span></p>
+                <h2 style="
+                padding: 9px 8px;
+              font-size: 17px;
+              color: white;
+              margin-top: 20px;
+              background-color: #a7996e;
+            ">
+                    Additional Grading Information
+                </h2>
+                <div style="font-size: 14px; color: #666">
+                    <p>Polish: <span style="float: right">Excellent</span></p>
+                    <p>Symmetry: <span style="float: right">Excellent</span></p>
+                    <p>Fluorescence: <span style="float: right">None</span></p>
+                    <p>
+                        Clarity Characteristics:
+                        <span style="float: right">Minor Details of Polish</span>
+                    </p>
+                    <p>
+                        Inscription(s): <span style="float: right">GIA 1345651328</span>
+                    </p>
                 </div>
-                <footer style="text-align: center; margin-top: 20px;">
-                    <p style="font-size: 14px; color: #666;">Visit <a href="https://www.gia.edu" style="color: #666;">GIA.edu</a></p>
+                <footer style="text-align: center; margin-top: 20px">
+                    <p style="font-size: 14px; color: #666">
+                        Visit
+                        <a href="https://www.gia.edu" style="color: #666">GIA.edu</a>
+                    </p>
                 </footer>
             </form>
             <!-- Grading Scales form -->
             <div class="grading-scales">
-                <h2>Grading Scales</h2>
+                <h2 style="text-align: left;">Grading Scales</h2>
                 <div class="scale">
                     <div>
                         <h3>GIA Color Scale</h3>

@@ -34,6 +34,27 @@ import Paper from "@mui/material/Paper";
 // };
 
 const ManagerStatitic = () => {
+  const formatDate = (date) => {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  };
+
+  const getCurrentMonthYear = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Ensure month is 2 digits
+    return `${year}-${month}`;
+  };
+  
   const taskProgress = 75.5;
   const [allCatePercentages, setAllCatePercentages] = useState([]);
   const [totalProduct, setTotalProduct] = useState(null);
@@ -42,7 +63,7 @@ const ManagerStatitic = () => {
   const [totalValue, setTotalValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalCustomers, setTotalCustomers] = useState(null);
-  const [valueByDate, setValueByDate] = useState(null);
+  const [valueByDate, setValueByDate] = useState([]);
   const [currentMonthStats, setCurrentMonthStats] = useState([]);
   const [profitByYear, setProfitByYear] = useState(null);
   const [topTen, setTopTen] = useState([]);
@@ -334,6 +355,7 @@ const ManagerStatitic = () => {
           <input
             className="manager_statis_input_date"
             type="date"
+            value={formatDate(valueByDate)}
             onChange={handleDateChange}
             style={{ marginLeft: '4.2%' }}
           ></input>
@@ -435,10 +457,11 @@ const ManagerStatitic = () => {
               <Select
                 labelId="listYear-label"
                 id="listYear"
-                name="year"
+                // name="year"
+                value={selectedYear}
                 onChange={handleYearChange}
                 autoWidth
-                label="Year"
+                 label="Year"
                 required
               >
                 <MenuItem value="">
@@ -496,6 +519,7 @@ const ManagerStatitic = () => {
                 name="year"
                 onChange={profitYear}
                 autoWidth
+                value={selectedYear}
                 label="Year"
                 required
               >
@@ -565,8 +589,9 @@ const ManagerStatitic = () => {
           </div>
           <div className="manager_manage_diamond_table_wrapper">
             <input
-              className="manager_statis_input_date"
+              className="manager_statis_input_date" 
               type="month"
+              value={currentMonthStats}
               onChange={MonthYearStats}
               style={{ margin: "10px" }}
             ></input>
