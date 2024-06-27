@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import swal from 'sweetalert';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Authentication/ResetPassword.scss';
 import rightImage from '../../assets/img/right.jpeg';
@@ -63,42 +64,24 @@ const ResetPassword = () => {
         setLoading(true);
 
         if (!password || !rePassword) {
-            swal({
-                title: "Fields haven't filled in all yet!",
-                text: "Please fill in all fields first.",
-                icon: "error",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
+            toast.error("Please fill in all fields first.", {
+                position: "top-right"
             });
             setLoading(false);
             return;
         }
 
         if (!isValidPassword(password)) {
-            swal({
-                title: "Password is too weak!",
-                text: "Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.",
-                icon: "error",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
+            toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
+                position: "top-right"
             });
             setLoading(false);
             return;
         }
 
         if (password !== rePassword) {
-            swal({
-                title: "Passwords have to be the same!",
-                text: "Please try again.",
-                icon: "error",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
+            toast.error("Passwords have to be the same! Please try again.", {
+                position: "top-right"
             });
             setLoading(false);
             return;
@@ -108,28 +91,16 @@ const ResetPassword = () => {
             const email = localStorage.getItem('resetPasswordEmail');
             const token = localStorage.getItem('resetPasswordToken');
             await resetPasswordApi({ email, token, password, confirmPassword: rePassword });
-            swal({
-                title: "Reset password successfully!",
-                text: "You can sign in with new password now.",
-                icon: "success",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
+            toast.success("Reset password successfully! You can sign in with new password now.", {
+                position: "top-right"
             }).then(() => {
                 localStorage.removeItem('resetPasswordEmail');
                 localStorage.removeItem('resetPasswordToken');
                 window.location.href = "/login";
             });
         } catch (error) {
-            swal({
-                title: "Error resetting password!",
-                text: "Failed to reset the password. Please try again later.",
-                icon: "error",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                },
+            toast.error("Failed to reset the password. Please try again later.", {
+                position: "top-right"
             });
         } finally {
             setLoading(false);
@@ -151,6 +122,7 @@ const ResetPassword = () => {
 
     return (
         <div className="rp_main_container container-fluid">
+            <ToastContainer /> 
             <div className="rp_wrapper">
                 {/* Left Side: Reset Password Form */}
                 <div className="rp_left_side col-md-6">

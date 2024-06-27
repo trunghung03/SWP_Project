@@ -228,7 +228,7 @@ const Register = () => {
                 } else {
                     swal({
                         title: "Sign up successfully!",
-                        text: "You have signed up a new account.",
+                        text: "You now can sign in with your account.",
                         icon: "success",
                         button: {
                             text: "Ok",
@@ -240,13 +240,15 @@ const Register = () => {
                 }
             } catch (error) {
                 swal({
-                    title: "Register account successfully!",
+                    title: "Sign up successfully!",
                     text: "You now can sign in with your account.",
                     icon: "success",
                     button: {
                         text: "Ok",
                         className: "swal-button"
                     },
+                }).then(() => {
+                    window.location.href = "/login";
                 });
             } finally {
                 setLoading(false);
