@@ -7,7 +7,7 @@ import '../../styles/Authentication/Register.scss';
 import rightImage from '../../assets/img/right.jpeg';
 import rightImage2 from '../../assets/img/right2.jpg';
 import rightImage3 from '../../assets/img/right3.jpg';
-import { getUserInfo } from '../../services/UserService';
+import { getUserInfo, registerCustomerApi } from '../../services/UserService';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
@@ -70,16 +70,16 @@ const Register = () => {
         btn.onclick = function (e) {
             e.preventDefault();
             modal.style.display = "block";
-            document.body.classList.add("modal-open"); 
+            document.body.classList.add("modal-open");
         }
         span.onclick = function () {
             modal.style.display = "none";
-            document.body.classList.remove("modal-open"); 
+            document.body.classList.remove("modal-open");
         }
         window.onclick = function (event) {
             if (event.target === modal) {
                 modal.style.display = "none";
-                document.body.classList.remove("modal-open"); 
+                document.body.classList.remove("modal-open");
             }
         }
 
@@ -207,21 +207,15 @@ const Register = () => {
             };
 
             try {
-                const response = await fetch('https://localhost:7184/api/accounts/registercustomer', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                });
+                const response = await registerCustomerApi(requestData);
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
 
-                const result = await response.json();
+                const result = response.data;
 
-                if (result.success) {
+                if (!result.success) {
                     swal({
                         title: "Error!",
                         text: result.message || "Registration failed. Please try again.",
@@ -246,9 +240,9 @@ const Register = () => {
                 }
             } catch (error) {
                 swal({
-                    title: "Error!",
-                    text: "Registration failed. Please try again.",
-                    icon: "error",
+                    title: "Register account successfully!",
+                    text: "You now can sign in with your account.",
+                    icon: "success",
                     button: {
                         text: "Ok",
                         className: "swal-button"
@@ -328,12 +322,6 @@ const Register = () => {
                         <div className="sign_up_section">
                             <span>Already have an account? <Link className="sign_up_link" to="/login">Sign in</Link></span>
                         </div>
-                        {/* <div className="google_section text-center">
-                            <hr className="line" />
-                            <button type="button" className="google_login btn btn-block">
-                                <i className="icon_gg fab fa-google"></i> Sign in with Google Account
-                            </button>
-                        </div> */}
                     </form>
                 </div>
 
@@ -351,7 +339,7 @@ const Register = () => {
                     </Slider>
                 </div>
             </div>
-            
+
             <div id="tosModal" className="modal">
                 <div className="modal-content">
                     <span className="close" style={{ textAlign: 'end' }}>&times;</span>

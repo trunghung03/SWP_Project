@@ -42,4 +42,20 @@ const getNewestCollections = () => {
     return axios.get(`${API_BASE_URL}/collections/newest`);
 };
 
-export { getProductList, getCollectionList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductsByIds, getNewestProducts, getTopSellingProducts, getNewestCollections };
+const searchProducts = (query) => {
+    return axios.get(`${API_BASE_URL}/products/search`, { params: { name: query } });
+};
+
+export { 
+    getProductList, 
+    getCollectionList, 
+    getProductDetail, 
+    getDiamondDetail, 
+    getCollectionDetail, 
+    getShellMaterials, 
+    getProductsByIds, 
+    getNewestProducts, 
+    getTopSellingProducts, 
+    getNewestCollections,
+    searchProducts 
+};

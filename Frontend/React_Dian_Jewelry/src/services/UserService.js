@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const googleLoginApi = (body) => {
-    return axios.post(`${API_BASE_URL}/accounts/login-gg`,body);
+    return axios.post(`${API_BASE_URL}/accounts/login-gg`, body);
 }
 
 const customerLoginApi = (email, password) => {
@@ -34,6 +34,10 @@ const resetPasswordApi = (data) => {
     return axios.post(`${API_BASE_URL}/accounts/reset-password`, data);
 }
 
+const registerCustomerApi = (data) => {
+    return axios.post(`${API_BASE_URL}/accounts/registercustomer`, data);
+}
+
 export { 
     customerLoginApi, 
     employeeLoginApi, 
@@ -42,5 +46,6 @@ export {
     googleLoginApi,
     updateCustomerInfo, 
     forgotPasswordApi, 
-    resetPasswordApi  
+    resetPasswordApi,
+    registerCustomerApi
 };
