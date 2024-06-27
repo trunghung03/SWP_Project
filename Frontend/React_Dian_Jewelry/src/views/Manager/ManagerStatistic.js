@@ -67,6 +67,8 @@ const ManagerStatitic = () => {
   const [currentMonthStats, setCurrentMonthStats] = useState([]);
   const [profitByYear, setProfitByYear] = useState(null);
   const [topTen, setTopTen] = useState([]);
+  const [localDate,setLocalDate]= useState();
+  const [monthYear,setMonthYear]= useState();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -92,8 +94,10 @@ const ManagerStatitic = () => {
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().toISOString().slice(0, 7);
+    setMonthYear(currentMonth);
     const currentDate = new Date();
     const formattedDate = formatDate(currentDate);
+    setLocalDate(formattedDate);
     console.log("Formatted Date: " + formattedDate);
     const fetchData = async () => {
       try {
@@ -356,7 +360,7 @@ const ManagerStatitic = () => {
           <input
             className="manager_statis_input_date"
             type="date"
-            value={formatDate(valueByDate)}
+            value={localDate}
             onChange={handleDateChange}
             style={{ marginLeft: '4.2%' }}
           ></input>
@@ -593,7 +597,7 @@ const ManagerStatitic = () => {
             <input
               className="manager_statis_input_date"
               type="month"
-              value={currentMonthStats}
+              value={monthYear}
               onChange={MonthYearStats}
               style={{ margin: "10px" }}
             ></input>
