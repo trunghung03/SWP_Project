@@ -1,12 +1,7 @@
 ﻿using DIAN_.DTOs.AccountDTO;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
-using DIAN_.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Web;
 using UserApplication.Interfaces;
 
@@ -33,7 +28,8 @@ namespace DIAN_.Services
             if (user == null) throw new ArgumentException("No account found with the provided email.");
 
             var token = _tokenService.CreateCustomerToken(user);
-            var callbackUrl = $"https://diandiamondstore.com/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
+            var callbackUrlFormat = _configuration["ResetPassword:Url"];
+            var callbackUrl = string.Format(callbackUrlFormat, HttpUtility.UrlEncode(token), HttpUtility.UrlEncode(resetPasswordDto.Email));
             var message = new MailResetPassword
             {
                 ToEmail = user.Email,

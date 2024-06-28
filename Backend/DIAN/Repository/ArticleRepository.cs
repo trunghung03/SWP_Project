@@ -68,6 +68,8 @@ namespace DIAN_.Repository
 
         public async Task<Article?> GetArticleByIdAsync(int id)
         {
+            var url = Environment.GetEnvironmentVariable("ASPNETCORE_APIURL");
+            Console.WriteLine(url);
             return await _context.Articles.Include(a => a.EmployeeNavigation)
                 .Where(a => a.Status)
                 .FirstOrDefaultAsync(c => c.ContentId == id);

@@ -16,6 +16,8 @@ using UserApplication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+Environment.SetEnvironmentVariable("ASPNETCORE_APIURL",builder.Configuration.GetSection("URLS").GetSection("ApiUrl").Value);
 // Add services to the container.
 
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
@@ -96,6 +98,12 @@ app.UseCors(builder => builder
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
 
 app.UseSwagger();
 
