@@ -10,3 +10,60 @@ body {
     background-color: #1c1c1c !important;
     color: white;
 }
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 300px; /* Adjust as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    background: #007bff; /* Change background color to blue */
+    color: white; /* Ensure text is visible against the blue background */
+  }
+  
+  .control-buttons {
+    display: flex;
+    justify-content: flex-end;
+    background: #0056b3; /* Darker blue for control buttons background */
+    padding: 5px;
+  }
+  
+  .chatbot-body {
+    display: block;
+    padding: 10px;
+    background: #007bff; /* Change background color to blue for chatbot body */
+    color: white; /* Ensure text is visible against the blue background */
+  }
+  
+  .control-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin-left: 5px;
+    cursor: pointer;
+    color: white; /* Ensure control buttons are visible */
+  }
+  
+  .control-button:hover {
+    color: #d1eaff; /* Slightly lighter blue on hover for better visibility */
+  }
+  
+  .chatbot-body {
+    display: block;
+    padding: 10px;
+    background: #007bff; /* Ensure the chatbot body matches the container */
+    color: white; /* Ensure text is visible against the blue background */
+  }
+  .supporter-text {
+    font-size: 18px; /* Increase font size */
+    font-weight: bold; /* Make the text bold */
+    color: #003366; /* Dark blue color */
+    background: -webkit-linear-gradient(#003366, #66a3ff); /* Gradient from dark blue to lighter blue */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a slight shadow for more prominence */
+  }
+  

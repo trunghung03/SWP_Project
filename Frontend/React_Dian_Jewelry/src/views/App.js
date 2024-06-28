@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -56,9 +56,27 @@ import ManagerAddPromotion from './Manager/ManagerManagePromotional/ManagerAddPr
 import RichTextPage from './SalesStaff/SalesStaffManageContent/SSRichTextPage';
 import ProtectedRoute from '../services/ProtectedRoute';
 import TransactionFail from './Cart/TransactionFail';
+import Chatbot from 'react-chatbot-kit';
+import config from '../components/ChatBot/config.js';
+import MessageParser from '../components/ChatBot/MessageParser.js';
+import ActionProvider from '../components/ChatBot/ActionProvider.js';
+import 'react-chatbot-kit/build/main.css';
 // import Notification from './Notification/Notify';
 
 function App() {
+  const [isClosed, setIsClosed] = useState(false);
+
+  const toggleMinimize = () => {
+    setIsClosed(true);
+  };
+
+  const closeChatbot = () => {
+    setIsClosed(true);
+  };
+
+  const openChatbot = () => {
+    setIsClosed(false);
+  };
   return (
     <Router>
       <UserProvider>
@@ -129,7 +147,31 @@ function App() {
 
             {/* <Route path="/notification" element={<Notification/>} /> */}
           </Routes>
-        </CartProvider>
+          {!isClosed && (
+            <div className="chatbot-container">
+              <div className="control-buttons">
+                <button className="control-button" onClick={toggleMinimize}>
+                  —
+                </button>
+                <button className="control-button" onClick={closeChatbot}>
+                  ✖
+                </button>
+              </div>
+              <div className="chatbot-body">
+                <Chatbot
+                  config={config}
+                  messageParser={MessageParser}
+                  actionProvider={ActionProvider}
+                />
+              </div>
+            </div>
+          )}
+          {isClosed && (
+            <button className="control-button" onClick={openChatbot} style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
+             <div className="supporter-text">Supporter</div>
+            </button>
+          )}
+        </CartProvider>        
       </UserProvider>
     </Router>
   );
