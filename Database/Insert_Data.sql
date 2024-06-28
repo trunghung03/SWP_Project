@@ -1,5 +1,4 @@
-﻿		-- Insert dummy data into CUSTOMER table
-	INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
+﻿	INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
 	('john.doe@yahoo.com', '123', 'Doe', 'John', '123 Main St', '+1 (212) 555-0198', 1000, 1),
 	('jane.smith@gmail.com', '123', 'Smith', 'Jane', '456 Elm St', '+1 (415) 555-0234', 1500, 1),
 	('cxhrisB124@gmail.com', '123', 'Chris', 'Burkerly', '789 Oak St', '+1 (310) 555-0745', 2000, 1),
