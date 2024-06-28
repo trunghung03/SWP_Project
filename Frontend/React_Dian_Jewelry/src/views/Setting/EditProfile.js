@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import swal from 'sweetalert';
 import '../../styles/Setting/EditProfile.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
@@ -76,27 +77,55 @@ function EditProfile() {
     eyeIcon.classList.toggle('fa-eye-slash');
   };
 
+  const isValidPhoneNumber = (phone) => {
+    const phonePattern = /^[0-9]{10,15}$/;
+    return phonePattern.test(phone);
+  };
+
   const handleSaveChanges = async () => {
     if (!firstName || !lastName) {
-      swal("Field cannot be empty!", "Please fill out all required fields.", "error");
+      toast.error("Field cannot be empty! Please fill out all required fields.", {
+        position: "top-right",
+        autoClose: 8000
+      });
+      return;
+    }
+
+    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+      toast.error("Phone number is invalid! Please try again.", {
+        position: "top-right",
+        autoClose: 8000
+      });
       return;
     }
 
     if (isPasswordFormVisible && !isGoogleUser) {
       if (!currentPassword || !newPassword || !confirmPassword) {
-        swal("Please fill in all fields", "All password fields are required.", "error");
+        toast.error("Please fill in all fields. All password fields are required.", {
+          position: "top-right",
+          autoClose: 8000
+        });
         return;
       }
       if (currentPassword !== storedPassword) {
-        swal("Current password is incorrect!", "Please try again.", "error");
+        toast.error("Current password is incorrect! Please try again.", {
+          position: "top-right",
+          autoClose: 8000
+        });
         return;
       }
       if (newPassword !== confirmPassword) {
-        swal("New passwords do not match!", "Please try again.", "error");
+        toast.error("New passwords do not match! Please try again.", {
+          position: "top-right",
+          autoClose: 8000
+        });
         return;
       }
       if (newPassword === storedPassword) {
-        swal("New password cannot be the same as the current password!", "Please try again.", "error");
+        toast.error("New password cannot be the same as the current password! Please try again.", {
+          position: "top-right",
+          autoClose: 8000
+        });
         return;
       }
     }
@@ -115,7 +144,10 @@ function EditProfile() {
     try {
       const response = await updateCustomerInfo(email, updatedData);
       if (response.status === 200) {
-        swal("Successfully updated!", "Profile has been updated successfully.", "success");
+        toast.success("Profile has been updated successfully.", {
+          position: "top-right",
+          autoClose: 8000
+        });
         localStorage.setItem('firstName', firstName);
         localStorage.setItem('lastName', lastName);
         localStorage.setItem('points', points);
@@ -127,7 +159,10 @@ function EditProfile() {
         });
       }
     } catch (error) {
-      swal("Failed to update profile!", "Please try again.", "error");
+      toast.error("Failed to update profile! Please try again.", {
+        position: "top-right",
+        autoClose: 8000
+      });
     }
   };
 
@@ -135,7 +170,7 @@ function EditProfile() {
     <div className="EditProfile">
       <HeaderComponent />
       <SubNav items={navItems} />
-
+      <ToastContainer />
       <div className="edit_profile_container">
         <div className="setting_menu">
           <div className="setting_menu_section">
@@ -194,7 +229,7 @@ function EditProfile() {
             <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save change</button>
           </form>
 
-          {!isGoogleUser && (
+          {/* {!isGoogleUser && (
             <>
               <hr className="edit_profile_line"></hr>
               <h2 onClick={togglePasswordForm} className="toggle_password_form">
@@ -258,7 +293,7 @@ function EditProfile() {
                 </form>
               )}
             </>
-          )}
+          )} */}
         </div>
       </div>
 

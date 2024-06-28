@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import swal from 'sweetalert';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ringSizeGuide from '../../assets/img/sgRing.jpg';
@@ -14,7 +15,6 @@ import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-
 
 function Cart() {
     const navigate = useNavigate();
@@ -69,28 +69,18 @@ function Cart() {
         const updatedCartItems = JSON.parse(localStorage.getItem(`cartItems${customerId}`)) || [];
 
         if (updatedCartItems.length === 0) {
-            swal({
-                title: "Please add something to the cart!",
-                text: "There are no products in the cart.",
-                icon: "warning",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                }
+            toast.warn("Please add something to the cart! There are nothing in the cart.", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
 
         const missingSizeItems = updatedCartItems.some(item => !item.selectedSize);
         if (missingSizeItems) {
-            swal({
-                title: "Have not chosen a size yet!",
-                text: "Please select a size for all jewelries.",
-                icon: "warning",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                }
+            toast.warn("Have not chosen a size yet! Please select a size for all jewelries.", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
@@ -121,6 +111,7 @@ function Cart() {
         <div className={`cart ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
+            <ToastContainer /> 
             <div className="cart_main_container">
                 <div className="cart_header">
                     <div className="cart_title">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import swal from 'sweetalert';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
@@ -146,10 +147,16 @@ function Checkout() {
             setVoucherDiscount(discountAmount);
             setPromotionId(promotion.id);
             setAppliedVoucher(true);
-            swal("Apply voucher successfully!", "", "success");
+            toast.success("Apply voucher successfully!", {
+                position: "top-right",
+                autoClose: 8000
+            });
         } catch (error) {
             console.error('Error applying voucher:', error);
-            swal("Invalid voucher code!", "Please try another code.", "error");
+            toast.error("Invalid voucher code! Please try another one.", {
+                position: "top-right",
+                autoClose: 8000
+            });
         }
     };
 
@@ -157,32 +164,26 @@ function Checkout() {
         const { fullName, phone, address, note } = formData;
 
         if (!fullName || !phone || !address) {
-            swal({
-                title: "Please fill in all the required fields!",
-                text: "All fields have not been filled in yet.",
-                icon: "warning",
-                button: "OK",
+            toast.warn("Please fill in all the required fields!", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
 
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(phone)) {
-            swal({
-                title: "Invalid phone number!",
-                text: "Please enter a valid 10-digit phone number.",
-                icon: "error",
-                button: "OK",
+            toast.error("Please enter a valid 10-digit phone number.", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
 
         if (paymentMethod === '') {
-            swal({
-                title: "Have not chosen a payment method!",
-                text: "Please select a payment method before confirming the order.",
-                icon: "warning",
-                button: "OK",
+            toast.warn("Have not chosen a payment method!", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
@@ -266,11 +267,9 @@ function Checkout() {
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
-                swal({
-                    title: "Order successfully!",
-                    text: "Thank you for your order.",
-                    icon: "success",
-                    button: "OK",
+                toast.success("Order successfully! Thank you for your order.", {
+                    position: "top-right",
+                    autoClose: 8000
                 });
 
                 localStorage.setItem('fromCheckout', 'true');
@@ -282,11 +281,9 @@ function Checkout() {
             if (error.response) {
                 console.error('Server responded with an error:', error.response.data);
             }
-            swal({
-                title: "Error processing order!",
-                text: "There was an error processing your order. Please try again.",
-                icon: "error",
-                button: "OK",
+            toast.error("Error processing order! There was an error processing your order. Please try again.", {
+                position: "top-right",
+                autoClose: 8000
             });
             setLoading(false);
         }
@@ -309,7 +306,7 @@ function Checkout() {
         <div className="Checkout">
             <HeaderComponent />
             <SubNav items={navItems} />
-
+            <ToastContainer />
             <div className="checkout_header">
                 <div className="checkout_title">
                     <i className="fas fa-shopping-cart"></i> Checkout ({cartItems.length})

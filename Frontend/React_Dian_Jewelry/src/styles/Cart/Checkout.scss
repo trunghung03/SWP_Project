@@ -1,7 +1,7 @@
 .checkout_header {
     display: flex;
     justify-content: space-between;
-    padding: 20px 22% 20px 270px;
+    padding: 20px 21% 20px 270px;
     margin: 40px 205px -25px -177px;
 }
 
@@ -35,8 +35,7 @@
 .checkout_container {
     display: flex;
     justify-content: space-between;
-    padding: 20px 40px 20px 40px;
-    align-items: flex-start;
+    padding: 20px 40px 90px 40px;
 }
 
 .checkout_items {
@@ -53,6 +52,7 @@
     margin: 0 47px 80px -45px;
     background-color: #f8f9fa;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 310px;
 }
 
 .checkout_summary_title {
@@ -166,8 +166,10 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 17px 17px 0 17px;
-    margin: 0px 10% 5% 4%;
+    margin: 0px 10% 5% 50px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    max-width: 87%;
+
 }
 
 .checkout_form {

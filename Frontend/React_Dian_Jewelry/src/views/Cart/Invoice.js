@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
@@ -24,26 +26,34 @@ function Invoice() {
     const { setCartItems: updateCartContext } = useCart();
 
     useEffect(() => {
-        const orderId = parseInt(localStorage.getItem('orderId'));
-        const invoiceKey = `invoice${orderId}`;
-        const storedInvoiceData = JSON.parse(localStorage.getItem(invoiceKey));
+        // toast.success("Order successfully! Thank you for your order.", {
+        //     position: "top-right",
+        //     autoClose: 8000
+        // });
+        window.scrollTo(0, 160);
 
-        if (storedInvoiceData) {
-            setInvoiceData(storedInvoiceData);
-            localStorage.removeItem(invoiceKey);
-            localStorage.removeItem('orderId');
-        }
-
-        const customerId = localStorage.getItem('customerId');
-        const cartKey = `cartItems${customerId}`;
-        localStorage.removeItem(cartKey);
-        updateCartContext([]);
-
-    }, [location.state, updateCartContext]);
+    });
 
     useEffect(() => {
-        window.scrollTo(0, 160);
-    }, []);
+        const fetchData = () => {
+            const orderId = parseInt(localStorage.getItem('orderId'));
+            const invoiceKey = `invoice${orderId}`;
+            const storedInvoiceData = JSON.parse(localStorage.getItem(invoiceKey));
+
+            if (storedInvoiceData) {
+                setInvoiceData(storedInvoiceData);
+                localStorage.removeItem(invoiceKey);
+                localStorage.removeItem('orderId');
+            }
+
+            const customerId = localStorage.getItem('customerId');
+            const cartKey = `cartItems${customerId}`;
+            localStorage.removeItem(cartKey);
+            updateCartContext([]);
+        };
+
+        fetchData();
+    }, [updateCartContext]);
 
     if (!invoiceData) {
         return <div>Loading...</div>;
@@ -57,6 +67,7 @@ function Invoice() {
         <div className="Invoice">
             <HeaderComponent />
             <SubNav items={navItems} />
+            <ToastContainer />
             <div className="invoice_container">
                 <div className="invoice_order_summary">
                     <h4 className="invoice_title">THANK YOU FOR YOUR ORDER</h4>

@@ -123,7 +123,6 @@ function OrderHistory() {
                                 onChange={handleFilterChange}
                             >
                                 <MenuItem value="All">All</MenuItem>
-                                <MenuItem value="Pending">Pending</MenuItem>
                                 <MenuItem value="Unpaid">Unpaid</MenuItem>
                                 <MenuItem value="Paid">Paid</MenuItem>
                                 <MenuItem value="Preparing">Preparing</MenuItem>

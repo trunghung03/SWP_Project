@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import swal from 'sweetalert';
 import '../../styles/Active/Blog.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
@@ -15,7 +16,6 @@ import recycledMetalsIcon from '../../assets/img/blog2.svg';
 import givingBackIcon from '../../assets/img/blog3.svg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
-
 
 function Blog() {
   const [articles, setArticles] = useState([]);
@@ -74,7 +74,10 @@ function Blog() {
     if (event.key === 'Enter') {
       const validSearchTerm = /^[a-zA-Z\s]*$/.test(searchTerm);
       if (!validSearchTerm) {
-        swal('No blogs found!', 'Please try another title.', 'error');
+        toast.error('No blogs found! Please try another title.', {
+          position: 'top-right',
+          autoClose: 8000,
+        });
       } else {
         if (searchTerm.trim() === '') {
           getAllArticles()
@@ -90,7 +93,10 @@ function Blog() {
           searchArticlesByTitle(searchTerm)
             .then(data => {
               if (data.length === 0) {
-                swal('No blogs found!', 'Please try another title.', 'error');
+                toast.error('No blogs found! Please try another title.', {
+                  position: 'top-right',
+                  autoClose: 8000,
+                });
               } else {
                 setSearchResults(data);
                 setSearchActive(true);
@@ -124,6 +130,7 @@ function Blog() {
     <div className="Blog">
       <HeaderComponent />
       <SubNav items={navItems} />
+      <ToastContainer />
 
       <div className="blog_main_container row">
         <div className='blog_logo'>

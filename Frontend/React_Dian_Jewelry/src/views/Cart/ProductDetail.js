@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import swal from 'sweetalert';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ringSizeGuide from '../../assets/img/sgRing.jpg';
@@ -72,7 +73,6 @@ function ProductDetail() {
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
                     setAlsoLikeProducts(relatedProducts.slice(0, 4));
 
-                    // Fetch diamond price
                     return getDiamondPrice(
                         diamondResponse.data.cut,
                         diamondResponse.data.carat,
@@ -96,37 +96,26 @@ function ProductDetail() {
 
     const handleAddToCart = () => {
         if (!selectedShell) {
-            swal({
-                title: "Have not chosen a shell yet!",
-                text: "Please choose a shell type for this jewelry.",
-                icon: "warning",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                }
+            toast.warn("Have not chosen a shell yet! Please choose a shell.", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
 
         if (!selectedSize) {
-            swal({
-                title: "Have not chosen a size yet!",
-                text: "Please choose a size for this jewelry.",
-                icon: "warning",
-                button: {
-                    text: "Ok",
-                    className: "swal-button"
-                }
+            toast.warn("Have not chosen a size yet! Please choose a size.", {
+                position: "top-right",
+                autoClose: 8000
             });
             return;
         }
 
         const token = localStorage.getItem('token');
         if (!token) {
-            swal({
-                title: "Please sign in or sign up first!",
-                text: "Sign in to add jewelry to cart.",
-                icon: "warning",
+            toast.warn("Please sign in or sign up first! Sign in to add jewelry to cart.", {
+                position: "top-right",
+                autoClose: 8000,
                 buttons: {
                     signIn: {
                         text: "Sign In",
@@ -170,14 +159,9 @@ function ProductDetail() {
     };
 
     const navigateToCart = () => {
-        swal({
-            title: "Add to cart successfully!",
-            text: "You can direct to cart to see your jewelry that you have added.",
-            icon: "success",
-            button: {
-                text: "Ok",
-                className: "swal-button"
-            }
+        toast.success("Add to cart successfully!", {
+            position: "top-right",
+            autoClose: 8000
         });
     };
 
@@ -228,6 +212,7 @@ function ProductDetail() {
         <div id="product_detail" className={`product_detail ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
+            <ToastContainer />\
             <br />
             <div className="product_detail_container">
                 <div className="product_images_detail">

@@ -91,7 +91,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 18px 0 20px 0;
+        margin: 18px 0 25px 0;
 
         .product_price_detail {
             font-size: 28px;
@@ -133,9 +133,9 @@
         margin-bottom: 20px;
 
         .add_to_cart_btn {
-            background-color: transparent;
-            color: #1c1c1c;
-            border: 1px solid #1c1c1c;
+            background-color: #1c1c1c;
+            color: white;
+            border: none;
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 30px;
@@ -144,12 +144,14 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             width: 100%;
 
             &:hover {
-                background-color: #1c1c1c;
+                background-color: #797979;
                 color: white;
+                transform: translateY(-5px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
                 i {
                     color: white;
@@ -158,10 +160,31 @@
 
             i {
                 font-size: 16px;
-                color: #1c1c1c;
+                color: white;
             }
         }
     }
+
+
+    // .checkout_summary_checkout {
+    //     background-color: #1c1c1c;
+    //     color: white;
+    //     padding: 10px 20px;
+    //     border: none;
+    //     border-radius: 8px;
+    //     cursor: pointer;
+    //     width: 100%;
+    //     margin-top: 10px;
+    //     margin-bottom: 20px;
+    //     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    // }
+
+    // .checkout_summary_checkout:hover {
+    //     background-color: #797979;
+    //     color: white;
+    //     transform: translateY(-5px);
+    //     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    // }
 
     .product_delivery_detail {
         a {
@@ -566,18 +589,19 @@
     overflow: hidden;
 }
 
-.GIA_image_wrapper, .GIA_content{
+.GIA_image_wrapper,
+.GIA_content {
     text-align: center;
 }
 
-.GIA_image_wrapper img{
+.GIA_image_wrapper img {
     width: 900px;
     height: 1100px;
     border: 1px solid #cac9cd;
     border-radius: 5px;
 }
 
-.GIA_content{
+.GIA_content {
     margin: 20px 0 140px 0;
     font-style: italic;
 }

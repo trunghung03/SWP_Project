@@ -9,7 +9,6 @@ import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductByI
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 
-
 function OrderDetail() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -48,6 +47,7 @@ function OrderDetail() {
                         ...productData,
                         size: item.size,
                         shellMaterial: shellMaterialData.name,
+                        lineTotal: item.lineTotal
                     };
                 }));
                 setOrderProducts(productDetails);
@@ -133,7 +133,7 @@ function OrderDetail() {
                                     </div>
                                     <p className="order_detail_product_size">Shell: {product.shellMaterial}</p>
                                     <p className="order_detail_product_size">Size: {product.size}</p>
-                                    <p className="order_detail_product_price">{product.price}$</p>
+                                    <p className="order_detail_product_price">{product.lineTotal}$</p>
                                 </div>
                             </div>
                         ))}
