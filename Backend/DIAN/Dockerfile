@@ -13,5 +13,4 @@ WORKDIR /app
 # Copy the published application from the 'publish' stage to the final image
 COPY --from=publish /app/publish .
 EXPOSE 8080
-
 ENTRYPOINT ["dotnet", "DIAN_.dll"]
