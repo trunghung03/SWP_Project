@@ -6,7 +6,7 @@ BEGIN
     -- If the database exists, drop it
     ALTER DATABASE DIAN SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE DIAN;
-ENDd
+END
 GO
 -- Create the new database
 CREATE DATABASE DIAN;
