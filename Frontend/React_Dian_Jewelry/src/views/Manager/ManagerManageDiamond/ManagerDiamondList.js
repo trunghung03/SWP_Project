@@ -44,7 +44,6 @@ const ManagerDiamondList = () => {
       fontSize: 14,
     },
   }));
-
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
@@ -271,7 +270,7 @@ const ManagerDiamondList = () => {
     );
   
     return (
-      <div className="manager_manage_product_pagination">
+      <div className="manager_manage_diamond_pagination">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
