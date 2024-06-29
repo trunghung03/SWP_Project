@@ -16,7 +16,6 @@ using UserApplication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 Environment.SetEnvironmentVariable("ASPNETCORE_APIURL",builder.Configuration.GetSection("URLS").GetSection("ApiUrl").Value);
 // Add services to the container.
 
