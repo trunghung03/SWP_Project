@@ -29,8 +29,6 @@ public partial class Product
 
     public int? SubDiamondAmount { get; set; }
 
-    public decimal? ShellAmount { get; set; }
-
     public bool Status { get; set; }
 
     public int? CollectionId { get; set; }
@@ -44,6 +42,8 @@ public partial class Product
     public virtual Diamond MainDiamond { get; set; }
 
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
+
+    public virtual ICollection<Shell> Shells { get; set; } = new List<Shell>();
 
     public virtual Diamond SubDiamond { get; set; }
 }

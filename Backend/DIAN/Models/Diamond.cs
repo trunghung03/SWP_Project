@@ -21,8 +21,6 @@ public partial class Diamond
 
     public string CertificateScan { get; set; }
 
-    public int AmountAvailable { get; set; }
-
     public decimal Price { get; set; }
 
     public bool Status { get; set; }
