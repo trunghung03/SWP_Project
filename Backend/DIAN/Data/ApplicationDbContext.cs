@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using DIAN_.Models;
 
 namespace DIAN_.Models;
 
@@ -238,7 +239,6 @@ public partial class ApplicationDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(36)
                 .HasColumnName("productCode");
-            entity.Property(e => e.ShellAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Status).HasDefaultValue(true);
             entity.Property(e => e.SubDiamondId).HasColumnName("SubDiamondID");
 
@@ -326,7 +326,6 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("SHELLMATERIAL");
 
             entity.Property(e => e.ShellMaterialId).HasColumnName("ShellMaterialID");
-            entity.Property(e => e.AmountAvailable).HasColumnType("decimal(18, 4)");
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -377,4 +376,6 @@ public partial class ApplicationDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+public DbSet<DIAN_.Models.Shell> Shell { get; set; } = default!;
 }

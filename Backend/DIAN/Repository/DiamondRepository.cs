@@ -85,7 +85,6 @@ namespace DIAN_.Repository
                 existingDiamond.Cut = diamondModel.Cut;
                 existingDiamond.Carat = diamondModel.Carat;
                 existingDiamond.CertificateScan = diamondModel.CertificateScan;
-                existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
                 existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();
                 return existingDiamond;
