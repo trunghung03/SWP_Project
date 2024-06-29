@@ -10,60 +10,114 @@ body {
     background-color: #1c1c1c !important;
     color: white;
 }
+.react-chatbot-kit-chat-bot-message-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; /* Space between messages */
+}
+
+.react-chatbot-kit-chat-bot-avatar-container {
+  width: 20px; /* Avatar size */
+  height: 20px; /* Avatar size */
+  margin-right: 5px; /* Space between avatar and message */
+}
+
+.react-chatbot-kit-chat-bot-avatar-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* Make the avatar circular */
+}
+
+.react-chatbot-kit-chat-bot-message {
+  background-color: #376B7E; /* Background color for bot's message */
+  color: white;
+  padding: 8px 12px; /* Padding inside the message bubble */
+  border-radius: 8px; /* Rounded corners for the message bubble */
+  max-width: 80%; /* Limit the width of the message */
+  font-size: 12px; /* Font size for the message text */
+  margin-bottom: 5px; /* Space below each message */
+}
+
+/* Styling for the user's message */
+.react-chatbot-kit-user-chat-message {
+  background-color: #007bff; /* Background color for user's message */
+  color: white;
+  padding: 8px 12px; /* Padding inside the message bubble */
+  border-radius: 8px; /* Rounded corners for the message bubble */
+  max-width: 80%; /* Limit the width of the message */
+  font-size: 12px; /* Font size for the message text */
+  margin-bottom: 5px; /* Space below each message */
+}
+
+/* Styling for the button */
+.staff-btn {
+  background-color: #376B7E; /* Match the botMessageBox background color */
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  padding: 5px 10px; /* Padding inside the button */
+  border-radius: 8px; /* Rounded corners for the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 12px; /* Font size for the button text */
+  margin: 5px 0; /* Margin for spacing */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.staff-btn:hover {
+  background-color: #5ccc9d; /* Change background color on hover */
+}
+
 .chatbot-container {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    width: 300px; /* Adjust as needed */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-    background: #007bff; /* Change background color to blue */
-    color: white; /* Ensure text is visible against the blue background */
-  }
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  width: 300px; /* Adjust as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  background: #66a3ff; /* Lighter blue background */
+  color: white; /* Ensure text is visible against the blue background */
+}
+
+.control-buttons {
+  display: flex;
+  justify-content: flex-end;
+  background: #0056b3; /* Darker blue for control buttons background */
+  padding: 5px;
+}
+
+.control-button {
+  background: none;
+  border: none;
+  font-size: 14px; /* Font size for control buttons */
+  margin-left: 5px;
+  cursor: pointer;
+  color: white; /* Ensure control buttons are visible */
+}
+
+.control-button:hover {
+  color: #d1eaff; /* Slightly lighter blue on hover for better visibility */
+}
+
+.chatbot-body {
+  display: block;
+  padding: 10px;
+  background: #007bff; /* Ensure the chatbot body matches the container */
+  color: white; /* Ensure text is visible against the blue background */
+}
+
+.supporter-text {
+  font-size: 14px; /* Font size */
+  font-weight: bold; /* Make the text bold */
+  color: #3399ff; /* Medium blue color */
+  background: -webkit-linear-gradient(#3399ff, #99ccff); /* Gradient from medium blue to lighter blue */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a slight shadow for more prominence */
+}
+
+
   
-  .control-buttons {
-    display: flex;
-    justify-content: flex-end;
-    background: #0056b3; /* Darker blue for control buttons background */
-    padding: 5px;
-  }
   
-  .chatbot-body {
-    display: block;
-    padding: 10px;
-    background: #007bff; /* Change background color to blue for chatbot body */
-    color: white; /* Ensure text is visible against the blue background */
-  }
-  
-  .control-button {
-    background: none;
-    border: none;
-    font-size: 16px;
-    margin-left: 5px;
-    cursor: pointer;
-    color: white; /* Ensure control buttons are visible */
-  }
-  
-  .control-button:hover {
-    color: #d1eaff; /* Slightly lighter blue on hover for better visibility */
-  }
-  
-  .chatbot-body {
-    display: block;
-    padding: 10px;
-    background: #007bff; /* Ensure the chatbot body matches the container */
-    color: white; /* Ensure text is visible against the blue background */
-  }
-  .supporter-text {
-    font-size: 18px; /* Increase font size */
-    font-weight: bold; /* Make the text bold */
-    color: #003366; /* Dark blue color */
-    background: -webkit-linear-gradient(#003366, #66a3ff); /* Gradient from dark blue to lighter blue */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a slight shadow for more prominence */
-  }
   
