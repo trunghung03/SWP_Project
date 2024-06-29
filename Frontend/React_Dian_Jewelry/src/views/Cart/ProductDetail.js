@@ -21,10 +21,6 @@ import GIA from '../../assets/img/gia2.jpg';
 import { getDiamondPrice } from '../../services/PricingService';
 
 function ProductDetail() {
-    useEffect(() => {
-        window.scrollTo(0, 220);
-    }, []);
-
     const location = useLocation();
     const navigate = useNavigate();
     const { addToCart } = useCart();
@@ -42,18 +38,21 @@ function ProductDetail() {
     const [diamondPrice, setDiamondPrice] = useState(null);
     const [shellPrice, setShellPrice] = useState(0);
 
-    const navigateToProductDetail = (productId) => {
-        const productDetailElement = document.getElementById('product_detail');
-        if (productDetailElement) {
-            const topPos = productDetailElement.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo(0, 220);
-        }
-        navigate('/product-detail', { state: { id: productId } });
+    const navigateToProductDetail = (product) => {
+        const productId = product.productId;
+        const productName = product.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/product-detail/${productName}`, { state: { id: productId } });
+        window.scrollTo(0, 220);
     };
 
     useEffect(() => {
+        window.scrollTo(0, 220);
+    }, []);
+
+
+    useEffect(() => {
+        window.scrollTo(0, 220);
         const { id } = location.state || {};
-        console.log("Product ID from state:", id); 
         if (id) {
             getProductDetail(id).then(response => {
                 const productData = response.data;
@@ -212,7 +211,7 @@ function ProductDetail() {
         <div id="product_detail" className={`product_detail ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
-            <ToastContainer />\
+            <ToastContainer />
             <br />
             <div className="product_detail_container">
                 <div className="product_images_detail">
@@ -269,9 +268,9 @@ function ProductDetail() {
                         </div>
                     </div>
                     <div className="product_actions_detail">
-                        <button 
-                            className="add_to_cart_btn" 
-                            onClick={handleAddToCart} 
+                        <button
+                            className="add_to_cart_btn"
+                            onClick={handleAddToCart}
                             disabled={diamondPrice === null}
                         >
                             <i className="fas fa-shopping-cart"></i> Add to cart
@@ -319,7 +318,7 @@ function ProductDetail() {
                 <h2 className="also_like_title">You May Also Like</h2>
                 <div className="also_like_wrapper">
                     {alsoLikeProducts.map((product, index) => (
-                        <div key={index} className="also_like_card" onClick={(e) => { e.stopPropagation(); navigateToProductDetail(product.productId); }}>
+                        <div key={index} className="also_like_card" onClick={() => navigateToProductDetail(product)}>
                             <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
                             <div className="also_product_view_icon_wrapper" data-tooltip="View detail">
                                 <i className="far fa-eye also_product_view_icon"></i>

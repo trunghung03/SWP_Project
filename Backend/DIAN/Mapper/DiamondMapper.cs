@@ -17,7 +17,6 @@ namespace DIAN_.Mapper
                 Cut = diamond.Cut,
                 Carat = diamond.Carat ?? 0,
                 CertificateScan = diamond.CertificateScan,
-                AmountAvailable = diamond.AmountAvailable,
             };
         }
 
@@ -40,7 +39,6 @@ namespace DIAN_.Mapper
                 Cut = diamondRequestDTO.Cut,
                 Carat = diamondRequestDTO.Carat,
                 CertificateScan = diamondRequestDTO.CertificateScan,
-                AmountAvailable = diamondRequestDTO.AmountAvailable,
                 Status = diamondRequestDTO.Status,
             };
         }
@@ -54,7 +52,6 @@ namespace DIAN_.Mapper
                 Cut = updateDiamond.Cut,
                 Carat = updateDiamond.Carat,
                 CertificateScan = updateDiamond.CertificateScan,
-                AmountAvailable = updateDiamond.AmountAvailable,
                 Status = updateDiamond.Status,
             };
         }

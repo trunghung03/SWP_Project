@@ -45,7 +45,6 @@ namespace DIAN_.Mapper
                 ImageLinkList = product.ImageLinkList,
                 SubDiamondAmount = product.SubDiamondAmount ?? 0,
                 MainDiamondAmount = product.MainDiamondAmount ?? 0,
-                ShellAmount = product.ShellAmount ?? 0,
                 CollectionId = product.CollectionId,
                 Sizes = sizes,
                 CategoryId = product.CategoryId,
@@ -111,7 +110,6 @@ namespace DIAN_.Mapper
                 MainDiamondId = productRequestDTO.MainDiamondId,
                 SubDiamondAmount = productRequestDTO.SubDiamondAmount,
                 MainDiamondAmount = productRequestDTO.SubDiamondAmount,
-                ShellAmount = productRequestDTO.ShellAmount,
                 CollectionId = productRequestDTO.CollectionId,
                 CategoryId = productRequestDTO.CategoryId,
                 Status = true

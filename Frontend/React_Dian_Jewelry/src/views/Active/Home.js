@@ -167,8 +167,14 @@ const Home = () => {
     return tab === activeTab ? 'home_feature_navlink active-tab' : 'home_feature_navlink';
   };
 
-  const handleProductClick = (id) => {
-    navigate('/product-detail', { state: { id } });
+  const handleProductClick = (product) => {
+    const productName = product.name.replace(/\s+/g, '-').toLowerCase();
+    navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
+  };
+
+  const handleCollectionClick = () => {
+    const collectionName = newestCollection.name.replace(/\s+/g, '-').toLowerCase();
+    navigate(`/collection/${collectionName}`, { state: { collectionId: newestCollection.collectionId } });
   };
 
   return (
@@ -202,11 +208,11 @@ const Home = () => {
             <div className="slide-content">
               <img className="slide-img left-img" src={slide2} alt="Slide 2" />
               <div className="slide-right-section">
-                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E   L  R  Y</p>
+                <p className="slide-text right-text">C  L  A  S  S  I  C     J  E  W  E  L  R  Y</p>
                 <div className="slide-small-image">
                   <img src={slide2Small} alt="Small Slide 2" />
                   {newestCollection && (
-                    <button onClick={() => handleNavigate('/collection', { collectionId: newestCollection.collectionId })} className="slide-button">SHOP THIS COLLECTION</button>
+                    <button onClick={handleCollectionClick} className="slide-button">SHOP THIS COLLECTION</button>
                   )}
                 </div>
               </div>
@@ -425,11 +431,10 @@ const Home = () => {
             <h2 className="trending_title">Trending Jewelry</h2>
             <div className="trending_product_card_section row">
               {trendingProducts.map((product, index) => (
-                <div key={index} className="trending_product_card card" onClick={() => handleProductClick(product.productId)}>
+                <div key={index} className="trending_product_card card" onClick={() => handleProductClick(product)}>
                   <img src={product.imageLinkList} alt={product.name} className="product_image" />
                   <p className="trending_product_name">{product.name}</p>
                   <p className="trending_product_price"><del>{product.originalPrice}$</del>    {product.price}$</p>
-                  {/* <button className="view_detail_button">View detail</button> */}
                 </div>
               ))}
             </div>
@@ -458,7 +463,7 @@ const Home = () => {
           <div className="row">
             {displayProducts.map((product) => (
               <div key={product.productId} className="col-md-3">
-                <div className="home_feature_product_card" onClick={() => handleProductClick(product.productId)}>
+                <div className="home_feature_product_card" onClick={() => handleProductClick(product)}>
                   <div className="home_feature_product_icon_wrapper" data-tooltip="View detail">
                     <i className="far fa-eye home_feature_product_icon_eye" ></i>
                   </div>

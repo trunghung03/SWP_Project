@@ -56,8 +56,10 @@ function Blog() {
     };
   }, []);
 
-  const handleReadMore = (articleID) => {
-    navigate('/blog-detail', { state: { articleID } });
+  const handleReadMore = (article) => {
+    const { articleID, title } = article;
+    const formattedTitle = title.toLowerCase().split(' ').join('-');
+    navigate(`/blog-detail/${formattedTitle}`, { state: { articleID, title } });
   };
 
   const handleTagClick = (tag) => {
@@ -151,7 +153,7 @@ function Blog() {
               <div className='blog_read_this_button_container'>
                 <button
                   className="blog_read_this_button"
-                  onClick={() => handleReadMore(article.articleID)}
+                  onClick={() => handleReadMore(article)}
                 >
                   Read more
                 </button>
@@ -230,7 +232,7 @@ function Blog() {
                   <div className='small_blog_card_button'>
                     <button
                       className="small_blog_read_more btn btn-link"
-                      onClick={() => handleReadMore(article.articleID)}
+                      onClick={() => handleReadMore(article)}
                     >
                       Read more <i className="fas fa-arrow-right"></i>
                     </button>
@@ -283,10 +285,10 @@ function Blog() {
       </div>
 
       <div className='blog_inspired_title'>
-          <h4>Get Inspired</h4>
-          <p>Tag us on instagram @dianjewelry</p>
-        </div>
-      <BlogInspired openInstagram={openInstagram} />
+        <h4>Get Inspired</h4>
+        <p>Tag us on instagram @dianjewelry</p>
+      </div>
+      <BlogInspired />
 
       <ScrollToTop />
 

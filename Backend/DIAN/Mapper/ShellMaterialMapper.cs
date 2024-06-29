@@ -11,7 +11,6 @@ namespace DIAN_.Mapper
             {
                 ShellMaterialId = shell.ShellMaterialId,
                 Name = shell.Name,
-                AmountAvailable = shell.AmountAvailable,
             };
         }
 
@@ -20,7 +19,6 @@ namespace DIAN_.Mapper
             return new Shellmaterial
             {
                 Name = shellDTO.Name,
-                AmountAvailable = shellDTO.AmountAvailable,
                 Status = true
             };
         }
@@ -28,7 +26,6 @@ namespace DIAN_.Mapper
         public static Shellmaterial ToShellMaterial(this UpdateShellMaterialRequestDTO shellDTO, Shellmaterial existingShell)
         {
             existingShell.Name = shellDTO.Name;
-            existingShell.AmountAvailable = shellDTO.AmountAvailable;
             return existingShell;
         }
     }
