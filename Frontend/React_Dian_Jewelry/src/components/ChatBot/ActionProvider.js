@@ -74,6 +74,13 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       messages: [...prev.messages, botMessage],
     }));
   };
+  const handleUnknown = () => {
+    const botMessage = createChatBotMessage('I am not sure about that. Could you please ask something else?');
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+  };
 
   return (
     <div>
@@ -85,6 +92,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
             handleProductInfo,
             handlePurchaseInfo,
             handleCustomerSupport,
+            handleUnknown
           },
         });
       })}

@@ -20,6 +20,8 @@ const MessageParser = ({ children, actions }) => {
       actions.handlePurchaseInfo('place an order');
     } else if (lowerCaseMessage.includes('payment')) {
       actions.handlePurchaseInfo('payment methods');
+    } else {
+      actions.handleUnknown();
     }
   };
   
