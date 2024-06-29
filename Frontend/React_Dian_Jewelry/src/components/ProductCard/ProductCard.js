@@ -8,13 +8,14 @@ const ProductCard = ({ id, image, name, price, color, carat, clarity }) => {
 
     const handleViewClick = (e) => {
         e.stopPropagation();
-        navigate('/product-detail', { state: { id } });
+        const productName = name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/product-detail/${productName}`, { state: { id } });
     };
 
     return (
         <div className="product_card" onClick={handleViewClick}>
             <img src={image} alt={name} />
-            <div className="product_view_icon_wrapper"  data-tooltip="View detail">
+            <div className="product_view_icon_wrapper" data-tooltip="View detail">
                 <i className="far fa-eye product_view_icon"></i>
             </div>
             <p className='product_card_detail'>{clarity} | {carat} | {color}</p>
@@ -58,14 +59,14 @@ const ProductList = ({ products, resetKey }) => {
         <div className="product_list col-lg-12">
             {displayedProducts.map((product, index) => (
                 <ProductCard 
-                key={index} 
-                id={product.productId} 
-                image={product.imageLinkList} 
-                name={product.name} 
-                price={product.price}  
-                color={product.color}
-                carat={product.carat}
-                clarity={product.clarity}
+                    key={index} 
+                    id={product.productId} 
+                    image={product.imageLinkList} 
+                    name={product.name} 
+                    price={product.price}  
+                    color={product.color}
+                    carat={product.carat}
+                    clarity={product.clarity}
                 />
             ))}
             {visibleProducts < products.length ? (

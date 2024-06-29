@@ -69,8 +69,12 @@ function OrderHistory() {
     const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
     const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
+    // const handleDetailClick = (orderNumber) => {
+    //     navigate('/order-detail', { state: { orderNumber } });
+    // };
+
     const handleDetailClick = (orderNumber) => {
-        navigate('/order-detail', { state: { orderNumber } });
+        navigate(`/order-detail/${orderNumber}`, { state: { orderNumber } });
     };
 
     const handlePageChange = (pageNumber) => {

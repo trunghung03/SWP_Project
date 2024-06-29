@@ -81,16 +81,19 @@ const CollectionSlide = ({ onCollectionClick }) => {
       <div className="right_section wrapper">
         <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
         <ul className="carousel">
-          {collections.map((collection, index) => (
-            <li key={index} className="home_product_card card" onClick={() => handleNavigate('/collection', { collectionId: collection.collectionId })}>
-              <div className="home_product_icon_wrapper" data-tooltip="View collection">
-                <i className="far fa-eye home_product_icon_eye"></i>
-              </div>
-              <img src={collection.imageLink} alt={collection.name} className="home_product_image" />
-              <p className="home_product_name">{collection.name}</p>
-              <div className="home_collection_hover_effect"></div>
-            </li>
-          ))}
+          {collections.map((collection, index) => {
+            const collectionName = collection.name.replace(/\s+/g, '-').toLowerCase();
+            return (
+              <li key={index} className="home_product_card card" onClick={() => handleNavigate(`/collection/${collectionName}`, { collectionId: collection.collectionId })}>
+                <div className="home_product_icon_wrapper" data-tooltip="View collection">
+                  <i className="far fa-eye home_product_icon_eye"></i>
+                </div>
+                <img src={collection.imageLink} alt={collection.name} className="home_product_image" />
+                <p className="home_product_name">{collection.name}</p>
+                <div className="home_collection_hover_effect"></div>
+              </li>
+            );
+          })}
         </ul>
         <i id="right" className="fa-solid fa-angle-right nav_arrow right_arrow" role="button"></i>
       </div>

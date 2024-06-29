@@ -15,19 +15,19 @@ body {
     bottom: 20px;
     left: 20px;
     z-index: 1000;
-    width: 300px; /* Adjust as needed */
+    width: 300px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
-    background: #007bff; /* Change background color to blue */
-    color: white; /* Ensure text is visible against the blue background */
+    background: #007bff;
+    color: white; 
   }
   
   .control-buttons {
     display: flex;
     justify-content: flex-end;
-    background: #0056b3; /* Darker blue for control buttons background */
+    background: #0056b3;
     padding: 5px;
   }
   
