@@ -59,6 +59,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[SHELL]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[SHELLMATERIAL]",
          "ObjectType": 0
       },
@@ -73,6 +77,7 @@
    ],
    "UiHint": null,
    "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDateOnlyTimeOnly": true,

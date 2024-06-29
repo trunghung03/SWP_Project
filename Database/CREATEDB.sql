@@ -69,8 +69,7 @@ CREATE TABLE PURCHASEORDER (
 CREATE TABLE SHELLMATERIAL (
     ShellMaterialID INT PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(100) NOT NULL,
-	AmountAvailable DECIMAL(18,4) NOT NULL,
-     Price DECIMAL(18, 2) NOT NULL,
+    Price DECIMAL(18, 2) NOT NULL,
     Status BIT NOT NULL DEFAULT 1,
 );
 
@@ -83,7 +82,6 @@ CREATE TABLE DIAMOND (
     Carat DECIMAL(5, 2) ,
     Cut NVARCHAR(50),
     CertificateScan NVARCHAR(MAX),
-    AmountAvailable INT NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 );
@@ -116,11 +114,18 @@ CREATE TABLE PRODUCT (
     ImageLinkList NVARCHAR(MAX),
 	MainDiamondAmount INT,
     SubDiamondAmount INT,
-	ShellAmount DECIMAL(18, 2),
     Status BIT NOT NULL DEFAULT 1,
 	CollectionID INT FOREIGN KEY REFERENCES COLLECTION(CollectionID),
 	CategoryID INT FOREIGN KEY REFERENCES CATEGORY(CategoryID),
 );
+
+CREATE TABLE SHELL (
+    ShellID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
+    ShellAmount DECIMAL(18, 2),
+    AmountAvailable INT NOT NULL,
+    Status BIT NOT NULL DEFAULT 1
+)
 
 -- Order Detail table
 CREATE TABLE ORDERDETAIL (

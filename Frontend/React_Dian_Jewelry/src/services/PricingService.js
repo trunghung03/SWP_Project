@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://pricingservice-z16l.onrender.com';
+const API_BASE_URL = '167.172.65.164:8000/docs#/';
 const SHELL_API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const getDiamondPrice = (cut, carat, clarity, color) => {
