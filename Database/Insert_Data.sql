@@ -42,13 +42,13 @@
 
 	-- Insert dummy data into PURCHASEORDER table
 	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note,SaleStaff,DeliveryStaff) VALUES
-	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 200.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
-	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 300.00, 'Paid', 2, 1, 'Ship at D2',3,8),
-	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 150.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
-	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 250.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
-	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
-	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
-	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8);
+	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2000.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
+	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3000.00, 'Paid', 2, 1, 'Ship at D2',3,8),
+	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1500.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
+	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2500.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
+	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3500.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
+	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4000.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
+	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4500.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8);
 	
 	-- Insert dummy data into CATEGORY table
 	INSERT INTO CATEGORY ([Name], Status) VALUES
@@ -255,13 +255,13 @@ INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (48, 
 
 	-- Insert dummy data into ORDERDETAIL table
 	INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, Size, Status) VALUES
-	(1, 2000.00, 1, 2, 7.5, 1),
-	(2, 5000.00, 2, 2, 18.0, 1),
-	(3, 3000.00, 3, 3, 16.0, 1),
-	(4, 1500.00, 4, 4, 6.0, 1),
-	(5, 3500.00, 5, 3, 20.0, 1), -- Changed ShellMaterialID to 3
-	(6, 10000.00, 1, 3, 22.0, 1), -- Changed ProductID to 1 and ShellMaterialID to 3
-	(7, 4000.00, 2, 1, 12.0, 1); -- Changed ProductID to 2 and ShellMaterialID to 1
+	(1, 2300.00, 1, 2, 7.5, 1),
+	(2, 3100.00, 2, 2, 18.0, 1),
+	(3, 2000.00, 3, 3, 16.0, 1),
+	(4, 3200.00, 4, 4, 6.0, 1),
+	(5, 4000.00, 5, 3, 20.0, 1), -- Changed ShellMaterialID to 3
+	(6, 5000.00, 1, 3, 22.0, 1), -- Changed ProductID to 1 and ShellMaterialID to 3
+	(7, 4500.00, 2, 1, 12.0, 1); -- Changed ProductID to 2 and ShellMaterialID to 1
 
 	-- Insert dummy data into WARRANTY table
 	INSERT INTO WARRANTY (OrderDetailID, StartDate, EndDate, Status) VALUES
@@ -292,20 +292,20 @@ INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (48, 
 
 	-- Insert more dummy data into PURCHASEORDER table with different dates
 INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note, SaleStaff, DeliveryStaff) VALUES
-(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 220.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
-(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 305.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
-(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 175.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
-(4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 290.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
-(5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 380.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
-(6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 420.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),
-(7, '2023-06-25', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 440.00, 'Pending', 6, 0, 'Signature required', 4, 7);
+(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2200.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
+(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3050.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
+(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1750.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
+(4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2900.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
+(5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3800.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
+(6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4200.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),
+(7, '2023-06-25', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4400.00, 'Pending', 6, 0, 'Signature required', 4, 7);
 
 -- Insert more dummy data into ORDERDETAIL table using existing IDs
 INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, Size, Status) VALUES
-(8, 2200.00, 1, 1, 8.0, 1),
-(9, 3500.00, 2, 2, 19.0, 1), 
-(10, 2700.00, 3, 3, 17.0, 1),
-(11, 3100.00, 4, 4, 15.0, 1),
-(12, 3900.00, 5, 3, 21.0, 1),
-(13, 4700.00, 1, 3, 23.0, 1),
-(14, 5200.00, 2, 1, 10.0, 1);
+(8, 2300.00, 1, 1, 8.0, 1),
+(9, 3100.00, 2, 2, 19.0, 1), 
+(10, 2100.00, 3, 3, 17.0, 1),
+(11, 3200.00, 4, 4, 15.0, 1),
+(12, 4000.00, 5, 3, 21.0, 1),
+(13, 5000.00, 1, 3, 23.0, 1),
+(14, 4500.00, 2, 1, 10.0, 1);

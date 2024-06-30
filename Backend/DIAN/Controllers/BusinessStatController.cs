@@ -333,9 +333,9 @@ namespace DIAN_.Controllers
             var totalOrders = ordersOnDate.Count;
             var totalCustomers = ordersOnDate.Select(o => o.UserId).Distinct().Count();
             var totalSales = ordersOnDate.Sum(o => o.TotalPrice);
-            // Calculate the total price of order details
+
             var totalPriceOfOrderDetails = ordersOnDate.Sum(o => o.Orderdetails.Sum(d => d.LineTotal));
-            // Calculate profit
+
             var primeCost = totalPriceOfOrderDetails - totalPriceOfOrderDetails * 0.2m; 
             var profit = totalSales - primeCost;
             var statistics = new TodayStatisticDto
