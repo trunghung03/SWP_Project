@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as signalR from '@microsoft/signalr';
 
-const Notification = ({ customerId }) => {
+const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   
   useEffect(() => {
@@ -14,7 +14,7 @@ const Notification = ({ customerId }) => {
     //   .configureLogging(signalR.LogLevel.Debug)
     //   .build();
     const connection = new signalR.HubConnectionBuilder()
-  .withUrl("/notifications")
+  .withUrl("https://localhost:7184/notification")
   .build();
 
     // connection.start().then(() => {
@@ -37,7 +37,7 @@ const Notification = ({ customerId }) => {
     return () => {
       connection.stop();
     };
-  }, [customerId]);
+  }, []);
 
   return (
     <div>

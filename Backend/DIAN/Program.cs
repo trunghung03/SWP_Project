@@ -129,7 +129,7 @@ app.UseSwaggerUI(options =>
 });
 app.UseDeveloperExceptionPage();
 
-app.MapHub<NotificationsHub>("/notifications");
+app.MapHub<NotificationsHub>("/notification");
 
 app.ConfigureCustomExceptionMiddleware();
 app.UseExceptionHandler(opt => { });
