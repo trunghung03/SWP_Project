@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../../styles/Manager/ManagerList.scss";
 import logo from "../../assets/img/logoN.png";
 import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -172,7 +171,6 @@ const handleBackClick = () => {
               label="Status"
             >
               <MenuItem value="default">Default</MenuItem>
-              <MenuItem value="Preparing">Preparing</MenuItem>
               <MenuItem value="Delivering">Delivering</MenuItem>
               <MenuItem value="Completed">Completed</MenuItem>
               <MenuItem value="Cancelled">Cancelled</MenuItem>
@@ -255,7 +253,7 @@ const handleBackClick = () => {
           </TableContainer>
           {isSearch && (
               <button className="SS_back_button" onClick={handleBackClick}>
-                Back to Order List
+                Back
               </button>
             )}
         </div>

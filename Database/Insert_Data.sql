@@ -42,13 +42,13 @@
 
 	-- Insert dummy data into PURCHASEORDER table
 	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note,SaleStaff,DeliveryStaff) VALUES
-	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 200.00, 'Pending', 1, 0, 'Shipping with packaging',3,4),
-	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 300.00, 'Pending', 2, 1, 'Ship at D2',3,8),
-	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 150.00, 'Pending', 3, 0, 'Shipping without packaging',3,8),
-	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 250.00, 'Pending', 4, 1, 'Shipping with packaging',5,4),
-	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Pending', 5, 0, 'Shipping with packaging',5,4),
-	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Pending', 6, 1, 'Shipping with packaging',3,4),
-	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Pending', 7, 0, 'Shipping with packaging',5,8);
+	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 200.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
+	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 300.00, 'Paid', 2, 1, 'Ship at D2',3,8),
+	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 150.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
+	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 250.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
+	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 350.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
+	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 400.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
+	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 450.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8);
 	
 	-- Insert dummy data into CATEGORY table
 	INSERT INTO CATEGORY ([Name], Status) VALUES
@@ -150,7 +150,7 @@ VALUES
 	-- Insert dummy data into PRODUCT table
 INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, SubDiamondID, LaborCost, ImageLinkList, MainDiamondAmount, SubDiamondAmount, Status, CollectionID, CategoryID)
 VALUES
-('PROD001', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.', 1 , 5, 71.50, 'https://image.brilliantearth.com/media/product_new_images/B7/BE2D7890_yellow_top.jpg;https://image.brilliantearth.com/media/product_new_images/E4/BE2D7890_yellow_side1.jpg;https://image.brilliantearth.com/media/product_images/D2/BE2D1791_yellow_additional1.jpg;https://image.brilliantearth.com/media/product_images/C9/BE2D1791.jpg', 0, 73, 1, 2, 1),
+('PROD001', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.', 1 , 5, 71.50, 'https://i5.walmartimages.com/seo/Feledorashia-Rings-for-Women-Valentine-s-Day-Gifts-2PC-Ring-Bridal-Zircon-Diamond-Elegant-Engagement-Wedding-Band-Ring-Set_b1ea52c3-bf4d-4b24-ab8b-3452fccec372.6da512e049be49a0c5539e5fd8f02970.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF', 0, 73, 1, 2, 1),
 ('PROD002', 'Ballad Eternity Ring', 1190.00, 'A stunning ring featuring diamonds that encircle the band for a timeless and elegant look.', 5 , 5, 276.00,  'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 1, 30, 1, 2, 9),
 ('PROD003', 'Riviera Eternity Ring', 1990.00, 'This ring showcases lab diamonds in a continuous band, creating an eternity effect.', 6 , 5, 64.00, 'https://image.brilliantearth.com/media/diamond_ring_vto/3C/BE1M30D_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/ED/BE1M30D_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/SF/BE1M30D-18KW-RD_2.jpg;https://image.brilliantearth.com/media/product_images/U1/BE1M30D_white_additional1.jpeg', 1, 50, 1, 2, 9),
 ('PROD004', 'Ellora Ring', 2750.00, 'Featuring lab diamonds around the entire band, this ring sparkles with sophistication.',12 , 5, 82.10,  'https://image.brilliantearth.com/media/diamond_ring_vto/P9/BE1D14842_yellow_Pear_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/B1/BE1D14842_PS_200ct_yellow_side2.jpg;https://image.brilliantearth.com/media/carat_image/BE/BE1D14842_PS_200ct_yellow_side1.jpg;https://image.brilliantearth.com/media/product_images/3V/BE1D14842LC-yellow_035.jpg', 1, 60, 1, 2, 1),

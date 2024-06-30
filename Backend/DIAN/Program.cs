@@ -34,6 +34,16 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
+builder.Services.AddStackExchangeRedisCache(option =>
+{
+    option.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+    option.InstanceName = "master";
+});
+
+builder.Services.AddMemoryCache(options =>
+{
+    options.SizeLimit = 1024;
+});
 
 builder.Services.AddAuthorization(options =>
 {

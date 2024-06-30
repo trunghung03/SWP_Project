@@ -4,15 +4,19 @@ using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace DIAN_.Repository
 {
     public class ArticleRepository : IArticleRepository
     {
         private readonly ApplicationDbContext _context;
-        public ArticleRepository(ApplicationDbContext context)
+        private readonly IDistributedCache distributedCache;
+        public ArticleRepository(ApplicationDbContext context, IDistributedCache distributed)
         {
             _context = context;
+            distributedCache = distributed;
         }
 
         public async Task<Article> CreateArticleAsync(Article articleModel)
@@ -22,23 +26,38 @@ namespace DIAN_.Repository
                 throw new ArgumentNullException(nameof(articleModel.Employee), "EmployeeId cannot be null.");
             }
 
-            // Khởi tạo EmployeeNavigation dựa trên EmployeeID
-            //articleModel.EmployeeNavigation = await _context.Employees.FindAsync(articleModel.Employee);
-            //if (articleModel.EmployeeNavigation == null)
-            //{
-            //    return null;
-            //}
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
+            string cacheKey = "ArticleList";
+            await distributedCache.RemoveAsync(cacheKey);
             return articleModel;
         }
 
-        public async Task<List<Article>> GetArticleByTitleAsync(string title)
+        public async Task<List<Article>> GetArticleByTitleAsync(string title, CancellationToken cancellationToken = default)
         {
-            return await _context.Articles
-        .Where(a => a.Title.Contains(title) && a.Status)
-        .Include(a => a.EmployeeNavigation)
-        .ToListAsync();
+            string? cacheTitle = await distributedCache.GetStringAsync(title, cancellationToken);
+            if(string.IsNullOrEmpty(cacheTitle))
+            {
+                var articles = await _context.Articles
+                    .Where(a => a.Title.Contains(title) && a.Status)
+                    .Include(a => a.EmployeeNavigation)
+                    .ToListAsync(cancellationToken);
+                await distributedCache.SetStringAsync(title, JsonSerializer.Serialize(articles), new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                }, cancellationToken);
+                return articles;
+            }
+            var listTitle = JsonSerializer.Deserialize<List<Article>>(cacheTitle);
+            if (listTitle is not null)
+            {
+                foreach (var article in listTitle)
+                {
+                    _context.Set<Article>().Attach(article);
+                }
+            }
+
+            return listTitle;
         }
 
         public async Task<Article?> DeleteArticleAsync(int id)
@@ -50,6 +69,8 @@ namespace DIAN_.Repository
             {
                 existingArticle.Status = false;
                 await _context.SaveChangesAsync();
+                string individualArticleCacheKey = $"Article_{existingArticle.ContentId}";
+                await distributedCache.RemoveAsync(individualArticleCacheKey);
             }
             return existingArticle;
         }
@@ -57,19 +78,34 @@ namespace DIAN_.Repository
 
         public async Task<List<ArticleList>> GetAllAsync()
         {
-            var articles = await _context.Articles
-                .Where(w => w.Status)
-                .Include(a => a.EmployeeNavigation)
-                .Select(w => w.ToArticleList())
-                .ToListAsync();
+            string? cacheData = await distributedCache.GetStringAsync("ArticleList");
+            List<ArticleList>? articles;
 
-            return articles;
+            if (string.IsNullOrEmpty(cacheData))
+            {
+                articles = await _context.Articles
+                    .Where(w => w.Status)
+                    .Include(a => a.EmployeeNavigation)
+                    .Select(w => w.ToArticleList())
+                    .ToListAsync();
+
+                string serializedArticles = JsonSerializer.Serialize(articles);
+                await distributedCache.SetStringAsync("ArticleList", serializedArticles, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+            else
+            {
+                articles = JsonSerializer.Deserialize<List<ArticleList>>(cacheData);
+            }
+
+            return articles ?? new List<ArticleList>();
         }
+
 
         public async Task<Article?> GetArticleByIdAsync(int id)
         {
-            var url = Environment.GetEnvironmentVariable("ASPNETCORE_APIURL");
-            Console.WriteLine(url);
             return await _context.Articles.Include(a => a.EmployeeNavigation)
                 .Where(a => a.Status)
                 .FirstOrDefaultAsync(c => c.ContentId == id);
@@ -89,7 +125,8 @@ namespace DIAN_.Repository
             existingArticle.Tag = articleModel.Tag;
 
             await _context.SaveChangesAsync();
-
+            string individualArticleCacheKey = $"Article_{existingArticle.ContentId}";
+            await distributedCache.RemoveAsync(individualArticleCacheKey);
             return existingArticle;
         }
 
