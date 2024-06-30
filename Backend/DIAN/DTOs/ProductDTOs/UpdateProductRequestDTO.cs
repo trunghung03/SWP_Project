@@ -13,9 +13,6 @@ namespace DIAN_.DTOs.ProductDTOs
         [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessage = "Labor price must be non-negative.")]
-        public decimal LaborPrice { get; set; }
-
         [Url(ErrorMessage = "Image link list must be a valid URL.")]
         public string ImageLinkList { get; set; }
 

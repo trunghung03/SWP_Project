@@ -13,6 +13,8 @@
 
         public int MainDiamondId { get; set; }
 
+        public int SubDiamondId { get; set; }
+
         public decimal LaborPrice { get; set; }
 
         public string ImageLinkList { get; set; } = string.Empty;

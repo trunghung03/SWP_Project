@@ -26,11 +26,32 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product)
         {
+            var mainDiamondPrice = product.MainDiamondId.HasValue
+                ? await _context.Diamonds
+                    .Where(d => d.DiamondId == product.MainDiamondId.Value)
+                    .Select(d => d.Price)
+                    .FirstOrDefaultAsync()
+                : 0;
+
+            var subDiamondPrice = product.SubDiamondId.HasValue
+                ? await _context.Diamonds
+                    .Where(d => d.DiamondId == product.SubDiamondId.Value)
+                    .Select(d => d.Price)
+                    .FirstOrDefaultAsync()
+                : 0;
+
+            product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
+                            (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
+                            (product.LaborCost ?? 0);
+
             _memoryCache.Remove(CacheKey);
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
+
             return product;
         }
+
 
         public async Task<Product?> DeleteAsync(int id)
         {

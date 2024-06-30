@@ -25,6 +25,9 @@ namespace DIAN_.DTOs.ProductDTOs
         [Required(ErrorMessage = "Main diamond ID is required.")]
         public int MainDiamondId { get; set; }
 
+        [Required(ErrorMessage = "Sub diamond ID is required.")]
+        public int SubDiamondId { get; set; }
+
         [Required(ErrorMessage = "Labor price is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Labor price must be non-negative.")]
         public decimal LaborPrice { get; set; }
