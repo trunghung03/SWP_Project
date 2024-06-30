@@ -43,6 +43,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[NOTIFICATION]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ORDERDETAIL]",
          "ObjectType": 0
       },
@@ -77,7 +81,6 @@
    ],
    "UiHint": null,
    "UncountableWords": null,
-   "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDateOnlyTimeOnly": true,

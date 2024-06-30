@@ -292,9 +292,9 @@ INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (48, 
 
 	-- Insert more dummy data into PURCHASEORDER table with different dates
 INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note, SaleStaff, DeliveryStaff) VALUES
-(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2200.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
-(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3050.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
-(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1750.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
+(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2200.00, 'Paid', 1, 0, 'Expedited shipping', 1, 2),
+(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3050.00, 'Delivered', 2, 1, 'Deliver ASAP', 3, 4),
+(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1750.00, 'Delivering', 1, 0, 'Extra packaging needed', 2, 3),
 (4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2900.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
 (5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3800.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
 (6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4200.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),

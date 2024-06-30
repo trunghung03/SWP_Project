@@ -18,11 +18,12 @@ namespace DIAN_.Services
         private readonly IWarrantyRepository _warrantyRepository;
         private readonly IDiamondRepository _diamondRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IHubContext<NotificationsHub> _hubContext;
         private readonly ILogger<SalesStaffService> _logger;
         public SalesStaffService(IPurchaseOrderRepository purchaseOrderRepository, IOrderDetailRepository orderDetailRepository,
             IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository,
-            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger)
+            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, INotificationRepository notificationRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -31,27 +32,34 @@ namespace DIAN_.Services
             _employeeRepository = employeeRepository;
             _hubContext = hubContext;
             _logger = logger;
+            _notificationRepository = notificationRepository;
         }
 
         public async Task<Purchaseorder> UpdateOrderStatus(string status, int orderId)
         {
             var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
-            if (order == null)
-            {
-                throw new Exception("Order not found.");
-            }
-
-            //order.OrderStatus = status;
+            if (order == null) throw new Exception("Order not found.");
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
             var connectionId = NotificationsHub.GetConnectionIdForCustomer(order.UserId);
+
+            _logger.LogInformation($"Order {orderId} status updated to {status}.");
             if (connectionId != null)
             {
-                _logger.LogInformation("start notify customer");
-                _logger.LogInformation("Excuting {SaleStaffService} {orderId}", nameof(SalesStaffService), status);
-                _logger.LogInformation("end notify customer");
+                _logger.LogInformation($"Sending notification to customer {order.UserId}.");
                 await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
-                
+            }
+            else
+            {
+                _logger.LogInformation($"Customer {order.UserId} is not connected.");
+                var notification = new Notification
+                {
+                    CustomerId = order.UserId,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = false,
+                    CreatedAt = DateTime.Now,
+                };
+                await _notificationRepository.AddNotification(notification);
             }
             return updatedOrder;
         }

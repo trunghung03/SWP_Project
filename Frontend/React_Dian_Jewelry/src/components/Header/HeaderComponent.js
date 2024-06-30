@@ -16,6 +16,7 @@ import wBraceletCategory from '../../assets/img/wBraceletnav.jpg';
 import necklaceCategory from '../../assets/img/necklaceNav.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceNav.webp';
 import { searchProducts } from '../../services/ProductService'; 
+import Notification from '../../views/Setting/Notification';
 
 const HeaderComponent = () => {
     const { user, setUser } = useContext(UserContext);
@@ -26,6 +27,7 @@ const HeaderComponent = () => {
     const weddingMenuRef = useRef(null);
     const diamondMenuTimeoutRef = useRef(null);
     const weddingMenuTimeoutRef = useRef(null);
+    const customerId = localStorage.getItem('customerId');
     const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
     const [showNotifications, setShowNotifications] = useState(false);
 
@@ -182,7 +184,7 @@ const HeaderComponent = () => {
                                         placeholder="Search..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        onKeyPress={handleSearchKeyPress}
+                                        onKeyUp={handleSearchKeyPress}
                                     />
                                 </div>
                             </div>
@@ -199,6 +201,7 @@ const HeaderComponent = () => {
                                             <div className="noti_header">Notifications</div>
                                             <div className="noti_header_view">View all<i className="fas fa-arrow-right"></i></div>
                                         </div>
+                                        <Notification customerId={customerId} />
                                         {notifications.map((notification, index) => (
                                             <div key={notification.id} className="noti_item" style={{ borderBottom: index === notifications.length - 1 ? 'none' : '1px solid #e0e0e0' }}>
                                                 <div className='each_noti'>

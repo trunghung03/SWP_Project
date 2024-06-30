@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Models;
 
@@ -24,14 +19,14 @@ namespace DIAN_.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Shell>>> GetShell()
         {
-            return await _context.Shell.ToListAsync();
+            return await _context.Shells.ToListAsync();
         }
 
         // GET: api/Shells/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Shell>> GetShell(int id)
         {
-            var shell = await _context.Shell.FindAsync(id);
+            var shell = await _context.Shells.FindAsync(id);
 
             if (shell == null)
             {
@@ -77,7 +72,7 @@ namespace DIAN_.Controllers
         [HttpPost]
         public async Task<ActionResult<Shell>> PostShell(Shell shell)
         {
-            _context.Shell.Add(shell);
+            _context.Shells.Add(shell);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetShell", new { id = shell.ShellId }, shell);
@@ -87,13 +82,13 @@ namespace DIAN_.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShell(int id)
         {
-            var shell = await _context.Shell.FindAsync(id);
+            var shell = await _context.Shells.FindAsync(id);
             if (shell == null)
             {
                 return NotFound();
             }
 
-            _context.Shell.Remove(shell);
+            _context.Shells.Remove(shell);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +96,7 @@ namespace DIAN_.Controllers
 
         private bool ShellExists(int id)
         {
-            return _context.Shell.Any(e => e.ShellId == id);
+            return _context.Shells.Any(e => e.ShellId == id);
         }
     }
 }

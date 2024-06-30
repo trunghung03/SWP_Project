@@ -180,7 +180,7 @@ const Home = () => {
   return (
     <div className="Home">
       <HeaderComponent />
-
+      
       {/* Slider */}
       <div className="slider-container">
         <Slider {...settings}>
