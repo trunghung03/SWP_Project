@@ -67,14 +67,28 @@
     align-items: center;
     //background-color: white;
 }
+.manager_manage_diamond_header .manager_manage_diamond_search_section input {
+    background-color: #f3f4f6;
+    border: none;
+    width: 220px;
+    height: 28px;
+}
 
+.manager_manage_diamond_header .manager_manage_diamond_search_section input:focus {
+    background-color: #f3f4f6;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 220px;
+}
 
 .manager_manage_diamond_header .manager_manage_diamond_search_bar {
     padding: 10px;
     border-radius: 5px;
     margin-top: 5px;
     margin-right: 10px;
-    }   
+} 
+
 .manager_manage_diamond_all_container h3 {
     text-align: center;
     font-weight: bold;

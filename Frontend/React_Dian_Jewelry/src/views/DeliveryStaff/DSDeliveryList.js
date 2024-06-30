@@ -229,7 +229,7 @@ const handleBackClick = () => {
                     >
                       <TableCell align="center">{item.orderId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")} </TableCell>
+                      <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")}</TableCell>
                       <TableCell align="center">
                         {item.shippingAddress}
                       </TableCell>

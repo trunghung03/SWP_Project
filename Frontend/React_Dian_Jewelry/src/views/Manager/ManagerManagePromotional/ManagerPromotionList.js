@@ -339,8 +339,8 @@ const ManagerPromotionList = () => {
                       <TableCell align="center">{item.code}</TableCell>
                       <TableCell align="center">{item.amount}</TableCell>
                       <TableCell align="center">{item.description}</TableCell>
-                      <TableCell align="center">{item.startDate}</TableCell>
-                      <TableCell align="center">{item.endDate}</TableCell>
+                      <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
+                      <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>
                       <TableCell align="center">
                         <PromotionButton endDate={item.endDate} id={item.id} />
                       </TableCell>
