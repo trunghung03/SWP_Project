@@ -392,16 +392,30 @@ body {
 
 .account_dropdown_menu {
     top: 25px;
-    left: -200px;
-    width: 230px;
+    left: -220px;
+    width: 250px;
     border-radius: 0;
     white-space: nowrap;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.account_dropdown_menu .fa-clipboard {
+    font-size: 16px;
+    margin-right: 6px;
+    margin-left: 1px;
+}
+
 .dropdown-item {
     white-space: normal;
     word-wrap: break-word;
+}
+
+.account_dropdown_menu .dropdown-item:hover i{
+    color: #797979;
+}
+
+.account_dropdown_menu .dropdown-item:hover{
+    color: #797979;
 }
 
 // .icon_arrow {
@@ -456,8 +470,8 @@ body {
     font-size: 15px;
 }
 
-.account_dropdown_menu li:focus {
-    color: #565e6c;
+.account_dropdown_menu .dropdown-item:hover {
+    background-color: #f4f4f4;
 }
 
 .account_dropdown_menu .full_name:hover,
@@ -467,9 +481,6 @@ body {
     cursor: default;
 }
 
-li:focus {
-    color: #565e6c;
-}
 
 .header .fa-phone-alt,
 .header .fa-map-marker-alt {

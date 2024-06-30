@@ -15,7 +15,7 @@ import braceletCategory from '../../assets/img/braceletNav.png';
 import wBraceletCategory from '../../assets/img/wBraceletnav.jpg';
 import necklaceCategory from '../../assets/img/necklaceNav.jpg';
 import wNecklaceCategory from '../../assets/img/wNecklaceNav.webp';
-import { searchProducts } from '../../services/ProductService'; 
+import { searchProducts } from '../../services/ProductService';
 
 const HeaderComponent = () => {
     const { user, setUser } = useContext(UserContext);
@@ -229,7 +229,8 @@ const HeaderComponent = () => {
                                                 <p className="point dropdown-item">{user.points} points</p>
                                             </li>
                                             <hr className="account_hr1" />
-                                            <li><Link className="dropdown-item" to="/edit-profile"><i className="adm_icon fas fa-cog"></i> Setting</Link></li>
+                                            <li><Link className="dropdown-item" to="/edit-profile"><i className="adm_icon fas fa-cog"></i> My profile</Link></li>
+                                            <li><Link className="dropdown-item" to="/order-history"><i className="adm_icon fas fa-clipboard"></i> Order history</Link></li>
                                             <li><Link className="dropdown-item" to="/FAQs"><i className="adm_icon fas fa-question-circle"></i> FAQs</Link></li>
                                             <hr className="account_hr2" />
                                             <li><div className="dropdown-item" onClick={handleLogout}><i className="adm_icon fas fa-sign-out-alt"></i> Sign out</div></li>

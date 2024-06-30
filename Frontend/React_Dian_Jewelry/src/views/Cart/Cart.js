@@ -99,8 +99,9 @@ function Cart() {
         updateCartItem(index, updatedItem);
     };
 
-    const handleViewProduct = (productId) => {
-        navigate('/product-detail', { state: { id: productId } });
+    const handleViewProduct = (product) => {
+        const productName = product.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
     };
 
     const calculateTotal = () => {
@@ -138,7 +139,7 @@ function Cart() {
                                             <div className="cart_item_header">
                                                 <h5 className="cart_item_name">{item.name}</h5>
                                                 <div className="cart_item_links">
-                                                    <a onClick={() => handleViewProduct(item.productId)} className="cart_item_view">VIEW</a>
+                                                    <a onClick={() => handleViewProduct(item)} className="cart_item_view">VIEW</a>
                                                     <span> | </span>
                                                     <a className="cart_item_remove" onClick={() => removeFromCart(index)}>REMOVE</a>
                                                 </div>

@@ -388,7 +388,7 @@ const Login = () => {
                   onClick={handleGuestLogin}
                   style={{ cursor: "pointer" }}
                 >
-                  Sign in as guest
+                  Guest
                 </div>
               </div>
             </div>
