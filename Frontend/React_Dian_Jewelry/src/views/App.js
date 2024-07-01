@@ -69,6 +69,39 @@ function AppContent() {
   const location = useLocation();
   const isLoginPath = location.pathname === '/login';
 
+  const staffPaths = [
+    '/sales-staff-order-list',
+    '/sales-staff-manage-order-detail',
+    '/sales-staff-content-list',
+    '/sales-staff-add-content',
+    '/sales-staff-update-content',
+    '/sales-staff-warranty-list',
+    '/rich-text-page',
+    '/delivery-staff-delivery-list',
+    '/delivery-staff-delivery-detail',
+    '/manager-statistic',
+    '/manager-diamond-list',
+    '/manager-add-diamond',
+    '/manager-product-list',
+    '/manager-add-product',
+    '/manager-shell-list',
+    '/manager-add-shell',
+    '/manager-employee-list',
+    '/manager-add-employee',
+    '/manager-promotional-list',
+    '/manager-add-promotion',
+    '/manager-collection-list',
+    '/manager-add-collection',
+    '/admin-customer-list',
+    '/admin-employee-list',
+    '/admin-add-employee',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+  ];
+
+  const shouldShowChatbot = !isLoginPath && !staffPaths.some(path => location.pathname.startsWith(path));
+
   const toggleMinimize = () => {
     setIsClosed(true);
   };
@@ -146,11 +179,11 @@ function AppContent() {
 
           {/* Delivery Staff */}
           <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
-          <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
+          <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail/:orderId" element={DSDeliveryDetail} />} />
 
           {/* <Route path="/notification" element={<Notification/>} /> */}
         </Routes>
-        {!isClosed && !isLoginPath && (
+        {shouldShowChatbot && !isClosed && (
           <div className="chatbot-container">
             <div className="control-buttons">
               <button className="control-button" onClick={toggleMinimize}>
@@ -170,7 +203,7 @@ function AppContent() {
             </div>
           </div>
         )}
-        {isClosed && !isLoginPath && (
+        {shouldShowChatbot && isClosed && (
           <button className="control-button" onClick={openChatbot} style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
             <div className="supporter-text">Supporter</div>
           </button>
