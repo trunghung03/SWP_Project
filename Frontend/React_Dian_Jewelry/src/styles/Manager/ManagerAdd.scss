@@ -42,6 +42,7 @@
     margin-top: 20px;
 }
 
+
 .manager_add_diamond_submit_button {
     background-color: #1c1c1c;
     color: white;
@@ -95,11 +96,16 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
+
 .manager_add_diamond_form_row {
     display: flex;
     gap: 20px;
 }
-
+@media screen and (max-width: 500px) {
+    .manager_add_diamond_form_row {
+       flex-direction: column;
+    }
+}
 .manager_add_diamond_form_group {
     flex: 1;
     display: flex;

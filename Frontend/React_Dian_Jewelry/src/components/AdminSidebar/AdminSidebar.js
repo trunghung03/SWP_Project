@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import './AdminSidebar.scss';
 import { useNavigate } from 'react-router-dom';
+
 
 class AdminSidebar extends Component {
     constructor(props) {
@@ -11,6 +12,23 @@ class AdminSidebar extends Component {
             lastName: localStorage.getItem('lastName') || 'Last Name'
         };
     }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize(); // Call initially to set expanded state
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+    }
+
+    handleResize = () => {
+        if (window.innerWidth < 1200) {
+            this.setState({ expanded: false });
+        } else {
+            this.setState({ expanded: true });
+        }
+    };
 
     toggleSidebar = () => {
         this.setState(prevState => ({
@@ -43,6 +61,8 @@ class AdminSidebar extends Component {
     
         this.props.navigate('/login');
     };
+
+   
     
 
     render() {
