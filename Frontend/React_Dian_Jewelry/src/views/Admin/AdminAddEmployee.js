@@ -66,7 +66,7 @@ const AdminAddEmployee = () => {
                             <label>First name</label>
                             <input type="text" name="firstName" placeholder="Enter first name" value={employeeData.firstName} onChange={handleChange} required />
                         </div>
-                        <div className="manager_add_diamond_form_group">
+                        <div className="manager_add_diamond_form_group ">
                             <label>Last name</label>
                             <input type="text" name="lastName" placeholder="Enter last name" value={employeeData.lastName} onChange={handleChange} required />
                         </div>

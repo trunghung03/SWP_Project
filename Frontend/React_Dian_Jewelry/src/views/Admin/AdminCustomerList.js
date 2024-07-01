@@ -172,85 +172,89 @@ const AdminCustomerList = () => {
         <hr className="manager_header_line"></hr>
         <h3>List Of Customer Accounts</h3>
         <div className="manager_manage_diamond_pagination">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={
+                index + 1 === currentPage ? "manager_order_active" : ""
+              }
             >
-              &lt;
+              {index + 1}
             </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
+        </div>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              <div className="table-responsive">
+                <TableContainer component={Paper}>
+                  <Table className="table table-striped table-bordered table-hover" aria-label="customized table">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell scope="col" align="center">ID</StyledTableCell>
+                        <StyledTableCell scope="col" align="center">Email</StyledTableCell>
+                        <StyledTableCell scope="col" align="center">Full Name</StyledTableCell>
+                        <StyledTableCell scope="col" align="center">Phone number</StyledTableCell>
+                        <StyledTableCell scope="col" align="center">Address</StyledTableCell>
+                        <StyledTableCell scope="col" align="center">Points</StyledTableCell>
+                        <StyledTableCell scope="col" align="center">Status</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {customerList.length > 0 ? (
+                        currentCustomer.map((item) => (
+                          <TableRow className="manager_manage_table_body_row" key={item.customerId}>
+                            <TableCell align="center">{item.customerId}</TableCell>
+                            <TableCell align="center">{item.email}</TableCell>
+                            <TableCell align="center">
+                              {item.firstName} {item.lastName}
+                            </TableCell>
+                            <TableCell align="center">{item.phoneNumber}</TableCell>
+                            <TableCell align="center">{item.address}</TableCell>
+                            <TableCell align="center">{item.points}</TableCell>
+                            <TableCell align="center">
+                              <Button
+                                onClick={() => handleStatus(item.customerId)}
+                                style={{
+                                  backgroundColor: item.status ? "#1fd655" : "#c94143",
+                                  color: "white",
+                                }}
+                                variant="contained"
+                              >
+                                {item.status ? "Active" : "Deactive"}
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan="7" align="center">No Customer found</TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+              {isSearch && (
+                <button className="btn btn-secondary mt-3" onClick={handleBack}>
+                  Back to show all customers
+                </button>
+              )}
+            </div>
           </div>
-        <div className="manager_manage_diamond_table_wrapper">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">ID</StyledTableCell>
-                  <StyledTableCell align="center">Email</StyledTableCell>
-                  <StyledTableCell align="center">Full Name</StyledTableCell>
-                  <StyledTableCell align="center">Phone number</StyledTableCell>
-                  <StyledTableCell align="center">Address</StyledTableCell>
-                  <StyledTableCell align="center">Points</StyledTableCell>
-                  <StyledTableCell align="center">Status</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {customerList.length > 0 ? (
-                  currentCustomer.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.customerId}>
-                      <TableCell align="center">{item.customerId}</TableCell>
-                      <TableCell align="center">{item.email}</TableCell>
-                      <TableCell align="center">
-                        {item.firstName} {item.lastName}
-                      </TableCell>
-                      <TableCell align="center">{item.phoneNumber}</TableCell>
-                      <TableCell align="center">{item.address}</TableCell>
-                      <TableCell align="center">{item.points}</TableCell>
-                      <TableCell align="center">
-                        <Button
-                          onClick={() => handleStatus(item.customerId)}
-                          style={{
-                            backgroundColor: item.status
-                              ? "#1fd655"
-                              : "#c94143",
-                            color: "white",
-                          }}
-                          variant="contained"
-                        >
-                          {item.status ? "Active" : "Deactive"}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan="7">No Customer found</TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {isSearch && ( // Conditionally render the back button
-            <button className="SS_back_button" onClick={handleBack}>
-              Back to show all customer
-            </button>
-          )}
         </div>
       </div>
     </div>
