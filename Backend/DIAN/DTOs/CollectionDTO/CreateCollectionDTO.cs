@@ -17,7 +17,6 @@ namespace DIAN_.DTOs.CategoryDTO
         [StringLength(500, ErrorMessage = "Description must not exceed 500 characters.")]
         public string? Description { get; set; }
 
-        [Url(ErrorMessage = "Image link must be a valid URL.")]
         public string? ImageLink { get; set; }
     }
 }

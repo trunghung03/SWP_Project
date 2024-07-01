@@ -12,11 +12,11 @@ namespace DIAN_.Repository
     public class ArticleRepository : IArticleRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IDistributedCache distributedCache;
-        public ArticleRepository(ApplicationDbContext context, IDistributedCache distributed)
+        private readonly IDistributedCache _distributedCache;
+        public ArticleRepository(ApplicationDbContext context, IDistributedCache distributedCache)
         {
             _context = context;
-            distributedCache = distributed;
+            _distributedCache = distributedCache;
         }
 
         public async Task<Article> CreateArticleAsync(Article articleModel)
@@ -29,35 +29,16 @@ namespace DIAN_.Repository
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
             string cacheKey = "ArticleList";
-            await distributedCache.RemoveAsync(cacheKey);
+            await _distributedCache.RemoveAsync(cacheKey);
             return articleModel;
         }
 
-        public async Task<List<Article>> GetArticleByTitleAsync(string title, CancellationToken cancellationToken = default)
+        public async Task<List<Article>> GetArticleByTitleAsync(string title)
         {
-            string? cacheTitle = await distributedCache.GetStringAsync(title, cancellationToken);
-            if(string.IsNullOrEmpty(cacheTitle))
-            {
-                var articles = await _context.Articles
-                    .Where(a => a.Title.Contains(title) && a.Status)
-                    .Include(a => a.EmployeeNavigation)
-                    .ToListAsync(cancellationToken);
-                await distributedCache.SetStringAsync(title, JsonSerializer.Serialize(articles), new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-                }, cancellationToken);
-                return articles;
-            }
-            var listTitle = JsonSerializer.Deserialize<List<Article>>(cacheTitle);
-            if (listTitle is not null)
-            {
-                foreach (var article in listTitle)
-                {
-                    _context.Set<Article>().Attach(article);
-                }
-            }
-
-            return listTitle;
+            return await _context.Articles
+         .Where(a => a.Title.Contains(title) && a.Status)
+         .Include(a => a.EmployeeNavigation)
+         .ToListAsync();
         }
 
         public async Task<Article?> DeleteArticleAsync(int id)
@@ -70,7 +51,7 @@ namespace DIAN_.Repository
                 existingArticle.Status = false;
                 await _context.SaveChangesAsync();
                 string individualArticleCacheKey = $"Article_{existingArticle.ContentId}";
-                await distributedCache.RemoveAsync(individualArticleCacheKey);
+                await _distributedCache.RemoveAsync(individualArticleCacheKey);
             }
             return existingArticle;
         }
@@ -78,7 +59,7 @@ namespace DIAN_.Repository
 
         public async Task<List<ArticleList>> GetAllAsync()
         {
-            string? cacheData = await distributedCache.GetStringAsync("ArticleList");
+            string? cacheData = await _distributedCache.GetStringAsync("ArticleList");
             List<ArticleList>? articles;
 
             if (string.IsNullOrEmpty(cacheData))
@@ -90,7 +71,7 @@ namespace DIAN_.Repository
                     .ToListAsync();
 
                 string serializedArticles = JsonSerializer.Serialize(articles);
-                await distributedCache.SetStringAsync("ArticleList", serializedArticles, new DistributedCacheEntryOptions
+                await _distributedCache.SetStringAsync("ArticleList", serializedArticles, new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
                 });
@@ -126,7 +107,7 @@ namespace DIAN_.Repository
 
             await _context.SaveChangesAsync();
             string individualArticleCacheKey = $"Article_{existingArticle.ContentId}";
-            await distributedCache.RemoveAsync(individualArticleCacheKey);
+            await _distributedCache.RemoveAsync(individualArticleCacheKey);
             return existingArticle;
         }
 

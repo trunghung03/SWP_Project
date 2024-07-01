@@ -13,8 +13,6 @@ namespace DIAN_.DTOs.ArticleDTO
         [Required(ErrorMessage = "Content is required.")]
         public string Content { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Image URL is required.")]
-        [Url(ErrorMessage = "Image must be a valid URL.")]
         public string Image { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Tag is required.")]

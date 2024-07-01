@@ -1,15 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
-using DIAN_.Interfaces;
+﻿using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
-using DIAN_.Mapper;
-using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Helper;
 using Microsoft.Extensions.Caching.Memory;
-using System.Threading;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace DIAN_.Repository
 {
@@ -18,11 +12,15 @@ namespace DIAN_.Repository
         private readonly ApplicationDbContext _context;
         private const string CacheKey = "ProductList";
         private IMemoryCache _memoryCache;
+        private readonly IDistributedCache _distributedCache;
         private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
-        public ProductRepository(ApplicationDbContext context, IMemoryCache memoryCache)
+        private readonly ILogger<ProductRepository> _logger;
+        public ProductRepository(ApplicationDbContext context, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<ProductRepository> logger)
         {
             _context = context;
             _memoryCache = memoryCache;
+            _distributedCache = distributedCache;
+            _logger = logger;
         }
         public async Task<Product> CreateAsync(Product product)
         {
@@ -60,6 +58,7 @@ namespace DIAN_.Repository
             {
                 product.Status = false;
                 await _context.SaveChangesAsync();
+                _memoryCache.Remove(CacheKey);
                 return product;
             }
             return null;
@@ -90,7 +89,8 @@ namespace DIAN_.Repository
                     await semaphore.WaitAsync();
                     if (_memoryCache.TryGetValue(CacheKey, out cachedProducts) && cachedProducts != null)
                     {
-                        return (cachedProducts.ToList(), cachedProducts.Count());
+                        _logger.LogInformation("Products from cache");
+                        return (cachedProducts.ToList(), cachedProducts.Count());   
                     }
                     else
                     {
@@ -120,6 +120,7 @@ namespace DIAN_.Repository
 
                         _memoryCache.Set(CacheKey, productList, cacheEntryOptions);
                         _memoryCache.Set("SecondKey", productList.Select(p => p), cacheEntryOptions);
+                        _logger.LogInformation("Products from database");
                         return (productList, totalItems);
                     }
                 }
@@ -131,48 +132,111 @@ namespace DIAN_.Repository
         }
         public async Task<Product> GetByIdAsync(int id)
         {
-            var product = await _context.Products.Where(p => p.Status && p.ProductId == id)
-                          .Include(p => p.Category).ThenInclude(c => c.Size)
-                          .FirstOrDefaultAsync();
-            if (product == null)
+            string cacheKey = $"ProductDetail_{id}";
+            if (!_memoryCache.TryGetValue(cacheKey, out Product? cachedProduct))
             {
-                throw new Exception($"Product with id {id} not found.");
+                var product = await _context.Products
+                    .Where(p => p.Status && p.ProductId == id)
+                    .Include(p => p.Category).ThenInclude(c => c.Size)
+                    .FirstOrDefaultAsync();
+
+                if (product == null)
+                {
+                    throw new Exception($"Product with id {id} not found.");
+                }
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
+
+                _memoryCache.Set(cacheKey, product, cacheEntryOptions);
+                _logger.LogInformation("Product from database");
+                return product;
             }
-            return product;
+            _logger.LogInformation("Product from cache");
+            return cachedProduct;
         }
+
 
         public async Task<List<Product>> GetByNameAsync(string name)
         {
-            var products = await _context.Products
-                                  .Where(p => p.Status && p.Name.Contains(name))
-                                  .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
-                                  .ToListAsync();
-            return products;
+            string cacheKey = $"ProductsByName_{name}";
+            if (!_memoryCache.TryGetValue(cacheKey, out List<Product>? cachedProducts))
+            {
+                var products = await _context.Products
+                    .Where(p => p.Status && p.Name.Contains(name))
+                    .Include(p => p.MainDiamond)
+                    .ToListAsync();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
+
+                _memoryCache.Set(cacheKey, products, cacheEntryOptions);
+                _logger.LogInformation("Products from database");
+                return products;
+            }
+            _logger.LogInformation("Products from cache");
+            return cachedProducts;
         }
+
 
         public async Task<List<Product>> GetProductByCode(string code)
         {
-            var products = await _context.Products.Where(p => p.ProductCode.Contains(code)).ToListAsync();
-            if (products == null || !products.Any())
+            string cacheKey = $"ProductsByCode_{code}";
+            if (!_memoryCache.TryGetValue(cacheKey, out List<Product>? cachedProducts))
             {
-                throw new KeyNotFoundException("Product does not exist");
+                var products = await _context.Products
+                    .Where(p => p.ProductCode.Contains(code))
+                    .ToListAsync();
+
+                if (products == null || !products.Any())
+                {
+                    throw new KeyNotFoundException("Product does not exist");
+                }
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
+
+                _memoryCache.Set(cacheKey, products, cacheEntryOptions);
+                _logger.LogInformation("Products from database");
+                return products;
             }
-            return products;
+            _logger.LogInformation("Products from cache");
+            return cachedProducts;
         }
+
 
         public async Task<Product> GetDetailAsync(int id)
         {
-            var product = await _context.Products
-                                        .Include(p => p.MainDiamond)
-                                        .Include(p => p.Category).ThenInclude(c => c.Size)
-                                        .Where(p => p.Status && p.ProductId == id)
-                                        .FirstOrDefaultAsync();
-
-            if (product == null)
+            string cacheKey = $"ProductDetail_{id}";
+            if (!_memoryCache.TryGetValue(cacheKey, out Product? cachedProduct))
             {
-                throw new KeyNotFoundException("Product does not exist");
+                var product = await _context.Products
+                                            .Include(p => p.MainDiamond)
+                                            .Include(p => p.Category).ThenInclude(c => c.Size)
+                                            .Where(p => p.Status && p.ProductId == id)
+                                            .FirstOrDefaultAsync();
+
+                if (product == null)
+                {
+                    throw new KeyNotFoundException("Product does not exist");
+                }
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
+
+                _memoryCache.Set(cacheKey, product, cacheEntryOptions);
+                _logger.LogInformation("Product from database");
+                return product;
             }
-            return product;
+            _logger.LogInformation("Product from cache");
+            return cachedProduct;
         }
 
         public async Task<List<Product>> GetListAsync()
@@ -196,6 +260,7 @@ namespace DIAN_.Repository
                 existingProduct.CollectionId = product.CollectionId;
                 existingProduct.CategoryId = product.CategoryId;
                 await _context.SaveChangesAsync();
+                _memoryCache.Remove(CacheKey);
                 return existingProduct;
             }
             return null;

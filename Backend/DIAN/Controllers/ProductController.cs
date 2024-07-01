@@ -144,9 +144,9 @@ namespace DIAN_.Controllers
 
                 return Ok(new { data = products.Select(p => p.ToProductDTO()), pagination });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 

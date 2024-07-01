@@ -12,7 +12,6 @@ namespace DIAN_.DTOs.CategoryDTO
         public string? Description { get; set; }
         [Required(ErrorMessage ="Status is required")]
         public bool? Status { get; set; }
-        [Url(ErrorMessage = "Image link must be a valid URL.")]
         public string? ImageLink { get; set; }
     }
 }
