@@ -113,6 +113,11 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader());
 
+//app.UseCors(builder =>
+//{
+//    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+//});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");

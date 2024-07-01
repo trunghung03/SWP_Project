@@ -14,8 +14,13 @@ const Notification = () => {
     //   .configureLogging(signalR.LogLevel.Debug)
     //   .build();
     const connection = new signalR.HubConnectionBuilder()
-  .withUrl("https://localhost:7184/notification")
-  .build();
+    .withUrl("https://localhost:7184/notification", {
+      // skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets
+    })
+    .withAutomaticReconnect()
+    .build();
+
 
     // connection.start().then(() => {
     //   console.log("Connected!");
