@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -12,6 +12,7 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 
 function FAQs() {
+  const [transitionKey, setTransitionKey] = useState(Date.now());
   const navItems = [
     { name: 'Home', link: '/home' },
     { name: 'Frequently Asked Questions', link: '/FAQS' }
@@ -29,7 +30,6 @@ function FAQs() {
   const toggleFAQ = index => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
   const faqs = [
     {
       question: "What is the 4Cs standard in diamond quality?",
@@ -143,13 +143,20 @@ function FAQs() {
     setVisibleCount(visibleCount + 10);
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.querySelector('.faqs_banner_container').classList.add('visible');
+    }, 10);
+    return () => clearTimeout(timeout);
+  }, [transitionKey]);
+
   return (
     <div className="FAQs">
       <HeaderComponent />
       <SubNav items={navItems} />
 
       {/* Main title */}
-      <div className="faqs_banner_container" style={{ backgroundImage: `url(${faqsImg})` }}>
+      <div key={transitionKey} className="faqs_banner_container" style={{ backgroundImage: `url(${faqsImg})` }}>
         <div className="faqs_banner_content">
           <h2>How can we help you?</h2>
         </div>

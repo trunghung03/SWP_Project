@@ -8,6 +8,14 @@
   color: white;
   background-size: cover;
   background-position: center;
+  opacity: 0; 
+  transition: opacity 1.4s ease-in-out, transform 1.2s ease-in-out;
+  margin-top: -20px;
+}
+
+.faqs_banner_container.visible {
+  opacity: 1; 
+  transform: translateY(20px);
 }
 
 .faqs_banner_content h2 {
@@ -93,10 +101,7 @@
   margin-top: 10px;
 }
 
-
 // End Main FAQS 
-
-
 
 // Still need help
 .faqs_help_container {
@@ -153,7 +158,6 @@
 }
 
 // End still need help
-
 
 .faqs_view_more_button {
   color: #1c1c1c;

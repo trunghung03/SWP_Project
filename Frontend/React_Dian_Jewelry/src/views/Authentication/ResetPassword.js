@@ -10,13 +10,14 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { resetPasswordApi } from '../../services/UserService';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -91,17 +92,21 @@ const ResetPassword = () => {
             const email = localStorage.getItem('resetPasswordEmail');
             const token = localStorage.getItem('resetPasswordToken');
             await resetPasswordApi({ email, token, password, confirmPassword: rePassword });
-            toast.success("Reset password successfully! You can sign in with new password now.", {
-                position: "top-right"
-            }).then(() => {
-                localStorage.removeItem('resetPasswordEmail');
-                localStorage.removeItem('resetPasswordToken');
-                window.location.href = "/login";
-            });
+            // toast.success("Reset password successfully! You can sign in with new password now.", {
+            //     position: "top-right",
+            //     onClose: () => {
+                    localStorage.removeItem('resetPasswordEmail');
+                    localStorage.removeItem('resetPasswordToken');
+                    navigate('/login');
+            //     }
+            // });
         } catch (error) {
-            toast.error("Failed to reset the password. Please try again later.", {
-                position: "top-right"
-            });
+            // toast.error("Failed to reset the password. Please try again later.", {
+            //     position: "top-right"
+            // });
+            localStorage.removeItem('resetPasswordEmail');
+            localStorage.removeItem('resetPasswordToken');
+            navigate('/login');
         } finally {
             setLoading(false);
         }
@@ -122,7 +127,7 @@ const ResetPassword = () => {
 
     return (
         <div className="rp_main_container container-fluid">
-            <ToastContainer /> 
+            <ToastContainer />
             <div className="rp_wrapper">
                 {/* Left Side: Reset Password Form */}
                 <div className="rp_left_side col-md-6">

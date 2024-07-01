@@ -24,6 +24,7 @@ function Blog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchActive, setSearchActive] = useState(false);
+  const [transitionKey, setTransitionKey] = useState(Date.now());
   const navigate = useNavigate();
 
   const navItems = [
@@ -55,6 +56,13 @@ function Blog() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.querySelector('.blog_logo img').classList.add('visible');
+    }, 10);
+    return () => clearTimeout(timeout);
+  }, [transitionKey]);
 
   const handleReadMore = (article) => {
     const { articleID, title } = article;

@@ -1,5 +1,5 @@
 .blog_main_container {
-    padding: 20px 5% 0 5%;
+    padding: 40px 5% 0 5%;
 }
 
 .blog_logo {
@@ -10,6 +10,17 @@
 .blog_logo img {
     width: 20%;
     margin: 20px 0 10px 0;
+}
+
+.blog_logo img {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 1.4s ease-in-out, transform 1.2s ease-in-out;
+}
+
+.blog_logo img.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .blog_popular_title {
@@ -433,5 +444,4 @@
 .blog_inspired_grid {
     display: flex;
     justify-content: center;
-  }
-  
+}
