@@ -28,8 +28,8 @@ namespace DIAN_.Services
             if (user == null) throw new ArgumentException("No account found with the provided email.");
 
             var token = _tokenService.CreateCustomerToken(user);
-            var callbackUrlFormat = _configuration["ResetPassword:Url"];
-            var callbackUrl = string.Format(callbackUrlFormat, HttpUtility.UrlEncode(token), HttpUtility.UrlEncode(resetPasswordDto.Email));
+            var url = _configuration["ApiBaseUrl:Url"];
+            var callbackUrl = $"{url}/reset-password?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(resetPasswordDto.Email)}";
             var message = new MailResetPassword
             {
                 ToEmail = user.Email,
