@@ -8,6 +8,7 @@ CREATE TABLE CUSTOMER (
     Address NVARCHAR(255),
     PhoneNumber NVARCHAR(20),
     Points BIGINT,
+    AccountType NVARCHAR(128),
     Status BIT NOT NULL DEFAULT 1
 );
 
@@ -116,11 +117,26 @@ CREATE TABLE DIAMOND (
     Status BIT NOT NULL DEFAULT 1
 );
 
+-- Subdiamond table
+CREATE TABLE SUBDIAMOND (
+    SubdiamondID INT PRIMARY KEY IDENTITY(1,1),
+	Shape NVARCHAR (50),
+    Color NVARCHAR(50) ,
+    Clarity NVARCHAR(50) ,
+    Carat DECIMAL(5, 2) ,
+    Cut NVARCHAR(50),
+    Price DECIMAL(18, 2) NOT NULL,
+    AmountAvailable INT,
+    Status BIT NOT NULL DEFAULT 1
+);
+
 CREATE TABLE SHELL (
     ShellID INT PRIMARY KEY IDENTITY(1,1),
     ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
     ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
-    ShellAmount DECIMAL(18, 2),
+    SubdiamondID INT FOREIGN KEY REFERENCES SUBDIAMOND(SubdiamondID),
+    SubDiamondAmount INT,
+    [Weight] DECIMAL(18, 2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 )
