@@ -247,14 +247,14 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
 
-                var diamondIds = products.Select(p => p.MainDiamondId).Distinct().ToList();
+                var diamondIds = products.Select(p => p.Diamonds.FirstOrDefault().DiamondId).Distinct().ToList();
                 var diamonds = await _context.Diamonds
                                              .Where(d => diamondIds.Contains(d.DiamondId))
                                              .ToListAsync();
 
                 var productDTOs = products.Select(p =>
                 {
-                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.MainDiamondId);
+                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.Diamonds.FirstOrDefault().DiamondId);
                     return p.ToProductListDTO(diamond);
                 }).ToList();
 

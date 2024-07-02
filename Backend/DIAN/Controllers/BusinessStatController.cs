@@ -289,7 +289,7 @@ namespace DIAN_.Controllers
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
                 .ThenInclude(p => p.Diamonds.FirstOrDefault())
-                .Where(od => od.Orders.Date >= effectiveStartDate && od.Orders.Date <= effectiveEndDate)
+                .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
                 {
@@ -304,14 +304,14 @@ namespace DIAN_.Controllers
                     (g, p) => p)
                 .ToListAsync();
 
-            var diamondIds = topProducts.Select(tp => tp.MainDiamondId).Distinct().ToList();
+            var diamondIds = topProducts.Select(tp => tp.Diamonds.FirstOrDefault().DiamondId).Distinct().ToList();
             var diamonds = await _context.Diamonds
                                          .Where(d => diamondIds.Contains(d.DiamondId))
                                          .ToListAsync();
 
             var productDTOs = topProducts.Select(tp =>
             {
-                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == tp.MainDiamondId);
+                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == tp.Diamonds.FirstOrDefault().DiamondId);
                 return tp.ToProductListDTO(diamond);
             }).ToList();
 
