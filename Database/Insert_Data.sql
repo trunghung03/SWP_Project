@@ -1,25 +1,25 @@
 ﻿	use DIAN
 	Go
-	INSERT INTO CUSTOMER (Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
-	('john.doe@yahoo.com', '123', 'Doe', 'John', '123 Main St', '+1 (212) 555-0198', 1000, 1),
-	('jane.smith@gmail.com', '123', 'Smith', 'Jane', '456 Elm St', '+1 (415) 555-0234', 1500, 1),
-	('cxhrisB124@gmail.com', '123', 'Chris', 'Burkerly', '789 Oak St', '+1 (310) 555-0745', 2000, 1),
-	('emma.watson@gmail.com', '123', 'Watson', 'Emma', '101 Pine St', '+1 (617) 555-0987', 800, 1),
-	('oliver.queen@gmail.com', '123', 'Queen', 'Oliver', '202 Cedar St', '+1 (818) 555-0367', 300, 1),
-	('lee1103@gmail.com', '123', 'Lee', 'Bruce', '303 Birch St', '+1 (305) 555-0456', 3500, 1),
-	('clark08kent@gmail.com', 'clark0809', 'Kent', 'Clark', '404 Maple St', '+1 (702) 555-0823', 200, 1);
+	INSERT INTO CUSTOMER (AccountType, Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
+	('Google', 'john.doe@yahoo.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Doe', 'John', '123 Main St', '+1 (212) 555-0198', 1000, 1),
+	('None', 'jane.smith@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Smith', 'Jane', '456 Elm St', '+1 (415) 555-0234', 1500, 1),
+	('None', 'cxhrisB124@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Chris', 'Burkerly', '789 Oak St', '+1 (310) 555-0745', 2000, 1),
+	('Google', 'emma.watson@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Watson', 'Emma', '101 Pine St', '+1 (617) 555-0987', 800, 1),
+	('None', 'oliver.queen@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Queen', 'Oliver', '202 Cedar St', '+1 (818) 555-0367', 300, 1),
+	('Google', 'lee1103@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Lee', 'Bruce', '303 Birch St', '+1 (305) 555-0456', 3500, 1),
+	('Google', 'clark08kent@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Kent', 'Clark', '404 Maple St', '+1 (702) 555-0823', 200, 1);
 
 	-- Insert dummy data into EMPLOYEE table
 	-- Insert dummy data into EMPLOYEE table with updated roles
 	INSERT INTO EMPLOYEE (Role, Email, Password, LastName, FirstName, Address, PhoneNumber, Status) VALUES
-	('Admin', 'RaveAdmin@gmail.com', '123', 'Steve', 'Ravy', '789 Pine St', '+1 (202) 555-0178', 1),
-	('Manager', 'SmithManager@gmail.com', '123', 'Smith', 'John', '101 Oak St', '+1 (303) 555-0192', 1),
-	('SalesStaff', 'BrownSales@gmail.com', '123', 'Sarah', 'Brown', '123 Elm St', '+1 (404) 555-0153', 1),
-	('DeliveryStaff', 'DanielDelivery@gmail.com', '123', 'Moore', 'Daniel', '456 Birch St', '+1 (505) 555-0147', 1),
-	('SalesStaff', 'AmandaSale02@gmail.com', '123', 'Taylor', 'Amanda', '789 Cedar St', '+1 (707) 555-0185', 1),
-	('Manager', 'JamesManager02@gmail.com', '123', 'Davis', 'James', '101 Maple St', '+1 (808) 555-0136', 1),
-	('Admin', 'JessicaAdmin2@gmail.com', '123', 'Miller', 'Jessica', '202 Oak St', '+1 (315) 555-0176', 1),
-	('DeliveryStaff', 'BobbyDelivery@gmail.com', '123', 'Demer', 'Bobby', '412 OakHill St', '+1 (505) 613-0457', 1);
+	('Admin', 'RaveAdmin@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Steve', 'Ravy', '789 Pine St', '+1 (202) 555-0178', 1),
+	('Manager', 'SmithManager@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Smith', 'John', '101 Oak St', '+1 (303) 555-0192', 1),
+	('SalesStaff', 'BrownSales@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Sarah', 'Brown', '123 Elm St', '+1 (404) 555-0153', 1),
+	('DeliveryStaff', 'DanielDelivery@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Moore', 'Daniel', '456 Birch St', '+1 (505) 555-0147', 1),
+	('SalesStaff', 'AmandaSale02@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Taylor', 'Amanda', '789 Cedar St', '+1 (707) 555-0185', 1),
+	('Manager', 'JamesManager02@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Davis', 'James', '101 Maple St', '+1 (808) 555-0136', 1),
+	('Admin', 'JessicaAdmin2@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Miller', 'Jessica', '202 Oak St', '+1 (315) 555-0176', 1),
+	('DeliveryStaff', 'BobbyDelivery@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Demer', 'Bobby', '412 OakHill St', '+1 (505) 613-0457', 1);
 	-- Insert dummy data into ARTICLE table
 	INSERT INTO ARTICLE (Title, Content, Employee, [Date], [Image], Tag, Status) VALUES
 	('Natural vs. Lab Diamonds', 'Natural and lab-grown diamonds are identical to the naked eye. In fact, most experts can''t even tell them apart without specialized equipment. Ultimately, the main difference is how they''re created. Learn more to understand which diamond type suits your style.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F369828bf6d7c48d6ae52eb7edb069602', 'Blog', 1),
@@ -204,59 +204,127 @@ VALUES
 ('Heart', 'F', 'IF', 0.52, 'Ideal', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 1740, 30, 1),
 ('Heart', 'F', 'VVS2', 0.56, 'Very Good', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 1740, 31, 1),
 ('Heart', 'F', 'VS1', 1.05, 'Ideal', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg', 1740, 31, 1);
+
+
+
+-- Insert dummy data into DIAMOND table
+INSERT INTO SUBDIAMOND (AmountAvailable, Shape, Color, Clarity, Carat, Cut, Price, Status)
+VALUES
+(200, 'Round', 'F', 'VVS2', 1.03, 'Super Ideal', 3000, 1),
+(200, 'Round', 'G', 'VVS2', 1.00, 'Super Ideal', 3000, 1),
+(200, 'Round', 'F', 'VVS2', 0.56, 'Super Ideal', 3000, 1),
+(200, 'Round', 'G', 'VS2', 1.20, 'Super Ideal', 3000, 1),
+(200, 'Round', 'H', 'VS1', 2.01, 'Super Ideal', 3000, 1),
+(200, 'Round', 'I', 'VVS2', 0.31, 'Very Good', 3000, 1),
+(200, 'Oval', 'G', 'VS1', 1.50, 'Super Ideal', 3000, 1),
+(200, 'Oval', 'J', 'VS1', 1.51, 'Ideal', 3000, 1),
+(200, 'Oval', 'F', 'VS1', 1.00, 'Ideal', 3000, 1),
+(200, 'Oval', 'J', 'VS1', 1.51, 'Ideal', 3000, 1),
+(200, 'Oval', 'G', 'VVS2', 1.70, 'Ideal', 3000, 1),
+(200, 'Oval', 'G', 'VS1', 1.50, 'Super Ideal', 3000, 1),
+(200, 'Oval', 'F', 'VVS2', 1.00, 'Ideal', 3000, 1),
+(200, 'Oval', 'F', 'VVS2', 1.01, 'Ideal', 3000, 1),
+(200, 'Emerald', 'F', 'VVS2', 1.30, 'Super Ideal', 3000, 1),
+(200, 'Emerald', 'G', 'VS1', 2.01, 'Super Ideal', 4000, 1),
+(200, 'Emerald', 'G', 'IF', 2.01, 'Ideal', 4000, 1),
+(200, 'Emerald', 'H', 'VVS2', 2.02, 'Ideal', 4000, 1),
+(200, 'Emerald', 'H', 'VVS1', 1.21, 'Ideal', 4000, 1),
+(200, 'Emerald', 'H', 'IF', 2.00, 'Super Ideal', 4000, 1),
+(200, 'Cushion', 'H', 'VS2', 1.03, 'Super Ideal', 4000, 1),
+(200, 'Cushion', 'G', 'VVS1', 1.01, 'Super Ideal', 4000, 1),
+(200, 'Cushion', 'G', 'VVS2', 1.51, 'Super Ideal', 4000, 1),
+(200, 'Cushion', 'G', 'IF', 1.50, 'Super Ideal', 4000, 1),
+(200, 'Cushion', 'I', 'VS2', 2.01, 'Very Good', 4000, 1),
+(200, 'Cushion', 'G', 'VVS2', 1.51, 'Super Ideal', 4000, 1),
+(200, 'Cushion', 'I', 'VS1', 1.90, 'Super Ideal', 4000, 1),
+(200, 'Pear', 'J', 'SI1', 3.01, 'Ideal', 4000, 1),
+(200, 'Pear', 'I', 'SI1', 1.75, 'Ideal', 4000, 1),
+(200, 'Pear', 'J', 'SI1', 0.96, 'Very Good', 4000, 1),
+(200, 'Pear', 'F', 'VVS2', 1.02, 'Ideal', 4000, 1),
+(200, 'Pear', 'F', 'VS1', 1.21, 'Ideal', 4000, 1),
+(200, 'Pear', 'F', 'VS2', 1.43, 'Ideal', 4000, 1),
+(200, 'Radiant', 'J', 'VS2', 2.01, 'Super Ideal', 4000, 1),
+(200, 'Radiant', 'F', 'VVS1', 1.03, 'Ideal', 4000, 1),
+(200, 'Radiant', 'I', 'VS1', 2.01, 'Super Ideal', 2750, 1),
+(200, 'Radiant', 'H', 'VS1', 2.02, 'Super Ideal', 2750, 1),
+(200, 'Radiant', 'G', 'VVS1', 1.50, 'Ideal', 2750, 1),
+(200, 'Princess', 'F', 'VVS2', 1.00, 'Super Ideal', 2750, 1),
+(200, 'Princess', 'J', 'VVS1', 2.02, 'Super Ideal', 2750, 1),
+(200, 'Princess', 'F', 'VS1', 0.80, 'Ideal', 2750, 1),
+(200, 'Princess', 'F', 'VVS2', 1.01, 'Ideal', 2750, 1),
+(200, 'Princess', 'G', 'VVS1', 1.51, 'Super Ideal', 2750, 1),
+(200, 'Princess', 'G', 'VS1', 1.01, 'Ideal', 2750, 1),
+(200, 'Princess', 'F', 'VVS1', 0.92, 'Super Ideal', 2750, 1),
+(200, 'Marquise', 'J', 'VS2', 1.00, 'Ideal', 2750, 1),
+(200, 'Marquise', 'G', 'VVS1', 0.53, 'Ideal', 2750, 1),
+(200, 'Marquise', 'F', 'SI1', 0.32, 'Ideal', 2750, 1),
+(200, 'Marquise', 'I', 'VS2', 0.50, 'Very Good', 2750, 1),
+(200, 'Marquise', 'G', 'VS1', 0.50, 'Ideal', 2750, 1),
+(200, 'Asscher', 'J', 'VVS2', 1.01, 'Ideal', 2750, 1),
+(200, 'Asscher', 'F', 'VS1', 0.91, 'Super Ideal', 2750, 1),
+(200, 'Asscher', 'F', 'VVS2', 0.70, 'Ideal', 2750, 1),
+(200, 'Asscher', 'G', 'IF', 0.71, 'Ideal', 2750, 1),
+(200, 'Asscher', 'F', 'VS1', 0.51, 'Super Ideal', 1740, 1),
+(200, 'Asscher', 'F', 'VVS2', 1.00, 'Super Ideal', 1740, 1),
+(200, 'Heart', 'F', 'VS1', 0.91, 'Ideal', 1740, 1),
+(200, 'Heart', 'G', 'VS1', 0.90, 'Ideal', 1740, 1),
+(200, 'Heart', 'F', 'VS2', 0.71, 'Ideal', 1740, 1),
+(200, 'Heart', 'F', 'IF', 0.52, 'Ideal', 1740, 1),
+(200, 'Heart', 'F', 'VVS2', 0.56, 'Very Good', 1740, 1),
+(200, 'Heart', 'F', 'VS1', 1.05, 'Ideal', 1740, 1);
 -- Define default values
-DECLARE @ShellAmount DECIMAL(18, 2) = 50.00;
+DECLARE @Weight DECIMAL(18, 2) = 50.00;
 DECLARE @AmountAvailable INT = 100;
 
 -- Insert shell records
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (5, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (6, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (7, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (8, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (9, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (10, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (11, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (12, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (13, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (14, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (15, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (16, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (17, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (18, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (19, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (20, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (21, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (22, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (23, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (24, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (25, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (26, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (27, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (28, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (29, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (30, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (31, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (32, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (33, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (34, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (35, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (36, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (37, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (38, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (39, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (40, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (41, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (42, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (43, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (44, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (45, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (46, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (47, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellAmount, AmountAvailable, Status) VALUES (48, @ShellAmount, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 5, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 6, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 7, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 8, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 9, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 10, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 11, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 12, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 13, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 14, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 15, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 16, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 17, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 18, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 19, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 20, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 21, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 22, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 23, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 24, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 25, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 26, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 27, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 28, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 29, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 30, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 31, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 32, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 33, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 34, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 35, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 36, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 37, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 38, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 39, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 40, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 41, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 42, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 43, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 44, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 45, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 46, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 47, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (SubdiamondID, SubDiamondAmount, ProductID, Weight, AmountAvailable, Status) VALUES (2, 5, 48, @Weight, @AmountAvailable, 1);
 
 	-- Insert dummy data into ORDERDETAIL table
 	INSERT INTO ORDERDETAIL (OrderID, LineTotal, ProductID, ShellMaterialID, Size, Status) VALUES
