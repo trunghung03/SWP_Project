@@ -90,6 +90,7 @@ builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IShellRepository, ShellRepository>();
+builder.Services.AddScoped<ISubDiamondRepository, SubDiamondRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
