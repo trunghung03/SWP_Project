@@ -6,102 +6,147 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Models;
+using DIAN_.Interfaces;
+using DIAN_.Repository;
+using DIAN_.Mapper;
+using DIAN_.DTOs.PromotionDto;
+using DIAN_.DTOs.ShellDto;
 
 namespace DIAN_.Controllers
 {
-    [Route("api/shell")]
+    [Route("api/shells")]
     [ApiController]
     public class ShellsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IShellRepository _shellRepository;
 
-        public ShellsController(ApplicationDbContext context)
+        public ShellsController(IShellRepository shellRepository)
         {
-            _context = context;
+            _shellRepository = shellRepository;
         }
 
         // GET: api/Shells
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Shell>>> GetShell()
+        public async Task<IActionResult> GetShell()
         {
-            return await _context.Shells.ToListAsync();
-        }
-
-        // GET: api/Shells/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Shell>> GetShell(int id)
-        {
-            var shell = await _context.Shells.FindAsync(id);
-
-            if (shell == null)
-            {
-                return NotFound();
-            }
-
-            return shell;
-        }
-
-        // PUT: api/Shells/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutShell(int id, Shell shell)
-        {
-            if (id != shell.ShellId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(shell).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var shells = await _shellRepository.GetAllShellAsync();
+                if (shells.Count == 0)
+                {
+                    return NotFound("Shell does not exist");
+                }
+                var shellDtos = shells.Select(promotion => promotion.ToShellDetail());
+                return Ok(shellDtos);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!ShellExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return NoContent();
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetShellById( [FromRoute] int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var shell = await _shellRepository.GetShellByIdAsync(id);
+                if (shell == null)
+                {
+                    return NotFound("Shell does not exist");
+                }
+                return Ok(shell.ToShellDetail());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        // POST: api/Shells
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Shell>> PostShell(Shell shell)
+        public async Task<IActionResult> CreateShell([FromBody] CreateShellRequestDto shellDto)
         {
-            _context.Shells.Add(shell);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetShell", new { id = shell.ShellId }, shell);
-        }
-
-        // DELETE: api/Shells/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShell(int id)
-        {
-            var shell = await _context.Shells.FindAsync(id);
-            if (shell == null)
+            try
             {
-                return NotFound();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var shellModel = shellDto.ToShellFromCreateDto();
+                await _shellRepository.CreateShellAsync(shellModel);
+                return Ok(shellModel.ToShellDetail());
             }
-
-            _context.Shells.Remove(shell);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception)
+            {
+                throw;
+            }
         }
-
-        private bool ShellExists(int id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateShell([FromBody] UpdateShellRequestDto shellRequestDto, [FromRoute] int id)
         {
-            return _context.Shells.Any(e => e.ShellId == id);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var shell = await _shellRepository.UpdateShellAsync(shellRequestDto.ToShellFromUpdateDto(id), id);
+                if (shell == null)
+                {
+                    return NotFound("Promotion does not exist");
+                }
+                return Ok(shell.ToShellDetail());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteShell([FromRoute] int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var deletedShell = await _shellRepository.DeleteShellAsync(id);
+                if (deletedShell == null)
+                {
+                    return NotFound("Shell does not exist");
+                }
+                return Ok(deletedShell.ToShellDetail());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPut("updatestock/{id}")]
+        public async Task<IActionResult> UpdateShellStock([FromBody] UpdateShellStock updateShellStock, [FromRoute] int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                var updatedShell = await _shellRepository.UpdateShellStockAsync(updateShellStock.ToShellFromUpdateStockDto(id), id);
+                if (updatedShell == null)
+                {
+                    return NotFound("Shell does not exist");
+                }
+                return Ok(updatedShell.ToShellDetail());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
