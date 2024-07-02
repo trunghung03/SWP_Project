@@ -288,8 +288,8 @@ namespace DIAN_.Controllers
 
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
-                .ThenInclude(p => p.MainDiamond)
-                .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
+                .ThenInclude(p => p.Diamonds.FirstOrDefault())
+                .Where(od => od.Orders.Date >= effectiveStartDate && od.Orders.Date <= effectiveEndDate)
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
                 {

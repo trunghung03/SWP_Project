@@ -31,7 +31,7 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
-                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+                return Ok(products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())));
             }
             catch (Exception)
             {
@@ -182,7 +182,7 @@ namespace DIAN_.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(productDetail.ToProductDetailDTO(productDetail.MainDiamond, new List<string>()));
+                return Ok(productDetail.ToProductDetailDTO(productDetail.Diamonds.FirstOrDefault(), new List<string>()));
             }
             catch (Exception)
             {
@@ -200,7 +200,7 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetByNameAsync(name);
-                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+                return Ok(products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())));
             }
             catch (Exception)
             {

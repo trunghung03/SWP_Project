@@ -24,7 +24,7 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product)
         {
-            var mainDiamondPrice = product.MainDiamondId.HasValue
+            var mainDiamondPrice = product.Diamonds.FirstOrDefault().HasValue()
                 ? await _context.Diamonds
                     .Where(d => d.DiamondId == product.MainDiamondId.Value)
                     .Select(d => d.Price)
@@ -166,7 +166,7 @@ namespace DIAN_.Repository
             {
                 var products = await _context.Products
                     .Where(p => p.Status && p.Name.Contains(name))
-                    .Include(p => p.MainDiamond)
+                    .Include(p => p.Diamonds.FirstOrDefault())
                     .ToListAsync();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -217,7 +217,7 @@ namespace DIAN_.Repository
             if (!_memoryCache.TryGetValue(cacheKey, out Product? cachedProduct))
             {
                 var product = await _context.Products
-                                            .Include(p => p.MainDiamond)
+                                            .Include(p => p.Diamonds.FirstOrDefault())
                                             .Include(p => p.Category).ThenInclude(c => c.Size)
                                             .Where(p => p.Status && p.ProductId == id)
                                             .FirstOrDefaultAsync();
@@ -242,7 +242,7 @@ namespace DIAN_.Repository
         public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
-                                 .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                 .Include(p => p.Diamonds.FirstOrDefault()) // Include the MainDiamond to get the shape
                                  .ToListAsync();
 
             return products;
