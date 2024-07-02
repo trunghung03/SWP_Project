@@ -57,8 +57,9 @@ function OrderDetail() {
         }
     }, [orderNumber]);
 
-    const handleProductView = (productId) => {
-        navigate('/product-detail', { state: { id: productId } });
+    const handleProductView = (product) => {
+        const productName = product.name.toLowerCase().replace(/\s+/g, '-');
+        navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
     };
 
     useEffect(() => {
@@ -129,7 +130,7 @@ function OrderDetail() {
                                     <div className="order_detail_product_header">
                                         <h5 className="order_detail_product_name">{product.name}</h5>
                                         <div className="order_detail_product_links">
-                                            <a href="#" onClick={() => handleProductView(product.productId)}>VIEW</a>
+                                            <a href="" onClick={() => handleProductView(product)}>VIEW</a>
                                         </div>
                                     </div>
                                     <p className="order_detail_product_size">Shell: {product.shellMaterial}</p>
