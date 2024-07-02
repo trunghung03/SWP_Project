@@ -19,6 +19,7 @@ function OrderHistory() {
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState('All');
+    const [sortOrder, setSortOrder] = useState('Newest');
     const ordersPerPage = 6;
 
     useEffect(() => {
@@ -40,13 +41,18 @@ function OrderHistory() {
     }, []);
 
     useEffect(() => {
-        if (filterStatus === 'All') {
-            setFilteredOrders(orders);
-        } else {
-            setFilteredOrders(orders.filter(order => order.orderStatus === filterStatus));
+        let filtered = [...orders];
+        if (filterStatus !== 'All') {
+            filtered = filtered.filter(order => order.orderStatus === filterStatus);
         }
+        if (sortOrder === 'Newest') {
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        } else {
+            filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+        }
+        setFilteredOrders(filtered);
         setCurrentPage(1);
-    }, [filterStatus, orders]);
+    }, [filterStatus, sortOrder, orders]);
 
     useEffect(() => {
         window.scrollTo({
@@ -70,10 +76,6 @@ function OrderHistory() {
     const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
     const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
-    // const handleDetailClick = (orderNumber) => {
-    //     navigate('/order-detail', { state: { orderNumber } });
-    // };
-
     const handleDetailClick = (orderNumber) => {
         navigate(`/order-detail/${orderNumber}`, { state: { orderNumber } });
     };
@@ -89,6 +91,10 @@ function OrderHistory() {
 
     const handleFilterChange = (event) => {
         setFilterStatus(event.target.value);
+    };
+
+    const handleSortChange = (event) => {
+        setSortOrder(event.target.value);
     };
 
     return (
@@ -117,8 +123,21 @@ function OrderHistory() {
                 </div>
 
                 <div className="order_history_table_wrapper">
-                    <div className="order_filter">
+                    <div className="order_filters">
                         <FormControl fullWidth size="small">
+                            <InputLabel id="sortOrderLabel">Sort</InputLabel>
+                            <Select
+                                labelId="sortOrderLabel"
+                                id="sortOrder"
+                                value={sortOrder}
+                                label="Sort By"
+                                onChange={handleSortChange}
+                            >
+                                <MenuItem value="Newest">Newest</MenuItem>
+                                <MenuItem value="Oldest">Oldest</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth size="small" style={{ marginRight: '10px' }}>
                             <InputLabel id="orderFilterLabel">Status</InputLabel>
                             <Select
                                 labelId="orderFilterLabel"

@@ -28,6 +28,9 @@ const HeaderComponent = () => {
     const weddingMenuTimeoutRef = useRef(null);
     const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showAccountDropdown, setShowAccountDropdown] = useState(false);
+    const accountDropdownTimeoutRef = useRef(null);
+    const notificationDropdownTimeoutRef = useRef(null);
 
     useEffect(() => {
         const role = localStorage.getItem('role');
@@ -43,14 +46,6 @@ const HeaderComponent = () => {
                 }
             }
 
-            console.log('Before clearing:');
-            console.log('role:', localStorage.getItem('role'));
-            console.log('firstName:', localStorage.getItem('firstName'));
-            console.log('lastName:', localStorage.getItem('lastName'));
-            console.log('points:', localStorage.getItem('points'));
-            console.log('email:', localStorage.getItem('email'));
-
-            console.log('Clearing local storage...');
             localStorage.clear();
 
             if (rememberedEmail && rememberedPassword) {
@@ -61,13 +56,6 @@ const HeaderComponent = () => {
             for (const key in allCartItems) {
                 localStorage.setItem(key, allCartItems[key]);
             }
-
-            console.log('After clearing:');
-            console.log('role:', localStorage.getItem('role'));
-            console.log('firstName:', localStorage.getItem('firstName'));
-            console.log('lastName:', localStorage.getItem('lastName'));
-            console.log('points:', localStorage.getItem('points'));
-            console.log('email:', localStorage.getItem('email'));
 
             setUser({
                 firstName: localStorage.getItem('firstName') || '',
@@ -106,7 +94,7 @@ const HeaderComponent = () => {
     const handleSearchKeyPress = async (e) => {
         if (e.key === 'Enter' && searchQuery.trim()) {
             try {
-                const response = await searchProducts(searchQuery);  // Use the searchProducts function
+                const response = await searchProducts(searchQuery);
                 setSearchQuery('');
                 navigate('/search', { state: { products: response.data, searchQuery } });
             } catch (error) {
@@ -138,6 +126,28 @@ const HeaderComponent = () => {
 
     const handleImageHover = (imageSrc) => {
         setHoveredImage(imageSrc);
+    };
+
+    const handleAccountMouseEnter = () => {
+        clearTimeout(accountDropdownTimeoutRef.current);
+        setShowAccountDropdown(true);
+    };
+
+    const handleAccountMouseLeave = () => {
+        accountDropdownTimeoutRef.current = setTimeout(() => {
+            setShowAccountDropdown(false);
+        }, 200);
+    };
+
+    const handleNotificationMouseEnter = () => {
+        clearTimeout(notificationDropdownTimeoutRef.current);
+        setShowNotifications(true);
+    };
+
+    const handleNotificationMouseLeave = () => {
+        notificationDropdownTimeoutRef.current = setTimeout(() => {
+            setShowNotifications(false);
+        }, 200);
     };
 
     const notifications = [
@@ -188,38 +198,46 @@ const HeaderComponent = () => {
                             </div>
                             <div
                                 className="notification_icon"
-                                onMouseEnter={() => setShowNotifications(true)}
-                                onMouseLeave={() => setShowNotifications(false)}
+                                onMouseEnter={handleNotificationMouseEnter}
+                                onMouseLeave={handleNotificationMouseLeave}
                             >
                                 <i className="icon_noti fas fa-bell"></i>
                                 <span className="notification_badge">5</span>
-                                {showNotifications && (
-                                    <div className="noti_dropdown_menu">
-                                        <div className='noti_header_wrapper'>
-                                            <div className="noti_header">Notifications</div>
-                                            <div className="noti_header_view">View all<i className="fas fa-arrow-right"></i></div>
-                                        </div>
-                                        {notifications.map((notification, index) => (
-                                            <div key={notification.id} className="noti_item" style={{ borderBottom: index === notifications.length - 1 ? 'none' : '1px solid #e0e0e0' }}>
-                                                <div className='each_noti'>
-                                                    <p className="noti_title">{notification.title}</p>
-                                                    <p className="noti_description">{notification.description}</p>
-                                                    <span className="noti_time">{notification.time}</span>
-                                                </div>
-                                            </div>
-                                        ))}
+                                <div
+                                    className="noti_dropdown_menu"
+                                    style={{ display: showNotifications ? 'block' : 'none', opacity: showNotifications ? '1' : '0', transform: showNotifications ? 'translateY(0)' : 'translateY(-10px)' }}
+                                >
+                                    <div className='noti_header_wrapper'>
+                                        <div className="noti_header">Notifications</div>
+                                        <div className="noti_header_view">View all<i className="fas fa-arrow-right"></i></div>
                                     </div>
-                                )}
+                                    {notifications.map((notification, index) => (
+                                        <div key={notification.id} className="noti_item" style={{ borderBottom: index === notifications.length - 1 ? 'none' : '1px solid #e0e0e0' }}>
+                                            <div className='each_noti'>
+                                                <p className="noti_title">{notification.title}</p>
+                                                <p className="noti_description">{notification.description}</p>
+                                                <span className="noti_time">{notification.time}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                             <Link to="/cart" className="cart_icon">
                                 <i className="icon_cart fas fa-shopping-bag"></i>
                                 {cartItems.length > 0 && <span className="cart_badge">{cartItems.length}</span>}
                             </Link>
-                            <div className="account_dropdown_section dropdown">
+                            <div
+                                className="account_dropdown_section dropdown"
+                                onMouseEnter={handleAccountMouseEnter}
+                                onMouseLeave={handleAccountMouseLeave}
+                            >
                                 <i className="icon_account fas fa-user"></i>
-                                {/* <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                    aria-expanded="false"></i> */}
-                                <ul className="account_dropdown_menu dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                {/* <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i> */}
+                                <ul
+                                    className="account_dropdown_menu dropdown-menu"
+                                    aria-labelledby="dropdownMenuButton1"
+                                    style={{ display: showAccountDropdown ? 'block' : 'none', opacity: showAccountDropdown ? '1' : '0', transform: showAccountDropdown ? 'translateY(0)' : 'translateY(-10px)' }}
+                                >
                                     {user.firstName ? (
                                         <>
                                             <li>
