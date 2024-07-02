@@ -63,6 +63,7 @@ import ActionProvider from '../components/ChatBot/ActionProvider.js';
 import DirectSalesStaffBtn from '../components/ChatBot/DirectSalesStaffBtn.js';
 import 'react-chatbot-kit/build/main.css';
 import UpdateTitle from '../services/TitleService';
+import ManagerProductDetail from './Manager/ManagerManageProduct/ManagerProductDetail.js';
 
 function AppContent() {
   const [isClosed, setIsClosed] = useState(true);  // Set the initial state to true
@@ -158,6 +159,7 @@ function AppContent() {
           <Route path="/manager-diamond-list" element={<ProtectedRoute path="/manager-diamond-list" element={ManagerDiamondList} />} />
           <Route path="/manager-add-diamond" element={<ProtectedRoute path="/manager-add-diamond" element={ManagerAddDiamond} />} />
           <Route path="/manager-product-list" element={<ProtectedRoute path="/manager-product-list" element={ManagerProductList} />} />
+          <Route path="/manager-product-detail" element={<ManagerProductDetail/>} />
           <Route path="/manager-add-product" element={<ProtectedRoute path="/manager-add-product" element={ManagerAddProduct} />} />
           <Route path="/manager-shell-list" element={<ProtectedRoute path="/manager-shell-list" element={ManagerShellList} />} />
           <Route path="/manager-add-shell" element={<ProtectedRoute path="/manager-add-shell" element={ManagerAddShell} />} />

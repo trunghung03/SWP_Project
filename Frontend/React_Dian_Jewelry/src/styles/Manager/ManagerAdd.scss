@@ -135,3 +135,27 @@
     outline: none;
     height: 28px;
 }
+.manager_product_detail_box{
+    width: 100%;
+    max-width: 1300px;
+    margin: 3% auto;
+    border: 0.5px solid #cccccc;
+    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.1), 0 2px 2px -2px rgb(0 0 0 / 0.1);
+}
+.manager_product_detail_subcontent{
+    padding: 5px 20px;
+}
+.manager_back_button{
+    background-color: white;
+    color: black;
+    padding: 8px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: 90%;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.manager_back_button:hover{
+    text-decoration: underline;
+}

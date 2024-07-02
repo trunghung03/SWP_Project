@@ -247,7 +247,7 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
 
-                var diamondIds = products.Select(p => p.Diamonds.FirstOrDefault().DiamondId).Distinct().ToList();
+                var diamondIds = products.Select(p => p.Diamonds.FirstOrDefault()?.DiamondId).Where(id => id != null).Distinct().ToList();
                 var diamonds = await _context.Diamonds
                                              .Where(d => diamondIds.Contains(d.DiamondId))
                                              .ToListAsync();
@@ -260,9 +260,9 @@ namespace DIAN_.Controllers
 
                 return Ok(productDTOs);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
     }

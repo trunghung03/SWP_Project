@@ -25,6 +25,7 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {Visibility } from "@mui/icons-material";
 
 const ManagerProductList = () => {
   const navigate = useNavigate();
@@ -351,16 +352,18 @@ const handleEdit = (product) => {
                   <StyledTableCell align="center">ID</StyledTableCell>
                   <StyledTableCell align="center">Code</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Description</StyledTableCell>
+                  <StyledTableCell align="center">Price</StyledTableCell>
+                  {/* <StyledTableCell align="center">Description</StyledTableCell>
                   <StyledTableCell align="center">Diamond</StyledTableCell>
                   <StyledTableCell align="center">Main & Sub Diamond Amount</StyledTableCell>
                   <StyledTableCell align="center">Shell Weight</StyledTableCell>
                   <StyledTableCell align="center">Images</StyledTableCell>
                   <StyledTableCell align="center">Category</StyledTableCell>
                   <StyledTableCell align="center">Collection</StyledTableCell>
-                  <StyledTableCell align="center">Price</StyledTableCell>
-                  <StyledTableCell align="center">Labor</StyledTableCell>
+                  <StyledTableCell align="center">Labor</StyledTableCell> */}
+                  <StyledTableCell align="center">Stock</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
+                  <StyledTableCell align="center">View</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -370,7 +373,9 @@ const handleEdit = (product) => {
                       <TableCell align="center">{item.productId}</TableCell>
                       <TableCell align="center">{item.productCode}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{item.description}</TableCell>
+                      <TableCell align="center">{item.price}</TableCell>
+                      <TableCell align="center">quantityyy</TableCell>
+                      {/* <TableCell align="center">{item.description}</TableCell>
                       <TableCell align="center">{mainDiamonds[item.mainDiamondId]}</TableCell>
                       <TableCell align="center">
                         {item.mainDiamondAmount} / {item.subDiamondAmount}
@@ -393,8 +398,8 @@ const handleEdit = (product) => {
                       </TableCell>
                       <TableCell align="center">{categories[item.categoryId]}</TableCell>
                       <TableCell align="center">{collections[item.collectionId]}</TableCell>
-                      <TableCell align="center">{item.laborPrice}</TableCell>
-                      <TableCell align="center">{item.price}</TableCell>
+                      <TableCell align="center">{item.laborPrice}</TableCell> */}
+                      
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
@@ -402,6 +407,9 @@ const handleEdit = (product) => {
                         <IconButton onClick={() => handleDelete(item.productId)}>
                           <DeleteIcon />
                         </IconButton>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Visibility onClick={() => navigate("/manager-product-detail")}></Visibility>
                       </TableCell>
                     </TableRow>
                   ))

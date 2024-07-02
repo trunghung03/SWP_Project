@@ -6,6 +6,7 @@ using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Linq;
 
 namespace DIAN_.Controllers
 {
@@ -288,7 +289,6 @@ namespace DIAN_.Controllers
 
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
-                .ThenInclude(p => p.Diamonds.FirstOrDefault())
                 .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
@@ -304,19 +304,23 @@ namespace DIAN_.Controllers
                     (g, p) => p)
                 .ToListAsync();
 
-            var diamondIds = topProducts.Select(tp => tp.Diamonds.FirstOrDefault().DiamondId).Distinct().ToList();
+            // Since including Diamonds directly with FirstOrDefault is not supported, we'll load them separately
+            var productIds = topProducts.Select(p => p.ProductId).ToList();
             var diamonds = await _context.Diamonds
-                                         .Where(d => diamondIds.Contains(d.DiamondId))
-                                         .ToListAsync();
+                              .Where(d => d.ProductId.HasValue && productIds.Contains(d.ProductId.Value))
+                              .ToListAsync();
+
 
             var productDTOs = topProducts.Select(tp =>
             {
-                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == tp.Diamonds.FirstOrDefault().DiamondId);
-                return tp.ToProductListDTO(diamond);
+                var diamond = diamonds.FirstOrDefault(d => d.ProductId == tp.ProductId);
+                // Ensure that we handle the case where diamond could be null
+                return tp.ToProductListDTO(diamond ?? new Diamond()); // Assuming a parameterless constructor or substitute with an appropriate default
             }).ToList();
 
             return Ok(productDTOs);
         }
+
 
         [HttpGet("daily-statistics")]
         public async Task<ActionResult<TodayStatisticDto>> GetDailyStatistics(DateTime? date)

@@ -24,6 +24,7 @@ CREATE TABLE CUSTOMER (
     Address NVARCHAR(255),
     PhoneNumber NVARCHAR(20),
     Points BIGINT,
+    AccountType NVARCHAR(128),
     Status BIT NOT NULL DEFAULT 1
 );
 
@@ -89,19 +90,6 @@ CREATE TABLE SHELLMATERIAL (
     Status BIT NOT NULL DEFAULT 1,
 );
 
--- Diamond table
-CREATE TABLE DIAMOND (
-    DiamondID INT PRIMARY KEY IDENTITY(1,1),
-	Shape NVARCHAR (50),
-    Color NVARCHAR(50) ,
-    Clarity NVARCHAR(50) ,
-    Carat DECIMAL(5, 2) ,
-    Cut NVARCHAR(50),
-    CertificateScan NVARCHAR(MAX),
-    Price DECIMAL(18, 2) NOT NULL,
-    Status BIT NOT NULL DEFAULT 1
-);
-
 CREATE TABLE COLLECTION (
 	CollectionID INT PRIMARY KEY,	
 	Name NVARCHAR(128) NOT NULL,
@@ -124,21 +112,47 @@ CREATE TABLE PRODUCT (
     [Name] NVARCHAR(100) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     [Description] NVARCHAR(MAX) ,
-    MainDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID), -- Constrain the percentage to be between 0 and 100
-    SubDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
     LaborCost DECIMAL(18, 2),
     ImageLinkList NVARCHAR(MAX),
-	MainDiamondAmount INT,
-    SubDiamondAmount INT,
     Status BIT NOT NULL DEFAULT 1,
 	CollectionID INT FOREIGN KEY REFERENCES COLLECTION(CollectionID),
 	CategoryID INT FOREIGN KEY REFERENCES CATEGORY(CategoryID),
 );
 
+-- Diamond table
+CREATE TABLE DIAMOND (
+    DiamondID INT PRIMARY KEY IDENTITY(1,1),
+	Shape NVARCHAR (50),
+    Color NVARCHAR(50) ,
+    Clarity NVARCHAR(50) ,
+    Carat DECIMAL(5, 2) ,
+    Cut NVARCHAR(50),
+    CertificateScan NVARCHAR(MAX),
+    Price DECIMAL(18, 2) NOT NULL,
+	ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
+    Status BIT NOT NULL DEFAULT 1
+);
+
+-- Subdiamond table
+CREATE TABLE SUBDIAMOND (
+    SubdiamondID INT PRIMARY KEY IDENTITY(1,1),
+	Shape NVARCHAR (50),
+    Color NVARCHAR(50) ,
+    Clarity NVARCHAR(50) ,
+    Carat DECIMAL(5, 2) ,
+    Cut NVARCHAR(50),
+    Price DECIMAL(18, 2) NOT NULL,
+    AmountAvailable INT,
+    Status BIT NOT NULL DEFAULT 1
+);
+
 CREATE TABLE SHELL (
     ShellID INT PRIMARY KEY IDENTITY(1,1),
     ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
-    ShellAmount DECIMAL(18, 2),
+    ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
+    SubdiamondID INT FOREIGN KEY REFERENCES SUBDIAMOND(SubdiamondID),
+    SubDiamondAmount INT,
+    [Weight] DECIMAL(18, 2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 )
@@ -177,3 +191,5 @@ CREATE TABLE COMPANY (
     PhoneNumber NVARCHAR(20) NOT NULL,
 	MarkupPrice DECIMAL(5, 2) CHECK (MarkupPrice >= 0 AND MarkupPrice <= 100)
 );
+
+
