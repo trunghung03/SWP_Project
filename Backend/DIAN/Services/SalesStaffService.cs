@@ -43,15 +43,12 @@ namespace DIAN_.Services
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
             var connectionId = NotificationsHub.GetConnectionIdForCustomer(order.UserId);
 
-            _logger.LogInformation($"Order {orderId} status updated to {status}.");
             if (connectionId != null)
             {
-                _logger.LogInformation($"Sending notification to customer {order.UserId}.");
                 await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
             }
             else
             {
-                _logger.LogInformation($"Customer {order.UserId} is not connected.");
                 var notification = new Notification
                 {
                     CustomerId = order.UserId,

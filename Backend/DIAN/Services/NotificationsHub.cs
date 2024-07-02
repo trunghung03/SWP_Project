@@ -12,45 +12,43 @@ public class NotificationsHub : Hub<INotificationClient>
         _notificationRepository = notificationRepository;
     }
 
-    //public override async Task OnConnectedAsync()
-    //{
-    //    Console.WriteLine("New connection established.");
-    //    var httpContext = Context.GetHttpContext();
-    //    Console.WriteLine($"Query string: {httpContext.Request.QueryString}");
-    //    int customerId = int.Parse(httpContext.Request.Query["customerId"]);
-    //    Console.WriteLine($"Customer {customerId} connected.");
-    //    customerConnectionMap.AddOrUpdate(customerId, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
-    //    Console.WriteLine($"Customer {customerId} connected with connection id {Context.ConnectionId}.");
-
-    //    // Check for and send any undelivered notifications
-    //    var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
-    //    foreach (var notification in undeliveredNotifications)
-    //    {
-    //        await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
-    //        notification.IsDelivered = true;
-    //        await _notificationRepository.UpdateNotification(notification);
-    //    }
-
-    //    await base.OnConnectedAsync();
-    //}
-    public override Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
-        var connectionId = Context.ConnectionId;
-        // Handle connection logic (e.g., storing connectionId)
-        return base.OnConnectedAsync();
+       
+        var httpContext = Context.GetHttpContext(); 
+        int customerId = int.Parse(httpContext.Request.Query["customerId"]);
+        
+        customerConnectionMap.AddOrUpdate(customerId, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
+
+        // Check for and send any undelivered notifications
+        var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
+        foreach (var notification in undeliveredNotifications)
+        {
+            await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
+            notification.IsDelivered = true;
+            await _notificationRepository.UpdateNotification(notification);
+        }
+
+        await base.OnConnectedAsync();
     }
+    public static string GetConnectionIdForCustomer(int customerId)
+    {
+        customerConnectionMap.TryGetValue(customerId, out var connectionId);
+        return connectionId;
+    }
+
+    //public override Task OnConnectedAsync()
+    //{
+    //    var connectionId = Context.ConnectionId;
+    //    // Handle connection logic (e.g., storing connectionId)
+    //    return base.OnConnectedAsync();
+    //}
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         var customerId = customerConnectionMap.FirstOrDefault(kvp => kvp.Value == Context.ConnectionId).Key;
         customerConnectionMap.TryRemove(customerId, out _);
         await base.OnDisconnectedAsync(exception);
-    }
-
-    public static string GetConnectionIdForCustomer(int customerId)
-    {
-        customerConnectionMap.TryGetValue(customerId, out var connectionId);
-        return connectionId;
     }
 
     public async Task NotifyCustomer(int customerId, string message)

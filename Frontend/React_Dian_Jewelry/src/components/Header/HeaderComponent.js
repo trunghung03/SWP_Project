@@ -201,7 +201,7 @@ const HeaderComponent = () => {
                                             <div className="noti_header">Notifications</div>
                                             <div className="noti_header_view">View all<i className="fas fa-arrow-right"></i></div>
                                         </div>
-                                        <Notification />
+                                        <Notification customerId={customerId}/>
                                         {notifications.map((notification, index) => (
                                             <div key={notification.id} className="noti_item" style={{ borderBottom: index === notifications.length - 1 ? 'none' : '1px solid #e0e0e0' }}>
                                                 <div className='each_noti'>
