@@ -65,6 +65,7 @@ namespace DIAN_.Repository
             }
 
             shell.Name = shellDTO.Name;
+            shell.Price = shellDTO.Price;
 
             _context.Shellmaterials.Update(shell);
             await _context.SaveChangesAsync();
