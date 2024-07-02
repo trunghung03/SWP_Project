@@ -294,7 +294,7 @@ const ManagerShellList = () => {
             className="manager_manage_diamond_create_button"
             onClick={() => setAddMode(true)}
           >
-            Add new shell
+            Add new shell material
           </button>
           <div className="manager_manage_diamond_pagination">
             <button
@@ -333,6 +333,81 @@ const ManagerShellList = () => {
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Amount Available (g)</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {shellItems.length > 0 ? (
+                  shellItems.map((item) => (
+                    <TableRow className="manager_manage_table_body_row" key={item.shellMaterialId}>
+                      <StyledTableCell align="center">{item.shellMaterialId}</StyledTableCell>
+                      <StyledTableCell align="center">{item.name}</StyledTableCell>
+                      <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
+                      <StyledTableCell align="center">
+                        <IconButton onClick={() => handleEdit(item)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDelete(item.shellMaterialId)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </StyledTableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <StyledTableCell colSpan="4" align="center">No shell found</StyledTableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+
+        <div className="manager_manage_diamond_create_button_section" style={{marginTop:"2%"}}>
+          <button
+            className="manager_manage_diamond_create_button"
+            onClick={() => navigate("/manager-add-shell")}
+          >
+            Add new shell
+          </button>
+          <div className="manager_manage_diamond_pagination">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={
+                  index + 1 === currentPage ? "manager_order_active" : ""
+                }
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+
+                <div className="manager_manage_diamond_table_wrapper">
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">Shell Id</StyledTableCell>
+                  <StyledTableCell align="center">Product Id</StyledTableCell>
+                  <StyledTableCell align="center">Product name</StyledTableCell>
+                  <StyledTableCell align="center">Action</StyledTableCell>
+                  {/* nói chung hiện hết mấy cái mà vừa add */}
                 </TableRow>
               </TableHead>
               <TableBody>

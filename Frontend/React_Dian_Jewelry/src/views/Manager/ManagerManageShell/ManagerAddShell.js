@@ -57,6 +57,17 @@ const ManagerAddShell = () => {
                         &lt; Back
                     </button>
                 </div>
+                <div>note: yêu cầu
+                    <ul>
+                        <li>product Id: </li>
+                        <li>product name: sau khi nhập productId sẽ hiện ra product name</li>
+                        <li>shell material: 4 option (Silver, Gold, Rose Gold, White Gold)</li>
+                        <li>subdiamondId</li>
+                        <li>subdiamond amount: k rõ còn tên gọi khác cho này k, kiểu như lỗ trên vỏ hả....</li>
+                        <li>weight</li>
+                        <li>stock/quantity/amount available: tự kiếm tên đặt cho nhìn hợp lý nha</li>
+                    </ul>
+                </div>
                 <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
