@@ -40,11 +40,7 @@ namespace DIAN_.Mapper
                 Price = product.Price,
                 LaborPrice = product.LaborCost ?? 0, // Handle nullable types
                 Description = product.Description,
-                MainDiamondId = product.MainDiamondId ?? 0,
-                SubDiamondId = product.SubDiamondId ?? 0,
                 ImageLinkList = product.ImageLinkList,
-                SubDiamondAmount = product.SubDiamondAmount ?? 0,
-                MainDiamondAmount = product.MainDiamondAmount ?? 0,
                 CollectionId = product.CollectionId,
                 Sizes = sizes,
                 CategoryId = product.CategoryId,
@@ -107,10 +103,6 @@ namespace DIAN_.Mapper
                 LaborCost = productRequestDTO.LaborPrice,
                 Description = productRequestDTO.Description,
                 ImageLinkList = productRequestDTO.imageLinkList,
-                MainDiamondId = productRequestDTO.MainDiamondId,
-                SubDiamondId = productRequestDTO.SubDiamondId,
-                SubDiamondAmount = productRequestDTO.SubDiamondAmount,
-                MainDiamondAmount = productRequestDTO.MainDiamondAmount,
                 CollectionId = productRequestDTO.CollectionId,
                 CategoryId = productRequestDTO.CategoryId,
                 Status = true
