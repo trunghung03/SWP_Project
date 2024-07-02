@@ -23,6 +23,8 @@ public partial class Customer
 
     public long? Points { get; set; }
 
+    public string AccountType { get; set; }
+
     public bool Status { get; set; }
 
     public virtual ICollection<Purchaseorder> Purchaseorders { get; set; } = new List<Purchaseorder>();

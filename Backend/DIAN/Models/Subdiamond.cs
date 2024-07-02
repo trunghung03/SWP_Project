@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace DIAN_.Models;
 
-public partial class Diamond
+public partial class Subdiamond
 {
-    public int DiamondId { get; set; }
+    public int SubdiamondId { get; set; }
 
     public string Shape { get; set; }
 
@@ -19,13 +19,11 @@ public partial class Diamond
 
     public string Cut { get; set; }
 
-    public string CertificateScan { get; set; }
-
     public decimal Price { get; set; }
 
-    public int? ProductId { get; set; }
+    public int? AmountAvailable { get; set; }
 
     public bool Status { get; set; }
 
-    public virtual Product Product { get; set; }
+    public virtual ICollection<Shell> Shells { get; set; } = new List<Shell>();
 }
