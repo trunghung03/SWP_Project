@@ -38,6 +38,7 @@ const ManagerProductList = () => {
   const [categories, setCategories] = useState({});
   const [collections, setCollections] = useState({});
   const [mainDiamonds, setMainDiamonds] = useState({});
+  const [isSearch , setIsSearch] = useState(false);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 6,
@@ -105,6 +106,7 @@ const ManagerProductList = () => {
     };
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
+        setIsSearch(true);
         try {
           const response = await getProductDetail(searchQuery.trim());
           setProductItems([response]);
@@ -119,12 +121,13 @@ const ManagerProductList = () => {
           swal("Product not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
+        setIsSearch(true);
         fetchData(1, searchQuery);
       }
     }
   };
 
-  const handleShowAllProducts = () => {
+  const handleBack = () => {
     setSearchQuery("");
     fetchData(1);
   };
@@ -318,17 +321,11 @@ const handleEdit = (product) => {
             <input
               type="text"
               className="manager_manage_product_search_bar"
-              placeholder="Search by ID or Name..."
+              placeholder="Search by ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={handleShowAllProducts}
-            >
-              Show all products
-            </button>
           </div>
         </div>
         <hr className="manager_product_header_line"></hr>
@@ -338,7 +335,7 @@ const handleEdit = (product) => {
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-product")}
           >
-            Add new product
+            Add product
           </button>
           {renderPagination()}
         </div>
@@ -421,6 +418,11 @@ const handleEdit = (product) => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && (
+            <button className="btn btn-secondary mt-3" onClick={handleBack}>
+              Back to show all products
+            </button>
+          )}
         </div>
       </div>
 

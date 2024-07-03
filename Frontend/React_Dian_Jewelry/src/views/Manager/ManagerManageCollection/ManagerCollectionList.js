@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
 import "../../../styles/Manager/ManagerList.scss";
-import { ShowAllCollection, searchCollectionById, deleteCollectionById,changeStatus ,updateCollectionById } from "../../../services/ManagerService/ManagerCollectionService.js";
+import { ShowAllCollection, searchCollectionById, deleteCollectionById, changeStatus, updateCollectionById } from "../../../services/ManagerService/ManagerCollectionService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -27,6 +27,7 @@ const ManagerCollectionList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedCollection, setEditedCollection] = useState({});
+  const [isSearch, setIsSearch] = useState(false);
   const [originalCollection, setOriginalCollection] = useState({});
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -79,7 +80,9 @@ const ManagerCollectionList = () => {
       return /^-?\d+$/.test(value);
     };
     if (e.key === "Enter") {
+      
       if (isInteger(searchQuery.trim())) {
+        setIsSearch(true);
         try {
           const response = await searchCollectionById(searchQuery.trim());
           setCollectionItems([response]);
@@ -89,6 +92,7 @@ const ManagerCollectionList = () => {
           swal("Collection not found!", "Please try another one.", "error");
         }
       } else {
+        setIsSearch(false);
         try {
           const response = await ShowAllCollection();
           setCollectionItems(response);
@@ -103,13 +107,13 @@ const ManagerCollectionList = () => {
 
   const handleStatus = async (collectionID) => {
     try {
-      
+
       const collection = await searchCollectionById(collectionID);
       console.log(collection);
       const collectionStatus = collection.status;
       const action = collectionStatus ? "DEACTIVATE" : "ACTIVATE";
       const swalResult = await swal({
-        title:  `Are you sure to ${action} this customer account?`,
+        title: `Are you sure to ${action} this customer account?`,
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -151,57 +155,58 @@ const ManagerCollectionList = () => {
     const requiredFields = ['name', 'description', 'status'];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
-        if (!editedCollection[field]) {
-            swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-            return;
-        }
-        if (specialCharPattern.test(editedCollection[field])) {
-          swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-          return;
-        }
+      if (!editedCollection[field]) {
+        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedCollection[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
     }
 
     const isEqual = JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
     if (isEqual) {
-        swal("No changes detected!", "You have not made any changes.", "error");
-        return;
+      swal("No changes detected!", "You have not made any changes.", "error");
+      return;
     }
 
     const CollectionToUpdate = { ...editedCollection, status: true };
 
     try {
-        console.log("Sending update request with data:", CollectionToUpdate);
-        await updateCollectionById(CollectionToUpdate.collectionId, CollectionToUpdate);
-        const updatedItems = await ShowAllCollection();
-        setCollectionItems(updatedItems);
-        setEditMode(false);
-        swal(
-            "Updated successfully!",
-            "The Collection information has been updated.",
-            "success"
-        );
+      console.log("Sending update request with data:", CollectionToUpdate);
+      await updateCollectionById(CollectionToUpdate.collectionId, CollectionToUpdate);
+      const updatedItems = await ShowAllCollection();
+      setCollectionItems(updatedItems);
+      setEditMode(false);
+      swal(
+        "Updated successfully!",
+        "The Collection information has been updated.",
+        "success"
+      );
     } catch (error) {
-        console.error(
-            "Error updating Collection:",
-            error.response ? error.response.data : error.message
-        );
-        swal(
-            "Something went wrong!",
-            "Failed to update. Please try again.",
-            "error"
-        );
+      console.error(
+        "Error updating Collection:",
+        error.response ? error.response.data : error.message
+      );
+      swal(
+        "Something went wrong!",
+        "Failed to update. Please try again.",
+        "error"
+      );
     }
-};
+  };
 
-const backList = async () =>{
-  try {
-    const response = await ShowAllCollection();
-    setCollectionItems(response);
-    setCurrentPage(1);
-  } catch (error) {
-    console.error("Error fetching data:", error);
+  const handleBack = async () => {
+    try {
+      const response = await ShowAllCollection();
+      setCollectionItems(response);
+      setCurrentPage(1);
+      setIsSearch(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
-}
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -220,10 +225,6 @@ const backList = async () =>{
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={() => backList()}
-            >Show all collections</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>
@@ -289,7 +290,7 @@ const backList = async () =>{
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
-                        </TableCell>
+                      </TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={() => handleStatus(item.collectionId)}
@@ -314,7 +315,13 @@ const backList = async () =>{
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && (
+              <button className="btn btn-secondary mt-3" onClick={handleBack}>
+                Back to show all collections
+              </button>
+            )}
         </div>
+        
       </div>
 
       {/* Update modal */}
@@ -356,7 +363,7 @@ const backList = async () =>{
                 <button onClick={handleUpdate}>Confirm</button>
               </div>
             </div>
-          </div>
+          </div> 
         </div>
       )}
     </div>

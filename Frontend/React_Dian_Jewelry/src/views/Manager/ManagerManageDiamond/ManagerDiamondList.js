@@ -32,6 +32,7 @@ const ManagerDiamondList = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedDiamond, setEditedDiamond] = useState({});
   const [originalDiamond, setOriginalDiamond] = useState({});
+  const [isSearch , setIsSearch] = useState(false);
   const [pagination, setPagination] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -78,6 +79,7 @@ const ManagerDiamondList = () => {
     };
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
+        setIsSearch(true);
         try {
           const response = await getDiamondDetail(searchQuery.trim());
           setDiamondList([response]);
@@ -87,6 +89,7 @@ const ManagerDiamondList = () => {
           swal("Diamond not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
+        setIsSearch(true);
         try {
           const response = await getDiamondByShape(searchQuery.trim());
           if (Array.isArray(response)) {
@@ -103,6 +106,7 @@ const ManagerDiamondList = () => {
           swal("Diamond not found!", "Please try another one.", "error");
         }
       } else {
+        setIsSearch(false);
         fetchData(1);
       }
     }
@@ -137,12 +141,13 @@ const ManagerDiamondList = () => {
     });
   };
 
-  const backList = async () =>{
+  const handleBack = async () =>{
     try {
       const response = await ShowAllDiamond();
       setSearchQuery("");
       setDiamondList(response.data);
       setPagination(response.pagination);
+      setIsSearch(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -307,10 +312,6 @@ const ManagerDiamondList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={() => backList()}
-            >Show all diamonds</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>
@@ -399,7 +400,12 @@ const ManagerDiamondList = () => {
                 )}
               </TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer>{isSearch && (
+            <button className="btn btn-secondary mt-3" onClick={handleBack}>
+              Back to show all diamonds
+            </button>
+          )}
+
         </div>
       </div>
 

@@ -97,6 +97,7 @@
 }
 
 
+
 .manager_add_diamond_form_row {
     display: flex;
     gap: 20px;
@@ -158,4 +159,25 @@
 }
 .manager_back_button:hover{
     text-decoration: underline;
+}
+@media screen and (max-width: 650px) {
+    .manager_add_diamond_form_row {
+       flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .responsive-select {
+        width: 100%;
+    }
+}  
+@media screen and (max-width: 450px) {
+    .collectionId {
+        width: 100%;
+    }
+}
+
+.manager_add_diamond_form_group .collectionId{
+    width: 100%;
+    flex-direction: column;
 }

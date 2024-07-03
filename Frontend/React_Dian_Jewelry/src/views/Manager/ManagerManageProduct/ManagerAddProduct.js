@@ -154,7 +154,7 @@ const ManagerAddProduct = () => {
                                     value={productData.collectionId}
                                     onChange={handleChange}
                                     required
-                                    style={{ maxHeight: '100px', overflowY: 'auto' }}
+                                    style={{ maxHeight: '100px', overflowY: 'auto', width: '200px'}}
                                 >
                                     <option value="">Select Collection</option>
                                     {collections.map((collection) => (

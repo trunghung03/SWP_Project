@@ -28,6 +28,7 @@ const ManagerEmployeeList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedEmployee, setEditedEmployee] = useState({});
+  const [isSearch, setIsSearch] = useState(false);
   const [originalEmployee, setOriginalEmployee] = useState({});
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -83,6 +84,7 @@ const ManagerEmployeeList = () => {
     };
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
+        setIsSearch(true);
         try {
           const response = await getEmployeeDetail(searchQuery.trim());
           setEmployeeList([response]);
@@ -92,6 +94,7 @@ const ManagerEmployeeList = () => {
           swal("Employee not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
+        setIsSearch(true);
         try {
           const response = await getEmployeeByRole(searchQuery.trim());
           if (Array.isArray(response)) {
@@ -109,6 +112,7 @@ const ManagerEmployeeList = () => {
         }
       } else {
         try {
+          setIsSearch(false);
           const response = await ShowAllEmployee();
           setEmployeeList(response);
           setCurrentPage(1);
@@ -119,107 +123,12 @@ const ManagerEmployeeList = () => {
     }
   };
 
-  // Delete diamond by id
-  const handleDelete = async (employeeID) => {
-    swal({
-      title: "Are you sure to delete this employee account?",
-      text: "This action cannot be undone",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        try {
-          await deleteEpmloyeeById(employeeID);
-          const response = await ShowAllEmployee();
-          setEmployeeList(response);
-          swal(
-            "Deleted successfully!",
-            "Employee has been deleted.",
-            "success"
-          );
-        } catch (error) {
-          console.error("Error deleting diamond:", error);
-          swal(
-            "Something went wrong!",
-            "Failed to delete the employee. Please try again.",
-            "error"
-          );
-        }
-      }
-    });
-  };
-
-  // Update by id
-  const handleEdit = (employee) => {
-    setEditMode(true);
-    setEditedEmployee(employee);
-    setOriginalEmployee(employee);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedEmployee({ ...editedEmployee, [name]: value });
-  };
-
-  const handleUpdate = async () => {
-    const requiredFields = [
-      "role",
-      "email",
-      "password",
-      "lastName",
-      "firstName",
-      "address",
-      "phoneNumber",
-    ];
-    for (let field of requiredFields) {
-      if (!editedEmployee[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
-    }
-
-    const isEqual =
-      JSON.stringify(originalEmployee) === JSON.stringify(editedEmployee);
-    if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
-      return;
-    }
-
-    const employeeToUpdate = { ...editedEmployee, status: true };
-
-    try {
-      console.log("Sending update request with data:", employeeToUpdate);
-      const response = await updateEmployeeById(
-        employeeToUpdate.employeeId,
-        employeeToUpdate
-      );
-      console.log("Update response:", response.data);
-      const updatedItems = await ShowAllEmployee();
-      setEmployeeList(updatedItems);
-      setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "Employee information has been updated.",
-        "success"
-      );
-    } catch (error) {
-      console.error(
-        "Error updating diamond:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
-    }
-  };
-  const backList = async () => {
+  const handleBack = async () => {
     try {
       const response = await ShowAllEmployee();
       setEmployeeList(response);
       setCurrentPage(1);
+      setIsSearch(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -242,10 +151,6 @@ const ManagerEmployeeList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={() => backList()}
-            >Show all employees</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>
@@ -332,92 +237,13 @@ const ManagerEmployeeList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && (
+            <button className="btn btn-secondary mt-3" onClick={handleBack}>
+              Back to show all employees
+            </button>
+          )}
         </div>
       </div>
-
-      {/* Update modal */}
-      {editMode && (
-        <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setEditMode(false)}
-        >
-          <div
-            className="manager_manage_diamond_update_modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Employee Information</h4>
-              <div className="manager_manage_diamond_form_group">
-                <label>Role</label>
-                <input
-                  type="text"
-                  name="role"
-                  value={editedEmployee.role}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Email</label>
-                <input
-                  type="text"
-                  name="email"
-                  value={editedEmployee.email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Password</label>
-                <input
-                  type="text"
-                  name="password"
-                  value={editedEmployee.password}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Last name</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={editedEmployee.lastName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>First name</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={editedEmployee.firstName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Addresss</label>
-                <input
-                  type="text"
-                  name="address"
-                  value={editedEmployee.address}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Phone number</label>
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  value={editedEmployee.phoneNumber}
-                  onChange={handleChange}
-                />
-              </div>
-              {/* <div className="manager_manage_diamond_modal_actions">
-                <button onClick={() => setEditMode(false)}>Cancel</button>
-                <button onClick={handleUpdate}>Confirm</button>
-              </div> */}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

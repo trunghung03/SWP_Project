@@ -100,6 +100,7 @@ const ManagerPromotionList = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedPromotion, setEditedPromotion] = useState({});
   const [originalPromotion, setOriginalPromotion] = useState({});
+  const [isSearch, setIsSearch] = useState(false);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: '#f9c6bb',
@@ -144,6 +145,7 @@ const ManagerPromotionList = () => {
     };
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
+        setIsSearch(true);
         try {
           const response = await getPromotionDetail(searchQuery.trim());
           setPromotionList([response]);
@@ -153,6 +155,7 @@ const ManagerPromotionList = () => {
           swal("Promotion not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
+        setIsSearch(true);
         try {
           const response = await getPromotionByName(searchQuery.trim());
           if (Array.isArray(response)) {
@@ -168,6 +171,7 @@ const ManagerPromotionList = () => {
           swal("Promotion not found!", "Please try another one.", "error");
         }
       } else {
+        setIsSearch(false);
         try {
           const response = await ShowAllPromotion();
           setPromotionList(response);
@@ -177,10 +181,10 @@ const ManagerPromotionList = () => {
         }
       }
     }
-    
+
   };
 
- 
+
   const handleEdit = (Promotion) => {
     setEditMode(true);
     setEditedPromotion(Promotion);
@@ -193,7 +197,7 @@ const ManagerPromotionList = () => {
   };
 
   const handleUpdate = async () => {
-    const requiredFields = ["name","code","amount","description","validFrom","validTo"];
+    const requiredFields = ["name", "code", "amount", "description", "validFrom", "validTo"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedPromotion[field]) {
@@ -243,11 +247,12 @@ const ManagerPromotionList = () => {
     }
   };
 
-  const backList = async () =>{
+  const handleBack = async () => {
     try {
       const response = await ShowAllPromotion();
       setPromotionList(response);
       setCurrentPage(1);
+      setIsSearch(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -270,22 +275,18 @@ const ManagerPromotionList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleSearchKeyPress}
             />
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={() => backList()}
-            >Show all promotions</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>
 
         <h3>List Of Promotional Codes</h3>
-          <div className="manager_manage_diamond_create_button_section">
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={() => navigate("/manager-add-promotion")}
-            >
-              Add new promotional code
-            </button>
+        <div className="manager_manage_diamond_create_button_section">
+          <button
+            className="manager_manage_diamond_create_button"
+            onClick={() => navigate("/manager-add-promotion")}
+          >
+            Add new promotional code
+          </button>
           <div className="manager_manage_diamond_pagination">
             <button
               className="manager_button_pagination"
@@ -312,7 +313,7 @@ const ManagerPromotionList = () => {
             >
               &gt;
             </button>
-        </div>
+          </div>
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -348,7 +349,7 @@ const ManagerPromotionList = () => {
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
-                        </TableCell>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
@@ -361,10 +362,15 @@ const ManagerPromotionList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {isSearch && (
+            <button className="btn btn-secondary mt-3" onClick={handleBack}>
+              Back to show all promotions
+            </button>
+          )}
         </div>
       </div>
 
-       
+
       {editMode && (
         <div
           className="manager_manage_diamond_modal_overlay"
@@ -446,7 +452,7 @@ const ManagerPromotionList = () => {
                   required
                 />
               </div>
-        
+
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
@@ -454,7 +460,7 @@ const ManagerPromotionList = () => {
             </div>
           </div>
         </div>
-      )} 
+      )}
     </div>
   );
 };

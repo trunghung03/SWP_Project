@@ -8,9 +8,9 @@ import {
   ShowAllShell,
   getShellDetail,
   deleteShellById,
-  updateShellById,
+  updateShellMaterialById,
   getShellByName,
-  createShell
+  createShell,ShowAllShellMaterial
 } from "../../../services/ManagerService/ManagerShellService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -28,12 +28,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const ManagerShellList = () => {
   const navigate = useNavigate();
 
-  const [shellItems, setShellItems] = useState([]);
+  const [shellMaterial, setShellMaterial] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedShell, setEditedShell] = useState({});
   const [originalShell, setOriginalShell] = useState({});
   const [addMode, setAddMode] = useState(false);
+  const [shell, setShell] = useState([]);
   const [newShell, setNewShell] = useState({
     name: '',
     amountAvailable: ''
@@ -62,8 +63,11 @@ const ManagerShellList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ShowAllShell();
-        setShellItems(response);
+        const response = await ShowAllShellMaterial();
+        setShellMaterial(response);
+        const shells = await ShowAllShell();
+        setShell(shells);
+        console.log(shells);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -77,8 +81,8 @@ const ManagerShellList = () => {
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentShell = shellItems.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(shellItems.length / ordersPerPage);
+  const currentShell = shellMaterial.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(shellMaterial.length / ordersPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -93,7 +97,7 @@ const ManagerShellList = () => {
       if (isInteger(searchQuery.trim())) {
         try {
           const response = await getShellDetail(searchQuery.trim());
-          setShellItems([response]);
+          setShellMaterial([response]);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching shell:", error);
@@ -103,11 +107,11 @@ const ManagerShellList = () => {
         try {
           const response = await getShellByName(searchQuery.trim());
           if (Array.isArray(response)) {
-            setShellItems(response);
+            setShellMaterial(response);
           } else if (response) {
-            setShellItems([response]);
+            setShellMaterial([response]);
           } else {
-            setShellItems([]);
+            setShellMaterial([]);
           }
           setCurrentPage(1);
         } catch (error) {
@@ -117,7 +121,7 @@ const ManagerShellList = () => {
       } else {
         try {
           const response = await ShowAllShell();
-          setShellItems(response);
+          setShellMaterial(response);
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -138,8 +142,8 @@ const ManagerShellList = () => {
       if (willDelete) {
         try {
           await deleteShellById(shellID);
-          const response = await ShowAllShell();
-          setShellItems(response);
+          const response = await ShowAllShellMaterial();
+          setShellMaterial(response);
           swal(
             "Deleted successfully!",
             "The shell has been deleted.",
@@ -173,7 +177,7 @@ const ManagerShellList = () => {
   const handleUpdate = async () => {
     const status = true;
     const price = 0;
-    const requiredFields = ["name", "amountAvailable"];
+    const requiredFields = ["name", "price"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedShell[field]) {
@@ -197,13 +201,13 @@ const ManagerShellList = () => {
 
     try {
       console.log("Sending update request with data:", shellToUpdate);
-      const response = await updateShellById(
+      const response = await updateShellMaterialById(
         shellToUpdate.shellMaterialId,
         shellToUpdate
       );
       console.log("Update response:", response.data);
-      const updatedItems = await ShowAllShell();
-      setShellItems(updatedItems);
+      const updatedItems = await ShowAllShellMaterial();
+      setShellMaterial(updatedItems);
       setEditMode(false);
       swal(
         "Updated successfully!",
@@ -225,7 +229,7 @@ const ManagerShellList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const requiredFields = ["name", "amountAvailable"];
+    const requiredFields = ["name", "price"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!newShell[field]) {
@@ -244,8 +248,8 @@ const ManagerShellList = () => {
       await createShell(shellDataWithStatus);
       swal("Success", "Shell added successfully", "success");
       setAddMode(false);
-      const response = await ShowAllShell();
-      setShellItems(response);
+      const response = await ShowAllShellMaterial();
+      setShellMaterial(response);
     } catch (error) {
       console.error("Error creating shell:", error);
       swal("Something went wrong!", "Failed to add shell. Please try again.", "error");
@@ -255,7 +259,7 @@ const ManagerShellList = () => {
   const backList = async () => {
     try {
       const response = await ShowAllShell();
-      setShellItems(response);
+      setShellMaterial(response);
       setCurrentPage(1);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -329,19 +333,19 @@ const ManagerShellList = () => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center">ID</StyledTableCell>
+                  <StyledTableCell align="center">Shell Material ID</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Amount Available (g)</StyledTableCell>
+                  <StyledTableCell align="center">Price</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {shellItems.length > 0 ? (
-                  shellItems.map((item) => (
+                {shellMaterial.length > 0 ? (
+                  shellMaterial.map((item) => (
                     <TableRow className="manager_manage_table_body_row" key={item.shellMaterialId}>
                       <StyledTableCell align="center">{item.shellMaterialId}</StyledTableCell>
                       <StyledTableCell align="center">{item.name}</StyledTableCell>
-                      <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
+                      <StyledTableCell align="center">{item.price}</StyledTableCell>
                       <StyledTableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
@@ -404,18 +408,18 @@ const ManagerShellList = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">Shell Id</StyledTableCell>
-                  <StyledTableCell align="center">Product Id</StyledTableCell>
-                  <StyledTableCell align="center">Product name</StyledTableCell>
+                  <StyledTableCell align="center">Product ID</StyledTableCell>
+                  <StyledTableCell align="center">Amount Available</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
                   {/* nói chung hiện hết mấy cái mà vừa add */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {shellItems.length > 0 ? (
-                  shellItems.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.shellMaterialId}>
-                      <StyledTableCell align="center">{item.shellMaterialId}</StyledTableCell>
-                      <StyledTableCell align="center">{item.name}</StyledTableCell>
+                {shell.length > 0 ? (
+                  shell.map((item) => (
+                    <TableRow className="manager_manage_table_body_row" key={item.shellId}>
+                      <StyledTableCell align="center">{item.shellId}</StyledTableCell>
+                      <StyledTableCell align="center">{item.productId}</StyledTableCell>
                       <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
                       <StyledTableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
@@ -464,11 +468,11 @@ const ManagerShellList = () => {
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Amount Available</label>
+                <label>Price</label>
                 <input
                   type="text"
-                  name="amountAvailable"
-                  value={editedShell.amountAvailable}
+                  name="price"
+                  value={editedShell.price}
                   onChange={handleChange}
                   required
                 />
@@ -493,7 +497,7 @@ const ManagerShellList = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="manager_manage_diamond_modal_content">
-              <h4>Add New Shell</h4>
+              <h4>Add Shell Material</h4>
               <div className="manager_manage_diamond_form_group">
                 <label>Name</label>
                 <input
@@ -507,13 +511,13 @@ const ManagerShellList = () => {
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Amount Available</label>
+                <label>Price</label>
                 <input
                   type="text"
-                  name="amountAvailable"
+                  name="price"
                   placeholder="Enter amount available"
                   maxLength={10}
-                  value={newShell.amountAvailable}
+                  value={newShell.price}
                   onChange={handleChange}
                   required
                 />
