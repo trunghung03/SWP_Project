@@ -24,11 +24,10 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product)
         {
-            var mainDiamondPrice = product.Diamonds.FirstOrDefault()?.Price ?? 0;
+            var mainDiamondPrice = product.ProductDiamonds.FirstOrDefault()?.Diamond?.Price ?? 0;
+            var subDiamondPrice = product.Shells.FirstOrDefault()?.ShellMaterial?.Price ?? 0;
 
-            var subDiamondPrice = product.Shells.FirstOrDefault()?.Subdiamond?.Price ?? 0;
-
-            product.Price = (mainDiamondPrice * (product.Diamonds.Count)) +
+            product.Price = (mainDiamondPrice * (product.ProductDiamonds.Count)) +
                             (subDiamondPrice * (product.Shells.FirstOrDefault()?.SubDiamondAmount ?? 0) * 0.05m) +
                             (product.LaborCost ?? 0);
 
@@ -156,7 +155,7 @@ namespace DIAN_.Repository
             {
                 var products = await _context.Products
                     .Where(p => p.Status && p.Name.Contains(name))
-                    .Include(p => p.Diamonds.FirstOrDefault())
+                    .Include(p => p.ProductDiamonds.FirstOrDefault())
                     .ToListAsync();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -207,7 +206,7 @@ namespace DIAN_.Repository
             if (!_memoryCache.TryGetValue(cacheKey, out Product? cachedProduct))
             {
                 var product = await _context.Products
-                                            .Include(p => p.Diamonds.FirstOrDefault())
+                                            .Include(p => p.ProductDiamonds.FirstOrDefault())
                                             .Include(p => p.Category).ThenInclude(c => c.Size)
                                             .Where(p => p.Status && p.ProductId == id)
                                             .FirstOrDefaultAsync();
@@ -232,7 +231,7 @@ namespace DIAN_.Repository
         public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
-                                 .Include(p => p.Diamonds.FirstOrDefault()) // Include the MainDiamond to get the shape
+                                 .Include(p => p.ProductDiamonds.FirstOrDefault()) // Include the MainDiamond to get the shape
                                  .ToListAsync();
 
             return products;

@@ -51,6 +51,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[PRODUCT_DIAMOND]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[PROMOTION]",
          "ObjectType": 0
       },
@@ -71,17 +75,12 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[SUBDIAMOND]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[WARRANTY]",
          "ObjectType": 0
       }
    ],
    "UiHint": null,
    "UncountableWords": null,
-   "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDateOnlyTimeOnly": true,

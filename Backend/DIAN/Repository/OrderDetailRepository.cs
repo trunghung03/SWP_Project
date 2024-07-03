@@ -83,7 +83,7 @@ namespace DIAN_.Repository
                     combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
                     (combined, p) => new { combined.po, combined.od, p })
                 .SelectMany(
-                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.Diamonds.FirstOrDefault().DiamondId).DefaultIfEmpty(),
+                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.ProductDiamonds.FirstOrDefault().DiamondId).DefaultIfEmpty(),
                     (combined, d) => new { combined.po, combined.od, combined.p, d })
                 .GroupBy(x => x.po.OrderId)
                 .Select(g => new OrderBillDto

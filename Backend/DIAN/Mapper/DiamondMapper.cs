@@ -10,6 +10,7 @@ namespace DIAN_.Mapper
         {
             return new DiamondDto
             {
+                DiamondType = diamond.DiamondType,
                 Shape = diamond.Shape,
                 DiamondId = diamond.DiamondId,
                 Color = diamond.Color,
@@ -24,6 +25,7 @@ namespace DIAN_.Mapper
         {
             return new DiamondListDto
             {
+                DiamondType = diamond.DiamondType,
                 Shape = diamond.Shape,
                 DiamondId = diamond.DiamondId,
             };
@@ -33,11 +35,14 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
+                DiamondType = diamondRequestDTO.DiamondType,
                 Shape = diamondRequestDTO.Shape,
                 Color = diamondRequestDTO.Color,
                 Clarity = diamondRequestDTO.Clarity,
                 Cut = diamondRequestDTO.Cut,
                 Carat = diamondRequestDTO.Carat,
+                Price = diamondRequestDTO.Price,
+                Quantity = diamondRequestDTO.AmountAvailable,
                 CertificateScan = diamondRequestDTO.CertificateScan,
                 Status = diamondRequestDTO.Status,
             };
@@ -46,11 +51,14 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
+                DiamondType = updateDiamond.DiamondType,
                 Shape = updateDiamond.Shape,    
                 Color = updateDiamond.Color,
                 Clarity = updateDiamond.Clarity,
                 Cut = updateDiamond.Cut,
                 Carat = updateDiamond.Carat,
+                Price = updateDiamond.Price,
+                Quantity = updateDiamond.AmountAvailable,
                 CertificateScan = updateDiamond.CertificateScan,
                 Status = updateDiamond.Status,
             };
@@ -62,19 +70,5 @@ namespace DIAN_.Mapper
                 CertificateScan = updateCertificate.CertificateScan,
             };
         }
-        //public static DiamondDetailDto ToDiamondDetailDTO(this Diamond diamond)
-        //{
-        //    return new DiamondDetailDto
-        //    {
-        //        DiamondId = diamond.DiamondId,
-        //        Name = diamond.Name,
-        //        Color = diamond.Color,
-        //        Clarity = diamond.Clarity,
-        //        Cut = diamond.Cut,
-        //        Carat = diamond.Carat,
-        //        CertificateScan = diamond.CertificateScan,
-        //        DiamondSize = diamond.DiamondSize ?? 0,
-        //    };
-        //}
     }
 }

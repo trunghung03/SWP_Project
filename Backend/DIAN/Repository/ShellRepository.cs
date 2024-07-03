@@ -63,7 +63,6 @@ namespace DIAN_.Repository
             shell.ShellMaterialId = shellDTO.ShellMaterialId;
             shell.Weight = shellDTO.Weight;
             shell.ProductId = shellDTO.ProductId;
-            shell.SubdiamondId = shellDTO.SubdiamondId;
             shell.SubDiamondAmount = shellDTO.SubDiamondAmount;
             shell.AmountAvailable = shellDTO.AmountAvailable;
 

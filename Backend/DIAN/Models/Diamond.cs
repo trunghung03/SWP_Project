@@ -9,6 +9,8 @@ public partial class Diamond
 {
     public int DiamondId { get; set; }
 
+    public string DiamondType { get; set; }
+
     public string Shape { get; set; }
 
     public string Color { get; set; }
@@ -21,11 +23,11 @@ public partial class Diamond
 
     public string CertificateScan { get; set; }
 
-    public decimal Price { get; set; }
+    public int Quantity { get; set; }
 
-    public int? ProductId { get; set; }
+    public decimal Price { get; set; }
 
     public bool Status { get; set; }
 
-    public virtual Product Product { get; set; }
+    public virtual ICollection<ProductDiamond> ProductDiamonds { get; set; } = new List<ProductDiamond>();
 }
