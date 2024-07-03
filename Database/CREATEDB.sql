@@ -106,37 +106,30 @@ CREATE TABLE PRODUCT (
 -- Diamond table
 CREATE TABLE DIAMOND (
     DiamondID INT PRIMARY KEY IDENTITY(1,1),
+    DiamondType NVARCHAR(50) NOT NULL,
 	Shape NVARCHAR (50),
     Color NVARCHAR(50) ,
     Clarity NVARCHAR(50) ,
     Carat DECIMAL(5, 2) ,
     Cut NVARCHAR(50),
     CertificateScan NVARCHAR(MAX),
+    Quantity INT NOT NULL DEFAULT 1,
     Price DECIMAL(18, 2) NOT NULL,
-	ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
     Status BIT NOT NULL DEFAULT 1
 );
-
--- Subdiamond table
-CREATE TABLE SUBDIAMOND (
-    SubdiamondID INT PRIMARY KEY IDENTITY(1,1),
-	Shape NVARCHAR (50),
-    Color NVARCHAR(50) ,
-    Clarity NVARCHAR(50) ,
-    Carat DECIMAL(5, 2) ,
-    Cut NVARCHAR(50),
-    Price DECIMAL(18, 2) NOT NULL,
-    AmountAvailable INT,
-    Status BIT NOT NULL DEFAULT 1
+CREATE TABLE PRODUCT_DIAMOND (
+    productID INT FOREIGN KEY REFERENCES PRODUCT(productID),
+    DiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
+    Status BIT NOT NULL DEFAULT 1,
+    PRIMARY KEY (productID, DiamondID)
 );
 
 CREATE TABLE SHELL (
     ShellID INT PRIMARY KEY IDENTITY(1,1),
     ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
     ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
-    SubdiamondID INT FOREIGN KEY REFERENCES SUBDIAMOND(SubdiamondID),
-    SubDiamondAmount INT,
     [Weight] DECIMAL(18, 2),
+    SubDiamondAmount INT,
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 )
