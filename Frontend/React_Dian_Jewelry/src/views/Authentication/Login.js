@@ -261,6 +261,7 @@ const Login = () => {
       firstName: decoded.given_name,
       address: "",
       phoneNumber: "",
+      accountType: "Google",
       points: 0,
     };
 
