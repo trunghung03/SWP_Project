@@ -101,6 +101,7 @@ namespace UserApplication.Controllers
                 new NewUserDto
                 {
                     Email = customer.Email,
+                    AccountType = "Google",
                     Token = _tokenService.CreateCustomerToken(customer)
                 });
         }

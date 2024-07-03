@@ -7,6 +7,7 @@ namespace UserApplication.Dtos.Account
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+        public string AccountType { get; set; }
         [Required]
         public string Token { get; set; }
     }

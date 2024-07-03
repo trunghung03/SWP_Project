@@ -86,6 +86,7 @@ namespace DIAN_.Repository
                 Address = user.Address ?? null,
                 PhoneNumber = user.PhoneNumber ?? null,
                 Points = 0,
+                AccountType = user.AccountType,
                 Status = true,
             };
 

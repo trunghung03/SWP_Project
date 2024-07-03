@@ -17,7 +17,7 @@ namespace UserApplication.Dtos.Account
         public string? FirstName { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
-
+        public string AccountType { get; set; }
         public long? Points { get; set; }
     }
 }
