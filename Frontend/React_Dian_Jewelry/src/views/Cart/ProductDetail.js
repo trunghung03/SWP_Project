@@ -83,7 +83,7 @@ function ProductDetail() {
 
     const handleAddToCart = () => {
         if (!selectedShell) {
-            toast.warn("Have not chosen a shell yet! Please choose a shell.", {
+            toast.warn("Please choose a shell type.", {
                 position: "top-right",
                 autoClose: 8000
             });
@@ -91,7 +91,7 @@ function ProductDetail() {
         }
 
         if (!selectedSize) {
-            toast.warn("Have not chosen a size yet! Please choose a size.", {
+            toast.warn("Please choose a size.", {
                 position: "top-right",
                 autoClose: 8000
             });
@@ -100,7 +100,7 @@ function ProductDetail() {
 
         const token = localStorage.getItem('token');
         if (!token) {
-            toast.warn("Please sign in or sign up first! Sign in to add jewelry to cart.", {
+            toast.warn("Please sign in or sign up to add jewelry to cart.", {
                 position: "top-right",
                 autoClose: 8000,
                 buttons: {

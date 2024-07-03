@@ -164,7 +164,7 @@ function Checkout() {
         const { fullName, phone, address, note } = formData;
 
         if (!fullName || !phone || !address) {
-            toast.warn("Please fill in all the required fields!", {
+            toast.warn("Please fill in all the required fields.", {
                 position: "top-right",
                 autoClose: 8000
             });
@@ -181,7 +181,7 @@ function Checkout() {
         }
 
         if (paymentMethod === '') {
-            toast.warn("Have not chosen a payment method!", {
+            toast.warn("Please choose a payment method.", {
                 position: "top-right",
                 autoClose: 8000
             });

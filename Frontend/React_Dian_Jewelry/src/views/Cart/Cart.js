@@ -69,7 +69,7 @@ function Cart() {
         const updatedCartItems = JSON.parse(localStorage.getItem(`cartItems${customerId}`)) || [];
 
         if (updatedCartItems.length === 0) {
-            toast.warn("Please add something to the cart! There are nothing in the cart.", {
+            toast.warn("Please add something first! There are nothing in the cart.", {
                 position: "top-right",
                 autoClose: 8000
             });
@@ -78,7 +78,7 @@ function Cart() {
 
         const missingSizeItems = updatedCartItems.some(item => !item.selectedSize);
         if (missingSizeItems) {
-            toast.warn("Have not chosen a size yet! Please select a size for all jewelries.", {
+            toast.warn("Please select a size for jewelry in your cart.", {
                 position: "top-right",
                 autoClose: 8000
             });

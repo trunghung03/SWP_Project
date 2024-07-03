@@ -9,7 +9,7 @@ import rightImage3 from '../../assets/img/right3.jpg';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { forgotPasswordApi } from '../../services/UserService';
+import { forgotPasswordApi, getUserInfo } from '../../services/UserService';
 import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
@@ -26,12 +26,19 @@ const ForgotPassword = () => {
             if (emailPattern.test(email)) {
                 try {
                     await forgotPasswordApi(email);
-                    localStorage.setItem('resetPasswordEmail', email);
-                    toast.success("Mail sent! Check your email to reset your account password.", {
-                        position: "top-right"
-                    });
+                    const userInfo = await getUserInfo(email);
+                    if (userInfo.data.accountType === 'Google') {
+                        toast.error("Google account cannot reset password.", {
+                            position: "top-right"
+                        });
+                    } else {
+                        localStorage.setItem('resetPasswordEmail', email);
+                        toast.success("Mail sent! Check your email to reset your account password.", {
+                            position: "top-right"
+                        });
+                    }
                 } catch (error) {
-                    toast.error("This email has not signed up for an account!", {
+                    toast.error("This email has not signed up for an account.", {
                         position: "top-right"
                     });
                 } finally {
@@ -44,7 +51,7 @@ const ForgotPassword = () => {
                 setLoading(false);
             }
         } else {
-            toast.error("Have not entered an email yet! Please enter your email before submitting.", {
+            toast.error("Please enter your email before submitting.", {
                 position: "top-right"
             });
             setLoading(false);
@@ -66,7 +73,7 @@ const ForgotPassword = () => {
 
     return (
         <div className="fp_main_container container-fluid">
-            <ToastContainer /> {/* Add ToastContainer to render the toasts */}
+            <ToastContainer /> 
             <div className="fp_wrapper">
                 {/* Left Side: Forgot Password Form */}
                 <div className="fp_left_side col-md-6 d-flex align-items-center justify-content-center">

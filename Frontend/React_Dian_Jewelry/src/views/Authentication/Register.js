@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import swal from 'sweetalert';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -95,14 +96,8 @@ const Register = () => {
             const tosCheckbox = document.getElementById("tos_checkbox");
 
             if (!firstName || !lastName || !email || !password || !rePassword) {
-                swal({
-                    title: "Fields haven't filled in all yet!",
-                    text: "Please fill in all fields first.",
-                    icon: "error",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
+                toast.error("Please fill in all fields first.", {
+                    position: "top-right"
                 });
                 setLoading(false);
                 return;
@@ -119,56 +114,32 @@ const Register = () => {
             }
 
             if (!isValidEmail(email)) {
-                swal({
-                    title: "Wrong email format!",
-                    text: "Please enter a valid email.",
-                    icon: "error",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
+                toast.error("Wrong email format! Please enter a valid email.", {
+                    position: "top-right"
                 });
                 setLoading(false);
                 return;
             }
 
             if (!isValidPassword(password)) {
-                swal({
-                    title: "Password is too weak!",
-                    text: "Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.",
-                    icon: "error",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
+                toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
+                    position: "top-right"
                 });
                 setLoading(false);
                 return;
             }
 
             if (password !== rePassword) {
-                swal({
-                    title: "Passwords have to be the same!",
-                    text: "Please try again.",
-                    icon: "error",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
+                toast.error("Passwords have to be the same! Please try again.", {
+                    position: "top-right"
                 });
                 setLoading(false);
                 return;
             }
 
             if (!tosCheckbox.checked) {
-                swal({
-                    title: "Have not agreed to term of service!",
-                    text: "Cannot sign up if you do not agree with our terms of service.",
-                    icon: "error",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
+                toast.error("Can not sign up if you do not agree with our terms of service.", {
+                    position: "top-right"
                 });
                 setLoading(false);
                 return;
@@ -177,23 +148,17 @@ const Register = () => {
             try {
                 const userInfoRes = await getUserInfo(email);
                 if (userInfoRes && userInfoRes.data) {
-                    swal({
-                        title: "Email has been registered!",
-                        text: "Please use another email to sign up.",
-                        icon: "error",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        },
+                    toast.error("Email has been registered! Please use another email to sign up.", {
+                        position: "top-right"
                     });
                     setLoading(false);
                     return;
                 }
             } catch (error) {
                 if (error.response && error.response.status === 404) {
-                    console.log('Email not found, safe to proceed with registration.');
+                    // console.log('Email not found, safe to proceed with registration.');
                 } else {
-                    console.error("Error checking email existence: ", error);
+                    // console.error("Error checking email existence: ", error);
                     setLoading(false);
                     return;
                 }
@@ -216,40 +181,20 @@ const Register = () => {
                 const result = response.data;
 
                 if (!result.success) {
-                    swal({
-                        title: "Error!",
-                        text: result.message || "Registration failed. Please try again.",
-                        icon: "error",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        },
+                    toast.error(result.message || "Registration failed. Please try again.", {
+                        position: "top-right"
                     });
                 } else {
-                    swal({
-                        title: "Sign up successfully!",
-                        text: "You now can sign in with your account.",
-                        icon: "success",
-                        button: {
-                            text: "Ok",
-                            className: "swal-button"
-                        },
-                    }).then(() => {
-                        window.location.href = "/login";
+                    toast.success("Sign up successfully! You now can sign in with your account.", {
+                        position: "top-right"
                     });
+                    window.location.href = "/login";
                 }
             } catch (error) {
-                swal({
-                    title: "Sign up successfully!",
-                    text: "You now can sign in with your account.",
-                    icon: "success",
-                    button: {
-                        text: "Ok",
-                        className: "swal-button"
-                    },
-                }).then(() => {
-                    window.location.href = "/login";
+                toast.success("Sign up successfully! You now can sign in with your account.", {
+                    position: "top-right"
                 });
+                window.location.href = "/login";
             } finally {
                 setLoading(false);
             }
@@ -276,6 +221,7 @@ const Register = () => {
 
     return (
         <div className="register_main_container container-fluid">
+            <ToastContainer />
             <div className="register_wrapper">
                 {/* Left Side: register Form */}
                 <div className="register_left_side col-md-6">
@@ -366,4 +312,3 @@ const Register = () => {
 };
 
 export default Register;
-

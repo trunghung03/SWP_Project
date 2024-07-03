@@ -290,7 +290,7 @@ const Login = () => {
 
   return (
     <div className="main_container">
-      <ToastContainer /> {/* Add ToastContainer to render the toasts */}
+      <ToastContainer /> 
       <div className="login_wrapper">
         <div className="left_side">
           <form className="sign_in_form" onSubmit={handleLogin}>
