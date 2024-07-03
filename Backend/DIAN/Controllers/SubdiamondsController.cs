@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DIAN_.Interfaces;
-using DIAN_.DTOs.SubDiamondDto;
-using DIAN_.Mapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using DIAN_.Models;
 
 namespace DIAN_.Controllers
 {
@@ -9,112 +13,95 @@ namespace DIAN_.Controllers
     [ApiController]
     public class SubdiamondsController : ControllerBase
     {
-        private readonly ISubDiamondRepository _subDiamondRepository;
+        private readonly ApplicationDbContext _context;
 
-        public SubdiamondsController(ISubDiamondRepository subDiamondRepository)
+        public SubdiamondsController(ApplicationDbContext context)
         {
-            _subDiamondRepository = subDiamondRepository;
+            _context = context;
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateSubDiamond([FromBody] CreateSubDiamondRequestDto subDiamondRequestDTO)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-           var subDiamond = subDiamondRequestDTO.ToSubDiamondFromCreateDTO();
-            await _subDiamondRepository.CreateAsync(subDiamond);
-            return Ok(subDiamond);
-        }
+
+        // GET: api/Subdiamonds
         [HttpGet]
-        public async Task<IActionResult> GetAllSubDiamonds()
+        public async Task<ActionResult<IEnumerable<Subdiamond>>> GetSubdiamonds()
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var subDiamonds = await _subDiamondRepository.GetAllAsync();
-                if (subDiamonds.Count == 0)
-                {
-                    return NotFound("Subdiamonds does not exist");
-                }
-                var subDiamondDtos = subDiamonds.Select(subDiamond => subDiamond.ToSubDiamondDTO());
-                return Ok(subDiamondDtos);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _context.Subdiamonds.ToListAsync();
         }
+
+        // GET: api/Subdiamonds/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSubDiamondById([FromRoute] int id)
+        public async Task<ActionResult<Subdiamond>> GetSubdiamond(int id)
         {
-            try
+            var subdiamond = await _context.Subdiamonds.FindAsync(id);
+
+            if (subdiamond == null)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var subDiamond = await _subDiamondRepository.GetByIdAsync(id);
-                if (subDiamond == null)
-                {
-                    return NotFound("Subdiamond does not exist");
-                }
-                var subDiamondDto = subDiamond.ToSubDiamondDTO();
-                return Ok(subDiamondDto);
+                return NotFound();
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            return subdiamond;
         }
+
+        // PUT: api/Subdiamonds/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSubDiamond([FromRoute] int id, [FromBody] UpdateSubDiamondRequestDto updateSubDiamond)
+        public async Task<IActionResult> PutSubdiamond(int id, Subdiamond subdiamond)
         {
+            if (id != subdiamond.SubdiamondId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(subdiamond).State = EntityState.Modified;
+
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var subDiamond = await _subDiamondRepository.GetByIdAsync(id);
-                if (subDiamond == null)
-                {
-                    return NotFound("Subdiamond does not exist");
-                }
-                var updatedSubDiamond = updateSubDiamond.ToSubDiamondFromUpdateDTO(id);
-                await _subDiamondRepository.UpdateAsync(id, updatedSubDiamond);
-                return Ok(updatedSubDiamond.ToSubDiamondDTO());
+                await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (DbUpdateConcurrencyException)
             {
-                throw;
+                if (!SubdiamondExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
         }
+
+        // POST: api/Subdiamonds
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Subdiamond>> PostSubdiamond(Subdiamond subdiamond)
+        {
+            _context.Subdiamonds.Add(subdiamond);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetSubdiamond", new { id = subdiamond.SubdiamondId }, subdiamond);
+        }
+
+        // DELETE: api/Subdiamonds/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSubDiamond([FromRoute] int id)
+        public async Task<IActionResult> DeleteSubdiamond(int id)
         {
-            try
+            var subdiamond = await _context.Subdiamonds.FindAsync(id);
+            if (subdiamond == null)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var subDiamond = await _subDiamondRepository.GetByIdAsync(id);
-                if (subDiamond == null)
-                {
-                    return NotFound("Subdiamond does not exist");
-                }
-                await _subDiamondRepository.DeleteAsync(id);
-                return Ok(subDiamond.ToSubDiamondDTO());
+                return NotFound();
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            _context.Subdiamonds.Remove(subdiamond);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
-       
+
+        private bool SubdiamondExists(int id)
+        {
+            return _context.Subdiamonds.Any(e => e.SubdiamondId == id);
+        }
     }
 }
