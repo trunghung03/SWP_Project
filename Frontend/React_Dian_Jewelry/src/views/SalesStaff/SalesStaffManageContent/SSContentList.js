@@ -129,6 +129,7 @@ function SSContentList() {
               type="text"
               className="ss_manage_content_search_bar"
               placeholder="Search by title..."
+              style={{width: '140px'}}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}

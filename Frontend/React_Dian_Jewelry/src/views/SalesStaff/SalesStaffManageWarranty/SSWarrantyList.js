@@ -216,6 +216,7 @@ const SSWarrantyList = () => {
               className="manager_manage_diamond_search_bar"
               placeholder="Search by ID..."
               value={searchQuery}
+              style={{width: '140px', borderRadius: '5px'}}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />

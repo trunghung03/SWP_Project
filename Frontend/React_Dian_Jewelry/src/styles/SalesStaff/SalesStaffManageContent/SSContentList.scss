@@ -173,3 +173,12 @@
 .ss_manage_content_content_actions i:hover {
     color: #0092f7;
 }
+
+@media (max-width: 650px) {
+    .ss_manage_content_content_list {
+        flex-direction: column;
+    }
+    .ss_manage_content_content_card {
+        width: 100%;
+    }
+}

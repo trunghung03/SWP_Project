@@ -18,6 +18,24 @@ class SalesStaffSidebar extends Component {
         }));
     };
 
+    
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize(); // Call initially to set expanded state
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+    }
+
+    handleResize = () => {
+        if (window.innerWidth < 1200) {
+            this.setState({ expanded: false });
+        } else {
+            this.setState({ expanded: true });
+        }
+    };
+
     handleSignOut = () => {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const rememberedPassword = localStorage.getItem('rememberedPassword');

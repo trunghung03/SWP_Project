@@ -160,6 +160,7 @@ const SSOrderList = () => {
               className="ss_manage_content_search_bar"
               placeholder="Search by Order ID..."
               value={searchQuery}
+              style={{width: '140px'}}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
