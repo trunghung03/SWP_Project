@@ -16,7 +16,5 @@ namespace DIAN_.Interfaces
         Task<Diamond?> DeleteDiamondAsync(int id);
 
         Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id);
-
-        Task<Diamond?> UpdateDiamondQuantity(UpdateDiamondQuantityDto updateDiamondQuantityDto, int id);
     }
 }

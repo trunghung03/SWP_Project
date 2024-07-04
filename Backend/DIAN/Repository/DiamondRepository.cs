@@ -1,5 +1,4 @@
-﻿using DIAN_.DTOs.DiamondDto;
-using DIAN_.Helper;
+﻿using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
@@ -182,18 +181,6 @@ namespace DIAN_.Repository
                 string individualCacheKey = $"Diamond_{id}";
                 await _distributedCache.RemoveAsync(individualCacheKey);
                 return existingDiamond;
-            }
-            throw new KeyNotFoundException("Diamond does not exist");
-        }
-
-        public async Task<Diamond?> UpdateDiamondQuantity(UpdateDiamondQuantityDto updateDiamondQuantityDto, int id)
-        {
-            var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == id);
-            if (diamond != null)
-            {
-                diamond.Quantity = updateDiamondQuantityDto.AmountAvailable;
-                await _context.SaveChangesAsync();
-                return diamond;
             }
             throw new KeyNotFoundException("Diamond does not exist");
         }

@@ -18,13 +18,6 @@ namespace DIAN_.Repository
             return productDiamond;
         }
 
-        public async Task<IEnumerable<ProductDiamond>> CreateRangeAsync(IEnumerable<ProductDiamond> productDiamonds)
-        {
-            _context.ProductDiamonds.AddRange(productDiamonds);
-            await _context.SaveChangesAsync();
-            return productDiamonds;
-        }
-
         public async Task<ProductDiamond?> DeleteAsync(int productId)
         {
             var existingProductDiamond = await _context.ProductDiamonds.FirstOrDefaultAsync(x => x.ProductId == productId);

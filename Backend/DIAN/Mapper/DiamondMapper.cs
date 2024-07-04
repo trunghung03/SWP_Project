@@ -17,9 +17,7 @@ namespace DIAN_.Mapper
                 Clarity = diamond.Clarity,
                 Cut = diamond.Cut,
                 Carat = diamond.Carat ?? 0,
-                Price = diamond.Price,
                 CertificateScan = diamond.CertificateScan,
-                AmountAvailable = diamond.Quantity,
             };
         }
 
@@ -70,13 +68,6 @@ namespace DIAN_.Mapper
             return new Diamond
             {
                 CertificateScan = updateCertificate.CertificateScan,
-            };
-        }
-        public static Diamond ToDiamondFromUpdateStock(this UpdateDiamondQuantityDto updateStock, int id)
-        {
-            return new Diamond
-            {
-                Quantity = updateStock.AmountAvailable,
             };
         }
     }
