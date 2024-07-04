@@ -31,9 +31,9 @@ public partial class Product
 
     public virtual Collection Collection { get; set; }
 
-    public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
+    public virtual ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();
 
-    public virtual ICollection<ProductDiamond> ProductDiamonds { get; set; } = new List<ProductDiamond>();
+    public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
 
     public virtual ICollection<Shell> Shells { get; set; } = new List<Shell>();
 }

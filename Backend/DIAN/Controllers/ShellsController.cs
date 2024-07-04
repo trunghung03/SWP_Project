@@ -40,7 +40,7 @@ namespace DIAN_.Controllers
                 {
                     return NotFound("Shell does not exist");
                 }
-                var shellDtos = shells.Select(shell => shell.ToShellDetail());
+                var shellDtos = shells.Select(promotion => promotion.ToShellDetail());
                 return Ok(shellDtos);
             }
             catch (Exception)

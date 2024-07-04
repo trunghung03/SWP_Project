@@ -13,9 +13,11 @@ public partial class Shell
 
     public int? ShellMaterialId { get; set; }
 
-    public decimal? Weight { get; set; }
+    public int? SubdiamondId { get; set; }
 
     public int? SubDiamondAmount { get; set; }
+
+    public decimal? Weight { get; set; }
 
     public int AmountAvailable { get; set; }
 
@@ -24,4 +26,6 @@ public partial class Shell
     public virtual Product Product { get; set; }
 
     public virtual Shellmaterial ShellMaterial { get; set; }
+
+    public virtual Subdiamond Subdiamond { get; set; }
 }

@@ -12,6 +12,7 @@ namespace DIAN_.Mapper
             {
                 ProductId = shellModel.ProductId,
                 ShellMaterialId = shellModel.ShellMaterialId,
+                SubdiamondId = shellModel.SubDiamondId,
                 SubDiamondAmount = shellModel.SubDiamondAmount,
                 Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
@@ -24,6 +25,7 @@ namespace DIAN_.Mapper
             {
                 ProductId = shellModel.ProductId,
                 ShellMaterialId = shellModel.ShellMaterialId,
+                SubdiamondId = shellModel.SubDiamondId,
                 SubDiamondAmount = shellModel.SubDiamondAmount,
                 Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
@@ -44,6 +46,7 @@ namespace DIAN_.Mapper
                 ShellId = shellModel.ShellId,
                 ProductId = shellModel.ProductId ?? 0,
                 ShellMaterialId = shellModel.ShellMaterialId ?? 0,
+                SubDiamondId = shellModel.SubdiamondId ?? 0,
                 SubDiamondAmount = shellModel.SubDiamondAmount ?? 0,
                 Weight = shellModel.Weight ?? 0,
                 AmountAvailable = shellModel.AmountAvailable,

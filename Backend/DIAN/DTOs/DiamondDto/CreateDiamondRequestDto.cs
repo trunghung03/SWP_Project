@@ -4,10 +4,6 @@ namespace DIAN_.DTOs.DiamondDto
 {
     public class CreateDiamondRequestDto
     {
-        [Required(ErrorMessage = "Diamond type is required.")]
-        [StringLength(50, ErrorMessage = "Diamond type must not exceed 50 characters.")]
-        public string? DiamondType { get; set; }
-
         [Required(ErrorMessage = "Shape is required.")]
         [StringLength(50, ErrorMessage = "Shape must not exceed 50 characters.")]
         public string Shape { get; set; } = string.Empty;
@@ -28,9 +24,9 @@ namespace DIAN_.DTOs.DiamondDto
         [Range(0.01, 40.00, ErrorMessage = "Carat must be between 0.01 and 40.00.")]
         public decimal Carat { get; set; }
 
-        [Required(ErrorMessage = "Price is required.")]
-        [Range(0, double.MaxValue, ErrorMessage = "Price cannot be smaller than 0.")]
-        public decimal Price { get; set; }
+        [Required(ErrorMessage = "Cost is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Cost cannot be smaller than 0.")]
+        public decimal Cost { get; set; }
 
         [Required(ErrorMessage = "Certificate scan is required.")]
         public string CertificateScan { get; set; } = string.Empty;

@@ -2,7 +2,6 @@
 {
     public class DiamondDto
     {
-        public string? DiamondType { get; set; }
         public int DiamondId { get; set; }
 
         public string Shape { get; set; } = string.Empty;
@@ -15,7 +14,7 @@
 
         public decimal Carat { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal Cost { get; set; }
 
         public string CertificateScan { get; set; } = string.Empty;
 
