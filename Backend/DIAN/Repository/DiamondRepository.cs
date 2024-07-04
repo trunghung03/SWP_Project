@@ -161,7 +161,6 @@ namespace DIAN_.Repository
                 existingDiamond.Clarity = diamondModel.Clarity;
                 existingDiamond.Cut = diamondModel.Cut;
                 existingDiamond.Carat = diamondModel.Carat;
-                existingDiamond.CertificateScan = diamondModel.CertificateScan;
                 existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();
                 string individualCacheKey = $"Diamond_{id}";
@@ -171,18 +170,18 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
-        public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
-        {
-           var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
-            if (existingDiamond != null)
-            {
-                existingDiamond.CertificateScan = diamondModel.CertificateScan;
-                await _context.SaveChangesAsync();
-                string individualCacheKey = $"Diamond_{id}";
-                await _distributedCache.RemoveAsync(individualCacheKey);
-                return existingDiamond;
-            }
-            throw new KeyNotFoundException("Diamond does not exist");
-        }
+        //public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
+        //{
+        //   var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
+        //    if (existingDiamond != null)
+        //    {
+        //        existingDiamond.CertificateScan = diamondModel.CertificateScan;
+        //        await _context.SaveChangesAsync();
+        //        string individualCacheKey = $"Diamond_{id}";
+        //        await _distributedCache.RemoveAsync(individualCacheKey);
+        //        return existingDiamond;
+        //    }
+        //    throw new KeyNotFoundException("Diamond does not exist");
+        //}
     }
 }

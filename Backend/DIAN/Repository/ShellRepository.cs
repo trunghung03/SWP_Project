@@ -61,12 +61,9 @@ namespace DIAN_.Repository
             }
 
             shell.ShellMaterialId = shellDTO.ShellMaterialId;
-            shell.Weight = shellDTO.Weight;
-            shell.ProductId = shellDTO.ProductId;
-            shell.SubdiamondId = shellDTO.SubdiamondId;
-            shell.SubDiamondAmount = shellDTO.SubDiamondAmount;
             shell.AmountAvailable = shellDTO.AmountAvailable;
-
+            shell.ShellAmount = shellDTO.ShellAmount;
+            shell.Status = shellDTO.Status;
 
             _context.Shells.Update(shell);
             await _context.SaveChangesAsync();

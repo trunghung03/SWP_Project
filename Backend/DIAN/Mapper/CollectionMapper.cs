@@ -38,9 +38,10 @@ namespace DIAN_.Mapper
                 Description = collection.Description,
                 Status = collection.Status,
                 ImageLink = collection.CollectionImage,
-                Products = collection.Products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())).ToList()
+                Products = collection.Products.Select(p => p.ToProductListDTO(p.MainDiamond)).ToList()
             };
         }
+
         public static NewestCollectionDTO ToNewestCollectionDTO(this Collection collection)
         {
             return new NewestCollectionDTO

@@ -13,6 +13,8 @@ public partial class Orderdetail
 
     public decimal LineTotal { get; set; }
 
+    public string CertificateScan { get; set; }
+
     public int ProductId { get; set; }
 
     public int? ShellMaterialId { get; set; }

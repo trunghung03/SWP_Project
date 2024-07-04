@@ -20,5 +20,7 @@ namespace DIAN_.DTOs.OrderDetailDto
         [Range(0.01, double.MaxValue, ErrorMessage = "Size must be greater than 0.")]
         public decimal? Size { get; set; }
 
+        public string? CertificateScan { get; set; }
+
     }
 }

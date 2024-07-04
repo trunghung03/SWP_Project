@@ -70,12 +70,8 @@ namespace DIAN_.Repository
                 collections = JsonSerializer.Deserialize<List<Collection>>(cachedCollections);
                 _logger.LogInformation("Collections from cache");
                 return collections;
-            }
-
-           
+            }  
         }
-
-
         public async Task<Collection?> GetByIdAsync(int id)
         {
             string cacheKey = $"Collection_{id}";

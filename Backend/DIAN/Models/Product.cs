@@ -17,9 +17,17 @@ public partial class Product
 
     public string Description { get; set; }
 
+    public int? MainDiamondId { get; set; }
+
+    public int? SubDiamondId { get; set; }
+
     public decimal? LaborCost { get; set; }
 
     public string ImageLinkList { get; set; }
+
+    public int? MainDiamondAmount { get; set; }
+
+    public int? SubDiamondAmount { get; set; }
 
     public bool Status { get; set; }
 
@@ -31,9 +39,11 @@ public partial class Product
 
     public virtual Collection Collection { get; set; }
 
-    public virtual ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();
+    public virtual Diamond MainDiamond { get; set; }
 
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
 
     public virtual ICollection<Shell> Shells { get; set; } = new List<Shell>();
+
+    public virtual Diamond SubDiamond { get; set; }
 }

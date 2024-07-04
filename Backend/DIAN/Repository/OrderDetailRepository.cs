@@ -83,7 +83,7 @@ namespace DIAN_.Repository
                     combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
                     (combined, p) => new { combined.po, combined.od, p })
                 .SelectMany(
-                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.Diamonds.FirstOrDefault().DiamondId).DefaultIfEmpty(),
+                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondId).DefaultIfEmpty(),
                     (combined, d) => new { combined.po, combined.od, combined.p, d })
                 .GroupBy(x => x.po.OrderId)
                 .Select(g => new OrderBillDto
@@ -111,7 +111,6 @@ namespace DIAN_.Repository
                         ProductDescription = x.p.Description,
                         Size = x.od.Size ?? 0m,
                         LineTotal = x.od.LineTotal,
-                        CertificateScan = x.d != null ? x.d.CertificateScan : null,
                         WarrantyStartDate = x.od.Warranty != null ? x.od.Warranty.StartDate : null,
                         WarrantyEndDate = x.od.Warranty != null ? x.od.Warranty.EndDate : null,
                     }).ToList()
@@ -119,9 +118,5 @@ namespace DIAN_.Repository
 
             return orderBill;
         }
-
-
-
-
     }
 }

@@ -31,13 +31,14 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
-                return Ok(products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())));
+                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
@@ -182,13 +183,14 @@ namespace DIAN_.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(productDetail.ToProductDetailDTO(productDetail.Diamonds.FirstOrDefault(), new List<string>()));
+                return Ok(productDetail.ToProductDetailDTO(productDetail.MainDiamond, new List<string>()));
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpGet("search")]
         public async Task<IActionResult> GetByName([FromQuery] string name)
@@ -200,13 +202,14 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetByNameAsync(name);
-                return Ok(products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())));
+                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpGet("code/{code}")]
         public async Task<IActionResult> GetByCode([FromRoute] string code)
@@ -247,22 +250,22 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
 
-                var diamondIds = products.Select(p => p.Diamonds.FirstOrDefault()?.DiamondId).Where(id => id != null).Distinct().ToList();
+                var diamondIds = products.Select(p => p.MainDiamondId).Distinct().ToList();
                 var diamonds = await _context.Diamonds
                                              .Where(d => diamondIds.Contains(d.DiamondId))
                                              .ToListAsync();
 
                 var productDTOs = products.Select(p =>
                 {
-                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.Diamonds.FirstOrDefault().DiamondId);
+                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.MainDiamondId);
                     return p.ToProductListDTO(diamond);
                 }).ToList();
 
                 return Ok(productDTOs);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, "Internal server error");
             }
         }
     }

@@ -171,27 +171,27 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-        [HttpPut("updatecertificate/{id:int}")]
-        public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+        //[HttpPut("updatecertificate/{id:int}")]
+        //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
 
-                var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
-                if (diamondModel == null)
-                {
-                    return NotFound("Diamond does not exist");
-                }
-                return Ok(diamondModel.ToDiamondDTO());
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
+        //        if (diamondModel == null)
+        //        {
+        //            return NotFound("Diamond does not exist");
+        //        }
+        //        return Ok(diamondModel.ToDiamondDTO());
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

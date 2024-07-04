@@ -14,7 +14,7 @@ GO
 -- Switch context to the new database
 USE DIAN;
 GO
--- User table
+
 CREATE TABLE CUSTOMER (
     CustomerID INT PRIMARY KEY IDENTITY(1,1),
     Email NVARCHAR(254) NOT NULL,
@@ -90,6 +90,19 @@ CREATE TABLE SHELLMATERIAL (
     Status BIT NOT NULL DEFAULT 1,
 );
 
+-- Diamond table
+CREATE TABLE DIAMOND (
+    DiamondID INT PRIMARY KEY IDENTITY(1,1),
+	Shape NVARCHAR (50),
+    Color NVARCHAR(50) ,
+    Clarity NVARCHAR(50) ,
+    Carat DECIMAL(5, 2) ,
+    Cut NVARCHAR(50),
+	AmountAvailable INT NOT NULL,	
+    Price DECIMAL(18, 2) NOT NULL,
+    Status BIT NOT NULL DEFAULT 1
+);
+
 CREATE TABLE COLLECTION (
 	CollectionID INT PRIMARY KEY,	
 	Name NVARCHAR(128) NOT NULL,
@@ -112,40 +125,22 @@ CREATE TABLE PRODUCT (
     [Name] NVARCHAR(100) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     [Description] NVARCHAR(MAX) ,
+    MainDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID), -- Constrain the percentage to be between 0 and 100
+    SubDiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
     LaborCost DECIMAL(18, 2),
     ImageLinkList NVARCHAR(MAX),
+	MainDiamondAmount INT,
+    SubDiamondAmount INT,
     Status BIT NOT NULL DEFAULT 1,
 	CollectionID INT FOREIGN KEY REFERENCES COLLECTION(CollectionID),
 	CategoryID INT FOREIGN KEY REFERENCES CATEGORY(CategoryID),
 );
 
--- Diamond table
-CREATE TABLE DIAMOND (
-    DiamondID INT PRIMARY KEY IDENTITY(1,1),
-    DiamondType NVARCHAR(50) NOT NULL,
-	Shape NVARCHAR (50),
-    Color NVARCHAR(50) ,
-    Clarity NVARCHAR(50) ,
-    Carat DECIMAL(5, 2) ,
-    Cut NVARCHAR(50),
-    CertificateScan NVARCHAR(MAX),
-    Quantity INT NOT NULL DEFAULT 1,
-    Price DECIMAL(18, 2) NOT NULL,
-    Status BIT NOT NULL DEFAULT 1
-);
-CREATE TABLE PRODUCT_DIAMOND (
-    productID INT FOREIGN KEY REFERENCES PRODUCT(productID),
-    DiamondID INT FOREIGN KEY REFERENCES DIAMOND(DiamondID),
-    Status BIT NOT NULL DEFAULT 1,
-    PRIMARY KEY (productID, DiamondID)
-);
-
 CREATE TABLE SHELL (
-    ShellID INT PRIMARY KEY IDENTITY(1,1),
+	ShellID INT PRIMARY KEY IDENTITY(1,1),
     ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
-    ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
-    [Weight] DECIMAL(18, 2),
-    SubDiamondAmount INT,
+	ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
+    ShellAmount DECIMAL(18, 2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 )
@@ -155,6 +150,7 @@ CREATE TABLE ORDERDETAIL (
     OrderDetailID INT PRIMARY KEY IDENTITY(1,1),
     OrderID INT NOT NULL FOREIGN KEY REFERENCES PURCHASEORDER(OrderID),
     LineTotal DECIMAL(18, 2) NOT NULL,
+	CertificateScan NVARCHAR(MAX),
     ProductID INT NOT NULL FOREIGN KEY REFERENCES PRODUCT(productID),
     ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
 	Size DECIMAL(5, 2),

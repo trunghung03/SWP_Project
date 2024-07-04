@@ -71,17 +71,12 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[SUBDIAMOND]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[WARRANTY]",
          "ObjectType": 0
       }
    ],
    "UiHint": null,
    "UncountableWords": null,
-   "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDateOnlyTimeOnly": true,

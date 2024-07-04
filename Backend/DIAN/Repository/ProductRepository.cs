@@ -24,19 +24,8 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product)
         {
-            var mainDiamondPrice = product.Diamonds.FirstOrDefault()?.Price ?? 0;
-
-            var subDiamondPrice = product.Shells.FirstOrDefault()?.Subdiamond?.Price ?? 0;
-
-            product.Price = (mainDiamondPrice * (product.Diamonds.Count)) +
-                            (subDiamondPrice * (product.Shells.FirstOrDefault()?.SubDiamondAmount ?? 0) * 0.05m) +
-                            (product.LaborCost ?? 0);
-
-            _memoryCache.Remove(CacheKey);
-
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
-
             return product;
         }
 
@@ -151,25 +140,11 @@ namespace DIAN_.Repository
 
         public async Task<List<Product>> GetByNameAsync(string name)
         {
-            string cacheKey = $"ProductsByName_{name}";
-            if (!_memoryCache.TryGetValue(cacheKey, out List<Product>? cachedProducts))
-            {
-                var products = await _context.Products
-                    .Where(p => p.Status && p.Name.Contains(name))
-                    .Include(p => p.Diamonds.FirstOrDefault())
-                    .ToListAsync();
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
-                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
-
-                _memoryCache.Set(cacheKey, products, cacheEntryOptions);
-                _logger.LogInformation("Products from database");
-                return products;
-            }
-            _logger.LogInformation("Products from cache");
-            return cachedProducts;
+            var products = await _context.Products
+                                  .Where(p => p.Status && p.Name.Contains(name))
+                                  .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                  .ToListAsync();
+            return products;
         }
 
 
@@ -203,40 +178,29 @@ namespace DIAN_.Repository
 
         public async Task<Product> GetDetailAsync(int id)
         {
-            string cacheKey = $"ProductDetail_{id}";
-            if (!_memoryCache.TryGetValue(cacheKey, out Product? cachedProduct))
+            var product = await _context.Products
+                                        .Include(p => p.MainDiamond)
+                                        .Include(p => p.Category).ThenInclude(c => c.Size)
+                                        .Where(p => p.Status && p.ProductId == id)
+                                        .FirstOrDefaultAsync();
+
+            if (product == null)
             {
-                var product = await _context.Products
-                                            .Include(p => p.Diamonds.FirstOrDefault())
-                                            .Include(p => p.Category).ThenInclude(c => c.Size)
-                                            .Where(p => p.Status && p.ProductId == id)
-                                            .FirstOrDefaultAsync();
-
-                if (product == null)
-                {
-                    throw new KeyNotFoundException("Product does not exist");
-                }
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
-                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
-
-                _memoryCache.Set(cacheKey, product, cacheEntryOptions);
-                _logger.LogInformation("Product from database");
-                return product;
+                throw new KeyNotFoundException("Product does not exist");
             }
-            _logger.LogInformation("Product from cache");
-            return cachedProduct;
+            return product;
         }
+
 
         public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
-                                 .Include(p => p.Diamonds.FirstOrDefault()) // Include the MainDiamond to get the shape
+                                 .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
                                  .ToListAsync();
 
             return products;
         }
+
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
         {
