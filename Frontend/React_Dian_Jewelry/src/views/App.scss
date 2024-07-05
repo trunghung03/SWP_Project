@@ -13,32 +13,32 @@ body {
 .react-chatbot-kit-chat-bot-message-container {
   display: flex;
   align-items: center;
-  margin-bottom: 5px; /* Space between messages */
+  margin-bottom: 5px; 
 }
 
 .react-chatbot-kit-chat-bot-avatar-container {
-  width: 20px; /* Avatar size */
-  height: 20px; /* Avatar size */
-  margin-right: 5px; /* Space between avatar and message */
+  width: 20px; 
+  height: 20px; 
+  margin-right: 5px; 
 }
 
 .react-chatbot-kit-chat-bot-avatar-container img {
   width: 100%;
   height: 100%;
-  border-radius: 50%; /* Make the avatar circular */
+  border-radius: 50%; 
 }
 
 .react-chatbot-kit-chat-bot-message {
-  background-color: #376B7E; /* Background color for bot's message */
+  background-color: #1c1c1c; 
   color: white;
-  padding: 8px 12px; /* Padding inside the message bubble */
-  border-radius: 8px; /* Rounded corners for the message bubble */
-  max-width: 80%; /* Limit the width of the message */
-  font-size: 12px; /* Font size for the message text */
-  margin-bottom: 5px; /* Space below each message */
+  padding: 8px 12px; 
+  border-radius: 8px;
+  max-width: 80%; 
+  font-size: 12px; 
+  margin-bottom: 5px;
 }
 
-/* Styling for the user's message */
+
 .react-chatbot-kit-user-chat-message {
   background-color: #007bff; /* Background color for user's message */
   color: white;
@@ -49,7 +49,7 @@ body {
   margin-bottom: 5px; /* Space below each message */
 }
 
-/* Styling for the button */
+
 .staff-btn {
   background-color: #376B7E; /* Match the botMessageBox background color */
   color: white; /* White text color */
@@ -63,61 +63,89 @@ body {
 }
 
 .staff-btn:hover {
-  background-color: #5ccc9d; /* Change background color on hover */
+  background-color: #5ccc9d; 
 }
 
 .chatbot-container {
   position: fixed;
   bottom: 20px;
-  left: 20px;
+  right: 35px;
   z-index: 1000;
-  width: 300px; /* Adjust as needed */
+  width: 295px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s ease-in-out;
-  background: #66a3ff; /* Lighter blue background */
-  color: white; /* Ensure text is visible against the blue background */
+  background: #66a3ff; 
+  color: white; 
 }
 
 .control-buttons {
   display: flex;
   justify-content: flex-end;
-  background: #0056b3; /* Darker blue for control buttons background */
+  background: #0056b3; 
   padding: 5px;
 }
 
 .control-button {
   background: none;
   border: none;
-  font-size: 14px; /* Font size for control buttons */
+  font-size: 14px;
   margin-left: 5px;
   cursor: pointer;
-  color: white; /* Ensure control buttons are visible */
+  color: white; 
 }
 
 .control-button:hover {
-  color: #d1eaff; /* Slightly lighter blue on hover for better visibility */
+  color: #d1eaff;
 }
 
 .chatbot-body {
   display: block;
   padding: 10px;
-  background: #007bff; /* Ensure the chatbot body matches the container */
-  color: white; /* Ensure text is visible against the blue background */
+  background: #007bff;
+  color: white;
 }
 
-.supporter-text {
-  font-size: 14px; /* Font size */
-  font-weight: bold; /* Make the text bold */
-  color: #3399ff; /* Medium blue color */
-  background: -webkit-linear-gradient(#3399ff, #99ccff); /* Gradient from medium blue to lighter blue */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a slight shadow for more prominence */
+.control-open-button{
+  background-color: #1c1c1c; 
+  border: none;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 40px;
+  right: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  width: 58px;
+  height: 58px;
 }
 
+.control-open-button:hover{
+  background-color: #797979;
+}
 
-  
-  
-  
+.control-open-button .icon {
+  color: white; 
+  font-size: 20px; 
+}
+
+.react-chatbot-kit-chat-btn-send{
+  background-color: #1c1c1c !important;
+}
+
+.react-chatbot-kit-chat-btn-send:hover{
+  background-color: #797979 !important;
+
+}
+
+.react-chatbot-kit-chat-input:focus{
+  outline: none;
+}
+
+.react-chatbot-kit-chat-message-container{
+  overflow-x: hidden !important; 
+  overflow-y: scroll !important;
+}

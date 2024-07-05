@@ -1,14 +1,14 @@
 import { Widgets } from '@mui/icons-material';
 import { createChatBotMessage } from 'react-chatbot-kit';
-import DirectSalesStaffBtn  from './DirectSalesStaffBtn'; // Ensure this is the correct path
+import DirectSalesStaffBtn  from './DirectSalesStaffBtn'; 
 
-const botName = 'DIAN';
+const botName = 'DIAN JEWELRY';
 const config = {
-  initialMessages: [createChatBotMessage(`Hello! Welcome to DIAN. How can I assist you today?`, { widget: 'startBtn' })],
+  initialMessages: [createChatBotMessage(`Hello! Welcome to DIAN JEWELRY. How can I assist you today?`, { widget: 'startBtn' })],
   botName: botName,
   customStyles: {
     botMessageBox: {
-      backgroundColor: '#376B7E',
+      backgroundColor: '#1c1c1c',
     },
     chatButton: {
       backgroundColor: '#5ccc9d',

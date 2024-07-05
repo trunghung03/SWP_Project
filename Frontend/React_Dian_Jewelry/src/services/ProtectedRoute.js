@@ -5,7 +5,7 @@ const rolesPermissions = {
     Admin: ['/','/admin-customer-list', '/admin-employee-list', '/admin-add-employee'],
     Manager: ['/','/manager-statistic','/manager-collection-list', '/manager-add-collection', '/manager-diamond-list', '/manager-add-diamond', '/manager-product-list', '/manager-add-product', '/manager-shell-list', '/manager-add-shell', '/manager-employee-list', '/manager-add-employee', '/manager-promotional-list', '/manager-add-promotion'],
     SalesStaff: ['/','/sales-staff-order-list', '/sales-staff-content-list', '/sales-staff-add-content', '/sales-staff-warranty-list', '/rich-text-page'],
-    DeliveryStaff: ['/','/delivery-staff-delivery-list', '/delivery-staff-delivery-detail'],
+    DeliveryStaff: ['/','/delivery-staff-delivery-list', '/delivery-staff-delivery-detail/:orderId'],
     Customer: ['/', '/vnpay-result', '/transaction-fail' , '/home', '/blog', '/blog-detail/:title', '/search', '/product-detail/:name', '/cart', '/FAQs', '/checkout', '/invoice', '/edit-profile', '/order-history', '/order-detail/:orderNumber', '/diamond-jewelry', '/collection/:name', '/shape', '/diamond-price', '/contact', '/introduce'],
     Guest: ['/','/home', '/blog', '/blog-detail/:title', '/search', '/product-detail/:name', '/cart', '/FAQs', '/login', '/register', '/forgot-password', '/reset-password', '/diamond-jewelry', '/collection/:name', '/shape', '/diamond-price', '/contact', '/introduce']
 };

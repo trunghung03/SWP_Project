@@ -16,7 +16,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         response = 'Our store is open from 9 a.m to 8 p.m for the whole week. We look forward to your visit!';
         break;
       case 'store location':
-        response = 'We are located at FPT uNI. You can find directions [here/link to map].';
+        response = 'We are located at FPT UNI. You can find directions [here/link to map].';
         break;
       default:
         response = 'I am not sure about that. Could you please ask something else?';

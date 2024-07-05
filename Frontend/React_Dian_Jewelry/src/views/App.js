@@ -63,11 +63,48 @@ import ActionProvider from '../components/ChatBot/ActionProvider.js';
 import DirectSalesStaffBtn from '../components/ChatBot/DirectSalesStaffBtn.js';
 import 'react-chatbot-kit/build/main.css';
 import UpdateTitle from '../services/TitleService';
+import ManagerProductDetail from './Manager/ManagerManageProduct/ManagerProductDetail.js';
+import DSEditProfile from './DeliveryStaff/DSEditProfile.js';
+import SSEditProfile from './SalesStaff/SalesStaffSetting/SalesStaffEditProfile.js';
+import ManagerEditProfile from './Manager/ManagerSetting/ManagerEditProfile.js';
 
 function AppContent() {
-  const [isClosed, setIsClosed] = useState(true);  // Set the initial state to true
+  const [isClosed, setIsClosed] = useState(true);
   const location = useLocation();
   const isLoginPath = location.pathname === '/login';
+
+  const staffPaths = [
+    '/sales-staff-order-list',
+    '/sales-staff-manage-order-detail',
+    '/sales-staff-content-list',
+    '/sales-staff-add-content',
+    '/sales-staff-update-content',
+    '/sales-staff-warranty-list',
+    '/rich-text-page',
+    '/delivery-staff-delivery-list',
+    '/delivery-staff-delivery-detail',
+    '/manager-statistic',
+    '/manager-diamond-list',
+    '/manager-add-diamond',
+    '/manager-product-list',
+    '/manager-add-product',
+    '/manager-shell-list',
+    '/manager-add-shell',
+    '/manager-employee-list',
+    '/manager-add-employee',
+    '/manager-promotional-list',
+    '/manager-add-promotion',
+    '/manager-collection-list',
+    '/manager-add-collection',
+    '/admin-customer-list',
+    '/admin-employee-list',
+    '/admin-add-employee',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+  ];
+
+  const shouldShowChatbot = !isLoginPath && !staffPaths.some(path => location.pathname.startsWith(path));
 
   const toggleMinimize = () => {
     setIsClosed(true);
@@ -121,6 +158,7 @@ function AppContent() {
           <Route path="/manager-diamond-list" element={<ProtectedRoute path="/manager-diamond-list" element={ManagerDiamondList} />} />
           <Route path="/manager-add-diamond" element={<ProtectedRoute path="/manager-add-diamond" element={ManagerAddDiamond} />} />
           <Route path="/manager-product-list" element={<ProtectedRoute path="/manager-product-list" element={ManagerProductList} />} />
+          <Route path="/manager-product-detail" element={<ManagerProductDetail />} />
           <Route path="/manager-add-product" element={<ProtectedRoute path="/manager-add-product" element={ManagerAddProduct} />} />
           <Route path="/manager-shell-list" element={<ProtectedRoute path="/manager-shell-list" element={ManagerShellList} />} />
           <Route path="/manager-add-shell" element={<ProtectedRoute path="/manager-add-shell" element={ManagerAddShell} />} />
@@ -130,6 +168,7 @@ function AppContent() {
           <Route path="/manager-add-promotion" element={<ProtectedRoute path="/manager-add-promotion" element={ManagerAddPromotion} />} />
           <Route path="/manager-collection-list" element={<ProtectedRoute path="/manager-collection-list" element={ManagerCollectionList} />} />
           <Route path="/manager-add-collection" element={<ProtectedRoute path="/manager-add-collection" element={ManagerAddCollection} />} />
+          <Route path="/manager-edit-profile" element={<ManagerEditProfile />} />
 
           {/* Sales Staff */}
           <Route path="/sales-staff-order-list" element={<SSOrderList />} />
@@ -143,15 +182,17 @@ function AppContent() {
           {/* Delivery Staff */}
           <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
           <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
-
-          {/* <Route path="/notification" element={<Notification/>} /> */}
         </Routes>
-        {!isClosed && !isLoginPath && (
+
+        {shouldShowChatbot && !isClosed && (
           <div className="chatbot-container">
             <div className="control-buttons">
               <button className="control-button" onClick={toggleMinimize}>
-                —
+                <strong>—</strong>
               </button>
+              {/* <button className="control-button" onClick={() => setIsClosed(true)}>
+                ✖
+              </button> */}
             </div>
             <div className="chatbot-body">
               <Chatbot
@@ -163,9 +204,9 @@ function AppContent() {
             </div>
           </div>
         )}
-        {isClosed && !isLoginPath && (
-          <button className="control-button" onClick={openChatbot} style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
-            <div className="supporter-text">Supporter</div>
+        {shouldShowChatbot && isClosed && (
+          <button className="control-open-button" onClick={openChatbot}>
+            <i className="fa-regular fa-comments icon"></i>
           </button>
         )}
       </CartProvider>

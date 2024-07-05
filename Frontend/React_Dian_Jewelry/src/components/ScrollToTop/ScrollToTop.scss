@@ -1,11 +1,11 @@
 .fix_icon_top {
-    width: 55px;
-    height: 55px;
+    width: 57px;
+    height: 57px;
     position: fixed;
-    right: 20px;
+    right: 35px;
     background-color: white;
     padding: 6px;
-    border-radius: 5px;
+    border-radius: 50%;
     transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
     z-index: 3;
     display: flex;
@@ -13,7 +13,7 @@
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    top: 85%;
+    bottom: 115px;
     opacity: 0;
     visibility: hidden;
 }
@@ -33,5 +33,5 @@
 }
 
 .top_icon {
-    color: #565e6c;
+    color: #1c1c1c;
 }
