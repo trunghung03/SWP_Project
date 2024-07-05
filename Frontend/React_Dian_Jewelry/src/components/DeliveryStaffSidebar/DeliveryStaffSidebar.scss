@@ -103,6 +103,43 @@
                 opacity: 1;
             }
         }
+        .deliverystaff_sidebar_edit_profile {
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+
+            i {
+                font-size: 16px;
+            }
+
+            &:hover {
+                background-color: #e0e0e0;
+            }
+
+            &::after {
+                content: "Sign Out";
+                position: absolute;
+                left: calc(100% + 10px);
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: #333;
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 3px;
+                white-space: nowrap;
+                opacity: 0;
+                transition: opacity 0.3s;
+                pointer-events: none;
+                z-index: 1;
+                font-size: 12px;
+            }
+
+            &:hover::after {
+                opacity: 1;
+            }
+        }
     }
 
     .deliverystaff_sidebar_header {
@@ -213,7 +250,28 @@
                 }
             }
         }
+        .deliverystaff_sidebar_edit_profile{
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px 10px 10px 10px;
 
+            .fa-user {
+                font-size: 17px;
+                margin-right: 10px;
+                margin-left: 23px;
+                margin-bottom: -2px;
+            }
+
+            span {
+                font-size: 16px;
+            }
+
+            &:hover {
+                background-color: #e0e0e0;
+            }
+        }
         .deliverystaff_sidebar_sign_out {
             display: flex;
             align-items: center;

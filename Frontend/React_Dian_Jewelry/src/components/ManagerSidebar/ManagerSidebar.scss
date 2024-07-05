@@ -65,7 +65,6 @@
                 }
             }
         }
-
         .manager_sidebar_sign_out_icon {
             text-align: center;
             padding: 10px 0;
@@ -184,7 +183,11 @@
                     margin-right: 11px;
                     margin-left: 21px;
                 }
-
+                .fa-user{
+                    font-size: 16px;
+                    margin-right: 11px;
+                    margin-left: 21px;
+                }
                 .fa-box-open {
                     font-size: 16px;
                     margin-right: 10px;
@@ -261,7 +264,9 @@
     .fa-users::before {
         font-size: 16px;
     }
-
+    .fa-user::before{
+        font-size: 16px;
+    }
     .fa-box-open::before {
         font-size: 16px;
     }

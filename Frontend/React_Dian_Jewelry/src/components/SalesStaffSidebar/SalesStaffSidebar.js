@@ -94,10 +94,10 @@ class SalesStaffSidebar extends Component {
                                 <i className="fas fa-file-contract"></i>
                                 <span>Manage Warranty</span>
                             </li>
-                            {/* <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/salesStaffEditProfile')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/sales-staff-edit-profile')}>
                                 <i className="fas fa-user"></i>
                                 <span>Edit Profile</span>
-                            </li> */}
+                            </li>
                             <div className="salesstaff_sidebar_sign_out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                                 <span>Sign Out</span>
@@ -117,9 +117,9 @@ class SalesStaffSidebar extends Component {
                             <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_manage_warranty' ? 'selected' : ''}`} data-tooltip="Manage Warranty" onClick={() => this.props.navigate('/sales-staff-warranty-list')}>
                                 <i className="fas fa-file-contract"></i>
                             </li>
-                            {/* <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/salesStaffEditProfile')}>
+                            <li className={`salesstaff_sidebar_menu_item ${currentPage === 'salesstaff_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/sales-staff-edit-profile')}>
                                 <i className="fas fa-user"></i>
-                            </li> */}
+                            </li>
                             <div className="salesstaff_sidebar_sign_out_icon" data-tooltip="Sign Out" onClick={this.handleSignOut}>
                                 <i className="fas fa-sign-out-alt"></i>
                             </div>
