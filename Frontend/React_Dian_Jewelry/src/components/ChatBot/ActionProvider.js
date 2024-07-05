@@ -8,17 +8,18 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       messages: [...prev.messages, botMessage],
     }));
   };
+
   const handleGenInfo = (infoType) => {
     let response;
     switch (infoType) {
       case 'store hours':
-        response = 'Our store is open from 9 a.m to 8p.m for the whole week. We look forward to your visit!';
+        response = 'Our store is open from 9 a.m to 8 p.m for the whole week. We look forward to your visit!';
         break;
       case 'store location':
         response = 'We are located at FPT uNI. You can find directions [here/link to map].';
         break;
       default:
-        response = 'I am not sure about that. Could you please ask something  else?';
+        response = 'I am not sure about that. Could you please ask something else?';
     }
     const botMessage = createChatBotMessage(response);
     setState((prev) => ({
@@ -48,6 +49,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       messages: [...prev.messages, botMessage],
     }));
   };
+
   const handlePurchaseInfo = (infoType) => {
     let response;
     switch (infoType) {
@@ -66,16 +68,10 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       messages: [...prev.messages, botMessage],
     }));
   };
-  const handleCustomerSupport = () => {
-    const response = 'We\'re here to help! Please contact our customer support team at [customer support email] or call us at [phone number].';
-    const botMessage = createChatBotMessage(response);
-    setState((prev) => ({
-      ...prev,
-      messages: [...prev.messages, botMessage],
-    }));
-  };
+
   const handleUnknown = () => {
-    const botMessage = createChatBotMessage('I am not sure about that. Could you please ask something else?');
+    const response = 'Please contact us at our email: support@ourstore.com or call our hotline: 090909090';
+    const botMessage = createChatBotMessage(response);
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
@@ -91,8 +87,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
             handleGenInfo,
             handleProductInfo,
             handlePurchaseInfo,
-            handleCustomerSupport,
-            handleUnknown
+            handleUnknown,
           },
         });
       })}

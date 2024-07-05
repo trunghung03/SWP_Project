@@ -8,11 +8,11 @@ const MessageParser = ({ children, actions }) => {
       actions.handleHello();
     } else if (lowerCaseMessage.includes('hours') || lowerCaseMessage.includes('time') || lowerCaseMessage.includes('when')) {
       actions.handleGenInfo('store hours');
-    } else if (lowerCaseMessage.includes('location') || lowerCaseMessage.includes('address') || lowerCaseMessage.includes('where') ) {
+    } else if (lowerCaseMessage.includes('location') || lowerCaseMessage.includes('address') || lowerCaseMessage.includes('where')) {
       actions.handleGenInfo('store location');
-    } else if (lowerCaseMessage.includes('collection') ) {
+    } else if (lowerCaseMessage.includes('collection')) {
       actions.handleProductInfo('diamond collection');
-    } else if (lowerCaseMessage.includes('custom ') || lowerCaseMessage.includes('design')) {
+    } else if (lowerCaseMessage.includes('custom') || lowerCaseMessage.includes('design')) {
       actions.handleProductInfo('custom jewelry design');
     } else if (lowerCaseMessage.includes('quality')) {
       actions.handleProductInfo('diamond quality');
@@ -24,7 +24,6 @@ const MessageParser = ({ children, actions }) => {
       actions.handleUnknown();
     }
   };
-  
 
   return (
     <div>
