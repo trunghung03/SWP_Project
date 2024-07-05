@@ -103,5 +103,27 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpPut("updatecertificate/{id:int}")]
+        public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var orderDetailModel = await _orderDetailRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
+                if (orderDetailModel == null)
+                {
+                    return NotFound("Order Detail does not exist");
+                }
+                return Ok(orderDetailModel);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

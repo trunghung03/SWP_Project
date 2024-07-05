@@ -38,7 +38,6 @@ namespace DIAN_.Services
             }
             else { orderModel.PromotionId = null; }
 
-            // 2. Check for usedPoint
             bool usedPoints = orderModel.PayWithPoint.HasValue ? orderModel.PayWithPoint.Value : false;
 
             if (usedPoints)
@@ -55,9 +54,7 @@ namespace DIAN_.Services
                     }
                     else
                     {
-                        // If points are less than total price, subtract points from total price
                         orderModel.TotalPrice -= pointsValue;
-                        // Set customer's points to 0 as all points are used
                         pointRemaining = 0;
                     }
 
@@ -69,7 +66,6 @@ namespace DIAN_.Services
                     _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
                 }
             }
-            // 3. Assign staff
             var salesStaff = _employeeRepository.GetEmployeeByRole("SalesStaff").Result;
             var deliveryStaff = _employeeRepository.GetEmployeeByRole("DeliveryStaff").Result;
 
@@ -80,13 +76,8 @@ namespace DIAN_.Services
             orderModel.SaleStaff = randomSalesStaff.EmployeeId;
             orderModel.DeliveryStaff = randomDeliveryStaff.EmployeeId;
 
-            // 4. Payment method
-            
-
-
             var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
 
-            //convert to dto
             return orderToDto.ToPurchaseOrderDTO();
         }
 

@@ -52,5 +52,12 @@ namespace DIAN_.Mapper
                 Status = updateDiamond.Status,
             };
         }
+        public static Diamond ToDiamondFromUpdateAmountAvailable(this UpdateDiamondStockDto updateAmountAvailable, int id)
+        {
+            return new Diamond
+            {
+                AmountAvailable = updateAmountAvailable.AmountAvailable,
+            };
+        }
     }
 }

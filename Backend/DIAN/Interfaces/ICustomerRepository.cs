@@ -20,6 +20,8 @@ namespace DIAN_.Interfaces
         Task<Customer?> SearchByNameAsyncs(string fisrstName);
         Task<bool> ResetPasswordRequestAsync(ResetPasswordDto resetPasswordDto);
 
-        Task<bool> ResetPassworConfirmdAsync(Customer user, string token, string newPassword);
+        Task<bool> ResetPassworConfirmdAsync(Customer customer, string token, string newPassword);
+
+        Task<Customer?> ChangePassword(Customer customer, string oldPassword, string newPassword);
     }
 }

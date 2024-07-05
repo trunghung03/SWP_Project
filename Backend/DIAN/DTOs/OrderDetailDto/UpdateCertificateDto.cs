@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DIAN_.DTOs.DiamondDto
+namespace DIAN_.DTOs.OrderDetailDto
 {
     public class UpdateCertificateDto
     {

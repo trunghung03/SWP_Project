@@ -1,4 +1,5 @@
-﻿using DIAN_.Helper;
+﻿using DIAN_.DTOs.ShellDto;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
@@ -151,6 +152,17 @@ namespace DIAN_.Repository
             return diamonds;
         }
 
+        public async Task<Diamond?> UpdateAmountAvailable(Diamond diamondModel, int id)
+        {
+            var diamond = await _context.Diamonds.FirstOrDefaultAsync(d => d.DiamondId == id);
+            if (diamond != null)
+            {
+                diamond.AmountAvailable = diamondModel.AmountAvailable;
+                await _context.SaveChangesAsync();
+                return diamond;
+            }
+            return null;
+        }
 
         public async Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id)
         {

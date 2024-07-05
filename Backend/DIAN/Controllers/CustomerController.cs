@@ -308,6 +308,32 @@ namespace UserApplication.Controllers
             }
         }
 
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var customer = await _customerRepository.GetByEmailAsync(changePasswordDto.Email);
+                if (customer == null) return NotFound();
+
+                var result = await _customerRepository.ChangePassword(customer, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+                if (result is not null)
+                {
+                    return Ok("Password has been changed.");
+                }
+                else
+                {
+                    return BadRequest("An error occurred while processing your request.");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
     }
 }

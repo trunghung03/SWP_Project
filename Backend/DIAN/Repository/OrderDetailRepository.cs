@@ -74,6 +74,20 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return updateDetail;
         }
+
+        public async Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail orderdetail, int id)
+        {
+            var existingOrderDetail = await _context.Orderdetails.FirstOrDefaultAsync(x => x.OrderDetailId == id);
+            if (existingOrderDetail != null)
+            {
+                existingOrderDetail.CertificateScan = orderdetail.CertificateScan;
+                await _context.SaveChangesAsync();
+                return existingOrderDetail;
+            }
+            throw new KeyNotFoundException("Order detail does not exist");
+
+        }
+
         public async Task<OrderBillDto?> ViewOrderBillAsync(int orderId)
         {
             var orderBill = await _context.Purchaseorders

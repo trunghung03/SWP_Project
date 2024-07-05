@@ -14,5 +14,8 @@ namespace DIAN_.Interfaces
         Task<Orderdetail?> DeleteAsync(int id);
 
         Task<OrderBillDto?> ViewOrderBillAsync(int orderId);
+
+        Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail diamondModel, int id);
+
     }
 }
