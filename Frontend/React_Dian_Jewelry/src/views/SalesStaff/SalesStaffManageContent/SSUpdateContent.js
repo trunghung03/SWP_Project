@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import logo from "../../../assets/img/logo.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import { updateContentById, getContentById } from "../../../services/SalesStaffService/SSContentService.js";
+import { updateContentById, getContentById, uploadImage } from "../../../services/SalesStaffService/SSContentService.js";
 import { UserContext } from "../../../services/UserContext.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
 import Button from "@mui/material/Button";
@@ -20,12 +20,14 @@ function SSUpdateContent() {
     imageUrl: "",
     createdBy: "",
   });
+  const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const response = await getContentById(id);
         setContentData(response.data);
+        setImagePreview(response.data.imageUrl);
       } catch (error) {
         console.error("Error fetching content:", error);
         swal("Error", "Failed to fetch content data.", "error");
@@ -38,6 +40,31 @@ function SSUpdateContent() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setContentData({ ...contentData, [name]: value });
+  };
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      console.error("No file selected.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file); // Ensure the key matches your API's expected key
+
+    try {
+      const response = await uploadImage(formData);
+      const url = response.url;
+      console.log("Uploaded image URL:", url);
+      setContentData((prevContentData) => ({
+        ...prevContentData,
+        imageUrl: url,
+      }));
+      setImagePreview(URL.createObjectURL(file));
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+    event.target.value = null;
   };
 
   const handleSubmit = async (e) => {
@@ -62,7 +89,10 @@ function SSUpdateContent() {
     }
   };
 
-
+  const handleRemoveImage = () => {
+    setImagePreview("");
+    setContentData({ ...contentData, imageUrl: "" });
+  };
 
   useEffect(() => {
     localStorage.setItem("richTextContent", contentData.content);
@@ -185,15 +215,54 @@ function SSUpdateContent() {
               </div>
             </div>
             <div className="ss_add_displayed_image_div2">
-              <label className="ss_add_content_label_image">Image URL:</label>
+              <label className="ss_add_content_label_image">Content avatar:</label>
               <input
-                className="ss_enter_image"
-                type="text"
+                type="file"
                 name="imageUrl"
-                value={contentData.imageUrl}
-                onChange={handleChange}
-                placeholder="Enter the image URL"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={imagePreview ? true : false}
+                style={{ marginLeft: '1.5%' }}
               />
+              {imagePreview && (
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <button
+                    onClick={handleRemoveImage}
+                    style={{
+                      display: "block",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "20px",
+                      position: "absolute",
+                      top: "5px",
+                      right: "5px",
+                      color: "black"
+                    }}
+                  >
+                    &#x2715; {/* Unicode character for "X" */}
+                  </button>
+                  <div
+                    className="ss_image_preview"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
+                    <img
+                      src={imagePreview}
+                      alt="Content avatar"
+                      style={{
+                        width: "87%",
+                        height: "40%",
+                        margin: "auto",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <Button
               type="submit"
