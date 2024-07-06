@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs.PromotionDto;
+﻿using DIAN_.DTOs.DiamondDto;
+using DIAN_.DTOs.PromotionDto;
 using DIAN_.DTOs.ShellDto;
 using DIAN_.Models;
 
@@ -12,7 +13,7 @@ namespace DIAN_.Mapper
             {
                 ProductId = shellModel.ProductId,
                 ShellMaterialId = shellModel.ShellMaterialId,
-                ShellAmount = shellModel.Weight,
+                Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
                 Status = shellModel.Status
             };
@@ -23,7 +24,7 @@ namespace DIAN_.Mapper
             {
                 ProductId = shellModel.ProductId,
                 ShellMaterialId = shellModel.ShellMaterialId,
-                ShellAmount = shellModel.Weight,
+                Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
                 Status = shellModel.Status
             };
@@ -42,9 +43,16 @@ namespace DIAN_.Mapper
                 ShellId = shellModel.ShellId,
                 ProductId = shellModel.ProductId ?? 0,
                 ShellMaterialId = shellModel.ShellMaterialId ?? 0,
-                Weight = shellModel.ShellAmount ?? 0,
+                Weight = shellModel.Weight ?? 0,
                 AmountAvailable = shellModel.AmountAvailable,
                 Status = shellModel.Status
+            };
+        }
+        public static Shell ToDiamondFromUpdateProductId(this UpdateProductIdForShellDto updateProductId, int id)
+        {
+            return new Shell
+            {
+                ProductId = updateProductId.ProductId,
             };
         }
     }

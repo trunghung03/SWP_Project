@@ -59,20 +59,20 @@ namespace DIAN_.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateOrderDetailDto orderDetailDto)
-        {
-            try
-            {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
-                var orderDetail = await _orderDetailRepository.CreateAsync(orderDetailDto.FromCreateToOrderDetail());
-                if (orderDetail == null) return NotFound();
-                return CreatedAtAction(nameof(GetByOrderDetailId), new { id = orderDetail.OrderDetailId }, orderDetail);
-            }catch(Exception)
-            {
-                throw;
-            }
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Create(CreateOrderDetailDto orderDetailDto)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid) return BadRequest(ModelState);
+        //        var orderDetail = await _orderDetailRepository.CreateAsync(orderDetailDto.FromCreateToOrderDetail());
+        //        if (orderDetail == null) return NotFound();
+        //        return CreatedAtAction(nameof(GetByOrderDetailId), new { id = orderDetail.OrderDetailId }, orderDetail);
+        //    }catch(Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(UpdateOrderDetailDto orderDetailDto, int id)
@@ -103,27 +103,27 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-        [HttpPut("updatecertificate/{id:int}")]
-        public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+        //[HttpPut("updatecertificate/{id:int}")]
+        //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
 
-                var orderDetailModel = await _orderDetailRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
-                if (orderDetailModel == null)
-                {
-                    return NotFound("Order Detail does not exist");
-                }
-                return Ok(orderDetailModel);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        var orderDetailModel = await _orderDetailRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
+        //        if (orderDetailModel == null)
+        //        {
+        //            return NotFound("Order Detail does not exist");
+        //        }
+        //        return Ok(orderDetailModel);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

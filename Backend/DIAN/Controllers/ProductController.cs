@@ -15,10 +15,12 @@ namespace DIAN_.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepo;
-        public ProductController(ApplicationDbContext context, IProductRepository productRepo)
+        private readonly IGoodsService _goodsService;
+        public ProductController(ApplicationDbContext context, IProductRepository productRepo, IGoodsService goodsService)
         {
             _productRepo = productRepo;
             _context = context;
+            _goodsService = goodsService;
         }
 
         [HttpGet("list")]
@@ -31,14 +33,13 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
-                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+                return Ok(products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())));
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
@@ -72,11 +73,11 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 // Check if the MainDiamondId exists
-                var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
-                if (!mainDiamondExists)
-                {
-                    return BadRequest("The specified MainDiamondId does not exist.");
-                }
+                //var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
+                //if (!mainDiamondExists)
+                //{
+                //    return BadRequest("The specified MainDiamondId does not exist.");
+                //}
 
                 // Check if the ProCode already exists
                 var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
@@ -95,7 +96,25 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpPost("add-multiple")]
+        public async Task<IActionResult> AddMultipleProducts([FromBody] AddMultipleProductRequestDto request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
+                await _goodsService.AddMultipleProductsAsync(request.Products, request.Quantity);
+
+                return Ok("Products added successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {
@@ -183,14 +202,13 @@ namespace DIAN_.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(productDetail.ToProductDetailDTO(productDetail.MainDiamond, new List<string>()));
+                return Ok(productDetail.ToProductDetailDTO(productDetail.Diamonds.FirstOrDefault(), new List<string>()));
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
 
         [HttpGet("search")]
         public async Task<IActionResult> GetByName([FromQuery] string name)
@@ -202,14 +220,13 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetByNameAsync(name);
-                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+                return Ok(products.Select(p => p.ToProductListDTO(p.Diamonds.FirstOrDefault())));
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
 
         [HttpGet("code/{code}")]
         public async Task<IActionResult> GetByCode([FromRoute] string code)
@@ -250,14 +267,14 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
 
-                var diamondIds = products.Select(p => p.MainDiamondId).Distinct().ToList();
+                var diamondIds = products.Select(p => p.Diamonds.FirstOrDefault().DiamondId).Distinct().ToList();
                 var diamonds = await _context.Diamonds
                                              .Where(d => diamondIds.Contains(d.DiamondId))
                                              .ToListAsync();
 
                 var productDTOs = products.Select(p =>
                 {
-                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.MainDiamondId);
+                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.Diamonds.FirstOrDefault().DiamondId);
                     return p.ToProductListDTO(diamond);
                 }).ToList();
 

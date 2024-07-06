@@ -24,26 +24,19 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product)
         {
-            var mainDiamondPrice = product.MainDiamondId.HasValue
-               ? await _context.Diamonds
-                   .Where(d => d.DiamondId == product.MainDiamondId.Value)
-                   .Select(d => d.Price)
-                   .FirstOrDefaultAsync()
-               : 0;
+            var mainDiamondPrice = product.Diamonds.FirstOrDefault()?.Price ?? 0;
 
-            var subDiamondPrice = product.SubDiamondId.HasValue
-                ? await _context.Diamonds
-                    .Where(d => d.DiamondId == product.SubDiamondId.Value)
-                    .Select(d => d.Price)
-                    .FirstOrDefaultAsync()
-                : 0;
+            //var subDiamondPrice = product.Shells.FirstOrDefault()?.Subdiamond?.Price ?? 0;
 
-            product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
-                            (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
-                            (product.LaborCost ?? 0);
+            //product.Price = (mainDiamondPrice * (product.Diamonds.Count)) +
+            //                (subDiamondPrice * (product.Shells.FirstOrDefault()?.SubDiamondAmount ?? 0) * 0.05m) +
+            //                (product.LaborCost ?? 0);
+
             _memoryCache.Remove(CacheKey);
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
+
             return product;
         }
 
@@ -87,7 +80,7 @@ namespace DIAN_.Repository
                     if (_memoryCache.TryGetValue(CacheKey, out cachedProducts) && cachedProducts != null)
                     {
                         _logger.LogInformation("Products from cache");
-                        return (cachedProducts.ToList(), cachedProducts.Count());   
+                        return (cachedProducts.ToList(), cachedProducts.Count());
                     }
                     else
                     {
@@ -158,11 +151,25 @@ namespace DIAN_.Repository
 
         public async Task<List<Product>> GetByNameAsync(string name)
         {
-            var products = await _context.Products
-                                  .Where(p => p.Status && p.Name.Contains(name))
-                                  .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
-                                  .ToListAsync();
-            return products;
+            string cacheKey = $"ProductsByName_{name}";
+            if (!_memoryCache.TryGetValue(cacheKey, out List<Product>? cachedProducts))
+            {
+                var products = await _context.Products
+                    .Where(p => p.Status && p.Name.Contains(name))
+                    .Include(p => p.Diamonds.FirstOrDefault())
+                    .ToListAsync();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
+
+                _memoryCache.Set(cacheKey, products, cacheEntryOptions);
+                _logger.LogInformation("Products from database");
+                return products;
+            }
+            _logger.LogInformation("Products from cache");
+            return cachedProducts;
         }
 
 
@@ -196,29 +203,40 @@ namespace DIAN_.Repository
 
         public async Task<Product> GetDetailAsync(int id)
         {
-            var product = await _context.Products
-                                        .Include(p => p.MainDiamond)
-                                        .Include(p => p.Category).ThenInclude(c => c.Size)
-                                        .Where(p => p.Status && p.ProductId == id)
-                                        .FirstOrDefaultAsync();
-
-            if (product == null)
+            string cacheKey = $"ProductDetail_{id}";
+            if (!_memoryCache.TryGetValue(cacheKey, out Product? cachedProduct))
             {
-                throw new KeyNotFoundException("Product does not exist");
-            }
-            return product;
-        }
+                var product = await _context.Products
+                                            .Include(p => p.Diamonds.FirstOrDefault())
+                                            .Include(p => p.Category).ThenInclude(c => c.Size)
+                                            .Where(p => p.Status && p.ProductId == id)
+                                            .FirstOrDefaultAsync();
 
+                if (product == null)
+                {
+                    throw new KeyNotFoundException("Product does not exist");
+                }
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                    .SetPriority(CacheItemPriority.Normal).SetSize(1);
+
+                _memoryCache.Set(cacheKey, product, cacheEntryOptions);
+                _logger.LogInformation("Product from database");
+                return product;
+            }
+            _logger.LogInformation("Product from cache");
+            return cachedProduct;
+        }
 
         public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
-                                 .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                 .Include(p => p.Diamonds.FirstOrDefault()) // Include the MainDiamond to get the shape
                                  .ToListAsync();
 
             return products;
         }
-
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
         {

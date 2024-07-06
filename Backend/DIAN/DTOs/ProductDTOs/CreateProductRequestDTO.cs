@@ -22,11 +22,11 @@ namespace DIAN_.DTOs.ProductDTOs
         [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Main diamond ID is required.")]
-        public int MainDiamondId { get; set; }
+        //[Required(ErrorMessage = "Main diamond ID is required.")]
+        //public int MainDiamondId { get; set; }
 
-        [Required(ErrorMessage = "Sub diamond ID is required.")]
-        public int SubDiamondId { get; set; }
+        //[Required(ErrorMessage = "Sub diamond ID is required.")]
+        //public int SubDiamondId { get; set; }
 
         [Required(ErrorMessage = "Labor price is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Labor price must be non-negative.")]
@@ -38,15 +38,15 @@ namespace DIAN_.DTOs.ProductDTOs
         [Required(ErrorMessage = "Image link list is required.")]
         public string imageLinkList { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Sub diamond amount is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Sub diamond amount must be non-negative.")]
-        public int SubDiamondAmount { get; set; }
+        //[Required(ErrorMessage = "Sub diamond amount is required.")]
+        //[Range(0, int.MaxValue, ErrorMessage = "Sub diamond amount must be non-negative.")]
+        //public int SubDiamondAmount { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Main diamond amount must be non-negative.")]
-        public int? MainDiamondAmount { get; set; }
+        //[Range(0, int.MaxValue, ErrorMessage = "Main diamond amount must be non-negative.")]
+        //public int? MainDiamondAmount { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessage = "Shell amount must be non-negative.")]
-        public decimal? ShellAmount { get; set; }
+        //[Range(0, double.MaxValue, ErrorMessage = "Shell amount must be non-negative.")]
+        //public decimal? ShellAmount { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Collection ID must be a positive number.")]
         public int? CollectionId { get; set; }

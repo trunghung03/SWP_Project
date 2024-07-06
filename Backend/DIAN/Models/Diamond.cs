@@ -19,13 +19,15 @@ public partial class Diamond
 
     public string Cut { get; set; }
 
-    public int AmountAvailable { get; set; }
+    public string CertificateScan { get; set; }
+
+    public int ProductId { get; set; }
+
+    public int Quantity { get; set; }
 
     public decimal Price { get; set; }
 
     public bool Status { get; set; }
 
-    public virtual ICollection<Product> ProductMainDiamonds { get; set; } = new List<Product>();
-
-    public virtual ICollection<Product> ProductSubDiamonds { get; set; } = new List<Product>();
+    public virtual Product Product { get; set; }
 }

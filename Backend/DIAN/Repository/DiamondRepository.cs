@@ -1,4 +1,4 @@
-﻿using DIAN_.DTOs.ShellDto;
+﻿using DIAN_.DTOs.DiamondDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
@@ -100,7 +100,7 @@ namespace DIAN_.Repository
                     string serializedData = JsonSerializer.Serialize(existingDiamond);
                     await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
                     {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) 
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
                     });
                 }
             }
@@ -135,7 +135,7 @@ namespace DIAN_.Repository
                     string serializedData = JsonSerializer.Serialize(diamonds);
                     await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
                     {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) 
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
                     });
                 }
             }
@@ -152,17 +152,6 @@ namespace DIAN_.Repository
             return diamonds;
         }
 
-        public async Task<Diamond?> UpdateAmountAvailable(Diamond diamondModel, int id)
-        {
-            var diamond = await _context.Diamonds.FirstOrDefaultAsync(d => d.DiamondId == id);
-            if (diamond != null)
-            {
-                diamond.AmountAvailable = diamondModel.AmountAvailable;
-                await _context.SaveChangesAsync();
-                return diamond;
-            }
-            return null;
-        }
 
         public async Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id)
         {
@@ -173,6 +162,7 @@ namespace DIAN_.Repository
                 existingDiamond.Clarity = diamondModel.Clarity;
                 existingDiamond.Cut = diamondModel.Cut;
                 existingDiamond.Carat = diamondModel.Carat;
+                existingDiamond.CertificateScan = diamondModel.CertificateScan;
                 existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();
                 string individualCacheKey = $"Diamond_{id}";
@@ -181,19 +171,67 @@ namespace DIAN_.Repository
             }
             throw new KeyNotFoundException("Diamond does not exist");
         }
+        public async Task<Diamond?> UpdateAmountAvailable(Diamond diamondModel, int id)
+        {
+            var diamond = await _context.Diamonds.FirstOrDefaultAsync(d => d.DiamondId == id);
+            if (diamond != null)
+            {
+                diamond.Quantity = diamondModel.Quantity;
+                await _context.SaveChangesAsync();
+                return diamond;
+            }
+            return null;
+        }
+        public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
+            if (existingDiamond != null)
+            {
+                existingDiamond.CertificateScan = diamondModel.CertificateScan;
+                await _context.SaveChangesAsync();
+                string individualCacheKey = $"Diamond_{id}";
+                await _distributedCache.RemoveAsync(individualCacheKey);
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
+        public async Task<List<Diamond>> GetDiamondsBy4cAsync(decimal carat, string cut, string color, string clarity)
+        {
+            return await _context.Set<Diamond>()
+                .Where(d => d.Carat == carat && d.Cut == cut && d.Color == color && d.Clarity == clarity)
+                .ToListAsync();
+        }
+        public async Task<List<Diamond>> GetDiamondsByProductIdAsync(int productId)
+        {
+            return await _context.Set<Diamond>()
+                .Where(d => d.ProductId == productId)
+                .ToListAsync();
+        }
 
-        //public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
-        //{
-        //   var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
-        //    if (existingDiamond != null)
-        //    {
-        //        existingDiamond.CertificateScan = diamondModel.CertificateScan;
-        //        await _context.SaveChangesAsync();
-        //        string individualCacheKey = $"Diamond_{id}";
-        //        await _distributedCache.RemoveAsync(individualCacheKey);
-        //        return existingDiamond;
-        //    }
-        //    throw new KeyNotFoundException("Diamond does not exist");
-        //}
+        public async Task<List<Diamond>> GetAll()
+        {
+            var diamonds = await _context.Diamonds
+                    .Where(c => c.Status == true)
+                    .ToListAsync();
+            return diamonds;
+        }
+        public async Task<List<Diamond>> GetDiamondsByCaratAsync(decimal minCarat, decimal maxCarat)
+        {
+            return await _context.Set<Diamond>()
+                .Where(d => d.Carat >= minCarat && d.Carat < maxCarat)
+                .ToListAsync();
+        }
+
+        public async Task<Diamond?> UpdateProductId(UpdateProductIdForDiamondDto updateProductIdForDiamondDto, int id)
+        {
+            var diamond = await _context.Diamonds.FirstOrDefaultAsync(d => d.DiamondId == id);
+            if (diamond == null)
+            {
+                return null;
+            }
+            diamond.ProductId = updateProductIdForDiamondDto.ProductId;
+            await _context.SaveChangesAsync();
+            return diamond;
+        }
     }
 }

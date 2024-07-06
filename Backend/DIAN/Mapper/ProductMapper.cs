@@ -108,5 +108,31 @@ namespace DIAN_.Mapper
                 Status = true
             };
         }
+        public static SubDiamondDto ToSubDiamond(this SubDiamondDto dto)
+        {
+            return new SubDiamondDto
+            {
+                SubDiamondId = dto.SubDiamondId,
+                Quantity = dto.Quantity
+            };
+        }
+
+        public static MainDiamondDto ToMainDiamond(this MainDiamondDto dto)
+        {
+            return new MainDiamondDto
+            {
+                RequiredDiamondIds = dto.RequiredDiamondIds
+            };
+        }
+
+        public static AddProductDto ToProduct(this AddProductDto dto)
+        {
+            return new AddProductDto
+            {
+                Shell = dto.Shell,
+                SubDiamond = dto.SubDiamond.ToSubDiamond(),
+                RequiredMainDiamonds = dto.RequiredMainDiamonds.Select(md => md.ToMainDiamond()).ToList()
+            };
+        }
     }
 }

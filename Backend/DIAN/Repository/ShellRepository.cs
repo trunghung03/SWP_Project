@@ -1,4 +1,5 @@
-﻿using DIAN_.Interfaces;
+﻿using DIAN_.DTOs.ShellDto;
+using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,17 @@ namespace DIAN_.Repository
             return shell;
         }
 
+        public async Task<Shell?> UpdateProductId(UpdateProductIdForShellDto updateProductIdForShellDto, int id)
+        {
+            var shell = await _context.Shells.FirstOrDefaultAsync(s => s.ShellId == id);
+            if (shell == null)
+            {
+                return null;
+            }
+            shell.ProductId = updateProductIdForShellDto.ProductId;
+            await _context.SaveChangesAsync();
+            return shell;
+        }
 
         public async Task<Shell?> UpdateShellAsync(Shell shellDTO, int id)
         {
@@ -62,7 +74,7 @@ namespace DIAN_.Repository
 
             shell.ShellMaterialId = shellDTO.ShellMaterialId;
             shell.AmountAvailable = shellDTO.AmountAvailable;
-            shell.ShellAmount = shellDTO.ShellAmount;
+            shell.Weight = shellDTO.Weight;
             shell.Status = shellDTO.Status;
 
             _context.Shells.Update(shell);

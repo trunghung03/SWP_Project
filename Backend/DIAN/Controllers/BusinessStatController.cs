@@ -6,7 +6,6 @@ using DIAN_.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Linq;
 
 namespace DIAN_.Controllers
 {
@@ -197,7 +196,7 @@ namespace DIAN_.Controllers
             var categoryPercent = superCategoryCounts.Values.Select(s => new
             {
                 Categories = s.Categories,
-                Percentage = totalSoldProducts > 0 ? (double)s.Count / totalSoldProducts *100 : 0
+                Percentage = totalSoldProducts > 0 ? (double)s.Count / totalSoldProducts * 100 : 0
             }).ToList();
 
             return Ok(categoryPercent);
@@ -289,7 +288,7 @@ namespace DIAN_.Controllers
 
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
-                .ThenInclude(p => p.MainDiamond)
+                .ThenInclude(p => p.Diamonds.FirstOrDefault())
                 .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
@@ -305,27 +304,26 @@ namespace DIAN_.Controllers
                     (g, p) => p)
                 .ToListAsync();
 
-            var diamondIds = topProducts.Select(tp => tp.MainDiamondId).Distinct().ToList();
+            var diamondIds = topProducts.Select(tp => tp.Diamonds.FirstOrDefault().DiamondId).Distinct().ToList();
             var diamonds = await _context.Diamonds
                                          .Where(d => diamondIds.Contains(d.DiamondId))
                                          .ToListAsync();
 
             var productDTOs = topProducts.Select(tp =>
             {
-                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == tp.MainDiamondId);
+                var diamond = diamonds.FirstOrDefault(d => d.DiamondId == tp.Diamonds.FirstOrDefault().DiamondId);
                 return tp.ToProductListDTO(diamond);
             }).ToList();
 
             return Ok(productDTOs);
         }
 
-
         [HttpGet("daily-statistics")]
         public async Task<ActionResult<TodayStatisticDto>> GetDailyStatistics(DateTime? date)
         {
-            var effectiveDate = date ?? DateTime.Now; 
-            var startDate = effectiveDate.Date; 
-            var endDate = startDate.AddDays(1); 
+            var effectiveDate = date ?? DateTime.Now;
+            var startDate = effectiveDate.Date;
+            var endDate = startDate.AddDays(1);
 
             var ordersOnDate = await _context.Purchaseorders
        .Where(o => o.Date >= startDate && o.Date <= endDate)
@@ -338,7 +336,7 @@ namespace DIAN_.Controllers
 
             var totalPriceOfOrderDetails = ordersOnDate.Sum(o => o.Orderdetails.Sum(d => d.LineTotal));
 
-            var primeCost = totalPriceOfOrderDetails - totalPriceOfOrderDetails * 0.2m; 
+            var primeCost = totalPriceOfOrderDetails - totalPriceOfOrderDetails * 0.2m;
             var profit = totalSales - primeCost;
             var statistics = new TodayStatisticDto
             {
@@ -388,11 +386,11 @@ namespace DIAN_.Controllers
         [HttpGet("monthly-profit-statistics")]
         public async Task<ActionResult<IEnumerable<MonthlyProfitDto>>> GetMonthlyProfitStatistics([FromQuery] int? year)
         {
-            var targetYear = year ?? DateTime.Now.Year; 
+            var targetYear = year ?? DateTime.Now.Year;
             var monthlyProfits = Enumerable.Range(1, 12).Select(month => new MonthlyProfitDto
             {
                 Month = new DateTime(targetYear, month, 1).ToString("MMMM"),
-                Profit = 0 
+                Profit = 0
             }).ToList();
 
             var purchaseOrders = await _context.Purchaseorders
@@ -402,9 +400,9 @@ namespace DIAN_.Controllers
 
             foreach (var order in purchaseOrders)
             {
-                var monthIndex = order.Date.Month - 1; 
+                var monthIndex = order.Date.Month - 1;
                 var totalSales = order.TotalPrice;
-                var primeCost = order.Orderdetails.Sum(od => od.LineTotal) * 0.8m; 
+                var primeCost = order.Orderdetails.Sum(od => od.LineTotal) * 0.8m;
                 var profit = totalSales - primeCost;
 
                 monthlyProfits[monthIndex].Profit += profit;

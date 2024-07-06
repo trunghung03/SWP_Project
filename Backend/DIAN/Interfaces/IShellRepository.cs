@@ -1,4 +1,5 @@
-﻿using DIAN_.Models;
+﻿using DIAN_.DTOs.ShellDto;
+using DIAN_.Models;
 
 namespace DIAN_.Interfaces
 {
@@ -11,5 +12,7 @@ namespace DIAN_.Interfaces
         Task<Shell?> UpdateShellAsync(Shell shellDTO, int id);
 
         Task<Shell?> UpdateShellStockAsync(Shell shellDto, int id);
+
+        Task<Shell?> UpdateProductId(UpdateProductIdForShellDto updateProductIdForShellDto, int id);
     }
 }

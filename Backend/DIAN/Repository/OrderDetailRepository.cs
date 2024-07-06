@@ -13,14 +13,14 @@ namespace DIAN_.Repository
             _context = context;
         }
 
-        public async Task<Orderdetail?> CreateAsync(Orderdetail orderdetail)
-        {
-            if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
-            if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
-            await _context.AddAsync(orderdetail);
-            await _context.SaveChangesAsync();
-            return orderdetail;
-        }
+        //public async Task<Orderdetail?> CreateAsync(Orderdetail orderdetail)
+        //{
+        //    if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
+        //    if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
+        //    await _context.AddAsync(orderdetail);
+        //    await _context.SaveChangesAsync();
+        //    return orderdetail;
+        //}
 
         public async Task<Orderdetail?> DeleteAsync(int id)
         {
@@ -57,15 +57,13 @@ namespace DIAN_.Repository
             var updateDetail = await _context.Orderdetails.FirstOrDefaultAsync(o => o.OrderDetailId == id);
             if (updateDetail == null) { return null; }
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
-            if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
+           // if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
 
             // Assuming updateDetail and orderdetail are instances of the same class
             updateDetail.OrderId = orderdetail.OrderId;
             updateDetail.LineTotal = orderdetail.LineTotal;
             updateDetail.ProductId = orderdetail.ProductId;
 
-            // Copying nullable properties
-            updateDetail.ShellMaterialId = orderdetail.ShellMaterialId ?? null;
             updateDetail.Size = orderdetail.Size ?? null;
 
             // Copying non-nullable property
@@ -75,18 +73,18 @@ namespace DIAN_.Repository
             return updateDetail;
         }
 
-        public async Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail orderdetail, int id)
-        {
-            var existingOrderDetail = await _context.Orderdetails.FirstOrDefaultAsync(x => x.OrderDetailId == id);
-            if (existingOrderDetail != null)
-            {
-                existingOrderDetail.CertificateScan = orderdetail.CertificateScan;
-                await _context.SaveChangesAsync();
-                return existingOrderDetail;
-            }
-            throw new KeyNotFoundException("Order detail does not exist");
+        //public async Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail orderdetail, int id)
+        //{
+        //    var existingOrderDetail = await _context.Orderdetails.FirstOrDefaultAsync(x => x.OrderDetailId == id);
+        //    if (existingOrderDetail != null)
+        //    {
+        //        existingOrderDetail.CertificateScan = orderdetail.CertificateScan;
+        //        await _context.SaveChangesAsync();
+        //        return existingOrderDetail;
+        //    }
+        //    throw new KeyNotFoundException("Order detail does not exist");
 
-        }
+        //}
 
         public async Task<OrderBillDto?> ViewOrderBillAsync(int orderId)
         {
@@ -97,7 +95,7 @@ namespace DIAN_.Repository
                     combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
                     (combined, p) => new { combined.po, combined.od, p })
                 .SelectMany(
-                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondId).DefaultIfEmpty(),
+                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.ProductId).DefaultIfEmpty(),
                     (combined, d) => new { combined.po, combined.od, combined.p, d })
                 .GroupBy(x => x.po.OrderId)
                 .Select(g => new OrderBillDto

@@ -9,13 +9,13 @@ namespace DIAN_.Interfaces
         Task<List<Orderdetail>> GetAllAsync();
         Task<Orderdetail?> GetByIdAsync(int id);
         Task<List<Orderdetail>?> GetByOrderIdAsync(int id);
-        Task<Orderdetail?> CreateAsync(Orderdetail orderdetail);
+        //Task<Orderdetail?> CreateAsync(Orderdetail orderdetail);
         Task<Orderdetail?> UpdateAsync(Orderdetail orderdetail, int id);
         Task<Orderdetail?> DeleteAsync(int id);
 
         Task<OrderBillDto?> ViewOrderBillAsync(int orderId);
 
-        Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail diamondModel, int id);
+        //Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail diamondModel, int id);
 
     }
 }

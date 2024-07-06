@@ -11,13 +11,9 @@ public partial class Orderdetail
 
     public int OrderId { get; set; }
 
-    public decimal LineTotal { get; set; }
-
-    public string CertificateScan { get; set; }
-
     public int ProductId { get; set; }
 
-    public int? ShellMaterialId { get; set; }
+    public decimal LineTotal { get; set; }
 
     public decimal? Size { get; set; }
 
@@ -26,8 +22,6 @@ public partial class Orderdetail
     public virtual Purchaseorder Order { get; set; }
 
     public virtual Product Product { get; set; }
-
-    public virtual Shellmaterial ShellMaterial { get; set; }
 
     public virtual Warranty Warranty { get; set; }
 }
