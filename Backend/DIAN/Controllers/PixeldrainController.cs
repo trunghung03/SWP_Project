@@ -179,6 +179,12 @@ namespace DIAN_.Controllers
                         form.Add(new StringContent(fileName), "name");
                     }
 
+                    // Add the API key in the headers
+                    var apiKey = "78159216-1c26-4e2a-bb85-d4c08b04b949";
+                    var authToken = Convert.ToBase64String(Encoding.ASCII.GetBytes(":" + apiKey));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+
+
                     var response = await client.PostAsync("https://pixeldrain.com/api/file", form);
 
                     if (!response.IsSuccessStatusCode)
