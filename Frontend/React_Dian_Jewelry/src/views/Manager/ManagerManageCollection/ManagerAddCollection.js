@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import { addCollection } from '../../../services/ManagerService/ManagerCollectionService.js';
+import { addCollection,uploadImage } from '../../../services/ManagerService/ManagerCollectionService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
 
 const ManagerAddCollection = () => {
@@ -14,17 +14,61 @@ const ManagerAddCollection = () => {
         description: '',
         imageLink: ''
     });
+    const [imageUrls, setImageUrls] = useState([]); // Array to store individual image URLs
+    const [imagePreviews, setImagePreviews] = useState([]);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCollectionData({ ...collectionData, [name]: value });
     };
 
+    const handleImageUpload = async (event) => {
+        const files = event.target.files;
+        if (!files.length) {
+            console.error("No file selected.");
+            return;
+        }
+
+        const newImageUrls = [];
+        const newImagePreviews = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const formData = new FormData();
+            formData.append("file", file); // Ensure the key matches your API's expected key
+
+            try {
+                const response = await uploadImage(formData);
+                const url = response.url;
+                console.log("Uploaded image URL:", url);
+                newImageUrls.push(url);
+                newImagePreviews.push(URL.createObjectURL(file));
+            } catch (error) {
+                console.error("Upload error:", error);
+            }
+        }
+
+        setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
+        setImagePreviews((prevPreviews) => [...prevPreviews, ...newImagePreviews]);
+
+        event.target.value = null;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const collectionDataWithStatus = { ...collectionData, status: true };
-            await addCollection(collectionDataWithStatus);
+            // Concatenate image URLs into a single string
+            const imageLinksString = imageUrls.join(';');
+            
+            // Update the collectionData with the concatenated image URLs
+            const collectionDataWithImages = { 
+                ...collectionData, 
+                imageLink: imageLinksString, // Update the imageLink field
+                status: true 
+            };
+
+            await addCollection(collectionDataWithImages);
             swal("Success", "Collection added successfully", "success");
             navigate('/manager-collection-list');
         } catch (error) {
@@ -74,9 +118,43 @@ const ManagerAddCollection = () => {
                         <label>Description</label>
                         <input type="text" placeholder="Enter collection's description" name="description" value={collectionData.description} onChange={handleChange} required />
                     </div>
-                    <div className="manager_add_diamond_form_group">
-                        <label>Image Link</label>
-                        <input type="text" name="imageLink" placeholder="Enter collection's image link" value={collectionData.imageLink} onChange={handleChange} required />
+                    <div className="manager_add_collection_form_group">
+                        <label>Images</label>
+                        <input type="file" name="images" accept="image/*" multiple onChange={handleImageUpload} />
+                        <div className="image_previews">
+                            {imagePreviews.map((preview, index) => (
+                                <div key={index} className="image_preview_container">
+                                    <button
+                                        onClick={() => {
+                                            const updatedImagePreviews = imagePreviews.filter((_, i) => i !== index);
+                                            const updatedImageUrls = imageUrls.filter((_, i) => i !== index);
+                                            setImagePreviews(updatedImagePreviews);
+                                            setImageUrls(updatedImageUrls);
+                                        }}
+                                        style={{
+                                            display: "block",
+                                            marginTop: "1%",
+                                            background: "none",
+                                            border: "none",
+                                            cursor: "pointer",
+                                            fontSize: "20px",
+                                            marginLeft: "90%"
+                                        }}
+                                    >
+                                        &#x2715; {/* Unicode character for "X" */}
+                                    </button>
+                                    <img
+                                        src={preview}
+                                        alt="Collection avatar"
+                                        style={{
+                                            width: "87%",
+                                            height: "40%",
+                                            margin: "auto",
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>

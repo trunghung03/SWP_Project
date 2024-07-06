@@ -56,4 +56,9 @@ const getAllCollection = async () => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, getProductCategory, getAllCollection,getProductCollection,getProductDiamond, getAllCategories };
+const uploadImage = async (data) => {
+  const response = await axios.post(`${API_BASE_URL}/pixeldrain/upload`, data);
+  return response.data;
+};
+
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, uploadImage,getProductCategory, getAllCollection,getProductCollection,getProductDiamond, getAllCategories };

@@ -32,4 +32,9 @@ const changeStatus = async (id) => {
     return response.data;
 };
 
-export { ShowAllCollection, deleteCollectionById, searchCollectionById, addCollection, updateCollectionById, changeStatus };
+const uploadImage = async (data) => {
+    const response = await axios.post(`${API_BASE_URL}/pixeldrain/upload`, data);
+    return response.data;
+};
+
+export { ShowAllCollection, deleteCollectionById, searchCollectionById, addCollection, updateCollectionById, changeStatus, uploadImage };
