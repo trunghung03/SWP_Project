@@ -2,8 +2,10 @@
 using DIAN_.DTOs.ProductDTOs;
 using DIAN_.DTOs.ShellDto;
 using DIAN_.Interfaces;
+using DIAN_.Mapper;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace DIAN_.Services
 {
@@ -12,12 +14,14 @@ namespace DIAN_.Services
         private readonly IDiamondRepository _diamondRepository;
         private readonly IProductRepository _productRepository;
         private readonly IShellRepository _shellRepository;
-
-        public GoodsService(IDiamondRepository diamondRepository, IProductRepository productRepository, IShellRepository shellRepository)
+        private readonly ILogger<GoodsService> _logger;
+        public GoodsService(IDiamondRepository diamondRepository, IProductRepository productRepository, IShellRepository shellRepository, ILogger<GoodsService> logger)
         {
             _diamondRepository = diamondRepository;
             _productRepository = productRepository;
-            _shellRepository = shellRepository;
+            _shellRepository = shellRepository; 
+            _logger = logger;
+
         }
         public async Task<List<Diamond>> GetDiamondWithSame4c(int diamondId)
         {
@@ -61,39 +65,41 @@ namespace DIAN_.Services
             }
             return diamond.Carat > 1;
         }
-        public async Task AddMultipleProductsAsync(List<AddProductDto> products, int quantity)
+        public async Task AddMultipleProductsAsync(UpdateProductRequestDTO createProductRequest, List<AddProductDto> products, int quantity)
         {
             try
             {
+                var product = new Product
+                {
+                    ProductCode = "",
+                    Name = "",
+                    Price = 0,
+                    Status = true
+                };
+                _logger.LogInformation("Creating product...");
+                await _productRepository.CreateAsync(product);
                 for (int i = 0; i < quantity; i++)
                 {
                     foreach (var productDto in products)
                     {
-                        if (productDto.Shell == null || productDto.SubDiamond == null || productDto.RequiredMainDiamonds == null)
-                        {
-                            throw new ArgumentException("Invalid product data.");
-                        }
-
-                        var product = new Product
-                        {
-                            Status = true
-                        };
-                        await _productRepository.CreateAsync(product);
-
                         var updateShellDto = new UpdateProductIdForShellDto
                         {
                             ProductId = product.ProductId
                         };
+
                         var shellId = productDto.Shell.ShellId;
+                        _logger.LogInformation($"Updating shell... {shellId}", shellId);
                         await _shellRepository.UpdateProductId(updateShellDto, shellId);
+                        _logger.LogInformation("Shell updated.");
 
                         var updateDiamondDto = new UpdateProductIdForDiamondDto
                         {
                             ProductId = product.ProductId
                         };
                         var subDiamondId = productDto.SubDiamond.SubDiamondId;
+                        _logger.LogInformation($"Updating sub diamond... {subDiamondId}", subDiamondId);
                         await _diamondRepository.UpdateProductId(updateDiamondDto, subDiamondId);
-
+                        _logger.LogInformation("Sub diamond updated.");
                         foreach (var mainDiamondDto in productDto.RequiredMainDiamonds)
                         {
                             foreach (var diamondId in mainDiamondDto.RequiredDiamondIds)
@@ -102,11 +108,14 @@ namespace DIAN_.Services
                                 {
                                     ProductId = product.ProductId
                                 };
+                                _logger.LogInformation($"Updating main diamond... {diamondId}", diamondId);
                                 await _diamondRepository.UpdateProductId(updateProductIdOfMainDiamond, diamondId);
+                                _logger.LogInformation("Main diamond updated.");
                             }
                         }
                     }
                 }
+                 product = await _productRepository.UpdateProductAsync(createProductRequest.ToProductFromUpdateDTO(product.ProductId), product.ProductId);
             }
             catch (DbUpdateException ex)
             {
@@ -133,6 +142,7 @@ namespace DIAN_.Services
                 throw;
             }
         }
+
 
 
         public async Task<ProductDetailWithSpecificDiamondDto> GetProductWithDetailsAsync(int productId)

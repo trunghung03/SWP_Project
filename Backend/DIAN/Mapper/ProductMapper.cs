@@ -5,16 +5,21 @@ namespace DIAN_.Mapper
 {
     public static class ProductMapper
     {
-        public static Product ToProductFromUpdateDTO(this UpdateProductRequestDTO updateDTO, int id)
+        public static Product ToProductFromUpdateDTO(this UpdateProductRequestDTO productRequestDTO, int id)
         {
             return new Product
             {
-                ProductId = id,
-                Name = updateDTO.Name,
-                Description = updateDTO.Description,
-                ImageLinkList = updateDTO.ImageLinkList,
-                CollectionId = updateDTO.CollectionId,
-                CategoryId = updateDTO.CategoryId,
+                Name = productRequestDTO.Name,
+                Price = productRequestDTO.Price,
+                ProductCode = productRequestDTO.ProductCode,
+                LaborCost = productRequestDTO.LaborPrice,
+                Description = productRequestDTO.Description,
+                ImageLinkList = productRequestDTO.imageLinkList,
+                MainDiamondAmount = productRequestDTO.MainDiamondAmount,
+                SubDiamondAmount = productRequestDTO.SubDiamondAmount,
+                CollectionId = productRequestDTO.CollectionId,
+                CategoryId = productRequestDTO.CategoryId,
+                Status = true
             };
         }
 
@@ -103,6 +108,8 @@ namespace DIAN_.Mapper
                 LaborCost = productRequestDTO.LaborPrice,
                 Description = productRequestDTO.Description,
                 ImageLinkList = productRequestDTO.imageLinkList,
+                MainDiamondAmount = productRequestDTO.MainDiamondAmount,
+                SubDiamondAmount = productRequestDTO.SubDiamondAmount,
                 CollectionId = productRequestDTO.CollectionId,
                 CategoryId = productRequestDTO.CategoryId,
                 Status = true

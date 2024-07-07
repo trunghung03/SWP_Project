@@ -106,15 +106,24 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
 
-                await _goodsService.AddMultipleProductsAsync(request.Products, request.Quantity);
+                await _goodsService.AddMultipleProductsAsync(request.CreateProductRequest,request.Products, request.Quantity);
 
                 return Ok("Products added successfully.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log detailed error message
+                var errorMessage = $"Exception: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" InnerException: {ex.InnerException.Message}";
+                }
+                // Add logging here (e.g., using a logging framework)
+                Console.WriteLine(errorMessage);
+                return StatusCode(500, "An error occurred while adding the products.");
             }
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
         {

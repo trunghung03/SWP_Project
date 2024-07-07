@@ -15,6 +15,6 @@ namespace DIAN_.Interfaces
 
         Task<bool> IsMainDiamond(int diamondId);
 
-        Task AddMultipleProductsAsync(List<AddProductDto> products, int quantity);
+        Task AddMultipleProductsAsync(UpdateProductRequestDTO productRequestDTO, List<AddProductDto> products, int quantity);
     }
 }
