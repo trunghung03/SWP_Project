@@ -56,8 +56,8 @@ public class NotificationsHub : Hub<INotificationClient>
         _logger.LogInformation($"Customer {customerId} connected");
         var connectionId = Context.ConnectionId;
         _logger.LogInformation($"Connection ID: {connectionId}");
-        _connectionService.AddConnection(customerId, connectionId);
-
+        //_connectionService.AddConnection(customerId, connectionId);
+        customerConnectionMap.AddOrUpdate(customerId, connectionId, (key, oldValue) => connectionId);
         await base.OnConnectedAsync();
     }
 
