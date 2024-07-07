@@ -52,6 +52,19 @@ namespace DIAN_.Repository
             return shell;
         }
 
+        public async Task<Shell?> GetShellByProductId(int productId)
+        {
+            var shell = await _context.Shells
+                .Where(s => s.Status && s.ProductId == productId)
+                .FirstOrDefaultAsync();
+            if (shell == null)
+            {
+                throw new KeyNotFoundException("Shell does not exist");
+            }
+            return shell;
+
+        }
+
         public async Task<Shell?> UpdateProductId(UpdateProductIdForShellDto updateProductIdForShellDto, int id)
         {
             var shell = await _context.Shells.FirstOrDefaultAsync(s => s.ShellId == id);

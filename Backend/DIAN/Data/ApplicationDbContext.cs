@@ -47,7 +47,7 @@ public partial class ApplicationDbContext : DbContext
     {
         modelBuilder.Entity<Article>(entity =>
         {
-            entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E94CB0DF0");
+            entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E977FE649");
 
             entity.ToTable("ARTICLE");
 
@@ -70,11 +70,11 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__CATEGORY__19093A2B6ECE7E3D");
+            entity.HasKey(e => e.CategoryId).HasName("PK__CATEGORY__19093A2B997D4652");
 
             entity.ToTable("CATEGORY");
 
-            entity.HasIndex(e => e.Name, "UQ__CATEGORY__737584F65CB5B878").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__CATEGORY__737584F6F092E558").IsUnique();
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.Name)
@@ -85,7 +85,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Collection>(entity =>
         {
-            entity.HasKey(e => e.CollectionId).HasName("PK__COLLECTI__7DE6BC24B47F75B1");
+            entity.HasKey(e => e.CollectionId).HasName("PK__COLLECTI__7DE6BC240E99479D");
 
             entity.ToTable("COLLECTION");
 
@@ -101,7 +101,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__COMPANY__2D971C4C34D60491");
+            entity.HasKey(e => e.CompanyId).HasName("PK__COMPANY__2D971C4C704546BD");
 
             entity.ToTable("COMPANY");
 
@@ -125,7 +125,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__CUSTOMER__A4AE64B8406D0717");
+            entity.HasKey(e => e.CustomerId).HasName("PK__CUSTOMER__A4AE64B8AFBC4074");
 
             entity.ToTable("CUSTOMER");
 
@@ -150,7 +150,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Diamond>(entity =>
         {
-            entity.HasKey(e => e.DiamondId).HasName("PK__DIAMOND__23A8E7BB13B72EF3");
+            entity.HasKey(e => e.DiamondId).HasName("PK__DIAMOND__23A8E7BBF0E08212");
 
             entity.ToTable("DIAMOND");
 
@@ -166,13 +166,12 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Diamonds)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__DIAMOND__Product__5AEE82B9");
         });
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.HasKey(e => e.EmployeeId).HasName("PK__EMPLOYEE__7AD04FF193F4C93F");
+            entity.HasKey(e => e.EmployeeId).HasName("PK__EMPLOYEE__7AD04FF196E0B819");
 
             entity.ToTable("EMPLOYEE");
 
@@ -199,7 +198,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Orderdetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__ORDERDET__D3B9D30C99C35EC8");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__ORDERDET__D3B9D30C8DF2168A");
 
             entity.ToTable("ORDERDETAIL");
 
@@ -223,11 +222,11 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__PRODUCT__2D10D14A928AE2BF");
+            entity.HasKey(e => e.ProductId).HasName("PK__PRODUCT__2D10D14A87667C4D");
 
             entity.ToTable("PRODUCT");
 
-            entity.HasIndex(e => e.ProductCode, "UQ__PRODUCT__C2068389EE78149C").IsUnique();
+            entity.HasIndex(e => e.ProductCode, "UQ__PRODUCT__C2068389AA7F67FD").IsUnique();
 
             entity.Property(e => e.ProductId).HasColumnName("productID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -254,7 +253,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__PROMOTIO__52C42F2FFEEEF82E");
+            entity.HasKey(e => e.PromotionId).HasName("PK__PROMOTIO__52C42F2FE0CBEE53");
 
             entity.ToTable("PROMOTION");
 
@@ -269,7 +268,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Purchaseorder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__PURCHASE__C3905BAFAC5B6E62");
+            entity.HasKey(e => e.OrderId).HasName("PK__PURCHASE__C3905BAFE36D8C1D");
 
             entity.ToTable("PURCHASEORDER");
 
@@ -314,7 +313,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Shell>(entity =>
         {
-            entity.HasKey(e => e.ShellId).HasName("PK__SHELL__DB5C54BDCD12104B");
+            entity.HasKey(e => e.ShellId).HasName("PK__SHELL__DB5C54BD16581428");
 
             entity.ToTable("SHELL");
 
@@ -335,7 +334,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Shellmaterial>(entity =>
         {
-            entity.HasKey(e => e.ShellMaterialId).HasName("PK__SHELLMAT__B375E41DDE470E96");
+            entity.HasKey(e => e.ShellMaterialId).HasName("PK__SHELLMAT__B375E41D5591D8DA");
 
             entity.ToTable("SHELLMATERIAL");
 
@@ -349,7 +348,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__SIZE__19093A2B4620E486");
+            entity.HasKey(e => e.CategoryId).HasName("PK__SIZE__19093A2BF50AE0F1");
 
             entity.ToTable("SIZE");
 
@@ -368,7 +367,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Warranty>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__WARRANTY__D3B9D30C4B6ADA1F");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__WARRANTY__D3B9D30C579F876D");
 
             entity.ToTable("WARRANTY");
 

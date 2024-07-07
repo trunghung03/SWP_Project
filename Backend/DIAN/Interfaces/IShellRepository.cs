@@ -8,6 +8,8 @@ namespace DIAN_.Interfaces
         Task<Shell> CreateShellAsync(Shell shell);
         Task<Shell?> DeleteShellAsync(int id);
         Task<Shell?> GetShellByIdAsync(int id);
+
+        Task<Shell?> GetShellByProductId(int productId);
         Task<List<Shell>?> GetAllShellAsync();
         Task<Shell?> UpdateShellAsync(Shell shellDTO, int id);
 

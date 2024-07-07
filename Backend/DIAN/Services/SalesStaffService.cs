@@ -18,74 +18,92 @@ namespace DIAN_.Services
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
-        private readonly IWarrantyRepository _warrantyRepository;
         private readonly IDiamondRepository _diamondRepository;
+        private IGoodsService _goodsService;
         private readonly IShellRepository _shellRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IHubContext<NotificationsHub> _hubContext;
         private readonly ILogger<SalesStaffService> _logger;
         public SalesStaffService(IPurchaseOrderRepository purchaseOrderRepository, IOrderDetailRepository orderDetailRepository,
-            IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository,
+            IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository, IGoodsService goodsService,
             IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, IShellRepository shellRepository, IProductRepository productRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
-            _warrantyRepository = warrantyRepository;
             _diamondRepository = diamondRepository;
             _employeeRepository = employeeRepository;
             _hubContext = hubContext;
             _logger = logger;
             _shellRepository = shellRepository;
             _productRepository = productRepository;
+            _goodsService = goodsService;
         }
-        //public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId)
-        //{
-        //    if (status.Equals("Delivering", StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
-        //        if (orderDetails == null || !orderDetails.Any())
-        //        {
-        //            return false;
-        //        }
+        public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId)
+        {
+            if (status.Equals("Delivering", StringComparison.OrdinalIgnoreCase))
+            {
+                var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
+                if (orderDetails == null || !orderDetails.Any())
+                {
+                    return false;
+                }
 
-        //        foreach (var orderDetail in orderDetails)
-        //        {
-        //            var product = await _productRepository.GetByIdAsync(orderDetail.ProductId);
-        //            if (product == null)
-        //            {
-        //                return false;
-        //            }
-        //            var shell = await _shellRepository.GetShellByIdAsync(orderDetail.ProductId);
-        //            if (shell != null)
-        //            {
-        //                var updateShellStockDto = new UpdateShellStock
-        //                {
-        //                    Quantity = shell.AmountAvailable - 1
-        //                };
-        //                var updatedShell = updateShellStockDto.ToShellFromUpdateStockDto(shell.ShellId);
-        //                await _shellRepository.UpdateShellStockAsync(updatedShell, shell.ShellId);
-        //            }
+                foreach (var orderDetail in orderDetails)
+                {
+                    var product = await _productRepository.GetByIdAsync(orderDetail.ProductId);
+                    if (product == null)
+                    {
+                        return false;
+                    }
+                    var shell = await _shellRepository.GetShellByIdAsync(orderDetail.ProductId);
+                    if (shell != null)
+                    {
+                        var updateShellStockDto = new UpdateShellStock
+                        {
+                            Quantity = shell.AmountAvailable - 1
+                        };
+                        var updatedShell = updateShellStockDto.ToShellFromUpdateStockDto(shell.ShellId);
+                        await _shellRepository.UpdateShellStockAsync(updatedShell, shell.ShellId);
+                    }
 
-        //            var mainDiamondAmount = 5;
-        //            var subDiamondAmount = 7;
-        //                var totalDiamondAmount = mainDiamondAmount + subDiamondAmount;
+                    var mainDiamondAmount = product.MainDiamondAmount ?? 0;
+                    var subDiamondAmount = product.SubDiamondAmount ?? 0;
 
-        //                var diamond = await _diamondRepository.GetDiamondByIdAsync(orderDetail.ProductId);
-        //                if (diamond != null)
-        //                {
-        //                    var updateDiamondStockDto = new UpdateDiamondStockDto
-        //                    {
-        //                        AmountAvailable = 10 - totalDiamondAmount
-        //                    };
-        //                    var updatedDiamond = updateDiamondStockDto.ToDiamondFromUpdateAmountAvailable(diamond.DiamondId);
-        //                    await _diamondRepository.UpdateAmountAvailable(updatedDiamond, diamond.DiamondId);
-                        
-        //            }
-        //        }
-        //        return true;
-        //    }
-        //    return false;
-        //}
+                    var diamonds = await _diamondRepository.GetDiamondsByProductIdAsync(orderDetail.ProductId);
+                    if (diamonds != null && diamonds.Any())
+                    {
+                        int mainDiamondCount = 0;
+
+                        foreach (var diamond in diamonds)
+                        {
+                            bool isMainDiamond = await _goodsService.IsMainDiamond(diamond.DiamondId);
+
+                            if (isMainDiamond && mainDiamondCount < mainDiamondAmount)
+                            {
+                                var updateDiamondStockDto = new UpdateDiamondStockDto
+                                {
+                                    AmountAvailable = diamond.Quantity - 1
+                                };
+                                var updatedDiamond = updateDiamondStockDto.ToDiamondFromUpdateAmountAvailable(diamond.DiamondId);
+                                await _diamondRepository.UpdateAmountAvailable(updatedDiamond, diamond.DiamondId);
+                                mainDiamondCount++;
+                            }
+                            else if (!isMainDiamond)
+                            {
+                                var updateDiamondStockDto = new UpdateDiamondStockDto
+                                {
+                                    AmountAvailable = diamond.Quantity - subDiamondAmount
+                                };
+                                var updatedDiamond = updateDiamondStockDto.ToDiamondFromUpdateAmountAvailable(diamond.DiamondId);
+                                await _diamondRepository.UpdateAmountAvailable(updatedDiamond, diamond.DiamondId);
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
 
         public async Task<Purchaseorder> UpdateOrderStatus(string status, int orderId)
         {

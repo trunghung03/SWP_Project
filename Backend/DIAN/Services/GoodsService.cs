@@ -3,6 +3,7 @@ using DIAN_.DTOs.ProductDTOs;
 using DIAN_.DTOs.ShellDto;
 using DIAN_.Interfaces;
 using DIAN_.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Services
 {
@@ -62,46 +63,79 @@ namespace DIAN_.Services
         }
         public async Task AddMultipleProductsAsync(List<AddProductDto> products, int quantity)
         {
-            for (int i = 0; i < quantity; i++)
+            try
             {
-                foreach (var productDto in products)
+                for (int i = 0; i < quantity; i++)
                 {
-                    var product = new Product
+                    foreach (var productDto in products)
                     {
-                        Status = true
-                    };
-                    await _productRepository.CreateAsync(product);
-
-                    var updateShellDto = new UpdateProductIdForShellDto
-                    {
-                        ProductId = product.ProductId
-                    };
-                    var shellId = productDto.Shell.ShellId;
-                    await _shellRepository.UpdateProductId(updateShellDto, shellId);
-
-                    var updateDiamondDto = new UpdateProductIdForDiamondDto
-                    {
-                        ProductId = product.ProductId
-                    };
-                    var subDiamondId = productDto.SubDiamond.SubDiamondId;
-                    await _diamondRepository.UpdateProductId(updateDiamondDto, subDiamondId);
-
-                    foreach (var mainDiamondDto in productDto.RequiredMainDiamonds)
-                    {
-                        foreach (var diamondId in mainDiamondDto.RequiredDiamondIds)
+                        if (productDto.Shell == null || productDto.SubDiamond == null || productDto.RequiredMainDiamonds == null)
                         {
-                            var updateProductIdOfMainDiamond = new UpdateProductIdForDiamondDto
+                            throw new ArgumentException("Invalid product data.");
+                        }
+
+                        var product = new Product
+                        {
+                            Status = true
+                        };
+                        await _productRepository.CreateAsync(product);
+
+                        var updateShellDto = new UpdateProductIdForShellDto
+                        {
+                            ProductId = product.ProductId
+                        };
+                        var shellId = productDto.Shell.ShellId;
+                        await _shellRepository.UpdateProductId(updateShellDto, shellId);
+
+                        var updateDiamondDto = new UpdateProductIdForDiamondDto
+                        {
+                            ProductId = product.ProductId
+                        };
+                        var subDiamondId = productDto.SubDiamond.SubDiamondId;
+                        await _diamondRepository.UpdateProductId(updateDiamondDto, subDiamondId);
+
+                        foreach (var mainDiamondDto in productDto.RequiredMainDiamonds)
+                        {
+                            foreach (var diamondId in mainDiamondDto.RequiredDiamondIds)
                             {
-                                ProductId = product.ProductId
-                            };
-                            var MainDiamondId = productDto.SubDiamond.SubDiamondId;
-                            await _diamondRepository.UpdateProductId(updateProductIdOfMainDiamond, subDiamondId);
+                                var updateProductIdOfMainDiamond = new UpdateProductIdForDiamondDto
+                                {
+                                    ProductId = product.ProductId
+                                };
+                                await _diamondRepository.UpdateProductId(updateProductIdOfMainDiamond, diamondId);
+                            }
                         }
                     }
                 }
             }
+            catch (DbUpdateException ex)
+            {
+                // Log detailed error message
+                var errorMessage = $"DbUpdateException: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" InnerException: {ex.InnerException.Message}";
+                }
+                // Add logging here (e.g., using a logging framework)
+                Console.WriteLine(errorMessage);
+                throw new Exception("An error occurred while saving the products. Please check the input data and try again.");
+            }
+            catch (Exception ex)
+            {
+                // Log detailed error message
+                var errorMessage = $"Exception: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" InnerException: {ex.InnerException.Message}";
+                }
+                // Add logging here (e.g., using a logging framework)
+                Console.WriteLine(errorMessage);
+                throw;
+            }
         }
-        public async Task<ProductDetailDTO> GetProductWithDetailsAsync(int productId)
+
+
+        public async Task<ProductDetailWithSpecificDiamondDto> GetProductWithDetailsAsync(int productId)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             if (product == null)
@@ -109,8 +143,8 @@ namespace DIAN_.Services
                 throw new Exception($"Product with ID {productId} not found.");
             }
 
-            var shell = await _shellRepository.GetShellByIdAsync(productId); //it should be get by productid
-            var subDiamond = await _diamondRepository.GetDiamondsByProductIdAsync(productId);
+            var shell = await _shellRepository.GetShellByProductId(productId);
+            var subDiamond = await _diamondRepository.GetSingleDiamondByProductId(productId);
             var mainDiamonds = await _diamondRepository.GetDiamondsByProductIdAsync(productId);
 
             // Ensure the number of main diamonds matches the MainDiamondAmount

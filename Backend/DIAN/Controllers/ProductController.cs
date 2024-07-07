@@ -110,9 +110,9 @@ namespace DIAN_.Controllers
 
                 return Ok("Products added successfully.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                throw;
             }
         }
         [HttpPut("{id}")]

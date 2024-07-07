@@ -5,6 +5,7 @@ using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace DIAN_.Repository
 {
@@ -232,6 +233,15 @@ namespace DIAN_.Repository
             diamond.ProductId = updateProductIdForDiamondDto.ProductId;
             await _context.SaveChangesAsync();
             return diamond;
+        }
+
+        public async Task<Diamond> GetSingleDiamondByProductId(int productId)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(d => d.DiamondId == productId);
+            if (existingDiamond == null) {
+                throw new KeyNotFoundException("Diamond does not exist");
+            }
+            return existingDiamond;
         }
     }
 }

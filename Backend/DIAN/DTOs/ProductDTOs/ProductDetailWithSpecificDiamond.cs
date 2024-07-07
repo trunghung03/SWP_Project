@@ -1,3 +1,5 @@
+using DIAN_.Models;
+
 namespace DIAN_.DTOs.ProductDTOs
 {
     public class ProductDetailWithSpecificDiamondDto

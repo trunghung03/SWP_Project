@@ -19,6 +19,7 @@ namespace DIAN_.Interfaces
         Task<List<Diamond>> GetDiamondsBy4cAsync(decimal carat, string cut, string color, string clarity);
 
         Task<List<Diamond>> GetDiamondsByProductIdAsync(int productId);
+        Task<Diamond> GetSingleDiamondByProductId(int productId);
         Task<List<Diamond>> GetDiamondsByCaratAsync(decimal minCarat, decimal maxCarat);
 
         Task<Diamond?> UpdateProductId(UpdateProductIdForDiamondDto updateProductIdForDiamondDto, int id);

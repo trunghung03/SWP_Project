@@ -21,7 +21,7 @@ public partial class Diamond
 
     public string CertificateScan { get; set; }
 
-    public int ProductId { get; set; }
+    public int? ProductId { get; set; }
 
     public int Quantity { get; set; }
 
