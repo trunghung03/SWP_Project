@@ -346,12 +346,11 @@ const ManagerStatitic = () => {
       </div>
       <div
         className="manager_statitic_content"
-        style={{ backgroundColor: "#f6f6f6" }}
       >
-        {/* <div className="manager_manage_diamond_header">
+        <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
         </div> 
-         <hr className="manager_header_line"></hr> */}
+         <hr className="manager_header_line"></hr>
           <h3 className="manager_manage_statistic_title">Statistic Report</h3>
           <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
             <input
@@ -373,7 +372,6 @@ const ManagerStatitic = () => {
                 <div
                   className="manager_manage_report_div"
                   style={{
-                    backgroundColor: "white",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -392,7 +390,6 @@ const ManagerStatitic = () => {
                 <div
                   className="manager_manage_report_div"
                   style={{
-                    backgroundColor: "white",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -412,7 +409,6 @@ const ManagerStatitic = () => {
                 <div
                   className="manager_manage_report_div"
                   style={{
-                    backgroundColor: "white",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -431,7 +427,6 @@ const ManagerStatitic = () => {
                 <div
                   className="manager_manage_report_div"
                   style={{
-                    backgroundColor: "white",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -537,7 +532,8 @@ const ManagerStatitic = () => {
                   padding: "20px",
                   border: "1px solid #ddd",
                   borderRadius: "8px",
-                  backgroundColor:"white"
+                  backgroundColor:"white",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
                 }}
               >
                 <h3>Sales</h3>
@@ -556,7 +552,8 @@ const ManagerStatitic = () => {
                   padding: "20px",
                   border: "1px solid #ddd",
                   borderRadius: "8px",
-                   backgroundColor:"white"
+                   backgroundColor:"white",
+                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
                 }}
               >
                 <h3>Category Sold</h3>
@@ -596,7 +593,8 @@ const ManagerStatitic = () => {
                 padding: "20px",
                 border: "1px solid #ddd",
                 borderRadius: "8px",
-                 backgroundColor:"white"
+                 backgroundColor:"white",
+                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
               }}
             >
               <div>
@@ -610,9 +608,10 @@ const ManagerStatitic = () => {
                 )}
               </div>
             </div>
-            <div className="manager_manage_diamond_table_wrapper">
+            <div className="manager_manage_diamond_table_wrapper"
+            style ={{marginTop:"3.5%"}}>
               <h3>Top 10 Selling Products</h3>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} style={{boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"}}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
@@ -652,7 +651,8 @@ const ManagerStatitic = () => {
                 </Table>
               </TableContainer>
             </div>
-            <div className="manager_manage_diamond_table_wrapper">
+            <div className="manager_manage_diamond_table_wrapper"
+            style ={{marginTop:"3.5%"}}>Date:
               <input
                 className="manager_statis_input_date"
                 type="month"
@@ -660,7 +660,7 @@ const ManagerStatitic = () => {
                 onChange={MonthYearStats}
                 style={{ margin: "10px" }}
               ></input>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper}  style ={{boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"}}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
