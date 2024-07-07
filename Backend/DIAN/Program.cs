@@ -103,20 +103,22 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();
 builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
 
+builder.Services.AddSingleton<IConnectionService, ConnectionService>();
+
 
 //builder.Services.AddScoped<IJobService, JobService>();
 
 var app = builder.Build();
 
-app.UseCors(builder => builder
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+//app.UseCors(builder => builder
+//    .AllowAnyOrigin()
+//    .AllowAnyMethod()
+//    .AllowAnyHeader());
 
-//app.UseCors(builder =>
-//{
-//    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-//});
+app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+});
 
 if (!app.Environment.IsDevelopment())
 {

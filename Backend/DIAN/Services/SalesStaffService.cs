@@ -19,11 +19,12 @@ namespace DIAN_.Services
         private readonly IDiamondRepository _diamondRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IConnectionService _connectionService;
         private readonly IHubContext<NotificationsHub> _hubContext;
         private readonly ILogger<SalesStaffService> _logger;
         public SalesStaffService(IPurchaseOrderRepository purchaseOrderRepository, IOrderDetailRepository orderDetailRepository,
             IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository,
-            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, INotificationRepository notificationRepository)
+            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, INotificationRepository notificationRepository, IConnectionService connection)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -31,6 +32,7 @@ namespace DIAN_.Services
             _diamondRepository = diamondRepository;
             _employeeRepository = employeeRepository;
             _hubContext = hubContext;
+            _connectionService = connection;
             _logger = logger;
             _notificationRepository = notificationRepository;
         }
@@ -41,11 +43,14 @@ namespace DIAN_.Services
             if (order == null) throw new Exception("Order not found.");
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
-            var connectionId = NotificationsHub.GetConnectionIdForCustomer(order.UserId);
+            var connectionIds = _connectionService.GetConnectionId(order.UserId);
 
-            if (connectionId != null)
+            if (connectionIds != null && connectionIds.Any())
             {
-                await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                foreach (var connectionId in connectionIds)
+                {
+                    await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                }
             }
             else
             {
@@ -60,6 +65,7 @@ namespace DIAN_.Services
             }
             return updatedOrder;
         }
+
 
         public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int salesStaffId)
         {
