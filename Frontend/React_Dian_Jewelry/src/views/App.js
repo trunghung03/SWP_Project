@@ -178,10 +178,12 @@ function AppContent() {
           <Route path="/sales-staff-update-content/:id" element={<SSUpdateContent />} />
           <Route path="/sales-staff-warranty-list" element={<SSWarrantyList />} />
           <Route path="/rich-text-page" element={<RichTextPage />} />
+          <Route path="/sales-staff-edit-profile" element={<SSEditProfile />} />
 
           {/* Delivery Staff */}
           <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
           <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
+          <Route path="/delivery-staff-edit-profile" element={<DSEditProfile />} />
         </Routes>
 
         {shouldShowChatbot && !isClosed && (

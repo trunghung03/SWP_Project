@@ -9,6 +9,7 @@ import { getUserInfo, updateCustomerInfo } from '../../services/UserService';
 import { UserContext } from '../../services/UserContext';
 import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
 import logo from "../../assets/img/logoN.png";
+import { changePassword } from '../../services/UserService';
 
 function DSEditProfile() {
   const navigate = useNavigate();
