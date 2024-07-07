@@ -10,5 +10,7 @@ namespace DIAN_.Interfaces
         void RemoveConnection(int customerId, string connectionId);
 
         ConcurrentDictionary<int, ConcurrentBag<string>> GetConnections();
+
+        Task SaveConnectionToDatabase(int customerId, string connectionId);
     }
 }

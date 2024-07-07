@@ -19,6 +19,18 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Notification>> GetAllNotifications(int customerId)
+        {
+            return await _context.Notifications
+                .Where(n => n.CustomerId == customerId)
+                .ToListAsync();
+        }
+
+        public async Task<Notification> GetConnectionIDByCustomerId(int customerId)
+        {
+            return await _context.Notifications.Where(c => customerId == c.CustomerId).FirstOrDefaultAsync();   
+        }
+
         public async Task<IEnumerable<Notification>> GetUndeliveredNotifications(int customerId)
         {
             return await _context.Notifications
@@ -26,11 +38,32 @@ namespace DIAN_.Repository
                 .ToListAsync();
         }
 
+        public Task<IEnumerable<Notification>> RemoveNotification(Notification notification)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Notification>> UpdateConnectionID(int customerId, string connectionId)
+        {
+            var notifications = await _context.Notifications
+                .Where(n => n.CustomerId == customerId && !n.IsDelivered)
+                .ToListAsync();
+
+            foreach (var notification in notifications)
+            {
+                notification.ConnectionId = connectionId;
+            }
+
+            await _context.SaveChangesAsync();
+            return notifications;
+        }
+
         public async Task UpdateNotification(Notification notification)
         {
             _context.Notifications.Update(notification);
             await _context.SaveChangesAsync();
         }
+
     }
 
 }

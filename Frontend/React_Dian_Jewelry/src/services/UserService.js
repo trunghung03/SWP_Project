@@ -21,6 +21,15 @@ const getUserInfo = (email) => {
 const getEmployeeInfo = (email) => {
     return axios.get(`${API_BASE_URL}/employees/${encodeURIComponent(email)}`);
 }
+const getNotifications = async (customerId) => {
+    return axios.get(`${API_BASE_URL}/api/notifications/all`, { params: { customerId } })
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+  }
 
 const updateCustomerInfo = (id, data) => {
     return axios.put(`${API_BASE_URL}/accounts/${id}`, data);
@@ -43,6 +52,7 @@ export {
     employeeLoginApi, 
     getUserInfo, 
     getEmployeeInfo, 
+    getNotifications,
     googleLoginApi,
     updateCustomerInfo, 
     forgotPasswordApi, 

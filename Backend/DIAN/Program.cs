@@ -105,7 +105,7 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();
 builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
 
-builder.Services.AddSingleton<IConnectionService, ConnectionService>();
+builder.Services.AddScoped<IConnectionService, ConnectionService>();
 
 
 //builder.Services.AddScoped<IJobService, JobService>();

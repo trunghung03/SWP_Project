@@ -56,31 +56,31 @@ public class NotificationsHub : Hub<INotificationClient>
         _logger.LogInformation($"Customer {customerId} connected");
         var connectionId = Context.ConnectionId;
         _logger.LogInformation($"Connection ID: {connectionId}");
-        //_connectionService.AddConnection(customerId, connectionId);
+
+        _connectionService.AddConnection(customerId, connectionId);
         customerConnectionMap.AddOrUpdate(customerId, connectionId, (key, oldValue) => connectionId);
+
+        await _connectionService.SaveConnectionToDatabase(customerId, connectionId);
+        _logger.LogInformation($"Connection saved to database");
+        var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
+        foreach (var notification in undeliveredNotifications)
+        {
+            await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
+            notification.IsDelivered = true;
+            await _notificationRepository.UpdateNotification(notification);
+        }
+
         await base.OnConnectedAsync();
     }
 
-    //public override async Task OnConnectedAsync()
-    //{
-    //    var connectionId = _connectionService.GetConnectionId(customerId);
-    //    await Clients.Client(connectionId).SendAsync("ReceiveMessage", "Connected");
-    //}
-
-    //public override async Task OnDisconnectedAsync(Exception exception)
-    //{
-    //    var customerId = customerConnectionMap.FirstOrDefault(kvp => kvp.Value == Context.ConnectionId).Key;
-    //    customerConnectionMap.TryRemove(customerId, out _);
-    //    await base.OnDisconnectedAsync(exception);
-    //}
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         var httpContext = Context.GetHttpContext();
         int customerId = int.Parse(httpContext.Request.Query["customerId"]);
         var connectionId = Context.ConnectionId;
-
+        _logger.LogInformation($"Customer {customerId} disconnected");
         _connectionService.RemoveConnection(customerId, connectionId);
-
+        _logger.LogInformation($"Connection removed from memory");
         await base.OnDisconnectedAsync(exception);
     }
 

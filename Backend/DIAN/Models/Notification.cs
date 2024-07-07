@@ -16,4 +16,8 @@ public partial class Notification
     public bool IsDelivered { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public string ConnectionId { get; set; }
+
+    public bool MarkRead { get; set; }
 }
