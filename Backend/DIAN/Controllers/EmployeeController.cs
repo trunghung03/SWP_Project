@@ -4,6 +4,8 @@ using UserApplication.Interfaces;
 using DIAN_.DTOs.Account;
 using DIAN_.Interfaces;
 using DIAN_.Services;
+using DIAN_.DTOs.AccountDTO;
+using DIAN_.Repository;
 
 namespace UserApplication.Controllers
 {
@@ -338,6 +340,31 @@ namespace UserApplication.Controllers
 
                 return Ok(result);
             }catch(Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var employee = await _employeeRepository.GetByEmailAsync(changePasswordDto.Email);
+                if (employee == null) return NotFound();
+
+                var result = await _employeeRepository.ChangePassword(employee, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+                if (result is not null)
+                {
+                    return Ok("Password has been changed.");
+                }
+                else
+                {
+                    return Ok("Password is not match");
+                }
+            }
+            catch (Exception)
             {
                 throw;
             }

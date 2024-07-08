@@ -133,6 +133,16 @@ namespace DIAN_.Repository
             return true;
         }
 
-
+        public async Task<Employee?> ChangePassword(Employee employeeModel, string oldPassword, string newPassword)
+        {
+            var employee = await _context.Employees.FirstOrDefaultAsync(x => x.Email == employeeModel.Email);
+            if (employee == null) { return null; }
+            var verificationResult = _passwordHasher.VerifyHashedPassword(employee, employee.Password, oldPassword);
+            if (verificationResult == PasswordVerificationResult.Failed) { return null; }
+            employee.Password = _passwordHasher.HashPassword(employee, newPassword);
+            _context.Employees.Update(employee);
+            var result = await _context.SaveChangesAsync();
+            return employee;
+        }
     }
 }
