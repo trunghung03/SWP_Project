@@ -97,7 +97,8 @@ const Register = () => {
 
             if (!firstName || !lastName || !email || !password || !rePassword) {
                 toast.error("Please fill in all fields first.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 setLoading(false);
                 return;
@@ -115,7 +116,8 @@ const Register = () => {
 
             if (!isValidEmail(email)) {
                 toast.error("Wrong email format! Please enter a valid email.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 setLoading(false);
                 return;
@@ -123,7 +125,8 @@ const Register = () => {
 
             if (!isValidPassword(password)) {
                 toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 setLoading(false);
                 return;
@@ -131,7 +134,8 @@ const Register = () => {
 
             if (password !== rePassword) {
                 toast.error("Passwords have to be the same! Please try again.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 setLoading(false);
                 return;
@@ -139,7 +143,8 @@ const Register = () => {
 
             if (!tosCheckbox.checked) {
                 toast.error("Can not sign up if you do not agree with our terms of service.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 setLoading(false);
                 return;
@@ -149,7 +154,8 @@ const Register = () => {
                 const userInfoRes = await getUserInfo(email);
                 if (userInfoRes && userInfoRes.data) {
                     toast.error("Email has been registered! Please use another email to sign up.", {
-                        position: "top-right"
+                        position: "top-right",
+                        autoClose: 3000 
                     });
                     setLoading(false);
                     return;
@@ -168,7 +174,8 @@ const Register = () => {
                 firstName,
                 lastName,
                 email,
-                password
+                password,
+                accountType: 'None'
             };
 
             try {
@@ -182,17 +189,20 @@ const Register = () => {
 
                 if (!result.success) {
                     toast.error(result.message || "Registration failed. Please try again.", {
-                        position: "top-right"
+                        position: "top-right",
+                        autoClose: 3000 
                     });
                 } else {
                     toast.success("Sign up successfully! You now can sign in with your account.", {
-                        position: "top-right"
+                        position: "top-right",
+                        autoClose: 3000 
                     });
                     window.location.href = "/login";
                 }
             } catch (error) {
                 toast.success("Sign up successfully! You now can sign in with your account.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 window.location.href = "/login";
             } finally {
@@ -221,7 +231,7 @@ const Register = () => {
 
     return (
         <div className="register_main_container container-fluid">
-            <ToastContainer />
+            <ToastContainer autoClose={3000} />
             <div className="register_wrapper">
                 {/* Left Side: register Form */}
                 <div className="register_left_side col-md-6">

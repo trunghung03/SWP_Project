@@ -66,7 +66,8 @@ const ResetPassword = () => {
 
         if (!password || !rePassword) {
             toast.error("Please fill in all fields first.", {
-                position: "top-right"
+                position: "top-right",
+                autoClose: 3000 
             });
             setLoading(false);
             return;
@@ -74,7 +75,8 @@ const ResetPassword = () => {
 
         if (!isValidPassword(password)) {
             toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
-                position: "top-right"
+                position: "top-right",
+                autoClose: 3000 
             });
             setLoading(false);
             return;
@@ -82,7 +84,8 @@ const ResetPassword = () => {
 
         if (password !== rePassword) {
             toast.error("Passwords have to be the same! Please try again.", {
-                position: "top-right"
+                position: "top-right",
+                autoClose: 3000 
             });
             setLoading(false);
             return;

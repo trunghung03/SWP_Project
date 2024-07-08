@@ -85,7 +85,7 @@ function ProductDetail() {
         if (!selectedShell) {
             toast.warn("Please choose a shell type.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }
@@ -93,7 +93,7 @@ function ProductDetail() {
         if (!selectedSize) {
             toast.warn("Please choose a size.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }
@@ -102,7 +102,7 @@ function ProductDetail() {
         if (!token) {
             toast.warn("Please sign in or sign up to add jewelry to cart.", {
                 position: "top-right",
-                autoClose: 8000,
+                autoClose: 3000,
                 buttons: {
                     signIn: {
                         text: "Sign In",
@@ -148,7 +148,7 @@ function ProductDetail() {
     const navigateToCart = () => {
         toast.success("Add to cart successfully!", {
             position: "top-right",
-            autoClose: 8000
+            autoClose: 1000
         });
     };
 

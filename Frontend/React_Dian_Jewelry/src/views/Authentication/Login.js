@@ -76,7 +76,7 @@ const Login = () => {
     if (!isValidEmail(email)) {
       toast.error("Wrong email format! Please enter a valid email.", {
         position: "top-right",
-        autoClose: 8000
+        autoClose: 3000
       });
       setLoading(false);
       return;
@@ -100,7 +100,7 @@ const Login = () => {
       } catch (error) {
         toast.error("Wrong email or password! Please try again.", {
           position: "top-right",
-          autoClose: 8000
+          autoClose: 3000
         });
         console.error("Login failed: ", error);
         setLoading(false);
@@ -113,7 +113,7 @@ const Login = () => {
       if (!userInfo.status) {
         toast.error("Account is deactivated! Please contact us if this is a mistake.", {
           position: "top-right",
-          autoClose: 8000
+          autoClose: 3000
         });
         setLoading(false);
         return;

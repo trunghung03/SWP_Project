@@ -71,7 +71,7 @@ function Cart() {
         if (updatedCartItems.length === 0) {
             toast.warn("Please add something first! There are nothing in the cart.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }
@@ -80,7 +80,7 @@ function Cart() {
         if (missingSizeItems) {
             toast.warn("Please select a size for jewelry in your cart.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }

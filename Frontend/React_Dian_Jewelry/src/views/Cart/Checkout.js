@@ -149,13 +149,13 @@ function Checkout() {
             setAppliedVoucher(true);
             toast.success("Apply voucher successfully!", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
         } catch (error) {
             console.error('Error applying voucher:', error);
             toast.error("Invalid voucher code! Please try another one.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
         }
     };
@@ -166,7 +166,7 @@ function Checkout() {
         if (!fullName || !phone || !address) {
             toast.warn("Please fill in all the required fields.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }
@@ -175,7 +175,7 @@ function Checkout() {
         if (!phoneRegex.test(phone)) {
             toast.error("Please enter a valid 10-digit phone number.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }
@@ -183,7 +183,7 @@ function Checkout() {
         if (paymentMethod === '') {
             toast.warn("Please choose a payment method.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             return;
         }
@@ -269,7 +269,7 @@ function Checkout() {
             } else {
                 toast.success("Order successfully! Thank you for your order.", {
                     position: "top-right",
-                    autoClose: 8000
+                    autoClose: 3000
                 });
 
                 localStorage.setItem('fromCheckout', 'true');
@@ -283,7 +283,7 @@ function Checkout() {
             }
             toast.error("Error processing order! There was an error processing your order. Please try again.", {
                 position: "top-right",
-                autoClose: 8000
+                autoClose: 3000
             });
             setLoading(false);
         }

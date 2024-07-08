@@ -29,30 +29,35 @@ const ForgotPassword = () => {
                     const userInfo = await getUserInfo(email);
                     if (userInfo.data.accountType === 'Google') {
                         toast.error("Google account cannot reset password.", {
-                            position: "top-right"
+                            position: "top-right",
+                            autoClose: 3000 
                         });
                     } else {
                         localStorage.setItem('resetPasswordEmail', email);
                         toast.success("Mail sent! Check your email to reset your account password.", {
-                            position: "top-right"
+                            position: "top-right",
+                            autoClose: 3000 
                         });
                     }
                 } catch (error) {
                     toast.error("This email has not signed up for an account.", {
-                        position: "top-right"
+                        position: "top-right",
+                        autoClose: 3000 
                     });
                 } finally {
                     setLoading(false);
                 }
             } else {
                 toast.error("Wrong email format! Please enter a valid email.", {
-                    position: "top-right"
+                    position: "top-right",
+                    autoClose: 3000 
                 });
                 setLoading(false);
             }
         } else {
             toast.error("Please enter your email before submitting.", {
-                position: "top-right"
+                position: "top-right",
+                autoClose: 3000 
             });
             setLoading(false);
         }
@@ -73,7 +78,7 @@ const ForgotPassword = () => {
 
     return (
         <div className="fp_main_container container-fluid">
-            <ToastContainer /> 
+            <ToastContainer autoClose={3000} /> 
             <div className="fp_wrapper">
                 {/* Left Side: Forgot Password Form */}
                 <div className="fp_left_side col-md-6 d-flex align-items-center justify-content-center">

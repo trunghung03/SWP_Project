@@ -37,10 +37,11 @@ const resetPasswordApi = (data) => {
 const registerCustomerApi = (data) => {
     return axios.post(`${API_BASE_URL}/accounts/registercustomer`, data);
 }
-const changePassword = (data) => {
-    return axios.post(`${API_BASE_URL}/accounts/change-password`, data);
 
+const changePasswordApi = (data) => {
+    return axios.post(`${API_BASE_URL}/accounts/change-password`, data);
 }
+
 export { 
     customerLoginApi, 
     employeeLoginApi, 
@@ -51,5 +52,5 @@ export {
     forgotPasswordApi, 
     resetPasswordApi,
     registerCustomerApi,
-    changePassword
+    changePasswordApi
 };

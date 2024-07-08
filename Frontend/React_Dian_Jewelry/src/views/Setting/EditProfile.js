@@ -7,7 +7,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../styles/Setting/EditProfile.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getUserInfo, updateCustomerInfo } from '../../services/UserService';
+import { getUserInfo, updateCustomerInfo, changePasswordApi } from '../../services/UserService';
 import { UserContext } from '../../services/UserContext';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
@@ -62,7 +62,6 @@ function EditProfile() {
   const menuItems = [
     { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
     { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
-    { name: 'Notifications', path: '#', icon: 'fas fa-bell', iconClass: 'icon-notification' },
   ];
 
   const togglePasswordForm = () => {
@@ -83,11 +82,16 @@ function EditProfile() {
     return phonePattern.test(phone);
   };
 
-  const handleSaveChanges = async () => {
+  const isValidPassword = (password) => {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,20}$/;
+    return passwordPattern.test(password);
+  };
+
+  const handleSaveProfileChanges = async () => {
     if (!firstName || !lastName) {
       toast.error("Field cannot be empty! Please fill out all required fields.", {
         position: "top-right",
-        autoClose: 8000
+        autoClose: 3000
       });
       return;
     }
@@ -95,45 +99,14 @@ function EditProfile() {
     if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
       toast.error("Phone number is invalid! Please try again.", {
         position: "top-right",
-        autoClose: 8000
+        autoClose: 3000
       });
       return;
     }
 
-    if (isPasswordFormVisible && !isGoogleUser) {
-      if (!currentPassword || !newPassword || !confirmPassword) {
-        toast.error("Please fill in all fields. All password fields are required.", {
-          position: "top-right",
-          autoClose: 8000
-        });
-        return;
-      }
-      if (currentPassword !== storedPassword) {
-        toast.error("Current password is incorrect! Please try again.", {
-          position: "top-right",
-          autoClose: 8000
-        });
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        toast.error("New passwords do not match! Please try again.", {
-          position: "top-right",
-          autoClose: 8000
-        });
-        return;
-      }
-      if (newPassword === storedPassword) {
-        toast.error("New password cannot be the same as the current password! Please try again.", {
-          position: "top-right",
-          autoClose: 8000
-        });
-        return;
-      }
-    }
-
     const updatedData = {
       email,
-      password: isPasswordFormVisible ? newPassword : storedPassword,
+      password: storedPassword,
       lastName,
       firstName,
       address,
@@ -147,7 +120,7 @@ function EditProfile() {
       if (response.status === 200) {
         toast.success("Profile has been updated successfully.", {
           position: "top-right",
-          autoClose: 8000
+          autoClose: 3000
         });
         localStorage.setItem('firstName', firstName);
         localStorage.setItem('lastName', lastName);
@@ -162,7 +135,58 @@ function EditProfile() {
     } catch (error) {
       toast.error("Failed to update profile! Please try again.", {
         position: "top-right",
-        autoClose: 8000
+        autoClose: 3000
+      });
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all fields. All password fields are required.", {
+        position: "top-right",
+        autoClose: 3000
+      });
+      return;
+    }
+
+    if (!isValidPassword(newPassword)) {
+      toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
+        position: "top-right",
+        autoClose: 3000
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("New password does not match! Please try again.", {
+        position: "top-right",
+        autoClose: 3000
+      });
+      return;
+    }
+
+    try {
+      const changePasswordResponse = await changePasswordApi({
+        email,
+        oldPassword: currentPassword,
+        newPassword: newPassword
+      });
+
+      if (changePasswordResponse.data === 'Password has been changed.') {
+        toast.success("Password has been changed successfully.", {
+          position: "top-right",
+          autoClose: 3000
+        });
+      } else if (changePasswordResponse.data === 'Password is not match') {
+        toast.error("Current password is incorrect! Please try again.", {
+          position: "top-right",
+          autoClose: 3000
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to change password! Please try again.", {
+        position: "top-right",
+        autoClose: 3000
       });
     }
   };
@@ -171,7 +195,7 @@ function EditProfile() {
     <div className="EditProfile">
       <HeaderComponent />
       <SubNav items={navItems} />
-      <ToastContainer />
+      <ToastContainer autoClose={3000} />
       <div className="edit_profile_container">
         <div className="setting_menu">
           <div className="setting_menu_section">
@@ -227,10 +251,10 @@ function EditProfile() {
               <label>Address</label>
               <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
             </div>
-            <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save change</button>
+            <button type="button" className="edit_form_save_button" onClick={handleSaveProfileChanges}>Save change</button>
           </form>
 
-          {/* {!isGoogleUser && (
+          {!isGoogleUser && (
             <>
               <hr className="edit_profile_line"></hr>
               <h2 onClick={togglePasswordForm} className="toggle_password_form">
@@ -290,11 +314,11 @@ function EditProfile() {
                       ></i>
                     </span>
                   </div>
-                  <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save new password</button>
+                  <button type="button" className="edit_form_save_button" onClick={handleChangePassword}>Save new password</button>
                 </form>
               )}
             </>
-          )} */}
+          )}
         </div>
       </div>
 

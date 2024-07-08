@@ -86,7 +86,7 @@ function Blog() {
       if (!validSearchTerm) {
         toast.error('No blogs found! Please try another title.', {
           position: 'top-right',
-          autoClose: 8000,
+          autoClose: 3000,
         });
       } else {
         if (searchTerm.trim() === '') {
@@ -105,7 +105,7 @@ function Blog() {
               if (data.length === 0) {
                 toast.error('No blogs found! Please try another title.', {
                   position: 'top-right',
-                  autoClose: 8000,
+                  autoClose: 3000,
                 });
               } else {
                 setSearchResults(data);
