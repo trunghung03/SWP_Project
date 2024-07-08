@@ -2,23 +2,27 @@ import React from 'react';
 
 const MessageParser = ({ children, actions }) => {
   const parse = (message) => {
-    const lowerCaseMessage = message.toLowerCase();
+    const trimmedMessage = message.trim().toLowerCase();
 
-    if (lowerCaseMessage.includes('hello')) {
+    if (!trimmedMessage) {
+      return;
+    }
+
+    if (trimmedMessage.includes('hello') || trimmedMessage.includes('hi')) {
       actions.handleHello();
-    } else if (lowerCaseMessage.includes('hours') || lowerCaseMessage.includes('time') || lowerCaseMessage.includes('when')) {
-      actions.handleGenInfo('store hours');
-    } else if (lowerCaseMessage.includes('location') || lowerCaseMessage.includes('address') || lowerCaseMessage.includes('where')) {
-      actions.handleGenInfo('store location');
-    } else if (lowerCaseMessage.includes('collection')) {
+    } else if (trimmedMessage.includes('hours') || trimmedMessage.includes('time') || trimmedMessage.includes('open') || trimmedMessage.includes('working')) {
+      actions.handleGenInfo('hours');
+    } else if (trimmedMessage.includes('location') || trimmedMessage.includes('address') || trimmedMessage.includes('where')) {
+      actions.handleGenInfo('location');
+    } else if (trimmedMessage.includes('collection')) {
       actions.handleProductInfo('diamond collection');
-    } else if (lowerCaseMessage.includes('custom') || lowerCaseMessage.includes('design')) {
+    } else if (trimmedMessage.includes('custom') || trimmedMessage.includes('design')) {
       actions.handleProductInfo('custom jewelry design');
-    } else if (lowerCaseMessage.includes('quality')) {
+    } else if (trimmedMessage.includes('quality')) {
       actions.handleProductInfo('diamond quality');
-    } else if (lowerCaseMessage.includes('order')) {
+    } else if (trimmedMessage.includes('order')) {
       actions.handlePurchaseInfo('place an order');
-    } else if (lowerCaseMessage.includes('payment')) {
+    } else if (trimmedMessage.includes('payment')) {
       actions.handlePurchaseInfo('payment methods');
     } else {
       actions.handleUnknown();

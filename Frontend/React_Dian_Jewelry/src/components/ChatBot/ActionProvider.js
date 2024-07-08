@@ -1,8 +1,11 @@
 import React from 'react';
+import { createChatBotMessage } from 'react-chatbot-kit';
 
-const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+const ActionProvider = ({ setState, children }) => {
   const handleHello = () => {
-    const botMessage = createChatBotMessage('Hello. Nice to meet you');
+    const botMessage = createChatBotMessage('Good day! Thank you for your visit. Are there anything I can help?', {
+      widget: 'suggestions'
+    });
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
@@ -12,10 +15,10 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   const handleGenInfo = (infoType) => {
     let response;
     switch (infoType) {
-      case 'store hours':
-        response = 'Our store is open from 9 a.m to 8 p.m for the whole week. We look forward to your visit!';
+      case 'hours':
+        response = 'Our store is open from 8 a.m to 6 p.m through Monday to Saturday, and from 8 a.m to 5 p.m at Sunday. We look forward to your visit!';
         break;
-      case 'store location':
+      case 'location':
         response = 'We are located at FPT UNI. You can find directions [here/link to map].';
         break;
       default:
@@ -57,7 +60,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         response = 'You can place an order through our online store [link], or you can visit us in-store for personalized assistance.';
         break;
       case 'payment methods':
-        response = 'We accept all major credit cards, PayPal, and bank transfers. For in-store purchases, we also accept cash.';
+        response = 'We accept cash, bank transfer and VNPAY for both online and in-store purchases.';
         break;
       default:
         response = 'I am not sure about that. Could you please ask something else?';
@@ -70,11 +73,19 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   };
 
   const handleUnknown = () => {
-    const response = 'Please contact us at our email: support@ourstore.com or call our hotline: 090909090';
+    const response = 'If you want to ask more, you can contact us through our hotline: 0795795959 or email: diamonddianjewelry@gmail.com.';
     const botMessage = createChatBotMessage(response);
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
+    }));
+  };
+
+  const handleUserMessage = (message) => {
+    const userMessage = createChatBotMessage(message, { isUser: true });
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, userMessage],
     }));
   };
 
@@ -88,6 +99,9 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
             handleProductInfo,
             handlePurchaseInfo,
             handleUnknown,
+            handleUserMessage,
+            setState,
+            createChatBotMessage,
           },
         });
       })}

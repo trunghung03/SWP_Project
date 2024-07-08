@@ -1,0 +1,16 @@
+.suggest_message button{
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+    margin-bottom: 10px;
+    border: 1px solid #1c1c1c;
+    background-color: transparent;
+    font-size: 14px;
+    padding: 5px 20px;
+}
+
+.suggest_message button:hover{
+    background-color: #1c1c1c;
+    color: white;
+}

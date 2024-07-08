@@ -65,6 +65,10 @@ import 'react-chatbot-kit/build/main.css';
 import UpdateTitle from '../services/TitleService';
 import ManagerProductDetail from './Manager/ManagerManageProduct/ManagerProductDetail.js';
 import StaffEditProfile from './StaffEditProfile.js';
+import logo from '../assets/img/logoN.png'; 
+// import DSEditProfile from './DeliveryStaff/DSEditProfile.js';
+// import SSEditProfile from './SalesStaff/SalesStaffSetting/SalesStaffEditProfile.js';
+// import ManagerEditProfile from './Manager/ManagerSetting/ManagerEditProfile.js';
 
 
 function AppContent() {
@@ -189,12 +193,10 @@ function AppContent() {
         {shouldShowChatbot && !isClosed && (
           <div className="chatbot-container">
             <div className="control-buttons">
+              <img src={logo} alt="Logo" className="chatbot-logo" />
               <button className="control-button" onClick={toggleMinimize}>
                 <strong>—</strong>
               </button>
-              {/* <button className="control-button" onClick={() => setIsClosed(true)}>
-                ✖
-              </button> */}
             </div>
             <div className="chatbot-body">
               <Chatbot
@@ -202,7 +204,7 @@ function AppContent() {
                 messageParser={MessageParser}
                 actionProvider={ActionProvider}
               />
-              <DirectSalesStaffBtn />
+              {/* <DirectSalesStaffBtn /> */}
             </div>
           </div>
         )}

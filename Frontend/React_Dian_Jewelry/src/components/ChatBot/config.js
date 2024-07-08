@@ -1,10 +1,13 @@
-import { Widgets } from '@mui/icons-material';
 import { createChatBotMessage } from 'react-chatbot-kit';
-import DirectSalesStaffBtn  from './DirectSalesStaffBtn'; 
+import SuggestionWidget from './SuggestionWidget';
+import DirectSalesStaffBtn from './DirectSalesStaffBtn';
 
 const botName = 'DIAN JEWELRY';
+
 const config = {
-  initialMessages: [createChatBotMessage(`Hello! Welcome to DIAN JEWELRY. How can I assist you today?`, { widget: 'startBtn' })],
+  initialMessages: [
+    createChatBotMessage(`Hello! Welcome to DIAN JEWELRY. How can I assist you today?`, { widget: 'startBtn' })
+  ],
   botName: botName,
   customStyles: {
     botMessageBox: {
@@ -16,8 +19,13 @@ const config = {
   },
   widgets: [
     {
-      widgetName: "StartBtn",
+      widgetName: "startBtn",
       widgetFunc: (props) => <DirectSalesStaffBtn {...props} />,
+    },
+    {
+      widgetName: "suggestions",
+      widgetFunc: (props) => <SuggestionWidget {...props} />,
+      mapStateToProps: ["messages"]
     }
   ]
 };
