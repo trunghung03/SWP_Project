@@ -19,5 +19,7 @@ namespace DIAN_.Interfaces
         Task<bool> DeactivateAndActivateCustomer(int id);
 
         Task<bool> DeactivateAndActivateEmployee(int id);
+
+        Task<Employee?> ChangePassword(Employee customer, string oldPassword, string newPassword);
     }
 }

@@ -325,7 +325,7 @@ namespace UserApplication.Controllers
                 }
                 else
                 {
-                    return BadRequest("An error occurred while processing your request.");
+                    return Ok("Password is not match");
                 }
             }
             catch (Exception)
