@@ -18,7 +18,7 @@ import { Box } from "@mui/material";
 import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
 import { salesStaffUpdateOrderStatus,
-   getWarrantyURL, sendWarrantyEmail
+   getWarrantyURL, sendWarrantyEmail, getCertificateURL
  } from "../../../services/SalesStaffService/SSOrderService.js";
 import swal from "sweetalert";
 import SSAddWarrantyPopup from "./SSAddWarrantyPopup.js";
@@ -46,7 +46,24 @@ const SSOrderDetail = () => {
         });
     }
   }, [orderId]);
-  
+  const handleSendCertificate = async () => {
+    try {
+      const response = await getCertificateURL(orderId);
+      const url = response.url;
+      console.log('Certificate URL:', url);
+      const emailData = {
+        toEmail: orderDetails.email, 
+        subject: "Your Diamond's Certificate:",
+        body: `Here is a link: ${url}`, 
+      };
+      console.log('emaildata: ' , emailData);
+      await sendWarrantyEmail(emailData);
+      swal("Success", "Certificate email sent successfully", "success");
+    } catch (error) {
+      console.error("Failed to send Certificate email:", error);
+      swal("Error", "Failed to send Certificate email", "error");
+    }
+  }
   const handleSendEmail = async () => {
     try {
       const response = await getWarrantyURL(orderId);
@@ -171,6 +188,7 @@ const SSOrderDetail = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
+                    <button className="salesstaff_manage_send_email_button" onClick={handleSendCertificate}>Send Certificate</button>
                   </div>
                   <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
                     <WarrantyIcon /> Warranty:

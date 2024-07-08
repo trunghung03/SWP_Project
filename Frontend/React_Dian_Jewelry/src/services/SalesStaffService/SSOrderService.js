@@ -91,5 +91,9 @@ export const getWarrantyURL = async (orderId) => {
   const response = await axios.get(`${API_BASE_URL_ORDER}/pixeldrain/warranty?id=${orderId}`);
   return response.data;
 };
+export const getCertificateURL = async (orderId) => {
+  const response = await axios.get(`${API_BASE_URL_ORDER}/pixeldrain/certificate?id=${orderId}`);
+  return response.data;
+};
 
 
