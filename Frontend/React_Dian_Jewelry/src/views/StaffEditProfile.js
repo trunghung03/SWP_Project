@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import '../../../styles/Setting/EditProfile.scss'
-import { getUserInfo, updateCustomerInfo } from '../../../services/UserService';
-import { UserContext } from '../../../services/UserContext';
-import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import logo from "../../../assets/img/logoN.png";
+import '../styles/Setting/EditProfile.scss';
+import { UserContext } from '../services/UserContext';
+import ManagerSidebar from '../components/ManagerSidebar/ManagerSidebar.js';
+import logo from "../assets/img/logoN.png";
+import DeliveryStaffSidebar from '../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js';
+import SalesStaffSidebar from '../components/SalesStaffSidebar/SalesStaffSidebar.js';
+import axios from 'axios';
+import { getUserInfo } from '../services/UserService.js';
+import { getEmployeeDetail,updateEmployeeById } from '../services/ManagerService/ManagerEmployeeService.js';
+import { X } from '@mui/icons-material';
 
-function SSEditProfile() {
+
+function StaffEditProfile() {
+
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [isPasswordFormVisible, setPasswordFormVisible] = useState(false);
@@ -19,34 +26,45 @@ function SSEditProfile() {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [points, setPoints] = useState(0);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [storedPassword, setStoredPassword] = useState('');
   const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const id = localStorage.getItem('employeeId');
+  const [role, setRole] = useState('');
+
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    if (storedEmail) {
-      getUserInfo(storedEmail).then((response) => {
-        const userData = response.data;
-        setFirstName(userData.firstName || '');
-        setLastName(userData.lastName || '');
-        setAddress(userData.address || '');
-        setPhoneNumber(userData.phoneNumber || '');
-        setEmail(userData.email || '');
-        setPoints(userData.points || 0);
-        setStoredPassword(userData.password || '');
-      }).catch((error) => {
+    const fetchData = async () => {
+      try {
+        const employeeDetailResponse = await getEmployeeDetail(id);
+        console.log(employeeDetailResponse);
+        setRole(employeeDetailResponse.role); 
+        setFirstName(employeeDetailResponse.firstName || '');
+        setLastName(employeeDetailResponse.lastName || '');
+        setAddress(employeeDetailResponse.address || '');
+        setPhoneNumber(employeeDetailResponse.phoneNumber || '');
+        setEmail(employeeDetailResponse.email || '');
+        setStoredPassword(employeeDetailResponse.password || '');
+      } catch (error) {
         console.error('Error fetching user data:', error);
-      });
-    }
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
 
   const togglePasswordForm = () => {
     setPasswordFormVisible(!isPasswordFormVisible);
   };
+
+
+  useEffect(() => {
+    console.log("Role: ", role);
+    console.log("Email: ", email);
+  }, [role, email]);
 
   const togglePasswordVisibility = (id, eyeId) => {
     const passwordField = document.getElementById(id);
@@ -58,7 +76,7 @@ function SSEditProfile() {
   };
 
   const isValidPhoneNumber = (phone) => {
-    const phonePattern = /^[0-9]{10,15}$/;
+    const phonePattern = /^(\+?\d{1,4}[\s-]?)?(\(?\d{3}\)?[\s-]?)?\d{3}[\s-]?\d{4}$/;
     return phonePattern.test(phone);
   };
 
@@ -117,12 +135,13 @@ function SSEditProfile() {
       firstName,
       address,
       phoneNumber,
-      points,
+      role,
       status: true
     };
 
     try {
-      const response = await updateCustomerInfo(email, updatedData);
+      console.log("Hello WOrld");
+      const response = await updateEmployeeById(id, updatedData);
       if (response.status === 200) {
         toast.success("Profile has been updated successfully.", {
           position: "top-right",
@@ -130,12 +149,10 @@ function SSEditProfile() {
         });
         localStorage.setItem('firstName', firstName);
         localStorage.setItem('lastName', lastName);
-        localStorage.setItem('points', points);
         setUser({
           firstName,
           lastName,
           email,
-          points,
         });
       }
     } catch (error) {
@@ -149,8 +166,11 @@ function SSEditProfile() {
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
-        <SalesStaffSidebar currentPage="salesstaff_edit_profile" />
+        {role === "Manager" && <ManagerSidebar currentPage="manager_edit_profile" />}
+        {role === "SalesStaff" && <SalesStaffSidebar currentPage="manager_edit_profile" />}
+        {role !== "Manager" && role !== "SalesStaff" && <DeliveryStaffSidebar currentPage="manager_edit_profile" />}
       </div>
+
       <div className="ss_manage_content_content">
         <div className="ss_manage_content_header">
           <img className="ss_manage_content_logo" src={logo} alt="Logo" />
@@ -193,73 +213,73 @@ function SSEditProfile() {
             </div>
             <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save change</button>
           </form>
-            <>
-              <hr className="edit_profile_line"></hr>
-              <h2 onClick={togglePasswordForm} className="toggle_password_form">
-                Change Password
-                <i className={`fas ${isPasswordFormVisible ? 'fa-chevron-up' : 'fa-chevron-down'} toggle_icon`}></i>
-              </h2>
-              {isPasswordFormVisible && (
-                <form>
-                  <div className="edit_form_group full_width position-relative">
-                    <label>Current password</label>
-                    <input
-                      type="password"
-                      id="current_password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                    />
-                    <span className="edit_password_eye">
-                      <i
-                        className="far fa-eye"
-                        id="edit_current_password_eye"
-                        onClick={() => togglePasswordVisibility('current_password', 'edit_current_password_eye')}
-                        style={{ cursor: 'pointer' }}
-                      ></i>
-                    </span>
-                  </div>
-                  <div className="edit_form_group full_width position-relative">
-                    <label>New password</label>
-                    <input
-                      type="password"
-                      id="new_password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                    <span className="edit_password_eye">
-                      <i
-                        className="far fa-eye"
-                        id="edit_new_password_eye"
-                        onClick={() => togglePasswordVisibility('new_password', 'edit_new_password_eye')}
-                        style={{ cursor: 'pointer' }}
-                      ></i>
-                    </span>
-                  </div>
-                  <div className="edit_form_group full_width position-relative">
-                    <label>Confirm new password</label>
-                    <input
-                      type="password"
-                      id="confirm_password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <span className="edit_password_eye">
-                      <i
-                        className="far fa-eye"
-                        id="edit_confirm_password_eye"
-                        onClick={() => togglePasswordVisibility('confirm_password', 'edit_confirm_password_eye')}
-                        style={{ cursor: 'pointer' }}
-                      ></i>
-                    </span>
-                  </div>
-                  <button type="button" className="edit_form_save_button" onClick={handleSaveChanges}>Save new password</button>
-                </form>
-              )}
-            </>
+          <>
+            <hr className="edit_profile_line"></hr>
+            <h2 onClick={togglePasswordForm} className="toggle_password_form">
+              Change Password
+              <i className={`fas ${isPasswordFormVisible ? 'fa-chevron-up' : 'fa-chevron-down'} toggle_icon`}></i>
+            </h2>
+            {isPasswordFormVisible && (
+              <form>
+                <div className="edit_form_group full_width position-relative">
+                  <label>Current password</label>
+                  <input
+                    type="password"
+                    id="current_password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                  />
+                  <span className="edit_password_eye">
+                    <i
+                      className="far fa-eye"
+                      id="edit_current_password_eye"
+                      onClick={() => togglePasswordVisibility('current_password', 'edit_current_password_eye')}
+                      style={{ cursor: 'pointer' }}
+                    ></i>
+                  </span>
+                </div>
+                <div className="edit_form_group full_width position-relative">
+                  <label>New password</label>
+                  <input
+                    type="password"
+                    id="new_password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <span className="edit_password_eye">
+                    <i
+                      className="far fa-eye"
+                      id="edit_new_password_eye"
+                      onClick={() => togglePasswordVisibility('new_password', 'edit_new_password_eye')}
+                      style={{ cursor: 'pointer' }}
+                    ></i>
+                  </span>
+                </div>
+                <div className="edit_form_group full_width position-relative">
+                  <label>Confirm new password</label>
+                  <input
+                    type="password"
+                    id="confirm_password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <span className="edit_password_eye">
+                    <i
+                      className="far fa-eye"
+                      id="edit_confirm_password_eye"
+                      onClick={() => togglePasswordVisibility('confirm_password', 'edit_confirm_password_eye')}
+                      style={{ cursor: 'pointer' }}
+                    ></i>
+                  </span>
+                </div>
+                <button type="button" className="edit_form_save_button" >Save new password</button>
+              </form>
+            )}
+          </>
         </div>
-    </div>
+      </div>
     </div>
   );
 }
 
-export default SSEditProfile;
+export default StaffEditProfile;

@@ -64,9 +64,8 @@ import DirectSalesStaffBtn from '../components/ChatBot/DirectSalesStaffBtn.js';
 import 'react-chatbot-kit/build/main.css';
 import UpdateTitle from '../services/TitleService';
 import ManagerProductDetail from './Manager/ManagerManageProduct/ManagerProductDetail.js';
-import DSEditProfile from './DeliveryStaff/DSEditProfile.js';
-import SSEditProfile from './SalesStaff/SalesStaffSetting/SalesStaffEditProfile.js';
-import ManagerEditProfile from './Manager/ManagerSetting/ManagerEditProfile.js';
+import StaffEditProfile from './StaffEditProfile.js';
+
 
 function AppContent() {
   const [isClosed, setIsClosed] = useState(true);
@@ -102,6 +101,7 @@ function AppContent() {
     '/register',
     '/forgot-password',
     '/reset-password',
+    '/staff-edit-profile'
   ];
 
   const shouldShowChatbot = !isLoginPath && !staffPaths.some(path => location.pathname.startsWith(path));
@@ -168,7 +168,7 @@ function AppContent() {
           <Route path="/manager-add-promotion" element={<ProtectedRoute path="/manager-add-promotion" element={ManagerAddPromotion} />} />
           <Route path="/manager-collection-list" element={<ProtectedRoute path="/manager-collection-list" element={ManagerCollectionList} />} />
           <Route path="/manager-add-collection" element={<ProtectedRoute path="/manager-add-collection" element={ManagerAddCollection} />} />
-          <Route path="/manager-edit-profile" element={<ManagerEditProfile />} />
+          <Route path="/staff-edit-profile" element={<StaffEditProfile />} />
 
           {/* Sales Staff */}
           <Route path="/sales-staff-order-list" element={<SSOrderList />} />
@@ -178,12 +178,12 @@ function AppContent() {
           <Route path="/sales-staff-update-content/:id" element={<SSUpdateContent />} />
           <Route path="/sales-staff-warranty-list" element={<SSWarrantyList />} />
           <Route path="/rich-text-page" element={<RichTextPage />} />
-          <Route path="/sales-staff-edit-profile" element={<SSEditProfile />} />
+          <Route path="/staff-edit-profile" element={<StaffEditProfile />} />
 
           {/* Delivery Staff */}
           <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
           <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
-          <Route path="/delivery-staff-edit-profile" element={<DSEditProfile />} />
+          <Route path="/staff-edit-profile" element={<StaffEditProfile />} />
         </Routes>
 
         {shouldShowChatbot && !isClosed && (
