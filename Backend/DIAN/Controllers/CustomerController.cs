@@ -321,11 +321,11 @@ namespace UserApplication.Controllers
                 var result = await _customerRepository.ChangePassword(customer, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
                 if (result is not null)
                 {
-                    return Ok("Password has been changed.");
+                    return Ok(customer);
                 }
                 else
                 {
-                    return Ok("Password is not match");
+                    return Ok("Cannot update password due to password is not match.");
                 }
             }
             catch (Exception)
