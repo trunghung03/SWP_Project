@@ -17,37 +17,12 @@ public class NotificationsHub : Hub<INotificationClient>
             _logger = logger;
     }
 
-    //public override async Task OnConnectedAsync()
-    //{
-       
-    //    var httpContext = Context.GetHttpContext(); 
-    //    int customerId = int.Parse(httpContext.Request.Query["customerId"]);
-        
-    //    customerConnectionMap.AddOrUpdate(customerId, Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
-
-    //    // Check for and send any undelivered notifications
-    //    var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
-    //    foreach (var notification in undeliveredNotifications)
-    //    { 
-    //        await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
-    //        notification.IsDelivered = true;
-    //        await _notificationRepository.UpdateNotification(notification);
-    //    }
-
-    //    await base.OnConnectedAsync();
-    //}
     public static string GetConnectionIdForCustomer(int customerId)
     {
         customerConnectionMap.TryGetValue(customerId, out var connectionId);
         return connectionId;
     }
 
-    //public override Task OnConnectedAsync()
-    //{
-    //    var connectionId = Context.ConnectionId;
-    //    // Handle connection logic (e.g., storing connectionId)
-    //    return base.OnConnectedAsync();
-    //}
     public override async Task OnConnectedAsync()
     {
         _logger.LogInformation("Connection established");
@@ -62,13 +37,13 @@ public class NotificationsHub : Hub<INotificationClient>
 
         await _connectionService.SaveConnectionToDatabase(customerId, connectionId);
         _logger.LogInformation($"Connection saved to database");
-        var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
-        foreach (var notification in undeliveredNotifications)
-        {
-            await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
-            notification.IsDelivered = true;
-            await _notificationRepository.UpdateNotification(notification);
-        }
+        //var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
+        //foreach (var notification in undeliveredNotifications)
+        //{
+        //    await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
+        //    notification.IsDelivered = true;
+        //    await _notificationRepository.UpdateNotification(notification);
+        //}
 
         await base.OnConnectedAsync();
     }

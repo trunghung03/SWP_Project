@@ -46,7 +46,7 @@ namespace DIAN_.Repository
         public async Task<IEnumerable<Notification>> UpdateConnectionID(int customerId, string connectionId)
         {
             var notifications = await _context.Notifications
-                .Where(n => n.CustomerId == customerId && !n.IsDelivered)
+                .Where(n => n.CustomerId == customerId)
                 .ToListAsync();
 
             foreach (var notification in notifications)

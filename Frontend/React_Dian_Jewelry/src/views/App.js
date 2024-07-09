@@ -63,6 +63,7 @@ import ActionProvider from '../components/ChatBot/ActionProvider.js';
 import DirectSalesStaffBtn from '../components/ChatBot/DirectSalesStaffBtn.js';
 import 'react-chatbot-kit/build/main.css';
 import UpdateTitle from '../services/TitleService';
+import { SignalRProvider } from '../services/SignalRContext.js';
 
 function AppContent() {
   const [isClosed, setIsClosed] = useState(true);  // Set the initial state to true
@@ -82,6 +83,7 @@ function AppContent() {
   };
 
   return (
+    <SignalRProvider>
     <UserProvider>
       <CartProvider>
         <AutoScrollToTop />
@@ -177,6 +179,7 @@ function AppContent() {
         )}
       </CartProvider>
     </UserProvider>
+    </SignalRProvider>
   );
 }
 
