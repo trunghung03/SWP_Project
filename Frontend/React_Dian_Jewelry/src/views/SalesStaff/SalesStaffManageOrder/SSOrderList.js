@@ -34,8 +34,8 @@ const SSOrderList = () => {
   const [isSearch, setIsSearch] = useState(false);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
+      backgroundColor: '#faecec',
+      color: '#575757',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -167,7 +167,7 @@ const SSOrderList = () => {
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 className="manager_title_employees" style={{ textAlign: "center" }}>
+        <h3 className="manager_title_employees" style={{ textAlign: "center", color:"#292727", fontFamily:"serif"}}>
           Order List
         </h3>
         <div className="ss_header_pagination_list">
@@ -247,19 +247,19 @@ const SSOrderList = () => {
                       className="manager_manage_table_body_row"
                       key={item.orderId}
                     >
-                      <TableCell align="center">{item.orderId}</TableCell>
-                      <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">
+                      <TableCell style={{color:"#767677"}} align="center">{item.orderId}</TableCell>
+                      <TableCell style={{color:"#767677"}} align="center">{item.name}</TableCell>
+                      <TableCell style={{color:"#767677"}} align="center">
                         {new Date(item.date).toLocaleDateString("en-CA")}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell style={{color:"#767677"}} align="center">
                         {item.shippingAddress}
                       </TableCell>
-                      <TableCell align="center">{item.phoneNumber}</TableCell>
-                      <TableCell align="center">{item.orderStatus}</TableCell>
-                      <TableCell align="center">
+                      <TableCell style={{color:"#767677"}} align="center">{item.phoneNumber}</TableCell>
+                      <TableCell style={{color:"#767677"}} align="center">{item.orderStatus}</TableCell>
+                      <TableCell style={{color:"#767677"}} align="center">
                         <InfoIcon
-                          style={{ cursor: "pointer" , color: "#ff6a6a"}}
+                          style={{ cursor: "pointer" , color: "#ffc1c1"}}
                           onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>

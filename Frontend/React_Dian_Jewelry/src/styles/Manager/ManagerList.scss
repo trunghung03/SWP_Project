@@ -30,7 +30,7 @@
 
 .manager_button_pagination:hover {
     text-decoration: underline;
-    background-color: #ff6a6a; 
+    background-color: #ffc1c1; 
     color: white;
     cursor: pointer;
 }
@@ -166,7 +166,7 @@
     cursor: pointer;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     &:hover{
-        background-color: #f9eff3;
+        background-color: #f5eef1;
     }
 
 }
@@ -218,9 +218,9 @@
 }
 
 .manager_manage_diamond_pagination .manager_order_active {
-    background-color: #FF6A6A;
+    background-color: #f7b4b4;
     color: white;
-    border: 1px solid #FF6A6A;
+    border: 1px solid #f7b4b4;
 }
 
 // Update modal
