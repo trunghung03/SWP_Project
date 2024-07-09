@@ -38,6 +38,8 @@ namespace DIAN_.Mapper
                 ProductCode = product.ProductCode,
                 Name = product.Name,
                 Price = product.Price,
+                MainDiamondId = product.MainDiamondId ?? 0,
+                SubDiamondId = product.SubDiamondId ?? 0,
                 LaborPrice = product.LaborCost ?? 0, // Handle nullable types
                 Description = product.Description,
                 ImageLinkList = product.ImageLinkList,

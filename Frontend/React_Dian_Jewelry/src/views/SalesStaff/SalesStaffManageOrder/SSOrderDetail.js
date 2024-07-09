@@ -140,7 +140,7 @@ const SSOrderDetail = () => {
                           label="Status"
                           onChange={handleChange}
                         >
-                          <MenuItem value ="UnPaid">UnPaid</MenuItem>
+                          <MenuItem value ="Unpaid">UnPaid</MenuItem>
                           <MenuItem value="Paid">Paid</MenuItem>
                           <MenuItem value="Preparing">Preparing</MenuItem>
                           <MenuItem value="Delivering">Delivering</MenuItem>
