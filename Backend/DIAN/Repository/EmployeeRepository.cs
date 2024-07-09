@@ -56,7 +56,17 @@ namespace DIAN_.Repository
         }
 
 
+        public async Task<List<Employee>> SearchByNameAsyncs(string name)
+        {
 
+            var employees = await _context.Employees
+                .Where(c => c.FirstName.Contains(name) ||
+                            c.LastName.Contains(name) ||
+                            (c.FirstName + " " + c.LastName).Contains(name))
+                .ToListAsync();
+
+            return employees;
+        }
         public async Task<Employee?> LoginAsync(LoginDto loginDto)
         {
 

@@ -72,8 +72,8 @@ const AdminCustomerList = () => {
           setCustomerList([response]);
           setCurrentPage(1);
         } catch (error) {
-          console.error("Error fetching diamond:", error);
-          swal("Customer not found!", "Please try another one.", "error");
+          console.error("Error while search for customer:", error);
+          swal("Customer not found!", "Please try again.", "error");
         }
       } else if (searchQuery.trim()) {
         try {
@@ -201,16 +201,16 @@ const AdminCustomerList = () => {
             <div className="col-12">
               <div className="table-responsive">
                 <TableContainer component={Paper}>
-                  <Table className="table table-striped table-bordered table-hover" aria-label="customized table">
+                  <Table aria-label="customized table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell scope="col" align="center">ID</StyledTableCell>
-                        <StyledTableCell scope="col" align="center">Email</StyledTableCell>
-                        <StyledTableCell scope="col" align="center">Full Name</StyledTableCell>
-                        <StyledTableCell scope="col" align="center">Phone number</StyledTableCell>
-                        <StyledTableCell scope="col" align="center">Address</StyledTableCell>
-                        <StyledTableCell scope="col" align="center">Points</StyledTableCell>
-                        <StyledTableCell scope="col" align="center">Status</StyledTableCell>
+                        <StyledTableCell align="center">ID</StyledTableCell>
+                        <StyledTableCell align="center">Email</StyledTableCell>
+                        <StyledTableCell align="center">Full Name</StyledTableCell>
+                        <StyledTableCell align="center">Phone number</StyledTableCell>
+                        <StyledTableCell align="center">Address</StyledTableCell>
+                        <StyledTableCell align="center">Points</StyledTableCell>
+                        <StyledTableCell align="center">Status</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -249,8 +249,8 @@ const AdminCustomerList = () => {
                 </TableContainer>
               </div>
               {isSearch && (
-                <button className="btn btn-secondary mt-3" onClick={handleBack}>
-                  Back to show all customers
+                <button className="SS_back_button" onClick={handleBack}>
+                  Back
                 </button>
               )}
             </div>

@@ -25,6 +25,12 @@ const getEmployeeByEmail = async (email) => {
     const response = await axios.get(`${API_BASE_URL}/employees/${email}`);
     return response.data;
 };
+
+const getEmployeeByName = async (name) => {
+    const response = await axios.get(`${API_BASE_URL}/employees/search/${name}`);
+    return response.data;
+
+}
 const createEmployee = async (data) => {
     const response = await axios.post(`${API_BASE_URL}/employees/registeremployee`, data);
     return response.data;
@@ -32,4 +38,5 @@ const createEmployee = async (data) => {
 const deleteEpmloyeeById = async (id) => {
     return axios.delete(`${API_BASE_URL}/employees/${id}`);
 }
-export { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeeById, createEmployee, getEmployeeByRole, updateStatusById, getEmployeeByEmail };
+
+export { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeeById, createEmployee, getEmployeeByRole, updateStatusById, getEmployeeByEmail, getEmployeeByName };

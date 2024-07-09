@@ -26,7 +26,7 @@ const getCustomer = async (email) => {
 };
 
 const getCustomerByName = async (name) => {
-  const response = await axios.get(`${API_BASE_URL}/accounts/search/name/${name}`);
+  const response = await axios.get(`${API_BASE_URL}/accounts/search/${name}`);
   return response.data;
 }
 

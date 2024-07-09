@@ -14,6 +14,7 @@ namespace DIAN_.Interfaces
         Task<Employee?> GetByIdAsync(int id);
         Task<Employee?> UpdateAsync(int id, UpdateEmployeeDto employeeDto);
         Task<Employee?> DeleteAsync(int id);
+        Task<List<Employee>>? SearchByNameAsyncs(string name);
         Task<List<Employee>> GetEmployeeByRole(string role);
 
         Task<bool> DeactivateAndActivateCustomer(int id);

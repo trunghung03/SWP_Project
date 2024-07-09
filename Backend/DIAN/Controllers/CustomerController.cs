@@ -141,7 +141,7 @@ namespace UserApplication.Controllers
             }
         }
 
-        [HttpGet("search/name/{name}")]
+        [HttpGet("search/{name}")]
         public async Task<IActionResult> SearchByName(string name)
         {
             try

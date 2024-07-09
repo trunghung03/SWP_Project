@@ -11,6 +11,8 @@ import {
   getEmployeeDetail,
   getEmployeeByRole,
   getEmployeeByEmail,
+  getEmployeeByName
+
 } from "../../services/AdminService/AdminEmployeeService.js";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";

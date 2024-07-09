@@ -110,6 +110,23 @@ namespace UserApplication.Controllers
             }
         }
 
+        [HttpGet("search/{name}")]
+        public async Task<IActionResult> SearchByName(string name)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+
+                var employees = await _employeeRepository.SearchByNameAsyncs(name);
+                if (employees == null) return NotFound("Not employee found");
+
+                return Ok(employees);
+            }catch(Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {

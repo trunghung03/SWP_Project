@@ -17,7 +17,7 @@ namespace DIAN_.Interfaces
         Task<Customer?> UpdateCustomerPoint(int id, UpdateCustomerPointDto customerDto);
         Task<Customer?> DeleteAsync(string email);
 
-        Task<Customer?> SearchByNameAsyncs(string fisrstName);
+        Task<List<Customer>>? SearchByNameAsyncs(string name);
         Task<bool> ResetPasswordRequestAsync(ResetPasswordDto resetPasswordDto);
 
         Task<bool> ResetPassworConfirmdAsync(Customer customer, string token, string newPassword);
