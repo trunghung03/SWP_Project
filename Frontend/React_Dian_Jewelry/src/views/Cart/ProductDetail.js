@@ -59,18 +59,39 @@ function ProductDetail() {
                 setSelectedImage(images[0]);
 
                 return Promise.all([
-                    getDiamondDetail(productData.mainDiamondId),
-                    getCollectionDetail(productData.collectionId),
-                    getProductList()
+                    getDiamondDetail(productData.mainDiamondId).catch(error => {
+                        console.error('Error fetching diamond details:', error);
+                        throw error;
+                    }),
+                    getCollectionDetail(productData.collectionId).catch(error => {
+                        console.error('Error fetching collection details:', error);
+                        throw error;
+                    }),
+                    getProductList().catch(error => {
+                        console.error('Error fetching product list:', error);
+                        throw error;
+                    })
                 ]).then(([diamondResponse, collectionResponse, productListResponse]) => {
                     setDiamond(diamondResponse.data);
                     setCollection(collectionResponse.data);
 
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
-                    setAlsoLikeProducts(relatedProducts.slice(0, 4));
+                    const currentIndex = relatedProducts.findIndex(p => p.productId === productData.productId);
+                    let nextProducts = [];
+
+                    if (currentIndex !== -1) {
+                        nextProducts = relatedProducts.slice(currentIndex + 1, currentIndex + 5);
+                        if (nextProducts.length < 4) {
+                            nextProducts = nextProducts.concat(relatedProducts.slice(0, 4 - nextProducts.length));
+                        }
+                    }
+
+                    setAlsoLikeProducts(nextProducts);
                 }).catch(error => {
-                    console.error('Error fetching product, diamond, or collection details:', error);
+                    console.error('Error in Promise.all:', error);
                 });
+            }).catch(error => {
+                console.error('Error fetching product details:', error);
             });
 
             getShellMaterials().then(response => {
@@ -222,7 +243,7 @@ function ProductDetail() {
                         {product.description}
                     </p>
                     <p className="product_code_detail"><strong>Code:</strong> {product.productCode}</p>
-                    <p className="product_diamond_detail"><strong>Diamond Shape:</strong> {diamond.shape}</p>
+                    <p className="product_diamond_detail"><strong>Shape:</strong> {diamond.shape}</p>
                     <p className="product_weight_detail"><strong>Carat:</strong> {diamond.carat}</p>
                     <p className="product_shell_detail"><strong>Shell:</strong>
                         {shellMaterials.map((shell) => (

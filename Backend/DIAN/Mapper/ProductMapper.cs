@@ -43,6 +43,8 @@ namespace DIAN_.Mapper
                 LaborPrice = product.LaborCost ?? 0, // Handle nullable types
                 Description = product.Description,
                 ImageLinkList = product.ImageLinkList,
+                MainDiamondAmount = product.MainDiamondAmount ?? 0,
+                SubDiamondAmount = product.SubDiamondAmount ?? 0,
                 CollectionId = product.CollectionId,
                 Sizes = sizes,
                 CategoryId = product.CategoryId,

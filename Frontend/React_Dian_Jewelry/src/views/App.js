@@ -186,7 +186,7 @@ function AppContent() {
 
           {/* Delivery Staff */}
           <Route path="/delivery-staff-delivery-list" element={<ProtectedRoute path="/delivery-staff-delivery-list" element={DSDeliveryList} />} />
-          <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail" element={DSDeliveryDetail} />} />
+          <Route path="/delivery-staff-delivery-detail/:orderId" element={<ProtectedRoute path="/delivery-staff-delivery-detail/:orderId" element={DSDeliveryDetail} />} />
           <Route path="/staff-edit-profile" element={<StaffEditProfile />} />
         </Routes>
 

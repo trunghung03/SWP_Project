@@ -158,7 +158,7 @@ function EditProfile() {
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error("New password does not match! Please try again.", {
+      toast.error("New password and confirm password do not match! Please try again.", {
         position: "top-right",
         autoClose: 3000
       });
@@ -172,16 +172,20 @@ function EditProfile() {
         newPassword: newPassword
       });
 
-      if (changePasswordResponse.data === 'Password has been changed.') {
-        toast.success("Password has been changed successfully.", {
-          position: "top-right",
-          autoClose: 3000
-        });
-      } else if (changePasswordResponse.data === 'Password is not match') {
+      if (changePasswordResponse.data === 'Cannot update password due to password is not match.') {
         toast.error("Current password is incorrect! Please try again.", {
           position: "top-right",
           autoClose: 3000
         });
+      } else if (changePasswordResponse.data) {
+        toast.success("Password has been changed successfully.", {
+          position: "top-right",
+          autoClose: 3000
+        });
+        // Clear password fields after successful password change
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
       }
     } catch (error) {
       toast.error("Failed to change password! Please try again.", {
