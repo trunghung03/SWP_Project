@@ -14,7 +14,7 @@ namespace DIAN_.Mapper
                 Title = article.Title,
                 Content = article.Content,
                 CreatedOn = article.Date,
-                CreatedBy = article.EmployeeNavigation?.LastName ?? "Unknown", 
+                CreatedBy = article.Employee, 
                 Image = article.Image,
                 Tag = article.Tag,
             };

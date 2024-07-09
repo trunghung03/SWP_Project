@@ -277,7 +277,7 @@ const SSOrderList = () => {
           </TableContainer>
           {isSearch && (
             <button className="SS_back_button" onClick={handleBackClick}>
-              Back to Order List
+              Back
             </button>
           )}
         </div>

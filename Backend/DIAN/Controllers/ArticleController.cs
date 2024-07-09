@@ -10,7 +10,6 @@ namespace DIAN_.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleRepository _articleRepository;
-        private readonly IWebHostEnvironment _env;
 
         public ArticleController(IArticleRepository articleRepository)
         {

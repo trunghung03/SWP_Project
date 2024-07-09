@@ -20,6 +20,7 @@ function SSUpdateContent() {
     imageUrl: "",
     createdBy: "",
   });
+  
   const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {

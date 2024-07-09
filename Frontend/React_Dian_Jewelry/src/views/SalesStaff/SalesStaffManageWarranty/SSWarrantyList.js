@@ -23,6 +23,10 @@ import TableHead from "@mui/material/TableHead"; // Import TableHead
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const SSWarrantyList = () => {
   const navigate = useNavigate();
@@ -35,8 +39,8 @@ const SSWarrantyList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
+      backgroundColor: "#f9c6bb",
+      color: "1c1c1c",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -186,7 +190,7 @@ const SSWarrantyList = () => {
       );
     } catch (error) {
       console.error(
-        "Error updating diamond:",
+        "Error updating warranty status:",
         error.response ? error.response.data : error.message
       );
       swal(
@@ -197,8 +201,8 @@ const SSWarrantyList = () => {
     }
   };
   const isExpired = (endDate) => {
-    const today = new Date().toLocaleDateString('en-CA');
-    const formattedEndDate = new Date(endDate).toLocaleDateString('en-CA');
+    const today = new Date().toLocaleDateString("en-CA");
+    const formattedEndDate = new Date(endDate).toLocaleDateString("en-CA");
     return new Date(today) > new Date(formattedEndDate);
   };
 
@@ -216,16 +220,19 @@ const SSWarrantyList = () => {
               className="manager_manage_diamond_search_bar"
               placeholder="Search by ID..."
               value={searchQuery}
-              style={{width: '140px', borderRadius: '5px'}}
+              style={{ width: "140px", borderRadius: "5px" }}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 style={{ textAlign: 'center' }}>Warranty List</h3>
-        <div className="manager_manage_diamond_create_button_section" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <div className="manager_manage_diamond_pagination" >
+        <h3 style={{ textAlign: "center" }}>Warranty List</h3>
+        <div
+          className="manager_manage_diamond_create_button_section"
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
+          <div className="manager_manage_diamond_pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -257,7 +264,9 @@ const SSWarrantyList = () => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center">Order Detail ID</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Order Detail ID
+                  </StyledTableCell>
                   <StyledTableCell align="center">Start Date</StyledTableCell>
                   <StyledTableCell align="center">End Date</StyledTableCell>
                   <StyledTableCell align="center">Status</StyledTableCell>
@@ -267,12 +276,28 @@ const SSWarrantyList = () => {
               <TableBody>
                 {currentWarranty.length > 0 ? (
                   currentWarranty.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.orderDetailId}>
+                    <TableRow
+                      className="manager_manage_table_body_row"
+                      key={item.orderDetailId}
+                    >
                       <TableCell align="center">{item.orderDetailId}</TableCell>
-                      <TableCell align="center">{new Date(item.startDate).toLocaleDateString('en-CA')}</TableCell>
-                      <TableCell align="center">{new Date(item.endDate).toLocaleDateString('en-CA')}</TableCell>
-                      <TableCell align="center" style={{ color: isExpired(item.endDate) ? 'red' : 'inherit' }}>
-                        {isExpired(item.endDate) ? "Expired" : (item.status !== undefined ? item.status.toString() : "N/A")}
+                      <TableCell align="center">
+                        {new Date(item.startDate).toLocaleDateString("en-CA")}
+                      </TableCell>
+                      <TableCell align="center">
+                        {new Date(item.endDate).toLocaleDateString("en-CA")}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          color: isExpired(item.endDate) ? "red" : "inherit",
+                        }}
+                      >
+                        {isExpired(item.endDate)
+                          ? "Expired"
+                          : item.status !== undefined
+                          ? item.status.toString()
+                          : "N/A"}
                       </TableCell>
 
                       <TableCell align="center">
@@ -313,16 +338,35 @@ const SSWarrantyList = () => {
           >
             <div className="manager_manage_diamond_modal_content">
               <div className="manager_manage_diamond_form_group">
-                <label>Status</label>
                 {isExpired(editedWarranty.endDate) ? (
-                  <select name="status" value={editedWarranty.status} onChange={handleChange} disabled>
-                    <option value="Expired">Expired</option>
-                  </select>
+                  <FormControl sx={{ m: 1, minWidth: 120 }} disabled>
+                    <InputLabel id="status-select-label">Status</InputLabel>
+                    <Select
+                      name="status"
+                      labelId="status-select-label"
+                      id="status-select"
+                      value={editedWarranty.status}
+                      onChange={handleChange}
+                      label="status"
+                    >
+                      <MenuItem value="Expired">Expired</MenuItem>
+                    </Select>
+                  </FormControl>
                 ) : (
-                  <select name="status" value={editedWarranty.status} onChange={handleChange}>
-                    <option value="Active">Active</option>
-                    <option value="Deactive">Deactive</option>
-                  </select>
+                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="status-select-label">Status</InputLabel>
+                    <Select
+                      name="status"
+                      labelId="status-select-label"
+                      id="status-select"
+                      value={editedWarranty.status}
+                      onChange={handleChange}
+                      label="status"
+                    >
+                      <MenuItem value="Active">Active</MenuItem>
+                      <MenuItem value="Invalid">Invalid</MenuItem>
+                    </Select>
+                  </FormControl>
                 )}
               </div>
               <div className="manager_manage_diamond_modal_actions">

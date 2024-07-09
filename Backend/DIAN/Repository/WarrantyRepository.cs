@@ -38,6 +38,7 @@ namespace DIAN_.Repository
         {
 
             var warranties = await _context.Warranties
+                .Where(w => w.Status == "Active" || w.Status == "Invalid")
                 .Select(w => w.ToWarrantyDetailDto())
                 .ToListAsync();
 

@@ -247,7 +247,6 @@
     width: 100%;
     z-index: 1001;
     overflow-y: auto;
-    margin: 300px 0 50px 0;
 }
 
 .manager_manage_diamond_modal_content {
@@ -261,7 +260,11 @@
 }
 
 .manager_manage_diamond_form_group {
-    margin-bottom: 15px;
+    margin: 7px 16px; 
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+   // margin-bottom: 16px;
 }
 
 .manager_manage_diamond_form_group label {
@@ -277,7 +280,7 @@
 
 .manager_manage_diamond_modal_actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .manager_manage_diamond_modal_actions button {
