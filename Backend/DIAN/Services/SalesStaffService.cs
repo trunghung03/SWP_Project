@@ -43,14 +43,19 @@ namespace DIAN_.Services
             if (order == null) throw new Exception("Order not found.");
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
-            var connectionIds = _connectionService.GetConnectionId(order.UserId);
-
-            if (connectionIds != null && connectionIds.Any())
+            var connectionId = _connectionService.GetConnectionId(order.UserId);
+            _logger.LogInformation($"Connection IDs: {connectionId}");
+            if (connectionId != null && connectionId.Any())
             {
-                foreach (var connectionId in connectionIds)
-                {
                     await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
-                }
+                    var notification = new Notification
+                    {
+                        CustomerId = order.UserId,
+                        Message = $"Order {orderId} status updated to {status}.",
+                        IsDelivered = true,
+                        CreatedAt = DateTime.Now,
+                    };
+                    await _notificationRepository.AddNotification(notification);
             }
             else
             {
