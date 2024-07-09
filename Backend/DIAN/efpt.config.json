@@ -43,6 +43,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[NOTIFICATION]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ORDERDETAIL]",
          "ObjectType": 0
       },

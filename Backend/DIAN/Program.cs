@@ -10,11 +10,19 @@ using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using System.Reflection;
 using UserApplication.Interfaces;
 using UserApplication.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddUserSecrets(Assembly.GetEntryAssembly()!)
+    .AddEnvironmentVariables();
 
 Environment.SetEnvironmentVariable("ASPNETCORE_APIURL",builder.Configuration.GetSection("URLS").GetSection("ApiUrl").Value);
 // Add services to the container.
@@ -56,7 +64,13 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.EnableDetailedErrors = true;
+    hubOptions.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+    hubOptions.KeepAliveInterval = TimeSpan.FromSeconds(15);
+});
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -89,6 +103,7 @@ builder.Services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IShellRepository, ShellRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
@@ -98,16 +113,17 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();
 builder.Services.AddScoped<IPasswordHasher<Employee>, PasswordHasher<Employee>>();
+builder.Services.AddScoped<IConnectionService, ConnectionService>();
 
-
+//builder.Services.AddSingleton<ICryptoUtils, CryptoUtils>();
 //builder.Services.AddScoped<IJobService, JobService>();
 
 var app = builder.Build();
 
-app.UseCors(builder => builder
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+});
 
 if (!app.Environment.IsDevelopment())
 {
@@ -125,7 +141,7 @@ app.UseSwaggerUI(options =>
 });
 app.UseDeveloperExceptionPage();
 
-app.MapHub<NotificationsHub>("/notifications");
+app.MapHub<NotificationsHub>("/notification");
 
 app.ConfigureCustomExceptionMiddleware();
 app.UseExceptionHandler(opt => { });

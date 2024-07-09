@@ -22,11 +22,14 @@ namespace DIAN_.Services
         private readonly IDiamondRepository _diamondRepository;
         private readonly IShellRepository _shellRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IConnectionService _connectionService;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IHubContext<NotificationsHub> _hubContext;
         private readonly ILogger<SalesStaffService> _logger;
         public SalesStaffService(IPurchaseOrderRepository purchaseOrderRepository, IOrderDetailRepository orderDetailRepository,
             IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository,
-            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, IShellRepository shellRepository, IProductRepository productRepository)
+            IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, IShellRepository shellRepository, IProductRepository productRepository,
+            INotificationRepository notificationRepository, IConnectionService connectionService)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -37,6 +40,8 @@ namespace DIAN_.Services
             _logger = logger;
             _shellRepository = shellRepository;
             _productRepository = productRepository;
+            _notificationRepository = notificationRepository;
+            _connectionService = connectionService;
         }
         public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId)
         {
@@ -92,16 +97,40 @@ namespace DIAN_.Services
         public async Task<Purchaseorder> UpdateOrderStatus(string status, int orderId)
         {
             var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
-            if (order == null)
-            {
-                throw new Exception("Order not found.");
-            }
+            if (order == null) throw new Exception("Order not found.");
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
-
-            var orderDto = updatedOrder.ToPurchaseOrderDTO();
+            var connectionIds = _connectionService.GetConnectionId(order.UserId);
+            _logger.LogInformation($"Connection IDs: {connectionIds}");
+            if (connectionIds != null && connectionIds.Any())
+            {
+                foreach (var connectionId in connectionIds)
+                {
+                    await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                    var notification = new Notification
+                    {
+                        CustomerId = order.UserId,
+                        Message = $"Order {orderId} status updated to {status}.",
+                        IsDelivered = true,
+                        CreatedAt = DateTime.Now,
+                    };
+                    await _notificationRepository.AddNotification(notification);
+                }
+            }
+            else
+            {
+                var notification = new Notification
+                {
+                    CustomerId = order.UserId,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = false,
+                    CreatedAt = DateTime.Now,
+                };
+                await _notificationRepository.AddNotification(notification);
+            }
             return updatedOrder;
         }
+
 
 
         public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int salesStaffId)

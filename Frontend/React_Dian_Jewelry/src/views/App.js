@@ -66,10 +66,10 @@ import UpdateTitle from '../services/TitleService';
 import ManagerProductDetail from './Manager/ManagerManageProduct/ManagerProductDetail.js';
 import StaffEditProfile from './StaffEditProfile.js';
 import logo from '../assets/img/logoN.png'; 
+import { SignalRProvider } from '../services/SignalRContext.js';
 // import DSEditProfile from './DeliveryStaff/DSEditProfile.js';
 // import SSEditProfile from './SalesStaff/SalesStaffSetting/SalesStaffEditProfile.js';
 // import ManagerEditProfile from './Manager/ManagerSetting/ManagerEditProfile.js';
-
 
 function AppContent() {
   const [isClosed, setIsClosed] = useState(true);
@@ -221,7 +221,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
+      <SignalRProvider>
       <AppContent />
+      </SignalRProvider>
     </Router>
   );
 }
