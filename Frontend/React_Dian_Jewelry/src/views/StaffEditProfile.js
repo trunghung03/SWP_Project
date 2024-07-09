@@ -12,8 +12,9 @@ import DeliveryStaffSidebar from '../components/DeliveryStaffSidebar/DeliverySta
 import SalesStaffSidebar from '../components/SalesStaffSidebar/SalesStaffSidebar.js';
 import axios from 'axios';
 import { getUserInfo } from '../services/UserService.js';
-import { getEmployeeDetail,updateEmployeeById } from '../services/ManagerService/ManagerEmployeeService.js';
+import { getEmployeeDetail, updateEmployeeById, updateEmployeePassword } from '../services/ManagerService/ManagerEmployeeService.js';
 import { X } from '@mui/icons-material';
+
 
 
 function StaffEditProfile() {
@@ -40,13 +41,14 @@ function StaffEditProfile() {
       try {
         const employeeDetailResponse = await getEmployeeDetail(id);
         console.log(employeeDetailResponse);
-        setRole(employeeDetailResponse.role); 
+        setRole(employeeDetailResponse.role);
         setFirstName(employeeDetailResponse.firstName || '');
         setLastName(employeeDetailResponse.lastName || '');
         setAddress(employeeDetailResponse.address || '');
         setPhoneNumber(employeeDetailResponse.phoneNumber || '');
         setEmail(employeeDetailResponse.email || '');
         setStoredPassword(employeeDetailResponse.password || '');
+        
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -163,6 +165,35 @@ function StaffEditProfile() {
     }
   };
 
+  const handleChangePassword = async () => {
+    try {
+      const updatePasswordData = {
+        email: email,
+        oldPassword: currentPassword,
+        newPassword: newPassword
+      };
+      console.log("Hello world");
+      const response = await updateEmployeePassword(updatePasswordData);
+      alert(response);
+      if (response.status === 200) {
+        console.log("Update successfully");
+        toast.success("Password updated successfully.", {
+          position: "top-right",
+          autoClose: 8000
+        });
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setPasswordFormVisible(false);
+      }
+    } catch (error) {
+      toast.error("Failed to update password. Please try again later.", {
+        position: "top-right",
+        autoClose: 8000
+      });
+    }
+  };
+
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -272,7 +303,7 @@ function StaffEditProfile() {
                     ></i>
                   </span>
                 </div>
-                <button type="button" className="edit_form_save_button" >Save new password</button>
+                <button type="button" className="edit_form_save_button" onClick={handleChangePassword}>Save new password</button>
               </form>
             )}
           </>

@@ -8,6 +8,11 @@ const ShowAllEmployee = async () => {
   return response.data;
 };
 
+const updateEmployeePassword = async (data) => {
+  const response = await axios.post(`${API_BASE_URL}/employees/change-password`, data);
+  return response.data;
+}
+
 const updateEmployeeById = (id, data) => {
   return axios.put(`${API_BASE_URL}/employees/${id}`, data);
 };
@@ -26,4 +31,4 @@ const createEmployee = async (data) => {
 const deleteEpmloyeeById = async (id) => {
   return axios.delete(`${API_BASE_URL}/employees/${id}`);
 }
-export { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeeById, createEmployee, getEmployeeByRole };
+export { ShowAllEmployee, getEmployeeDetail, deleteEpmloyeeById, updateEmployeePassword,updateEmployeeById, createEmployee, getEmployeeByRole };
