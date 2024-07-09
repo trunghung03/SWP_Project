@@ -12,6 +12,7 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 import { useCart } from '../../services/CartService';
+import Loading from '../../components/Loading/Loading';
 
 function Invoice() {
     const navItems = [
@@ -23,16 +24,12 @@ function Invoice() {
     const navigate = useNavigate();
     const location = useLocation();
     const [invoiceData, setInvoiceData] = useState(null);
+    const [loading, setLoading] = useState(true); 
     const { setCartItems: updateCartContext } = useCart();
 
     useEffect(() => {
-        // toast.success("Order successfully! Thank you for your order.", {
-        //     position: "top-right",
-        //     autoClose: 8000
-        // });
         window.scrollTo(0, 160);
-
-    });
+    }, []);
 
     useEffect(() => {
         const fetchData = () => {
@@ -50,17 +47,35 @@ function Invoice() {
             const cartKey = `cartItems${customerId}`;
             localStorage.removeItem(cartKey);
             updateCartContext([]);
+            setLoading(false); 
         };
 
         fetchData();
     }, [updateCartContext]);
 
+    if (loading) {
+        return (
+            <div>
+                <HeaderComponent />
+                <Loading />
+                <ScrollToTop />
+                <FooterComponent />
+            </div>
+        );
+    }
+
     if (!invoiceData) {
-        return <div>Loading...</div>;
+        return (
+            <div>
+                <HeaderComponent />
+                <div>Loading...</div>
+                <ScrollToTop />
+                <FooterComponent />
+            </div>
+        );
     }
 
     const { orderId, orderDate, orderTotalPrice, orderDiscount, paymentMethod, cartItems } = invoiceData;
-
     const formattedDate = new Date(orderDate).toLocaleDateString('en-GB');
 
     return (
@@ -132,7 +147,7 @@ function Invoice() {
                 </div>
             </div>
 
-            <br></br><br></br>
+            <br /><br />
             <Insta />
             <ScrollToTop />
             <FooterComponent />

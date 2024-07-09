@@ -15,16 +15,16 @@ const FooterComponent = () => {
         btn.onclick = function (e) {
             e.preventDefault();
             modal.style.display = "block";
-            document.body.classList.add("modal-open"); // Add class to disable scrolling
+            document.body.classList.add("modal-open"); 
         };
         span.onclick = function () {
             modal.style.display = "none";
-            document.body.classList.remove("modal-open"); // Remove class to enable scrolling
+            document.body.classList.remove("modal-open"); 
         };
         window.onclick = function (event) {
             if (event.target === modal) {
                 modal.style.display = "none";
-                document.body.classList.remove("modal-open"); // Remove class to enable scrolling
+                document.body.classList.remove("modal-open"); 
             }
         };
     }, []);
@@ -92,7 +92,7 @@ const FooterComponent = () => {
                                 <li><Link to="/blog" onClick={(e) => handleLinkClick(e, 0)}>Articles</Link></li>
                                 <li><Link to="/introduce" onClick={(e) => handleLinkClick(e, 0)}>About us</Link></li>
                                 <li><Link to="/contact" onClick={(e) => handleLinkClick(e, 0)}>Contact us</Link></li>
-                                <li><Link to="/price-list" onClick={(e) => handleLinkClick(e, 0)}>Diamond price</Link></li>
+                                <li><Link to="/diamond-price" onClick={(e) => handleLinkClick(e, 0)}>Diamond price</Link></li>
                             </ul>
                         </div>
                         <div className="col-sm-12 col-md-3 footer_last_column">

@@ -9,6 +9,7 @@ import '../../styles/Active/BlogDetail.scss';
 import blogLogo from '../../assets/img/blogLogo.png';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Loading from '../../components/Loading/Loading';
 
 function BlogDetail() {
   const navigate = useNavigate();
@@ -36,10 +37,18 @@ function BlogDetail() {
           console.error('Error fetching article by ID:', error);
         });
     }
+    window.scrollTo(0, 210);
   }, [articleID]);
 
   if (!article) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <HeaderComponent />
+        <Loading />
+        <ScrollToTop />
+        <FooterComponent />
+      </div>
+    );
   }
 
   const navItems = [

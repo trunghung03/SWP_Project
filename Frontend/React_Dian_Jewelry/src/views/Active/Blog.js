@@ -16,6 +16,7 @@ import recycledMetalsIcon from '../../assets/img/blog2.svg';
 import givingBackIcon from '../../assets/img/blog3.svg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Loading from '../../components/Loading/Loading'; // Import the Loading component
 
 function Blog() {
   const [articles, setArticles] = useState([]);
@@ -24,7 +25,7 @@ function Blog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchActive, setSearchActive] = useState(false);
-  const [transitionKey, setTransitionKey] = useState(Date.now());
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   const navItems = [
@@ -36,9 +37,11 @@ function Blog() {
     getAllArticles()
       .then(data => {
         setArticles(data);
+        setLoading(false); // Set loading to false when data is fetched
       })
       .catch(error => {
         console.error('Error fetching articles:', error);
+        setLoading(false); // Set loading to false even if there is an error
       });
   }, []);
 
@@ -56,13 +59,6 @@ function Blog() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      document.querySelector('.blog_logo img').classList.add('visible');
-    }, 10);
-    return () => clearTimeout(timeout);
-  }, [transitionKey]);
 
   const handleReadMore = (article) => {
     const { articleID, title } = article;
@@ -132,9 +128,16 @@ function Blog() {
     setVisibleBlogs(visibleBlogs + 8);
   };
 
-  const openInstagram = () => {
-    window.open('https://www.instagram.com/dian_jewelryy', '_blank');
-  };
+  if (loading) {
+    return (
+      <div>
+        <HeaderComponent />
+        <Loading />
+        <ScrollToTop />
+        <FooterComponent />
+      </div>
+    );
+  }
 
   return (
     <div className="Blog">
@@ -233,14 +236,13 @@ function Blog() {
         {filteredArticles.length > 0 ? (
           filteredArticles.map(article => (
             <div key={article.articleID} className="col-md-3 mb-4">
-              <div className="small_blog_card card">
+              <div className="small_blog_card card" onClick={() => handleReadMore(article)}>
                 <img src={article.image} alt={article.title} className="small_blog_image card-img-top" />
                 <div className="small_blog_card_body card-body">
                   <h6 className="small_blog_title card-title">{article.title}</h6>
                   <div className='small_blog_card_button'>
                     <button
                       className="small_blog_read_more btn btn-link"
-                      onClick={() => handleReadMore(article)}
                     >
                       Read more <i className="fas fa-arrow-right"></i>
                     </button>

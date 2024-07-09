@@ -9,6 +9,7 @@ import { getAllOrders } from '../../services/TrackingOrderService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import Loading from '../../components/Loading/Loading'; 
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ function OrderHistory() {
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState('All');
     const [sortOrder, setSortOrder] = useState('Newest');
+    const [loading, setLoading] = useState(true); 
     const ordersPerPage = 6;
 
     useEffect(() => {
@@ -35,8 +37,10 @@ function OrderHistory() {
             const customerOrders = data.filter(order => order.userId === parseInt(customerId));
             setOrders(customerOrders);
             setFilteredOrders(customerOrders);
+            setLoading(false); 
         }).catch(error => {
             console.error('Error fetching orders:', error);
+            setLoading(false); 
         });
     }, []);
 
@@ -54,12 +58,12 @@ function OrderHistory() {
         setCurrentPage(1);
     }, [filterStatus, sortOrder, orders]);
 
-    useEffect(() => {
-        window.scrollTo({
-            top: document.querySelector('.order_history_container').offsetTop,
-            behavior: 'smooth',
-        });
-    }, []);
+    // useEffect(() => {
+    //     window.scrollTo({
+    //         top: document.querySelector('.order_history_container').offsetTop,
+    //         behavior: 'smooth',
+    //     });
+    // }, []);
 
     const navItems = [
         { name: 'Home', link: '/home' },
@@ -95,6 +99,17 @@ function OrderHistory() {
     const handleSortChange = (event) => {
         setSortOrder(event.target.value);
     };
+
+    if (loading) {
+        return (
+            <div>
+                <HeaderComponent />
+                <Loading />
+                <ScrollToTop />
+                <FooterComponent />
+            </div>
+        );
+    }
 
     return (
         <div className="OrderHistory">

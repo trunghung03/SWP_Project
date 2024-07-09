@@ -53,6 +53,7 @@
     background-color: #f8f9fa;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 310px;
+    max-height: 735px;
 }
 
 .checkout_summary_title {
@@ -292,6 +293,7 @@
     border: 1px solid gray;
     border-radius: 5px;
     background-color: white;
+    cursor: pointer;
 }
 
 .payment_method input[type="radio"] {

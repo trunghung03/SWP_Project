@@ -8,6 +8,7 @@ import '../../styles/Setting/OrderDetail.scss';
 import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellMaterialById } from '../../services/TrackingOrderService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Loading from '../../components/Loading/Loading'; 
 
 function OrderDetail() {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ function OrderDetail() {
     const [orderDetails, setOrderDetails] = useState(null);
     const [promotionCode, setPromotionCode] = useState('');
     const [orderProducts, setOrderProducts] = useState([]);
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const storedFirstName = localStorage.getItem('firstName');
@@ -51,8 +53,10 @@ function OrderDetail() {
                     };
                 }));
                 setOrderProducts(productDetails);
+                setLoading(false);
             }).catch(error => {
                 console.error('Error fetching order details:', error);
+                setLoading(false); 
             });
         }
     }, [orderNumber]);
@@ -81,8 +85,15 @@ function OrderDetail() {
         { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
     ];
 
-    if (!orderDetails) {
-        return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <div>
+                <HeaderComponent />
+                <Loading />
+                <ScrollToTop />
+                <FooterComponent />
+            </div>
+        );
     }
 
     const formatDate = (dateString) => {

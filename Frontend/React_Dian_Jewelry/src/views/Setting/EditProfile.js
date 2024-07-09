@@ -11,6 +11,7 @@ import { getUserInfo, updateCustomerInfo, changePasswordApi } from '../../servic
 import { UserContext } from '../../services/UserContext';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
+import Loading from '../../components/Loading/Loading';
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ function EditProfile() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [storedPassword, setStoredPassword] = useState('');
   const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
@@ -42,18 +44,20 @@ function EditProfile() {
         setEmail(userData.email || '');
         setPoints(userData.points || 0);
         setStoredPassword(userData.password || '');
+        setLoading(false); 
       }).catch((error) => {
         console.error('Error fetching user data:', error);
+        setLoading(false); 
       });
     }
   }, []);
 
-  useEffect(() => {
-    window.scrollTo({
-      top: document.querySelector('.edit_profile_container').offsetTop,
-      behavior: 'smooth',
-    });
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo({
+  //     top: document.querySelector('.edit_profile_container').offsetTop,
+  //     behavior: 'smooth',
+  //   });
+  // }, []);
 
   const navItems = [
     { name: 'Home', link: '/home' },
@@ -182,7 +186,6 @@ function EditProfile() {
           position: "top-right",
           autoClose: 3000
         });
-        // Clear password fields after successful password change
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
@@ -194,6 +197,17 @@ function EditProfile() {
       });
     }
   };
+
+  if (loading) {
+    return (
+      <div>
+        <HeaderComponent />
+        <Loading />
+        <ScrollToTop />
+        <FooterComponent />
+      </div>
+    );
+  }
 
   return (
     <div className="EditProfile">

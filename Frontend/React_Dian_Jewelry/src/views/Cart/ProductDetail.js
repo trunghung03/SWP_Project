@@ -18,6 +18,7 @@ import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
 import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 import GIA from '../../assets/img/gia2.jpg';
+import Loading from '../../components/Loading/Loading';
 
 function ProductDetail() {
     const location = useLocation();
@@ -35,6 +36,7 @@ function ProductDetail() {
     const [selectedImage, setSelectedImage] = useState('');
     const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
     const [shellPrice, setShellPrice] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const navigateToProductDetail = (product) => {
         const productId = product.productId;
@@ -51,6 +53,7 @@ function ProductDetail() {
         window.scrollTo(0, 220);
         const { id } = location.state || {};
         if (id) {
+            setLoading(true);
             getProductDetail(id).then(response => {
                 const productData = response.data;
                 setProduct(productData);
@@ -89,9 +92,12 @@ function ProductDetail() {
                     setAlsoLikeProducts(nextProducts);
                 }).catch(error => {
                     console.error('Error in Promise.all:', error);
+                }).finally(() => {
+                    setLoading(false);
                 });
             }).catch(error => {
                 console.error('Error fetching product details:', error);
+                setLoading(false);
             });
 
             getShellMaterials().then(response => {
@@ -216,11 +222,23 @@ function ProductDetail() {
         sizeGuideImage = necklaceSizeGuide;
     }
 
+    if (loading) {
+        return (
+            <div>
+                <HeaderComponent />
+                <Loading />
+                <ScrollToTop />
+                <FooterComponent />
+            </div>
+        );
+    }
+
     return (
         <div id="product_detail" className={`product_detail ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
             <ToastContainer />
+            
             <br />
             <div className="product_detail_container">
                 <div className="product_images_detail">
