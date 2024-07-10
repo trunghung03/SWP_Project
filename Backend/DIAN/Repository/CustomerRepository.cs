@@ -78,13 +78,13 @@ namespace DIAN_.Repository
 
         public async Task<Customer?> ChangePassword(Customer customerModel, string oldPassword, string newPassword)
         {
-           var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Email == customerModel.Email);
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Email == customerModel.Email);
             if (customer == null) { return null; }
             var verificationResult = _passwordHasher.VerifyHashedPassword(customer, customer.Password, oldPassword);
             if (verificationResult == PasswordVerificationResult.Failed) { return null; }
-                customer.Password = _passwordHasher.HashPassword(customer, newPassword);
-                _context.Customers.Update(customer);
-                var result = await _context.SaveChangesAsync();
+            customer.Password = _passwordHasher.HashPassword(customer, newPassword);
+            _context.Customers.Update(customer);
+            var result = await _context.SaveChangesAsync();
             return customer;
         }
 
@@ -162,6 +162,14 @@ namespace DIAN_.Repository
             _context.Customers.Update(customer);
             var result = await _context.SaveChangesAsync();
             return result > 0;
+        }
+
+        public async Task<string?> GetCustomerEmail(int id)
+        {
+            return await _context.Customers
+                                 .Where(c => c.CustomerId == id)
+                                 .Select(c => c.Email)
+                                 .FirstOrDefaultAsync();
         }
     }
 }

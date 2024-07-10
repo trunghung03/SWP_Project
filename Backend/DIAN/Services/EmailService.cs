@@ -1,5 +1,6 @@
 ﻿using DIAN_.Helper;
 using DIAN_.Interfaces;
+using DIAN_.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
@@ -15,7 +16,24 @@ namespace DIAN_.Services
         {
             this.emailSettings = options.Value;
         }
+        public async Task<string> GetEmailConfirmBody(Purchaseorder order, string htmlTemplatePath)
+        {
+            if (!System.IO.File.Exists(htmlTemplatePath))
+            {
+                throw new Exception($"Template file '{htmlTemplatePath}' not found.");
+            }
 
+            string htmlContent = await System.IO.File.ReadAllTextAsync(htmlTemplatePath);
+
+            htmlContent = htmlContent.Replace("{orderId}", order.OrderId.ToString());
+            htmlContent = htmlContent.Replace("{customerName}", order.Name);
+            htmlContent = htmlContent.Replace("{date}", DateTime.UtcNow.ToString("yyyy-MM-dd"));
+            htmlContent = htmlContent.Replace("{address}", order.ShippingAddress);
+            htmlContent = htmlContent.Replace("{phoneNumber}", order.PhoneNumber);
+            htmlContent = htmlContent.Replace("{total}", order.TotalPrice.ToString());
+
+            return htmlContent;
+        }
         public async Task SendEmailAsync(MailRequest message)
         {
             var email = new MimeMessage();

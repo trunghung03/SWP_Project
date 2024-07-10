@@ -342,7 +342,7 @@ const handleEdit = (product) => {
 
         {/* Table product list */}
         <div className="manager_manage_product_table_wrapper">
-          <TableContainer component={Paper} style={{ marginTop: 10 }}>
+          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>

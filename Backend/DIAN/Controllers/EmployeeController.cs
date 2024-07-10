@@ -18,14 +18,16 @@ namespace UserApplication.Controllers
         private readonly ISalesStaffService _salesStaffService;
         private readonly IDeliveryStaffService _deliveryStaffService;
         private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IEmailService _emailService;
         public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository, 
-            ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService, IOrderDetailRepository orderDetailRepository)
+            ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService, IOrderDetailRepository orderDetailRepository, IEmailService emailService)
         {
             _tokenService = tokenService;
             _employeeRepository = employeeRepository;
             _salesStaffService = salesStaffService;
             _deliveryStaffService = deliveryStaffService;
             _orderDetailRepository = orderDetailRepository;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]

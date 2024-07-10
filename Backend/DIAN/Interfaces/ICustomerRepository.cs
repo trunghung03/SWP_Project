@@ -12,6 +12,8 @@ namespace DIAN_.Interfaces
         Task<Customer?> RegisterAsync(RegisterUserDto user);
         Task<List<Customer>> GetAllAsync();
         Task<Customer?> GetByEmailAsync(string email);
+
+        Task<string?> GetCustomerEmail(int id);
         Task<Customer?> GetByIdAsync(int id);
         Task<Customer?> UpdateAsync(string email, UpdateUserDto customerDto);
         Task<Customer?> UpdateCustomerPoint(int id, UpdateCustomerPointDto customerDto);

@@ -10,6 +10,7 @@ using DIAN_.Repository;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection;
 
 namespace DIAN_.Services
 {
@@ -19,6 +20,7 @@ namespace DIAN_.Services
         private readonly IProductRepository _productRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IWarrantyRepository _warrantyRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IDiamondRepository _diamondRepository;
         private readonly IShellRepository _shellRepository;
         private readonly IEmployeeRepository _employeeRepository;
@@ -26,10 +28,11 @@ namespace DIAN_.Services
         private readonly INotificationRepository _notificationRepository;
         private readonly IHubContext<NotificationsHub> _hubContext;
         private readonly ILogger<SalesStaffService> _logger;
+        private readonly IEmailService _emailService;
         public SalesStaffService(IPurchaseOrderRepository purchaseOrderRepository, IOrderDetailRepository orderDetailRepository,
             IWarrantyRepository warrantyRepository, IDiamondRepository diamondRepository, IEmployeeRepository employeeRepository,
             IHubContext<NotificationsHub> hubContext, ILogger<SalesStaffService> logger, IShellRepository shellRepository, IProductRepository productRepository,
-            INotificationRepository notificationRepository, IConnectionService connectionService)
+            INotificationRepository notificationRepository, IConnectionService connectionService, IEmailService emailService, ICustomerRepository customerRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -42,6 +45,8 @@ namespace DIAN_.Services
             _productRepository = productRepository;
             _notificationRepository = notificationRepository;
             _connectionService = connectionService;
+            _emailService = emailService;
+            _customerRepository = customerRepository;
         }
         public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId)
         {
@@ -97,6 +102,7 @@ namespace DIAN_.Services
         public async Task<Purchaseorder> UpdateOrderStatus(string status, int orderId)
         {
             var order = await _purchaseOrderRepository.GetPurchasrOrderById(orderId);
+            var customerEmail = await _customerRepository.GetCustomerEmail(order.UserId);
             if (order == null) throw new Exception("Order not found.");
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
@@ -128,10 +134,20 @@ namespace DIAN_.Services
                 };
                 await _notificationRepository.AddNotification(notification);
             }
+
+            if (status.Equals("Paid", StringComparison.OrdinalIgnoreCase))
+            {
+                var emailBody = await _emailService.GetEmailConfirmBody(order, "purchaseOrderEmail.html");
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = customerEmail,
+                    Subject = "Confirm your order",
+                    Body = emailBody
+                };
+                await _emailService.SendEmailAsync(mailRequest);
+            }
             return updatedOrder;
         }
-
-
 
         public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int salesStaffId)
         {
