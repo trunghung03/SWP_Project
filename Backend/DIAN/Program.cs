@@ -31,12 +31,12 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(corsBuilder =>
+    options.AddDefaultPolicy(builder =>
     {
-        corsBuilder.WithOrigins("https://diandiamondstore.com")
-                   .AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .AllowCredentials();
+        builder.WithOrigins("http://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -124,7 +124,7 @@ var app = builder.Build();
 
 app.UseCors(corsBuilder =>
 {
-    corsBuilder.WithOrigins("https://diandiamondstore.com")
+    corsBuilder.WithOrigins("http://localhost:3000")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
