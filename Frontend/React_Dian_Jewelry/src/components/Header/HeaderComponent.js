@@ -1,9 +1,9 @@
 import React, {
   useContext,
   useState,
-  useRef,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../services/CartService";
@@ -35,15 +35,13 @@ const HeaderComponent = () => {
   const { cartItems } = useCart();
   const diamondMenuRef = useRef(null);
   const weddingMenuRef = useRef(null);
-
   const diamondMenuTimeoutRef = useRef(null);
   const weddingMenuTimeoutRef = useRef(null);
   const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
-  const accountDropdownTimeoutRef = useRef(null);
-  const notificationDropdownTimeoutRef = useRef(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+
   const handleNotificationReceived = useCallback((newNotification) => {
     setNotificationCount((prevCount) => prevCount + 1);
   }, []);
@@ -52,6 +50,7 @@ const HeaderComponent = () => {
     setNotificationCount(notifications.length);
     console.log(notifications)
   }, [notifications]);
+
 
   useEffect(() => {
     startConnection(customerId);
@@ -87,8 +86,22 @@ const HeaderComponent = () => {
       });
     }
   }, [setUser, startConnection, customerId]);
-  const handleNotificationClick = () => {
-    setShowNotifications(!showNotifications);
+  //   const handleNotificationClick = () => {
+  //     setShowNotifications(!showNotifications);
+  // =======
+
+  useEffect(() => {
+    setNotificationCount(notifications.length);
+  }, [notifications]);
+
+  const toggleAccountDropdown = () => {
+    setShowAccountDropdown((prevShow) => !prevShow);
+    if (showNotifications) setShowNotifications(false);
+  };
+
+  const toggleNotificationDropdown = () => {
+    setShowNotifications((prevShow) => !prevShow);
+    if (showAccountDropdown) setShowAccountDropdown(false);
   };
 
   const handleLogout = () => {
@@ -155,36 +168,6 @@ const HeaderComponent = () => {
     setHoveredImage(imageSrc);
   };
 
-  const handleAccountMouseEnter = () => {
-    clearTimeout(accountDropdownTimeoutRef.current);
-    setShowAccountDropdown(true);
-  };
-
-  const handleAccountMouseLeave = () => {
-    accountDropdownTimeoutRef.current = setTimeout(() => {
-      setShowAccountDropdown(false);
-    }, 200);
-  };
-
-//   const handleNotificationMouseEnter = () => {
-//     clearTimeout(notificationDropdownTimeoutRef.current);
-//     setShowNotifications(true);
-//   };
-
-//   const handleNotificationMouseLeave = () => {
-//     notificationDropdownTimeoutRef.current = setTimeout(() => {
-//       setShowNotifications(false);
-//     }, 200);
-//   };
-
-  // const notifications = [
-  //     { id: 1, title: 'Title 1', description: 'Description for title 1 Description for title 1 Description for title 1', time: '1 hour ago' },
-  //     { id: 2, title: 'Title 2', description: 'Description for title 2222222222222222222222222222222', time: '2 hours ago' },
-  //     { id: 3, title: 'Title 3', description: 'Description for title 3', time: '3 hours ago' },
-  //     { id: 4, title: 'Title 4', description: 'Description for title 4', time: '4 hours ago' },
-  //     { id: 5, title: 'Title 5', description: 'Description for title 5', time: '5 hours ago' },
-  // ];
-
   return (
     <header className="header">
       <div className="top_announcement">
@@ -235,10 +218,7 @@ const HeaderComponent = () => {
                   />
                 </div>
               </div>
-              <div
-                className="notification_icon"
-                onClick={handleNotificationClick}
-              >
+              <div className="notification_icon" onClick={toggleNotificationDropdown}>
                 <i className="icon_noti fas fa-bell"></i>
                 <span className="notification_badge">{notificationCount}</span>
                 <div
@@ -253,11 +233,11 @@ const HeaderComponent = () => {
                 >
                   <div className="noti_header_wrapper">
                     <div className="noti_header">Notifications</div>
-                    <div className="noti_header_view">
+                    {/* <div className="noti_header_view">
                       View all<i className="fas fa-arrow-right"></i>
-                    </div>
+                    </div> */}
                   </div>
-                  {notifications.length > 0 ? (notifications.slice(notifications.length-5, notifications.length).reverse().map((notification, index) => (
+                  {notifications.length > 0 ? (notifications.slice(notifications.length - 5, notifications.length).reverse().map((notification, index) => (
                     <div
                       key={notification.Id}
                       className="noti_item"
@@ -289,11 +269,9 @@ const HeaderComponent = () => {
               </Link>
               <div
                 className="account_dropdown_section dropdown"
-                onMouseEnter={handleAccountMouseEnter}
-                onMouseLeave={handleAccountMouseLeave}
+                onClick={toggleAccountDropdown}
               >
                 <i className="icon_account fas fa-user"></i>
-                {/* <i className="icon_arrow fas fa-chevron-down" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i> */}
                 <ul
                   className="account_dropdown_menu dropdown-menu"
                   aria-labelledby="dropdownMenuButton1"

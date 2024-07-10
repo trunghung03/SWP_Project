@@ -12,17 +12,44 @@ const ActionProvider = ({ setState, children }) => {
     }));
   };
 
-  const handleGenInfo = (infoType) => {
+  const handleProductInfo = (infoType) => {
     let response;
     switch (infoType) {
-      case 'hours':
-        response = 'Our store is open from 8 a.m to 6 p.m through Monday to Saturday, and from 8 a.m to 5 p.m at Sunday. We look forward to your visit!';
+      case 'GIA':
+        response = 'GIA (Gemological Institute of America) of diamond is really shorthand diamond sellers use to describe diamonds that have been graded by GIA. GIA is an independent, nonprofit organization that conducts gem research, educates gem professionals and sets the standards for determining diamond quality.';
         break;
-      case 'location':
-        response = 'We are located at FPT UNI. You can find directions [here/link to map].';
+      case '4Cs':
+        response = 'The 4Cs are the globally accepted standard for assessing the quality of a diamond - color, clarity, cut and carat weight.';
+        break;
+      case 'diamondColor':
+        response = 'Diamond color has the scale ranges from D which is totally colorless to Z which is a pale yellow or brown color. Brown diamonds darker than K color are usually described using their letter grade, and a descriptive phrase, for example M Faint Brown. Diamonds with more depth of color than Z color fall into the fancy color diamond range.';
+        break;
+      case 'diamondClarity':
+        response = 'Diamond clarity is a measure of the purity and rarity of the stone, graded by the visibility of these characteristics under 10-power magnification. A stone is graded as flawless if, under 10-power magnification, no inclusions (internal flaws) and no blemishes (external imperfections) are visible.';
+        break;
+      case 'diamondCarat':
+        response = 'Diamond carat weight measures a diamond\'s apparent size. To put it simply, diamond carat weight measures how much a diamond weighs. A metric carat is defined as 200 milligrams. Each carat is subdivided into 100 points. This allows very precise measurements to the hundredth decimal place.';
+        break;
+      case 'diamondCut':
+        response = 'Diamond cut refers to a diamond\'s facets, symmetry, and dimensions. It describes the way a diamond reflects light, not how the diamond is outwardly shaped. Emerald and Radiant cut diamonds are a great example of the difference between cut and shape.';
+        break;
+      case 'ringSize':
+        response = 'test ring';
+        break;
+      case 'earringsSize':
+        response = 'test earring';
+        break;
+      case 'braceletSize':
+        response = 'test bracelet';
+        break;
+      case 'necklaceSize':
+        response = 'test necklace';
+        break;
+      case 'size':
+        response = 'Do you want to ask about the size of which kind of jewelry?';
         break;
       default:
-        response = 'I am not sure about that. Could you please ask something else?';
+        response = 'I am not sure about that. If you cannot find the answer here, you can contact us directly through hotline: 0795795959 or email: diamonddianjewelry@gmail.com. We will reply as soon as possible.';
     }
     const botMessage = createChatBotMessage(response);
     setState((prev) => ({
@@ -31,22 +58,40 @@ const ActionProvider = ({ setState, children }) => {
     }));
   };
 
-  const handleProductInfo = (infoType) => {
+  const handleGenInfo = (infoType) => {
     let response;
     switch (infoType) {
-      case 'diamond collection':
-        response = 'Certainly! We have a wide range of diamonds, including different cuts, carats, colors, and clarity grades. You can explore our collection [here/link to collection].';
+      case 'hours':
+        response = 'Our store is open from 8 a.m to 6 p.m through Monday to Saturday, and from 8 a.m to 5 p.m at Sunday. We look forward to your visit!';
         break;
-      case 'custom jewelry design':
-        response = 'Yes, we do! Our expert jewelers can help you design a custom piece. Please visit [link] for more details.';
+      case 'location':
+        response = 'We are located at Thu Duc HCM. You can find the direction with Google Map by clicking the address at the top left of our website.';
         break;
-      case 'diamond quality':
-        response = 'All our diamonds come with a certification from reputable gemological laboratories such as GIA, AGS, or IGI. You can learn more about diamond grading [here/link to grading guide].';
+      case 'contact':
+        response = 'You can contact us through our hotline: 0795795959 or email: diamonddianjewelry@gmail.com for the fastest reply, you can also contact us through Facebook, Instagram or Tiktok.';
+        break;
+      case 'sell':
+        response = 'Here we have many types of diamond jewelry, including rings, necklaces, earrings, bracelets, engagement and wedding jewelry. With many beautiful and modern jewelry collections with diversity shape.';
+        break;
+      case 'social':
+        response = 'We have Facebook, Instagram and also TikTok social media account. You can visit us by clicking the corresponding social media icon at the end of our website.';
+        break;
+      case 'account':
+        response = 'By clicking the user icon at top right of website then click "Sign in". You can sign in with a signed account or a Google account, or you can sign up a new account if you don\'t have one.';
+        break;
+      case 'deactivate':
+        response = 'If your account has been deactivated by mistake, please contact us through hotline: 0795795959 or email: diamonddianjewelry@gmail.com for the fastest reply.';
+        break;
+      case 'password':
+        response = 'If you forgot your account password, you can click "Forgot password" on the sign in page and enter your account email to reset the password. Or if you want to change the password, go to "My profile" to change it by entering the current password and the new password.';
         break;
       default:
-        response = 'I am not sure about that. Could you please ask something else?';
+        response = 'I am not sure about that. If you cannot find the answer here, you can contact us directly through hotline: 0795795959 or email: diamonddianjewelry@gmail.com. We will reply as soon as possible.';
     }
-    const botMessage = createChatBotMessage(response);
+    const botMessage = createChatBotMessage(response, {
+      withAvatar: true,
+      delay: 500,
+    });
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
@@ -56,14 +101,26 @@ const ActionProvider = ({ setState, children }) => {
   const handlePurchaseInfo = (infoType) => {
     let response;
     switch (infoType) {
-      case 'place an order':
-        response = 'You can place an order through our online store [link], or you can visit us in-store for personalized assistance.';
-        break;
       case 'payment methods':
-        response = 'We accept cash, bank transfer and VNPAY for both online and in-store purchases.';
+        response = 'We accept cash, bank transfer and VNPAY for both online and in-store purchases. As for the remaining payment methods, we currently do not support.';
+        break;
+      case 'voucher':
+        response = 'We have various types of voucher codes that will be displayed on our homepage when released. You can apply them during checkout to get discounts on your purchases.';
+        break;
+      case 'point':
+        response = 'You can obtain points after a successful order. These points can be redeemed for discounts on future purchases with one point equal to one $.';
+        break;
+      case 'order':
+        response = 'By choosing your favorite jewelry and adding it to the cart, you can proceed to checkout. You will receive an invoice for order confirmation on the website and in your registered email once you confirm the order.';
+        break;
+      case 'checkoutIssue':
+        response = `You cannot add to cart and checkout due to one of these reasons, hope these solutions can solve your problem:
+- Have not signed in an account. If you do not have one, you can sign up an account or sign in with a Google account.
+- Have not chosen a shell type and size for the jewelry you want to add to cart or checkout.
+- Due to some network connectivity issue, you can double-check your connectivity.`;
         break;
       default:
-        response = 'I am not sure about that. Could you please ask something else?';
+        response = 'I am not sure about that. If you cannot find the answer here, you can contact us directly through hotline: 0795795959 or email: diamonddianjewelry@gmail.com. We will reply as soon as possible.';
     }
     const botMessage = createChatBotMessage(response);
     setState((prev) => ({
@@ -72,8 +129,9 @@ const ActionProvider = ({ setState, children }) => {
     }));
   };
 
+
   const handleUnknown = () => {
-    const response = 'If you want to ask more, you can contact us through our hotline: 0795795959 or email: diamonddianjewelry@gmail.com.';
+    const response = 'I\'m not sure about that. If you can\'t find the answer here, you can contact us through hotline: 0795795959 or email: diamonddianjewelry@gmail.com. We will reply as soon as possible.';
     const botMessage = createChatBotMessage(response);
     setState((prev) => ({
       ...prev,
