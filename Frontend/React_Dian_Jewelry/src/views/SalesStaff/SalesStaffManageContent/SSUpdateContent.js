@@ -28,7 +28,7 @@ function SSUpdateContent() {
       try {
         const response = await getContentById(id);
         setContentData(response.data);
-        setImagePreview(response.data.imageUrl);
+        setImagePreview(response.data.image);
       } catch (error) {
         console.error("Error fetching content:", error);
         swal("Error", "Failed to fetch content data.", "error");
