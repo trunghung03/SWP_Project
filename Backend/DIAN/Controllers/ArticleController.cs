@@ -160,5 +160,27 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("employee-name/{id:int}")]
+        public async Task<IActionResult> GetEmployeeNameByArticleId(int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var employeeName = await _articleRepository.GetEmployeeNameByArticleIdAsync(id);
+                if (employeeName == null)
+                {
+                    return NotFound("No article found with the given id or employee not found");
+                }
+
+                return Ok(employeeName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

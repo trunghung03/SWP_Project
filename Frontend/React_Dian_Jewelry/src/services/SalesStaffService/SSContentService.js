@@ -15,6 +15,9 @@ const getContentById = (id) => {
     return axios.get(`${API_BASE_URL}/articles/${id}`);
 };
 
+const getEmployeeNameByArticleId = (id) => {
+    return axios.get(`${API_BASE_URL}/articles/employee-name/${id}`);
+}
 const deleteContentById = (id) => {
     return axios.delete(`${API_BASE_URL}/articles/delete/${id}`);
 };
@@ -34,6 +37,6 @@ const uploadImage = async (data) => {
 };
 
 
-export { getContentList, getContentByTitle, deleteContentById, createContent, updateContentById, getContentById, uploadImage};
+export { getContentList, getContentByTitle,getEmployeeNameByArticleId ,deleteContentById, createContent, updateContentById, getContentById, uploadImage};
 
 
