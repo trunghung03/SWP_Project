@@ -6,11 +6,14 @@ import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js
 import "../../../styles/Manager/ManagerList.scss";
 import {
   ShowAllShell,
-  getShellDetail,
-  deleteShellById,
+  getShellMaterialDetail,
+  deleteShellMaterialById,
   updateShellMaterialById,
-  getShellByName,
-  createShell,ShowAllShellMaterial
+  getShellMaterialByName,
+  createShellMaterial,
+  updateShellById
+  , ShowAllShellMaterial,
+  deleteShellById
 } from "../../../services/ManagerService/ManagerShellService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -35,8 +38,14 @@ const ManagerShellList = () => {
   const [originalShell, setOriginalShell] = useState({});
   const [addMode, setAddMode] = useState(false);
   const [shell, setShell] = useState([]);
+  const [editShellMode, setEditShellMode] = useState(false);
+  const [editedShellNotMaterial, setEditedShellNotMaterial] = useState({
+    productId: "",
+    amountAvailable: ""
+  });
+  const [originalShellNotMaterial, setOriginalShellNotMaterial] = useState({});
   const [newShell, setNewShell] = useState({
-    name: '',
+    productId: '',
     amountAvailable: ''
   });
 
@@ -96,7 +105,7 @@ const ManagerShellList = () => {
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
         try {
-          const response = await getShellDetail(searchQuery.trim());
+          const response = await getShellMaterialDetail(searchQuery.trim());
           setShellMaterial([response]);
           setCurrentPage(1);
         } catch (error) {
@@ -105,7 +114,7 @@ const ManagerShellList = () => {
         }
       } else if (searchQuery.trim()) {
         try {
-          const response = await getShellByName(searchQuery.trim());
+          const response = await getShellMaterialByName(searchQuery.trim());
           if (Array.isArray(response)) {
             setShellMaterial(response);
           } else if (response) {
@@ -131,7 +140,37 @@ const ManagerShellList = () => {
   };
 
   // Delete diamond by id
-  const handleDelete = async (shellID) => {
+  const handleDeleteShellMaterial = async (shellID) => {
+    swal({
+      title: "Are you sure to delete this shell material?",
+      text: "This action cannot be undone",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        try {
+          await deleteShellMaterialById(shellID);
+          const response = await ShowAllShellMaterial();
+          setShellMaterial(response);
+          swal(
+            "Deleted successfully!",
+            "The shell has been deleted.",
+            "success"
+          );
+        } catch (error) {
+          console.error("Error deleting shell:", error);
+          swal(
+            "Something went wrong!",
+            "Failed to delete the shell. Please try again.",
+            "error"
+          );
+        }
+      }
+    });
+  };
+
+  const handleDeleteShell = async (shellID) => {
     swal({
       title: "Are you sure to delete this shell?",
       text: "This action cannot be undone",
@@ -142,8 +181,8 @@ const ManagerShellList = () => {
       if (willDelete) {
         try {
           await deleteShellById(shellID);
-          const response = await ShowAllShellMaterial();
-          setShellMaterial(response);
+          const response = await ShowAllShell();
+          setShell(response);
           swal(
             "Deleted successfully!",
             "The shell has been deleted.",
@@ -167,6 +206,8 @@ const ManagerShellList = () => {
     setEditedShell(shell);
     setOriginalShell(shell);
   };
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -211,6 +252,62 @@ const ManagerShellList = () => {
       setEditMode(false);
       swal(
         "Updated successfully!",
+        "The shellmaterial information has been updated.",
+        "success"
+      );
+    } catch (error) {
+      console.error(
+        "Error updating shell material:",
+        error.response ? error.response.data : error.message
+      );
+      swal(
+        "Something went wrong!",
+        "Failed to update. Please try again.",
+        "error"
+      );
+    }
+  };
+
+
+  const handleEditShell = (shell) => {
+    setEditShellMode(true);
+    setEditedShellNotMaterial(shell);
+    setOriginalShellNotMaterial(shell);
+  };
+  const handleShellChange = (e) => {
+    const { name, value } = e.target;
+    setEditedShellNotMaterial({ ...editedShellNotMaterial, [name]: value });
+  };
+
+  const handleUpdateShell = async () => {
+    const requiredFields = ["productId", "amountAvailable"];
+    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
+    for (let field of requiredFields) {
+      if (!editedShellNotMaterial[field]) {
+        swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedShellNotMaterial[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
+    }
+
+    const isEqual =
+      JSON.stringify(originalShellNotMaterial) === JSON.stringify(editedShellNotMaterial);
+    if (isEqual) {
+      swal("No changes detected!", "You have not made any changes.", "error");
+      return;
+    }
+
+    try {
+      const response = await updateShellById(editedShellNotMaterial.shellId, editedShellNotMaterial);
+      console.log("Update response:", response.data);
+      const updatedShells = await ShowAllShell();
+      setShell(updatedShells);
+      setEditShellMode(false);
+      swal(
+        "Updated successfully!",
         "The shell information has been updated.",
         "success"
       );
@@ -226,6 +323,7 @@ const ManagerShellList = () => {
       );
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -245,7 +343,7 @@ const ManagerShellList = () => {
     const shellDataWithStatus = { ...newShell, status: true };
 
     try {
-      await createShell(shellDataWithStatus);
+      await createShellMaterial(shellDataWithStatus);
       swal("Success", "Shell added successfully", "success");
       setAddMode(false);
       const response = await ShowAllShellMaterial();
@@ -351,7 +449,7 @@ const ManagerShellList = () => {
                           <EditIcon />
                         </IconButton>
                         <IconButton
-                          onClick={() => handleDelete(item.shellMaterialId)}
+                          onClick={() => handleDeleteShellMaterial(item.shellMaterialId)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -368,7 +466,7 @@ const ManagerShellList = () => {
           </TableContainer>
         </div>
 
-        <div className="manager_manage_diamond_create_button_section" style={{marginTop:"2%"}}>
+        <div className="manager_manage_diamond_create_button_section" style={{ marginTop: "2%" }}>
           <button
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-shell")}
@@ -402,7 +500,7 @@ const ManagerShellList = () => {
           </div>
         </div>
 
-                <div className="manager_manage_diamond_table_wrapper">
+        <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
@@ -422,11 +520,11 @@ const ManagerShellList = () => {
                       <StyledTableCell align="center">{item.productId}</StyledTableCell>
                       <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
                       <StyledTableCell align="center">
-                        <IconButton onClick={() => handleEdit(item)}>
+                        <IconButton onClick={() => handleEditShell(item)}>
                           <EditIcon />
                         </IconButton>
                         <IconButton
-                          onClick={() => handleDelete(item.shellMaterialId)}
+                          onClick={() => handleDeleteShell(item.shellId)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -455,9 +553,9 @@ const ManagerShellList = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Shell Information</h4>
+              <h4>Edit Shell Material Information</h4>
               <div className="manager_manage_diamond_form_group">
-                <label>Shell</label>
+                <label>Shell Name</label>
                 <input
                   type="text"
                   name="name"
@@ -480,6 +578,46 @@ const ManagerShellList = () => {
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {editShellMode && (
+        <div
+          className="manager_manage_diamond_modal_overlay"
+          onClick={() => setEditShellMode(false)}
+        >
+          <div
+            className="manager_manage_diamond_update_modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="manager_manage_diamond_modal_content">
+              <h4>Edit Shell Information</h4>
+              <div className="manager_manage_diamond_form_group">
+                <label>Product ID</label>
+                <input
+                  type="text"
+                  name="productId"
+                  value={editedShellNotMaterial.productId}
+                  onChange={handleShellChange}
+                  maxLength={100}
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Amount Available</label>
+                <input
+                  type="text"
+                  name="amountAvailable"
+                  value={editedShellNotMaterial.amountAvailable}
+                  onChange={handleShellChange}
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_modal_actions">
+                <button onClick={() => setEditShellMode(false)}>Cancel</button>
+                <button onClick={handleUpdateShell}>Confirm</button>
               </div>
             </div>
           </div>

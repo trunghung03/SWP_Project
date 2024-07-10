@@ -5,17 +5,30 @@ import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import { createShell } from '../../../services/ManagerService/ManagerShellService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
+import { getProductDetail } from '../../../services/ManagerService/ManagerProductService.js';
 
 const ManagerAddShell = () => {
     const navigate = useNavigate();
+    const [productName, setProductName] = useState("");
     const [shellData, setShellData] = useState({
-        name: '',
-        amountAvailable: ''
+        productId: '',
+        amountAvailable: '',
+        shellMaterialId: '',
+        weight: '',
     });
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const { name, value } = e.target;
         setShellData({ ...shellData, [name]: value });
+        if (name === 'productId') {
+            try {
+                const productDetail = await getProductDetail(value);
+                setProductName(productDetail.name);
+            } catch (error) {
+                console.error("Error fetching product detail:", error);
+                setProductName(""); // Reset product name if there's an error
+            }
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -57,26 +70,31 @@ const ManagerAddShell = () => {
                         &lt; Back
                     </button>
                 </div>
-                <div>note: yêu cầu
-                    <ul>
-                        <li>product Id: </li>
-                        <li>product name: sau khi nhập productId sẽ hiện ra product name</li>
-                        <li>shell material: 4 option (Silver, Gold, Rose Gold, White Gold)</li>
-                        <li>subdiamondId</li>
-                        <li>subdiamond amount: k rõ còn tên gọi khác cho này k, kiểu như lỗ trên vỏ hả....</li>
-                        <li>weight</li>
-                        <li>stock/quantity/amount available: tự kiếm tên đặt cho nhìn hợp lý nha</li>
-                    </ul>
-                </div>
                 <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Name</label>
-                            <input placeholder="Add shell's name" type="text" name="name" value={shellData.name} onChange={handleChange} required />
+                            <label>Product ID</label>
+                            <input placeholder="Add product id" type="number" name="productId" value={shellData.productId} onChange={handleChange} required />
+                        </div>
+                        <div className="manager_add_diamond_form_group">
+                            <label>Product Name</label>
+                            <input type="text" name="amountAvailable" value={productName} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Shell Material ID</label>
+                            <input placeholder="Add shell's material Id"  type="number" name="shellMaterialId" value={shellData.shellMaterialId} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Amount Available</label>
                             <input placeholder="Add amount available" type="text" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Weight</label>
+                            <input placeholder="Add shell's weight" type="text" name="weight" value={shellData.weight} onChange={handleChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

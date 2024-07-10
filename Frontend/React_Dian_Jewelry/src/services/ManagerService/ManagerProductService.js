@@ -41,7 +41,7 @@ const getProductCollection = async (id) => {
   return response.data;
 };
 
-const getAllCategories = async () =>{
+const getAllCategories = async () => {
   const response = await axios.get(`${API_BASE_URL}/categories`)
   return response.data;
 }
@@ -61,4 +61,4 @@ const uploadImage = async (data) => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, uploadImage,getProductCategory, getAllCollection,getProductCollection,getProductDiamond, getAllCategories };
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, uploadImage, getProductCategory, getAllCollection, getProductCollection, getProductDiamond, getAllCategories };
