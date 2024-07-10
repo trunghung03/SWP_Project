@@ -13,12 +13,14 @@ namespace DIAN_.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly IDistributedCache _distributedCache;
+        private ILogger<ArticleRepository> _logger;
         private readonly string cacheKey = "ArticleList";
 
-        public ArticleRepository(ApplicationDbContext context, IDistributedCache distributedCache)
+        public ArticleRepository(ApplicationDbContext context, IDistributedCache distributedCache, ILogger<ArticleRepository> logger)
         {
             _context = context;
             _distributedCache = distributedCache;
+            _logger = logger;
         }
 
         public async Task<Article> CreateArticleAsync(Article articleModel)
@@ -30,15 +32,36 @@ namespace DIAN_.Repository
 
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
-            await _distributedCache.RemoveAsync(cacheKey); // Invalidate the cache after successful save
+            await _distributedCache.RemoveAsync(cacheKey);
             return articleModel;
         }
 
         public async Task<List<Article>> GetArticleByTitleAsync(string title)
         {
-            return await _context.Articles
-                .Where(a => a.Title.Contains(title) && a.Status)
-                .ToListAsync();
+            // Use a cache key that includes the title to ensure uniqueness
+            string cacheKeyWithTitle = $"{cacheKey}_Title_{title}";
+            string? cacheData = await _distributedCache.GetStringAsync(cacheKeyWithTitle);
+            List<Article>? articles;
+
+            if (string.IsNullOrEmpty(cacheData))
+            {
+                articles = await _context.Articles
+                    .Where(a => a.Title.Contains(title) && a.Status)
+                    .ToListAsync();
+                _logger.LogInformation($"Articles with title {title} not found in cache. Fetching from database.");
+                string serializedArticles = JsonSerializer.Serialize(articles);
+                await _distributedCache.SetStringAsync(cacheKeyWithTitle, serializedArticles, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+            else
+            {
+                articles = JsonSerializer.Deserialize<List<Article>>(cacheData) ?? new List<Article>();
+                _logger.LogInformation($"Articles with title {title} found in cache.");
+            }
+
+            return articles;
         }
 
         public async Task<Article?> DeleteArticleAsync(int id)
@@ -51,8 +74,8 @@ namespace DIAN_.Repository
                 existingArticle.Status = false;
                 await _context.SaveChangesAsync();
                 string individualArticleCacheKey = $"Article_{existingArticle.ContentId}";
-                await _distributedCache.RemoveAsync(individualArticleCacheKey); // Invalidate individual article cache
-                await _distributedCache.RemoveAsync(cacheKey); // Invalidate article list cache
+                await _distributedCache.RemoveAsync(individualArticleCacheKey);
+                await _distributedCache.RemoveAsync(cacheKey);
             }
 
             return existingArticle;
@@ -70,7 +93,7 @@ namespace DIAN_.Repository
                     .Include(a => a.EmployeeNavigation)
                     .Select(w => w.ToArticleList())
                     .ToListAsync();
-
+                _logger.LogInformation("Articles not found in cache. Fetching from database.");
                 string serializedArticles = JsonSerializer.Serialize(articles);
                 await _distributedCache.SetStringAsync(cacheKey, serializedArticles, new DistributedCacheEntryOptions
                 {
@@ -80,6 +103,7 @@ namespace DIAN_.Repository
             else
             {
                 articles = JsonSerializer.Deserialize<List<ArticleList>>(cacheData) ?? new List<ArticleList>();
+                _logger.LogInformation("Articles found in cache.");
             }
 
             return articles;
@@ -92,6 +116,7 @@ namespace DIAN_.Repository
 
             if (!string.IsNullOrEmpty(cacheData))
             {
+                _logger.LogInformation($"Article with id {id} found in cache.");
                 return JsonSerializer.Deserialize<Article>(cacheData);
             }
 
@@ -106,6 +131,7 @@ namespace DIAN_.Repository
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
                 });
+                _logger.LogInformation($"Article with id {id} not found in cache. Fetching from database.");
             }
 
             return article;
@@ -130,14 +156,32 @@ namespace DIAN_.Repository
 
             return existingArticle;
         }
-        public async Task<string?> GetEmployeeNameByArticleIdAsync(int id) 
+        public async Task<string?> GetEmployeeNameByArticleIdAsync(int id)
         {
+            string individualArticleCacheKey = $"ArticleEmployee_{id}";
+            string? cacheData = await _distributedCache.GetStringAsync(individualArticleCacheKey);
+
+            if (!string.IsNullOrEmpty(cacheData))
+            {
+                return cacheData;
+            }
+
             var article = await _context.Articles
                 .Where(a => a.Status)
                 .Include(a => a.EmployeeNavigation)
                 .FirstOrDefaultAsync(c => c.ContentId == id);
 
-            return article != null ? $"{article.EmployeeNavigation.FirstName} {article.EmployeeNavigation.LastName}" : null;
+            string? employeeName = article != null ? $"{article.EmployeeNavigation.FirstName} {article.EmployeeNavigation.LastName}" : null;
+
+            if (employeeName != null)
+            {
+                await _distributedCache.SetStringAsync(individualArticleCacheKey, employeeName, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+
+            return employeeName;
         }
     }
 }

@@ -72,14 +72,14 @@
 	-- Insert dummy data into COLLECTIONS table
 INSERT INTO COLLECTION (CollectionID, [Name], Status, [Description], CollectionImage)
 VALUES
-(1, 'Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(2, 'Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(3, 'Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(4, 'Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(5, 'Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(6, 'Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg'),
-(8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.', 'https://css.brilliantearth.com/static/img/diamond_shape_new/heart_new.jpg');
+(1, 'Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.', 'https://i2.wp.com/www.wolf-and-stag.com/wp-content/uploads/2019/11/Capsule-Jewelry-Collection-4.jpg?quality=100&resize=1000%2C1500'),
+(2, 'Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.', 'https://i.etsystatic.com/44410244/r/il/e673fe/5068446280/il_fullxfull.5068446280_2ksj.jpg'),
+(3, 'Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.', 'https://image.brilliantearth.com/media/thumbnail/32/c0/32c03ba80196fe7da32991b3183feb81.jpg'),
+(4, 'Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.', 'https://image.brilliantearth.com/cdn-cgi/image/width=1440,height=1090,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F74d345b581d1441d90f4a8a734add393'),
+(5, 'Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.', 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fcc070a91902748e18c5359226ef4fb7a'),
+(6, 'Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.', 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F546baa4954c64db18a3a75b885337b99'),
+(7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FJ.jpg'),
+(8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FASHION.jpg');
 
 
 -- Note the generated product ids
@@ -191,7 +191,7 @@ VALUES
 ('PROD035', 'Blossom Diamond Ring', 395.00, 'A charming pendant with a floral blossom design encrusted with diamonds.',7,  3, 43.00,  'https://image.brilliantearth.com/media/product_new_images/B2/BE2M3420H_white_top.jpg;https://image.brilliantearth.com/media/product_new_images/D3/BE2M3420H_white_side1.jpg;https://image.brilliantearth.com/media/product_images/I7/BE2M3420H-18KW_2.jpg;https://image.brilliantearth.com/media/product_images/46/BE2M3420H_white_additional1.jpeg', 0, 5, 1, 1, 5),
 ('PROD036', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.',9, 7, 71.50,  'https://image.brilliantearth.com/media/product_new_images/B7/BE2D7890_yellow_top.jpg;https://image.brilliantearth.com/media/product_new_images/E4/BE2D7890_yellow_side1.jpg;https://image.brilliantearth.com/media/product_images/D2/BE2D1791_yellow_additional1.jpg;https://image.brilliantearth.com/media/product_images/C9/BE2D1791.jpg', 0, 73, 1, 2, 1),
 ('PROD037', 'Ballad Eternity Ring', 1190.00, 'A stunning ring featuring diamonds that encircle the band for a timeless and elegant look.',19 ,7, 76.00, 'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 1, 30, 1, 2, 9),
-('PROD038', 'Riviera Eternity Ring', 1990.00, 'This ring showcases lab diamonds in a continuous band, creating an eternity effect.', 20,7, 64.00, 'https://image.brilliantearth.com/media/diamond_ring_vto/3C/BE1M30D_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/ED/BE1M30D_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/SF/BE1M30D-18KW-RD_2.jpg;https://image.brilliantearth.com/media/product_images/U1/BE1M30D_white_additional1.jpeg', 1, 50, 1, 2, 9),
+('PROD038', 'Riviera Eternity Ring', 1990.00, 'This ring showcases lab diamonds in a continuous band, creating an eternity effect.', 20,7, 64.00, 'https://image.brilliantearth.com/media/product_new_images/6E/BE2D7158_white_top.jpg;https://image.brilliantearth.com/media/carat_image/ED/BE1M30D_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/SF/BE1M30D-18KW-RD_2.jpg;https://image.brilliantearth.com/media/product_images/U1/BE1M30D_white_additional1.jpeg', 1, 50, 1, 2, 9),
 ('PROD039', 'Ellora Ring', 2750.00, 'Featuring lab diamonds around the entire band, this ring sparkles with sophistication.', 15,7, 82.10,'https://image.brilliantearth.com/media/diamond_ring_vto/P9/BE1D14842_yellow_Pear_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/B1/BE1D14842_PS_200ct_yellow_side2.jpg;https://image.brilliantearth.com/media/carat_image/BE/BE1D14842_PS_200ct_yellow_side1.jpg;https://image.brilliantearth.com/media/product_images/3V/BE1D14842LC-yellow_035.jpg', 1, 60, 1, 2, 1),
 ('PROD040', 'Lab Grown Stud Earrings', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.',20, 7, 69.80, 'https://image.brilliantearth.com/media/product_images/DF/BE304RD100_white_top.jpg;https://image.brilliantearth.com/media/product_images/ZJ/BE304RD100LAB_add_img1_96114.jpeg;https://image.brilliantearth.com/media/product_images/04/BE304RD100-18KW_2.jpg;https://image.brilliantearth.com/media/product_images/VK/BE215-18KW_062.jpg', 2, 0, 1, 2, 2),
 ('PROD041', 'Heart Stud Earrings', 425.00, 'Beautiful heart-shaped stud earrings with lab grown diamonds.',55,7, 53.00,'https://image.brilliantearth.com/media/product_images/7J/BE3D20-18KY_850_top.jpg;https://image.brilliantearth.com/media/product_images/QO/BE3D20-18KY_additional1.jpeg;https://image.brilliantearth.com/media/product_images/WD/expires_oct2024_102422_SL_HP_MinimalistGifts_HERO.jpg;https://image.brilliantearth.com/media/product_images/HV/BE3D20-18KY_2.jpg', 0, 1, 1, 2, 6),
@@ -312,3 +312,26 @@ INSERT INTO ORDERDETAIL (OrderID, LineTotal,CertificateScan, ProductID, ShellMat
 (12, 4000.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 3, 21.0, 1),
 (13, 5000.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 3, 23.0, 1),
 (14, 4500.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 1, 10.0, 1);
+
+INSERT INTO NOTIFICATION (CustomerId, Message, IsDelivered, CreatedAt, MarkRead)
+VALUES
+    (1, 'Your order has been shipped.', 0, GETDATE(), 0),
+    (2, 'Your payment was successful.', 1, GETDATE(), 1),
+    (3, 'Your product review has been approved.', 1, GETDATE(), 1),
+    (4, 'Your wishlist item is back in stock.', 0, GETDATE(), 0),
+    (5, 'Your return request has been received.', 1, GETDATE(), 1),
+    (6, 'Your refund has been processed.', 1, GETDATE(), 1),
+    (7, 'Your order has been delivered.', 1, GETDATE(), 1),
+    (8, 'Your discount coupon is ready.', 0, GETDATE(), 0),
+    (1, 'Your account has been updated.', 1, GETDATE(), 1),
+    (2, 'Your loyalty points have been added.', 1, GETDATE(), 1),
+    (3, 'Your subscription has been renewed.', 1, GETDATE(), 1),
+    (4, 'Your gift card is ready.', 0, GETDATE(), 0),
+    (5, 'Your address has been updated.', 1, GETDATE(), 1),
+    (6, 'Your membership has been upgraded.', 1, GETDATE(), 1),
+    (7, 'Your support ticket has been closed.', 1, GETDATE(), 1),
+    (8, 'Your newsletter subscription is confirmed.', 0, GETDATE(), 0),
+    (1, 'Your password has been changed.', 1, GETDATE(), 1),
+    (2, 'Your email has been verified.', 1, GETDATE(), 1),
+    (3, 'Your profile picture has been updated.', 1, GETDATE(), 1),
+    (4, 'Your saved items are on sale.', 0, GETDATE(), 0);

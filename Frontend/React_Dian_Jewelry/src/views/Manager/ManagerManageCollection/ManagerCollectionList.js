@@ -113,7 +113,7 @@ const ManagerCollectionList = () => {
       const collectionStatus = collection.status;
       const action = collectionStatus ? "DEACTIVATE" : "ACTIVATE";
       const swalResult = await swal({
-        title: `Are you sure to ${action} this customer account?`,
+        title: `Are you sure to ${action} this collection?`,
         icon: "warning",
         buttons: true,
         dangerMode: true,
