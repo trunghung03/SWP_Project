@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import logo from "../../../assets/img/logo.png";
 import "../../../styles/SalesStaff/SalesStaffManageContent/SSAddContent.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
-import { updateContentById, getContentById, uploadImage } from "../../../services/SalesStaffService/SSContentService.js";
+import { updateContentById, getContentById, uploadImage, getEmployeeNameByArticleId } from "../../../services/SalesStaffService/SSContentService.js";
 import { UserContext } from "../../../services/UserContext.js";
 import RichTextEditor from "../SalesStaffManageContent/RichText.js";
 import Button from "@mui/material/Button";
@@ -26,9 +26,13 @@ function SSUpdateContent() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await getContentById(id);
-        setContentData(response.data);
-        setImagePreview(response.data.image);
+        const contentResponse = await getContentById(id);
+        const nameResponse = await getEmployeeNameByArticleId(id);
+        setContentData({
+          ...contentResponse.data,
+          createdBy: nameResponse.data, // Set the employee name
+        });
+        setImagePreview(contentResponse.data.image);
       } catch (error) {
         console.error("Error fetching content:", error);
         swal("Error", "Failed to fetch content data.", "error");

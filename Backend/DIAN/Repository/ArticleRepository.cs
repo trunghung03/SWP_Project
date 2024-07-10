@@ -130,5 +130,14 @@ namespace DIAN_.Repository
 
             return existingArticle;
         }
+        public async Task<string?> GetEmployeeNameByArticleIdAsync(int id) 
+        {
+            var article = await _context.Articles
+                .Where(a => a.Status)
+                .Include(a => a.EmployeeNavigation)
+                .FirstOrDefaultAsync(c => c.ContentId == id);
+
+            return article != null ? $"{article.EmployeeNavigation.FirstName} {article.EmployeeNavigation.LastName}" : null;
+        }
     }
 }
