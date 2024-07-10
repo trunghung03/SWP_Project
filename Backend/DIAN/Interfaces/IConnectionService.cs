@@ -11,6 +11,5 @@ namespace DIAN_.Interfaces
 
         ConcurrentDictionary<int, ConcurrentBag<string>> GetConnections();
 
-        Task SaveConnectionToDatabase(int customerId, string connectionId);
     }
 }

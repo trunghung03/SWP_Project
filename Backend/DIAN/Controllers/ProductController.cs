@@ -263,9 +263,9 @@ namespace DIAN_.Controllers
 
                 return Ok(productDTOs);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
     }

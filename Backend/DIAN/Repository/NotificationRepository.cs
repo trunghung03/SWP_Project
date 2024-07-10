@@ -43,20 +43,6 @@ namespace DIAN_.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Notification>> UpdateConnectionID(int customerId, string connectionId)
-        {
-            var notifications = await _context.Notifications
-                .Where(n => n.CustomerId == customerId)
-                .ToListAsync();
-
-            foreach (var notification in notifications)
-            {
-                notification.ConnectionId = connectionId;
-            }
-
-            await _context.SaveChangesAsync();
-            return notifications;
-        }
 
         public async Task UpdateNotification(Notification notification)
         {

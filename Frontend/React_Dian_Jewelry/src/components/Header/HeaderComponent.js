@@ -49,10 +49,12 @@ const HeaderComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn && customerId) {
-      startConnection(customerId); // start the connection when the user is logged in
-    }
+    setNotificationCount(notifications.length);
+    console.log(notifications)
+  }, [notifications]);
 
+  useEffect(() => {
+    startConnection(customerId);
     const role = localStorage.getItem("role");
     if (["Admin", "SalesStaff", "Manager", "DeliveryStaff"].includes(role)) {
       const rememberedEmail = localStorage.getItem("rememberedEmail");
@@ -84,10 +86,7 @@ const HeaderComponent = () => {
         points: localStorage.getItem("points") || 0,
       });
     }
-  }, [setUser, isLoggedIn, startConnection, customerId]);
-  useEffect(() => {
-    setNotificationCount(notifications.length);
-  }, [notifications]);
+  }, [setUser, startConnection, customerId]);
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
   };
@@ -258,7 +257,7 @@ const HeaderComponent = () => {
                       View all<i className="fas fa-arrow-right"></i>
                     </div>
                   </div>
-                  {notifications.length > 0 ? (notifications.map((notification, index) => (
+                  {notifications.length > 0 ? (notifications.slice(notifications.length-5, notifications.length).reverse().map((notification, index) => (
                     <div
                       key={notification.Id}
                       className="noti_item"
@@ -270,11 +269,11 @@ const HeaderComponent = () => {
                       }}
                     >
                       <div className="each_noti">
-                        <p className="noti_title">{notification.CustomerId}</p>
+                        {/* <p className="noti_title">{notification.customerId}</p> */}
                         <p className="noti_description">
-                          {notification.Message}
+                          {notification}
                         </p>
-                        <span className="noti_time">{notification.CreatedAt}</span>
+                        {/* <span className="noti_time">{notification}</span> */}
                       </div>
                     </div>
                   ))) : (

@@ -181,3 +181,11 @@ CREATE TABLE COMPANY (
 	MarkupPrice DECIMAL(5, 2) CHECK (MarkupPrice >= 0 AND MarkupPrice <= 100)
 );
 
+CREATE TABLE NOTIFICATION (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    CustomerId INT NOT NULL,
+    Message NVARCHAR(MAX) NOT NULL,
+    IsDelivered BIT NOT NULL,
+    CreatedAt DATETIME NOT NULL,
+    MarkRead BIT NOT NULL DEFAULT 1
+);

@@ -12,8 +12,6 @@ namespace DIAN_.Interfaces
 
         Task<IEnumerable<Notification>> RemoveNotification(Notification notification);
 
-        Task<IEnumerable<Notification>> UpdateConnectionID(int customerId, string connectionId);
-
         Task<IEnumerable<Notification>> GetAllNotifications(int customerId);
 
     }

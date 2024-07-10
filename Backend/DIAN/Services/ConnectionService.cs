@@ -33,9 +33,5 @@ namespace DIAN_.Services
         {
             Connections.Remove(customerId, connectionId);
         }
-        public async Task SaveConnectionToDatabase(int customerId, string connectionId)
-        {
-            await _notificationRepository.UpdateConnectionID(customerId, connectionId);
-        }
     }
 }

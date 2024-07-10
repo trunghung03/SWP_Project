@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import * as signalR from '@microsoft/signalr';
 import axios from 'axios';
 
@@ -20,10 +20,7 @@ export const SignalRProvider = ({ children }) => {
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    newConnection.on("ReceiveNotification", (message) => {
-      setNotifications((prevNotifications) => [...prevNotifications, { ...message, id: Date.now() }]);
-      console.log("Received notification: ", message);
-    });
+    
 
     newConnection
       .start()
@@ -32,7 +29,8 @@ export const SignalRProvider = ({ children }) => {
         return getNotifications(customerId);
       })
       .then((fetchedNotifications) => {
-        setNotifications(fetchedNotifications);
+        console.log("fetched notification", fetchedNotifications);
+        setNotifications(fetchedNotifications.map(n=>{ return n.message}));
       })
       .catch((err) => console.log('Error connecting or fetching notifications:', err));
 
@@ -43,6 +41,12 @@ export const SignalRProvider = ({ children }) => {
     };
   }, []);
 
+  useEffect(()=>{
+    connection?.on("ReceiveNotification", (message) => {
+      setNotifications(prev => [...prev,message]);
+      console.log("Received notification: ", message);
+    });
+  },[connection])
   return (
     <SignalRContext.Provider value={{ connection, notifications, startConnection }}>
       {children}

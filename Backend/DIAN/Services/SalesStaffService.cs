@@ -9,6 +9,7 @@ using DIAN_.Models;
 using DIAN_.Repository;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using System;
 using System.Reflection;
 
@@ -110,18 +111,22 @@ namespace DIAN_.Services
             _logger.LogInformation($"Connection IDs: {connectionIds}");
             if (connectionIds != null && connectionIds.Any())
             {
-                foreach (var connectionId in connectionIds)
+
+                var notification = new Notification
                 {
-                    await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
-                    var notification = new Notification
-                    {
-                        CustomerId = order.UserId,
-                        Message = $"Order {orderId} status updated to {status}.",
-                        IsDelivered = true,
-                        CreatedAt = DateTime.Now,
-                    };
-                    await _notificationRepository.AddNotification(notification);
-                }
+                    CustomerId = order.UserId,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = true,
+                    CreatedAt = DateTime.Now,
+                };
+                await _notificationRepository.AddNotification(notification);
+
+                //   await _hubContext.Clients.Client(connectionIds).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                await _hubContext.Clients.Client(NotificationsHub.GetConnectionIdForCustomer(order.UserId)).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.").ContinueWith((res) =>
+                {
+                    _logger.LogInformation($"Sent notification to user {order.UserId}." + res.IsCompletedSuccessfully);
+
+                });
             }
             else
             {

@@ -195,13 +195,10 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__NOTIFICA__3214EC07A5F56C0D");
+            entity.HasKey(e => e.Id).HasName("PK__NOTIFICA__3214EC075CA63177");
 
             entity.ToTable("NOTIFICATION");
 
-            entity.Property(e => e.ConnectionId)
-                .HasMaxLength(100)
-                .HasColumnName("ConnectionID");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.MarkRead).HasDefaultValue(true);
             entity.Property(e => e.Message).IsRequired();

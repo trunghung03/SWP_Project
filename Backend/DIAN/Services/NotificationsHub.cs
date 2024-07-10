@@ -32,18 +32,17 @@ public class NotificationsHub : Hub<INotificationClient>
         var connectionId = Context.ConnectionId;
         _logger.LogInformation($"Connection ID: {connectionId}");
 
+        // Check if the customer is already connected
+        var existingConnectionId = GetConnectionIdForCustomer(customerId);
+        if (!string.IsNullOrEmpty(existingConnectionId))
+        {
+            _logger.LogInformation($"Customer {customerId} already connected with Connection ID: {existingConnectionId}");
+        }
+
         _connectionService.AddConnection(customerId, connectionId);
         customerConnectionMap.AddOrUpdate(customerId, connectionId, (key, oldValue) => connectionId);
 
-        await _connectionService.SaveConnectionToDatabase(customerId, connectionId);
         _logger.LogInformation($"Connection saved to database");
-        //var undeliveredNotifications = await _notificationRepository.GetUndeliveredNotifications(customerId);
-        //foreach (var notification in undeliveredNotifications)
-        //{
-        //    await Clients.Client(Context.ConnectionId).ReceiveNotification(notification.Message);
-        //    notification.IsDelivered = true;
-        //    await _notificationRepository.UpdateNotification(notification);
-        //}
 
         await base.OnConnectedAsync();
     }
