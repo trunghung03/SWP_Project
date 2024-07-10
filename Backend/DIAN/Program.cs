@@ -120,10 +120,14 @@ builder.Services.AddScoped<IConnectionService, ConnectionService>();
 
 var app = builder.Build();
 
-app.UseCors(builder =>
+app.UseCors(corsBuilder =>
 {
-    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+    corsBuilder.WithOrigins("http://localhost:3000", "https://diandiamondstore.com")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
 });
+
 
 if (!app.Environment.IsDevelopment())
 {
