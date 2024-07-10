@@ -31,14 +31,16 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(corsBuilder =>
     {
-        builder.WithOrigins("http://localhost:3000")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
+        corsBuilder.WithOrigins("http://localhost:3000", "https://diandiamondstore.com")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
     });
 });
+
+
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
