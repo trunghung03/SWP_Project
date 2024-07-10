@@ -59,7 +59,7 @@ namespace DIAN_.Repository
             {
                 return null;
             }
-
+            shell.ProductId = shellDTO.ProductId;
             shell.ShellMaterialId = shellDTO.ShellMaterialId;
             shell.AmountAvailable = shellDTO.AmountAvailable;
             shell.ShellAmount = shellDTO.ShellAmount;
