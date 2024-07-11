@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:3000")
+        builder.WithOrigins("https://diandiamondstore.com")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials();
