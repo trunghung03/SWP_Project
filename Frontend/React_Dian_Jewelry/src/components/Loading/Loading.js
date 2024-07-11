@@ -3,18 +3,27 @@ import { CircularProgress } from '@mui/material';
 import './Loading.scss';
 
 const Loading = () => {
-  const [loadingText, setLoadingText] = useState("The waiting is the hardest part. Good things come to those who wait");
+  const quotes = [
+    "The waiting is the hardest part. Good things will come",
+    "Patience is to keep a good attitude while waiting",
+    "Great things take time, be patient",
+    "The best things in life are worth waiting for",
+    "Good things take time",
+    "Your patience will be rewarded"
+  ];
+
+  const [loadingText, setLoadingText] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setLoadingText(prev => {
         if (prev.endsWith("...")) {
-          return "The waiting is the hardest part. Good things come to those who wait";
+          return quotes[Math.floor(Math.random() * quotes.length)];
         } else {
           return prev + ".";
         }
       });
-    }, 500);
+    }, 900);
 
     return () => clearInterval(interval);
   }, []);
