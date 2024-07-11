@@ -8,6 +8,17 @@
 	('None', 'oliver.queen@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Queen', 'Oliver', '202 Cedar St', '+1 (818) 555-0367', 300, 1),
 	('Google', 'lee1103@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Lee', 'Bruce', '303 Birch St', '+1 (305) 555-0456', 3500, 1),
 	('Google', 'clark08kent@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Kent', 'Clark', '404 Maple St', '+1 (702) 555-0823', 200, 1);
+	('None', 'sara.connor@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Connor', 'Sara', '505 Spruce St', '+1 (213) 555-0156', 1200, 1),
+	('Google', 'bruce.wayne@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Wayne', 'Bruce', '606 Willow St', '+1 (212) 555-0293', 2500, 1),
+	('None', 'diana.prince@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Prince', 'Diana', '707 Fir St', '+1 (415) 555-0472', 3000, 1),
+	('Google', 'barry.allen@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Allen', 'Barry', '808 Redwood St', '+1 (310) 555-0183', 500, 1),
+	('None', 'peter.parker@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Parker', 'Peter', '909 Ash St', '+1 (617) 555-0194', 700, 1),
+	('Google', 'natasha.romanoff@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Romanoff', 'Natasha', '1010 Sequoia St', '+1 (818) 555-0215', 1800, 1),
+	('None', 'steve.rogers@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Rogers', 'Steve', '1111 Cypress St', '+1 (305) 555-0346', 2200, 1),
+	('Google', 'tony.stark@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Stark', 'Tony', '1212 Juniper St', '+1 (702) 555-0457', 4100, 1),
+	('None', 'wanda.maximoff@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Maximoff', 'Wanda', '1313 Chestnut St', '+1 (213) 555-0568', 2600, 1),
+	('Google', 'scott.lang@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Lang', 'Scott', '1414 Magnolia St', '+1 (212) 555-0679', 1400, 1);
+
 
 	-- Insert dummy data into EMPLOYEE table
 	-- Insert dummy data into EMPLOYEE table with updated roles
@@ -42,13 +53,67 @@
 
 	-- Insert dummy data into PURCHASEORDER table
 	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note,SaleStaff,DeliveryStaff) VALUES
-	(1, GETDATE(), 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2000.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
-	(2, GETDATE(), 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3000.00, 'Paid', 2, 1, 'Ship at D2',3,8),
-	(3, GETDATE(), 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1500.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
-	(4, GETDATE(), 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2500.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
-	(5, GETDATE(), 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3500.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
-	(6, GETDATE(), 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4000.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
-	(7, GETDATE(), 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4500.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8);
+	(1, '2024-07-12', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2000.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
+	(2, '2024-07-12', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3000.00, 'Paid', 2, 1, 'Ship at D2',3,8),
+	(3, '2024-07-12', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1500.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
+	(4, '2024-09-18', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2500.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
+	(5, '2024-09-12', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3500.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
+	(6, '2024-03-12', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4000.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
+	(7, '2024-03-12', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4500.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8),
+	(8, '2024-07-12', 'Credit Card', 'Sara Connor', '213-555-0156', '505 Spruce St', 2200.00, 'Paid', 8, 1, 'Ship at D2', 6, 9),
+	(9, '2024-07-12', 'PayPal', 'Bruce Wayne', '212-555-0293', '606 Willow St', 2800.00, 'Completed', 9, 0, 'Shipping without packaging', 7, 10),
+	(10, '2024-07-12', 'Credit Card', 'Diana Prince', '415-555-0472', '707 Fir St', 1900.00, 'Unpaid', 10, 0, 'Ship at D1', 6, 9),
+	(11, '2024-07-12', 'PayPal', 'Barry Allen', '310-555-0183', '808 Redwood St', 2300.00, 'Delivering', 11, 1, 'Shipping with packaging', 7, 10),
+	(12, '2024-07-12', 'Credit Card', 'Peter Parker', '617-555-0194', '909 Ash St', 2100.00, 'Cancelled', 12, 0, 'Ship at D2', 6, 9),
+	(13, '2024-07-12', 'PayPal', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2400.00, 'Paid', 13, 1, 'Shipping without packaging', 7, 10),
+	(14, '2024-07-12', 'Credit Card', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2500.00, 'Completed', 14, 0, 'Shipping with packaging', 6, 9),
+	(15, '2024-02-28', 'PayPal', 'Tony Stark', '702-555-0457', '1212 Juniper St', 2900.00, 'Delivering', 15, 1, 'Ship at D2', 7, 10),
+	(16, '2024-02-28', 'Credit Card', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 1700.00, 'Unpaid', 16, 0, 'Shipping with packaging', 6, 9),
+	(17, '2024-02-28', 'PayPal', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 2600.00, 'Paid', 17, 1, 'Ship at D1', 7, 10),
+	(1, '2024-02-28', 'Credit Card', 'John Doe', '212-555-0198', '123 Main St', 1800.00, 'Paid', 18, 1, 'Ship at D2', 3, 7),
+	(2, '2024-02-28', 'PayPal', 'Jane Smith', '415-555-0234', '456 Elm St', 2200.00, 'Completed', 19, 0, 'Ship at D1', 3, 7),
+	(3, '2024-02-28', 'Credit Card', 'Chris Burkerly', '310-555-0745', '789 Oak St', 2700.00, 'Unpaid', 20, 0, 'Shipping with packaging', 3, 8),
+	(4, '2024-02-28', 'PayPal', 'Emma Watson', '617-555-0987', '101 Pine St', 1900.00, 'Delivering', 21, 1, 'Shipping without packaging', 5, 8),
+	(5, '2024-02-28', 'Credit Card', 'Oliver Queen', '818-555-0367', '202 Cedar St', 1600.00, 'Cancelled', 22, 0, 'Ship at D2', 5, 9),
+	(6, '2024-08-11', 'PayPal', 'Bruce Lee', '305-555-0456', '303 Birch St', 3200.00, 'Paid', 23, 1, 'Shipping with packaging', 5, 9),
+	(7, '2024-01-23', 'Credit Card', 'Clark Kent', '702-555-0823', '404 Maple St', 1400.00, 'Completed', 24, 0, 'Shipping without packaging', 5, 10),
+	(8, '2024-01-23', 'PayPal', 'Sara Connor', '213-555-0156', '505 Spruce St', 1800.00, 'Delivering', 25, 1, 'Ship at D1', 6, 10),
+	(9, '2024-01-23', 'Credit Card', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3100.00, 'Unpaid', 26, 0, 'Shipping with packaging', 7, 9),
+	(10, '2024-01-23', 'PayPal', 'Diana Prince', '415-555-0472', '707 Fir St', 2800.00, 'Paid', 27, 1, 'Ship at D2', 7, 9),
+	(11, '2024-01-23', 'Credit Card', 'Barry Allen', '310-555-0183', '808 Redwood St', 1700.00, 'Completed', 28, 0, 'Shipping with packaging', 7, 10),
+	(12, '2024-01-23', 'PayPal', 'Peter Parker', '617-555-0194', '909 Ash St', 1300.00, 'Delivering', 29, 1, 'Ship at D1', 7, 10),
+	(13, '2024-01-23', 'Credit Card', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2600.00, 'Cancelled', 30, 0, 'Shipping without packaging', 7, 9),
+	(14, '2024-01-23', 'PayPal', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2400.00, 'Paid', 31, 1, 'Ship at D2', 6, 10),
+	(15, '2024-01-23', 'Credit Card', 'Tony Stark', '702-555-0457', '1212 Juniper St', 4000.00, 'Completed', 32, 0, 'Shipping with packaging', 7, 9),
+	(16, '2024-01-23', 'PayPal', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2100.00, 'Unpaid', 33, 1, 'Ship at D1', 6, 10),
+	(17, '2024-05-31', 'Credit Card', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 2700.00, 'Delivering', 34, 0, 'Shipping with packaging', 7, 9),
+	(1, '2024-05-31', 'PayPal', 'John Doe', '212-555-0198', '123 Main St', 2100.00, 'Delivering', 35, 0, 'Ship at D2', 3, 10),
+	(2, '2024-05-31', 'Credit Card', 'Jane Smith', '415-555-0234', '456 Elm St', 2500.00, 'Completed', 36, 1, 'Shipping without packaging', 3, 9),
+	(3, '2024-05-31', 'PayPal', 'Chris Burkerly', '310-555-0745', '789 Oak St', 2900.00, 'Cancelled', 37, 0, 'Ship at D1', 3, 8),
+	(4, '2024-05-31', 'Credit Card', 'Emma Watson', '617-555-0987', '101 Pine St', 2200.00, 'Paid', 38, 1, 'Shipping with packaging', 5, 7),
+	(5, '2024-05-31', 'PayPal', 'Oliver Queen', '818-555-0367', '202 Cedar St', 1800.00, 'Delivering', 39, 0, 'Ship at D2', 5, 10),
+	(6, '2024-05-31', 'Credit Card', 'Bruce Lee', '305-555-0456', '303 Birch St', 3500.00, 'Unpaid', 40, 1, 'Shipping without packaging', 5, 9),
+	(7, '2024-05-31', 'PayPal', 'Clark Kent', '702-555-0823', '404 Maple St', 1700.00, 'Cancelled', 41, 0, 'Ship at D1', 5, 8),
+	(8, '2024-05-31', 'Credit Card', 'Sara Connor', '213-555-0156', '505 Spruce St', 2000.00, 'Paid', 42, 1, 'Shipping with packaging', 6, 7),
+	(9, '2024-04-14', 'PayPal', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3400.00, 'Delivering', 43, 0, 'Ship at D2', 7, 10),
+	(10, '2024-04-14', 'Credit Card', 'Diana Prince', '415-555-0472', '707 Fir St', 3100.00, 'Completed', 44, 1, 'Shipping without packaging', 7, 9),
+	(11, '2024-04-14', 'PayPal', 'Barry Allen', '310-555-0183', '808 Redwood St', 2000.00, 'Paid', 45, 0, 'Ship at D1', 7, 8),
+	(12, '2024-04-14', 'Credit Card', 'Peter Parker', '617-555-0194', '909 Ash St', 1500.00, 'Cancelled', 46, 1, 'Shipping with packaging', 7, 10),
+	(13, '2024-04-14', 'PayPal', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2900.00, 'Delivering', 47, 0, 'Ship at D2', 7, 9),
+	(14, '2024-04-14', 'Credit Card', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2700.00, 'Unpaid', 48, 1, 'Shipping without packaging', 6, 8),
+	(15, '2023-04-14', 'PayPal', 'Tony Stark', '702-555-0457', '1212 Juniper St', 4300.00, 'Completed', 49, 0, 'Ship at D1', 7, 10),
+	(16, '2023-04-14', 'Credit Card', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2400.00, 'Paid', 50, 1, 'Shipping with packaging', 6, 9),
+	(17, '2023-04-14', 'PayPal', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 3000.00, 'Delivering', 51, 0, 'Ship at D2', 7, 8),
+	(1, '2023-04-14', 'Credit Card', 'John Doe', '212-555-0198', '123 Main St', 2300.00, 'Cancelled', 52, 1, 'Shipping without packaging', 3, 9),
+	(2, '2023-04-14', 'PayPal', 'Jane Smith', '415-555-0234', '456 Elm St', 2600.00, 'Paid', 53, 0, 'Ship at D1', 3, 8),
+	(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2200.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
+(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3050.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
+(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1750.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
+(4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2900.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
+(5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3800.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
+(6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4200.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),
+(7, '2023-06-25', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4400.00, 'Pending', 6, 0, 'Signature required', 4, 7);
+	
 	
 	-- Insert dummy data into CATEGORY table
 	INSERT INTO CATEGORY ([Name], Status) VALUES
@@ -154,9 +219,9 @@ INSERT INTO DIAMOND (Shape, Color, Clarity, Carat, Cut, AmountAvailable, Price, 
 		-- Insert dummy data into PRODUCT table
 INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, SubDiamondID, LaborCost, ImageLinkList, MainDiamondAmount, SubDiamondAmount, Status, CollectionID, CategoryID)
 VALUES
-('PROD001', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.', 1 , 5, 71.50, 'https://i5.walmartimages.com/seo/Feledorashia-Rings-for-Women-Valentine-s-Day-Gifts-2PC-Ring-Bridal-Zircon-Diamond-Elegant-Engagement-Wedding-Band-Ring-Set_b1ea52c3-bf4d-4b24-ab8b-3452fccec372.6da512e049be49a0c5539e5fd8f02970.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF', 0, 73, 1, 2, 1),
+('PROD001', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.', 1 , 5, 71.50, 'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 0, 73, 1, 2, 1),
 ('PROD002', 'Ballad Eternity Ring', 1190.00, 'A stunning ring featuring diamonds that encircle the band for a timeless and elegant look.', 5 , 5, 276.00,  'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 1, 30, 1, 2, 9),
-('PROD003', 'Riviera Eternity Ring', 1990.00, 'This ring showcases lab diamonds in a continuous band, creating an eternity effect.', 6 , 5, 64.00, 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F86e35f29cae14a08bb6fcc6a25bca484;https://image.brilliantearth.com/media/carat_image/ED/BE1M30D_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/SF/BE1M30D-18KW-RD_2.jpg;https://image.brilliantearth.com/media/product_images/U1/BE1M30D_white_additional1.jpeg', 1, 50, 1, 2, 9),
+('PROD003', 'Riviera Eternity Ring', 1990.00, 'This ring showcases lab diamonds in a continuous band, creating an eternity effect.', 6 , 5, 64.00, 'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 1, 50, 1, 2, 9),
 ('PROD004', 'Ellora Ring', 2750.00, 'Featuring lab diamonds around the entire band, this ring sparkles with sophistication.',12 , 5, 82.10,  'https://image.brilliantearth.com/media/diamond_ring_vto/P9/BE1D14842_yellow_Pear_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/B1/BE1D14842_PS_200ct_yellow_side2.jpg;https://image.brilliantearth.com/media/carat_image/BE/BE1D14842_PS_200ct_yellow_side1.jpg;https://image.brilliantearth.com/media/product_images/3V/BE1D14842LC-yellow_035.jpg', 1, 60, 1, 2, 1),
 ('PROD005', 'Lab Grown Stud Earrings', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.', 4 , 5, 69.80, 'https://image.brilliantearth.com/media/product_images/DF/BE304RD100_white_top.jpg;https://image.brilliantearth.com/media/product_images/ZJ/BE304RD100LAB_add_img1_96114.jpeg;https://image.brilliantearth.com/media/product_images/04/BE304RD100-18KW_2.jpg;https://image.brilliantearth.com/media/product_images/VK/BE215-18KW_062.jpg', 2, 0, 1, 2, 2),
 ('PROD006', 'Heart Stud Earrings', 425.00, 'Beautiful heart-shaped stud earrings with lab grown diamonds.',13, 5, 53.00, 'https://image.brilliantearth.com/media/product_images/7J/BE3D20-18KY_850_top.jpg;https://image.brilliantearth.com/media/product_images/QO/BE3D20-18KY_additional1.jpeg;https://image.brilliantearth.com/media/product_images/WD/expires_oct2024_102422_SL_HP_MinimalistGifts_HERO.jpg;https://image.brilliantearth.com/media/product_images/HV/BE3D20-18KY_2.jpg', 0, 1, 1, 2, 6),
@@ -266,9 +331,10 @@ INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Sta
 	(6, 5000, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 3, 22.0, 1), -- Changed ProductID to 1 and ShellMaterialID to 3
 	(7, 4500, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 1, 12.0, 1); -- Changed ProductID to 2 and ShellMaterialID to 1
 
+
 	-- Insert dummy data into WARRANTY table
 	INSERT INTO WARRANTY (OrderDetailID, StartDate, EndDate, Status) VALUES
-	(1, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
+	(1, GETDATE, DATEADD(year, 1, GETDATE()), 'Active'),
 	(2, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(3, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(4, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
@@ -291,17 +357,6 @@ INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Sta
 
 	INSERT INTO COMPANY(CompanyID, CompanyName, Email, Address, PhoneNumber, MarkupPrice) VALUES
 	(1, 'DIAN Jewelry', 'diamondianjewelry@gmail.com', 'San Francisco, CA', '415-354-4623', 0.2)
-
-
-	-- Insert more dummy data into PURCHASEORDER table with different dates
-INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note, SaleStaff, DeliveryStaff) VALUES
-(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2200.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
-(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3050.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
-(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1750.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
-(4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2900.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
-(5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3800.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
-(6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4200.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),
-(7, '2023-06-25', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4400.00, 'Pending', 6, 0, 'Signature required', 4, 7);
 
 	-- Insert more dummy data into ORDERDETAIL table using existing IDs
 INSERT INTO ORDERDETAIL (OrderID, LineTotal,CertificateScan, ProductID, ShellMaterialID, Size, Status) VALUES
