@@ -25,7 +25,7 @@ const config = {
     {
       widgetName: "suggestions",
       widgetFunc: (props) => <SuggestionWidget {...props} />,
-      mapStateToProps: ["messages"]
+      mapStateToProps: ["messages", "widgetParams"]
     }
   ]
 };

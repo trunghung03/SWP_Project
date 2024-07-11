@@ -5,6 +5,8 @@ import logo from '../../assets/img/logoFooter.png';
 import vnpay from '../../assets/img/vnpay.webp';
 import bank from '../../assets/img/bankLogo.png';
 import cash from '../../assets/img/cashLogo.png';
+import { useNotification } from '../../services/NotificationContext';
+import { useChatbot } from '../../services/ChatbotContext'; 
 
 const FooterComponent = () => {
     useEffect(() => {
@@ -30,6 +32,8 @@ const FooterComponent = () => {
     }, []);
 
     const navigate = useNavigate();
+    const { setShowNotifications } = useNotification();
+    const { setIsChatbotOpen } = useChatbot();
 
     const handleNavigate = (path, state) => {
         window.scrollTo(0, 0);
@@ -40,6 +44,17 @@ const FooterComponent = () => {
         event.preventDefault();
         window.scrollTo(0, scrollTo);
         navigate(event.currentTarget.getAttribute('href'));
+    };
+
+    const handleNotificationClick = (event) => {
+        event.preventDefault();
+        window.scrollTo(0, 0);
+        setShowNotifications(true); 
+    };
+
+    const handleChatClick = (event) => {
+        event.preventDefault();
+        setIsChatbotOpen(true); 
     };
 
     return (
@@ -76,13 +91,13 @@ const FooterComponent = () => {
                             </ul>
                         </div>
                         <div className="col-sm-6 col-md-2 footer_3_column">
-                            <h6>Account</h6>
+                            <h6>Services</h6>
                             <ul className="footer_content">
                                 <li><Link to="/edit-profile" onClick={(e) => handleLinkClick(e, 160)}>My profile</Link></li>
                                 <li><Link to="/order-history" onClick={(e) => handleLinkClick(e, 160)}>Order history</Link></li>
-                                <li><Link to="/order-history" onClick={(e) => handleLinkClick(e, 160)}>Tracking order</Link></li>
-                                <li><Link to="" onClick={(e) => handleLinkClick(e, 0)}>Notifications</Link></li>
+                                <li><Link to="" onClick={handleNotificationClick}>Notifications</Link></li>
                                 <li><Link to="/cart" onClick={(e) => handleLinkClick(e, 0)}>Shopping cart</Link></li>
+                                <li><Link to="" onClick={handleChatClick}>Chat with us</Link></li>
                             </ul>
                         </div>
                         <div className="col-sm-6 col-md-2 footer_4_column">

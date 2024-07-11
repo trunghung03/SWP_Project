@@ -8,6 +8,7 @@ import React, {
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
+import { useNotification } from "../../services/NotificationContext";
 import "../Header/HeaderComponent.scss";
 import logo from "../../assets/img/logoN.png";
 import mainImgDiamondJewelry from "../../assets/img/nav1.jpg";
@@ -23,7 +24,6 @@ import necklaceCategory from "../../assets/img/necklaceNav.jpg";
 import wNecklaceCategory from "../../assets/img/wNecklaceNav.webp";
 import { searchProducts } from "../../services/ProductService";
 import { useSignalR } from "../../services/SignalRContext";
-import Notification from "../../views/Setting/Notification";
 
 const HeaderComponent = () => {
   const { user, setUser } = useContext(UserContext);
@@ -39,8 +39,11 @@ const HeaderComponent = () => {
   const weddingMenuTimeoutRef = useRef(null);
   const [hoveredImage, setHoveredImage] = useState(mainImgDiamondJewelry);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
+  const { showNotifications, setShowNotifications } = useNotification();
   const [notificationCount, setNotificationCount] = useState(0);
+  const [notificationsToShow, setNotificationsToShow] = useState(6);
+  const notificationMenuRef = useRef(null);
+  const accountMenuRef = useRef(null);
 
   const handleNotificationReceived = useCallback((newNotification) => {
     setNotificationCount((prevCount) => prevCount + 1);
@@ -48,9 +51,8 @@ const HeaderComponent = () => {
 
   useEffect(() => {
     setNotificationCount(notifications.length);
-    console.log(notifications)
+    console.log(notifications);
   }, [notifications]);
-
 
   useEffect(() => {
     startConnection(customerId);
@@ -86,13 +88,6 @@ const HeaderComponent = () => {
       });
     }
   }, [setUser, startConnection, customerId]);
-  //   const handleNotificationClick = () => {
-  //     setShowNotifications(!showNotifications);
-  // =======
-
-  useEffect(() => {
-    setNotificationCount(notifications.length);
-  }, [notifications]);
 
   const toggleAccountDropdown = () => {
     setShowAccountDropdown((prevShow) => !prevShow);
@@ -168,6 +163,16 @@ const HeaderComponent = () => {
     setHoveredImage(imageSrc);
   };
 
+  const handleViewMoreNotifications = (e) => {
+    e.stopPropagation();
+    setNotificationsToShow((prevCount) => prevCount + 5);
+  };
+
+  const handleNotificationClick = (e, notification) => {
+    e.stopPropagation();
+    console.log(notification);
+  };
+
   return (
     <header className="header">
       <div className="top_announcement">
@@ -218,9 +223,23 @@ const HeaderComponent = () => {
                   />
                 </div>
               </div>
-              <div className="notification_icon" onClick={toggleNotificationDropdown}>
+              <Link to="/cart" className="cart_icon">
+                <i className="icon_cart fas fa-shopping-bag"></i>
+                {cartItems.length > 0 && (
+                  <span className="cart_badge">{cartItems.length}</span>
+                )}
+              </Link>
+              <div
+                className="notification_icon"
+                onClick={toggleNotificationDropdown}
+                ref={notificationMenuRef}
+              >
                 <i className="icon_noti fas fa-bell"></i>
-                <span className="notification_badge">{notificationCount}</span>
+                {notificationCount > 0 && (
+                  <span className="notification_badge">
+                    {notificationCount}
+                  </span>
+                )}
                 <div
                   className="noti_dropdown_menu"
                   style={{
@@ -229,47 +248,58 @@ const HeaderComponent = () => {
                     transform: showNotifications
                       ? "translateY(0)"
                       : "translateY(-10px)",
+                    maxHeight: "370px",
+                    overflowY: "auto",
                   }}
                 >
                   <div className="noti_header_wrapper">
                     <div className="noti_header">Notifications</div>
-                    {/* <div className="noti_header_view">
-                      View all<i className="fas fa-arrow-right"></i>
-                    </div> */}
                   </div>
-                  {notifications.length > 0 ? (notifications.slice(notifications.length - 5, notifications.length).reverse().map((notification, index) => (
-                    <div
-                      key={notification.Id}
-                      className="noti_item"
-                      style={{
-                        borderBottom:
-                          index === notifications.length - 1
-                            ? "none"
-                            : "1px solid #e0e0e0",
-                      }}
-                    >
-                      <div className="each_noti">
-                        {/* <p className="noti_title">{notification.customerId}</p> */}
-                        <p className="noti_description">
-                          {notification}
-                        </p>
-                        {/* <span className="noti_time">{notification}</span> */}
-                      </div>
+                  {notifications.length > 0 ? (
+                    notifications
+                      .slice(0, notificationsToShow)
+                      .reverse()
+                      .map((notification, index) => (
+                        <div
+                          key={notification.Id}
+                          className="noti_item"
+                          style={{
+                            borderBottom:
+                              index === notifications.length - 1
+                                ? "none"
+                                : "1px solid #e0e0e0",
+                          }}
+                          onClick={(e) => handleNotificationClick(e, notification)}
+                        >
+                          <div className="each_noti">
+                            <p className="noti_description">{notification}</p>
+                          </div>
+                          <div className="noti_date">
+                            <p>10:20 09/11/2004</p>
+                          </div>
+                        </div>
+                      ))
+                  ) : (
+                    <div className="notification-item">
+                      No notification
                     </div>
-                  ))) : (
-                    <div className="notification-item">No new notifications</div>
+                  )}
+                  {notificationsToShow < notifications.length && (
+                    <div className="noti_view_more_wrapper">
+                      <button
+                        className="noti_view_more_button"
+                        onClick={handleViewMoreNotifications}
+                      >
+                        View more notifications
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
-              <Link to="/cart" className="cart_icon">
-                <i className="icon_cart fas fa-shopping-bag"></i>
-                {cartItems.length > 0 && (
-                  <span className="cart_badge">{cartItems.length}</span>
-                )}
-              </Link>
               <div
                 className="account_dropdown_section dropdown"
                 onClick={toggleAccountDropdown}
+                ref={accountMenuRef}
               >
                 <i className="icon_account fas fa-user"></i>
                 <ul

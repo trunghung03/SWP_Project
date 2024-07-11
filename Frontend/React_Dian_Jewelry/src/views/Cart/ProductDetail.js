@@ -129,30 +129,9 @@ function ProductDetail() {
         if (!token) {
             toast.warn("Please sign in or sign up to add jewelry to cart.", {
                 position: "top-right",
-                autoClose: 3000,
-                buttons: {
-                    signIn: {
-                        text: "Sign In",
-                        value: "signIn",
-                        className: "swal-button"
-                    },
-                    ok: {
-                        text: "Ok",
-                        value: "ok",
-                        className: "swal-button"
-                    }
-                }
-            }).then((value) => {
-                switch (value) {
-                    case "signIn":
-                        navigate('/login');
-                        break;
-                    case "ok":
-                        break;
-                    default:
-                        break;
-                }
+                autoClose: 3000
             });
+            return;
         } else {
             const productToSave = {
                 productId: product.productId,
@@ -238,7 +217,7 @@ function ProductDetail() {
             <HeaderComponent />
             <SubNav items={navItems} />
             <ToastContainer />
-            
+
             <br />
             <div className="product_detail_container">
                 <div className="product_images_detail">

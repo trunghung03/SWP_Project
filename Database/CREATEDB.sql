@@ -1,3 +1,20 @@
+USE master;
+GO
+-- Check if the database exists
+IF EXISTS(SELECT * FROM sys.databases WHERE name = 'DIAN')
+BEGIN
+    -- If the database exists, drop it
+    ALTER DATABASE DIAN SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DIAN;
+END
+GO
+-- Create the new database
+CREATE DATABASE DIAN;
+GO
+-- Switch context to the new database
+USE DIAN;
+GO
+
 CREATE TABLE CUSTOMER (
     CustomerID INT PRIMARY KEY IDENTITY(1,1),
     Email NVARCHAR(254) NOT NULL,
@@ -123,7 +140,7 @@ CREATE TABLE SHELL (
 	ShellID INT PRIMARY KEY IDENTITY(1,1),
     ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
 	ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
-    ShellAmount DECIMAL(18, 2),
+    Weight DECIMAL(18, 2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 )

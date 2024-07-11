@@ -7,7 +7,7 @@
 	('Google', 'emma.watson@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Watson', 'Emma', '101 Pine St', '+1 (617) 555-0987', 800, 1),
 	('None', 'oliver.queen@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Queen', 'Oliver', '202 Cedar St', '+1 (818) 555-0367', 300, 1),
 	('Google', 'lee1103@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Lee', 'Bruce', '303 Birch St', '+1 (305) 555-0456', 3500, 1),
-	('Google', 'clark08kent@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Kent', 'Clark', '404 Maple St', '+1 (702) 555-0823', 200, 1);
+	('Google', 'clark08kent@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Kent', 'Clark', '404 Maple St', '+1 (702) 555-0823', 200, 1),
 	('None', 'sara.connor@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Connor', 'Sara', '505 Spruce St', '+1 (213) 555-0156', 1200, 1),
 	('Google', 'bruce.wayne@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Wayne', 'Bruce', '606 Willow St', '+1 (212) 555-0293', 2500, 1),
 	('None', 'diana.prince@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Prince', 'Diana', '707 Fir St', '+1 (415) 555-0472', 3000, 1),
@@ -20,8 +20,6 @@
 	('Google', 'scott.lang@gmail.com', 'AQAAAAIAAYagAAAAEKWou0HCbLl1YudTeZbUd2sYyfk3gn0FF2gwMM0PfOVYssQ6GF9OEKTm1WzbtT7FMB==', 'Lang', 'Scott', '1414 Magnolia St', '+1 (212) 555-0679', 1400, 1);
 
 
-	-- Insert dummy data into EMPLOYEE table
-	-- Insert dummy data into EMPLOYEE table with updated roles
 	INSERT INTO EMPLOYEE (Role, Email, Password, LastName, FirstName, Address, PhoneNumber, Status) VALUES
 	('Admin', 'RaveAdmin@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Steve', 'Ravy', '789 Pine St', '+1 (202) 555-0178', 1),
 	('Manager', 'SmithManager@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Smith', 'John', '101 Oak St', '+1 (303) 555-0192', 1),
@@ -31,7 +29,7 @@
 	('Manager', 'JamesManager02@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Davis', 'James', '101 Maple St', '+1 (808) 555-0136', 1),
 	('Admin', 'JessicaAdmin2@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Miller', 'Jessica', '202 Oak St', '+1 (315) 555-0176', 1),
 	('DeliveryStaff', 'BobbyDelivery@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Demer', 'Bobby', '412 OakHill St', '+1 (505) 613-0457', 1);
-	-- Insert dummy data into ARTICLE table
+
 	INSERT INTO ARTICLE (Title, Content, Employee, [Date], [Image], Tag, Status) VALUES
 	('Natural vs. Lab Diamonds', 'Natural and lab-grown diamonds are identical to the naked eye. In fact, most experts can''t even tell them apart without specialized equipment. Ultimately, the main difference is how they''re created. Learn more to understand which diamond type suits your style.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F369828bf6d7c48d6ae52eb7edb069602', 'Blog', 1),
 	('Transformational Blockchain Technology', 'Blockchain technology is revolutionizing the natural diamond industry. Our blockchain keeps track of every step in a diamond’s journey – from mining, to market, to the moment it reaches you – safely, securely, and permanently. With our blockchain verified diamonds, you’ll have an enduring digital record about where your diamond comes from and how it was sourced. In 2019, we became one of the first retailers to offer blockchain verified diamonds, and year after year we have increased our offering of blockchain verified diamonds, ahead of our ESG Goals.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fa6e7c9b72fb840e29ce3d58ef93d4f6d', 'Blog', 1),
@@ -41,7 +39,6 @@
 	('Design Your Own Necklace', 'Customize a solitaire necklace with a setting and gemstone that suit your style.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=720,height=545,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F3f926b3050bd4f6baa39fe0b3db32fd3', 'Services', 1),
 	('OUR BEGINNING', 'In 2019, after witnessing the gap in ethical and sustainable options within the diamond industry, visionary entrepreneur Danielle Taylor embarked on a mission to redefine the narrative. Inspired by Beth Gerstein''s journey, Danielle envisioned a diamond jewelry brand that not only symbolized love but also upheld principles of environmental stewardship and ethical sourcing. With a shared commitment to sustainability, Danielle partnered with renowned jeweler Michael Adams to establish DIAN Diamond Jewelry in 2022. Together, they pioneered innovative approaches to diamond sourcing and transparency, leveraging cutting-edge technology to trace each gemstone''s origin. By offering consumers the assurance of ethical practices and environmental responsibility, DIAN quickly gained recognition as a leader in sustainable luxury jewelry, inspiring a new generation of conscientious consumers to adorn themselves with diamonds that shine with integrity and purpose.', 3, GETDATE(), 'https://image.brilliantearth.com/cdn-cgi/image/width=600,height=258,quality=100,format=auto/https://www.brilliantearth.com/bee2-ui/img/mission/about/Mission_About_Static.jpg', 'About', 1);
 
-	-- Insert dummy data into PROMOTION table
 	INSERT INTO PROMOTION ([Name], Amount, ValidFrom, ValidTo, [Description], Code, Status) VALUES
 	('Spring Sale', 20.00, GETDATE(), DATEADD(month, 1, GETDATE()), '20% off all items for Spring', 'SPRING20',  1),
 	('Summer Sale', 15.00, GETDATE(), DATEADD(month, 2, GETDATE()), '15% off all items for Summer', 'SUMMER15',  1),
@@ -51,71 +48,89 @@
 	('Cyber Monday', 35.00, GETDATE(), DATEADD(month, 6, GETDATE()), '35% off all items for Cyber Monday', 'CYBERMONDAY35',  1),
 	('Holiday Special', 40.00, GETDATE(), DATEADD(month, 7, GETDATE()), '40% off all items for the Holidays', 'HOLIDAY40', 1);
 
-	-- Insert dummy data into PURCHASEORDER table
 	INSERT INTO PURCHASEORDER (UserID, [Date], PaymentMethod, Name, PhoneNumber, ShippingAddress, TotalPrice, [OrderStatus], PromotionID, PayWithPoint, Note,SaleStaff,DeliveryStaff) VALUES
-	(1, '2024-07-12', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2000.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
-	(2, '2024-07-12', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3000.00, 'Paid', 2, 1, 'Ship at D2',3,8),
-	(3, '2024-07-12', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1500.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
-	(4, '2024-09-18', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2500.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
-	(5, '2024-09-12', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3500.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
-	(6, '2024-03-12', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4000.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
-	(7, '2024-03-12', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4500.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8),
-	(8, '2024-07-12', 'Credit Card', 'Sara Connor', '213-555-0156', '505 Spruce St', 2200.00, 'Paid', 8, 1, 'Ship at D2', 6, 9),
-	(9, '2024-07-12', 'PayPal', 'Bruce Wayne', '212-555-0293', '606 Willow St', 2800.00, 'Completed', 9, 0, 'Shipping without packaging', 7, 10),
-	(10, '2024-07-12', 'Credit Card', 'Diana Prince', '415-555-0472', '707 Fir St', 1900.00, 'Unpaid', 10, 0, 'Ship at D1', 6, 9),
-	(11, '2024-07-12', 'PayPal', 'Barry Allen', '310-555-0183', '808 Redwood St', 2300.00, 'Delivering', 11, 1, 'Shipping with packaging', 7, 10),
-	(12, '2024-07-12', 'Credit Card', 'Peter Parker', '617-555-0194', '909 Ash St', 2100.00, 'Cancelled', 12, 0, 'Ship at D2', 6, 9),
-	(13, '2024-07-12', 'PayPal', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2400.00, 'Paid', 13, 1, 'Shipping without packaging', 7, 10),
-	(14, '2024-07-12', 'Credit Card', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2500.00, 'Completed', 14, 0, 'Shipping with packaging', 6, 9),
-	(15, '2024-02-28', 'PayPal', 'Tony Stark', '702-555-0457', '1212 Juniper St', 2900.00, 'Delivering', 15, 1, 'Ship at D2', 7, 10),
-	(16, '2024-02-28', 'Credit Card', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 1700.00, 'Unpaid', 16, 0, 'Shipping with packaging', 6, 9),
-	(17, '2024-02-28', 'PayPal', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 2600.00, 'Paid', 17, 1, 'Ship at D1', 7, 10),
-	(1, '2024-02-28', 'Credit Card', 'John Doe', '212-555-0198', '123 Main St', 1800.00, 'Paid', 18, 1, 'Ship at D2', 3, 7),
-	(2, '2024-02-28', 'PayPal', 'Jane Smith', '415-555-0234', '456 Elm St', 2200.00, 'Completed', 19, 0, 'Ship at D1', 3, 7),
-	(3, '2024-02-28', 'Credit Card', 'Chris Burkerly', '310-555-0745', '789 Oak St', 2700.00, 'Unpaid', 20, 0, 'Shipping with packaging', 3, 8),
-	(4, '2024-02-28', 'PayPal', 'Emma Watson', '617-555-0987', '101 Pine St', 1900.00, 'Delivering', 21, 1, 'Shipping without packaging', 5, 8),
-	(5, '2024-02-28', 'Credit Card', 'Oliver Queen', '818-555-0367', '202 Cedar St', 1600.00, 'Cancelled', 22, 0, 'Ship at D2', 5, 9),
-	(6, '2024-08-11', 'PayPal', 'Bruce Lee', '305-555-0456', '303 Birch St', 3200.00, 'Paid', 23, 1, 'Shipping with packaging', 5, 9),
-	(7, '2024-01-23', 'Credit Card', 'Clark Kent', '702-555-0823', '404 Maple St', 1400.00, 'Completed', 24, 0, 'Shipping without packaging', 5, 10),
-	(8, '2024-01-23', 'PayPal', 'Sara Connor', '213-555-0156', '505 Spruce St', 1800.00, 'Delivering', 25, 1, 'Ship at D1', 6, 10),
-	(9, '2024-01-23', 'Credit Card', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3100.00, 'Unpaid', 26, 0, 'Shipping with packaging', 7, 9),
-	(10, '2024-01-23', 'PayPal', 'Diana Prince', '415-555-0472', '707 Fir St', 2800.00, 'Paid', 27, 1, 'Ship at D2', 7, 9),
-	(11, '2024-01-23', 'Credit Card', 'Barry Allen', '310-555-0183', '808 Redwood St', 1700.00, 'Completed', 28, 0, 'Shipping with packaging', 7, 10),
-	(12, '2024-01-23', 'PayPal', 'Peter Parker', '617-555-0194', '909 Ash St', 1300.00, 'Delivering', 29, 1, 'Ship at D1', 7, 10),
-	(13, '2024-01-23', 'Credit Card', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2600.00, 'Cancelled', 30, 0, 'Shipping without packaging', 7, 9),
-	(14, '2024-01-23', 'PayPal', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2400.00, 'Paid', 31, 1, 'Ship at D2', 6, 10),
-	(15, '2024-01-23', 'Credit Card', 'Tony Stark', '702-555-0457', '1212 Juniper St', 4000.00, 'Completed', 32, 0, 'Shipping with packaging', 7, 9),
-	(16, '2024-01-23', 'PayPal', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2100.00, 'Unpaid', 33, 1, 'Ship at D1', 6, 10),
-	(17, '2024-05-31', 'Credit Card', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 2700.00, 'Delivering', 34, 0, 'Shipping with packaging', 7, 9),
-	(1, '2024-05-31', 'PayPal', 'John Doe', '212-555-0198', '123 Main St', 2100.00, 'Delivering', 35, 0, 'Ship at D2', 3, 10),
-	(2, '2024-05-31', 'Credit Card', 'Jane Smith', '415-555-0234', '456 Elm St', 2500.00, 'Completed', 36, 1, 'Shipping without packaging', 3, 9),
-	(3, '2024-05-31', 'PayPal', 'Chris Burkerly', '310-555-0745', '789 Oak St', 2900.00, 'Cancelled', 37, 0, 'Ship at D1', 3, 8),
-	(4, '2024-05-31', 'Credit Card', 'Emma Watson', '617-555-0987', '101 Pine St', 2200.00, 'Paid', 38, 1, 'Shipping with packaging', 5, 7),
-	(5, '2024-05-31', 'PayPal', 'Oliver Queen', '818-555-0367', '202 Cedar St', 1800.00, 'Delivering', 39, 0, 'Ship at D2', 5, 10),
-	(6, '2024-05-31', 'Credit Card', 'Bruce Lee', '305-555-0456', '303 Birch St', 3500.00, 'Unpaid', 40, 1, 'Shipping without packaging', 5, 9),
-	(7, '2024-05-31', 'PayPal', 'Clark Kent', '702-555-0823', '404 Maple St', 1700.00, 'Cancelled', 41, 0, 'Ship at D1', 5, 8),
-	(8, '2024-05-31', 'Credit Card', 'Sara Connor', '213-555-0156', '505 Spruce St', 2000.00, 'Paid', 42, 1, 'Shipping with packaging', 6, 7),
-	(9, '2024-04-14', 'PayPal', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3400.00, 'Delivering', 43, 0, 'Ship at D2', 7, 10),
-	(10, '2024-04-14', 'Credit Card', 'Diana Prince', '415-555-0472', '707 Fir St', 3100.00, 'Completed', 44, 1, 'Shipping without packaging', 7, 9),
-	(11, '2024-04-14', 'PayPal', 'Barry Allen', '310-555-0183', '808 Redwood St', 2000.00, 'Paid', 45, 0, 'Ship at D1', 7, 8),
-	(12, '2024-04-14', 'Credit Card', 'Peter Parker', '617-555-0194', '909 Ash St', 1500.00, 'Cancelled', 46, 1, 'Shipping with packaging', 7, 10),
-	(13, '2024-04-14', 'PayPal', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2900.00, 'Delivering', 47, 0, 'Ship at D2', 7, 9),
-	(14, '2024-04-14', 'Credit Card', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2700.00, 'Unpaid', 48, 1, 'Shipping without packaging', 6, 8),
-	(15, '2023-04-14', 'PayPal', 'Tony Stark', '702-555-0457', '1212 Juniper St', 4300.00, 'Completed', 49, 0, 'Ship at D1', 7, 10),
-	(16, '2023-04-14', 'Credit Card', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2400.00, 'Paid', 50, 1, 'Shipping with packaging', 6, 9),
-	(17, '2023-04-14', 'PayPal', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 3000.00, 'Delivering', 51, 0, 'Ship at D2', 7, 8),
-	(1, '2023-04-14', 'Credit Card', 'John Doe', '212-555-0198', '123 Main St', 2300.00, 'Cancelled', 52, 1, 'Shipping without packaging', 3, 9),
-	(2, '2023-04-14', 'PayPal', 'Jane Smith', '415-555-0234', '456 Elm St', 2600.00, 'Paid', 53, 0, 'Ship at D1', 3, 8),
-	(1, '2023-01-15', 'Credit Card', 'John Doe', '123-456-7890', '123 Main St', 2200.00, 'Pending', 1, 0, 'Expedited shipping', 1, 2),
-(2, '2023-02-20', 'PayPal', 'Jane Smith', '234-567-8901', '456 Elm St', 3050.00, 'Shipped', 2, 1, 'Deliver ASAP', 3, 4),
-(3, '2023-02-28', 'Credit Card', 'Alice Johnson', '345-678-9012', '789 Oak St', 1750.00, 'Delivered', 1, 0, 'Extra packaging needed', 2, 3),
-(4, '2023-03-05', 'PayPal', 'Bob Brown', '456-789-0123', '101 Pine St', 2900.00, 'Completed', 3, 1, 'Handle with care', 1, 5),
-(5, '2023-04-10', 'Credit Card', 'Carol White', '567-890-1234', '202 Cedar St', 3800.00, 'Pending', 4, 0, 'Leave at doorstep', 3, 6),
-(6, '2023-05-15', 'PayPal', 'David Black', '678-901-2345', '303 Birch St', 4200.00, 'Cancelled', 5, 1, 'Hold for pickup', 2, 3),
-(7, '2023-06-25', 'Credit Card', 'Eve Green', '789-012-3456', '404 Maple St', 4400.00, 'Pending', 6, 0, 'Signature required', 4, 7);
-	
-	
-	-- Insert dummy data into CATEGORY table
+	(1, '2024-07-12', 'Bank Transfer', 'John Doe', '123-456-7890', '123 Main St', 2000.00, 'Unpaid', 1, 0, 'Shipping with packaging',3,4),
+	(2, '2024-07-12', 'VNPAY', 'Jane Smith', '234-567-8901', '456 Elm St', 3000.00, 'Paid', 2, 1, 'Ship at D2',3,8),
+	(3, '2024-07-12', 'Bank Transfer', 'Alice Johnson', '345-678-9012', '789 Oak St', 1500.00, 'Unpaid', 3, 0, 'Shipping without packaging',3,8),
+	(4, '2024-09-18', 'VNPAY', 'Bob Brown', '456-789-0123', '101 Pine St', 2500.00, 'Delivering', 4, 1, 'Shipping with packaging',5,4),
+	(5, '2024-09-12', 'Bank Transfer', 'Carol White', '567-890-1234', '202 Cedar St', 3500.00, 'Completed', 5, 0, 'Shipping with packaging',5,4),
+	(6, '2024-03-12', 'VNPAY', 'David Black', '678-901-2345', '303 Birch St', 4000.00, 'Cancelled', 6, 1, 'Shipping with packaging',3,4),
+	(7, '2024-03-12', 'Bank Transfer', 'Eve Green', '789-012-3456', '404 Maple St', 4500.00, 'Delivering', 7, 0, 'Shipping with packaging',5,8),
+	(8, '2024-07-12', 'Bank Transfer', 'Sara Connor', '213-555-0156', '505 Spruce St', 2200.00, 'Paid', 8, 1, 'Ship at D2', 6, 9),
+	(9, '2024-07-12', 'VNPAY', 'Bruce Wayne', '212-555-0293', '606 Willow St', 2800.00, 'Completed', 9, 0, 'Shipping without packaging', 7, 10),
+	(10, '2024-07-12', 'Bank Transfer', 'Diana Prince', '415-555-0472', '707 Fir St', 1900.00, 'Unpaid', 10, 0, 'Ship at D1', 6, 9),
+	(11, '2024-07-12', 'VNPAY', 'Barry Allen', '310-555-0183', '808 Redwood St', 2300.00, 'Delivering', 11, 1, 'Shipping with packaging', 7, 10),
+	(12, '2024-07-12', 'Bank Transfer', 'Peter Parker', '617-555-0194', '909 Ash St', 2100.00, 'Cancelled', 12, 0, 'Ship at D2', 6, 9),
+	(13, '2024-07-12', 'VNPAY', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2400.00, 'Paid', 13, 1, 'Shipping without packaging', 7, 10),
+(1, '2024-07-12', 'Bank Transfer', 'John Doe', '123-456-7890', '123 Main St', 2000.00, 'Unpaid', 1, 0, 'Shipping with packaging', 3, 4),
+(2, '2024-07-13', 'Cash', 'Jane Smith', '234-567-8901', '456 Elm St', 3000.00, 'Paid', 2, 1, 'Ship at D2', 3, 8),
+(3, '2024-07-14', 'VNPAY', 'Alice Johnson', '345-678-9012', '789 Oak St', 1500.00, 'Preparing', 3, 0, 'Shipping without packaging', 3, 4),
+(4, '2024-07-15', 'Bank Transfer', 'Bob Brown', '456-789-0123', '101 Pine St', 2500.00, 'Delivering', 4, 1, 'Shipping with packaging', 5, 4),
+(5, '2024-07-16', 'Cash', 'Carol White', '567-890-1234', '202 Cedar St', 3500.00, 'Completed', 5, 0, 'Shipping with packaging', 5, 4),
+(6, '2024-07-17', 'VNPAY', 'David Black', '678-901-2345', '303 Birch St', 4000.00, 'Cancelled', 6, 1, 'Shipping with packaging', 3, 8),
+(7, '2024-07-18', 'Bank Transfer', 'Eve Green', '789-012-3456', '404 Maple St', 4500.00, 'Delivering', 7, 0, 'Shipping with packaging', 5, 4),
+(8, '2024-07-19', 'Cash', 'Sara Connor', '213-555-0156', '505 Spruce St', 2200.00, 'Paid', 8, 1, 'Ship at D2', 3, 8),
+(9, '2024-07-20', 'VNPAY', 'Bruce Wayne', '212-555-0293', '606 Willow St', 2800.00, 'Completed', 9, 0, 'Shipping without packaging', 3, 4),
+(10, '2024-07-21', 'Bank Transfer', 'Diana Prince', '415-555-0472', '707 Fir St', 1900.00, 'Unpaid', 10, 0, 'Ship at D1', 5, 8),
+(11, '2024-07-22', 'Cash', 'Barry Allen', '310-555-0183', '808 Redwood St', 2300.00, 'Delivering', 11, 1, 'Shipping with packaging', 3, 4),
+(12, '2024-07-23', 'VNPAY', 'Peter Parker', '617-555-0194', '909 Ash St', 2100.00, 'Cancelled', 12, 0, 'Ship at D2', 3, 8),
+(13, '2024-07-24', 'Bank Transfer', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2400.00, 'Paid', 13, 1, 'Shipping without packaging', 5, 4),
+(14, '2024-07-25', 'Cash', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2500.00, 'Completed', 14, 0, 'Shipping with packaging', 3, 8),
+(15, '2024-07-26', 'VNPAY', 'Tony Stark', '702-555-0457', '1212 Juniper St', 2900.00, 'Delivering', 15, 1, 'Ship at D2', 5, 4),
+(16, '2024-07-27', 'Bank Transfer', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 1700.00, 'Preparing', 16, 0, 'Shipping with packaging', 3, 8),
+(17, '2024-07-28', 'Cash', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 2600.00, 'Paid', 17, 1, 'Ship at D1', 5, 4),
+(1, '2024-07-29', 'VNPAY', 'John Doe', '123-456-7890', '123 Main St', 1800.00, 'Completed', 1, 0, 'Ship at D2', 3, 4),
+(2, '2024-07-30', 'Bank Transfer', 'Jane Smith', '234-567-8901', '456 Elm St', 2200.00, 'Delivering', 2, 1, 'Ship at D1', 5, 8),
+(3, '2024-07-31', 'Cash', 'Alice Johnson', '345-678-9012', '789 Oak St', 2700.00, 'Preparing', 3, 0, 'Shipping with packaging', 3, 4),
+(4, '2024-08-01', 'VNPAY', 'Bob Brown', '456-789-0123', '101 Pine St', 1900.00, 'Paid', 4, 1, 'Shipping without packaging', 5, 8),
+(5, '2024-08-02', 'Bank Transfer', 'Carol White', '567-890-1234', '202 Cedar St', 1600.00, 'Completed', 5, 0, 'Ship at D2', 3, 4),
+(6, '2024-08-03', 'Cash', 'David Black', '678-901-2345', '303 Birch St', 3200.00, 'Delivering', 6, 1, 'Shipping with packaging', 5, 8),
+(7, '2024-08-04', 'VNPAY', 'Eve Green', '789-012-3456', '404 Maple St', 1400.00, 'Cancelled', 7, 0, 'Shipping without packaging', 3, 4),
+(8, '2024-08-05', 'Bank Transfer', 'Sara Connor', '213-555-0156', '505 Spruce St', 1800.00, 'Delivering', 8, 1, 'Ship at D1', 5, 8),
+(9, '2024-08-06', 'Cash', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3100.00, 'Paid', 9, 0, 'Shipping with packaging', 3, 4),
+(10, '2024-08-07', 'VNPAY', 'Diana Prince', '415-555-0472', '707 Fir St', 2800.00, 'Completed', 10, 0, 'Ship at D2', 5, 8),
+(11, '2024-08-08', 'Bank Transfer', 'Barry Allen', '310-555-0183', '808 Redwood St', 1700.00, 'Delivering', 11, 1, 'Shipping with packaging', 3, 4),
+(12, '2024-08-09', 'Cash', 'Peter Parker', '617-555-0194', '909 Ash St', 1300.00, 'Cancelled', 12, 0, 'Ship at D1', 5, 8),
+(13, '2024-08-10', 'VNPAY', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2600.00, 'Completed', 13, 1, 'Shipping without packaging', 3, 4),
+(14, '2024-08-11', 'Bank Transfer', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2400.00, 'Paid', 14, 0, 'Ship at D2', 5, 8),
+(15, '2024-08-12', 'Cash', 'Tony Stark', '702-555-0457', '1212 Juniper St', 2500.00, 'Delivering', 15, 1, 'Shipping with packaging', 3, 4),
+(16, '2024-08-13', 'VNPAY', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2900.00, 'Preparing', 16, 0, 'Ship at D2', 5, 8),
+(17, '2024-08-14', 'Bank Transfer', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 2700.00, 'Paid', 17, 1, 'Shipping with packaging', 3, 4),
+(1, '2024-08-15', 'Cash', 'John Doe', '123-456-7890', '123 Main St', 2100.00, 'Delivering', 1, 0, 'Ship at D1', 5, 8),
+(2, '2024-08-16', 'VNPAY', 'Jane Smith', '234-567-8901', '456 Elm St', 2500.00, 'Completed', 2, 1, 'Shipping without packaging', 3, 4),
+(3, '2024-08-17', 'Bank Transfer', 'Alice Johnson', '345-678-9012', '789 Oak St', 2900.00, 'Preparing', 3, 0, 'Ship at D2', 5, 8),
+(4, '2024-08-18', 'Cash', 'Bob Brown', '456-789-0123', '101 Pine St', 2200.00, 'Paid', 4, 1, 'Shipping with packaging', 3, 4),
+(5, '2024-08-19', 'VNPAY', 'Carol White', '567-890-1234', '202 Cedar St', 1800.00, 'Completed', 5, 0, 'Ship at D2', 5, 8),
+(6, '2024-08-20', 'Bank Transfer', 'David Black', '678-901-2345', '303 Birch St', 3500.00, 'Delivering', 6, 1, 'Shipping without packaging', 3, 4),
+(7, '2024-08-21', 'Cash', 'Eve Green', '789-012-3456', '404 Maple St', 1700.00, 'Cancelled', 7, 0, 'Shipping with packaging', 5, 8),
+(8, '2024-08-22', 'VNPAY', 'Sara Connor', '213-555-0156', '505 Spruce St', 2000.00, 'Delivering', 8, 1, 'Ship at D1', 3, 4),
+(9, '2024-08-23', 'Bank Transfer', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3400.00, 'Paid', 9, 0, 'Shipping without packaging', 5, 8),
+(10, '2024-08-24', 'Cash', 'Diana Prince', '415-555-0472', '707 Fir St', 3100.00, 'Completed', 10, 0, 'Ship at D2', 3, 4),
+(11, '2024-08-25', 'VNPAY', 'Barry Allen', '310-555-0183', '808 Redwood St', 2000.00, 'Paid', 11, 1, 'Shipping with packaging', 5, 8),
+(12, '2024-08-26', 'Bank Transfer', 'Peter Parker', '617-555-0194', '909 Ash St', 1500.00, 'Cancelled', 12, 0, 'Ship at D1', 3, 4),
+(13, '2024-08-27', 'Cash', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2900.00, 'Delivering', 13, 1, 'Shipping with packaging', 5, 8),
+(14, '2024-08-28', 'VNPAY', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2700.00, 'Unpaid', 14, 0, 'Shipping without packaging', 3, 4),
+(15, '2024-08-29', 'Bank Transfer', 'Tony Stark', '702-555-0457', '1212 Juniper St', 4300.00, 'Completed', 15, 1, 'Ship at D1', 5, 8),
+(16, '2024-08-30', 'Cash', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2400.00, 'Paid', 16, 0, 'Shipping with packaging', 3, 4),
+(17, '2024-08-31', 'VNPAY', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 3000.00, 'Delivering', 17, 1, 'Ship at D2', 5, 8),
+(1, '2024-09-01', 'Bank Transfer', 'John Doe', '123-456-7890', '123 Main St', 2300.00, 'Cancelled', 1, 0, 'Shipping without packaging', 3, 4),
+(2, '2024-09-02', 'Cash', 'Jane Smith', '234-567-8901', '456 Elm St', 2600.00, 'Paid', 2, 1, 'Ship at D1', 5, 8),
+(3, '2024-09-03', 'VNPAY', 'Alice Johnson', '345-678-9012', '789 Oak St', 2900.00, 'Preparing', 3, 0, 'Shipping with packaging', 3, 4),
+(4, '2024-09-04', 'Bank Transfer', 'Bob Brown', '456-789-0123', '101 Pine St', 2200.00, 'Paid', 4, 1, 'Shipping without packaging', 5, 8),
+(5, '2024-09-05', 'Cash', 'Carol White', '567-890-1234', '202 Cedar St', 1800.00, 'Completed', 5, 0, 'Ship at D2', 3, 4),
+(6, '2024-09-06', 'VNPAY', 'David Black', '678-901-2345', '303 Birch St', 3500.00, 'Delivering', 6, 1, 'Shipping with packaging', 5, 8),
+(7, '2024-09-07', 'Bank Transfer', 'Eve Green', '789-012-3456', '404 Maple St', 1700.00, 'Cancelled', 7, 0, 'Shipping without packaging', 3, 4),
+(8, '2024-09-08', 'Cash', 'Sara Connor', '213-555-0156', '505 Spruce St', 2000.00, 'Delivering', 8, 1, 'Ship at D1', 5, 8),
+(9, '2024-09-09', 'VNPAY', 'Bruce Wayne', '212-555-0293', '606 Willow St', 3400.00, 'Paid', 9, 0, 'Shipping with packaging', 3, 4),
+(10, '2024-09-10', 'Bank Transfer', 'Diana Prince', '415-555-0472', '707 Fir St', 3100.00, 'Completed', 10, 0, 'Ship at D2', 5, 8),
+(11, '2024-09-11', 'Cash', 'Barry Allen', '310-555-0183', '808 Redwood St', 2000.00, 'Paid', 11, 1, 'Shipping with packaging', 3, 4),
+(12, '2024-09-12', 'VNPAY', 'Peter Parker', '617-555-0194', '909 Ash St', 1500.00, 'Cancelled', 12, 0, 'Ship at D1', 5, 8),
+(13, '2024-09-13', 'Bank Transfer', 'Natasha Romanoff', '818-555-0215', '1010 Sequoia St', 2900.00, 'Delivering', 13, 1, 'Shipping with packaging', 3, 4),
+(14, '2024-09-14', 'Cash', 'Steve Rogers', '305-555-0346', '1111 Cypress St', 2700.00, 'Unpaid', 14, 0, 'Shipping without packaging', 5, 8),
+(15, '2024-09-15', 'VNPAY', 'Tony Stark', '702-555-0457', '1212 Juniper St', 4300.00, 'Completed', 15, 1, 'Ship at D1', 3, 4),
+(16, '2024-09-16', 'Bank Transfer', 'Wanda Maximoff', '213-555-0568', '1313 Chestnut St', 2400.00, 'Paid', 16, 0, 'Shipping with packaging', 5, 8),
+(17, '2024-09-17', 'Cash', 'Scott Lang', '212-555-0679', '1414 Magnolia St', 3000.00, 'Delivering', 17, 1, 'Ship at D2', 3, 4);
+
 	INSERT INTO CATEGORY ([Name], Status) VALUES
 	('Rings', 1),
 	('Earrings', 1),
@@ -126,15 +141,13 @@
 	('Wedding Bracelets',1),
 	('Wedding Necklaces',1),
 	('Engagement Rings',1);
-
-		-- Insert dummy data into SHELLMATERIAL table
+	
 	INSERT INTO SHELLMATERIAL ([Name], Price, Status) VALUES
 	('Silver', 1500, 1),
 	('Gold', 1700, 1),
 	('Rose Gold', 2000, 1),
 	('White Gold', 2300, 1);
-
-	-- Insert dummy data into COLLECTIONS table
+	
 INSERT INTO COLLECTION (CollectionID, [Name], Status, [Description], CollectionImage)
 VALUES
 (1, 'Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.', 'https://i2.wp.com/www.wolf-and-stag.com/wp-content/uploads/2019/11/Capsule-Jewelry-Collection-4.jpg?quality=100&resize=1000%2C1500'),
@@ -146,13 +159,6 @@ VALUES
 (7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FJ.jpg'),
 (8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FASHION.jpg');
 
-
--- Note the generated product ids
--- Insert updated data into DIAMOND table using the generated product ids:
--- Placeholder for illustration: Assume product ids starting from 1 to the last generated
--- You need to replace actual product ids if not sequential
-
--- Insert dummy data into DIAMOND table
 INSERT INTO DIAMOND (Shape, Color, Clarity, Carat, Cut, AmountAvailable, Price, Status)
 	VALUES('Round','F', 'VVS2', 1.03, 'Super Ideal', 10,3000,  1),
 	('Round','G', 'VVS2', 1.00, 'Super Ideal', 5, 3000,  1),
@@ -216,7 +222,7 @@ INSERT INTO DIAMOND (Shape, Color, Clarity, Carat, Cut, AmountAvailable, Price, 
     ('Heart', 'F', 'IF', 0.52, 'Ideal', 8,1740,  1),
     ('Heart', 'F', 'VVS2', 0.56, 'Very Good',  7,1740,  1),
     ('Heart', 'F', 'VS1', 1.05, 'Ideal',  9, 1740, 1);
-		-- Insert dummy data into PRODUCT table
+
 INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondID, SubDiamondID, LaborCost, ImageLinkList, MainDiamondAmount, SubDiamondAmount, Status, CollectionID, CategoryID)
 VALUES
 ('PROD001', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.', 1 , 5, 71.50, 'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 0, 73, 1, 2, 1),
@@ -267,82 +273,270 @@ VALUES
 ('PROD046', 'Whisper Eternity Necklace', 2890.00, 'Delicate design with diamonds encircling the band.',30, 7, 68.30,  'https://image.brilliantearth.com/media/product_images/CB/BE4DTN50_white_top.jpg;https://image.brilliantearth.com/media/product_images/7S/BE4DTN50_top.jpeg;https://image.brilliantearth.com/media/product_images/AM/BE1D4257LC-18KW-N-S6_BE4DTN50-18KW_BE4DTN50LC-14KW_062.jpg;https://image.brilliantearth.com/media/product_images/U0/BE3AD603-S_BE4DTN50-18KW_BE4DTN50LC-14KW_070.jpg', 0, 28, 1, 5, 4),
 ('PROD047', 'Certified Stud Earrings', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.',31, 7, 79.32, 'https://image.brilliantearth.com/media/product_images/90/BE3DME01318_white_top.jpg;https://image.brilliantearth.com/media/product_images/9X/BE3DME01318_additional1.jpeg;https://image.brilliantearth.com/media/product_images/ZP/BE3DME01318-18KY_top.jpg;https://image.brilliantearth.com/media/product_images/Z5/BE3DME01318-yellow.jpg', 2, 0, 1, 6, 2),
 ('PROD048', 'Diamond Stud Earrings', 495.00, 'Simple and elegant lab grown diamond stud earrings.',33, 7, 42.00, 'https://image.brilliantearth.com/media/product_images/D4/BE3D0492E_yellow_top.jpg;https://image.brilliantearth.com/media/product_images/A5/BE3D0492E_white_top.jpg;https://image.brilliantearth.com/media/product_images/0F/BE3D0492E_rose_top.jpg;https://image.brilliantearth.com/media/product_images/FJ/BE3D492E-14KR_060.jpg', 2, 0, 1, 8, 2);
--- Define default values
-DECLARE @ShellAmount DECIMAL(18, 2) = 50.00;
+
+DECLARE @Weight DECIMAL(18, 2) = 50.00;
 DECLARE @AmountAvailable INT = 100;
 
--- Insert shell records
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (1, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (2, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (3, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (4, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (5, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (6, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (7, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (8, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (9, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (10, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (11, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (12, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (13, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (14, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (15, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (16, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (17, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (18, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (19, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (20, 3,@ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (21, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (22, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (23, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (24, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (25, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (26, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (27, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (28, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (29, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (30, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (31, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (32, 4, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (33, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (34, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (35, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (36, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (37, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (38, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (39, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (40, 3,  @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (41, 3,  @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (42, 3,  @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (43, 3,  @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (44, 2, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (45,1,  @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (46, 1, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (47, 3, @ShellAmount, @AmountAvailable, 1);
-INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Status) VALUES (48, 2, @ShellAmount, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (1, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (2, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (3, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (4, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (5, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (6, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (7, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (8, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (9, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (10, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (11, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (12, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (13, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (14, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (15, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (16, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (17, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (18, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (19, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (20, 3,@Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (21, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (22, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (23, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (24, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (25, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (26, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (27, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (28, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (29, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (30, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (31, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (32, 4, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (33, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (34, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (35, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (36, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (37, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (38, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (39, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (40, 3,  @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (41, 3,  @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (42, 3,  @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (43, 3,  @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (44, 2, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (45,1,  @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (46, 1, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (47, 3, @Weight, @AmountAvailable, 1);
+INSERT INTO SHELL (ProductID, ShellMaterialID, Weight, AmountAvailable, Status) VALUES (48, 2, @Weight, @AmountAvailable, 1);
 
-	-- Insert dummy data into ORDERDETAIL table
-	INSERT INTO ORDERDETAIL (OrderID, LineTotal, CertificateScan, ProductID, ShellMaterialID, Size, Status) VALUES
-	(1, 2300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 2, 7.5, 1),
-	(2, 3100, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 18.0, 1),
-	(3, 2000, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 16.0, 1),
-	(4, 3200, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 6.0, 1),
-	(5, 4000, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 3, 20.0, 1), -- Changed ShellMaterialID to 3
-	(6, 5000, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 3, 22.0, 1), -- Changed ProductID to 1 and ShellMaterialID to 3
-	(7, 4500, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 1, 12.0, 1); -- Changed ProductID to 2 and ShellMaterialID to 1
+INSERT INTO ORDERDETAIL (OrderID, LineTotal, CertificateScan, ProductID, ShellMaterialID, Size, Status) VALUES
+(1, 1000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 2, 7.5, 1),
+(2, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 18.0, 1),
+(2, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 16.0, 1),
+(3, 750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 6.0, 1),
+(3, 750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 3, 20.0, 1),
+(4, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 1, 22.0, 1),
+(4, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 1, 12.0, 1),
+(5, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 2, 15.0, 1),
+(5, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 3, 10.0, 1),
+(6, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 4, 8.0, 1),
+(6, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 2, 18.0, 1),
+(7, 2250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 3, 12.0, 1),
+(7, 2250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 20.0, 1),
+(8, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 19.0, 1),
+(8, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 15.0, 1),
+(9, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 10.0, 1),
+(9, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(10, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(10, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(11, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(11, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(12, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(12, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(13, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(13, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(14, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(14, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(15, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(15, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(16, 850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(16, 850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(17, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(17, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(18, 900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(18, 900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(19, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(19, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(20, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(20, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(21, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(21, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(22, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(22, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(23, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(23, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(24, 1000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(24, 1000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(25, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(25, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(26, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(26, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(27, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(27, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(28, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(28, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1),
+(29, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 4, 11.0, 1),
+(29, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 1, 19.0, 1),
+(30, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 2, 10.5, 1),
+(30, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 3, 13.0, 1),
+(31, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 4, 6.0, 1),
+(31, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 17.0, 1),
+(32, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 14.0, 1),
+(32, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 20.0, 1),
+(33, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 11.0, 1),
+(33, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(34, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(34, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(35, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(35, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(36, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(36, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(37, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(37, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(38, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(38, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(39, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(39, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(40, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(40, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(41, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(41, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(42, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(42, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(43, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(43, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(44, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(44, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(45, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(45, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(46, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(46, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(47, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(47, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(48, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(48, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(49, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(49, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(50, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(50, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(51, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(51, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(52, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(52, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1),
+(53, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 4, 11.0, 1),
+(53, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 1, 19.0, 1),
+(54, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 2, 10.5, 1),
+(54, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 3, 13.0, 1),
+(55, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 4, 6.0, 1),
+(55, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 17.0, 1),
+(56, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 14.0, 1),
+(56, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 20.0, 1),
+(57, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 11.0, 1),
+(57, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(58, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(58, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(59, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(59, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(60, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(60, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(61, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(61, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(62, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(62, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(63, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(63, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(64, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(64, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(65, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(65, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(66, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(66, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(67, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(67, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(68, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(68, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(69, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(69, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(70, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(70, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(71, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(71, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(72, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(72, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(73, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(73, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(74, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(74, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(75, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(75, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(76, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(76, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1),
+(77, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 4, 11.0, 1),
+(77, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 1, 19.0, 1),
+(78, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 2, 10.5, 1),
+(78, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 3, 13.0, 1),
+(79, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 4, 6.0, 1),
+(79, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 17.0, 1),
+(80, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 14.0, 1),
+(80, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 20.0, 1),
+(81, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 11.0, 1),
+(81, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(82, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(82, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(83, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(83, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(84, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(84, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(85, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(85, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(86, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(86, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(87, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(87, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(88, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(88, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(89, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(89, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(90, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(90, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(91, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(91, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(92, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(92, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(93, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(93, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(94, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(94, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(95, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(95, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(96, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(96, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(97, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(97, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(98, 2200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(98, 2200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(99, 2300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(99, 2300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(100, 2400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(100, 2400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1);
 
-
-	-- Insert dummy data into WARRANTY table
+	
 	INSERT INTO WARRANTY (OrderDetailID, StartDate, EndDate, Status) VALUES
-	(1, GETDATE, DATEADD(year, 1, GETDATE()), 'Active'),
+	(1, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(2, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(3, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(4, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(5, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(6, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active'),
 	(7, GETDATE(), DATEADD(year, 1, GETDATE()), 'Active');
-
-	-- Insert dummy data into SIZE table
+	
 	INSERT INTO SIZE (CategoryID, MinSize, MaxSize, Step) VALUES
 	(1, 5.0, 12.0, 0.5),
 	(2, 8.0, 16.0, 2.0),
@@ -354,19 +548,210 @@ INSERT INTO SHELL (ProductID, ShellMaterialID, ShellAmount, AmountAvailable, Sta
 	(8, 400.0, 700.0, 100.0),
 	(9,  5.0, 12.0, 0.5);
 
-
 	INSERT INTO COMPANY(CompanyID, CompanyName, Email, Address, PhoneNumber, MarkupPrice) VALUES
 	(1, 'DIAN Jewelry', 'diamondianjewelry@gmail.com', 'San Francisco, CA', '415-354-4623', 0.2)
+	
+INSERT INTO ORDERDETAIL (OrderID, LineTotal, CertificateScan, ProductID, ShellMaterialID, Size, Status) VALUES
+(1, 1000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 2, 7.5, 1),
+(2, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 18.0, 1),
+(2, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 16.0, 1),
+(3, 750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 6.0, 1),
+(3, 750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 3, 20.0, 1),
+(4, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 1, 22.0, 1),
+(4, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 1, 12.0, 1),
+(5, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 2, 15.0, 1),
+(5, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 3, 10.0, 1),
+(6, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 4, 8.0, 1),
+(6, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 2, 18.0, 1),
+(7, 2250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 3, 12.0, 1),
+(7, 2250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 20.0, 1),
+(8, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 19.0, 1),
+(8, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 15.0, 1),
+(9, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 10.0, 1),
+(9, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(10, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(10, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(11, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(11, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(12, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(12, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(13, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(13, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(14, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(14, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(15, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(15, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(16, 850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(16, 850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(17, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(17, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(18, 900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(18, 900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(19, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(19, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(20, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(20, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(21, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(21, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(22, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(22, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(23, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(23, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(24, 1000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(24, 1000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(25, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(25, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(26, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(26, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(27, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(27, 950.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(28, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(28, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1),
+(29, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 4, 11.0, 1),
+(29, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 1, 19.0, 1),
+(30, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 2, 10.5, 1),
+(30, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 3, 13.0, 1),
+(31, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 4, 6.0, 1),
+(31, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 17.0, 1),
+(32, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 14.0, 1),
+(32, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 20.0, 1),
+(33, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 11.0, 1),
+(33, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(34, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(34, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(35, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(35, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(36, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(36, 1050.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(37, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(37, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(38, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(38, 1100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(39, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(39, 1250.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(40, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(40, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(41, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(41, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(42, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(42, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(43, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(43, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(44, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(44, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(45, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(45, 1150.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(46, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(46, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(47, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(47, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(48, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(48, 1200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(49, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(49, 1300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(50, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(50, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(51, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(51, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(52, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(52, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1),
+(53, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 4, 11.0, 1),
+(53, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 1, 19.0, 1),
+(54, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 2, 10.5, 1),
+(54, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 3, 13.0, 1),
+(55, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 4, 6.0, 1),
+(55, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 17.0, 1),
+(56, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 14.0, 1),
+(56, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 20.0, 1),
+(57, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 11.0, 1),
+(57, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(58, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(58, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(59, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(59, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(60, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(60, 1350.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(61, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(61, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(62, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(62, 1400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(63, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(63, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(64, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(64, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(65, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(65, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(66, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(66, 1500.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(67, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(67, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(68, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(68, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(69, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(69, 1450.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(70, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(70, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(71, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(71, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(72, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(72, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(73, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(73, 1550.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(74, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(74, 1600.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(75, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(75, 1750.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(76, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(76, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1),
+(77, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 8, 4, 11.0, 1),
+(77, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 9, 1, 19.0, 1),
+(78, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 10, 2, 10.5, 1),
+(78, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 11, 3, 13.0, 1),
+(79, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 12, 4, 6.0, 1),
+(79, 1650.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 13, 1, 17.0, 1),
+(80, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 14, 2, 14.0, 1),
+(80, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 15, 3, 20.0, 1),
+(81, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 16, 4, 11.0, 1),
+(81, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 17, 1, 18.0, 1),
+(82, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 18, 2, 7.5, 1),
+(82, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 19, 3, 14.0, 1),
+(83, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 20, 4, 11.0, 1),
+(83, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 21, 1, 19.0, 1),
+(84, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 22, 2, 10.5, 1),
+(84, 1800.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 23, 3, 13.0, 1),
+(85, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 24, 4, 6.0, 1),
+(85, 1700.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 25, 1, 17.0, 1),
+(86, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 26, 2, 14.0, 1),
+(86, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 27, 3, 20.0, 1),
+(87, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 28, 4, 11.0, 1),
+(87, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 29, 1, 18.0, 1),
+(88, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 30, 2, 7.5, 1),
+(88, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 31, 3, 14.0, 1),
+(89, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 32, 4, 11.0, 1),
+(89, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 33, 1, 19.0, 1),
+(90, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 34, 2, 10.5, 1),
+(90, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 35, 3, 13.0, 1),
+(91, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 36, 4, 6.0, 1),
+(91, 1850.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 37, 1, 17.0, 1),
+(92, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 38, 2, 14.0, 1),
+(92, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 39, 3, 20.0, 1),
+(93, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 40, 4, 11.0, 1),
+(93, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 41, 1, 18.0, 1),
+(94, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 42, 2, 7.5, 1),
+(94, 1900.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 43, 3, 14.0, 1),
+(95, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 44, 4, 11.0, 1),
+(95, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 45, 1, 19.0, 1),
+(96, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 46, 2, 10.5, 1),
+(96, 2100.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 47, 3, 13.0, 1),
+(97, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 48, 4, 6.0, 1),
+(97, 2000.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 1, 17.0, 1),
+(98, 2200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 14.0, 1),
+(98, 2200.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 20.0, 1),
+(99, 2300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 11.0, 1),
+(99, 2300.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 1, 18.0, 1),
+(100, 2400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 6, 2, 7.5, 1),
+(100, 2400.00, 'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 7, 3, 14.0, 1);
 
-	-- Insert more dummy data into ORDERDETAIL table using existing IDs
-INSERT INTO ORDERDETAIL (OrderID, LineTotal,CertificateScan, ProductID, ShellMaterialID, Size, Status) VALUES
-(8, 2300.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg',  1, 1, 8.0, 1),
-(9, 3100.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 2, 19.0, 1), 
-(10, 2100.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 3, 3, 17.0, 1),
-(11, 3200.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 4, 4, 15.0, 1),
-(12, 4000.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 5, 3, 21.0, 1),
-(13, 5000.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 1, 3, 23.0, 1),
-(14, 4500.00,'https://css.brilliantearth.com/static/img/diamond_shape_new/round_new.jpg', 2, 1, 10.0, 1);
 
 INSERT INTO NOTIFICATION (CustomerId, Message, IsDelivered, CreatedAt, MarkRead)
 VALUES

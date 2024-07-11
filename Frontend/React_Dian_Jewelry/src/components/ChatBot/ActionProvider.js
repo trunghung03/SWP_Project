@@ -4,34 +4,46 @@ import { createChatBotMessage } from 'react-chatbot-kit';
 const ActionProvider = ({ setState, children }) => {
   const handleHello = () => {
     const botMessage = createChatBotMessage('Good day! Thank you for your visit. Are there anything I can help?', {
-      widget: 'suggestions'
+      widget: 'suggestions',
+      widgetParams: { type: 'helloSuggest' }
     });
+
+    console.log('handleHello widgetParams:', { type: 'helloSuggest' });
+
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
+      widgetParams: { type: 'helloSuggest' }
     }));
   };
 
   const handleProductInfo = (infoType) => {
     let response;
+    let widgetParams;
     switch (infoType) {
       case 'GIA':
         response = 'GIA (Gemological Institute of America) of diamond is really shorthand diamond sellers use to describe diamonds that have been graded by GIA. GIA is an independent, nonprofit organization that conducts gem research, educates gem professionals and sets the standards for determining diamond quality.';
+        widgetParams = { type: 'GIASuggest' };
         break;
       case '4Cs':
         response = 'The 4Cs are the globally accepted standard for assessing the quality of a diamond - color, clarity, cut and carat weight.';
+        widgetParams = { type: '4CsSuggest' };
         break;
       case 'diamondColor':
         response = 'Diamond color has the scale ranges from D which is totally colorless to Z which is a pale yellow or brown color. Brown diamonds darker than K color are usually described using their letter grade, and a descriptive phrase, for example M Faint Brown. Diamonds with more depth of color than Z color fall into the fancy color diamond range.';
+        widgetParams = { type: 'diamondColorSuggest' };
         break;
       case 'diamondClarity':
         response = 'Diamond clarity is a measure of the purity and rarity of the stone, graded by the visibility of these characteristics under 10-power magnification. A stone is graded as flawless if, under 10-power magnification, no inclusions (internal flaws) and no blemishes (external imperfections) are visible.';
+        widgetParams = { type: 'diamondClaritySuggest' };
         break;
       case 'diamondCarat':
         response = 'Diamond carat weight measures a diamond\'s apparent size. To put it simply, diamond carat weight measures how much a diamond weighs. A metric carat is defined as 200 milligrams. Each carat is subdivided into 100 points. This allows very precise measurements to the hundredth decimal place.';
+        widgetParams = { type: 'diamondCaratSuggest' };
         break;
       case 'diamondCut':
         response = 'Diamond cut refers to a diamond\'s facets, symmetry, and dimensions. It describes the way a diamond reflects light, not how the diamond is outwardly shaped. Emerald and Radiant cut diamonds are a great example of the difference between cut and shape.';
+        widgetParams = { type: 'diamondCutSuggest' };
         break;
       case 'ringSize':
         response = 'test ring';
@@ -45,16 +57,23 @@ const ActionProvider = ({ setState, children }) => {
       case 'necklaceSize':
         response = 'test necklace';
         break;
+      case 'shape':
+        response = 'Here we have various type of diamond shapes for you, from simple shape like round or oval to the most complex one is heart. All the shapes we have is round, oval, emerald, cushion, pear, radiant, princess, marquise, asscher and heart.';
+        break;
       case 'size':
         response = 'Do you want to ask about the size of which kind of jewelry?';
+        break;
+      case 'VIP':
+        response = 'test vip';
         break;
       default:
         response = 'I am not sure about that. If you cannot find the answer here, you can contact us directly through hotline: 0795795959 or email: diamonddianjewelry@gmail.com. We will reply as soon as possible.';
     }
-    const botMessage = createChatBotMessage(response);
+    const botMessage = createChatBotMessage(response, { widget: 'suggestions', widgetParams });
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
+      widgetParams: widgetParams
     }));
   };
 
@@ -128,7 +147,6 @@ const ActionProvider = ({ setState, children }) => {
       messages: [...prev.messages, botMessage],
     }));
   };
-
 
   const handleUnknown = () => {
     const response = 'I\'m not sure about that. If you can\'t find the answer here, you can contact us through hotline: 0795795959 or email: diamonddianjewelry@gmail.com. We will reply as soon as possible.';
