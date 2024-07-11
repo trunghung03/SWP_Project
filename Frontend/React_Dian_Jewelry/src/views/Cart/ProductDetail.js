@@ -32,7 +32,7 @@ function ProductDetail() {
     const [collection, setCollection] = useState({});
     const [shellMaterials, setShellMaterials] = useState([]);
     const [sizes, setSizes] = useState([]);
-    const [showSpecifications, setShowSpecifications] = useState(false);
+    const [showSpecifications, setShowSpecifications] = useState(true);
     const [selectedImage, setSelectedImage] = useState('');
     const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
     const [shellPrice, setShellPrice] = useState(0);
