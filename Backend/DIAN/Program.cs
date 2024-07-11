@@ -122,13 +122,10 @@ builder.Services.AddScoped<IConnectionService, ConnectionService>();
 
 var app = builder.Build();
 
-app.UseCors(corsBuilder =>
-{
-    corsBuilder.WithOrigins("http://localhost:3000")
-               .AllowAnyHeader()
-               .AllowAnyMethod()
-               .AllowCredentials();
-});
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 
 if (!app.Environment.IsDevelopment())

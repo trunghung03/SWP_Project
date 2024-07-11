@@ -44,12 +44,15 @@ namespace DIAN_.Repository
         }
 
 
-        public async Task UpdateNotification(Notification notification)
+        public async Task UpdateDeliveryStatusAsync(int customerId, bool isDelivered)
         {
-            _context.Notifications.Update(notification);
+            var notifications = _context.Notifications.Where(n => n.CustomerId == customerId && !n.IsDelivered);
+            foreach (var notification in notifications)
+            {
+                notification.IsDelivered = isDelivered;
+            }
             await _context.SaveChangesAsync();
         }
-
     }
 
 }

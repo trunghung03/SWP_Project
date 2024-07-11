@@ -42,7 +42,7 @@ public class NotificationsHub : Hub<INotificationClient>
         _connectionService.AddConnection(customerId, connectionId);
         customerConnectionMap.AddOrUpdate(customerId, connectionId, (key, oldValue) => connectionId);
 
-        _logger.LogInformation($"Connection saved to database");
+        await _notificationRepository.UpdateDeliveryStatusAsync(customerId, true);
 
         await base.OnConnectedAsync();
     }
