@@ -4,85 +4,110 @@
     <meta charset="UTF-8" />
     <title>GIA Natural Diamond Dossier</title>
     <style>
+        @page {
+            size: 1200px 850px;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                width: 1200px;
+                height: 850px;
+                margin: 0;
+                font-size: 12pt;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f8f9fa;
+            width: 1200px;
+            height: 850px;
+            box-sizing: border-box;
         }
 
         .container {
-            width: 80%;
-            margin: 20px auto;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
             background-color: #fff;
-            padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .header {
             display: flex;
-            /* justify-content: space-between; */
-            align-items: center;    
-            margin-bottom: 20px;
-            padding: 20px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
         }
 
             .header img {
-                height: 130px;
+                height: 100px;
                 width: auto;
             }
 
         .form-container {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
 
         .main-form {
-            width: 35%;
+            flex: 0 1 38%;
             border: 1px solid #ccc;
-            padding: 20px;
+            padding: 10px;
             background-color: white;
-            background-image: linear-gradient( 45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent ), linear-gradient( -45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent );
+            background-image: linear-gradient(45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent), linear-gradient(-45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent);
             background-size: 20px 20px;
             box-sizing: border-box;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            overflow: hidden;
         }
 
         .grading-scales {
-            width: 55%;
-            font-size: 14px;
+            flex: 0 1 60%;
+            font-size: 10px;
             color: #666;
             border: 1px solid #ccc;
-            padding: 20px;
+            padding: 10px;
             background-color: white;
-            background-image: linear-gradient( 45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent ), linear-gradient( -45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent );
+            background-image: linear-gradient(45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent), linear-gradient(-45deg, #f5f3ed 25%, transparent 25%, transparent 50%, #f5f3ed 50%, #f5f3ed 75%, transparent 75%, transparent);
             background-size: 20px 20px;
             box-sizing: border-box;
+            overflow: hidden;
         }
 
         h2 {
-            font-size: 20px;
+            font-size: 16px;
             color: #444;
             margin-bottom: 5px;
             background-color: #a7996e;
+            padding: 5px;
         }
 
         .form p {
-            font-size: 14px;
+            font-size: 11px;
             color: #666;
         }
 
         .grading-scales h2 {
             background-color: #a7996e;
             color: white;
-            padding: 10px;
             text-align: center;
         }
 
         .scale {
             display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
+            flex-direction: column;
+            margin: 10px 0;
         }
 
             .scale div {
@@ -90,21 +115,17 @@
                 text-align: center;
             }
 
-                .scale div:not(:last-child) {
-                    border-right: 1px solid #ccc;
-                }
-
         .scale-category {
             display: flex;
             justify-content: space-between;
             border-bottom: 1px solid #ccc;
-            padding: 10px 0;
+            padding: 5px 0;
         }
 
         .category-label {
             flex: 1;
             text-align: left;
-            padding-left: 10px;
+            padding-left: 5px;
             font-weight: bold;
         }
 
@@ -143,16 +164,7 @@
             <!-- Main form -->
             <form class="main-form">
                 <div style="font-size: 14px; color: #666">
-                    <h2 style="
-                padding: 9px 8px;
-                font-size: 17px;
-                font-size: 20px;
-                color: white;
-                margin-bottom: 5px;
-                background-color: #a7996e;
-              ">
-                        GIA Natural Diamond Dossier
-                    </h2>
+                    <h2>GIA Natural Diamond Dossier</h2>
                     <p>January 28, 2020</p>
                     <p>
                         GIA Report Number: <span style="float: right">{DiamondId}</span>
@@ -167,31 +179,14 @@
                     </p>
                 </div>
                 <!-- Additional sections -->
-                <h2 style="
-              padding: 9px 8px;
-              font-size: 17px;
-              font-size: 20px;
-              color: white;
-              margin-top: 20px;
-              background-color: #a7996e;
-            ">
-                    Grading Results
-                </h2>
+                <h2>Grading Results</h2>
                 <div style="font-size: 14px; color: #666">
                     <p>Carat Weight: <span style="float: right">{Carat}</span></p>
                     <p>Color Grade: <span style="float: right">{Color}</span></p>
                     <p>Clarity Grade: <span style="float: right">{Clarity}</span></p>
                     <p>Cut Grade: <span style="float: right">{Cut}</span></p>
                 </div>
-                <h2 style="
-                padding: 9px 8px;
-              font-size: 17px;
-              color: white;
-              margin-top: 20px;
-              background-color: #a7996e;
-            ">
-                    Additional Grading Information
-                </h2>
+                <h2>Additional Grading Information</h2>
                 <div style="font-size: 14px; color: #666">
                     <p>Polish: <span style="float: right">Excellent</span></p>
                     <p>Symmetry: <span style="float: right">Excellent</span></p>
@@ -238,49 +233,33 @@
                             <p class="category-values">S, T, U, V, W, X, Y, Z</p>
                         </div>
                     </div>
+                </div>
+                <div class="scale">
                     <div>
                         <h3>GIA Clarity Scale</h3>
                         <div class="scale-category">
-                            <p class="category-label">Flawless</p>
-                            <p class="category-values">FL</p>
+                            <p class="category-label">Flawless (FL)</p>
+                            <p class="category-values">No inclusions or blemishes visible under 10x magnification</p>
                         </div>
                         <div class="scale-category">
-                            <p class="category-label">Internally Flawless</p>
-                            <p class="category-values">IF</p>
+                            <p class="category-label">Internally Flawless (IF)</p>
+                            <p class="category-values">No inclusions and only blemishes visible under 10x magnification</p>
                         </div>
                         <div class="scale-category">
-                            <p class="category-label">Very Very Slightly Included</p>
-                            <p class="category-values">VVS1, VVS2</p>
+                            <p class="category-label">Very, Very Slightly Included (VVS1 and VVS2)</p>
+                            <p class="category-values">Inclusions so slight they are difficult to see under 10x magnification</p>
                         </div>
                         <div class="scale-category">
-                            <p class="category-label">Very Slightly Included</p>
-                            <p class="category-values">VS1, VS2</p>
+                            <p class="category-label">Very Slightly Included (VS1 and VS2)</p>
+                            <p class="category-values">Inclusions are observed with effort under 10x magnification, but can be characterized as minor</p>
                         </div>
                         <div class="scale-category">
-                            <p class="category-label">Slightly Included</p>
-                            <p class="category-values">SI1, SI2</p>
+                            <p class="category-label">Slightly Included (SI1 and SI2)</p>
+                            <p class="category-values">Inclusions are noticeable under 10x magnification</p>
                         </div>
                         <div class="scale-category">
-                            <p class="category-label">Included</p>
-                            <p class="category-values">I1, I2, I3</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h3>GIA Cut Scale</h3>
-                        <div class="scale-category">
-                            <p class="category-label">Excellent</p>
-                        </div>
-                        <div class="scale-category">
-                            <p class="category-label">Very Good</p>
-                        </div>
-                        <div class="scale-category">
-                            <p class="category-label">Good</p>
-                        </div>
-                        <div class="scale-category">
-                            <p class="category-label">Fair</p>
-                        </div>
-                        <div class="scale-category">
-                            <p class="category-label">Poor</p>
+                            <p class="category-label">Included (I1, I2, and I3)</p>
+                            <p class="category-values">Inclusions are obvious under 10x magnification which may affect transparency and brilliance</p>
                         </div>
                     </div>
                 </div>
