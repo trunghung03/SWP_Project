@@ -198,7 +198,7 @@ namespace DIAN_.Controllers
                     var fileId = jsonDocument.RootElement.GetProperty("id").GetString();
 
                     // Return an object with the URL
-                    return new { url = "https://pixeldrain.com/u/" + fileId };
+                    return new { url = "https://pixeldrain.com/api/file/" + fileId };
                 }
             }
         }
