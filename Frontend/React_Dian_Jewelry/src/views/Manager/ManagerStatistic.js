@@ -351,7 +351,7 @@ const ManagerStatitic = () => {
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
         </div> 
          <hr className="manager_header_line"></hr>
-          <h3 className="manager_manage_statistic_title">Statistic Report</h3>
+          <h3 className="manager_manage_statistic_title" style={{fontFamily:"serif", color:"#292727"}}>Statistic Report</h3>
           <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
             <input
               className="manager_statis_input_date"

@@ -228,7 +228,7 @@ const ManagerCollectionList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3>List Of Collections</h3>
+        <h3 style={{fontFamily:"serif", textDecoration:"none"}}>List Of Collections</h3>
         <div className="manager_manage_diamond_create_button_section">
           <button
             className="manager_manage_diamond_create_button"

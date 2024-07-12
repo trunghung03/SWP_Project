@@ -329,7 +329,7 @@ const handleEdit = (product) => {
           </div>
         </div>
         <hr className="manager_product_header_line"></hr>
-        <h3>List Of Products</h3>
+        <h3 style={{fontFamily:"Georgia, 'Times New Roman', Times, serif", fontWeight:"500"}}>List Of Products</h3>
         <div className="manager_manage_diamond_create_button_section">
           <button
             className="manager_manage_diamond_create_button"

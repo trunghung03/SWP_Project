@@ -91,8 +91,9 @@
 
 .manager_manage_diamond_all_container h3 {
     text-align: center;
-    font-weight: bold;
-    color: #1c1c1c;
+    font-weight: 500;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    // color: #1c1c1c;
 }
 .manager_manage_diamond_table_head{  
     cursor: pointer;
@@ -236,6 +237,9 @@
     justify-content: center;
     z-index: 1000;
     overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s;
 }
 
 .manager_manage_diamond_update_modal {
@@ -248,7 +252,11 @@
     z-index: 1001;
     overflow-y: auto;
 }
-
+.manager_manage_diamond_modal_overlay.active {
+    /* Active state */
+    opacity: 1;
+    visibility: visible;
+  }
 .manager_manage_diamond_modal_content {
     display: flex;
     flex-direction: column;
