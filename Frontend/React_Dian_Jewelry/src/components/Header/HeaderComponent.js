@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
 import { useNotification } from "../../services/NotificationContext";
@@ -31,6 +31,7 @@ const HeaderComponent = () => {
   const customerId = localStorage.getItem("customerId");
   const isLoggedIn = user && customerId;
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const { cartItems } = useCart();
   const diamondMenuRef = useRef(null);
@@ -88,6 +89,11 @@ const HeaderComponent = () => {
       });
     }
   }, [setUser, startConnection, customerId]);
+
+  useEffect(() => {
+    setShowAccountDropdown(false);
+    setShowNotifications(false);
+  }, [location.pathname]); 
 
   const toggleAccountDropdown = () => {
     setShowAccountDropdown((prevShow) => !prevShow);
@@ -183,7 +189,7 @@ const HeaderComponent = () => {
           className="row align-items-center"
           style={{ backgroundColor: "white" }}
         >
-          <div className="col-md-5">
+          <div className="col-md-5 col-lg-5 col-sm-12">
             <div className="contact_info">
               <Link to="tel:0795795959">
                 <p className="contact_phone">
@@ -203,14 +209,14 @@ const HeaderComponent = () => {
               </a>
             </div>
           </div>
-          <div className="col-md-2 text-center">
+          <div className="col-md-2 col-lg-2 col-sm-12 text-center">
             <Link to="/home">
               <img className="logo" src={logo} alt="Logo" />
             </Link>
           </div>
-          <div className="col-md-5 text-end">
+          <div className="col-md-5 col-lg-5 col-sm-12 text-end">
             <div className="header_icons">
-              <div className="search_section">
+              <div className="col-sm-12 search_section">
                 <div className="search_bar_container">
                   <i className="fas fa-search search_icon"></i>
                   <input
@@ -230,7 +236,7 @@ const HeaderComponent = () => {
                 )}
               </Link>
               <div
-                className="notification_icon"
+                className={`notification_icon ${showNotifications ? "open" : ""}`}
                 onClick={toggleNotificationDropdown}
                 ref={notificationMenuRef}
               >
@@ -280,8 +286,8 @@ const HeaderComponent = () => {
                         </div>
                       ))
                   ) : (
-                    <div className="notification-item">
-                      No notification
+                    <div className="no_notification">
+                      <p>No notification</p>
                     </div>
                   )}
                   {notificationsToShow < notifications.length && (
@@ -297,7 +303,7 @@ const HeaderComponent = () => {
                 </div>
               </div>
               <div
-                className="account_dropdown_section dropdown"
+                className={`account_dropdown_section dropdown ${showAccountDropdown ? "open" : ""}`}
                 onClick={toggleAccountDropdown}
                 ref={accountMenuRef}
               >
@@ -612,3 +618,4 @@ const HeaderComponent = () => {
 };
 
 export default HeaderComponent;
+

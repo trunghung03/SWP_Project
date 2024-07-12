@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Static/FAQs.scss';
-import contact from '../../assets/img/contact.webp';
+import contact from '../../assets/img/faqContact.png';
 import faqsImg from '../../assets/img/faq.png';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
@@ -199,16 +199,18 @@ function FAQs() {
       <br></br><br></br>
 
       {/* Still need help */}
-      <div className="faqs_help_container">
-        <div className="faqs_help_content">
-          <h2 className="faqs_help_title">Still need help?</h2>
-          <p className="faqs_help_description">
-            Our dedicated team is here to provide further assistance and ensure all your concerns are addressed. Whether you need more detailed information or have specific inquiries, don't hesitate to reach out.
-          </p>
-          <button className="faqs_help_btn" onClick={handleContactClick}>Contact us</button>
-        </div>
-        <div className="faqs_help_image">
-          <img src={contact} alt="Contact Us" />
+      <div className="container faqs_help_container">
+        <div className="row">
+          <div className="col-lg-7 col-md-7 col-sm-12 faqs_help_content">
+            <h2 className="faqs_help_title">Still need help?</h2>
+            <p className="faqs_help_description">
+              Whether you need more detailed information or have specific inquiries, don't hesitate to reach out.
+            </p>
+            <button className="faqs_help_btn" onClick={handleContactClick}>Contact us</button>
+          </div>
+          <div className="col-lg-5 col-md-5 col-sm-12 faqs_help_image">
+            <img src={contact} alt="Contact Us" />
+          </div>
         </div>
       </div>
       <br></br><br></br><br></br>

@@ -106,7 +106,7 @@ function DiamondPrice() {
         <div className="diamond_price_content">
           <h2>DIAMOND PRICE</h2>
           <p>
-            Whether you are a buyer, seller, or simply an enthusiast, our comprehensive diamond pricing calculator system will help you stay informed and make well-informed decisions. Explore our collection to discover the true value of diamonds today.
+            Our comprehensive diamond pricing calculator system will help you stay informed and make well-informed decisions. Explore to discover the true value of diamonds today.
           </p>
         </div>
       </div>

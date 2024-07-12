@@ -13,18 +13,11 @@
     margin-left: 27px;
 }
 
-.contact_grid {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
 .contact_card {
-    width: 22%;
+    // width: 23%;
+    margin: 5px 5px;
     height: 200px;
     padding: 25px 18px 20px 18px;
-    text-align: center;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     background-color: #fff;
