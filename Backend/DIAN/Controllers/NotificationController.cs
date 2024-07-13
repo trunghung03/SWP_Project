@@ -12,20 +12,20 @@ namespace DIAN_.Controllers
         {
             _notificationRepository = notificationRepository;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetConnectionIDByCustomerID(int customerId)
-        {
-            var connectionId = await _notificationRepository.GetConnectionIDByCustomerId(customerId);
-            if (connectionId == null)
-            {
-                return NotFound();
-            }
-            return Ok(connectionId);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetConnectionIDByCustomerID(int customerId)
+        //{
+        //    var connectionId = await _notificationRepository.GetConnectionIDByCustomerId(customerId);
+        //    if (connectionId == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(connectionId);
+        //}
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllNotifications(int customerId)
+        public async Task<IActionResult> GetAllNotifications(int recipientId, string role)
         {
-            var notifications = await _notificationRepository.GetAllNotifications(customerId);
+            var notifications = await _notificationRepository.GetAllNotifications(recipientId, role);
             if (notifications == null)
             {
                 return NotFound();

@@ -26,10 +26,10 @@ namespace DIAN_.DTOs.DiamondDto
 
         [Required(ErrorMessage = "Cost is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Cost cannot be smaller than 0.")]
-        public decimal Cost { get; set; }
+        public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Certificate scan is required.")]
-        public string CertificateScan { get; set; } = string.Empty;
+        //[Required(ErrorMessage = "Certificate scan is required.")]
+        //public string CertificateScan { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Amount available is required.")]
         [Range(0, int.MaxValue, ErrorMessage = "Amount available cannot be smaller than 0.")]

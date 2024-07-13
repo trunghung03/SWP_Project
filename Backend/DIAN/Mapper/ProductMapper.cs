@@ -101,12 +101,16 @@ namespace DIAN_.Mapper
         {
             return new Product
             {
+                ProductCode = productRequestDTO.ProductCode,
                 Name = productRequestDTO.Name,
                 Price = productRequestDTO.Price,
-                ProductCode = productRequestDTO.ProductCode,
-                LaborCost = productRequestDTO.LaborPrice,
                 Description = productRequestDTO.Description,
+                MainDiamondId = productRequestDTO.MainDiamondId,
+                SubDiamondId = productRequestDTO.SubDiamondId,
+                LaborCost = productRequestDTO.LaborPrice,
                 ImageLinkList = productRequestDTO.imageLinkList,
+                MainDiamondAmount = productRequestDTO.MainDiamondAmount,
+                SubDiamondAmount = productRequestDTO.SubDiamondAmount,
                 CollectionId = productRequestDTO.CollectionId,
                 CategoryId = productRequestDTO.CategoryId,
                 Status = true

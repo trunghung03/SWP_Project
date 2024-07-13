@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerAdd.scss';
-import { createProduct, getAllCategories, getAllCollection, getProductByName ,uploadImage } from '../../../services/ManagerService/ManagerProductService.js';
+import { createProduct, getAllCategories, getAllCollection, uploadImage } from '../../../services/ManagerService/ManagerProductService.js';
 
 const ManagerAddProduct = () => {
     const navigate = useNavigate();
@@ -14,21 +14,19 @@ const ManagerAddProduct = () => {
         price: '',
         description: '',
         mainDiamondId: '',
-        laborCost: '',
+        subDiamondId: '',
+        laborPrice: '',
         imageLinkList: '',
         mainDiamondAmount: '',
         subDiamondAmount: '',
-        shellAmount: '',
         collectionId: '',
         categoryId: ''
     });
 
     const [collections, setCollections] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [productList,setProductList] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
-
 
     useEffect(() => {
         const fetchCollectionsAndCategories = async () => {
@@ -52,6 +50,7 @@ const ManagerAddProduct = () => {
         const { name, value } = e.target;
         setProductData({ ...productData, [name]: value });
     };
+
     const handleImageUpload = async (event) => {
         const files = event.target.files;
         if (!files.length) {
@@ -91,20 +90,23 @@ const ManagerAddProduct = () => {
                 productCode: productData.productCode,
                 name: productData.name,
                 price: parseFloat(productData.price),
-                laborPrice: parseFloat(productData.laborCost), // Ensure correct field name and type
+                laborPrice: parseFloat(productData.laborPrice),
                 description: productData.description,
                 mainDiamondId: parseInt(productData.mainDiamondId),
-                subDiamondId: parseInt(productData.subDiamondId), // Ensure subDiamondId is parsed as an integer
+                subDiamondId: parseInt(productData.subDiamondId),
                 mainDiamondAmount: parseInt(productData.mainDiamondAmount),
                 subDiamondAmount: parseInt(productData.subDiamondAmount),
-                shellAmount: parseFloat(productData.shellAmount),
                 imageLinkList: imageUrls.join(';'),
                 collectionId: parseInt(productData.collectionId),
                 categoryId: parseInt(productData.categoryId),
                 status: true
             };
-            console.log(productDTO.imageLinkList);
-            await createProduct(productDTO);
+
+            console.log("Submitting product:", productDTO);
+
+            const response = await createProduct(productDTO);
+            console.log("Response:", response);
+
             swal("Success", "Product added successfully", "success");
             navigate('/manager-product-list');
         } catch (error) {
@@ -122,7 +124,6 @@ const ManagerAddProduct = () => {
             swal("Something is wrong!", "Failed to add product. Please try again.", "error");
         }
     };
-    
 
     return (
         <div className="manager_add_diamond_all_container">
@@ -158,7 +159,7 @@ const ManagerAddProduct = () => {
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Labor Cost</label>
-                            <input type="number" name="laborCost" placeholder="Input product's labor cost" value={productData.laborCost} onChange={handleChange} required />
+                            <input type="number" name="laborPrice" placeholder="Input product's labor cost" value={productData.laborPrice} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
@@ -167,18 +168,18 @@ const ManagerAddProduct = () => {
                             <input type="number" name="mainDiamondId" placeholder="Input product's main diamond id" value={productData.mainDiamondId} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
-                            <label>Shell Weight</label>
-                            <input type="text" name="shellAmount" placeholder="Input product's shell weight (gram)" value={productData.shellAmount} onChange={handleChange} required />
+                            <label>Sub Diamond ID</label>
+                            <input type="number" name="subDiamondId" placeholder="Input product's sub diamond id" value={productData.subDiamondId} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Main Diamond Quantity</label>
-                            <input type="text" name="mainDiamondAmount" placeholder="Input quantity of main diamond" value={productData.mainDiamondAmount} onChange={handleChange} required />
+                            <input type="number" name="mainDiamondAmount" placeholder="Input quantity of main diamond" value={productData.mainDiamondAmount} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Sub Diamond Quantity</label>
-                            <input type="text" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} required />
+                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
@@ -194,7 +195,7 @@ const ManagerAddProduct = () => {
                                 >
                                     <option value="">Select Collection</option>
                                     {collections.map((collection) => (
-                                        <option key={collection.id} value={collection.id}>{collection.name}</option>
+                                        <option key={collection.collectionId} value={collection.collectionId}>{collection.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -211,7 +212,7 @@ const ManagerAddProduct = () => {
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map((category) => (
-                                        <option key={category.id} value={category.id}>{category.name}</option>
+                                        <option key={category.categoryId} value={category.categoryId}>{category.name}</option>
                                     ))}
                                 </select>
                             </div>

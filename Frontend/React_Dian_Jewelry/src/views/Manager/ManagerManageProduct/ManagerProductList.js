@@ -39,6 +39,9 @@ const ManagerProductList = () => {
   const [collections, setCollections] = useState({});
   const [mainDiamonds, setMainDiamonds] = useState({});
   const [isSearch , setIsSearch] = useState(false);
+  const viewDetail = (productId) => {
+    navigate(`/manager-product-detail/${productId}`);
+  };
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 6,
@@ -406,7 +409,7 @@ const handleEdit = (product) => {
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
-                        <Visibility onClick={() => navigate("/manager-product-detail")}></Visibility>
+                        <Visibility onClick={() => viewDetail(item.productId)}></Visibility>
                       </TableCell>
                     </TableRow>
                   ))

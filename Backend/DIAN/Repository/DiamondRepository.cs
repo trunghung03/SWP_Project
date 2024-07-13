@@ -39,6 +39,7 @@ namespace DIAN_.Repository
                 await _context.SaveChangesAsync();
                 string individualCacheKey = $"Diamond_{id}";
                 await _distributedCache.RemoveAsync(individualCacheKey);
+                await _distributedCache.RemoveAsync("Diamonds");
                 return existingDiamond;
             }
             throw new KeyNotFoundException("Diamond does not exist");
@@ -173,10 +174,13 @@ namespace DIAN_.Repository
                 existingDiamond.Clarity = diamondModel.Clarity;
                 existingDiamond.Cut = diamondModel.Cut;
                 existingDiamond.Carat = diamondModel.Carat;
+                existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
+                existingDiamond.Price = diamondModel.Price;
                 existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();
                 string individualCacheKey = $"Diamond_{id}";
                 await _distributedCache.RemoveAsync(individualCacheKey);
+                await _distributedCache.RemoveAsync("Diamonds");
                 return existingDiamond;
             }
             throw new KeyNotFoundException("Diamond does not exist");

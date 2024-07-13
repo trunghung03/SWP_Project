@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using DIAN_.Helper;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
+using DIAN_.DTOs.ProductDTOs;
 
 namespace DIAN_.Repository
 {
@@ -227,10 +228,9 @@ namespace DIAN_.Repository
             {
                 existingProduct.Name = product.Name;
                 existingProduct.Description = product.Description;
-                existingProduct.LaborCost = product.LaborCost;
                 existingProduct.ImageLinkList = product.ImageLinkList;
                 existingProduct.CollectionId = product.CollectionId;
-                existingProduct.CategoryId = product.CategoryId;
+                existingProduct.CategoryId = product.CategoryId;    
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove(CacheKey);
                 return existingProduct;
@@ -244,6 +244,36 @@ namespace DIAN_.Repository
                                  .OrderByDescending(p => p.ProductId) // Order by ProductId to get the latest products
                                  .Take(8)
                                  .ToListAsync();
+        }
+
+        public async Task<ManageProductDetailDto> GetProductDetail(int productId)
+        {
+            var result = (from category in _context.Categories
+                          join product in _context.Products on category.CategoryId equals product.CategoryId
+                          join collection in _context.Collections on product.CollectionId equals collection.CollectionId
+                          join shell in _context.Shells on product.ProductId equals shell.ProductId
+                          join shellMaterial in _context.Shellmaterials on shell.ShellMaterialId equals shellMaterial.ShellMaterialId
+                          where product.ProductId == productId
+                          select new ManageProductDetailDto
+                          {
+                              CategoryName = category.Name,
+                              CollectionName = collection.Name,
+                              ProductID = product.ProductId,
+                              ProductCode = product.ProductCode,
+                              ProductName = product.Name,
+                              Price = product.Price,
+                              Description = product.Description,
+                              MainDiamondID = product.MainDiamondId,
+                              SubDiamondID = product.SubDiamondId,
+                              LaborCost = product.LaborCost,
+                              ImageLinkList = product.ImageLinkList,
+                              SubDiamondAmount = product.SubDiamondAmount,
+                              MainDiamondAmount = product.MainDiamondAmount,
+                              AmountAvailable = shell.AmountAvailable,
+                              MaterialName = shellMaterial.Name
+                          }).FirstOrDefault();
+
+            return result;
         }
     }
 }

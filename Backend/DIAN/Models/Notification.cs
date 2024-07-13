@@ -7,9 +7,11 @@ namespace DIAN_.Models;
 
 public partial class Notification
 {
-    public int Id { get; set; }
+    public int NotificationId { get; set; }
 
-    public int CustomerId { get; set; }
+    public string RecipientRole { get; set; }
+
+    public int RecipientId { get; set; }
 
     public string Message { get; set; }
 
@@ -18,4 +20,8 @@ public partial class Notification
     public DateTime CreatedAt { get; set; }
 
     public bool MarkRead { get; set; }
+
+    public virtual Customer Recipient { get; set; }
+
+    public virtual Employee RecipientNavigation { get; set; }
 }

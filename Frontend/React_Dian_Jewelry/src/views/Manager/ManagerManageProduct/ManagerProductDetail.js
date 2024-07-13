@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../../assets/img/logoN.png";
 import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
 import "../../../styles/Manager/ManagerAdd.scss";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getManageProductDetail } from "../../../services/ManagerService/ManagerProductService.js";
 
 function srcset(image, size, rows = 1, cols = 1) {
   return {
@@ -16,6 +17,33 @@ function srcset(image, size, rows = 1, cols = 1) {
 }
 
 const ManagerProductDetail = () => {
+  const [productDetail, setProductDetail] = useState({});
+  const [imageLinks, setImageLinks] = useState([]);
+  const { productId } = useParams();
+  
+  useEffect(() => {
+    console.log("productId: ", productId);
+    if(productId){
+      getManageProductDetail(productId)
+        .then((data) => {
+          console.log("productDetail: ", data);
+          setProductDetail(data);
+          if (data.imageLinkList) {
+            const links = data.imageLinkList.split(";").map((link, index) => ({
+              img: link,
+              title: `Image ${index + 1}`,
+              rows: 1,
+              cols: 1,
+            }));
+            setImageLinks(links);
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch product details: ", error);
+        });
+    }
+  }, [productId]);
+
   const navigate = useNavigate();
   return (
     <div className="manager_add_diamond_all_container">
@@ -33,12 +61,13 @@ const ManagerProductDetail = () => {
         >
           &lt; Back
         </button>
+        
         <div className="manager_product_detail_box">
           <div
             className="manager_product_detail_subcontent"
             style={{ textAlign: "end", fontWeight: "600" }}
           >
-            #PROD001
+            {productDetail.productCode}
           </div>
           <div
             className="manager_product_detail_subcontent"
@@ -48,7 +77,7 @@ const ManagerProductDetail = () => {
               fontSize: "30px",
             }}
           >
-            Cocktail Ring
+            {productDetail.productName}
           </div>
           <div
             className="manager_product_detail_content_2"
@@ -56,19 +85,19 @@ const ManagerProductDetail = () => {
           >
             <div className="manager_product_detail_subcontent">
               <ImageList
-                sx={{ width: 500, height: 450 }}
+                sx={{ width: 500, height: 500 }} // Set height to ensure no scrollbar
                 variant="quilted"
-                cols={4}
-                rowHeight={121}
+                cols={2}  // 2 columns for 2x2 grid
+                rowHeight={250}  // Height of each row
               >
-                {itemData.map((item) => (
+                {imageLinks.map((item, index) => (
                   <ImageListItem
-                    key={item.img}
-                    cols={item.cols || 1}
-                    rows={item.rows || 1}
+                    key={index}
+                    cols={item.cols}
+                    rows={item.rows}
                   >
                     <img
-                      {...srcset(item.img, 121, item.rows, item.cols)}
+                      {...srcset(item.img, 250, item.rows, item.cols)}  // Adjust size accordingly
                       alt={item.title}
                       loading="lazy"
                     />
@@ -78,24 +107,34 @@ const ManagerProductDetail = () => {
             </div>
             <div>
               <div className="manager_product_detail_subcontent">
-                <p style={{ textDecoration: "underline" }}>Description:</p>
+                <p>Description:</p>
                 <p>
-                  Cocktail rings are large, bold rings typically featuring a
-                  large gemstone or cluster of gemstones. They are designed to
-                  make a statement and are often worn on special occasions or
-                  events. Cocktail rings can come in a variety of styles and
-                  designs, ranging from classic to modern, and are popular among
-                  those who want to add a touch of glamour to their outfit.
+                  {productDetail.description}
                 </p>
               </div>
               <div className="manager_product_detail_subcontent">
-                <p style={{ textDecoration: "underline" }}>Category:</p>
+                <p>Category: {productDetail.categoryName}</p>
               </div>
               <div className="manager_product_detail_subcontent">
-                <p style={{ textDecoration: "underline" }}>Collection:</p>
+                <p>Collection: {productDetail.collectionName}</p>
               </div>
               <div className="manager_product_detail_subcontent">
-                <p style={{ textDecoration: "underline" }}>Material:</p>
+                <p>Material: {productDetail.materialName}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Main Diamond ID: {productDetail.mainDiamondID}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Amount: {productDetail.mainDiamondAmount}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Sub Diamond ID: {productDetail.subDiamondID}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Amount: {productDetail.subDiamondAmount}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Labor Cost: {productDetail.laborCost}</p>
               </div>
             </div>
           </div>
@@ -104,13 +143,13 @@ const ManagerProductDetail = () => {
             className="manager_product_detail_subcontent"
             style={{ textAlign: "end", marginRight: "10%" }}
           >
-            Price:
+            Price: {productDetail.price}
           </div>
           <div
             className="manager_product_detail_subcontent"
             style={{ textAlign: "end", marginRight: "10%" }}
           >
-            Stock:
+            Stock: {productDetail.amountAvailable}
           </div>
         </div>
       </div>
@@ -119,63 +158,3 @@ const ManagerProductDetail = () => {
 };
 
 export default ManagerProductDetail;
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee",
-    cols: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    title: "Hats",
-    cols: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey",
-    author: "@arwinneil",
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    title: "Basketball",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    title: "Fern",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    title: "Mushrooms",
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    title: "Sea star",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-    title: "Bike",
-    cols: 2,
-  },
-];

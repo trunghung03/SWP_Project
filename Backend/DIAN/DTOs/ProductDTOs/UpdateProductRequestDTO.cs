@@ -13,7 +13,6 @@ namespace DIAN_.DTOs.ProductDTOs
         [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
 
-        [Url(ErrorMessage = "Image link list must be a valid URL.")]
         public string ImageLinkList { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Collection ID must be a positive number.")]

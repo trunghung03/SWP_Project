@@ -28,6 +28,7 @@ const SSOrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState({});
   const { orderId } = useParams();
   const [status, setStatus] = useState("");
+  const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const navigate = useNavigate();
   const handleChange = (event) => {
     setStatus(event.target.value);
@@ -40,6 +41,7 @@ const SSOrderDetail = () => {
           console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
           setStatus(data.orderStatus); // Set status from fetched order details
+          setIsOrderCompleted(data.orderStatus === "Completed");
         })
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
@@ -86,6 +88,7 @@ const SSOrderDetail = () => {
     try {
       await salesStaffUpdateOrderStatus(status, orderId);
       swal("Success", "Update order status successfully", "success");
+      navigate('/sales-staff-order-list');
       console.log("status: ", status);
       console.log("Order status updated successfully");
     } catch (error) {
@@ -139,6 +142,7 @@ const SSOrderDetail = () => {
                           value={status}
                           label="Status"
                           onChange={handleChange}
+                          disabled={isOrderCompleted}
                         >
                           <MenuItem value ="Unpaid">UnPaid</MenuItem>
                           <MenuItem value="Paid">Paid</MenuItem>
@@ -201,7 +205,7 @@ const SSOrderDetail = () => {
                 </p>
                 {/* <hr className="manager_header_line"></hr> */}
                 <div className="ss_detail_confirmbutton">
-                  <button onClick={handleSubmit}>Accept Order</button>
+                  <button onClick={handleSubmit} disabled={isOrderCompleted}>Confirm</button>
                 </div>
               </div>
             </div>

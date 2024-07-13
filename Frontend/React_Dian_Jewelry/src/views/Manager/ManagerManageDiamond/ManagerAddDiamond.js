@@ -17,7 +17,7 @@ const ManagerAddDiamond = () => {
         color: '',
         price: '',
         amountAvailable: '',
-        certificateScan: 'null' 
+        // certificateScan: 'null' 
     });
 
     const handleChange = (e) => {
@@ -29,9 +29,10 @@ const ManagerAddDiamond = () => {
         e.preventDefault();
         try {
             const diamondDataWithStatus = { ...diamondData, status: true };
-            const dataRes = await createDiamond(diamondDataWithStatus);
-            const certificate = await getCertificateById(dataRes.diamondId);
-            await updateCertificateById(dataRes.diamondId,{certificateScan: certificate.url});
+            await createDiamond(diamondDataWithStatus);
+            // const dataRes = await createDiamond(diamondDataWithStatus);
+            // const certificate = await getCertificateById(dataRes.diamondId);
+            // await updateCertificateById(dataRes.diamondId,{certificateScan: certificate.url});
             swal("Success", "Diamond added successfully", "success");
             navigate('/manager-diamond-list');
         } catch (error) {

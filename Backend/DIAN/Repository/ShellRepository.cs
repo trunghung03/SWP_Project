@@ -62,7 +62,7 @@ namespace DIAN_.Repository
             shell.ProductId = shellDTO.ProductId;
             shell.ShellMaterialId = shellDTO.ShellMaterialId;
             shell.AmountAvailable = shellDTO.AmountAvailable;
-            shell.ShellAmount = shellDTO.ShellAmount;
+            shell.Weight = shellDTO.Weight;
             shell.Status = shellDTO.Status;
 
             _context.Shells.Update(shell);

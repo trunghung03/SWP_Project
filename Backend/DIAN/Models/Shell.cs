@@ -13,7 +13,7 @@ public partial class Shell
 
     public int? ShellMaterialId { get; set; }
 
-    public decimal? ShellAmount { get; set; }
+    public decimal? Weight { get; set; }
 
     public int AmountAvailable { get; set; }
 

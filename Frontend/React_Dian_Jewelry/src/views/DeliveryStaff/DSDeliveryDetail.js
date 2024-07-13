@@ -45,6 +45,7 @@ function DSDeliveryDetail() {
     try {
       await deliStaffUpdateOrderStatus(status, orderId);
       swal("Success", "Update order status successfully", "success");
+      navigate('/delivery-staff-delivery-list');
     } catch (error) {
       console.error('Failed to update order status:', error);
     }

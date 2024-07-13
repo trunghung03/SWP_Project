@@ -59,7 +59,7 @@ namespace DIAN_.Repository
                     string serializedCollections = JsonSerializer.Serialize(collections);
                     await _distributedCache.SetStringAsync(cacheKey, serializedCollections, new DistributedCacheEntryOptions
                     {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) // Cache expiration time
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(10)
                     });
                 }
                 _logger.LogInformation("Collections from database");

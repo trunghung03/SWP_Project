@@ -107,34 +107,58 @@ namespace DIAN_.Services
             if (order == null) throw new Exception("Order not found.");
 
             var updatedOrder = await _purchaseOrderRepository.UpdatePurchaseOrderStatusAsync(orderId, status);
-            var connectionIds = _connectionService.GetConnectionId(order.UserId);
-            _logger.LogInformation($"Connection IDs: {connectionIds}");
-            if (connectionIds != null && connectionIds.Any())
+            var customerConnectionId = _connectionService.GetConnectionId(order.UserId);
+            var deliConnectionId = _connectionService.GetConnectionId(order.DeliveryStaff ?? 0);
+
+            _logger.LogInformation($"customer Connection IDs: {customerConnectionId}");
+            _logger.LogInformation($"deli Connection IDs: {deliConnectionId}");
+
+            if (customerConnectionId != null && customerConnectionId.Any())
             {
 
+                await _hubContext.Clients.Client(NotificationsHub.GetConnectionIdForCustomer(order.UserId)).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                await _notificationRepository.AddNotification(new Notification
+                {
+                    RecipientRole = "Customer",
+                    RecipientId = order.UserId,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = false,
+                    CreatedAt = DateTime.Now,
+                });
+
+            }
+            else
+            {
                 var notification = new Notification
                 {
-                    CustomerId = order.UserId,
+                    RecipientRole = "Customer",
+                    RecipientId = order.UserId,
                     Message = $"Order {orderId} status updated to {status}.",
-                    IsDelivered = true,
+                    IsDelivered = false,
                     CreatedAt = DateTime.Now,
                 };
                 await _notificationRepository.AddNotification(notification);
-
-                //   await _hubContext.Clients.Client(connectionIds).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
-                await _hubContext.Clients.Client(NotificationsHub.GetConnectionIdForCustomer(order.UserId)).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.").ContinueWith((res) =>
+            }
+            if (deliConnectionId != null && deliConnectionId.Any())
+            {
+                await _hubContext.Clients.Client(NotificationsHub.GetConnectionIdForDeliveryStaff(order.DeliveryStaff ?? 0)).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                await _notificationRepository.AddNotification(new Notification
                 {
-                    _logger.LogInformation($"Sent notification to user {order.UserId}." + res.IsCompletedSuccessfully);
-
+                    RecipientRole = "DeliveryStaff",
+                    RecipientId = order.DeliveryStaff ?? 0,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = true,
+                    CreatedAt = DateTime.Now,
                 });
             }
             else
             {
                 var notification = new Notification
                 {
-                    CustomerId = order.UserId,
+                    RecipientRole = "DeliveryStaff",
+                    RecipientId = order.DeliveryStaff ?? 0,
                     Message = $"Order {orderId} status updated to {status}.",
-                    IsDelivered = false,
+                    IsDelivered = true,
                     CreatedAt = DateTime.Now,
                 };
                 await _notificationRepository.AddNotification(notification);

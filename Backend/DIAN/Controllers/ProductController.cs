@@ -39,6 +39,27 @@ namespace DIAN_.Controllers
             }
         }
 
+        [HttpGet("product-detail/{productId}")]
+        public async Task<IActionResult> GetProductDetail([FromRoute] int productId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var productDetail = await _productRepo.GetProductDetail(productId);
+                if (productDetail == null)
+                {
+                    return NotFound();
+                }
+                return Ok(productDetail);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)

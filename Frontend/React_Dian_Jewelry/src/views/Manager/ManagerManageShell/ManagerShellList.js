@@ -501,44 +501,55 @@ const ManagerShellList = () => {
         </div>
 
         <div className="manager_manage_diamond_table_wrapper">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">Shell Id</StyledTableCell>
-                  <StyledTableCell align="center">Product ID</StyledTableCell>
-                  <StyledTableCell align="center">Amount Available</StyledTableCell>
-                  <StyledTableCell align="center">Action</StyledTableCell>
-                  {/* nói chung hiện hết mấy cái mà vừa add */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {shell.length > 0 ? (
-                  shell.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.shellId}>
-                      <StyledTableCell align="center">{item.shellId}</StyledTableCell>
-                      <StyledTableCell align="center">{item.productId}</StyledTableCell>
-                      <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
-                      <StyledTableCell align="center">
-                        <IconButton onClick={() => handleEditShell(item)}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleDeleteShell(item.shellId)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </StyledTableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <StyledTableCell colSpan="4" align="center">No shell found</StyledTableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <TableHead>
+      <TableRow>
+        <StyledTableCell align="center">Shell Id</StyledTableCell>
+        <StyledTableCell align="center">Product ID</StyledTableCell>
+        <StyledTableCell align="center">Shell Material Name</StyledTableCell> 
+        <StyledTableCell align="center">Weight</StyledTableCell>
+        <StyledTableCell align="center">Price</StyledTableCell> 
+        <StyledTableCell align="center">Quantity</StyledTableCell>  
+        <StyledTableCell align="center">Action</StyledTableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {shell.length > 0 ? (
+        shell.map((item) => {
+          // Assuming shellMaterials is an array of shell material objects
+          const material = shellMaterial.find(material => material.shellMaterialId === item.shellMaterialId) || { name: 'N/A', price: 'N/A' };
+          return (
+            <TableRow className="manager_manage_table_body_row" key={item.shellId}>
+              <StyledTableCell align="center">{item.shellId}</StyledTableCell>
+              <StyledTableCell align="center">{item.productId}</StyledTableCell>
+              <StyledTableCell align="center">{material ? material.name : 'Material not found'}</StyledTableCell>
+              <StyledTableCell align="center">{item.weight}</StyledTableCell>
+              <StyledTableCell align="center">
+                ${material ? material.price * item.weight : 'Material not found'}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {item.amountAvailable} 
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                <IconButton onClick={() => handleEditShell(item)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton onClick={() => handleDeleteShell(item.shellId)}>
+                  <DeleteIcon />
+                </IconButton>
+              </StyledTableCell>
+            </TableRow>
+          );
+        })
+      ) : (
+        <TableRow>
+          <StyledTableCell colSpan="6" align="center">No shell found</StyledTableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
         </div>
       </div>
 

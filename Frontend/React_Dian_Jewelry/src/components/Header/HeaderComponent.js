@@ -28,6 +28,7 @@ import { useSignalR } from "../../services/SignalRContext";
 const HeaderComponent = () => {
   const { user, setUser } = useContext(UserContext);
   const { startConnection, notifications } = useSignalR();
+  const role = localStorage.getItem("role");
   const customerId = localStorage.getItem("customerId");
   const isLoggedIn = user && customerId;
   const navigate = useNavigate();
@@ -56,8 +57,7 @@ const HeaderComponent = () => {
   }, [notifications]);
 
   useEffect(() => {
-    startConnection(customerId);
-    const role = localStorage.getItem("role");
+    startConnection(customerId, role);
     if (["Admin", "SalesStaff", "Manager", "DeliveryStaff"].includes(role)) {
       const rememberedEmail = localStorage.getItem("rememberedEmail");
       const rememberedPassword = localStorage.getItem("rememberedPassword");

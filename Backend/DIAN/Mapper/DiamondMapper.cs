@@ -16,6 +16,8 @@ namespace DIAN_.Mapper
                 Clarity = diamond.Clarity,
                 Cut = diamond.Cut,
                 Carat = diamond.Carat ?? 0,
+                Price = diamond.Price,
+                AmountAvailable = diamond.AmountAvailable,
             };
         }
 
@@ -37,6 +39,8 @@ namespace DIAN_.Mapper
                 Clarity = diamondRequestDTO.Clarity,
                 Cut = diamondRequestDTO.Cut,
                 Carat = diamondRequestDTO.Carat,
+                AmountAvailable = diamondRequestDTO.AmountAvailable,
+                Price = diamondRequestDTO.Price,
                 Status = diamondRequestDTO.Status,
             };
         }
@@ -49,6 +53,8 @@ namespace DIAN_.Mapper
                 Clarity = updateDiamond.Clarity,
                 Cut = updateDiamond.Cut,
                 Carat = updateDiamond.Carat,
+                AmountAvailable = updateDiamond.AmountAvailable,
+                Price = updateDiamond.Price,
                 Status = updateDiamond.Status,
             };
         }
