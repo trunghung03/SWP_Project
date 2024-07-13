@@ -154,16 +154,18 @@ namespace DIAN_.Services
             return updatedOrder;
         }
 
-        public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int salesStaffId)
+        public async Task<(List<PurchaseOrderDetailDto> Orders, int TotalCount)> ViewListOrdersAssign(int salesStaffId, PurchaseOrderQuerry querry)
         {
-            var orders = await _purchaseOrderRepository.GetListSalesOrderAssign(salesStaffId);
+            var (orders, totalCount) = await _purchaseOrderRepository.GetListSalesOrderAssign(salesStaffId, querry);
+
             if (orders == null)
             {
                 throw new Exception("You completed all orders");
             }
+
             var displayOrderDtos = orders.Select(order => PurchaseOrderMapper.ToPurchaseOrderDetail(order)).ToList();
 
-            return displayOrderDtos;
+            return (displayOrderDtos, totalCount);
         }
 
         public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status, int id)

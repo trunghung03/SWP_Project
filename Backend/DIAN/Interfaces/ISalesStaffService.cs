@@ -8,7 +8,7 @@ namespace DIAN_.Interfaces
     {
         Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status, int id);
 
-        Task<List<PurchaseOrderDetailDto>> ViewListOrdersAssign(int staffId);
+        Task<(List<PurchaseOrderDetailDto> Orders, int TotalCount)> ViewListOrdersAssign(int staffId, PurchaseOrderQuerry querry);
 
         Task<Purchaseorder> UpdateOrderStatus(string status, int orderId);
 

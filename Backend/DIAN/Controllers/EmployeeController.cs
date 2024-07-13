@@ -6,6 +6,7 @@ using DIAN_.Interfaces;
 using DIAN_.Services;
 using DIAN_.DTOs.AccountDTO;
 using DIAN_.Repository;
+using DIAN_.Helper;
 
 namespace UserApplication.Controllers
 {
@@ -197,17 +198,19 @@ namespace UserApplication.Controllers
         }
 
         [HttpGet("salesstaff/orderlists")]
-        public async Task<IActionResult> ViewListOrdersAssign( int staffId)
+        public async Task<IActionResult> ViewListOrdersAssign(int staffId, [FromQuery] PurchaseOrderQuerry querry)
         {
             try
             {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); };
-                var orders = await _salesStaffService.ViewListOrdersAssign(staffId);
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                return Ok(orders);
-            }catch(Exception)
+                var (orders, totalCount) = await _salesStaffService.ViewListOrdersAssign(staffId, querry);
+
+                return Ok(new { orders, totalCount });
+            }
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
         [HttpGet("salesstaff/status/{status}")] 

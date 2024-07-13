@@ -1,6 +1,6 @@
 ﻿using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Models;
-
+using DIAN_.Helper;
 namespace DIAN_.Interfaces
 {
     public interface IPurchaseOrderRepository
@@ -15,7 +15,7 @@ namespace DIAN_.Interfaces
         Task<List<Purchaseorder>> DeliveryGetPurchaseOrderStatusAsync(string status, int id);
 
         //just can view the purchaseorder must have the same sale staff id
-        Task<List<Purchaseorder>> GetListSalesOrderAssign(int staffId);
+        Task<(List<Purchaseorder> Orders, int TotalCount)> GetListSalesOrderAssign(int staffId, PurchaseOrderQuerry querry);
 
         //just can view the purchaseorder must have the same delivery staff id
         Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId);

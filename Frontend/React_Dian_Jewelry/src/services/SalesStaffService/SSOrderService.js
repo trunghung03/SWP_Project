@@ -34,15 +34,15 @@ const API_BASE_URL_ORDER = process.env.REACT_APP_API_BASE_URL;
     return error;
   });
 }
- const getSalesStaffOrderList = async (staffId) => {
-  return axios.get(`${API_BASE_URL_ORDER}/employees/salesstaff/orderlists`, { params: { staffId } })
-  .then((response) => {
-    return response.data;
-  })
-  .catch(function (error) {
-    return error;
+const getSalesStaffOrderList = async (staffId, pageNumber = 1, pageSize = 6, status = "default") => {
+  const params = { staffId, pageNumber, pageSize };
+  if (status !== "default") {
+    params.status = status;
+  }
+  return axios.get(`${API_BASE_URL_ORDER}/employees/salesstaff/orderlists`, {
+    params
   });
-}
+};
  const getBillDetail = async (orderId) => {
   return axios.get(`${API_BASE_URL_ORDER}/employees/view-order-detail-bill`, { params: { orderId } })
   .then((response) => {

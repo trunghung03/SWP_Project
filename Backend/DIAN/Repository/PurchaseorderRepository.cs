@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DIAN_.Helper;
 
 namespace DIAN_.Repository
 {
@@ -103,10 +104,24 @@ namespace DIAN_.Repository
             return order;
         }
 
-        public async Task<List<Purchaseorder>> GetListSalesOrderAssign(int staffId)
+        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListSalesOrderAssign(int staffId, PurchaseOrderQuerry querry)
         {
-           var order = await _context.Purchaseorders.Where(po => po.SaleStaff == staffId).ToListAsync();
-            return order;
+            var query = _context.Purchaseorders
+                         .Where(po => po.SaleStaff == staffId);
+
+            if (querry.Status != "default")
+            {
+                query = query.Where(po => po.OrderStatus == querry.Status);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var orders = await query
+                                .Skip((querry.PageNumber - 1) * querry.PageSize)
+                                .Take(querry.PageSize)
+                                .ToListAsync();
+
+            return (orders, totalCount);
         }
 
         public async Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId)
