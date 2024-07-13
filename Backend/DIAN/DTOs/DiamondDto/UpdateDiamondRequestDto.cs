@@ -24,12 +24,14 @@ namespace DIAN_.DTOs.DiamondDto
         [Range(0.01, 40.00, ErrorMessage = "Carat must be between 0.01 and 40.00.")]
         public decimal Carat { get; set; }
 
-        [Required(ErrorMessage = "Certificate scan is required.")]
-        public string CertificateScan { get; set; } = string.Empty;
+        //[Required(ErrorMessage = "Certificate scan is required.")]
+        //public string CertificateScan { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Amount available is required.")]
         [Range(0, int.MaxValue, ErrorMessage = "Amount Available cannot be smaller than 0")]
         public int AmountAvailable { get; set; }
+
+        public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Status is required.")]
         public bool Status { get; set; } = true;

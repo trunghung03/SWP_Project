@@ -8,6 +8,11 @@ const getProductDetail = async (id) => {
   return response.data;
 };
 
+const getManageProductDetail = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/products/product-detail/${id}`);
+  return response.data;
+};
+
 const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
@@ -61,4 +66,4 @@ const uploadImage = async (data) => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, updateProductById, uploadImage, getProductCategory, getAllCollection, getProductCollection, getProductDiamond, getAllCategories };
+export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, getManageProductDetail, updateProductById, uploadImage, getProductCategory, getAllCollection, getProductCollection, getProductDiamond, getAllCategories };

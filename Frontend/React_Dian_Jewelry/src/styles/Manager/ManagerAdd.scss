@@ -2,7 +2,14 @@
     display: flex;
     width: 100%;
 }
-
+.manager_product_detail_subcontent {
+    overflow-y: auto; 
+    scrollbar-width: none; 
+  }
+  
+  .manager_product_detail_subcontent::-webkit-scrollbar {
+    display: none;
+  }
 .manager_add_diamond_content {
     flex-grow: 1;
     padding: 10px 8% 0 8%;

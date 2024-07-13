@@ -170,7 +170,8 @@ const ManagerDiamondList = () => {
       "clarity",
       "cut",
       "carat",
-      "certificateScan",
+      "price",
+      // "certificateScan",
       "amountAvailable",
     ];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
@@ -338,8 +339,9 @@ const ManagerDiamondList = () => {
                   <StyledTableCell align="center">Clarity</StyledTableCell>
                   <StyledTableCell align="center">Carat</StyledTableCell>
                   <StyledTableCell align="center">Cut</StyledTableCell>
+                  <StyledTableCell align="center">Price</StyledTableCell>
                   <StyledTableCell align="center">Quantity</StyledTableCell>
-                  <StyledTableCell align="center">Certificate</StyledTableCell>
+                  {/* <StyledTableCell align="center">Certificate</StyledTableCell> */}
                   <StyledTableCell align="center">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -366,9 +368,12 @@ const ManagerDiamondList = () => {
                         {item.cut}
                       </TableCell>
                       <TableCell align="center">
-                        {item.amountAvailable}
+                        ${item.price}
                       </TableCell>
                       <TableCell align="center">
+                        {item.amountAvailable}
+                      </TableCell>
+                      {/* <TableCell align="center">
                         {item.certificateScan ? (
                           <img
                             src={item.certificateScan}
@@ -378,7 +383,7 @@ const ManagerDiamondList = () => {
                         ) : (
                           "No certificate"
                         )}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
@@ -411,10 +416,10 @@ const ManagerDiamondList = () => {
 
       {/* Update modal */}
       {editMode && (
-        <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setEditMode(false)}
-        >
+         <div
+         className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+         onClick={() => setEditMode(false)}
+       >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
@@ -488,6 +493,18 @@ const ManagerDiamondList = () => {
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
+                <label>Price</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={editedDiamond.price}
+                  onChange={handleChange}
+                  min = "100"
+                  max = "10000"
+                  required
+                />
+              </div>
+              {/* <div className="manager_manage_diamond_form_group">
                 <label>Certificate</label>
                 <input
                   type="text"
@@ -497,7 +514,7 @@ const ManagerDiamondList = () => {
                   maxLength={255}
                   required
                 />
-              </div>
+              </div> */}
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>

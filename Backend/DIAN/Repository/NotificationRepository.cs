@@ -19,39 +19,44 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Notification>> GetAllNotifications(int customerId)
+        public async Task<IEnumerable<Notification>> GetAllNotifications(int recipientId, string recipientRole)
         {
             return await _context.Notifications
-                .Where(n => n.CustomerId == customerId)
+                .Where(n => n.RecipientId == recipientId && n.RecipientRole == recipientRole)
                 .ToListAsync();
         }
 
-        public async Task<Notification> GetConnectionIDByCustomerId(int customerId)
-        {
-            return await _context.Notifications.Where(c => customerId == c.CustomerId).FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<Notification>> GetUndeliveredNotifications(int customerId)
+        public async Task<Notification> GetConnectionIDByRecipientId(int recipientId, string recipientRole)
         {
             return await _context.Notifications
-                .Where(n => n.CustomerId == customerId && !n.IsDelivered)
+                .Where(n => n.RecipientId == recipientId && n.RecipientRole == recipientRole)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Notification>> GetUndeliveredNotifications(int recipientId, string recipientRole)
+        {
+            return await _context.Notifications
+                .Where(n => n.RecipientId == recipientId && n.RecipientRole == recipientRole && !n.IsDelivered)
                 .ToListAsync();
         }
 
-        public Task<IEnumerable<Notification>> RemoveNotification(Notification notification)
+        public async Task<IEnumerable<Notification>> UpdateDeliveryStatusAsync(int recipientId, string recipientRole, bool isDelivered)
         {
-            throw new NotImplementedException();
-        }
+            var notifications = _context.Notifications
+                .Where(n => n.RecipientId == recipientId && n.RecipientRole == recipientRole && !n.IsDelivered);
 
-
-        public async Task UpdateDeliveryStatusAsync(int customerId, bool isDelivered)
-        {
-            var notifications = _context.Notifications.Where(n => n.CustomerId == customerId && !n.IsDelivered);
             foreach (var notification in notifications)
             {
                 notification.IsDelivered = isDelivered;
             }
             await _context.SaveChangesAsync();
+            return await notifications.ToListAsync();
+        }
+
+
+        public Task<IEnumerable<Notification>> RemoveNotification(Notification notification)
+        {
+            throw new NotImplementedException();
         }
     }
 

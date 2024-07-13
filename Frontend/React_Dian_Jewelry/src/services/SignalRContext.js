@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import * as signalR from '@microsoft/signalr';
 import axios from 'axios';
 
-const API_BASE_URL = 'https://dian.japaneast.cloudapp.azure.com';
+const API_BASE_URL = 'https://localhost:7184';
 
 const SignalRContext = createContext();
 
@@ -10,12 +10,12 @@ export const SignalRProvider = ({ children }) => {
   const [connection, setConnection] = useState(null);
   const [notifications, setNotifications] = useState([]);
 
-  const startConnection = useCallback((customerId) => {
+  const startConnection = useCallback((recipientId, recipientRole) => {
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${API_BASE_URL}/notification?customerId=${customerId}`, {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
-      })
+    .withUrl(`${API_BASE_URL}/notification?recipientId=${recipientId}&recipientRole=${recipientRole}`, {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets,
+  })
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build();
@@ -26,7 +26,7 @@ export const SignalRProvider = ({ children }) => {
       .start()
       .then(() => {
         console.log('Connection established, connection ID:', newConnection.connectionId);
-        return getNotifications(customerId);
+        return getNotifications(recipientId, recipientRole);
       })
       .then((fetchedNotifications) => {
         console.log("fetched notification", fetchedNotifications);
@@ -58,8 +58,8 @@ export const useSignalR = () => {
   return useContext(SignalRContext);
 };
 
-const getNotifications = async (customerId) => {
-  return axios.get(`${API_BASE_URL}/api/notifications/all`, { params: { customerId } })
+const getNotifications = async (recipientId, role) => {
+  return axios.get(`${API_BASE_URL}/api/notifications/all`, { params: { recipientId, role } })
     .then((response) => response.data)
     .catch((error) => {
       console.error('Error fetching notifications:', error);

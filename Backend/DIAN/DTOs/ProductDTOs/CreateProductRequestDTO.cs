@@ -45,8 +45,8 @@ namespace DIAN_.DTOs.ProductDTOs
         [Range(0, int.MaxValue, ErrorMessage = "Main diamond amount must be non-negative.")]
         public int? MainDiamondAmount { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessage = "Shell amount must be non-negative.")]
-        public decimal? ShellAmount { get; set; }
+        //[Range(0, double.MaxValue, ErrorMessage = "Shell amount must be non-negative.")]
+        //public decimal? ShellAmount { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Collection ID must be a positive number.")]
         public int? CollectionId { get; set; }
@@ -54,5 +54,7 @@ namespace DIAN_.DTOs.ProductDTOs
         [Range(1, int.MaxValue, ErrorMessage = "Category ID must be a positive number.")]
         [Required(ErrorMessage = "Category ID is required.")]
         public int? CategoryId { get; set; }
+
+        public bool Status { get; set; }
     }
 }
