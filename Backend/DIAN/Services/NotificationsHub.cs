@@ -35,18 +35,21 @@ public class NotificationsHub : Hub<INotificationClient>
         _logger.LogInformation("Connection established");
         var httpContext = Context.GetHttpContext();
         var connectionId = "";
-        string recipientRole = httpContext.Request.Query["role"];
-        if (recipientRole == "customer")
+        _logger.LogInformation($"ConnectionId: {Context.ConnectionId}");
+        string recipientRole = httpContext.Request.Query["recipientRole"];
+        _logger.LogInformation($"role: {recipientRole}");
+        if (recipientRole == "Customer")
         {
-            int customerId = int.Parse(httpContext.Request.Query["customerId"]);
+            int customerId = int.Parse(httpContext.Request.Query["recipientId"]);
              connectionId = Context.ConnectionId;
             _connectionService.AddConnection(customerId, connectionId);
             customerConnectionMap.AddOrUpdate(customerId, connectionId, (key, oldValue) => connectionId);
+            _logger.LogInformation($"Customer with id {connectionId} connected");
             await _notificationRepository.UpdateDeliveryStatusAsync(customerId, recipientRole, true);
         }
         if (recipientRole == "DeliveryStaff")
         {
-            int deliveryStaffId = int.Parse(httpContext.Request.Query["employeeId"]);
+            int deliveryStaffId = int.Parse(httpContext.Request.Query["recipientId"]);
             connectionId = Context.ConnectionId;
             _connectionService.AddConnection(deliveryStaffId, connectionId);
             staffConnectionMap.AddOrUpdate(deliveryStaffId, connectionId, (key, oldValue) => connectionId);
@@ -59,17 +62,18 @@ public class NotificationsHub : Hub<INotificationClient>
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         var httpContext = Context.GetHttpContext();
-        string recipientRole = httpContext.Request.Query["role"];
+        string recipientRole = httpContext.Request.Query["recipientRole"];
         var connectionId = "";
+        _logger.LogInformation($"role: {recipientRole}");
         if ( recipientRole == "Customer") {             
-            int customerId = int.Parse(httpContext.Request.Query["customerId"]);
+            int customerId = int.Parse(httpContext.Request.Query["recipientId"]);
             connectionId = Context.ConnectionId;
             _logger.LogInformation($"Customer {customerId} disconnected");
             _connectionService.RemoveConnection(customerId, connectionId);
             _logger.LogInformation($"Connection removed from memory");
         }
         if (recipientRole == "DeliveryStaff") {             
-            int deliveryStaffId = int.Parse(httpContext.Request.Query["employeeId"]);
+            int deliveryStaffId = int.Parse(httpContext.Request.Query["recipientId"]);
             connectionId = Context.ConnectionId;
             _logger.LogInformation($"Delivery staff {deliveryStaffId} disconnected");
             _connectionService.RemoveConnection(deliveryStaffId, connectionId);

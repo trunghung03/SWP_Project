@@ -110,13 +110,21 @@ namespace DIAN_.Services
             var customerConnectionId = _connectionService.GetConnectionId(order.UserId);
             var deliConnectionId = _connectionService.GetConnectionId(order.DeliveryStaff ?? 0);
 
-            _logger.LogInformation($"Connection IDs: {customerConnectionId}");
-            _logger.LogInformation($"Connection IDs: {deliConnectionId}");
+            _logger.LogInformation($"customer Connection IDs: {customerConnectionId}");
+            _logger.LogInformation($"deli Connection IDs: {deliConnectionId}");
 
             if (customerConnectionId != null && customerConnectionId.Any())
             {
 
                 await _hubContext.Clients.Client(NotificationsHub.GetConnectionIdForCustomer(order.UserId)).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                await _notificationRepository.AddNotification(new Notification
+                {
+                    RecipientRole = "Customer",
+                    RecipientId = order.UserId,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = false,
+                    CreatedAt = DateTime.Now,
+                });
 
             }
             else
@@ -134,6 +142,14 @@ namespace DIAN_.Services
             if (deliConnectionId != null && deliConnectionId.Any())
             {
                 await _hubContext.Clients.Client(NotificationsHub.GetConnectionIdForDeliveryStaff(order.DeliveryStaff ?? 0)).SendAsync("ReceiveNotification", $"Order {orderId} status updated to {status}.");
+                await _notificationRepository.AddNotification(new Notification
+                {
+                    RecipientRole = "DeliveryStaff",
+                    RecipientId = order.DeliveryStaff ?? 0,
+                    Message = $"Order {orderId} status updated to {status}.",
+                    IsDelivered = true,
+                    CreatedAt = DateTime.Now,
+                });
             }
             else
             {
