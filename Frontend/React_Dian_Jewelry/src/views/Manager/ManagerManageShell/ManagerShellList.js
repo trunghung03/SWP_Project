@@ -200,7 +200,7 @@ const ManagerShellList = () => {
     });
   };
 
-  // Update by id
+  // Update by id (shellMaterial)
   const handleEdit = (shell) => {
     setEditMode(true);
     setEditedShell(shell);
@@ -556,9 +556,9 @@ const ManagerShellList = () => {
       {/* Update modal */}
       {editMode && (
         <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setEditMode(false)}
-        >
+        className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+        onClick={() => setEditMode(false)}
+      >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
@@ -596,9 +596,9 @@ const ManagerShellList = () => {
       )}
       {editShellMode && (
         <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setEditShellMode(false)}
-        >
+        className={`manager_manage_diamond_modal_overlay ${editShellMode ? 'active' : ''}`}
+        onClick={() => setEditShellMode(false)}
+      >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}

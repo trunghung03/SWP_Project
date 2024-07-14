@@ -472,25 +472,16 @@ INSERT INTO ORDERDETAIL (OrderID, LineTotal, CertificateScan, ProductID, ShellMa
 	(1, 'DIAN Jewelry', 'diamondianjewelry@gmail.com', 'San Francisco, CA', '415-354-4623', 0.2)
 	
 
-INSERT INTO NOTIFICATION (CustomerId, Message, IsDelivered, CreatedAt, MarkRead)
-VALUES
-    (1, 'Your order has been shipped.', 0, GETDATE(), 0),
-    (2, 'Your payment was successful.', 1, GETDATE(), 1),
-    (3, 'Your product review has been approved.', 1, GETDATE(), 1),
-    (4, 'Your wishlist item is back in stock.', 0, GETDATE(), 0),
-    (5, 'Your return request has been received.', 1, GETDATE(), 1),
-    (6, 'Your refund has been processed.', 1, GETDATE(), 1),
-    (7, 'Your order has been delivered.', 1, GETDATE(), 1),
-    (8, 'Your discount coupon is ready.', 0, GETDATE(), 0),
-    (1, 'Your account has been updated.', 1, GETDATE(), 1),
-    (2, 'Your loyalty points have been added.', 1, GETDATE(), 1),
-    (3, 'Your subscription has been renewed.', 1, GETDATE(), 1),
-    (4, 'Your gift card is ready.', 0, GETDATE(), 0),
-    (5, 'Your address has been updated.', 1, GETDATE(), 1),
-    (6, 'Your membership has been upgraded.', 1, GETDATE(), 1),
-    (7, 'Your support ticket has been closed.', 1, GETDATE(), 1),
-    (8, 'Your newsletter subscription is confirmed.', 0, GETDATE(), 0),
-    (1, 'Your password has been changed.', 1, GETDATE(), 1),
-    (2, 'Your email has been verified.', 1, GETDATE(), 1),
-    (3, 'Your profile picture has been updated.', 1, GETDATE(), 1),
-    (4, 'Your saved items are on sale.', 0, GETDATE(), 0);
+INSERT INTO NOTIFICATION (RecipientRole, RecipientID, Message, IsDelivered, CreatedAt, MarkRead)
+VALUES 
+('Customer', 1, 'Your order #1001 has been shipped.', 1, GETDATE(), 0),
+('Customer', 1, 'Your order #1002 has been delivered.', 1, GETDATE(), 0),
+('Customer', 2, 'Your order #1003 is out for delivery.', 1, GETDATE(), 0),
+('Customer', 2, 'Thank you for your purchase! Your order #1004 has been confirmed.', 1, GETDATE(), 0);
+
+INSERT INTO NOTIFICATION (RecipientRole, RecipientID, Message, IsDelivered, CreatedAt, MarkRead)
+VALUES 
+('DeliveryStaff', 4, 'You have a new delivery task for order #1001.', 1, GETDATE(), 0),
+('DeliveryStaff', 4, 'Order #1002 is ready for pickup.', 1, GETDATE(), 0),
+('DeliveryStaff', 8, 'Order #1003 requires your attention.', 1, GETDATE(), 0),
+('DeliveryStaff', 8, 'Order #1004 has been assigned to you for delivery.', 1, GETDATE(), 0);

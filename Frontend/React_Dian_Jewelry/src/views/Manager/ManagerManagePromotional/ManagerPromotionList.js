@@ -273,7 +273,7 @@ const ManagerPromotionList = () => {
               placeholder="Search by ID or Code..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
@@ -372,10 +372,10 @@ const ManagerPromotionList = () => {
 
 
       {editMode && (
-        <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setEditMode(false)}
-        >
+       <div
+       className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+       onClick={() => setEditMode(false)}
+     >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}

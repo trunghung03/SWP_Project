@@ -19,7 +19,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 
-
 const ManagerCollectionList = () => {
   const navigate = useNavigate();
 
@@ -29,6 +28,7 @@ const ManagerCollectionList = () => {
   const [editedCollection, setEditedCollection] = useState({});
   const [isSearch, setIsSearch] = useState(false);
   const [originalCollection, setOriginalCollection] = useState({});
+  
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: '#f9c6bb',
@@ -327,9 +327,9 @@ const ManagerCollectionList = () => {
       {/* Update modal */}
       {editMode && (
         <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setEditMode(false)}
-        >
+        className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+        onClick={() => setEditMode(false)}
+      >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
@@ -351,7 +351,7 @@ const ManagerCollectionList = () => {
                 <label>Description</label>
                 <input
                   type="text"
-                  name="amountAvailable"
+                  name="description"
                   maxLength={255}
                   value={editedCollection.description}
                   onChange={handleChange}

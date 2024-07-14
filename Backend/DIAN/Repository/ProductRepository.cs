@@ -57,6 +57,7 @@ namespace DIAN_.Repository
                 product.Status = false;
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove(CacheKey);
+                _logger.LogInformation("Product deleted");
                 return product;
             }
             return null;
@@ -76,51 +77,52 @@ namespace DIAN_.Repository
 
         public async Task<(List<Product>, int)> GetAllAsync(ProductQuery query)
         {
-            if (_memoryCache.TryGetValue("SecondKey", out IEnumerable<Product>? cachedProducts) && cachedProducts != null)
+            var cacheKey = $"{CacheKey}_{query.PageNumber}_{query.PageSize}_{query.Name}";
+
+            if (_memoryCache.TryGetValue(cacheKey, out (List<Product>, int) cachedProducts))
             {
-                return (cachedProducts.ToList(), cachedProducts.Count());
+                _logger.LogInformation("Products from cache");
+                return cachedProducts;
             }
             else
             {
                 try
                 {
                     await semaphore.WaitAsync();
-                    if (_memoryCache.TryGetValue(CacheKey, out cachedProducts) && cachedProducts != null)
+                    if (_memoryCache.TryGetValue(cacheKey, out cachedProducts))
                     {
                         _logger.LogInformation("Products from cache");
-                        return (cachedProducts.ToList(), cachedProducts.Count());   
+                        return cachedProducts;
                     }
-                    else
+
+                    IQueryable<Product> productsQuery = _context.Products
+                       .Where(p => p.Status)
+                       .Include(p => p.Category)
+                       .ThenInclude(c => c.Size);
+
+                    if (!string.IsNullOrWhiteSpace(query.Name))
                     {
-                        IQueryable<Product> productsQuery = _context.Products
-                   .Where(p => p.Status)
-                   .Include(p => p.Category)
-                   .ThenInclude(c => c.Size);
-
-                        if (!string.IsNullOrWhiteSpace(query.Name))
-                        {
-                            productsQuery = productsQuery.Where(p => EF.Functions.Like(p.Name, $"%{query.Name}%"));
-                        }
-
-                        var totalItems = await productsQuery.CountAsync();
-
-                        var skipNumber = (query.PageNumber - 1) * query.PageSize;
-                        var productList = await productsQuery
-                            .Skip(skipNumber)
-                            .Take(query.PageSize)
-                            .ToListAsync();
-
-                        var cacheEntryOptions = new MemoryCacheEntryOptions()
-                            .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                            .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
-                            .SetPriority(CacheItemPriority.Normal)
-                            .SetSize(1);
-
-                        _memoryCache.Set(CacheKey, productList, cacheEntryOptions);
-                        _memoryCache.Set("SecondKey", productList.Select(p => p), cacheEntryOptions);
-                        _logger.LogInformation("Products from database");
-                        return (productList, totalItems);
+                        productsQuery = productsQuery.Where(p => EF.Functions.Like(p.Name, $"%{query.Name}%"));
                     }
+
+                    var totalItems = await productsQuery.CountAsync();
+
+                    var skipNumber = (query.PageNumber - 1) * query.PageSize;
+                    var productList = await productsQuery
+                        .Skip(skipNumber)
+                        .Take(query.PageSize)
+                        .ToListAsync();
+
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                        .SetPriority(CacheItemPriority.Normal)
+                        .SetSize(1);
+
+                    var result = (productList, totalItems);
+                    _memoryCache.Set(cacheKey, result, cacheEntryOptions);
+                    _logger.LogInformation("Products from database");
+                    return result;
                 }
                 finally
                 {
@@ -128,6 +130,7 @@ namespace DIAN_.Repository
                 }
             }
         }
+
         public async Task<Product> GetByIdAsync(int id)
         {
             string cacheKey = $"ProductDetail_{id}";

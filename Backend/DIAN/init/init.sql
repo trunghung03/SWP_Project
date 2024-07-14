@@ -140,7 +140,7 @@ CREATE TABLE SHELL (
 	ShellID INT PRIMARY KEY IDENTITY(1,1),
     ProductID INT FOREIGN KEY REFERENCES PRODUCT(productID),
 	ShellMaterialID INT FOREIGN KEY REFERENCES SHELLMATERIAL(ShellMaterialID),
-    ShellAmount DECIMAL(18, 2),
+    Weight DECIMAL(18, 2),
     AmountAvailable INT NOT NULL,
     Status BIT NOT NULL DEFAULT 1
 )
@@ -182,10 +182,13 @@ CREATE TABLE COMPANY (
 );
 
 CREATE TABLE NOTIFICATION (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    CustomerId INT NOT NULL,
+    NotificationID INT PRIMARY KEY IDENTITY(1,1),
+    RecipientRole NVARCHAR(20) NOT NULL CHECK (RecipientRole IN ('Customer', 'DeliveryStaff')), -- Can only be 'Customer' or 'Employee'
+    RecipientID INT NOT NULL,
     Message NVARCHAR(MAX) NOT NULL,
     IsDelivered BIT NOT NULL,
     CreatedAt DATETIME NOT NULL,
-    MarkRead BIT NOT NULL DEFAULT 1
+    MarkRead BIT NOT NULL DEFAULT 0, -- 0 for unread, 1 for read
+    CONSTRAINT FK_Notification_Customer FOREIGN KEY (RecipientID) REFERENCES CUSTOMER(CustomerID) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Notification_Employee FOREIGN KEY (RecipientID) REFERENCES EMPLOYEE(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE
 );
