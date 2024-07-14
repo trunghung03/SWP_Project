@@ -45,6 +45,36 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
+        public async Task<List<Diamond>> GetAllDiamond()
+        {
+            string cacheKey = "AllDiamonds";
+            string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+            List<Diamond> diamonds;
+
+            if (string.IsNullOrEmpty(cachedData))
+            {
+                diamonds = await _context.Diamonds
+                    .Where(d => d.Status)
+                    .ToListAsync();
+
+                if (diamonds != null && diamonds.Count > 0)
+                {
+                    string serializedData = JsonSerializer.Serialize(diamonds);
+                    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                    });
+                }
+            }
+            else
+            {
+                diamonds = JsonSerializer.Deserialize<List<Diamond>>(cachedData);
+            }
+
+            return diamonds;
+        }
+
+
         public async Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
             string cacheKey = $"Diamonds_{query.PageNumber}_{query.PageSize}";

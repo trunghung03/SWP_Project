@@ -171,27 +171,49 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-        //[HttpPut("updatecertificate/{id:int}")]
-        //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
+        [HttpGet("alldiamondwithoutpagination")]
+        public async Task<IActionResult> GetAllDiamondWithoutPagination()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var diamonds = await _diamondRepository.GetAllDiamond();
+                if (!diamonds.Any())
+                {
+                    return NotFound("Diamond does not exist");
+                }
+                var diamondDtos = diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList();
+                return Ok(diamondDtos);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            //[HttpPut("updatecertificate/{id:int}")]
+            //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
+            //{
+            //    try
+            //    {
+            //        if (!ModelState.IsValid)
+            //        {
+            //            return BadRequest(ModelState);
+            //        }
 
-        //        var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
-        //        if (diamondModel == null)
-        //        {
-        //            return NotFound("Diamond does not exist");
-        //        }
-        //        return Ok(diamondModel.ToDiamondDTO());
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
+            //        var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
+            //        if (diamondModel == null)
+            //        {
+            //            return NotFound("Diamond does not exist");
+            //        }
+            //        return Ok(diamondModel.ToDiamondDTO());
+            //    }
+            //    catch (Exception)
+            //    {
+            //        throw;
+            //    }
+            //}
+        }
     }
 }

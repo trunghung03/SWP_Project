@@ -11,6 +11,8 @@ namespace DIAN_.Interfaces
         Task<Diamond?> GetDiamondByIdAsync(int id);
         Task<List<Diamond>> GetDiamondByShapeAsync(string shape);
         Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query);
+
+        Task<List<Diamond>> GetAllDiamond();
         Task<Diamond> AddDiamondAsync(Diamond diamond);
         Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id);
         Task<Diamond?> DeleteDiamondAsync(int id);
