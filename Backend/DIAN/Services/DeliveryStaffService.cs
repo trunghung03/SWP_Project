@@ -1,5 +1,6 @@
 ﻿using DIAN_.DTOs.AccountDTO;
 using DIAN_.DTOs.PurchaseOrderDTOs;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
@@ -60,16 +61,18 @@ namespace DIAN_.Services
 
 
         //View list of delivery orders (get list is assigned)
-        public async Task<List<PurchaseOrderDetailDto>> ViewListDeliveryOrders(int deliStaffId)
+        public async Task<(List<PurchaseOrderDetailDto> Orders, int TotalCount)> ViewListDeliveryOrders(int deliStaffId, PurchaseOrderQuerry querry)
         {
-            var orders = await _orderRepository.GetListDeliOrderAssign(deliStaffId);
-            if (orders == null)
+            var (orders, totalCount) = await _orderRepository.GetListDeliOrderAssign(deliStaffId, querry);
+
+            if (orders == null || !orders.Any())
             {
                 throw new Exception("You completed all orders");
             }
+
             var displayOrderDtos = orders.Select(order => PurchaseOrderMapper.ToPurchaseOrderDetail(order)).ToList();
 
-            return displayOrderDtos;
+            return (displayOrderDtos, totalCount);
         }
 
         public async Task<List<PurchaseOrderDetailDto>> ViewListOrdersByStatus(string status, int deliveryId)

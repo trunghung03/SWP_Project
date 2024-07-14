@@ -18,7 +18,7 @@ namespace DIAN_.Interfaces
         Task<(List<Purchaseorder> Orders, int TotalCount)> GetListSalesOrderAssign(int staffId, PurchaseOrderQuerry querry);
 
         //just can view the purchaseorder must have the same delivery staff id
-        Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId);
+        Task<(List<Purchaseorder> Orders, int TotalCount)> GetListDeliOrderAssign(int staffId, PurchaseOrderQuerry querry);
 
         Task<Purchaseorder?> DeleteOrder(int orderid);
 

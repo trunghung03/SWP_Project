@@ -276,20 +276,24 @@ namespace UserApplication.Controllers
             }
         }
 
-        //For delivery staff
         [HttpGet("deliverystaff/orderlists")]
-        public async Task<IActionResult> ViewListDeliveryOrders(int staffId)
+        public async Task<IActionResult> ViewListDeliveryOrders(int staffId, [FromQuery] PurchaseOrderQuerry querry)
         {
             try
             {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-                var orders = await _deliveryStaffService.ViewListDeliveryOrders(staffId);
+                var (orders, totalCount) = await _deliveryStaffService.ViewListDeliveryOrders(staffId, querry);
+                var totalPages = (int)Math.Ceiling((double)totalCount / querry.PageSize);
 
-                return Ok(orders);
-            }catch(Exception)
+                return Ok(new { orders, totalCount, totalPages });
+            }
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 

@@ -124,15 +124,28 @@ namespace DIAN_.Repository
             return (orders, totalCount);
         }
 
-        public async Task<List<Purchaseorder>> GetListDeliOrderAssign(int staffId)
+        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListDeliOrderAssign(int staffId, PurchaseOrderQuerry querry)
         {
-            var order = await _context.Purchaseorders
+            var query = _context.Purchaseorders
                 .Where(po => po.DeliveryStaff == staffId &&
-                     (po.OrderStatus.ToLower() == "delivering" 
-                     || po.OrderStatus.ToLower() == "preparing" || po.OrderStatus.ToLower() == "completed"
-                     || po.OrderStatus.ToLower() == "cancelled"))
+                    (po.OrderStatus.ToLower() == "delivering"
+                    || po.OrderStatus.ToLower() == "completed"
+                    || po.OrderStatus.ToLower() == "preparing"
+                    || po.OrderStatus.ToLower() == "cancelled"));
+
+            if (querry.Status != "default")
+            {
+                query = query.Where(po => po.OrderStatus.ToLower() == querry.Status.ToLower());
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var orders = await query
+                .Skip((querry.PageNumber - 1) * querry.PageSize)
+                .Take(querry.PageSize)
                 .ToListAsync();
-            return order;
+
+            return (orders, totalCount);
         }
 
         public async Task<Purchaseorder?> CheckUsedPoint(bool payWithPoint, int userId)

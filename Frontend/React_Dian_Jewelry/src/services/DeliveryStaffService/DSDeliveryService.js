@@ -16,15 +16,15 @@ const updateDeliveryStatus = (id, data) => {
   return axios.put(`${API_BASE_URL}/purchaseorders/${id}`, data);
 };
 
-const getDeliveryStaffOrderList = async (staffId) => {
-  return axios.get(`${API_BASE_URL}/employees/deliverystaff/orderlists`, { params: { staffId } })
-  .then((response) => {
-    return response.data;
-  })
-  .catch(function (error) {
-    return error;
-  });
-}
+const getDeliveryStaffOrderList = async (staffId, pageNumber = 1, pageSize = 6, status = 'default') => {
+  return axios.get(`${API_BASE_URL}/employees/deliverystaff/orderlists`, {
+    params: { staffId, pageNumber, pageSize, status }
+  }).then(response => response.data)
+    .catch(error => {
+      console.error("Error fetching orders:", error);
+      throw error;
+    });
+};
 const getDeliPurchaseOrderByStatus = async (status, id) => {
   return axios.get(`${API_BASE_URL}/employees/deliverystaff/status/${status}`,{params:{id}})
 }
