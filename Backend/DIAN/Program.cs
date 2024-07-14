@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddUserSecrets(Assembly.GetEntryAssembly()!)
     .AddEnvironmentVariables();
 
@@ -31,16 +31,15 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    var corsSettings = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
+    options.AddPolicy("DefaultCorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:3000")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
+        builder.WithOrigins(corsSettings)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
-
-
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
@@ -122,17 +121,18 @@ builder.Services.AddScoped<IConnectionService, ConnectionService>();
 
 var app = builder.Build();
 
-app.UseCors(builder => builder
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
-
-
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseCors("DefaultCorsPolicy");
+}
+else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+    app.UseCors("DefaultCorsPolicy");
 }
+
 
 app.UseSwagger();
 
