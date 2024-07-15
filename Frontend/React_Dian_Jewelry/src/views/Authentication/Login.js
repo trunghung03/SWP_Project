@@ -21,6 +21,18 @@ import { jwtDecode } from "jwt-decode";
 import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
 import { GoogleLogin } from "@react-oauth/google";
+import CryptoJS from 'crypto-js';
+
+const SECRET_KEY = 'ERKufIf8ZD8FBGqYYP8n3xKdda9i3kh2X0N8CBBh7uY='; 
+
+const encryptPassword = (password) => {
+  return CryptoJS.AES.encrypt(password, SECRET_KEY).toString();
+};
+
+const decryptPassword = (encryptedPassword) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedPassword, SECRET_KEY);
+  return bytes.toString(CryptoJS.enc.Utf8);
+};
 
 const Login = () => {
   const { setUser } = useContext(UserContext);
@@ -34,7 +46,7 @@ const Login = () => {
 
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
-    const rememberedPassword = localStorage.getItem("rememberedPassword");
+    const rememberedPasswordEncrypted = localStorage.getItem("rememberedPassword");
 
     const allCartItems = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -50,9 +62,10 @@ const Login = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("points");
 
-    if (rememberedEmail && rememberedPassword) {
+    if (rememberedEmail && rememberedPasswordEncrypted) {
+      const rememberedPassword = decryptPassword(rememberedPasswordEncrypted);
       localStorage.setItem("rememberedEmail", rememberedEmail);
-      localStorage.setItem("rememberedPassword", rememberedPassword);
+      localStorage.setItem("rememberedPassword", rememberedPasswordEncrypted);
       setEmail(rememberedEmail);
       setPassword(rememberedPassword);
       setRememberMe(true);
@@ -200,7 +213,8 @@ const Login = () => {
 
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", email);
-        localStorage.setItem("rememberedPassword", password);
+        const encryptedPassword = encryptPassword(password);
+        localStorage.setItem("rememberedPassword", encryptedPassword);
       } else {
         localStorage.removeItem("rememberedEmail");
         localStorage.removeItem("rememberedPassword");
@@ -380,7 +394,7 @@ const Login = () => {
                       disabled={renderProps.disabled}
                       className="google_custom_btn"
                     >
-                      <i className="fab fa-google google-icon"></i> Login with Google
+                      <i className="fab fa-google google-icon"></i> Continue with Google
                     </button>
                   )}
                 />

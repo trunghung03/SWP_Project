@@ -25,7 +25,6 @@ import weddingBraceletBanner from '../../assets/img/weddingBraceletBanner.png';
 import weddingNecklaceBanner from '../../assets/img/weddingNecklaceBanner.png';
 import engagementRingBanner from '../../assets/img/engagementRingBanner.png';
 
-
 function DiamondJewelry() {
     const location = useLocation();
     const [products, setProducts] = useState([]);
@@ -137,16 +136,16 @@ function DiamondJewelry() {
             .then(response => {
                 let filteredProducts = response.data;
 
-                if (clarity !== '') {
+                if (clarity) {
                     filteredProducts = filteredProducts.filter(product => product.clarity === clarity);
                 }
-                if (carat !== '') {
+                if (carat) {
                     filteredProducts = filteredProducts.filter(product => product.carat === parseFloat(carat));
                 }
-                if (color !== '') {
+                if (color) {
                     filteredProducts = filteredProducts.filter(product => product.color === color);
                 }
-                if (shape !== '') {
+                if (shape) {
                     filteredProducts = filteredProducts.filter(product => product.shape === shape);
                 }
 
@@ -209,7 +208,7 @@ function DiamondJewelry() {
                     <p className='product_list_note'>Note: Jewelry prices displayed are for reference only and will vary based on market prices</p>
                 </div>
                 <div className="filters_products">
-                    {(clarity || carat || color || sort) && (
+                    {(clarity || carat || color || sort || shape) && (
                         <Button
                             onClick={handleRemoveFilters}
                             variant="outlined"
@@ -230,6 +229,7 @@ function DiamondJewelry() {
                             label="Sort"
                             onChange={(e) => setSort(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="Newest">Newest</MenuItem>
                             <MenuItem value="Oldest">Oldest</MenuItem>
                             <MenuItem value="Price (Low to High)">Price (Low to High)</MenuItem>
@@ -246,6 +246,7 @@ function DiamondJewelry() {
                             label="Clarity"
                             onChange={(e) => setClarity(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="IF">IF</MenuItem>
                             <MenuItem value="VVS1">VVS1</MenuItem>
                             <MenuItem value="VVS2">VVS2</MenuItem>
@@ -253,7 +254,7 @@ function DiamondJewelry() {
                             <MenuItem value="VS2">VS2</MenuItem>
                             <MenuItem value="SI1">SI1</MenuItem>
                             <MenuItem value="SI2">SI2</MenuItem>
-                            <MenuItem value="I1">I1 </MenuItem>
+                            <MenuItem value="I1">I1</MenuItem>
                         </Select>
                     </FormControl>
 
@@ -266,6 +267,7 @@ function DiamondJewelry() {
                             label="Color"
                             onChange={(e) => setColor(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="D">D</MenuItem>
                             <MenuItem value="E">E</MenuItem>
                             <MenuItem value="F">F</MenuItem>
@@ -285,6 +287,7 @@ function DiamondJewelry() {
                             label="Shape"
                             onChange={(e) => setShape(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="Round">Round</MenuItem>
                             <MenuItem value="Oval">Oval</MenuItem>
                             <MenuItem value="Emerald">Emerald</MenuItem>
@@ -306,6 +309,7 @@ function DiamondJewelry() {
                         type="number"
                         value={carat}
                         onChange={(e) => setCarat(e.target.value)}
+                        placeholder="None"
                     />
                 </div>
                 <ProductList products={products} resetKey={resetKey} />

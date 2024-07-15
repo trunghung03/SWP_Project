@@ -171,6 +171,7 @@ function Collection() {
                             label="Clarity"
                             onChange={(e) => setClarity(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="IF">IF</MenuItem>
                             <MenuItem value="VVS1">VVS1</MenuItem>
                             <MenuItem value="VVS2">VVS2</MenuItem>
@@ -191,6 +192,7 @@ function Collection() {
                             label="Color"
                             onChange={(e) => setColor(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="D">D</MenuItem>
                             <MenuItem value="E">E</MenuItem>
                             <MenuItem value="F">F</MenuItem>
@@ -200,7 +202,7 @@ function Collection() {
                             <MenuItem value="J">J</MenuItem>
                         </Select>
                     </FormControl>
-                    
+
                     <FormControl className="collection_filter_group" size="small">
                         <InputLabel id="shapeFilter-label">Shape</InputLabel>
                         <Select
@@ -210,6 +212,7 @@ function Collection() {
                             label="Shape"
                             onChange={(e) => setShape(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="Round">Round</MenuItem>
                             <MenuItem value="Oval">Oval</MenuItem>
                             <MenuItem value="Emerald">Emerald</MenuItem>
@@ -233,7 +236,7 @@ function Collection() {
                         onChange={(e) => setCarat(e.target.value)}
                     />
 
-                    
+
                 </div>
                 <ProductList products={products} resetKey={resetKey} />
             </div>

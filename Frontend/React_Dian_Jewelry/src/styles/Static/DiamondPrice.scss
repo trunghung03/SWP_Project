@@ -1,4 +1,4 @@
-// Main image 
+/* Main image */
 .diamond_price_main_image {
     display: flex;
     align-items: center;
@@ -7,13 +7,13 @@
     background-size: cover;
     height: 400px;
     color: #1c1c1c;
-    opacity: 0; 
-    transition: opacity 1.4s ease-in-out, transform 1.2s ease-in-out; 
+    opacity: 0;
+    transition: opacity 1.4s ease-in-out, transform 1.2s ease-in-out;
     margin-top: -20px;
 }
 
 .diamond_price_main_image.visible {
-    opacity: 1; 
+    opacity: 1;
     transform: translateY(20px);
 }
 
@@ -34,7 +34,7 @@
     margin-bottom: 20px;
 }
 
-// Title 
+/* Title */
 .diamond_price_title_container {
     text-align: center;
     margin: 90px 0 10px 0;
@@ -48,13 +48,11 @@
     margin-bottom: 10px;
 }
 
-
 .diamond_price_description {
     font-size: 16px;
 }
 
-// Price form
-
+/* Price form */
 .diamond_price_form_wrapper {
     text-align: center;
     padding: 0 10%;
@@ -88,7 +86,7 @@
     margin-bottom: 20px;
 }
 
-.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
     padding: 0 10px !important;
     background-color: white;
 }
@@ -102,11 +100,10 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out !important;
 }
 
-.calculate_btn:hover{
+.calculate_btn:hover {
     background-color: #797979 !important;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
 }
 
 .diamond_price_result {
@@ -116,12 +113,11 @@
     font-weight: bold;
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
     text-align: center;
 }
 
-// Middle content 
-
+/* Middle content */
 .diamond_price_middle_content {
     padding: 0 10%;
     text-align: center;
@@ -152,7 +148,7 @@
     font-style: italic;
 }
 
-// Last content 
+/* Last content */
 .diamond_price_last_content {
     padding: 0 10%;
 }
@@ -170,4 +166,79 @@
 
 .diamond_price_last_content a:hover {
     color: #797979 !important;
+}
+
+/* Filter and Table */
+.diamond_price_filter {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.diamond_price_filter .MuiFormControl-root {
+    width: 150px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.diamond_price_table_wrapper {
+    margin: 0 0 0 0;
+    overflow-x: auto;
+    max-height: 550px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.diamond_price_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.diamond_price_table th {
+    background-color: #1c1c1c;
+    color: white;
+    text-align: left;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.diamond_price_table_data {
+    padding: 10px;
+    border: none;
+}
+
+.diamond_price_table tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.diamond_price_table th,
+.diamond_price_table td {
+    text-align: center;
+}
+
+.diamond_price_table tr:hover {
+    background-color: #f8dcce;
+    color: white;
+}
+
+.diamond_price_table th,
+.diamond_price_table td {
+    font-size: 14px;
+    padding: 15px;
+}
+
+.filter_group_remove {
+    margin-left: 20px;
+    color: #1c1c1c;
+    border: 1px solid #1c1c1c;
+}
+
+.css-1rwt2y5-MuiButtonBase-root-MuiButton-root {
+    color: #1c1c1c !important;
+    height: 40px !important;
+    border: 1px solid #1c1c1c !important;
+    margin-bottom: 5px !important;
 }
