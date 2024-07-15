@@ -683,7 +683,7 @@ const ManagerStatitic = () => {
                           className="manager_manage_table_body_row"
                           key={item.date}
                         >
-                          <TableCell align="center">{item.date}</TableCell>
+                          <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")}</TableCell>
                           <TableCell align="center">
                             {item.totalSales}
                           </TableCell>
