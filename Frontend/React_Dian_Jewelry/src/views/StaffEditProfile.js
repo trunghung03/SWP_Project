@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -48,7 +48,7 @@ function StaffEditProfile() {
         setPhoneNumber(employeeDetailResponse.phoneNumber || '');
         setEmail(employeeDetailResponse.email || '');
         setStoredPassword(employeeDetailResponse.password || '');
-        
+
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -143,20 +143,19 @@ function StaffEditProfile() {
 
     try {
       console.log("Hello WOrld");
-      const response = await updateEmployeeById(id, updatedData);
-      if (response.status === 200) {
-        toast.success("Profile has been updated successfully.", {
-          position: "top-right",
-          autoClose: 8000
-        });
-        localStorage.setItem('firstName', firstName);
-        localStorage.setItem('lastName', lastName);
-        setUser({
-          firstName,
-          lastName,
-          email,
-        });
-      }
+      await updateEmployeeById(id, updatedData);
+      toast.success("Profile has been updated successfully.", {
+        position: "top-right",
+        autoClose: 8000
+      });
+      localStorage.setItem('firstName', firstName);
+      localStorage.setItem('lastName', lastName);
+      setUser({
+        firstName,
+        lastName,
+        email,
+      });
+
     } catch (error) {
       toast.error("Failed to update profile! Please try again.", {
         position: "top-right",
@@ -174,18 +173,15 @@ function StaffEditProfile() {
       };
       console.log("Hello world");
       const response = await updateEmployeePassword(updatePasswordData);
-      alert(response);
-      if (response.status === 200) {
-        console.log("Update successfully");
-        toast.success("Password updated successfully.", {
-          position: "top-right",
-          autoClose: 8000
-        });
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setPasswordFormVisible(false);
-      }
+      console.log("Update successfully");
+      toast.success("Password updated successfully.", {
+        position: "top-right",
+        autoClose: 8000
+      });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setPasswordFormVisible(false);
     } catch (error) {
       toast.error("Failed to update password. Please try again later.", {
         position: "top-right",
@@ -206,6 +202,7 @@ function StaffEditProfile() {
         <div className="ss_manage_content_header">
           <img className="ss_manage_content_logo" src={logo} alt="Logo" />
         </div>
+        <ToastContainer />
         <hr className="ss_manage_content_line"></hr>
         <div className="edit_profile_form">
           <h2>Profile Setting</h2>

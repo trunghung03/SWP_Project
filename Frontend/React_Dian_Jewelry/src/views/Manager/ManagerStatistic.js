@@ -67,6 +67,7 @@ const ManagerStatitic = () => {
   const [topTen, setTopTen] = useState([]);
   const [localDate, setLocalDate] = useState();
   const [monthYear, setMonthYear] = useState();
+  const [minProfit,setMinProfit] = useState();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -142,6 +143,7 @@ const ManagerStatitic = () => {
       setLoading(true);
       try {
         const profit = await ShowProfitByYear(year);
+        setMinProfit(Math.min(profit));
         setProfitByYear(profit);
         setProfitData({
           labels: [
@@ -274,8 +276,8 @@ const ManagerStatitic = () => {
   const profitOptions = {
     scales: {
       y: {
-        min: -5500,
-        max: 2500,
+        min: minProfit,
+        max: 80500,
         stepSize: 500,
       },
       x: {
