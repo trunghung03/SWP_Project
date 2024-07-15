@@ -209,7 +209,7 @@ const HeaderComponent = () => {
               </a>
             </div>
           </div>
-          <div className="col-md-2 col-lg-2 col-sm-12 text-center">
+          <div className="logo_container col-md-2 col-lg-2 col-sm-12 text-center">
             <Link to="/home">
               <img className="logo" src={logo} alt="Logo" />
             </Link>

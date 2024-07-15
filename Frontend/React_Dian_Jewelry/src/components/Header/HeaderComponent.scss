@@ -66,9 +66,14 @@ body {
     font-size: 12px;
 }
 
+.logo_container{
+    cursor: pointer;
+}
+
 .logo {
     width: 80%;
     margin: 8px 0 5px 0;
+    cursor: pointer;
 }
 
 .header_icons {

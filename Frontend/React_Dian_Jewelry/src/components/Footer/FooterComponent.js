@@ -10,24 +10,50 @@ import { useChatbot } from '../../services/ChatbotContext';
 
 const FooterComponent = () => {
     useEffect(() => {
-        const modal = document.getElementById("tosModal");
-        const btn = document.getElementById("tosLink");
-        const span = document.getElementsByClassName("close")[0];
+        const modals = [
+            { modalId: "warrantyModal", linkId: "warrantyModalLink" },
+            { modalId: "tosModal", linkId: "tosModalLink" }
+        ];
 
-        btn.onclick = function (e) {
-            e.preventDefault();
+        const openModal = (modal) => {
             modal.style.display = "block";
             document.body.classList.add("modal-open");
         };
-        span.onclick = function () {
+
+        const closeModal = (modal) => {
             modal.style.display = "none";
             document.body.classList.remove("modal-open");
         };
-        window.onclick = function (event) {
-            if (event.target === modal) {
-                modal.style.display = "none";
-                document.body.classList.remove("modal-open");
+
+        const handleClickOutside = (event) => {
+            modals.forEach(({ modalId }) => {
+                const modal = document.getElementById(modalId);
+                if (modal && event.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        };
+
+        modals.forEach(({ modalId, linkId }) => {
+            const modal = document.getElementById(modalId);
+            const btn = document.getElementById(linkId);
+            const span = modal?.getElementsByClassName("close")[0];
+
+            if (btn && modal && span) {
+                btn.onclick = function (e) {
+                    e.preventDefault();
+                    openModal(modal);
+                };
+                span.onclick = function () {
+                    closeModal(modal);
+                };
             }
+        });
+
+        window.addEventListener('click', handleClickOutside);
+
+        return () => {
+            window.removeEventListener('click', handleClickOutside);
         };
     }, []);
 
@@ -132,7 +158,8 @@ const FooterComponent = () => {
                             <p>© Copyright 2024 by Dian Jewelry</p>
                         </div>
                         <div className="col-sm-12 col-md-6 tos_col">
-                            <Link className="footer_tos_link" id="tosLink" to="#tos">Terms of Service & Privacy Policy</Link>
+                            <Link className="footer_tos_link" id="warrantyModalLink" to="#warranty">• Warranty Policyㅤㅤ</Link>
+                            <Link className="footer_tos_link" id="tosModalLink" to="#tos">• Terms of Service & Privacy Policy</Link>
                         </div>
                     </div>
                 </div>
@@ -142,7 +169,7 @@ const FooterComponent = () => {
                 <div className="modal-content">
                     <span className="close" style={{ textAlign: 'end' }}>&times;</span>
                     <h4 className="tos_title">Terms of Service & Privacy Policy</h4>
-                    <p class="tos_introduce">
+                    <p className="tos_introduce">
                         Welcome to Dian Jewelry! By signing up and creating an account on our website,
                         you agree to the following terms, conditions, and privacy policy. You acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you for your visit.
                     </p>
@@ -188,6 +215,58 @@ const FooterComponent = () => {
                     </p>
                 </div>
             </div>
+
+            <div id="warrantyModal" className="modal">
+                <div className="modal-content">
+                    <span className="close" style={{ textAlign: 'end' }}>&times;</span>
+                    <h4 className="tos_title">Warranty Policy</h4>
+                    <p className="tos_introduce">
+                        Welcome to Dian Jewelry! By purchasing our products, you agree to the following terms and conditions of our Warranty Policy. We strive to provide high-quality products and excellent customer service. Thank you for your trust in us. Hope you have a great time shopping.
+                    </p>
+
+                    <p>
+                        <strong>1. Warranty Coverage</strong><br />
+                        Our warranty covers manufacturing defects in materials and workmanship for a period of one year from the date of purchase. This warranty is applicable only to the original purchaser and is non-transferable.
+                    </p>
+
+                    <p>
+                        <strong>2. What is Not Covered</strong><br />
+                        The warranty does not cover damages caused by accidents, misuse, neglect, unauthorized repairs, or normal wear and tear. It also does not cover any loss of stones or gems after the initial 30 days of purchase.
+                    </p>
+
+                    <p>
+                        <strong>3. Warranty Claim Process</strong><br />
+                        To make a warranty claim, please contact our customer service team at <a href="mailto:diamonddianjewelry@gmail.com">diamonddianjewelry@gmail.com</a> or call us at <a href="tel:0795795959">0795 795 959</a>. You will need to provide your original purchase receipt and a detailed description of the defect. The warranty of the jewelry will be sent through the customer's signed email after a succesfully order.
+                    </p>
+
+                    <p>
+                        <strong>4. Warranty Resolution</strong><br />
+                        Upon receiving your warranty claim, our team will inspect the product. If the defect is covered by the warranty, we will repair the product free of charge. If repair is not possible, we will replace the product with one of equal value.
+                    </p>
+
+                    <p>
+                        <strong>5. Shipping Costs</strong><br />
+                        Shipping is free for warranty service. We will cover the shipping costs to return the repaired or replacement item back to the customer.
+                    </p>
+
+                    <p>
+                        <strong>6. Warranty Limitations</strong><br />
+                        This warranty is the only express warranty provided by Dian Jewelry. No implied warranties, including but not limited to warranties of merchantability and fitness for a particular purpose, are provided. Some jurisdictions do not allow limitations on how long an implied warranty lasts, so the above limitations may not apply to you.
+                    </p>
+
+                    <p>
+                        <strong>7. Changes to This Policy</strong><br />
+                        We may update this Warranty Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.
+                    </p>
+
+                    <p>
+                        <strong>8. Contact Us</strong><br />
+                        If you have any questions or concerns about this Warranty Policy, please contact us at <a href="/contact"> Dian Jewelry</a>.
+                    </p>
+                </div>
+            </div>
+
+
         </>
     );
 };

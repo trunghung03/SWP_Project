@@ -80,13 +80,17 @@
     transform: translateY(-2px);
 }
 
-.copyright p {
+.copyright a {
+    font-size: 14px;
+}
+
+.footer_tos_link {
     font-size: 16px;
 }
 
 .copyright .tos_col {
     text-align: end;
-    padding-right: 25px;
+    padding-right: 20px;
     font-size: 16px;
 }
 
