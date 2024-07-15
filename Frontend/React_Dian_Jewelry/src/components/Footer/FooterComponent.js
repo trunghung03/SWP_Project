@@ -6,7 +6,7 @@ import vnpay from '../../assets/img/vnpay.webp';
 import bank from '../../assets/img/bankLogo.png';
 import cash from '../../assets/img/cashLogo.png';
 import { useNotification } from '../../services/NotificationContext';
-import { useChatbot } from '../../services/ChatbotContext'; 
+import { useChatbot } from '../../services/ChatbotContext';
 
 const FooterComponent = () => {
     useEffect(() => {
@@ -17,16 +17,16 @@ const FooterComponent = () => {
         btn.onclick = function (e) {
             e.preventDefault();
             modal.style.display = "block";
-            document.body.classList.add("modal-open"); 
+            document.body.classList.add("modal-open");
         };
         span.onclick = function () {
             modal.style.display = "none";
-            document.body.classList.remove("modal-open"); 
+            document.body.classList.remove("modal-open");
         };
         window.onclick = function (event) {
             if (event.target === modal) {
                 modal.style.display = "none";
-                document.body.classList.remove("modal-open"); 
+                document.body.classList.remove("modal-open");
             }
         };
     }, []);
@@ -49,12 +49,12 @@ const FooterComponent = () => {
     const handleNotificationClick = (event) => {
         event.preventDefault();
         window.scrollTo(0, 0);
-        setShowNotifications(true); 
+        setShowNotifications(true);
     };
 
     const handleChatClick = (event) => {
         event.preventDefault();
-        setIsChatbotOpen(true); 
+        setIsChatbotOpen(true);
     };
 
     return (
@@ -142,18 +142,49 @@ const FooterComponent = () => {
                 <div className="modal-content">
                     <span className="close" style={{ textAlign: 'end' }}>&times;</span>
                     <h4 className="tos_title">Terms of Service & Privacy Policy</h4>
-                    <p className="tos_introduce">
+                    <p class="tos_introduce">
                         Welcome to Dian Jewelry! By signing up and creating an account on our website,
-                        you agree to the following terms, conditions and private policy and you acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you.
+                        you agree to the following terms, conditions, and privacy policy. You acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you for your visit.
                     </p>
+
                     <p>
-                        <strong>- Account Creation:</strong> You must provide accurate and complete information during the registration process.
-                        You are responsible for maintaining the confidentiality of your account information and password.<br />
-                        <strong>- Purchases and Payments:</strong> Payments must be made through the provided payment options. All sales are final, and returns or exchanges are subject to our return policy.<br />
-                        <strong>- User Conduct:</strong> You agree not to use our website for any unlawful purposes or to engage in any conduct that could damage or impair the functionality of our services.<br />
-                        <strong>- Use of Information:</strong> We use your information to process orders, communicate with you, and improve our services. We may also use your email address to send you promotional offers and updates, which you can opt out of at any time.<br />
-                        <strong>- Data Protection:</strong> We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure.<br />
-                        <strong>- Changes to This Policy:</strong> We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.<br />
+                        <strong>1. Introduction</strong><br />
+                        We value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and protect your data.
+                    </p>
+
+                    <p>
+                        <strong>2. Information We Collect</strong><br />
+                        We collect information that you provide to us directly, such as when you create an account, make a purchase, or contact us. This may include your name, email address, phone number, shipping address, and payment information. We also collect information automatically as you navigate our site, including IP address, browser type, and usage data.
+                    </p>
+
+                    <p>
+                        <strong>3. How We Use Your Information</strong><br />
+                        We use your information to provide and improve our services, process transactions, communicate with you, and for marketing purposes. We may also use your information to comply with legal obligations and protect our rights.
+                    </p>
+
+                    <p>
+                        <strong>4. Sharing Your Information</strong><br />
+                        We do not sell your personal information. We may share your information with third parties to facilitate our services, such as payment processors, shipping companies, and marketing partners. These third parties are obligated to protect your information and use it only for the purposes we specify.
+                    </p>
+
+                    <p>
+                        <strong>5. Data Security</strong><br />
+                        We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure. We strive to use commercially acceptable means to protect your data but cannot guarantee absolute security.
+                    </p>
+
+                    <p>
+                        <strong>6. Your Choices</strong><br />
+                        You have the right to access, update, and delete your personal information. You can manage your account settings or contact us to make changes. You can also opt out of receiving promotional emails by following the unsubscribe instructions in the emails.
+                    </p>
+
+                    <p>
+                        <strong>7. Changes to This Policy</strong><br />
+                        We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.
+                    </p>
+
+                    <p>
+                        <strong>8. Contact Us</strong><br />
+                        If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <a href="/contact"> Dian Jewelry</a>.
                     </p>
                 </div>
             </div>

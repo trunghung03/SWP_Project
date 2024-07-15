@@ -242,6 +242,7 @@ function Shape() {
                             label="Clarity"
                             onChange={(e) => setClarity(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="IF">IF</MenuItem>
                             <MenuItem value="VVS1">VVS1</MenuItem>
                             <MenuItem value="VVS2">VVS2</MenuItem>
@@ -262,6 +263,7 @@ function Shape() {
                             label="Color"
                             onChange={(e) => setColor(e.target.value)}
                         >
+                            <MenuItem value="">None</MenuItem>
                             <MenuItem value="D">D</MenuItem>
                             <MenuItem value="E">E</MenuItem>
                             <MenuItem value="F">F</MenuItem>

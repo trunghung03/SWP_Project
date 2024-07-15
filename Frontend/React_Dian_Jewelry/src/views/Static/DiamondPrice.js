@@ -9,8 +9,8 @@ import diamondPriceMidImage3 from '../../assets/img/gia2.jpg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-import { Select, MenuItem, InputLabel, FormControl, Button, TextField, CircularProgress } from '@mui/material';
-import { getDiamondPrice, getShellMaterials, getShellMaterialById } from '../../services/PricingService';
+import { Select, MenuItem, InputLabel, FormControl, Button, CircularProgress } from '@mui/material';
+import { getDiamondPrice, getShellMaterials, getShellMaterialById, getAllDiamonds } from '../../services/PricingService';
 
 function DiamondPrice() {
   const [transitionKey, setTransitionKey] = useState(Date.now());
@@ -27,6 +27,13 @@ function DiamondPrice() {
   const [shellPrice, setShellPrice] = useState('');
   const [shellLoading, setShellLoading] = useState(false);
 
+  const [diamonds, setDiamonds] = useState([]);
+  const [filteredDiamonds, setFilteredDiamonds] = useState([]);
+  const [selectedShape, setSelectedShape] = useState('');
+  const [selectedCut, setSelectedCut] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedClarity, setSelectedClarity] = useState('');
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       document.querySelector('.diamond_price_main_image').classList.add('visible');
@@ -41,6 +48,15 @@ function DiamondPrice() {
       })
       .catch(error => {
         console.error('Error fetching shell materials:', error);
+      });
+
+    getAllDiamonds()
+      .then(response => {
+        setDiamonds(response.data);
+        setFilteredDiamonds(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching diamonds:', error);
       });
   }, []);
 
@@ -96,6 +112,51 @@ function DiamondPrice() {
       });
   };
 
+  const handleShapeFilterChange = (e) => {
+    setSelectedShape(e.target.value);
+    applyFilters(e.target.value, selectedCut, selectedColor, selectedClarity);
+  };
+
+  const handleCutFilterChange = (e) => {
+    setSelectedCut(e.target.value);
+    applyFilters(selectedShape, e.target.value, selectedColor, selectedClarity);
+  };
+
+  const handleColorFilterChange = (e) => {
+    setSelectedColor(e.target.value);
+    applyFilters(selectedShape, selectedCut, e.target.value, selectedClarity);
+  };
+
+  const handleClarityFilterChange = (e) => {
+    setSelectedClarity(e.target.value);
+    applyFilters(selectedShape, selectedCut, selectedColor, e.target.value);
+  };
+
+  const applyFilters = (shape, cut, color, clarity) => {
+    let filtered = diamonds;
+    if (shape) {
+      filtered = filtered.filter(diamond => diamond.shape === shape);
+    }
+    if (cut) {
+      filtered = filtered.filter(diamond => diamond.cut === cut);
+    }
+    if (color) {
+      filtered = filtered.filter(diamond => diamond.color === color);
+    }
+    if (clarity) {
+      filtered = filtered.filter(diamond => diamond.clarity === clarity);
+    }
+    setFilteredDiamonds(filtered);
+  };
+
+  const handleRemoveFilters = () => {
+    setSelectedShape('');
+    setSelectedCut('');
+    setSelectedColor('');
+    setSelectedClarity('');
+    setFilteredDiamonds(diamonds);
+  };
+
   return (
     <div className="DiamondPrice">
       <HeaderComponent />
@@ -106,18 +167,18 @@ function DiamondPrice() {
         <div className="diamond_price_content">
           <h2>DIAMOND PRICE</h2>
           <p>
-            Our comprehensive diamond pricing calculator system will help you stay informed and make well-informed decisions. Explore to discover the true value of diamonds today.
+            Our comprehensive diamond pricing system will help you stay informed and make well-informed decisions. Explore to discover the true value of diamonds today.
           </p>
         </div>
       </div>
 
       {/* Title */}
-      <div className="diamond_price_title_container">
+      {/* <div className="diamond_price_title_container">
         <h2 className="diamond_price_title">Diamond Price Calculator</h2>
-      </div>
+      </div> */}
 
       {/* Price form */}
-      <div className="diamond_price_form_wrapper">
+      {/* <div className="diamond_price_form_wrapper">
         <form className="diamond_price_form">
           <div className="form_row">
             <FormControl fullWidth margin="normal">
@@ -192,10 +253,10 @@ function DiamondPrice() {
             <p>{price !== 'Diamond not found' && price !== 'Please fill in all fields for the most accurate price' ? `Price: ${price}` : price}</p>
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Shell Price Checker */}
-      <div className="diamond_price_title_container">
+      {/* <div className="diamond_price_title_container">
         <h2 className="diamond_price_title">Shell Material Price Checker</h2>
         <div className="diamond_price_form">
           <FormControl fullWidth margin="normal">
@@ -226,8 +287,120 @@ function DiamondPrice() {
             <p>{shellPrice}</p>
           </div>
         )}
+      </div> */}
+
+      {/* Diamond Table */}
+      <div className="diamond_price_title_container">
+        <h2 className="diamond_price_title">Diamond Price List</h2>
+        <div className="diamond_price_filter">
+          <FormControl fullWidth margin="normal" size="small">
+            <InputLabel id="shape-label">Shape</InputLabel>
+            <Select
+              labelId="shape-label"
+              value={selectedShape}
+              onChange={handleShapeFilterChange}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="Round">Round</MenuItem>
+              <MenuItem value="Oval">Oval</MenuItem>
+              <MenuItem value="Emerald">Emerald</MenuItem>
+              <MenuItem value="Cushion">Cushion</MenuItem>
+              <MenuItem value="Pear">Pear</MenuItem>
+              <MenuItem value="Radiant">Radiant</MenuItem>
+              <MenuItem value="Princess">Princess</MenuItem>
+              <MenuItem value="Marquise">Marquise</MenuItem>
+              <MenuItem value="Asscher">Asscher</MenuItem>
+              <MenuItem value="Heart">Heart</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal" size="small">
+            <InputLabel id="cut-label">Cut</InputLabel>
+            <Select
+              labelId="cut-label"
+              value={selectedCut}
+              onChange={handleCutFilterChange}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="Super Ideal">Super Ideal</MenuItem>
+              <MenuItem value="Very Good">Very Good</MenuItem>
+              <MenuItem value="Ideal">Ideal</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal" size="small">
+            <InputLabel id="color-label">Color</InputLabel>
+            <Select
+              labelId="color-label"
+              value={selectedColor}
+              onChange={handleColorFilterChange}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="D">D</MenuItem>
+              <MenuItem value="E">E</MenuItem>
+              <MenuItem value="F">F</MenuItem>
+              <MenuItem value="G">G</MenuItem>
+              <MenuItem value="H">H</MenuItem>
+              <MenuItem value="I">I</MenuItem>
+              <MenuItem value="J">J</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal" size="small">
+            <InputLabel id="clarity-label">Clarity</InputLabel>
+            <Select
+              labelId="clarity-label"
+              value={selectedClarity}
+              onChange={handleClarityFilterChange}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="IF">IF</MenuItem>
+              <MenuItem value="VVS1">VVS1</MenuItem>
+              <MenuItem value="VVS2">VVS2</MenuItem>
+              <MenuItem value="VS1">VS1</MenuItem>
+              <MenuItem value="VS2">VS2</MenuItem>
+              <MenuItem value="SI1">SI1</MenuItem>
+              <MenuItem value="SI2">SI2</MenuItem>
+            </Select>
+          </FormControl>
+          {(selectedShape || selectedCut || selectedColor || selectedClarity) && (
+            <Button
+              onClick={handleRemoveFilters}
+              variant="outlined"
+              color="primary"
+              startIcon={<i className="fas fa-times"></i>}
+              className="filter_group_remove"
+            >
+              Remove Filters
+            </Button>
+          )}
+        </div>
+        <div className="diamond_price_table_wrapper">
+          <table className="diamond_price_table">
+            <thead>
+              <tr>
+                <th className="diamond_price_table_header">Shape</th>
+                <th className="diamond_price_table_header">Price</th>
+                <th className="diamond_price_table_header">Carat</th>
+                <th className="diamond_price_table_header">Cut</th>
+                <th className="diamond_price_table_header">Color</th>
+                <th className="diamond_price_table_header">Clarity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredDiamonds.map((diamond, index) => (
+                <tr key={index}>
+                  <td className="diamond_price_table_data">{diamond.shape}</td>
+                  <td className="diamond_price_table_data">{diamond.price}$</td>
+                  <td className="diamond_price_table_data">{diamond.carat}</td>
+                  <td className="diamond_price_table_data">{diamond.cut}</td>
+                  <td className="diamond_price_table_data">{diamond.color}</td>
+                  <td className="diamond_price_table_data">{diamond.clarity}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <br></br> <br></br> <br></br>
+
+      <br /> <br /> <br />
       {/* Middle content */}
       <div className="diamond_price_middle_content">
         <div className="diamond_price_image_wrapper">
