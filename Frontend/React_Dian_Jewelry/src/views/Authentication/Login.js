@@ -304,10 +304,10 @@ const Login = () => {
   };
 
   return (
-    <div className="main_container">
+    <div className="container main_container">
       <ToastContainer /> 
-      <div className="login_wrapper">
-        <div className="left_side">
+      <div className="row login_wrapper">
+        <div className="col-lg-6 col-md-6 col-sm-12 left_side">
           <form className="sign_in_form" onSubmit={handleLogin}>
             <h3 className="sign_in_title">Sign in</h3>
             {error && <div className="alert alert-danger">{error}</div>}
@@ -409,7 +409,7 @@ const Login = () => {
             </div>
           </form>
         </div>
-        <div className="right_side">
+        <div className="col-lg-6 col-md-6 col-sm-12 right_side">
           <Slider {...sliderSettings}>
             <div>
               <img className="right_image" src={rightImage} alt="Ring photo" />

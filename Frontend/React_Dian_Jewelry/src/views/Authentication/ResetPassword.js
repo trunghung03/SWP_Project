@@ -95,18 +95,10 @@ const ResetPassword = () => {
             const email = localStorage.getItem('resetPasswordEmail');
             const token = localStorage.getItem('resetPasswordToken');
             await resetPasswordApi({ email, token, password, confirmPassword: rePassword });
-            // toast.success("Reset password successfully! You can sign in with new password now.", {
-            //     position: "top-right",
-            //     onClose: () => {
-                    localStorage.removeItem('resetPasswordEmail');
-                    localStorage.removeItem('resetPasswordToken');
-                    navigate('/login');
-            //     }
-            // });
+            localStorage.removeItem('resetPasswordEmail');
+            localStorage.removeItem('resetPasswordToken');
+            navigate('/login');
         } catch (error) {
-            // toast.error("Failed to reset the password. Please try again later.", {
-            //     position: "top-right"
-            // });
             localStorage.removeItem('resetPasswordEmail');
             localStorage.removeItem('resetPasswordToken');
             navigate('/login');
@@ -131,9 +123,9 @@ const ResetPassword = () => {
     return (
         <div className="rp_main_container container-fluid">
             <ToastContainer />
-            <div className="rp_wrapper">
+            <div className="rp_wrapper row">
                 {/* Left Side: Reset Password Form */}
-                <div className="rp_left_side col-md-6">
+                <div className="col-lg-6 col-md-6 col-sm-12 rp_left_side">
                     <form className="reset_password_form" onSubmit={handleResetPassword}>
                         <h3 className="reset_password_title">Reset password</h3>
                         <div className="rp_password_section mb-3 position-relative">
@@ -176,7 +168,7 @@ const ResetPassword = () => {
                 </div>
 
                 {/* Right Side: Image */}
-                <div className="rp_right_side col-md-6 p-0">
+                <div className="col-lg-6 col-md-6 col-sm-12 rp_right_side">
                     <Slider {...sliderSettings}>
                         <div>
                             <img className="rp_right_image" src={rightImage} alt="Ring photo" />

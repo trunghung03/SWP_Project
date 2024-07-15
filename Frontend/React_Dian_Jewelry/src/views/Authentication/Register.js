@@ -98,7 +98,7 @@ const Register = () => {
             if (!firstName || !lastName || !email || !password || !rePassword) {
                 toast.error("Please fill in all fields first.", {
                     position: "top-right",
-                    autoClose: 3000 
+                    autoClose: 3000
                 });
                 setLoading(false);
                 return;
@@ -117,7 +117,7 @@ const Register = () => {
             if (!isValidEmail(email)) {
                 toast.error("Wrong email format! Please enter a valid email.", {
                     position: "top-right",
-                    autoClose: 3000 
+                    autoClose: 3000
                 });
                 setLoading(false);
                 return;
@@ -126,7 +126,7 @@ const Register = () => {
             if (!isValidPassword(password)) {
                 toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
                     position: "top-right",
-                    autoClose: 3000 
+                    autoClose: 3000
                 });
                 setLoading(false);
                 return;
@@ -135,7 +135,7 @@ const Register = () => {
             if (password !== rePassword) {
                 toast.error("Passwords have to be the same! Please try again.", {
                     position: "top-right",
-                    autoClose: 3000 
+                    autoClose: 3000
                 });
                 setLoading(false);
                 return;
@@ -144,7 +144,7 @@ const Register = () => {
             if (!tosCheckbox.checked) {
                 toast.error("Can not sign up if you do not agree with our terms of service.", {
                     position: "top-right",
-                    autoClose: 3000 
+                    autoClose: 3000
                 });
                 setLoading(false);
                 return;
@@ -155,7 +155,7 @@ const Register = () => {
                 if (userInfoRes && userInfoRes.data) {
                     toast.error("Email has been registered! Please use another email to sign up.", {
                         position: "top-right",
-                        autoClose: 3000 
+                        autoClose: 3000
                     });
                     setLoading(false);
                     return;
@@ -190,19 +190,19 @@ const Register = () => {
                 if (!result.success) {
                     toast.error(result.message || "Registration failed. Please try again.", {
                         position: "top-right",
-                        autoClose: 3000 
+                        autoClose: 3000
                     });
                 } else {
                     toast.success("Sign up successfully! You now can sign in with your account.", {
                         position: "top-right",
-                        autoClose: 3000 
+                        autoClose: 3000
                     });
                     window.location.href = "/login";
                 }
             } catch (error) {
                 toast.success("Sign up successfully! You now can sign in with your account.", {
                     position: "top-right",
-                    autoClose: 3000 
+                    autoClose: 3000
                 });
                 window.location.href = "/login";
             } finally {
@@ -232,9 +232,9 @@ const Register = () => {
     return (
         <div className="register_main_container container-fluid">
             <ToastContainer autoClose={3000} />
-            <div className="register_wrapper">
+            <div className="row register_wrapper">
                 {/* Left Side: register Form */}
-                <div className="register_left_side col-md-6">
+                <div className="col-lg-6 col-md-6 col-sm-12 register_left_side">
                     <form className="sign_up_form">
                         <h3 className="sign_up_title">Sign up</h3>
                         <div className="name_section">
@@ -283,7 +283,7 @@ const Register = () => {
                     </form>
                 </div>
 
-                <div className="register_right_side col-md-6 p-0">
+                <div className="col-lg-6 col-md-6 col-sm-12 register_right_side">
                     <Slider {...sliderSettings}>
                         <div>
                             <img className="register_image" src={rightImage} alt="Ring photo" />
@@ -302,21 +302,54 @@ const Register = () => {
                 <div className="modal-content">
                     <span className="close" style={{ textAlign: 'end' }}>&times;</span>
                     <h4 className="tos_title">Terms of Service & Privacy Policy</h4>
-                    <p className="tos_introduce">
+                    <p class="tos_introduce">
                         Welcome to Dian Jewelry! By signing up and creating an account on our website,
-                        you agree to the following terms, conditions and private policy and you acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you.
+                        you agree to the following terms, conditions, and privacy policy. You acknowledge that you have read and agree to our Terms of Service & Privacy Policy. Thank you for your visit.
                     </p>
+
                     <p>
-                        <strong>- Account Creation:</strong> You must provide accurate and complete information during the registration process.
-                        You are responsible for maintaining the confidentiality of your account information and password.<br />
-                        <strong>- Purchases and Payments:</strong> Payments must be made through the provided payment options. All sales are final, and returns or exchanges are subject to our return policy.<br />
-                        <strong>- User Conduct:</strong> You agree not to use our website for any unlawful purposes or to engage in any conduct that could damage or impair the functionality of our services.<br />
-                        <strong>- Use of Information:</strong> We use your information to process orders, communicate with you, and improve our services. We may also use your email address to send you promotional offers and updates, which you can opt out of at any time.<br />
-                        <strong>- Data Protection:</strong> We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure.<br />
-                        <strong>- Changes to This Policy:</strong> We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.<br />
+                        <strong>1. Introduction</strong><br />
+                            We value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and protect your data.
+                    </p>
+
+                    <p>
+                        <strong>2. Information We Collect</strong><br />
+                            We collect information that you provide to us directly, such as when you create an account, make a purchase, or contact us. This may include your name, email address, phone number, shipping address, and payment information. We also collect information automatically as you navigate our site, including IP address, browser type, and usage data.
+                    </p>
+
+                    <p>
+                        <strong>3. How We Use Your Information</strong><br />
+                            We use your information to provide and improve our services, process transactions, communicate with you, and for marketing purposes. We may also use your information to comply with legal obligations and protect our rights.
+                    </p>
+
+                    <p>
+                        <strong>4. Sharing Your Information</strong><br />
+                            We do not sell your personal information. We may share your information with third parties to facilitate our services, such as payment processors, shipping companies, and marketing partners. These third parties are obligated to protect your information and use it only for the purposes we specify.
+                    </p>
+
+                    <p>
+                        <strong>5. Data Security</strong><br />
+                            We implement various security measures to protect your personal information. However, no method of transmission over the internet or electronic storage is 100% secure. We strive to use commercially acceptable means to protect your data but cannot guarantee absolute security.
+                    </p>
+
+                    <p>
+                        <strong>6. Your Choices</strong><br />
+                            You have the right to access, update, and delete your personal information. You can manage your account settings or contact us to make changes. You can also opt out of receiving promotional emails by following the unsubscribe instructions in the emails.
+                    </p>
+
+                    <p>
+                        <strong>7. Changes to This Policy</strong><br />
+                            We may update this Privacy Policy periodically. Any changes will be posted on our website, and your continued use of our services constitutes acceptance of the updated policy.
+                    </p>
+
+                    <p>
+                        <strong>8. Contact Us</strong><br />
+                            If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <a href="/contact"> Dian Jewelry</a>.
                     </p>
                 </div>
             </div>
+
+
         </div>
     );
 };

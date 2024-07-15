@@ -11,13 +11,13 @@ input {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 30px;
+    padding: 30px 92px;
 }
 
 .register_wrapper {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 100%;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -25,24 +25,16 @@ input {
     overflow: hidden;
 }
 
-
-.register_left_side,
-.register_right_side {
-    width: 50%;
-}
-
 .register_left_side {
-    padding: 70px 50px 50px 50px;
+    padding: 50px;
 }
 
 .register_right_side {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 0;
 }
 
 .register_image {
-    height: 105vh;
+    height: 100vh;
     width: 100%;
     object-fit: cover;
     margin-bottom: -6px;
@@ -204,7 +196,7 @@ input {
     width: 100%;
 }
 
-// /* Modal CSS */
+/* Modal CSS */
 body.modal-open {
     overflow: hidden;
 }
@@ -216,18 +208,21 @@ body.modal-open {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow-y: hidden;
     background-color: rgba(0, 0, 0, 0.4);
+    overflow-y: auto; 
 }
 
 .modal-content {
+    border-radius: 0;
     background-color: #fefefe;
-    margin: 20px auto;
-    padding: 20px 30px 50px 30px;
+    margin: 50px auto;
+    padding: 20px 30px 70px 30px;
     border: 1px solid #888;
     width: 80%;
     max-width: 900px;
-    overflow-y: hidden;
+    max-height: 80%; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
 }
 
 .close {
@@ -249,15 +244,15 @@ body.modal-open {
     text-align: center;
 }
 
-.tos_title{
+.tos_title {
     font-weight: bold;
 }
-
 
 .icon_gg {
     font-size: 17px;
     color: white;
 }
+
 
 /* Slider customization */
 .slick-slider {

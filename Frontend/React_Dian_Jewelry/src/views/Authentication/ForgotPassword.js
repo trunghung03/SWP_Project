@@ -77,11 +77,11 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="fp_main_container container-fluid">
+        <div className="container fp_main_container">
             <ToastContainer autoClose={3000} /> 
-            <div className="fp_wrapper">
+            <div className="row fp_wrapper">
                 {/* Left Side: Forgot Password Form */}
-                <div className="fp_left_side col-md-6 d-flex align-items-center justify-content-center">
+                <div className="col-lg-6 col-md-6 col-sm-12 fp_left_side">
                     <form className="forgot_password_form" onSubmit={handleEmailSubmit}>
                         <h3 className="forgot_password_title">Forgot password</h3>
                         <p className="fp_sub_title">Enter your account's email so that we can send a verify email to confirm for reset password</p>
@@ -100,7 +100,7 @@ const ForgotPassword = () => {
                 </div>
 
                 {/* Right Side: Image */}
-                <div className="fp_right_side col-md-6 p-0">
+                <div className="col-lg-6 col-md-6 col-sm-12 fp_right_side">
                     <Slider {...sliderSettings}>
                         <div>
                             <img className="fp_right_image" src={rightImage} alt="Ring photo" />
