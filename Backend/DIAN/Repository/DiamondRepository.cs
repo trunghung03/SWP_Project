@@ -38,8 +38,8 @@ namespace DIAN_.Repository
                 existingDiamond.Status = false;
                 await _context.SaveChangesAsync();
                 string individualCacheKey = $"Diamond_{id}";
-                await _distributedCache.RemoveAsync(individualCacheKey);
-                await _distributedCache.RemoveAsync("Diamonds");
+                //await _distributedCache.RemoveAsync(individualCacheKey);
+                //await _distributedCache.RemoveAsync("Diamonds");
                 return existingDiamond;
             }
             throw new KeyNotFoundException("Diamond does not exist");
@@ -47,29 +47,34 @@ namespace DIAN_.Repository
 
         public async Task<List<Diamond>> GetAllDiamond()
         {
-            string cacheKey = "AllDiamonds";
-            string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
-            List<Diamond> diamonds;
+            var diamonds = await _context.Diamonds
+                .Include(p => p.MainDiamondAtrribute)
+                .Where(d => d.Status)
+                .ToListAsync();
+            //string cacheKey = "AllDiamonds";
+            //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+            //List<Diamond> diamonds;
 
-            if (string.IsNullOrEmpty(cachedData))
-            {
-                diamonds = await _context.Diamonds
-                    .Where(d => d.Status)
-                    .ToListAsync();
+            //if (string.IsNullOrEmpty(cachedData))
+            //{
+            //    diamonds = await _context.Diamonds
+            //        .Include(p => p.MainDiamondAtrribute)
+            //        .Where(d => d.Status)
+            //        .ToListAsync();
 
-                if (diamonds != null && diamonds.Count > 0)
-                {
-                    string serializedData = JsonSerializer.Serialize(diamonds);
-                    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-                    });
-                }
-            }
-            else
-            {
-                diamonds = JsonSerializer.Deserialize<List<Diamond>>(cachedData);
-            }
+            //    if (diamonds != null && diamonds.Count > 0)
+            //    {
+            //        string serializedData = JsonSerializer.Serialize(diamonds);
+            //        await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            //        });
+            //    }
+            //}
+            //else
+            //{
+            //    diamonds = JsonSerializer.Deserialize<List<Diamond>>(cachedData);
+            //}
 
             return diamonds;
         }
@@ -77,122 +82,130 @@ namespace DIAN_.Repository
 
         public async Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
-            string cacheKey = $"Diamonds_{query.PageNumber}_{query.PageSize}";
-            string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            var diamonds = await _context.Diamonds
+                   .Where(s => s.Status)
+                   .Include(p => p.MainDiamondAtrribute)
+                   .Skip(skipNumber)
+                   .Take(query.PageSize)
+                   .ToListAsync();
+            var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
+            return (diamonds, totalCount);
+            //string cacheKey = $"Diamonds_{query.PageNumber}_{query.PageSize}";
+            //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
 
-            if (string.IsNullOrEmpty(cachedData))
-            {
-                var skipNumber = (query.PageNumber - 1) * query.PageSize;
-                var diamonds = await _context.Diamonds
-                    .Where(s => s.Status)
-                    .Skip(skipNumber)
-                    .Take(query.PageSize)
-                    .ToListAsync();
+            //if (string.IsNullOrEmpty(cachedData))
+            //{
+            //    var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            //    var diamonds = await _context.Diamonds
+            //        .Where(s => s.Status)
+            //        .Include(p => p.MainDiamondAtrribute)
+            //        .Skip(skipNumber)
+            //        .Take(query.PageSize)
+            //        .ToListAsync();
 
-                var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
+            //    var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
 
-                var cacheEntry = new { Diamonds = diamonds, TotalCount = totalCount };
-                string serializedData = JsonSerializer.Serialize(cacheEntry);
+            //    var cacheEntry = new { Diamonds = diamonds, TotalCount = totalCount };
+            //    string serializedData = JsonSerializer.Serialize(cacheEntry);
 
-                await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-                });
-                _logger.LogInformation("Diamonds from database");
-                return (diamonds, totalCount);
-            }
-            else
-            {
-                using (JsonDocument doc = JsonDocument.Parse(cachedData))
-                {
-                    JsonElement root = doc.RootElement;
-                    var diamonds = JsonSerializer.Deserialize<List<Diamond>>(root.GetProperty("Diamonds").GetRawText());
-                    int totalCount = root.GetProperty("TotalCount").GetInt32();
-                    _logger.LogInformation("Diamonds from cache");
-                    return (diamonds, totalCount);
-                }
-            }
+            //    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
+            //    {
+            //        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            //    });
+            //    _logger.LogInformation("Diamonds from database");
+            //    return (diamonds, totalCount);
+            //}
+            //else
+            //{
+            //    using (JsonDocument doc = JsonDocument.Parse(cachedData))
+            //    {
+            //        JsonElement root = doc.RootElement;
+            //        var diamonds = JsonSerializer.Deserialize<List<Diamond>>(root.GetProperty("Diamonds").GetRawText());
+            //        int totalCount = root.GetProperty("TotalCount").GetInt32();
+            //        _logger.LogInformation("Diamonds from cache");
+            //        return (diamonds, totalCount);
+            //    }
+            //}
         }
 
         public async Task<Diamond?> GetDiamondByIdAsync(int id)
         {
-            string cacheKey = $"Diamond_{id}";
-            string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
-            Diamond? existingDiamond = null;
-
-            if (string.IsNullOrEmpty(cachedData))
-            {
-                existingDiamond = await _context.Diamonds
-                    .Where(s => s.Status)
-                    .FirstOrDefaultAsync(x => x.DiamondId == id);
-
-                if (existingDiamond != null)
-                {
-                    string serializedData = JsonSerializer.Serialize(existingDiamond);
-                    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) 
-                    });
-                }
-            }
-            else
-            {
-                existingDiamond = JsonSerializer.Deserialize<Diamond>(cachedData);
-            }
-
-            if (existingDiamond == null)
-            {
-                throw new KeyNotFoundException("Diamond does not exist");
-            }
-
+            var existingDiamond = await _context.Diamonds
+                    .Include(d => d.MainDiamondAtrribute)
+                    .FirstOrDefaultAsync(x => x.DiamondId == id && x.Status);
             return existingDiamond;
+            //string cacheKey = $"Diamond_{id}";
+            //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+            //Diamond? existingDiamond = null;
+
+            //if (string.IsNullOrEmpty(cachedData))
+            //{
+            //    existingDiamond = await _context.Diamonds
+            //        .Include(d => d.MainDiamondAtrribute)
+            //        .FirstOrDefaultAsync(x => x.DiamondId == id && x.Status);
+
+            //    if (existingDiamond != null)
+            //    {
+            //        string serializedData = JsonSerializer.Serialize(existingDiamond);
+            //        await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            //        });
+            //    }
+            //}
+            //else
+            //{
+            //    existingDiamond = JsonSerializer.Deserialize<Diamond>(cachedData);
+            //}
+
+            //if (existingDiamond == null)
+            //{
+            //    throw new KeyNotFoundException("Diamond does not exist");
+            //}
+
+            //return existingDiamond;
         }
 
 
         public async Task<List<Diamond>> GetDiamondByShapeAsync(string shape)
         {
-            string cacheKey = $"Diamonds_Shape_{shape}";
-            string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
-            List<Diamond> diamonds;
-
-            if (string.IsNullOrEmpty(cachedData))
-            {
-                diamonds = await _context.Diamonds
-                    .Where(s => s.Status && s.Shape.Contains(shape))
+            var diamonds = await _context.Diamonds
+                    .Include(p => p.MainDiamondAtrribute)
+                    .Where(s => s.Status && s.MainDiamondAtrribute.Shape.Contains(shape))
                     .ToListAsync();
-
-                if (diamonds != null && diamonds.Count > 0)
-                {
-                    string serializedData = JsonSerializer.Serialize(diamonds);
-                    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) 
-                    });
-                }
-            }
-            else
-            {
-                diamonds = JsonSerializer.Deserialize<List<Diamond>>(cachedData);
-            }
-
-            if (diamonds == null || diamonds.Count == 0)
-            {
-                throw new KeyNotFoundException("Diamond does not exist");
-            }
-
             return diamonds;
-        }
+            //string cacheKey = $"Diamonds_Shape_{shape}";
+            //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+            //List<Diamond> diamonds;
 
-        public async Task<Diamond?> UpdateAmountAvailable(Diamond diamondModel, int id)
-        {
-            var diamond = await _context.Diamonds.FirstOrDefaultAsync(d => d.DiamondId == id);
-            if (diamond != null)
-            {
-                diamond.AmountAvailable = diamondModel.AmountAvailable;
-                await _context.SaveChangesAsync();
-                return diamond;
-            }
-            return null;
+            //if (string.IsNullOrEmpty(cachedData))
+            //{
+            //    diamonds = await _context.Diamonds
+            //        .Include(p => p.MainDiamondAtrribute)
+            //        .Where(s => s.Status && s.MainDiamondAtrribute.Shape.Contains(shape))
+            //        .ToListAsync();
+
+            //    if (diamonds != null && diamonds.Count > 0)
+            //    {
+            //        string serializedData = JsonSerializer.Serialize(diamonds);
+            //        await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            //        });
+            //    }
+            //}
+            //else
+            //{
+            //    diamonds = JsonSerializer.Deserialize<List<Diamond>>(cachedData) ?? new List<Diamond>();
+            //}
+
+            //if (diamonds == null || diamonds.Count == 0)
+            //{
+            //    throw new KeyNotFoundException("Diamond does not exist");
+            //}
+
+            //return diamonds;
         }
 
         public async Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id)
@@ -200,34 +213,75 @@ namespace DIAN_.Repository
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
             if (existingDiamond != null)
             {
-                existingDiamond.Color = diamondModel.Color;
-                existingDiamond.Clarity = diamondModel.Clarity;
-                existingDiamond.Cut = diamondModel.Cut;
-                existingDiamond.Carat = diamondModel.Carat;
-                existingDiamond.AmountAvailable = diamondModel.AmountAvailable;
+                existingDiamond.OrderDetailId = diamondModel.OrderDetailId;
                 existingDiamond.Price = diamondModel.Price;
                 existingDiamond.Status = diamondModel.Status;
                 await _context.SaveChangesAsync();
                 string individualCacheKey = $"Diamond_{id}";
-                await _distributedCache.RemoveAsync(individualCacheKey);
-                await _distributedCache.RemoveAsync("Diamonds");
+                //await _distributedCache.RemoveAsync(individualCacheKey);
+                //await _distributedCache.RemoveAsync("Diamonds");
                 return existingDiamond;
             }
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
-        //public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
-        //{
-        //   var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
-        //    if (existingDiamond != null)
-        //    {
-        //        existingDiamond.CertificateScan = diamondModel.CertificateScan;
-        //        await _context.SaveChangesAsync();
-        //        string individualCacheKey = $"Diamond_{id}";
-        //        await _distributedCache.RemoveAsync(individualCacheKey);
-        //        return existingDiamond;
-        //    }
-        //    throw new KeyNotFoundException("Diamond does not exist");
-        //}
+        public async Task<Diamond?> UpdateDiamondStatus(int diamondId)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            if(existingDiamond is not null)
+            {
+                existingDiamond.Status = false;
+                await _context.SaveChangesAsync();
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
+        public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
+            if (existingDiamond != null)
+            {
+                existingDiamond.CertificateScan = diamondModel.CertificateScan;
+                await _context.SaveChangesAsync();
+                //string individualCacheKey = $"Diamond_{id}";
+                //await _distributedCache.RemoveAsync(individualCacheKey);
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
+
+        public async Task<Diamondattribute> GetDiamondAttributeByIdAsync(int diamondAttributeId)
+        {
+            return await _context.Diamondattributes
+                                 .FirstOrDefaultAsync(da => da.DiamondAtrributeId == diamondAttributeId);
+        }
+
+        public async Task<Diamond> UpdateOrderDetailId(int orderId, int diamondId)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            if (existingDiamond != null)
+            {
+                existingDiamond.OrderDetailId = orderId;
+                await _context.SaveChangesAsync();
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
+        // In DiamondRepository
+        public async Task<int> CountDiamondsByAttributesAsync(string shape, string color, string clarity, string cut, decimal carat)
+        {
+            return await _context.Diamonds
+                .Include(d => d.MainDiamondAtrribute)
+                .CountAsync(d => d.MainDiamondAtrribute.Shape == shape &&
+                                 d.MainDiamondAtrribute.Color == color &&
+                                 d.MainDiamondAtrribute.Clarity == clarity &&
+                                 d.MainDiamondAtrribute.Cut == cut &&
+                                 d.MainDiamondAtrribute.Carat == carat);
+        }
+
+        public async Task<List<Diamond>> GetDiamondsByAttributeIdAsync(int attributeId)
+        {
+            return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId && p.Status).ToListAsync();   
+        }
     }
 }

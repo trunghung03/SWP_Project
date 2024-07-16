@@ -3,6 +3,7 @@ using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -15,11 +16,28 @@ namespace DIAN_.Controllers
     public class DiamondController : ControllerBase
     {
         private readonly IDiamondRepository _diamondRepository;
+        private readonly IGoodsService _goodsService;
 
-        public DiamondController(IDiamondRepository diamondRepository)
+        public DiamondController(IDiamondRepository diamondRepository, IGoodsService goodsService)
         {
-            this._diamondRepository = diamondRepository;
+            _diamondRepository = diamondRepository;
+            _goodsService = goodsService;
         }
+
+        [HttpGet("count")]
+        public async Task<IActionResult> GetDiamondsCount([FromQuery] string shape, [FromQuery] string color, [FromQuery] string clarity, [FromQuery] string cut, [FromQuery] decimal carat)
+        {
+            try
+            {
+                int count = await _goodsService.GetMainDiamondsCount(shape, color, clarity, cut, carat);
+                return Ok(count);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery query)
@@ -192,6 +210,8 @@ namespace DIAN_.Controllers
             {
                 throw;
             }
+
+
             //[HttpPut("updatecertificate/{id:int}")]
             //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
             //{

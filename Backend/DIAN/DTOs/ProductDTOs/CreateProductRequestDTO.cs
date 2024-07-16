@@ -23,10 +23,10 @@ namespace DIAN_.DTOs.ProductDTOs
         public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Main diamond ID is required.")]
-        public int MainDiamondId { get; set; }
+        public int MainDiamondAttributeId { get; set; }
 
         [Required(ErrorMessage = "Sub diamond ID is required.")]
-        public int SubDiamondId { get; set; }
+        public int SubDiamondAttributeId { get; set; }
 
         [Required(ErrorMessage = "Labor price is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Labor price must be non-negative.")]

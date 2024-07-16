@@ -1,0 +1,19 @@
+﻿using DIAN_.DTOs.DiamondDto;
+using DIAN_.DTOs.ProductDTOs;
+using DIAN_.DTOs.SubDiamondDto;
+
+namespace DIAN_.Interfaces
+{
+    public interface IGoodsService
+    {
+        Task<int> GetMainDiamondsCount(string shape, string color, string clarity, string cut, decimal carat);
+
+        Task<ProductDTO> CreateProductAsync(CreateProductRequestDTO createProductRequestDTO);
+
+        Task<SubDiamondDto> CreateSubDiamondAsync(CreateSubDiamondRequestDto requestDto);
+
+        Task<DiamondDto> CreateMainDiamondAsync(CreateDiamondRequestDto requestDto);
+
+        Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
+    }
+}
