@@ -53,7 +53,7 @@ public partial class ApplicationDbContext : DbContext
     {
         modelBuilder.Entity<Article>(entity =>
         {
-            entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E1C3E8E55");
+            entity.HasKey(e => e.ContentId).HasName("PK__ARTICLE__2907A87E15E27602");
 
             entity.ToTable("ARTICLE");
 
@@ -76,11 +76,11 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__CATEGORY__19093A2B611B8106");
+            entity.HasKey(e => e.CategoryId).HasName("PK__CATEGORY__19093A2B6AB6ED36");
 
             entity.ToTable("CATEGORY");
 
-            entity.HasIndex(e => e.Name, "UQ__CATEGORY__737584F6193700FC").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__CATEGORY__737584F6E3E76B2E").IsUnique();
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.Name)
@@ -91,7 +91,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Collection>(entity =>
         {
-            entity.HasKey(e => e.CollectionId).HasName("PK__COLLECTI__7DE6BC24661D8D80");
+            entity.HasKey(e => e.CollectionId).HasName("PK__COLLECTI__7DE6BC24C7398B09");
 
             entity.ToTable("COLLECTION");
 
@@ -107,7 +107,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__COMPANY__2D971C4CFFF25127");
+            entity.HasKey(e => e.CompanyId).HasName("PK__COMPANY__2D971C4CCDF7A7E7");
 
             entity.ToTable("COMPANY");
 
@@ -131,7 +131,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__CUSTOMER__A4AE64B8EE208377");
+            entity.HasKey(e => e.CustomerId).HasName("PK__CUSTOMER__A4AE64B8EABDD534");
 
             entity.ToTable("CUSTOMER");
 
@@ -156,19 +156,19 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Diamond>(entity =>
         {
-            entity.HasKey(e => e.DiamondId).HasName("PK__DIAMOND__23A8E7BB36B5DC60");
+            entity.HasKey(e => e.DiamondId).HasName("PK__DIAMOND__23A8E7BB0E4FAB02");
 
             entity.ToTable("DIAMOND");
 
             entity.Property(e => e.DiamondId).HasColumnName("DiamondID");
-            entity.Property(e => e.DiamondAtrributeId).HasColumnName("DiamondAtrributeID");
+            entity.Property(e => e.MainDiamondAtrributeId).HasColumnName("MainDiamondAtrributeID");
             entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Status).HasDefaultValue(true);
 
-            entity.HasOne(d => d.DiamondAtrribute).WithMany(p => p.Diamonds)
-                .HasForeignKey(d => d.DiamondAtrributeId)
-                .HasConstraintName("FK__DIAMOND__Diamond__6477ECF3");
+            entity.HasOne(d => d.MainDiamondAtrribute).WithMany(p => p.Diamonds)
+                .HasForeignKey(d => d.MainDiamondAtrributeId)
+                .HasConstraintName("FK__DIAMOND__MainDia__6477ECF3");
 
             entity.HasOne(d => d.OrderDetail).WithMany(p => p.Diamonds)
                 .HasForeignKey(d => d.OrderDetailId)
@@ -177,7 +177,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Diamondattribute>(entity =>
         {
-            entity.HasKey(e => e.DiamondAtrributeId).HasName("PK__DIAMONDA__24B6C435ECE62295");
+            entity.HasKey(e => e.DiamondAtrributeId).HasName("PK__DIAMONDA__24B6C43530DB33E5");
 
             entity.ToTable("DIAMONDATTRIBUTE");
 
@@ -199,7 +199,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.HasKey(e => e.EmployeeId).HasName("PK__EMPLOYEE__7AD04FF1FF9E950E");
+            entity.HasKey(e => e.EmployeeId).HasName("PK__EMPLOYEE__7AD04FF13023BC6B");
 
             entity.ToTable("EMPLOYEE");
 
@@ -226,7 +226,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__NOTIFICA__20CF2E32AD6B02A0");
+            entity.HasKey(e => e.NotificationId).HasName("PK__NOTIFICA__20CF2E32793A538A");
 
             entity.ToTable("NOTIFICATION");
 
@@ -249,7 +249,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Orderdetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__ORDERDET__D3B9D30CC2A6EDF9");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__ORDERDET__D3B9D30CB54FBDFB");
 
             entity.ToTable("ORDERDETAIL");
 
@@ -278,11 +278,11 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__PRODUCT__2D10D14A263B273B");
+            entity.HasKey(e => e.ProductId).HasName("PK__PRODUCT__2D10D14A1FF4611F");
 
             entity.ToTable("PRODUCT");
 
-            entity.HasIndex(e => e.ProductCode, "UQ__PRODUCT__C2068389171EA894").IsUnique();
+            entity.HasIndex(e => e.ProductCode, "UQ__PRODUCT__C2068389D7EAE873").IsUnique();
 
             entity.Property(e => e.ProductId).HasColumnName("productID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -319,7 +319,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__PROMOTIO__52C42F2F94466633");
+            entity.HasKey(e => e.PromotionId).HasName("PK__PROMOTIO__52C42F2FB857E9AB");
 
             entity.ToTable("PROMOTION");
 
@@ -334,7 +334,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Purchaseorder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__PURCHASE__C3905BAFA09B784B");
+            entity.HasKey(e => e.OrderId).HasName("PK__PURCHASE__C3905BAFF132E7C8");
 
             entity.ToTable("PURCHASEORDER");
 
@@ -379,7 +379,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Shell>(entity =>
         {
-            entity.HasKey(e => e.ShellId).HasName("PK__SHELL__DB5C54BD4F345399");
+            entity.HasKey(e => e.ShellId).HasName("PK__SHELL__DB5C54BD95137357");
 
             entity.ToTable("SHELL");
 
@@ -400,7 +400,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Shellmaterial>(entity =>
         {
-            entity.HasKey(e => e.ShellMaterialId).HasName("PK__SHELLMAT__B375E41D3B646FB2");
+            entity.HasKey(e => e.ShellMaterialId).HasName("PK__SHELLMAT__B375E41D4A12AF5A");
 
             entity.ToTable("SHELLMATERIAL");
 
@@ -414,7 +414,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__SIZE__19093A2BC3F38B1B");
+            entity.HasKey(e => e.CategoryId).HasName("PK__SIZE__19093A2B50637F2A");
 
             entity.ToTable("SIZE");
 
@@ -433,7 +433,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Subdiamond>(entity =>
         {
-            entity.HasKey(e => e.DiamondId).HasName("PK__SUBDIAMO__23A8E7BBF057866A");
+            entity.HasKey(e => e.DiamondId).HasName("PK__SUBDIAMO__23A8E7BBBAA766A6");
 
             entity.ToTable("SUBDIAMOND");
 
@@ -449,7 +449,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Warranty>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__WARRANTY__D3B9D30C59B0FB43");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__WARRANTY__D3B9D30CE7ACCDBD");
 
             entity.ToTable("WARRANTY");
 

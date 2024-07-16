@@ -24,7 +24,7 @@ namespace DIAN_.Controllers
             }
             var subDiamond = subDiamondRequestDTO.ToSubDiamondFromCreateDTO();
             await _subDiamondRepository.CreateAsync(subDiamond);
-            return Ok(subDiamond);
+            return Ok(subDiamond.ToSubDiamondDTO());
         }
         [HttpGet]
         public async Task<IActionResult> GetAllSubDiamonds()

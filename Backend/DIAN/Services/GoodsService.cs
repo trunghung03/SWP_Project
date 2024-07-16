@@ -52,7 +52,7 @@ namespace DIAN_.Services
 
             var newDiamond = new Diamond
             {
-                DiamondAtrributeId = existingAttribute.DiamondAtrributeId,
+                MainDiamondAtrributeId = existingAttribute.DiamondAtrributeId,
                 Price = requestDto.Price,
                 Status = requestDto.Status,
                 CertificateScan = requestDto.CertificateScan

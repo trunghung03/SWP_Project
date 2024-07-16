@@ -18,7 +18,7 @@ namespace DIAN_.Controllers
 
         public DiamondController(IDiamondRepository diamondRepository)
         {
-            this._diamondRepository = diamondRepository;
+            _diamondRepository = diamondRepository;
         }
 
         [HttpGet("all")]

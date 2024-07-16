@@ -381,7 +381,7 @@
 	(90, 180, 20800.00, 1);
 
 
-	INSERT INTO DIAMOND (DiamondAtrributeID, CertificateScan, OrderDetailID, Price, Status)
+	INSERT INTO DIAMOND (MainDiamondAtrributeID, CertificateScan, OrderDetailID, Price, Status)
 	VALUES
 	(1, 'https://pixeldrain.com/u/Cert1', NULL, 3000, 1),
 	(2, 'https://pixeldrain.com/u/Cert2', NULL, 3000, 1),

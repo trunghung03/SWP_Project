@@ -9,7 +9,7 @@ public partial class Diamond
 {
     public int DiamondId { get; set; }
 
-    public int? DiamondAtrributeId { get; set; }
+    public int? MainDiamondAtrributeId { get; set; }
 
     public string CertificateScan { get; set; }
 
@@ -19,7 +19,7 @@ public partial class Diamond
 
     public bool Status { get; set; }
 
-    public virtual Diamondattribute DiamondAtrribute { get; set; }
+    public virtual Diamondattribute MainDiamondAtrribute { get; set; }
 
     public virtual Orderdetail OrderDetail { get; set; }
 }

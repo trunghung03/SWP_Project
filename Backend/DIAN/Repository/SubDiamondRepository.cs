@@ -35,6 +35,7 @@ namespace DIAN_.Repository
         {
             var subDiamond = await _context.Subdiamonds
                  .Where(s => s.Status)
+                 .Include(p => p.DiamondAtrribute)
                  .ToListAsync();
             return subDiamond;
         }
@@ -43,6 +44,7 @@ namespace DIAN_.Repository
         {
             var subDiamond = await _context.Subdiamonds
               .Where(s => s.Status && s.DiamondId == id)
+              .Include(p => p.DiamondAtrribute)
               .FirstOrDefaultAsync();
             if (subDiamond == null)
             {
@@ -58,8 +60,6 @@ namespace DIAN_.Repository
             {
                 return null;
             }
-
-            subDiamond.DiamondAtrributeId = subdiamond.DiamondAtrributeId;
             subDiamond.Price = subdiamond.Price;
             subDiamond.AmountAvailable = subdiamond.AmountAvailable;
 

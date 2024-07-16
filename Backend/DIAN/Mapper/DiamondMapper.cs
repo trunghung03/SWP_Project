@@ -11,11 +11,11 @@ namespace DIAN_.Mapper
             return new DiamondDto
             {
                 DiamondId = diamond.DiamondId,
-                Shape = diamond.DiamondAtrribute?.Shape ?? "Not Available", 
-                Color = diamond.DiamondAtrribute?.Color ?? "Not Available",
-                Clarity = diamond.DiamondAtrribute?.Clarity ?? "Not Available", 
-                Cut = diamond.DiamondAtrribute?.Cut ?? "Not Available",
-                Carat = diamond.DiamondAtrribute?.Carat ?? 0,
+                Shape = diamond.MainDiamondAtrribute?.Shape ?? "Not Available", 
+                Color = diamond.MainDiamondAtrribute?.Color ?? "Not Available",
+                Clarity = diamond.MainDiamondAtrribute?.Clarity ?? "Not Available", 
+                Cut = diamond.MainDiamondAtrribute?.Cut ?? "Not Available",
+                Carat = diamond.MainDiamondAtrribute?.Carat ?? 0,
                 Price = diamond.Price,
                 CertificateScan = diamond.CertificateScan,
             };
@@ -25,7 +25,7 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
-                DiamondAtrribute = new Diamondattribute
+                MainDiamondAtrribute = new Diamondattribute
                 {
                     Shape = diamondRequestDTO.Shape,
                     Color = diamondRequestDTO.Color,

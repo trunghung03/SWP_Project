@@ -96,15 +96,24 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var productModel = _goodsService.CreateProductAsync(productDTO);
+                var productModel = await _goodsService.CreateProductAsync(productDTO); // This should return a ProductDTO
 
-                return CreatedAtAction(nameof(GetById), new { id = productModel.Id }, productModel);
+                // Assuming productModel already is a ProductDTO and has an Id property
+                if (productModel == null || productModel.ProductId == 0) // Adjust the condition based on how you identify a valid product
+                {
+                    return BadRequest("Product creation failed.");
+                }
+
+                // Since productModel is already a ProductDTO, no need to convert
+                return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel);
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)

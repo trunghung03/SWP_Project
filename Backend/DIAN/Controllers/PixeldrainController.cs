@@ -81,14 +81,14 @@ namespace DIAN_.Controllers
             }
 
             // Check if DiamondAttribute is null and attempt to fetch it using its ID
-            if (diamond.DiamondAtrribute == null)
+            if (diamond.MainDiamondAtrribute == null)
             {
                 // Assuming GetDiamondAttributeByIdAsync is a method in your repository to fetch DiamondAttribute by ID
-                diamond.DiamondAtrribute = await _diamondRepository.GetDiamondAttributeByIdAsync(id);
+                diamond.MainDiamondAtrribute = await _diamondRepository.GetDiamondAttributeByIdAsync(id);
             }
 
             // Proceed only if DiamondAttribute is not null
-            if (diamond.DiamondAtrribute == null)
+            if (diamond.MainDiamondAtrribute == null)
             {
                 return NotFound("Diamond attribute not found.");
             }
@@ -99,11 +99,11 @@ namespace DIAN_.Controllers
 
             // Replace placeholders in the HTML template with actual diamond data
             htmlContent = htmlContent.Replace("{DiamondId}", diamond.DiamondId.ToString()) //take main diamond attribute
-                                     .Replace("{Shape}", diamond.DiamondAtrribute.Shape)
-                                     .Replace("{Color}", diamond.DiamondAtrribute.Color)
-                                     .Replace("{Clarity}", diamond.DiamondAtrribute.Clarity)
-                                     .Replace("{Carat}", diamond.DiamondAtrribute.Carat.ToString() ?? "N/A")
-                                     .Replace("{Cut}", diamond.DiamondAtrribute.Cut);
+                                     .Replace("{Shape}", diamond.MainDiamondAtrribute.Shape)
+                                     .Replace("{Color}", diamond.MainDiamondAtrribute.Color)
+                                     .Replace("{Clarity}", diamond.MainDiamondAtrribute.Clarity)
+                                     .Replace("{Carat}", diamond.MainDiamondAtrribute.Carat.ToString() ?? "N/A")
+                                     .Replace("{Cut}", diamond.MainDiamondAtrribute.Cut);
 
             // Define the output PDF file path
             string outputPdfPath = "certificate.pdf";
