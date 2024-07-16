@@ -32,6 +32,24 @@ namespace DIAN_.Services
             _emailService = emailService;
         }
 
+        public bool SendEmailForVnPay(int orderId)
+        {
+            var orderDto = _purchaseOrderRepository.GetPurchasrOrderById(orderId).Result;
+            if (orderDto.OrderStatus == "Paid" && orderDto is not null)
+            {
+                var customerEmail = _customerRepository.GetCustomerEmail(orderDto.UserId).Result;
+                var emailBody = _emailService.GetEmailConfirmBody(orderDto, "purchaseOrderEmail.html").Result;
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = customerEmail,
+                    Subject = "Confirm your order",
+                    Body = emailBody
+                };
+                _emailService.SendEmailAsync(mailRequest);
+            }
+            return true;
+        }
+
         public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
@@ -83,14 +101,17 @@ namespace DIAN_.Services
             orderModel.DeliveryStaff = randomDeliveryStaff.EmployeeId;
 
             var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
-            var emailBody = _emailService.GetEmailConfirmBody(orderModel, "orderConfirm.html").Result;
-            var mailRequest = new MailRequest
+            if (orderToDto.PaymentMethod == "Cash" || orderToDto.PaymentMethod == "Bank Transfer")
             {
-                ToEmail = customerEmail,
-                Subject = "Confirm your order",
-                Body = emailBody
-            };
-            _emailService.SendEmailAsync(mailRequest);
+                var emailBody = _emailService.GetEmailConfirmBody(orderModel, "orderConfirm.html").Result;
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = customerEmail,
+                    Subject = "Confirm your order",
+                    Body = emailBody
+                };
+                _emailService.SendEmailAsync(mailRequest);
+            }
             return orderToDto.ToPurchaseOrderDTO();
         }
     }

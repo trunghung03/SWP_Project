@@ -9,5 +9,6 @@ namespace DIAN_.Interfaces
     public interface IOrderService
     {
         PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode);
+        bool SendEmailForVnPay(int orderId);
     }
 }
