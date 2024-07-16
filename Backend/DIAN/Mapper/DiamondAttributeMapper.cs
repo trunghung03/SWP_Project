@@ -29,17 +29,17 @@ namespace DIAN_.Mapper
         //    };
         //}
 
-        //public static DiamondAttributeDto ToDiamondAttributeDto(this DiamondAttribute diamondAttribute)
-        //{
-        //    return new DiamondAttributeDto
-        //    {
-        //        DiamondAttributeId = diamondAttribute.DiamondAttributeId,
-        //        Shape = diamondAttribute.Shape,
-        //        Color = diamondAttribute.Color,
-        //        Clarity = diamondAttribute.Clarity,
-        //        Cut = diamondAttribute.Cut,
-        //        Carat = diamondAttribute.Carat
-        //    };
-        //}
+        public static DiamondAttributeDto ToDiamondAttributeDto(this Diamondattribute diamondAttribute)
+        {
+            return new DiamondAttributeDto
+            {
+                DiamondAttributeId = diamondAttribute.DiamondAtrributeId,
+                Shape = diamondAttribute.Shape,
+                Color = diamondAttribute.Color,
+                Clarity = diamondAttribute.Clarity,
+                Cut = diamondAttribute.Cut,
+                Carat = diamondAttribute.Carat
+            };
+        }
     }
 }

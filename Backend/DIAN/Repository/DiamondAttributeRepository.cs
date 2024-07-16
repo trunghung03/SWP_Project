@@ -34,11 +34,6 @@ namespace DIAN_.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Diamondattribute> GetDiamondAttributeByIdAsync(int diamondAttributeId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Diamondattribute> GetDiamondAttributeIdByDetailsAsync(string shape, string color, string clarity, string cut, decimal carat)
         {
             var diamondAttribute = _context.Diamondattributes
@@ -55,7 +50,16 @@ namespace DIAN_.Repository
         {
             throw new NotImplementedException();
         }
-
+        public async Task<Diamondattribute> GetDiamondAttributesAsync(int diamondAttributeId)
+        {
+            var diamondAttribute = _context.Diamondattributes
+                .FirstOrDefault(x => x.DiamondAtrributeId == diamondAttributeId);
+            if (diamondAttribute == null)
+            {
+                return null;
+            }
+            return diamondAttribute;
+        }
         public Task<Diamondattribute> UpdateDiamondAttributeAsync(Diamondattribute diamondAttribute)
         {
             throw new NotImplementedException();
