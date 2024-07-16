@@ -12,5 +12,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 # Copy the published application from the 'publish' stage to the final image
 COPY --from=publish /app/publish .
+COPY . /app
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "DIAN_.dll"]
