@@ -38,9 +38,9 @@ namespace DIAN_.Mapper
                 ProductCode = product.ProductCode,
                 Name = product.Name,
                 Price = product.Price,
-                MainDiamondId = product.MainDiamondId ?? 0,
-                SubDiamondId = product.SubDiamondId ?? 0,
-                LaborPrice = product.LaborCost ?? 0, // Handle nullable types
+                MainDiamondAttributeId = product.MainDiamondAtrributeId ?? 0,
+                SubDiamondAttributeId = product.SubDiamondAtrributeId ?? 0,
+                LaborPrice = product.LaborCost ?? 0,
                 Description = product.Description,
                 ImageLinkList = product.ImageLinkList,
                 MainDiamondAmount = product.MainDiamondAmount ?? 0,
@@ -51,25 +51,27 @@ namespace DIAN_.Mapper
             };
         }
 
-        public static ProductListDTO ToProductListDTO(this Product product, Diamond diamond)
+        public static ProductListDTO ToProductListDTO(this Product product)
         {
-            var FirstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
+            var firstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
             return new ProductListDTO
             {
                 ProductId = product.ProductId,
                 Name = product.Name,
                 Price = product.Price,
                 CategoryID = product.CategoryId,
-                ImageLinkList = FirstImgLink,
+                ImageLinkList = firstImgLink,
                 CollectionId = product.CollectionId ?? 0,
-                Shape = diamond?.Shape ?? string.Empty,
-                Carat = diamond?.Carat ?? 0,
-                Color = diamond?.Color ?? string.Empty,
-                Clarity = diamond?.Clarity ?? string.Empty,
+                Shape = product.MainDiamondAtrribute?.Shape ?? "Not Available",
+                Carat = product.MainDiamondAtrribute?.Carat ?? 0,
+                Color = product.MainDiamondAtrribute?.Color ?? "Not Available",
+                Clarity = product.MainDiamondAtrribute?.Clarity ?? "Not Available",
             };
         }
 
-        public static ProductDetailDTO ToProductDetailDTO(this Product product, Diamond diamond, List<string> subDiamondColors)
+
+
+        public static ProductDetailDTO ToProductDetailDTO(this Product product, List<string> subDiamondColors)
         {
             var sizes = new List<decimal>();
             if (product.Category != null && product.Category.Size != null)
@@ -90,12 +92,13 @@ namespace DIAN_.Mapper
                 Image = product.ImageLinkList,
                 ProductCode = product.ProductCode,
                 Description = product.Description,
-                Carat = diamond?.Carat ?? 0,
+                Carat = product.MainDiamondAtrribute?.Carat ?? 0,
                 SubDiamondColors = subDiamondColors,
                 Sizes = sizes,
                 CategoryId = product.CategoryId,
             };
         }
+
 
         public static Product ToProductFromCreateDTO(this CreateProductRequestDTO productRequestDTO)
         {
@@ -105,8 +108,8 @@ namespace DIAN_.Mapper
                 Name = productRequestDTO.Name,
                 Price = productRequestDTO.Price,
                 Description = productRequestDTO.Description,
-                MainDiamondId = productRequestDTO.MainDiamondId,
-                SubDiamondId = productRequestDTO.SubDiamondId,
+                MainDiamondAtrributeId = productRequestDTO.MainDiamondAttributeId,
+                SubDiamondAtrributeId = productRequestDTO.SubDiamondAttributeId,
                 LaborCost = productRequestDTO.LaborPrice,
                 ImageLinkList = productRequestDTO.imageLinkList,
                 MainDiamondAmount = productRequestDTO.MainDiamondAmount,

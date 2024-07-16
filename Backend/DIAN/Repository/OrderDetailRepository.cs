@@ -75,19 +75,6 @@ namespace DIAN_.Repository
             return updateDetail;
         }
 
-        public async Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail orderdetail, int id)
-        {
-            var existingOrderDetail = await _context.Orderdetails.FirstOrDefaultAsync(x => x.OrderDetailId == id);
-            if (existingOrderDetail != null)
-            {
-                existingOrderDetail.CertificateScan = orderdetail.CertificateScan;
-                await _context.SaveChangesAsync();
-                return existingOrderDetail;
-            }
-            throw new KeyNotFoundException("Order detail does not exist");
-
-        }
-
         public async Task<OrderBillDto?> ViewOrderBillAsync(int orderId)
         {
             var orderBill = await _context.Purchaseorders
@@ -97,7 +84,7 @@ namespace DIAN_.Repository
                     combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
                     (combined, p) => new { combined.po, combined.od, p })
                 .SelectMany(
-                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondId).DefaultIfEmpty(),
+                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondAtrributeId).DefaultIfEmpty(),
                     (combined, d) => new { combined.po, combined.od, combined.p, d })
                 .GroupBy(x => x.po.OrderId)
                 .Select(g => new OrderBillDto

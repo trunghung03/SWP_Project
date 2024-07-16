@@ -9,8 +9,8 @@
         public string ProductName { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-        public int? MainDiamondID { get; set; }
-        public int? SubDiamondID { get; set; }
+        public int? MainDiamondAttributeId { get; set; }
+        public int? SubDiamondAttributeId { get; set; }
         public decimal? LaborCost { get; set; }
         public string ImageLinkList { get; set; }
         public int? SubDiamondAmount { get; set; }

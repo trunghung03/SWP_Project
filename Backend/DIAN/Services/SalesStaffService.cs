@@ -49,56 +49,56 @@ namespace DIAN_.Services
             _emailService = emailService;
             _customerRepository = customerRepository;
         }
-        public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId)
-        {
-            if (status.Equals("Delivering", StringComparison.OrdinalIgnoreCase))
-            {
-                var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
-                if (orderDetails == null || !orderDetails.Any())
-                {
-                    return false;
-                }
+        //public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId)
+        //{
+        //    if (status.Equals("Delivering", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
+        //        if (orderDetails == null || !orderDetails.Any())
+        //        {
+        //            return false;
+        //        }
 
-                foreach (var orderDetail in orderDetails)
-                {
-                    var product = await _productRepository.GetByIdAsync(orderDetail.ProductId);
-                    if (product == null)
-                    {
-                        return false;
-                    }
-                    var shell = await _shellRepository.GetShellByIdAsync(orderDetail.ProductId);
-                    if (shell != null)
-                    {
-                        var updateShellStockDto = new UpdateShellStock
-                        {
-                            Quantity = shell.AmountAvailable - 1
-                        };
-                        var updatedShell = updateShellStockDto.ToShellFromUpdateStockDto(shell.ShellId);
-                        await _shellRepository.UpdateShellStockAsync(updatedShell, shell.ShellId);
-                    }
+        //        foreach (var orderDetail in orderDetails)
+        //        {
+        //            var product = await _productRepository.GetByIdAsync(orderDetail.ProductId);
+        //            if (product == null)
+        //            {
+        //                return false;
+        //            }
+        //            var shell = await _shellRepository.GetShellByIdAsync(orderDetail.ProductId);
+        //            if (shell != null)
+        //            {
+        //                var updateShellStockDto = new UpdateShellStock
+        //                {
+        //                    Quantity = shell.AmountAvailable - 1
+        //                };
+        //                var updatedShell = updateShellStockDto.ToShellFromUpdateStockDto(shell.ShellId);
+        //                await _shellRepository.UpdateShellStockAsync(updatedShell, shell.ShellId);
+        //            }
 
-                    if (product.MainDiamondId != null || product.SubDiamondId != null)
-                    {
-                        var mainDiamondAmount = product.MainDiamondAmount ?? 0;
-                        var subDiamondAmount = product.SubDiamondAmount ?? 0;
-                        var totalDiamondAmount = mainDiamondAmount + subDiamondAmount;
+        //            if (product.MainDiamondId != null || product.SubDiamondId != null)
+        //            {
+        //                var mainDiamondAmount = product.MainDiamondAmount ?? 0;
+        //                var subDiamondAmount = product.SubDiamondAmount ?? 0;
+        //                var totalDiamondAmount = mainDiamondAmount + subDiamondAmount;
 
-                        var diamond = await _diamondRepository.GetDiamondByIdAsync(orderDetail.ProductId);
-                        if (diamond != null)
-                        {
-                            var updateDiamondStockDto = new UpdateDiamondStockDto
-                            {
-                                AmountAvailable = diamond.AmountAvailable - totalDiamondAmount
-                            };
-                            var updatedDiamond = updateDiamondStockDto.ToDiamondFromUpdateAmountAvailable(diamond.DiamondId);
-                            await _diamondRepository.UpdateAmountAvailable(updatedDiamond, diamond.DiamondId);
-                        }
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
+        //                var diamond = await _diamondRepository.GetDiamondByIdAsync(orderDetail.ProductId);
+        //                if (diamond != null)
+        //                {
+        //                    var updateDiamondStockDto = new UpdateDiamondStockDto
+        //                    {
+        //                        AmountAvailable = diamond.AmountAvailable - totalDiamondAmount
+        //                    };
+        //                    var updatedDiamond = updateDiamondStockDto.ToDiamondFromUpdateAmountAvailable(diamond.DiamondId);
+        //                    await _diamondRepository.UpdateAmountAvailable(updatedDiamond, diamond.DiamondId);
+        //                }
+        //            }
+        //        }
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         public async Task<Purchaseorder> UpdateOrderStatus(string status, int orderId)
         {

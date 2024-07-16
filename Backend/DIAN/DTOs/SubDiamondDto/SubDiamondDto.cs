@@ -1,8 +1,10 @@
-﻿namespace DIAN_.DTOs.DiamondDto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DIAN_.DTOs.SubDiamondDto
 {
-    public class DiamondDto
+    public class SubDiamondDto
     {
-        public int DiamondId { get; set; }
+        public int SubDiamondId { get; set; }
 
         public string Shape { get; set; } = string.Empty;
 
@@ -12,12 +14,12 @@
 
         public string Cut { get; set; } = string.Empty;
 
-        public decimal Carat { get; set; }
+        public decimal? Carat { get; set; }
 
         public decimal Price { get; set; }
 
-        public string CertificateScan { get; set; } = string.Empty;
+        public int? AmountAvailable { get; set; }
 
-
+        public bool Status { get; set; }
     }
 }

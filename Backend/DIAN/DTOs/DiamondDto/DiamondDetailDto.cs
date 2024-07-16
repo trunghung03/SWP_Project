@@ -1,5 +1,6 @@
 ﻿namespace DIAN_.DTOs.DiamondDto
 {
+    // for find diamond by order detail id
     public class DiamondDetailDto
     {
         public int DiamondId { get; set; }
@@ -16,8 +17,9 @@
 
         public decimal Cost { get; set; }
 
-        //public string CertificateScan { get; set; } = string.Empty;
+        public string CertificateScan { get; set; } = string.Empty;
 
+        public int OrderDetailId { get; set; }
 
     }
 }

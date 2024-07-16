@@ -23,18 +23,18 @@ namespace DIAN_.Repository
             _distributedCache = distributedCache;
             _logger = logger;
         }
-        public async Task<Product> CreateAsync(Product product)
+        public async Task<Product> CreateAsync(Product product) //not plus shell yet
         {
-            var mainDiamondPrice = product.MainDiamondId.HasValue
+            var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
                ? await _context.Diamonds
-                   .Where(d => d.DiamondId == product.MainDiamondId.Value)
+                   .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
                    .Select(d => d.Price)
                    .FirstOrDefaultAsync()
                : 0;
 
-            var subDiamondPrice = product.SubDiamondId.HasValue
+            var subDiamondPrice = product.SubDiamondAtrributeId.HasValue
                 ? await _context.Diamonds
-                    .Where(d => d.DiamondId == product.SubDiamondId.Value)
+                    .Where(d => d.DiamondId == product.SubDiamondAtrributeId.Value)
                     .Select(d => d.Price)
                     .FirstOrDefaultAsync()
                 : 0;
@@ -164,7 +164,7 @@ namespace DIAN_.Repository
         {
             var products = await _context.Products
                                   .Where(p => p.Status && p.Name.Contains(name))
-                                  .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                  .Include(p => p.MainDiamondAtrribute) // Include the MainDiamond to get the shape
                                   .ToListAsync();
             return products;
         }
@@ -201,7 +201,7 @@ namespace DIAN_.Repository
         public async Task<Product> GetDetailAsync(int id)
         {
             var product = await _context.Products
-                                        .Include(p => p.MainDiamond)
+                                        .Include(p => p.MainDiamondAtrribute)
                                         .Include(p => p.Category).ThenInclude(c => c.Size)
                                         .Where(p => p.Status && p.ProductId == id)
                                         .FirstOrDefaultAsync();
@@ -213,16 +213,16 @@ namespace DIAN_.Repository
             return product;
         }
 
-
-        public async Task<List<Product>> GetListAsync()
+ public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
-                                 .Include(p => p.MainDiamond) // Include the MainDiamond to get the shape
+                                 .Include(p => p.MainDiamondAtrribute) // Include the MainDiamond to get the shape
                                  .ToListAsync();
 
             return products;
         }
 
+       
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
         {
@@ -244,10 +244,12 @@ namespace DIAN_.Repository
         public async Task<IEnumerable<Product>> GetLast8ProductsAsync()
         {
             return await _context.Products
-                                 .OrderByDescending(p => p.ProductId) // Order by ProductId to get the latest products
+                                 .Include(p => p.MainDiamondAtrribute) 
+                                 .OrderByDescending(p => p.ProductId) 
                                  .Take(8)
                                  .ToListAsync();
         }
+
 
         public async Task<ManageProductDetailDto> GetProductDetail(int productId)
         {
@@ -266,8 +268,8 @@ namespace DIAN_.Repository
                               ProductName = product.Name,
                               Price = product.Price,
                               Description = product.Description,
-                              MainDiamondID = product.MainDiamondId,
-                              SubDiamondID = product.SubDiamondId,
+                              MainDiamondAttributeId = product.MainDiamondAtrributeId,
+                              SubDiamondAttributeId = product.SubDiamondAtrributeId,
                               LaborCost = product.LaborCost,
                               ImageLinkList = product.ImageLinkList,
                               SubDiamondAmount = product.SubDiamondAmount,
@@ -277,6 +279,15 @@ namespace DIAN_.Repository
                           }).FirstOrDefault();
 
             return result;
+        }
+        public async Task<bool> ExistsMainDiamondAttributeAsync(int mainDiamondAttributeId)
+        {
+            return await _context.Diamonds.AnyAsync(d => d.DiamondId == mainDiamondAttributeId);
+        }
+
+        public async Task<bool> ExistsSubDiamondAttributeAsync(int subDiamondAttributeId)
+        {
+            return await _context.Subdiamonds.AnyAsync(sd => sd.DiamondId == subDiamondAttributeId);
         }
     }
 }
