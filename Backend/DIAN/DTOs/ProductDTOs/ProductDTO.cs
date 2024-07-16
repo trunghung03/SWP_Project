@@ -23,7 +23,7 @@
 
         public int? MainDiamondAmount { get; set; }
 
-        //public decimal? ShellAmount { get; set; }
+        public decimal? Stock { get; set; } //amount available of shell
         
         public int? CollectionId { get; set; }
 

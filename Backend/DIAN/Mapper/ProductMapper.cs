@@ -1,5 +1,7 @@
 ﻿using DIAN_.DTOs.ProductDTOs;
 using DIAN_.Models;
+using System.Linq;
+
 
 namespace DIAN_.Mapper
 {
@@ -32,6 +34,12 @@ namespace DIAN_.Mapper
                     sizes.Add(size);
                 }
             }
+            int stock = 0;
+            if (product.Shells != null && product.Shells.Any())
+            {
+                stock = product.Shells.Sum(shell => shell.AmountAvailable);
+            }
+
             return new ProductDTO
             {
                 ProductId = product.ProductId,
@@ -48,8 +56,10 @@ namespace DIAN_.Mapper
                 CollectionId = product.CollectionId,
                 Sizes = sizes,
                 CategoryId = product.CategoryId,
+                Stock = stock // Populate the Stock field
             };
         }
+
 
         public static ProductListDTO ToProductListDTO(this Product product)
         {

@@ -10,6 +10,10 @@ import {
   deleteDiamondById,
   updateDiamondById,
   getDiamondByShape,
+  getAllSubDiamond,
+  getSubDiamondDetail,
+  deleteSubDiamondById,
+  updateSubDiamondById,
 } from "../../../services/ManagerService/ManagerDiamondService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -23,18 +27,23 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Box from '@mui/material/Box';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import DiamondIcon from '@mui/icons-material/Diamond';
+import SubDiamondIcon from '@mui/icons-material/Grain';
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
-
   const [diamondList, setDiamondList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedDiamond, setEditedDiamond] = useState({});
   const [originalDiamond, setOriginalDiamond] = useState({});
-  const [isSearch , setIsSearch] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   const [pagination, setPagination] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [value, setValue] = useState(0); // For BottomNavigation
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -49,15 +58,14 @@ const ManagerDiamondList = () => {
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
 
-  const fetchData = async (page) => {
+  const fetchData = async (page, type = "main") => {
     try {
-      const response = await ShowAllDiamond(page);
+      const response = type === "main" ? await ShowAllDiamond(page) : await getAllSubDiamond(page);
       setDiamondList(response.data);
       setPagination(response.pagination);
     } catch (error) {
@@ -66,49 +74,34 @@ const ManagerDiamondList = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]);
+    fetchData(currentPage, value === 0 ? "main" : "sub");
+  }, [currentPage, value]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   const handleSearchKeyPress = async (e) => {
-    const isInteger = (value) => {
-      return /^-?\d+$/.test(value);
-    };
+    const isInteger = (value) => /^-?\d+$/.test(value);
     if (e.key === "Enter") {
-      if (isInteger(searchQuery.trim())) {
-        setIsSearch(true);
-        try {
-          const response = await getDiamondDetail(searchQuery.trim());
-          setDiamondList([response]);
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching diamond:", error);
-          swal("Diamond not found!", "Please try another one.", "error");
-        }
-      } else if (searchQuery.trim()) {
-        setIsSearch(true);
-        try {
-          const response = await getDiamondByShape(searchQuery.trim());
-          if (Array.isArray(response)) {
-            setDiamondList(response);
-          } else if (response) {
-            setDiamondList([response]);
-          } else {
-            setDiamondList([]);
-          }
-
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching diamond:", error);
-          swal("Diamond not found!", "Please try another one.", "error");
-        }
-      } else {
-        setIsSearch(false);
-        fetchData(1);
+      setIsSearch(true);
+      try {
+        const response = isInteger(searchQuery.trim())
+          ? value === 0
+            ? await getDiamondDetail(searchQuery.trim())
+            : await getSubDiamondDetail(searchQuery.trim())
+          : value === 0
+            ? await getDiamondByShape(searchQuery.trim())
+            : await getSubDiamondDetail(searchQuery.trim());
+        setDiamondList(Array.isArray(response) ? response : [response]);
+        setCurrentPage(1);
+      } catch (error) {
+        console.error("Error fetching diamond:", error);
+        swal("Diamond not found!", "Please try another one.", "error");
       }
+    } else if (!searchQuery.trim()) {
+      setIsSearch(false);
+      fetchData(1, value === 0 ? "main" : "sub");
     }
   };
 
@@ -122,36 +115,23 @@ const ManagerDiamondList = () => {
     }).then(async (willDelete) => {
       if (willDelete) {
         try {
-          await deleteDiamondById(diamondId);
-          fetchData(currentPage);
-          swal(
-            "Deleted successfully!",
-            "The diamond has been deleted.",
-            "success"
-          );
+          value === 0 ? await deleteDiamondById(diamondId) : await deleteSubDiamondById(diamondId);
+          fetchData(currentPage, value === 0 ? "main" : "sub");
+          swal("Deleted successfully!", "The diamond has been deleted.", "success");
         } catch (error) {
           console.error("Error deleting diamond:", error);
-          swal(
-            "Something went wrong!",
-            "Failed to delete the diamond. Please try again.",
-            "error"
-          );
+          swal("Something went wrong!", "Failed to delete the diamond. Please try again.", "error");
         }
       }
     });
   };
 
-  const handleBack = async () =>{
-    try {
-      const response = await ShowAllDiamond();
-      setSearchQuery("");
-      setDiamondList(response.data);
-      setPagination(response.pagination);
-      setIsSearch(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const handleBack = async () => {
+    fetchData(1, value === 0 ? "main" : "sub");
+    setSearchQuery("");
+    setIsSearch(false);
   }
+
   const handleEdit = (diamond) => {
     setEditMode(true);
     setEditedDiamond(diamond);
@@ -164,16 +144,7 @@ const ManagerDiamondList = () => {
   };
 
   const handleUpdate = async () => {
-    const requiredFields = [
-      "shape",
-      "color",
-      "clarity",
-      "cut",
-      "carat",
-      "price",
-      // "certificateScan",
-      "amountAvailable",
-    ];
+    const requiredFields = ["shape", "color", "clarity", "cut", "carat", "price", "amountAvailable"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedDiamond[field]) {
@@ -186,8 +157,7 @@ const ManagerDiamondList = () => {
       }
     }
 
-    const isEqual =
-      JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
+    const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
@@ -196,29 +166,15 @@ const ManagerDiamondList = () => {
     const diamondToUpdate = { ...editedDiamond, status: true };
 
     try {
-      console.log("Sending update request with data:", diamondToUpdate);
-      const response = await updateDiamondById(
-        diamondToUpdate.diamondId,
-        diamondToUpdate
-      );
-      console.log("Update response:", response.data);
-      fetchData(currentPage);
+      value === 0
+        ? await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate)
+        : await updateSubDiamondById(diamondToUpdate.subDiamondId, diamondToUpdate);
+      fetchData(currentPage, value === 0 ? "main" : "sub");
       setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The diamond information has been updated.",
-        "success"
-      );
+      swal("Updated successfully!", "The diamond information has been updated.", "success");
     } catch (error) {
-      console.error(
-        "Error updating diamond:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
+      console.error("Error updating diamond:", error);
+      swal("Something went wrong!", "Failed to update. Please try again.", "error");
     }
   };
 
@@ -226,11 +182,7 @@ const ManagerDiamondList = () => {
     const pages = [];
     const totalPages = pagination.totalPages;
     const currentPage = pagination.currentPage;
-  
-    // Ensure totalPages and currentPage are valid
     if (totalPages <= 1) return null;
-  
-    // Always show the first page
     pages.push(
       <button
         key={1}
@@ -240,14 +192,11 @@ const ManagerDiamondList = () => {
         1
       </button>
     );
-  
     if (currentPage > 3) {
       pages.push(<span key="start-ellipsis">...</span>);
     }
-  
     const startPage = Math.max(2, currentPage - 1);
     const endPage = Math.min(totalPages - 1, currentPage + 1);
-  
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <button
@@ -259,12 +208,9 @@ const ManagerDiamondList = () => {
         </button>
       );
     }
-  
     if (currentPage < totalPages - 2) {
       pages.push(<span key="end-ellipsis">...</span>);
     }
-  
-    // Always show the last page
     pages.push(
       <button
         key={totalPages}
@@ -274,7 +220,6 @@ const ManagerDiamondList = () => {
         {totalPages}
       </button>
     );
-  
     return (
       <div className="manager_manage_diamond_pagination">
         <button
@@ -293,8 +238,6 @@ const ManagerDiamondList = () => {
       </div>
     );
   };
-  
-  
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -316,15 +259,30 @@ const ManagerDiamondList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3>List Of Diamonds</h3>
+        <h3>List Of {value === 0 ? "Diamonds" : "Sub-Diamonds"}</h3>
         <div className="manager_manage_diamond_create_button_section">
           <button
             className="manager_manage_diamond_create_button"
-            onClick={() => navigate("/manager-add-diamond")}
+            onClick={() => navigate(value === 0 ? "/manager-add-diamond" : "/manager-add-subdiamond")}
           >
-            Add new diamond
+            Add new {value === 0 ? "diamond" : "sub-diamond"}
           </button>
           {renderPagination()}
+        </div>
+        <div className="manager_manage_diamond_navigation">
+          <Box sx={{ width: 500 }}>
+            <BottomNavigation
+              showLabels
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+                fetchData(1, newValue === 0 ? "main" : "sub");
+              }}
+            >
+              <BottomNavigationAction label="Diamonds" icon={<DiamondIcon />} />
+              <BottomNavigationAction label="Sub-Diamonds" icon={<SubDiamondIcon />} />
+            </BottomNavigation>
+          </Box>
         </div>
 
         {/* Table diamond list */}
@@ -340,17 +298,20 @@ const ManagerDiamondList = () => {
                   <StyledTableCell align="center">Carat</StyledTableCell>
                   <StyledTableCell align="center">Cut</StyledTableCell>
                   <StyledTableCell align="center">Price</StyledTableCell>
-                  <StyledTableCell align="center">Quantity</StyledTableCell>
-                  {/* <StyledTableCell align="center">Certificate</StyledTableCell> */}
+                  {value === 0 ? (
+                    <StyledTableCell align="center">Certificate</StyledTableCell>
+                  ) : (
+                    <StyledTableCell align="center">Quantity</StyledTableCell>
+                  )}
                   <StyledTableCell align="center">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {diamondList.length > 0 ? (
                   diamondList.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.diamondId}>
+                    <TableRow className="manager_manage_table_body_row" key={item.diamondId || item.subDiamondId}>
                       <TableCell align="center">
-                        {item.diamondId}
+                        {item.diamondId || item.subDiamondId}
                       </TableCell>
                       <TableCell align="center">
                         {item.shape}
@@ -370,26 +331,29 @@ const ManagerDiamondList = () => {
                       <TableCell align="center">
                         ${item.price}
                       </TableCell>
-                      <TableCell align="center">
-                        {item.amountAvailable}
-                      </TableCell>
-                      {/* <TableCell align="center">
-                        {item.certificateScan ? (
-                          <img
-                            src={item.certificateScan}
-                            alt="Certificate"
-                            style={{ width: "60px", height: "auto" }}
-                          />
-                        ) : (
-                          "No certificate"
-                        )}
-                      </TableCell> */}
+                      {value === 0 ? (
+                        <TableCell align="center">
+                          {item.certificateScan ? (
+                            <img
+                              src={item.certificateScan}
+                              alt="Certificate"
+                              style={{ width: "60px", height: "auto" }}
+                            />
+                          ) : (
+                            "No certificate"
+                          )}
+                        </TableCell>
+                      ) : (
+                        <TableCell align="center">
+                          {item.amountAvailable}
+                        </TableCell>
+                      )}
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon />
                         </IconButton>
                         <IconButton
-                          onClick={() => handleDelete(item.diamondId)}
+                          onClick={() => handleDelete(item.diamondId || item.subDiamondId)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -399,7 +363,7 @@ const ManagerDiamondList = () => {
                 ) : (
                   <StyledTableRow>
                     <StyledTableCell colSpan={9} align="center">
-                      No diamond found
+                      No {value === 0 ? "diamond" : "sub-diamond"} found
                     </StyledTableCell>
                   </StyledTableRow>
                 )}
@@ -407,25 +371,24 @@ const ManagerDiamondList = () => {
             </Table>
           </TableContainer>{isSearch && (
             <button className="btn btn-secondary mt-3" onClick={handleBack}>
-              Back to show all diamonds
+              Back to show all {value === 0 ? "diamonds" : "sub-diamonds"}
             </button>
           )}
-
         </div>
       </div>
 
       {/* Update modal */}
       {editMode && (
-         <div
-         className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
-         onClick={() => setEditMode(false)}
-       >
+        <div
+          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          onClick={() => setEditMode(false)}
+        >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Diamond Information</h4>
+              <h4>Edit {value === 0 ? "Diamond" : "Sub-Diamond"} Information</h4>
               <div className="manager_manage_diamond_form_group">
                 <label>Shape</label>
                 <input
@@ -482,15 +445,31 @@ const ManagerDiamondList = () => {
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Quantity</label>
-                <input
-                  type="text"
-                  name="amountAvailable"
-                  value={editedDiamond.amountAvailable}
-                  onChange={handleChange}
-                  maxLength={10}
-                  required
-                />
+                {value === 0 ? (
+                  <>
+                    <label>Certificate</label>
+                    <input
+                      type="text"
+                      name="certificateScan"
+                      value={editedDiamond.certificateScan}
+                      onChange={handleChange}
+                      maxLength={255}
+                      required
+                    />
+                  </>
+                ) : (
+                  <>
+                    <label>Quantity</label>
+                    <input
+                      type="text"
+                      name="amountAvailable"
+                      value={editedDiamond.amountAvailable}
+                      onChange={handleChange}
+                      maxLength={10}
+                      required
+                    />
+                  </>
+                )}
               </div>
               <div className="manager_manage_diamond_form_group">
                 <label>Price</label>
@@ -499,22 +478,11 @@ const ManagerDiamondList = () => {
                   name="price"
                   value={editedDiamond.price}
                   onChange={handleChange}
-                  min = "100"
-                  max = "10000"
+                  min="100"
+                  max="10000"
                   required
                 />
               </div>
-              {/* <div className="manager_manage_diamond_form_group">
-                <label>Certificate</label>
-                <input
-                  type="text"
-                  name="certificateScan"
-                  value={editedDiamond.certificateScan}
-                  onChange={handleChange}
-                  maxLength={255}
-                  required
-                />
-              </div> */}
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>

@@ -2,6 +2,8 @@
 using DIAN_.Interfaces;
 using DIAN_.DTOs.SubDiamondDto;
 using DIAN_.Mapper;
+using DIAN_.Helper;
+using DIAN_.Repository;
 
 namespace DIAN_.Controllers
 {
@@ -48,6 +50,42 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery query)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var (diamonds, totalCount) = await _subDiamondRepository.GetAllDiamondsAsync(query);
+
+                if (!diamonds.Any())
+                {
+                    return NotFound("Diamond does not exist");
+                }
+
+                var diamondDtos = diamonds.Select(diamond => diamond.ToSubDiamondDTO()).ToList();
+
+                var pagination = new
+                {
+                    currentPage = query.PageNumber,
+                    pageSize = query.PageSize,
+                    totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize),
+                    totalCount
+                };
+
+                return Ok(new { data = diamondDtos, pagination });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSubDiamondById([FromRoute] int id)
         {

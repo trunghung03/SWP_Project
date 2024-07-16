@@ -3,6 +3,8 @@ import axios from 'axios';
 // const API_BASE_URL = 'https://localhost:7184/api';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+//Main Diamond
+
 const ShowAllDiamond = async (pageNumber = 1, pageSize = 6) => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/all`, {
     params: {
@@ -43,4 +45,41 @@ const createDiamond = async (data) => {
   return response.data;
 };
 
-export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape,getCertificateById,updateCertificateById };
+//Sub Diamond
+// const getAllSubDiamond = async () => {
+//   const response = await axios.get(`${API_BASE_URL}/subdiamonds`);
+//   return response.data;
+// };
+
+const getAllSubDiamond = async (pageNumber = 1, pageSize = 6) => {
+  const response = await axios.get(`${API_BASE_URL}/subdiamonds/all`, {
+    params: {
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+    },
+  });
+  return response.data;
+};
+
+const getSubDiamondDetail = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/subdiamonds/${id}`);
+  return response.data;
+};
+
+const createSubDiamond = async (data) => {
+  const response = await axios.post(`${API_BASE_URL}/subdiamonds`, data);
+  return response.data;
+}
+
+const updateSubDiamondById = (id, data) => {
+  return axios.put(`${API_BASE_URL}/subdiamonds/${id}`, data);
+};
+
+const deleteSubDiamondById = (id) => {
+  return axios.delete(`${API_BASE_URL}/subdiamonds/${id}`);
+};
+
+
+export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape,getCertificateById,updateCertificateById 
+  , getAllSubDiamond, getSubDiamondDetail, createSubDiamond, updateSubDiamondById, deleteSubDiamondById
+};

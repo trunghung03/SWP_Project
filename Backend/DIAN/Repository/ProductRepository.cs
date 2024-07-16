@@ -98,7 +98,8 @@ namespace DIAN_.Repository
                     IQueryable<Product> productsQuery = _context.Products
                        .Where(p => p.Status)
                        .Include(p => p.Category)
-                       .ThenInclude(c => c.Size);
+                       .ThenInclude(c => c.Size)
+                       .Include(p => p.Shells);
 
                     if (!string.IsNullOrWhiteSpace(query.Name))
                     {

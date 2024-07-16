@@ -281,7 +281,7 @@ namespace DIAN_.Repository
 
         public async Task<List<Diamond>> GetDiamondsByAttributeIdAsync(int attributeId)
         {
-            return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId).ToListAsync();   
+            return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId && p.Status).ToListAsync();   
         }
     }
 }

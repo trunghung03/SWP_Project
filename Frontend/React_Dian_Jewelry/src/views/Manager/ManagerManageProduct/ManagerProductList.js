@@ -374,10 +374,10 @@ const handleEdit = (product) => {
                       <TableCell align="center">{item.productCode}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
                       <TableCell align="center">{item.price}</TableCell>
-                      <TableCell align="center">quantityyy</TableCell>
+                      <TableCell align="center">{item.stock}</TableCell>
                       {/* <TableCell align="center">{item.description}</TableCell>
                       <TableCell align="center">{mainDiamonds[item.mainDiamondId]}</TableCell>
-                      <TableCell align="center">
+                      <TableCell aligns="center">
                         {item.mainDiamondAmount} / {item.subDiamondAmount}
                       </TableCell>
                       <TableCell align="center">{item.shellAmount}</TableCell>

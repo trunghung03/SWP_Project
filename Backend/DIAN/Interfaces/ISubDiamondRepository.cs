@@ -1,4 +1,5 @@
-﻿using DIAN_.Models;
+﻿using DIAN_.Helper;
+using DIAN_.Models;
 
 namespace DIAN_.Interfaces
 {
@@ -11,6 +12,7 @@ namespace DIAN_.Interfaces
         Task<Subdiamond?> DeleteAsync(int id);
         Task<Subdiamond?> UpdateDiamondStock(int id, Subdiamond subdiamond);
         Task<Subdiamond> GetDiamondsByAttributeIdAsync(int attributeId);
+        Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query);
 
     }
 }

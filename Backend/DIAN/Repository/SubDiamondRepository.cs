@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.ShellDto;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,20 @@ namespace DIAN_.Repository
                  .Include(p => p.DiamondAtrribute)
                  .ToListAsync();
             return subDiamond;
+        }
+
+        public async Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
+        {
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            var diamonds = await _context.Subdiamonds
+                   .Where(s => s.Status)
+                   .Include(p => p.DiamondAtrribute)
+                   .Skip(skipNumber)
+                   .Take(query.PageSize)
+                   .ToListAsync();
+            var totalCount = await _context.Subdiamonds.CountAsync(s => s.Status);
+            return (diamonds, totalCount);
+
         }
 
         public async Task<Subdiamond?> GetByIdAsync(int id)
