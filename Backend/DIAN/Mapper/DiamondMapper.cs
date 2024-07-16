@@ -47,5 +47,12 @@ namespace DIAN_.Mapper
                 Status = updateDiamond.Status,
             };
         }
+        public static Diamond ToDiamondFromUpdateOrderDetail(this UpdateOrderDetailForDiamonDto updateOrderDetail, int id)
+        {
+            return new Diamond
+            {
+                OrderDetailId = updateOrderDetail.OrderDetailId
+            };
+        }
     }
 }

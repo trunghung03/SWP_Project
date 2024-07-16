@@ -82,5 +82,10 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             return subDiamond;
         }
+        public async Task<Subdiamond> GetDiamondsByAttributeIdAsync(int attributeId)
+        {
+            return await _context.Subdiamonds.FirstOrDefaultAsync(s => s.DiamondAtrributeId == attributeId && s.Status);
+                
+        }
     }
 }

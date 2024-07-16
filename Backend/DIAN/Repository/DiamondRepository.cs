@@ -225,6 +225,17 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
+        public async Task<Diamond?> UpdateDiamondStatus(int diamondId)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            if(existingDiamond is not null)
+            {
+                existingDiamond.Status = false;
+                await _context.SaveChangesAsync();
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
         public async Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id)
         {
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
@@ -243,6 +254,34 @@ namespace DIAN_.Repository
         {
             return await _context.Diamondattributes
                                  .FirstOrDefaultAsync(da => da.DiamondAtrributeId == diamondAttributeId);
+        }
+
+        public async Task<Diamond> UpdateOrderDetailId(int orderId, int diamondId)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            if (existingDiamond != null)
+            {
+                existingDiamond.OrderDetailId = orderId;
+                await _context.SaveChangesAsync();
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
+        // In DiamondRepository
+        public async Task<int> CountDiamondsByAttributesAsync(string shape, string color, string clarity, string cut, decimal carat)
+        {
+            return await _context.Diamonds
+                .Include(d => d.MainDiamondAtrribute)
+                .CountAsync(d => d.MainDiamondAtrribute.Shape == shape &&
+                                 d.MainDiamondAtrribute.Color == color &&
+                                 d.MainDiamondAtrribute.Clarity == clarity &&
+                                 d.MainDiamondAtrribute.Cut == cut &&
+                                 d.MainDiamondAtrribute.Carat == carat);
+        }
+
+        public async Task<List<Diamond>> GetDiamondsByAttributeIdAsync(int attributeId)
+        {
+            return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId).ToListAsync();   
         }
     }
 }

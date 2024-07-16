@@ -6,12 +6,14 @@ namespace DIAN_.Interfaces
 {
     public interface IGoodsService
     {
-        int GetMainDiamondsCount();
+        Task<int> GetMainDiamondsCount(string shape, string color, string clarity, string cut, decimal carat);
 
         Task<ProductDTO> CreateProductAsync(CreateProductRequestDTO createProductRequestDTO);
 
         Task<SubDiamondDto> CreateSubDiamondAsync(CreateSubDiamondRequestDto requestDto);
 
         Task<DiamondDto> CreateMainDiamondAsync(CreateDiamondRequestDto requestDto);
+
+        Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
     }
 }
