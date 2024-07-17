@@ -131,14 +131,14 @@ function Invoice() {
                                 ) : paymentMethod === "Cash" ? (
                                     <ul>
                                         <li>Order will be prepare about four days</li>
-                                        <li>Keep track your order at tracking orders section</li>
+                                        <li>Keep track your order at order history section</li>
                                         <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
                                     </ul>
                                 ) : paymentMethod === "VNPAY" ? (
                                     <ul>
                                         <li>Order will be prepare about four days</li>
-                                        <li>Keep track your order at tracking orders section</li>
-                                        <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to transact directly at store</li>
+                                        <li>Keep track your order at order history section</li>
+                                        <li>Contact hotline <a href='tel:0795795959'><strong> 0795795959 </strong></a> to pay directly at store</li>
                                     </ul>
                                 ) : null}
                             </div>

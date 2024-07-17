@@ -11,9 +11,9 @@
 
         public string Description { get; set; } = string.Empty;
 
-        public int MainDiamondId { get; set; }
+        public int MainDiamondAttributeId { get; set; }
 
-        public int SubDiamondId { get; set; }
+        public int SubDiamondAttributeId { get; set; }
 
         public decimal LaborPrice { get; set; }
 
@@ -23,7 +23,7 @@
 
         public int? MainDiamondAmount { get; set; }
 
-        //public decimal? ShellAmount { get; set; }
+        public decimal? Stock { get; set; } //amount available of shell
         
         public int? CollectionId { get; set; }
 

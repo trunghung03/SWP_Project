@@ -9,23 +9,17 @@ public partial class Diamond
 {
     public int DiamondId { get; set; }
 
-    public string Shape { get; set; }
+    public int? MainDiamondAtrributeId { get; set; }
 
-    public string Color { get; set; }
+    public string CertificateScan { get; set; }
 
-    public string Clarity { get; set; }
-
-    public decimal? Carat { get; set; }
-
-    public string Cut { get; set; }
-
-    public int AmountAvailable { get; set; }
+    public int? OrderDetailId { get; set; }
 
     public decimal Price { get; set; }
 
     public bool Status { get; set; }
 
-    public virtual ICollection<Product> ProductMainDiamonds { get; set; } = new List<Product>();
+    public virtual Diamondattribute MainDiamondAtrribute { get; set; }
 
-    public virtual ICollection<Product> ProductSubDiamonds { get; set; } = new List<Product>();
+    public virtual Orderdetail OrderDetail { get; set; }
 }

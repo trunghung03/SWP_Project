@@ -10,23 +10,14 @@ namespace DIAN_.Mapper
         {
             return new DiamondDto
             {
-                Shape = diamond.Shape,
                 DiamondId = diamond.DiamondId,
-                Color = diamond.Color,
-                Clarity = diamond.Clarity,
-                Cut = diamond.Cut,
-                Carat = diamond.Carat ?? 0,
+                Shape = diamond.MainDiamondAtrribute?.Shape ?? "Not Available", 
+                Color = diamond.MainDiamondAtrribute?.Color ?? "Not Available",
+                Clarity = diamond.MainDiamondAtrribute?.Clarity ?? "Not Available", 
+                Cut = diamond.MainDiamondAtrribute?.Cut ?? "Not Available",
+                Carat = diamond.MainDiamondAtrribute?.Carat ?? 0,
                 Price = diamond.Price,
-                AmountAvailable = diamond.AmountAvailable,
-            };
-        }
-
-        public static DiamondListDto ToDiamondListDTO(this Diamond diamond)
-        {
-            return new DiamondListDto
-            {
-                Shape = diamond.Shape,
-                DiamondId = diamond.DiamondId,
+                CertificateScan = diamond.CertificateScan,
             };
         }
 
@@ -34,35 +25,33 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
-                Shape = diamondRequestDTO.Shape,
-                Color = diamondRequestDTO.Color,
-                Clarity = diamondRequestDTO.Clarity,
-                Cut = diamondRequestDTO.Cut,
-                Carat = diamondRequestDTO.Carat,
-                AmountAvailable = diamondRequestDTO.AmountAvailable,
+                MainDiamondAtrribute = new Diamondattribute
+                {
+                    Shape = diamondRequestDTO.Shape,
+                    Color = diamondRequestDTO.Color,
+                    Clarity = diamondRequestDTO.Clarity,
+                    Cut = diamondRequestDTO.Cut,
+                    Carat = diamondRequestDTO.Carat,
+                },
                 Price = diamondRequestDTO.Price,
                 Status = diamondRequestDTO.Status,
+                CertificateScan = diamondRequestDTO.CertificateScan,
             };
         }
+
         public static Diamond ToDiamondFromUpdateDTO(this UpdateDiamondRequestDto updateDiamond, int id)
         {
             return new Diamond
             {
-                Shape = updateDiamond.Shape,    
-                Color = updateDiamond.Color,
-                Clarity = updateDiamond.Clarity,
-                Cut = updateDiamond.Cut,
-                Carat = updateDiamond.Carat,
-                AmountAvailable = updateDiamond.AmountAvailable,
                 Price = updateDiamond.Price,
                 Status = updateDiamond.Status,
             };
         }
-        public static Diamond ToDiamondFromUpdateAmountAvailable(this UpdateDiamondStockDto updateAmountAvailable, int id)
+        public static Diamond ToDiamondFromUpdateOrderDetail(this UpdateOrderDetailForDiamonDto updateOrderDetail, int id)
         {
             return new Diamond
             {
-                AmountAvailable = updateAmountAvailable.AmountAvailable,
+                OrderDetailId = updateOrderDetail.OrderDetailId
             };
         }
     }

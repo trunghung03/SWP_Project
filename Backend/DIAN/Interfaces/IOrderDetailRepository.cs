@@ -15,7 +15,5 @@ namespace DIAN_.Interfaces
 
         Task<OrderBillDto?> ViewOrderBillAsync(int orderId);
 
-        Task<Orderdetail?> UpdateDiamondCertificate(Orderdetail diamondModel, int id);
-
     }
 }

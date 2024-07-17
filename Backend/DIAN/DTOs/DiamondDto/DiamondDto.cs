@@ -16,10 +16,8 @@
 
         public decimal Price { get; set; }
 
-        //public string CertificateScan { get; set; } = string.Empty;
+        public string CertificateScan { get; set; } = string.Empty;
 
-
-        public int AmountAvailable { get; set; }
 
     }
 }

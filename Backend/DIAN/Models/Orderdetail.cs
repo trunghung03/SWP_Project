@@ -13,8 +13,6 @@ public partial class Orderdetail
 
     public decimal LineTotal { get; set; }
 
-    public string CertificateScan { get; set; }
-
     public int ProductId { get; set; }
 
     public int? ShellMaterialId { get; set; }
@@ -22,6 +20,8 @@ public partial class Orderdetail
     public decimal? Size { get; set; }
 
     public bool Status { get; set; }
+
+    public virtual ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();
 
     public virtual Purchaseorder Order { get; set; }
 

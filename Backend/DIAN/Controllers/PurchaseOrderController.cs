@@ -120,6 +120,33 @@ namespace DIAN_.Controllers
             }
         }
 
+        [HttpPost("confirm-vnpay-payment")]
+        public Task<IActionResult> SendEmailConfirmVnPay([FromQuery] int orderId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Task.FromResult<IActionResult>(NotFound("Cannot found order."));
+                }
+                var result = _orderService.SendEmailForVnPay(orderId);
+                if (result)
+                {
+                    return Task.FromResult<IActionResult>(Ok("Email sent successfully."));
+                }
+                else
+                {
+                    return Task.FromResult<IActionResult>(BadRequest("Failed to send email."));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
         [HttpGet("vnpay-ipn-return")]
         public IActionResult PaymentUpdateDatabase()
         {
@@ -149,19 +176,6 @@ namespace DIAN_.Controllers
         }
 
 
-        [HttpPost("GetQR")]
-        public async Task<IActionResult> GetQR(VnPayQrRequestDto payQrRequest)
-        {
-            try
-            {
-                var pathImage = await _vnPayService.GenerateQRCodeAsync(payQrRequest);
-                return Ok(pathImage);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
     }
 }
 
