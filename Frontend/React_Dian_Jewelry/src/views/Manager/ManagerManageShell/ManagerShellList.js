@@ -49,6 +49,10 @@ const ManagerShellList = () => {
     amountAvailable: ''
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ordersPerPage = 6;
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: '#f9c6bb',
@@ -74,27 +78,108 @@ const ManagerShellList = () => {
       try {
         const response = await ShowAllShellMaterial();
         setShellMaterial(response);
-        const shells = await ShowAllShell();
-        setShell(shells);
-        console.log(shells);
+        await fetchShells(currentPage, ordersPerPage);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
-
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentShell = shellMaterial.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(shellMaterial.length / ordersPerPage);
+  }, [currentPage]);
+  
+  const fetchShells = async (pageNumber, pageSize) => {
+    try {
+      const response = await ShowAllShell(pageNumber, pageSize);
+      setShell(response.data);
+      setTotalPages(response.pagination.totalPages);
+    } catch (error) {
+      console.error("Error fetching shells:", error);
+    }
+  };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+  const renderPagination = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      // Show all pages if total pages are less than or equal to 5
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={i === currentPage ? "manager_order_active" : ""}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+      // Show first page
+      pages.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={1 === currentPage ? "manager_order_active" : ""}
+        >
+          1
+        </button>
+      );
+
+      if (currentPage > 3) {
+        pages.push(<span key="start-ellipsis">...</span>);
+      }
+
+      // Show previous, current, and next page
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={i === currentPage ? "manager_order_active" : ""}
+          >
+            {i}
+          </button>
+        );
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push(<span key="end-ellipsis">...</span>);
+      }
+
+      // Show last page
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={totalPages === currentPage ? "manager_order_active" : ""}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return (
+      <div className="manager_manage_diamond_pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+        {pages}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
+      </div>
+    );
   };
 
   // Search diamond by id
@@ -399,29 +484,7 @@ const ManagerShellList = () => {
             Add new shell material
           </button>
           <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
+            
           </div>
         </div>
 
@@ -473,7 +536,8 @@ const ManagerShellList = () => {
           >
             Add new shell
           </button>
-          <div className="manager_manage_diamond_pagination">
+          {renderPagination()}
+         { /*<div className="manager_manage_diamond_pagination">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -497,7 +561,7 @@ const ManagerShellList = () => {
             >
               &gt;
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="manager_manage_diamond_table_wrapper">

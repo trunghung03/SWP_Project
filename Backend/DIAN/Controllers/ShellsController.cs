@@ -11,6 +11,7 @@ using DIAN_.Repository;
 using DIAN_.Mapper;
 using DIAN_.DTOs.PromotionDto;
 using DIAN_.DTOs.ShellDto;
+using DIAN_.Helper;
 
 namespace DIAN_.Controllers
 {
@@ -27,7 +28,7 @@ namespace DIAN_.Controllers
 
         // GET: api/Shells
         [HttpGet]
-        public async Task<IActionResult> GetShell()
+        public async Task<IActionResult> GetShell([FromQuery] ShellQuerry query)
         {
             try
             {
@@ -35,13 +36,27 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var shells = await _shellRepository.GetAllShellAsync();
-                if (shells.Count == 0)
+
+                var (shells, totalItems) = await _shellRepository.GetAllShellAsync(query);
+
+                if (!shells.Any())
                 {
                     return NotFound("Shell does not exist");
                 }
-                var shellDtos = shells.Select(promotion => promotion.ToShellDetail());
-                return Ok(shellDtos);
+
+                var shellDtos = shells.Select(shell => shell.ToShellDetail()).ToList();
+
+                var paginationMetadata = new
+                {
+                    currentPage = query.PageNumber,
+                    pageSize = query.PageSize,
+                    totalPages = (int)Math.Ceiling((double)totalItems / query.PageSize),
+                    totalItems
+                };
+
+                Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(paginationMetadata));
+
+                return Ok(new { Data = shellDtos, Pagination = paginationMetadata });
             }
             catch (Exception)
             {

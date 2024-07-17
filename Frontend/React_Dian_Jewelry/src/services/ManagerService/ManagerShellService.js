@@ -6,11 +6,13 @@ const ShowAllShellMaterial = async () => {
     return response.data;
   };
   
-  const ShowAllShell = async () => {
-    const response = await axios.get(`${API_BASE_URL}/shells`);
+  const ShowAllShell = async (pageNumber, pageSize) => {
+    const response = await axios.get(`${API_BASE_URL}/shells`, {
+      params: { pageNumber, pageSize }
+    });
     return response.data;
   };
-
+  
   const updateShellMaterialById = (id, data) => {
     return axios.put(`${API_BASE_URL}/shellmaterials/${id}`, data);
   };
