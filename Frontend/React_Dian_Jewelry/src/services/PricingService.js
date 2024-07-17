@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://localhost:7184/api';
 const SHELL_API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const getDiamondPrice = (cut, carat, clarity, color) => {
@@ -11,7 +10,7 @@ const getDiamondPrice = (cut, carat, clarity, color) => {
     color: color
   };
 
-  return axios.post(`${API_BASE_URL}/diamond_price/`, data);
+  return axios.post(`${SHELL_API_BASE_URL}/diamond_price/`, data);
 };
 
 const getShellMaterials = () => {
@@ -23,7 +22,7 @@ const getShellMaterialById = (id) => {
 };
 
 const getAllDiamonds = () => {
-  return axios.get(`${API_BASE_URL}/diamonds/alldiamondwithoutpagination`);
+  return axios.get(`${SHELL_API_BASE_URL}/diamonds/alldiamondwithoutpagination`);
 };
 
 export { getDiamondPrice, getShellMaterials, getShellMaterialById, getAllDiamonds };
