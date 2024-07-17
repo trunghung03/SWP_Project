@@ -39,6 +39,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[DIAMONDATTRIBUTE]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[EMPLOYEE]",
          "ObjectType": 0
       },
@@ -72,6 +76,10 @@
       },
       {
          "Name": "[dbo].[SIZE]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SUBDIAMOND]",
          "ObjectType": 0
       },
       {

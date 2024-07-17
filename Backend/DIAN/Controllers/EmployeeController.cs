@@ -20,7 +20,8 @@ namespace UserApplication.Controllers
         private readonly IDeliveryStaffService _deliveryStaffService;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IEmailService _emailService;
-        public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository, 
+        private readonly IGoodsService _goodService;
+        public EmployeeController(ITokenService tokenService, IEmployeeRepository employeeRepository, IGoodsService goodsService,
             ISalesStaffService salesStaffService, IDeliveryStaffService deliveryStaffService, IOrderDetailRepository orderDetailRepository, IEmailService emailService)
         {
             _tokenService = tokenService;
@@ -29,6 +30,7 @@ namespace UserApplication.Controllers
             _deliveryStaffService = deliveryStaffService;
             _orderDetailRepository = orderDetailRepository;
             _emailService = emailService;
+            _goodService = goodsService;
         }
 
         [HttpPost("login")]
@@ -266,7 +268,7 @@ namespace UserApplication.Controllers
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-                var order = await _salesStaffService.UpdateQuantitiesForOrder(status, orderId);
+                var order = await _goodService.UpdateQuantitiesForOrder(status, orderId);
 
                 return Ok(order);
             }

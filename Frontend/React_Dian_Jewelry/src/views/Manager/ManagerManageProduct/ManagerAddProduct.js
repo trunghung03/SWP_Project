@@ -13,8 +13,8 @@ const ManagerAddProduct = () => {
         name: '',
         price: '',
         description: '',
-        mainDiamondId: '',
-        subDiamondId: '',
+        mainDiamondAttributeId: '',
+        subDiamondAttributeId: '',
         laborPrice: '',
         imageLinkList: '',
         mainDiamondAmount: '',
@@ -92,8 +92,8 @@ const ManagerAddProduct = () => {
                 price: parseFloat(productData.price),
                 laborPrice: parseFloat(productData.laborPrice),
                 description: productData.description,
-                mainDiamondId: parseInt(productData.mainDiamondId),
-                subDiamondId: parseInt(productData.subDiamondId),
+                mainDiamondAttributeId: parseInt(productData.mainDiamondAttributeId),
+                subDiamondAttributeId: parseInt(productData.subDiamondAttributeId),
                 mainDiamondAmount: parseInt(productData.mainDiamondAmount),
                 subDiamondAmount: parseInt(productData.subDiamondAmount),
                 imageLinkList: imageUrls.join(';'),
@@ -165,11 +165,11 @@ const ManagerAddProduct = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Main Diamond ID</label>
-                            <input type="number" name="mainDiamondId" placeholder="Input product's main diamond id" value={productData.mainDiamondId} onChange={handleChange} required />
+                            <input type="number" name="mainDiamondAttributeId" placeholder="Input product's main diamond id" value={productData.mainDiamondAttributeId} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Sub Diamond ID</label>
-                            <input type="number" name="subDiamondId" placeholder="Input product's sub diamond id" value={productData.subDiamondId} onChange={handleChange} required />
+                            <input type="number" name="subDiamondAttributeId" placeholder="Input product's sub diamond id" value={productData.subDiamondAttributeId} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">

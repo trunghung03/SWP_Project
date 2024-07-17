@@ -14,7 +14,7 @@ namespace DIAN_.Interfaces
 
         Task DeleteUnpaidOrdersOlderThan3Days();
 
-        Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
+        //Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
 
     }
 }

@@ -11,13 +11,18 @@ namespace DIAN_.Interfaces
         Task<Diamond?> GetDiamondByIdAsync(int id);
         Task<List<Diamond>> GetDiamondByShapeAsync(string shape);
         Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query);
-
         Task<List<Diamond>> GetAllDiamond();
         Task<Diamond> AddDiamondAsync(Diamond diamond);
         Task<Diamond?> UpdateDiamondAsync(Diamond diamondModel, int id);
         Task<Diamond?> DeleteDiamondAsync(int id);
-        Task<Diamond?> UpdateAmountAvailable(Diamond diamondModel, int id);
+        Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id);
+        Task<Diamondattribute> GetDiamondAttributeByIdAsync(int diamondAttributeId);
+        Task<List<Diamond>> GetDiamondsByAttributeIdAsync(int attributeId);
 
-        //Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id);
+        // In IDiamondRepository
+        Task<int> CountDiamondsByAttributesAsync(string shape, string color, string clarity, string cut, decimal carat);
+        Task<Diamond?> UpdateDiamondStatus(int diamondId);
+        Task<Diamond> UpdateOrderDetailId(int orderId, int diamondId);
+
     }
 }

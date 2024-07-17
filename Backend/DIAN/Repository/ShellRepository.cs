@@ -1,5 +1,6 @@
 ﻿using DIAN_.Interfaces;
 using DIAN_.Models;
+using DIAN_.Helper;
 using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Repository
@@ -30,12 +31,20 @@ namespace DIAN_.Repository
             return null;
         }
 
-        public async Task<List<Shell>?> GetAllShellAsync()
+        public async Task<(List<Shell>, int)> GetAllShellAsync(ShellQuerry query)
         {
-            var shells = await _context.Shells
-                  .Where(s => s.Status)
-                  .ToListAsync();
-            return shells;
+            var queryable = _context.Shells
+        .Where(s => s.Status)
+        .AsQueryable();
+
+            int totalItems = await queryable.CountAsync();
+
+            var shells = await queryable
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+
+            return (shells, totalItems);
         }
 
 

@@ -15,10 +15,12 @@ namespace DIAN_.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepo;
-        public ProductController(ApplicationDbContext context, IProductRepository productRepo)
+        private readonly IGoodsService _goodsService;
+        public ProductController(ApplicationDbContext context, IProductRepository productRepo, IGoodsService goodsService)
         {
             _productRepo = productRepo;
             _context = context;
+            _goodsService = goodsService;
         }
 
         [HttpGet("list")]
@@ -31,7 +33,9 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
-                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+               
+                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
+                return Ok(productDTOs);
             }
             catch (Exception)
             {
@@ -92,30 +96,24 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                // Check if the MainDiamondId exists
-                var mainDiamondExists = await _productRepo.ExistsMainDiamondAsync(productDTO.MainDiamondId);
-                if (!mainDiamondExists)
+                var productModel = await _goodsService.CreateProductAsync(productDTO); // This should return a ProductDTO
+
+                // Assuming productModel already is a ProductDTO and has an Id property
+                if (productModel == null || productModel.ProductId == 0) // Adjust the condition based on how you identify a valid product
                 {
-                    return BadRequest("The specified MainDiamondId does not exist.");
+                    return BadRequest("Product creation failed.");
                 }
 
-                // Check if the ProCode already exists
-                var proCodeExists = await _productRepo.ExistsProCodeAsync(productDTO.ProductCode);
-                if (proCodeExists)
-                {
-                    return BadRequest($"The ProCode '{productDTO.ProductCode}' already exists.");
-                }
-
-                var product = productDTO.ToProductFromCreateDTO();
-                var createdProduct = await _productRepo.CreateAsync(product);
-
-                return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+                // Since productModel is already a ProductDTO, no need to convert
+                return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel);
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDTO updateDTO)
@@ -204,7 +202,7 @@ namespace DIAN_.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(productDetail.ToProductDetailDTO(productDetail.MainDiamond, new List<string>()));
+                return Ok(productDetail.ToProductDetailDTO(new List<string>()));
             }
             catch (Exception)
             {
@@ -223,7 +221,8 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetByNameAsync(name);
-                return Ok(products.Select(p => p.ToProductListDTO(p.MainDiamond)));
+                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
+                return Ok(productDTOs);
             }
             catch (Exception)
             {
@@ -271,16 +270,8 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
 
-                var diamondIds = products.Select(p => p.MainDiamondId).Distinct().ToList();
-                var diamonds = await _context.Diamonds
-                                             .Where(d => diamondIds.Contains(d.DiamondId))
-                                             .ToListAsync();
-
-                var productDTOs = products.Select(p =>
-                {
-                    var diamond = diamonds.FirstOrDefault(d => d.DiamondId == p.MainDiamondId);
-                    return p.ToProductListDTO(diamond);
-                }).ToList();
+                // Assuming ToProductListDTO does not require the diamond object as a parameter
+                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
 
                 return Ok(productDTOs);
             }
@@ -289,5 +280,6 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+
     }
 }
