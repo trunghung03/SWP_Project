@@ -128,6 +128,13 @@ namespace DIAN_.Repository
             //    }
             //}
         }
+        // In DiamondRepository class
+        public async Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId)
+        {
+            return await _context.Diamonds
+                .Where(d => d.MainDiamondAtrributeId == mainDiamondAttributeId && d.Status == true) 
+                .CountAsync();
+        }
 
         public async Task<Diamond?> GetDiamondByIdAsync(int id)
         {

@@ -42,9 +42,10 @@ namespace DIAN_.Repository
             product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
                             (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
                             (product.LaborCost ?? 0);
-            _memoryCache.Remove(CacheKey);
+            
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
+            _memoryCache.Remove(CacheKey);
             return product;
         }
 
@@ -56,7 +57,11 @@ namespace DIAN_.Repository
             {
                 product.Status = false;
                 await _context.SaveChangesAsync();
-                _memoryCache.Remove(CacheKey);
+
+                _memoryCache.Remove($"ProductDetail_{id}");
+
+                CacheUtils.InvalidateAllPaginationKeys(_memoryCache, CacheKey);
+
                 _logger.LogInformation("Product deleted");
                 return product;
             }
@@ -223,7 +228,7 @@ namespace DIAN_.Repository
             return products;
         }
 
-       
+
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
         {
@@ -234,9 +239,15 @@ namespace DIAN_.Repository
                 existingProduct.Description = product.Description;
                 existingProduct.ImageLinkList = product.ImageLinkList;
                 existingProduct.CollectionId = product.CollectionId;
-                existingProduct.CategoryId = product.CategoryId;    
+                existingProduct.CategoryId = product.CategoryId;
                 await _context.SaveChangesAsync();
-                _memoryCache.Remove(CacheKey);
+
+                // Invalidate cache for product detail
+                _memoryCache.Remove($"ProductDetail_{id}");
+
+                // Invalidate cache for all pagination keys
+                CacheUtils.InvalidateAllPaginationKeys(_memoryCache, CacheKey);
+
                 return existingProduct;
             }
             return null;
@@ -250,7 +261,6 @@ namespace DIAN_.Repository
                                  .Take(8)
                                  .ToListAsync();
         }
-
 
         public async Task<ManageProductDetailDto> GetProductDetail(int productId)
         {

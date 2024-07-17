@@ -18,70 +18,110 @@ import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { visuallyHidden } from "@mui/utils";
+import { getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+
+const headCells = [
+  { id: 'employeeId', numeric: false, disablePadding: false, label: 'Employee ID', sortable: true },
+  { id: 'role', numeric: false, disablePadding: false, label: 'Role', sortable: true },
+  { id: 'email', numeric: false, disablePadding: false, label: 'Email', sortable: true },
+  { id: 'fullName', numeric: false, disablePadding: false, label: 'Full Name', sortable: true },
+  { id: 'address', numeric: false, disablePadding: false, label: 'Address', sortable: true },
+  { id: 'phoneNumber', numeric: false, disablePadding: false, label: 'Phone Number', sortable: true },
+];
+
+function EnhancedTableHead(props) {
+  const { order, orderBy, onRequestSort } = props;
+
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+          style ={{backgroundColor:"#faecec"}}
+            key={headCell.id}
+            align="center"
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            {headCell.sortable ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  onRequestSort: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+};
 
 const ManagerEmployeeList = () => {
-  const navigate = useNavigate();
-
   const [employeeList, setEmployeeList] = useState([]);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('employeeId');
   const [searchQuery, setSearchQuery] = useState("");
-  const [editMode, setEditMode] = useState(false);
-  const [editedEmployee, setEditedEmployee] = useState({});
   const [isSearch, setIsSearch] = useState(false);
-  const [originalEmployee, setOriginalEmployee] = useState({});
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ShowAllEmployee();
-        setEmployeeList(response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
+  const [employeesPerPage, setEmployeesPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentEmployee = employeeList.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
-  const totalPages = Math.ceil(employeeList.length / ordersPerPage);
+
+  const fetchEmployees = async () => {
+    try {
+      const response = await ShowAllEmployee();
+      setEmployeeList(response);
+      setTotalPages(Math.ceil(response.length / employeesPerPage));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Search diamond by id
   const handleSearchKeyPress = async (e) => {
-    const isInteger = (value) => {
-      return /^-?\d+$/.test(value);
-    };
+    const isInteger = (value) => /^-?\d+$/.test(value);
+
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
         setIsSearch(true);
@@ -90,7 +130,7 @@ const ManagerEmployeeList = () => {
           setEmployeeList([response]);
           setCurrentPage(1);
         } catch (error) {
-          console.error("Error fetching diamond:", error);
+          console.error("Error fetching employee:", error);
           swal("Employee not found!", "Please try another one.", "error");
         }
       } else if (searchQuery.trim()) {
@@ -104,17 +144,15 @@ const ManagerEmployeeList = () => {
           } else {
             setEmployeeList([]);
           }
-
           setCurrentPage(1);
         } catch (error) {
-          console.error("Error fetching diamond:", error);
+          console.error("Error fetching employee:", error);
           swal("Employee not found!", "Please try another one.", "error");
         }
       } else {
         try {
           setIsSearch(false);
-          const response = await ShowAllEmployee();
-          setEmployeeList(response);
+          fetchEmployees();
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -124,15 +162,11 @@ const ManagerEmployeeList = () => {
   };
 
   const handleBack = async () => {
-    try {
-      const response = await ShowAllEmployee();
-      setEmployeeList(response);
-      setCurrentPage(1);
-      setIsSearch(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+    fetchEmployees();
+    setCurrentPage(1);
+    setIsSearch(false);
+    setSearchQuery("");
+  };
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -154,95 +188,70 @@ const ManagerEmployeeList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3 className="manager_title_employees" style={{ alignItems: "flex-end" }}>
-          Employees
-        </h3>
-        <div className="manager_manage_diamond_pagination">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            &lt;
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => handlePageChange(index + 1)}
-              className={
-                index + 1 === currentPage ? "manager_order_active" : ""
-              }
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            &gt;
-          </button>
-        </div>
-        <div className="manager_manage_diamond_table_wrapper">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell align="justify">Role</StyledTableCell>
-                  <StyledTableCell align="justify">Email</StyledTableCell>
-                  <StyledTableCell align="justify">Full Name</StyledTableCell>
-                  <StyledTableCell align="justify">Address</StyledTableCell>
-                  <StyledTableCell align="justify">
-                    Phone number
-                  </StyledTableCell>
-                  {/* <StyledTableCell align="justify">Action</StyledTableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {employeeList.length > 0 ? (
-                  currentEmployee.map((item) => {
-                    if (item.role !== 'Admin') {
-                      return <TableRow
-                        className="manager_manage_table_body_row"
+        <h3 style={{ textAlign: "center", marginBottom:"3%" }}>Employee List</h3>
+        <Box sx={{ width: "100%", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)" }}>
+          <Paper sx={{ width: "100%", mb: 2 }}>
+            <TableContainer>
+              <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                <EnhancedTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={(event, property) => {
+                    const isAsc = orderBy === property && order === "asc";
+                    setOrder(isAsc ? "desc" : "asc");
+                    setOrderBy(property);
+                  }}
+                  rowCount={employeeList.length}
+                />
+                <TableBody>
+                  {tableSort(employeeList, getComparator(order, orderBy))
+                    .slice((currentPage - 1) * employeesPerPage, currentPage * employeesPerPage)
+                    .map((item, index) => (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
                         key={item.employeeId}
+                        sx={{ cursor: "pointer" }}
                       >
-                        <TableCell>{item.employeeId}</TableCell>
-                        <TableCell>{item.role}</TableCell>
-                        <TableCell>{item.email}</TableCell>
-                        <TableCell>
-                          {item.firstName} {item.lastName}
+                        <TableCell component="th" id={`employee-${item.employeeId}`} scope="row" align="center">
+                          {item.employeeId}
                         </TableCell>
-                        <TableCell>{item.address}</TableCell>
-                        <TableCell>{item.phoneNumber}</TableCell>
-                        {/* <TableCell>
-                        <i
-                          className="fas fa-pen"
-                          onClick={() => handleEdit(item)}
-                          style={{ cursor: "pointer", marginRight: "10px" }}
-                        ></i>
-                        <i
-                          className="fas fa-trash"
-                          onClick={() => handleDelete(item.employeeId)}
-                          style={{ cursor: "pointer" }}
-                        ></i>
-                      </TableCell> */}
+                        <TableCell align="center">{item.role}</TableCell>
+                        <TableCell align="center">{item.email}</TableCell>
+                        <TableCell align="center">{item.firstName} {item.lastName}</TableCell>
+                        <TableCell align="center">{item.address}</TableCell>
+                        <TableCell align="center">{item.phoneNumber}</TableCell>
                       </TableRow>
-                    }
-                  })
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan="10">No employee found</TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {isSearch && (
-            <button className="btn btn-secondary mt-3" onClick={handleBack}>
-              Back to show all employees
-            </button>
-          )}
-        </div>
+                    ))}
+                  {employeeList.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={7} align="center">No employee found</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={employeeList.length}
+              rowsPerPage={employeesPerPage}
+              page={currentPage - 1}
+              onPageChange={(event, newPage) => handlePageChange(newPage + 1)}
+              onRowsPerPageChange={(event) => {
+                setEmployeesPerPage(parseInt(event.target.value, 10));
+                setCurrentPage(1);
+                fetchEmployees();
+              }}
+            />
+          </Paper>
+        </Box>
+        {isSearch && (
+          <button className="btn btn-secondary mt-3" onClick={handleBack}>
+            Back
+          </button>
+        )}
       </div>
     </div>
   );

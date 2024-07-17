@@ -21,6 +21,8 @@ namespace DIAN_.Interfaces
 
         // In IDiamondRepository
         Task<int> CountDiamondsByAttributesAsync(string shape, string color, string clarity, string cut, decimal carat);
+        Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId);
+
         Task<Diamond?> UpdateDiamondStatus(int diamondId);
         Task<Diamond> UpdateOrderDetailId(int orderId, int diamondId);
 

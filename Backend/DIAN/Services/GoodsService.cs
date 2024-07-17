@@ -146,16 +146,25 @@ namespace DIAN_.Services
 
             if (!mainDiamondExists)
             {
-                throw new ValidationException("This diamond does not exist.");
+                throw new ValidationException("This main diamond does not exist.");
             }
 
             if (!subDiamondExists)
             {
-                throw new ValidationException("This diamond does not exist.");
+                throw new ValidationException("This sub diamond does not exist.");
             }
+
+            //var availableMainDiamondsCount = await _diamondRepository.CountDiamondsByAttributesAsync(createProductRequestDTO.MainDiamondAttributeId);
+
+            //if (availableMainDiamondsCount < createProductRequestDTO.MainDiamondAmount)
+            //{
+            //    throw new ValidationException($"Not enough main diamonds available. Required: {createProductRequestDTO.MainDiamondAmount}, Available: {availableMainDiamondsCount}.");
+            //}
+
             var product = await _productRepository.CreateAsync(productModel);
             return product.ToProductDTO();
         }
+
 
 
         public async Task<int> GetMainDiamondsCount(string shape, string color, string clarity, string cut, decimal carat)

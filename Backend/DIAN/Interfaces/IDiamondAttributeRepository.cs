@@ -5,6 +5,8 @@ namespace DIAN_.Interfaces
     public interface IDiamondAttributeRepository
     {
         Task<IEnumerable<Diamondattribute>> GetDiamondAttributesAsync();
+        Task<IEnumerable<Diamondattribute>> GetSubDiamondAttributesAsync();
+        Task<IEnumerable<Diamondattribute>> GetMainDiamondAttributesAsync();
         Task<Diamondattribute> GetDiamondAttributesAsync(int diamondAttributeId);
         Task<Diamondattribute> CreateDiamondAttributeAsync(Diamondattribute diamondAttribute);
         Task<Diamondattribute> UpdateDiamondAttributeAsync(Diamondattribute diamondAttribute);

@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
-import { ShowAllDiamond, createDiamond,getCertificateById,updateCertificateById } from '../../../services/ManagerService/ManagerDiamondService.js';
+import { createDiamond, createSubDiamond, getCertificateById, updateCertificateById } from '../../../services/ManagerService/ManagerDiamondService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
-import InputNumber from 'rc-input-number';
 
 const ManagerAddDiamond = () => {
     const navigate = useNavigate();
+    const [diamondType, setDiamondType] = useState('main');
     const [diamondData, setDiamondData] = useState({
         shape: '',
         carat: '',
@@ -17,7 +17,7 @@ const ManagerAddDiamond = () => {
         color: '',
         price: '',
         amountAvailable: '',
-        // certificateScan: 'null' 
+        certificateScan: ''
     });
 
     const handleChange = (e) => {
@@ -25,16 +25,54 @@ const ManagerAddDiamond = () => {
         setDiamondData({ ...diamondData, [name]: value });
     };
 
+    const handleDiamondTypeChange = (e) => {
+        setDiamondType(e.target.value);
+        setDiamondData({
+            shape: '',
+            carat: '',
+            cut: '',
+            clarity: '',
+            color: '',
+            price: '',
+            amountAvailable: '',
+            certificateScan: ''
+        });
+    };
+
+    const validateCarat = (carat) => {
+        const caratValue = parseFloat(carat);
+        if (diamondType === 'main') {
+            return caratValue > 0.5 && caratValue < 4;
+        } else {
+            return caratValue <= 0.5 && caratValue > 0.1;
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateCarat(diamondData.carat)) {
+            swal("Invalid Carat", `Carat value must be ${diamondType === 'main' ? 'greater than 0.5 and less than 4' : 'greater than 0.1 and less than or equal to 0.5'}`, "error");
+            return;
+        }
+    
         try {
             const diamondDataWithStatus = { ...diamondData, status: true };
-            await createDiamond(diamondDataWithStatus);
-            // const dataRes = await createDiamond(diamondDataWithStatus);
-            // const certificate = await getCertificateById(dataRes.diamondId);
-            // await updateCertificateById(dataRes.diamondId,{certificateScan: certificate.url});
-            swal("Success", "Diamond added successfully", "success");
-            navigate('/manager-diamond-list');
+    
+            if (diamondType === 'main') {
+                const dataRes = await createDiamond(diamondDataWithStatus);
+                // console.log("Main diamond response:", dataRes);
+                // const certificate = await getCertificateById(dataRes.diamondId);
+                // console.log("Certificate response:", certificate);
+                // await updateCertificateById(dataRes.diamondId, { certificateScan: certificate.url });
+            } else {
+                const subDiamondRes = await createSubDiamond(diamondDataWithStatus);
+                console.log("Sub diamond response:", subDiamondRes);
+            }
+    
+            swal("Success", `${diamondType === 'main' ? 'Main' : 'Sub'} Diamond added successfully`, "success")
+                .then(() => {
+                    navigate('/manager-diamond-list');
+                });
         } catch (error) {
             console.error("Error creating diamond:", error);
             if (error.response) {
@@ -47,10 +85,10 @@ const ManagerAddDiamond = () => {
                     }
                 }
             }
-            swal("Something is wrong!", "Failed to add diamond. Please try again.", "error");
+            swal("Something is wrong!", `Failed to add ${diamondType} diamond. Please try again.`, "error");
         }
     };
-
+    
     return (
         <div className="manager_add_diamond_all_container">
             <div className="manager_add_diamond_sidebar">
@@ -70,23 +108,48 @@ const ManagerAddDiamond = () => {
                 <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Color</label>
-                            <select type="text" name="color" value={diamondData.color} onChange={handleChange} required >
-                                <option value="">Select Color</option>
-                                <option value="SI2">SI2</option>
-                                <option value="E">E</option>
-                                <option value="I">I</option>
-                                <option value="J"> J</option>
-                                <option value="H">H</option>
-                                <option value="F">F</option>
-                                <option value="G">G</option>
-                                <option value="D">D</option>
+                            <label>Type</label>
+                            <select value={diamondType} onChange={handleDiamondTypeChange} required>
+                                <option value="main">Main Diamond</option>
+                                <option value="sub">Sub Diamond</option>
                             </select>
                         </div>
-
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Shape</label>
+                            <select type="text" name="shape" value={diamondData.shape} onChange={handleChange} required>
+                                <option value="">Select Shape</option>
+                                <option value="Round">Round</option>
+                                <option value="Oval">Oval</option>
+                                <option value="Emerald">Emerald</option>
+                                <option value="Cushion">Cushion</option>
+                                <option value="Pear">Pear</option>
+                                <option value="Radiant">Radiant</option>
+                                <option value="Marquise">Marquise</option>
+                                <option value="Asscher">Asscher</option>
+                                <option value="Heart">Heart</option>
+                            </select>
+                        </div>
+                        <div className="manager_add_diamond_form_group">
+                            <label>Carat</label>
+                            <input
+                                type="number"
+                                placeholder="Enter diamond's carat"
+                                name="carat"
+                                value={diamondData.carat}
+                                onChange={handleChange}
+                                required
+                                min={diamondType === 'main' ? 0.51 : 0.11}
+                                max={diamondType === 'main' ? 3.99 : 0.5}
+                                step="0.01"
+                            />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Cut</label>
-                            <select type="text" name="cut" value={diamondData.cut} onChange={handleChange} required >
+                            <select type="text" name="cut" value={diamondData.cut} onChange={handleChange} required>
                                 <option value="">Select Cut</option>
                                 <option value="Ideal">Ideal</option>
                                 <option value="Premium">Premium</option>
@@ -95,58 +158,53 @@ const ManagerAddDiamond = () => {
                                 <option value="Fair">Fair</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div className="manager_add_diamond_form_row">
-                        <div className="manager_add_diamond_form_group">
-                            <label>Carat</label>
-                            <input type="number" max={5.2} placeholder="Enter diamond's carat"  name="carat" value={diamondData.carat} onChange={handleChange} required />
-                        </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Clarity</label>
-                            <select type="text" name="clarity" value={diamondData.clarity} onChange={handleChange} required >
+                            <select type="text" name="clarity" value={diamondData.clarity} onChange={handleChange} required>
                                 <option value="">Select Clarity</option>
                                 <option value="SI2">SI2</option>
                                 <option value="SI1">SI1</option>
                                 <option value="VS1">VS1</option>
-                                <option value="VS2"> VS2</option>
+                                <option value="VS2">VS2</option>
                                 <option value="VVS2">VVS2</option>
                                 <option value="VVS1">VVS1</option>
                                 <option value="I1">I1</option>
                                 <option value="IF">IF</option>
                             </select>
                         </div>
-
                     </div>
-
                     <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Color</label>
+                            <select type="text" name="color" value={diamondData.color} onChange={handleChange} required>
+                                <option value="">Select Color</option>
+                                <option value="SI2">SI2</option>
+                                <option value="E">E</option>
+                                <option value="I">I</option>
+                                <option value="J">J</option>
+                                <option value="H">H</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Price</label>
                             <input type="number" placeholder="Enter diamond's price" name="price" value={diamondData.price} onChange={handleChange} required />
                         </div>
+                    </div>
+                    {diamondType === 'sub' && (
                         <div className="manager_add_diamond_form_group">
                             <label>Quantity</label>
-                            <input type="number" placeholder="Enter quantity" name="amountAvailable" value={diamondData.amountAvailable}
-                                onChange={handleChange} required />
+                            <input type="number" placeholder="Enter quantity" name="amountAvailable" value={diamondData.amountAvailable} onChange={handleChange} required />
                         </div>
-                    </div>
-
-                    <div className="manager_add_diamond_form_group">
-                        <label>Shape</label>
-                        <select type="text" name="shape" value={diamondData.shape} onChange={handleChange} required >
-                            <option value="">Select Shape</option>
-                            <option value="Round">Round</option>
-                            <option value="Oval">Oval</option>
-                            <option value="Emerald">Emerald</option>
-                            <option value="Cushion">Cushion</option>
-                            <option value="Pear">Pear</option>
-                            <option value="Radiant">Radiant</option>
-                            <option value="Marquise">Marquise</option>
-                            <option value="Asscher">Asscher</option>
-                            <option value="Heart">Heart</option>
-
-                        </select>
-                    </div>
+                    )}
+                    {diamondType === 'main' && (
+                        <div className="manager_add_diamond_form_group">
+                            <label>Certificate Scan</label>
+                            <input type="text" placeholder="Enter certificate scan URL" name="certificateScan" value={diamondData.certificateScan} onChange={handleChange} required />
+                        </div>
+                    )}
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
             </div>

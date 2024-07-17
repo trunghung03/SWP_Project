@@ -39,5 +39,53 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("sub")]
+        public async Task<IActionResult> GetSubDiamondAttributes()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var diamondAttributes = await _diamondAttributeRepository.GetSubDiamondAttributesAsync();
+
+                if (diamondAttributes == null)
+                {
+                    return NotFound("Diamond attributes do not exist");
+                }
+
+                return Ok(diamondAttributes.Select(x => x.ToDiamondAttributeDto()));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpGet("main")]
+        public async Task<IActionResult> GetMainDiamondAttributes()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var diamondAttributes = await _diamondAttributeRepository.GetMainDiamondAttributesAsync();
+
+                if (diamondAttributes == null)
+                {
+                    return NotFound("Diamond attributes do not exist");
+                }
+
+                return Ok(diamondAttributes.Select(x => x.ToDiamondAttributeDto()));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

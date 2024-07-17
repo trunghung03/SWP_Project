@@ -5,6 +5,7 @@ import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import '../../../styles/Manager/ManagerAdd.scss';
 import { createProduct, getAllCategories, getAllCollection, uploadImage } from '../../../services/ManagerService/ManagerProductService.js';
+import { getMainDiamondAttribute, getSubDiamondAttribute } from "../../../services/ManagerService/ManagerDiamondService.js";
 
 const ManagerAddProduct = () => {
     const navigate = useNavigate();
@@ -27,19 +28,25 @@ const ManagerAddProduct = () => {
     const [categories, setCategories] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
+    const [mainDiamondAttributes, setMainDiamondAttributes] = useState([]);
+    const [subDiamondAttributes, setSubDiamondAttributes] = useState([]);
 
     useEffect(() => {
         const fetchCollectionsAndCategories = async () => {
             try {
-                const [collectionsResponse, categoriesResponse] = await Promise.all([
+                const [collectionsResponse, categoriesResponse, mainDiamondAttributesResponse, subDiamondAttributesResponse] = await Promise.all([
                     getAllCollection(),
-                    getAllCategories()
+                    getAllCategories(),
+                    getMainDiamondAttribute(),
+                    getSubDiamondAttribute()
                 ]);
 
                 setCollections(collectionsResponse || []);
                 setCategories(categoriesResponse || []);
+                setMainDiamondAttributes(mainDiamondAttributesResponse || []);
+                setSubDiamondAttributes(subDiamondAttributesResponse || []);
             } catch (error) {
-                console.error("Error fetching collections or categories:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
@@ -145,41 +152,71 @@ const ManagerAddProduct = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Code</label>
-                            <input type="text" name="productCode" placeholder='PRODxxx' value={productData.productCode} onChange={handleChange} required />
+                            <input type="text" name="productCode" placeholder='PRODxxx' value={productData.productCode} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Name</label>
-                            <input type="text" name="name" placeholder="Input product's name" value={productData.name} onChange={handleChange} required />
+                            <input type="text" name="name" placeholder="Input product's name" value={productData.name} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Sale Price</label>
-                            <input type="number" name="price" placeholder="Input product's sale price" value={productData.price} onChange={handleChange} required />
+                            <input type="number" name="price" placeholder="Input product's sale price" value={productData.price} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Labor Cost</label>
-                            <input type="number" name="laborPrice" placeholder="Input product's labor cost" value={productData.laborPrice} onChange={handleChange} required />
+                            <input type="number" name="laborPrice" placeholder="Input product's labor cost" value={productData.laborPrice} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Main Diamond ID</label>
-                            <input type="number" name="mainDiamondAttributeId" placeholder="Input product's main diamond id" value={productData.mainDiamondAttributeId} onChange={handleChange} required />
+                            <label>Main Diamond</label>
+                            <div className="scrollable-select">
+                                <select
+                                    name="mainDiamondAttributeId"
+                                    value={productData.mainDiamondAttributeId}
+                                    onChange={handleChange}
+                                    required
+                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft:"5px", borderRadius:"7px"}}
+                                >
+                                    <option value="">Select Main Diamond</option>
+                                    {mainDiamondAttributes.map((attr) => (
+                                        <option key={attr.diamondAttributeId} value={attr.diamondAttributeId}>
+                                            {`${attr.shape}, ${attr.color}, ${attr.clarity}, ${attr.cut}, ${attr.carat}`}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                         <div className="manager_add_diamond_form_group">
-                            <label>Sub Diamond ID</label>
-                            <input type="number" name="subDiamondAttributeId" placeholder="Input product's sub diamond id" value={productData.subDiamondAttributeId} onChange={handleChange} required />
+                            <label>Sub Diamond</label>
+                            <div className="scrollable-select">
+                                <select
+                                    name="subDiamondAttributeId"
+                                    value={productData.subDiamondAttributeId}
+                                    onChange={handleChange}
+                                    required
+                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft:"5px", borderRadius:"7px"}}
+                                >
+                                    <option value="">Select Sub Diamond</option>
+                                    {subDiamondAttributes.map((attr) => (
+                                        <option key={attr.diamondAttributeId} value={attr.diamondAttributeId}>
+                                            {`${attr.shape}, ${attr.color}, ${attr.clarity}, ${attr.cut}, ${attr.carat}`}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Main Diamond Quantity</label>
-                            <input type="number" name="mainDiamondAmount" placeholder="Input quantity of main diamond" value={productData.mainDiamondAmount} onChange={handleChange} required />
+                            <input type="number" name="mainDiamondAmount" placeholder="Input quantity of main diamond" value={productData.mainDiamondAmount} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Sub Diamond Quantity</label>
-                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} required />
+                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
@@ -191,7 +228,7 @@ const ManagerAddProduct = () => {
                                     value={productData.collectionId}
                                     onChange={handleChange}
                                     required
-                                    style={{ maxHeight: '100px', overflowY: 'auto', width: '200px'}}
+                                    style={{ maxHeight: '100px', overflowY: 'auto', width: '200px', paddingLeft:"5px", borderRadius:"7px"}}
                                 >
                                     <option value="">Select Collection</option>
                                     {collections.map((collection) => (
@@ -208,7 +245,7 @@ const ManagerAddProduct = () => {
                                     value={productData.categoryId}
                                     onChange={handleChange}
                                     required
-                                    style={{ maxHeight: '100px', overflowY: 'auto' }}
+                                    style={{ maxHeight: '100px', overflowY: 'auto' , paddingLeft:"5px", borderRadius:"7px"}}
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map((category) => (
@@ -220,11 +257,11 @@ const ManagerAddProduct = () => {
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Description</label>
-                        <input type="text" name="description" placeholder="Input product's description" value={productData.description} onChange={handleChange} required />
+                        <input type="text" name="description" placeholder="Input product's description" value={productData.description} onChange={handleChange} required style={{borderRadius:"6px"}}/>
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Image</label>
-                        <input type="file" name="image" accept="image/*" onChange={handleImageUpload} multiple />
+                        <input type="file" name="image" accept="image/*" onChange={handleImageUpload} multiple style={{borderRadius:"6px"}}/>
                     </div>
                     <div className="ss_add_displayed_image_div2">
                         {imagePreviews.map((preview, index) => (

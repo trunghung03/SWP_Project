@@ -12,6 +12,7 @@ namespace DIAN_.Repository
         private readonly ApplicationDbContext _context;
         private readonly IDistributedCache _distributedCache;
         private readonly ILogger<CollectionRepository> _logger;
+        private string cacheKey = "Collections";
         public CollectionRepository(ApplicationDbContext context, IDistributedCache distributedCache, ILogger<CollectionRepository> logger)
         {
             _context = context;
@@ -26,7 +27,6 @@ namespace DIAN_.Repository
 
             await _context.Collections.AddAsync(collection);
             await _context.SaveChangesAsync();
-            string cacheKey = "Collections";
             await _distributedCache.RemoveAsync(cacheKey);
             return collection;
         }
@@ -41,12 +41,12 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             string individualCacheKey = $"Collection_{id}";
             await _distributedCache.RemoveAsync(individualCacheKey);
+            await _distributedCache.RemoveAsync(cacheKey);
             return collection;
         }
 
         public async Task<List<Collection>> GetAllAsync()
         {
-            string cacheKey = "Collections";
             string? cachedCollections = await _distributedCache.GetStringAsync(cacheKey);
             List<Collection> collections;
 
@@ -112,6 +112,7 @@ namespace DIAN_.Repository
 
             await _context.SaveChangesAsync();
             string individualCacheKey = $"Collection_{id}";
+            await _distributedCache.RemoveAsync(cacheKey);
             await _distributedCache.RemoveAsync(individualCacheKey);
             return updateCollection;
         }
@@ -124,6 +125,7 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             string individualCacheKey = $"Collection_{id}";
             await _distributedCache.RemoveAsync(individualCacheKey);
+            await _distributedCache.RemoveAsync(cacheKey);
             return true;
         }
         public async Task<Collection?> GetNewestCollectionAsync()

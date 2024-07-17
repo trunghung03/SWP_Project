@@ -80,6 +80,18 @@ const deleteSubDiamondById = (id) => {
 };
 
 
+//diamondattribute
+const getMainDiamondAttribute = async () => {
+  const response = await axios.get(`${API_BASE_URL}/diamond-attributes/main`);
+  return response.data;
+};
+
+const getSubDiamondAttribute = async () => {
+  const response = await axios.get(`${API_BASE_URL}/diamond-attributes/sub`);
+  return response.data;
+};
+
 export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape,getCertificateById,updateCertificateById 
-  , getAllSubDiamond, getSubDiamondDetail, createSubDiamond, updateSubDiamondById, deleteSubDiamondById
+  , getAllSubDiamond, getSubDiamondDetail, createSubDiamond, updateSubDiamondById, deleteSubDiamondById,
+  getMainDiamondAttribute, getSubDiamondAttribute
 };

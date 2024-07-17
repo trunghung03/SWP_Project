@@ -27,11 +27,11 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Box from '@mui/material/Box';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import DiamondIcon from '@mui/icons-material/Diamond';
-import SubDiamondIcon from '@mui/icons-material/Grain';
+import Box from "@mui/material/Box";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import DiamondIcon from "@mui/icons-material/Diamond";
+import SubDiamondIcon from "@mui/icons-material/Grain";
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
@@ -130,7 +130,7 @@ const ManagerDiamondList = () => {
     fetchData(1, value === 0 ? "main" : "sub");
     setSearchQuery("");
     setIsSearch(false);
-  }
+  };
 
   const handleEdit = (diamond) => {
     setEditMode(true);
@@ -144,37 +144,46 @@ const ManagerDiamondList = () => {
   };
 
   const handleUpdate = async () => {
-    const requiredFields = ["shape", "color", "clarity", "cut", "carat", "price", "amountAvailable"];
+    const requiredFields = ["shape", "color", "clarity", "cut", "carat", "price"];
+    if (value === 1) { // if sub-diamond, add 'amountAvailable' to required fields
+        requiredFields.push("amountAvailable");
+    } else { // if main diamond, add 'certificateScan' to required fields
+        requiredFields.push("certificateScan");
+    }
+
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
+
     for (let field of requiredFields) {
-      if (!editedDiamond[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
-      if (specialCharPattern.test(editedDiamond[field])) {
-        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-        return;
-      }
+        if (!editedDiamond[field]) {
+            swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
+            return;
+        }
+        if (specialCharPattern.test(editedDiamond[field])) {
+            swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+            return;
+        }
     }
 
     const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
     if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
-      return;
+        swal("No changes detected!", "You have not made any changes.", "error");
+        return;
     }
 
     const diamondToUpdate = { ...editedDiamond, status: true };
 
     try {
-      value === 0
-        ? await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate)
-        : await updateSubDiamondById(diamondToUpdate.subDiamondId, diamondToUpdate);
-      fetchData(currentPage, value === 0 ? "main" : "sub");
-      setEditMode(false);
-      swal("Updated successfully!", "The diamond information has been updated.", "success");
+        if (value === 0) {
+            await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
+        } else {
+            await updateSubDiamondById(diamondToUpdate.subDiamondId, diamondToUpdate);
+        }
+        fetchData(currentPage, value === 0 ? "main" : "sub");
+        setEditMode(false);
+        swal("Updated successfully!", "The diamond information has been updated.", "success");
     } catch (error) {
-      console.error("Error updating diamond:", error);
-      swal("Something went wrong!", "Failed to update. Please try again.", "error");
+        console.error("Error updating diamond:", error);
+        swal("Something went wrong!", "Failed to update. Please try again.", "error");
     }
   };
 
@@ -259,30 +268,31 @@ const ManagerDiamondList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3>List Of {value === 0 ? "Diamonds" : "Sub-Diamonds"}</h3>
+        <h3 style={{ marginBottom: "2.5%" }}>List Of {value === 0 ? "Diamonds" : "Sub-Diamonds"}</h3>
         <div className="manager_manage_diamond_create_button_section">
+          <div className="manager_manage_diamond_navigation">
+            <Box sx={{ width: 500 }}>
+              <BottomNavigation
+                showLabels
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                  fetchData(1, newValue === 0 ? "main" : "sub");
+                }}
+              >
+                <BottomNavigationAction label="Diamonds" icon={<DiamondIcon />} />
+                <BottomNavigationAction label="Sub-Diamonds" icon={<SubDiamondIcon />} />
+              </BottomNavigation>
+            </Box>
+          </div>
           <button
             className="manager_manage_diamond_create_button"
-            onClick={() => navigate(value === 0 ? "/manager-add-diamond" : "/manager-add-subdiamond")}
+            onClick={() => navigate("/manager-add-diamond")}
           >
-            Add new {value === 0 ? "diamond" : "sub-diamond"}
+            Add new diamond
           </button>
+
           {renderPagination()}
-        </div>
-        <div className="manager_manage_diamond_navigation">
-          <Box sx={{ width: 500 }}>
-            <BottomNavigation
-              showLabels
-              value={value}
-              onChange={(event, newValue) => {
-                setValue(newValue);
-                fetchData(1, newValue === 0 ? "main" : "sub");
-              }}
-            >
-              <BottomNavigationAction label="Diamonds" icon={<DiamondIcon />} />
-              <BottomNavigationAction label="Sub-Diamonds" icon={<SubDiamondIcon />} />
-            </BottomNavigation>
-          </Box>
         </div>
 
         {/* Table diamond list */}
@@ -333,15 +343,7 @@ const ManagerDiamondList = () => {
                       </TableCell>
                       {value === 0 ? (
                         <TableCell align="center">
-                          {item.certificateScan ? (
-                            <img
-                              src={item.certificateScan}
-                              alt="Certificate"
-                              style={{ width: "60px", height: "auto" }}
-                            />
-                          ) : (
-                            "No certificate"
-                          )}
+                          {item.certificateScan ? item.certificateScan : "No certificate"}
                         </TableCell>
                       ) : (
                         <TableCell align="center">
@@ -369,7 +371,8 @@ const ManagerDiamondList = () => {
                 )}
               </TableBody>
             </Table>
-          </TableContainer>{isSearch && (
+          </TableContainer>
+          {isSearch && (
             <button className="btn btn-secondary mt-3" onClick={handleBack}>
               Back to show all {value === 0 ? "diamonds" : "sub-diamonds"}
             </button>

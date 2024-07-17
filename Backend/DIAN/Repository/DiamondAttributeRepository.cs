@@ -1,5 +1,6 @@
 ﻿using DIAN_.Interfaces;
 using DIAN_.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DIAN_.Repository
 {
@@ -46,9 +47,26 @@ namespace DIAN_.Repository
 
         }
 
-        public Task<IEnumerable<Diamondattribute>> GetDiamondAttributesAsync()
+        public async Task<IEnumerable<Diamondattribute>> GetMainDiamondAttributesAsync()
         {
-            throw new NotImplementedException();
+            var diamondAttributes = await _context.Diamondattributes
+                .Where(x => x.Carat > 0.5m).ToListAsync(); 
+            return diamondAttributes;
+        }
+
+
+        public async Task<IEnumerable<Diamondattribute>> GetSubDiamondAttributesAsync()
+        {
+            var diamondAttributes = await _context.Diamondattributes
+                                                    .Where(x => x.Carat <= 0.5m)
+                                                    .ToListAsync();
+            return diamondAttributes;
+        }
+
+        public async Task<IEnumerable<Diamondattribute>> GetDiamondAttributesAsync()
+        {
+            var diamondAttributes = await _context.Diamondattributes.ToListAsync();
+            return diamondAttributes;
         }
         public async Task<Diamondattribute> GetDiamondAttributesAsync(int diamondAttributeId)
         {
@@ -60,6 +78,8 @@ namespace DIAN_.Repository
             }
             return diamondAttribute;
         }
+
+
         public Task<Diamondattribute> UpdateDiamondAttributeAsync(Diamondattribute diamondAttribute)
         {
             throw new NotImplementedException();

@@ -137,32 +137,28 @@ const ManagerProductList = () => {
 
   const handleDelete = async (productID) => {
     swal({
-      title: "Are you sure to delete this product?",
-      text: "This action cannot be undone",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        try {
-          await deleteProductById(productID);
-          fetchData(pagination.currentPage, searchQuery);
-          swal(
-            "Deleted successfully!",
-            "The product has been deleted.",
-            "success"
-          );
-        } catch (error) {
-          console.error("Error deleting product:", error);
-          swal(
-            "Something went wrong!",
-            "Failed to delete the product. Please try again.",
-            "error"
-          );
+        title: "Are you sure to delete this product?",
+        text: "This action cannot be undone",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            deleteProductById(productID)
+                .then(() => {
+                    swal("Deleted successfully!", "The product has been deleted.", "success")
+                        .then(() => {
+                            fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
+                        });
+                })
+                .catch((error) => {
+                    console.error("Error deleting product:", error);
+                    swal("Something went wrong!", "Failed to delete the product. Please try again.", "error");
+                });
         }
-      }
     });
-  };
+};
+
 
 const handleEdit = (product) => {
   setEditMode(true);
@@ -177,55 +173,48 @@ const handleEdit = (product) => {
 
   const handleUpdate = async () => {
     const requiredFields = [
-      "name",
-      "description",
-      "laborPrice",
-      "imageLinkList",
-      "collectionId",
-      "categoryId",
+        "name",
+        "description",
+        "laborPrice",
+        "imageLinkList",
+        "collectionId",
+        "categoryId",
     ];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
 
     for (let field of requiredFields) {
-      if (!editedProduct[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
-      if (specialCharPattern.test(editedProduct[field])) {
-        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-        return;
-      }
+        if (!editedProduct[field]) {
+            swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+            return;
+        }
+        if (specialCharPattern.test(editedProduct[field])) {
+            swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+            return;
+        }
     }
 
     const isEqual = JSON.stringify(originalProduct) === JSON.stringify(editedProduct);
     if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
-      return;
+        swal("No changes detected!", "You have not made any changes.", "error");
+        return;
     }
 
     const productToUpdate = { ...editedProduct, status: true };
 
-    try {
-      await updateProductById(productToUpdate.productId, productToUpdate);
-      fetchData(pagination.currentPage, searchQuery);
-      setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The product information has been updated.",
-        "success"
-      );
-    } catch (error) {
-      console.error(
-        "Error updating product:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
-    }
-  };
+    updateProductById(productToUpdate.productId, productToUpdate)
+        .then(() => {
+            swal("Updated successfully!", "The product information has been updated.", "success")
+                .then(() => {
+                    fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
+                    setEditMode(false);
+                });
+        })
+        .catch((error) => {
+            console.error("Error updating product:", error.response ? error.response.data : error.message);
+            swal("Something went wrong!", "Failed to update. Please try again.", "error");
+        });
+};
+
 
   const renderPagination = () => {
     const pages = [];
@@ -373,7 +362,7 @@ const handleEdit = (product) => {
                       <TableCell align="center">{item.productId}</TableCell>
                       <TableCell align="center">{item.productCode}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{item.price}</TableCell>
+                      <TableCell align="center">${item.price}</TableCell>
                       <TableCell align="center">{item.stock}</TableCell>
                       {/* <TableCell align="center">{item.description}</TableCell>
                       <TableCell align="center">{mainDiamonds[item.mainDiamondId]}</TableCell>
