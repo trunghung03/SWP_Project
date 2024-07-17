@@ -42,6 +42,10 @@ const changePasswordApi = (data) => {
     return axios.post(`${API_BASE_URL}/accounts/change-password`, data);
 }
 
+const getEmployeeById = (id) => {
+    return axios.get(`${API_BASE_URL}/employees/id/${id}`);
+}
+
 export { 
     customerLoginApi, 
     employeeLoginApi, 
@@ -52,5 +56,6 @@ export {
     forgotPasswordApi, 
     resetPasswordApi,
     registerCustomerApi,
-    changePasswordApi
+    changePasswordApi,
+    getEmployeeById
 };

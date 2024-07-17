@@ -377,22 +377,45 @@ function DiamondPrice() {
             <thead>
               <tr>
                 <th className="diamond_price_table_header">Shape</th>
-                <th className="diamond_price_table_header">Price</th>
                 <th className="diamond_price_table_header">Carat</th>
                 <th className="diamond_price_table_header">Cut</th>
                 <th className="diamond_price_table_header">Color</th>
                 <th className="diamond_price_table_header">Clarity</th>
+                <th className="diamond_price_table_header">Price</th>
               </tr>
             </thead>
             <tbody>
               {filteredDiamonds.map((diamond, index) => (
                 <tr key={index}>
                   <td className="diamond_price_table_data">{diamond.shape}</td>
-                  <td className="diamond_price_table_data">{diamond.price}$</td>
                   <td className="diamond_price_table_data">{diamond.carat}</td>
                   <td className="diamond_price_table_data">{diamond.cut}</td>
                   <td className="diamond_price_table_data">{diamond.color}</td>
                   <td className="diamond_price_table_data">{diamond.clarity}</td>
+                  <td className="diamond_price_table_data">{diamond.price}$</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Shell Price List */}
+      <div className="shell_price_title_container">
+        <h2 className="shell_price_title">Shell Price List</h2>
+        <div className="shell_price_table_wrapper">
+          <table className="shell_price_table">
+            <thead>
+              <tr>
+                <th className="shell_price_table_header">Name</th>
+                <th className="shell_price_table_header">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shellMaterials.map((shell, index) => (
+                <tr key={index}>
+                  <td className="shell_price_table_data">{shell.name}</td>
+                  <td className="shell_price_table_data">{shell.price}$</td>
                 </tr>
               ))}
             </tbody>
@@ -440,3 +463,4 @@ function DiamondPrice() {
 }
 
 export default DiamondPrice;
+

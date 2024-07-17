@@ -5,6 +5,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import BlogInspired from '../../components/BlogInspired/BlogInspired.js';
 import { getArticleById, getAllArticles } from '../../services/BlogService.js';
+import { getEmployeeById } from '../../services/UserService';
 import '../../styles/Active/BlogDetail.scss';
 import blogLogo from '../../assets/img/blogLogo.png';
 import HeaderComponent from '../../components/Header/HeaderComponent';
@@ -15,8 +16,8 @@ function BlogDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { articleID } = location.state || {};
-  const title = location.pathname.split('/').pop();
   const [article, setArticle] = useState(null);
+  const [creatorName, setCreatorName] = useState('');
   const [relatedArticles, setRelatedArticles] = useState([]);
 
   useEffect(() => {
@@ -28,10 +29,23 @@ function BlogDetail() {
       getArticleById(articleID)
         .then(data => {
           setArticle(data);
-          getAllArticles().then(allArticles => {
-            const related = allArticles.filter(a => a.tag === data.tag && a.articleID !== data.articleID).slice(0, 4);
-            setRelatedArticles(related);
-          });
+          getEmployeeById(data.createdBy)
+            .then(employeeData => {
+              const fullName = `${employeeData.data.firstName} ${employeeData.data.lastName}`;
+              setCreatorName(fullName);
+            })
+            .catch(error => {
+              console.error('Error fetching employee data:', error);
+            });
+
+          getAllArticles()
+            .then(allArticles => {
+              const related = allArticles.filter(a => a.tag === data.tag && a.articleID !== data.articleID).slice(0, 4);
+              setRelatedArticles(related);
+            })
+            .catch(error => {
+              console.error('Error fetching all articles:', error);
+            });
         })
         .catch(error => {
           console.error('Error fetching article by ID:', error);
@@ -66,7 +80,7 @@ function BlogDetail() {
         <div className="blog_detail_header">
           <p className="blog_detail_created_on">{new Date(article.createdOn).toLocaleDateString()}</p>
           <h4 className="blog_detail_title">{article.title}</h4>
-          <p className="blog_detail_created_by">Creator: {article.createdBy}</p>
+          <p className="blog_detail_created_by">Creator: {creatorName}</p>
         </div>
         <div className="blog_detail_content">
           <div className='blog_detail_main_image'>

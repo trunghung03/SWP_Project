@@ -1,3 +1,11 @@
+.Blog .blog_nav_bar_container .row>*{
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
 .blog_main_container {
     padding: 40px 5% 0 5%;
 }
@@ -140,10 +148,16 @@
         text-align: center;
         color: #1c1c1c;
         border-right: 1px solid #1c1c1c;
+        border-left: 1px solid #1c1c1c;
         padding: 0 15px;
 
+        &:first-child {
+            border-left: 1.4px solid #1c1c1c;
+
+        }
+
         &:last-child {
-            border-right: none;
+            border-right: 1.4px solid #1c1c1c;
         }
 
         .blog_recycle_title {
@@ -158,6 +172,10 @@
     }
 }
 
+.blog_nav_item_wrapper{
+    display: flex;
+}
+
 
 // Blog nav bar
 
@@ -165,9 +183,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 5% 45px 5%;
+    padding: 10px 0 45px 0;
     background-color: white;
     border-bottom: 1px solid #ddd;
+    max-width: 100% !important;
 }
 
 .blog_nav_item {
@@ -181,15 +200,9 @@
 }
 
 .blog_nav_item i {
-    font-size: 20px;
+    font-size: 18px;
     margin-right: 10px;
     color: #797979;
-}
-
-.blog_nav_item span {
-    font-size: 17px;
-    color: #1c1c1c;
-    margin-right: 10px;
 }
 
 .blog_nav_item span:hover {
@@ -203,16 +216,16 @@
 .blog_nav_search {
     display: flex;
     align-items: center;
-    margin-left: auto;
     position: relative;
+    justify-content: center;
 }
 
 .blog_nav_search input {
     border: none;
     border-bottom: 2px solid #1c1c1c;
     padding: 5px;
-    padding-right: 30px;
-    margin-right: 5px;
+    // padding-right: 30px;
+    // margin-right: 5px;
     outline: none;
     width: 250px;
 }
@@ -225,7 +238,7 @@
 }
 
 .blog_nav_item span {
-    font-size: 17px;
+    font-size: 15px;
     color: #1c1c1c;
     margin-right: 10px;
     position: relative;
@@ -302,7 +315,7 @@
     font-size: 13px;
 }
 
-.small_blog_card:hover  .small_blog_read_more{
+.small_blog_card:hover .small_blog_read_more {
     color: #1c1c1c;
     text-decoration: none;
     transform: translateY(-4px);
@@ -344,7 +357,7 @@
     position: relative;
     background-color: #f4f2ee;
     margin: 50px 0 85px 0;
-    border-bottom: 86px solid #f8dcce;
+    // border-bottom: 86px solid #f8dcce;
     border-left: 70px solid #f8dcce;
     border-right: 70px solid white;
 }

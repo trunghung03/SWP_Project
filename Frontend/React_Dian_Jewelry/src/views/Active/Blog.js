@@ -176,59 +176,68 @@ function Blog() {
 
       <div className="blog_recycle_container">
         <div className="row">
-          <div className="col-md-3 blog_recycle_column">
+          <div className="col-lg-3 col-md-3 col-sm-12 blog_recycle_column">
             <h4 className="blog_recycle_title">RECYCLED METALS</h4>
             <p>Today, 96% of our gold and 97% of our silver is recycled. By 2025, 100% will be recycled or Fairmined.</p>
           </div>
-          <div className="col-md-3 blog_recycle_column">
+          <div className="col-lg-3 col-md-3 col-sm-12 blog_recycle_column">
             <h4 className="blog_recycle_title">CIRCULARITY</h4>
             <p>Recycled materials. Timeless designs. Lifetime warranties. And trade-in programs that give your jewelry new life.</p>
           </div>
-          <div className="col-md-3 blog_recycle_column">
+          <div className="col-lg-3 col-md-3 col-sm-12 blog_recycle_column">
             <h4 className="blog_recycle_title">ZERO WASTE</h4>
             <p>No single-use plastics by 2025. Zero waste in showrooms and offices by 2030.</p>
           </div>
-          <div className="col-md-3 blog_recycle_column">
+          <div className="col-lg-3 col-md-3 col-sm-12 blog_recycle_column">
             <h4 className="blog_recycle_title">EMISSION REDUCTIONS</h4>
             <p>We have committed to setting near-term company-wide emission reductions.</p>
           </div>
         </div>
       </div>
 
-      <div className="blog_nav_bar_container">
-        <div className="blog_nav_item" onClick={() => handleTagClick('')}>
-          <i className="fas fa-list"></i>
-          <span>All</span>
-        </div>
-        <div className="blog_nav_item" onClick={() => handleTagClick('News')}>
-          <i className="fas fa-newspaper"></i>
-          <span>News</span>
-        </div>
-        <div className="blog_nav_item" onClick={() => handleTagClick('About')}>
-          <i className="fas fa-info-circle"></i>
-          <span>About</span>
-        </div>
-        <div className="blog_nav_item" onClick={() => handleTagClick('Service')}>
-          <i className="fas fa-concierge-bell"></i>
-          <span>Service</span>
-        </div>
-        <div className="blog_nav_item" onClick={() => handleTagClick('Education')}>
-          <i className="fas fa-graduation-cap"></i>
-          <span>Education</span>
-        </div>
-        <div className="blog_nav_item" onClick={() => handleTagClick('Blog')}>
-          <i className="fas fa-blog"></i>
-          <span>Blog</span>
-        </div>
-        <div className="blog_nav_search">
-          <input
-            type="text"
-            placeholder="Search blog..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            onKeyUp={handleSearchKeyPress}
-          />
-          <i className="fas fa-search"></i>
+      <div className="blog_nav_bar_container container">
+        <div className='row'>
+          <div className='col-lg-4 col-md-4 col-sm-12 blog_nav_item_wrapper'>
+            <div className="blog_nav_item" onClick={() => handleTagClick('')}>
+              <i className="fas fa-list"></i>
+              <span>All</span>
+            </div>
+            <div className="blog_nav_item" onClick={() => handleTagClick('News')}>
+              <i className="fas fa-newspaper"></i>
+              <span>News</span>
+            </div>
+            <div className="blog_nav_item" onClick={() => handleTagClick('About')}>
+              <i className="fas fa-info-circle"></i>
+              <span>About</span>
+            </div>
+          </div>
+          <div className='col-lg-5 col-md-5 col-sm-12 blog_nav_item_wrapper'>
+            <div className="blog_nav_item" onClick={() => handleTagClick('Service')}>
+              <i className="fas fa-concierge-bell"></i>
+              <span>Service</span>
+            </div>
+            <div className="blog_nav_item" onClick={() => handleTagClick('Education')}>
+              <i className="fas fa-graduation-cap"></i>
+              <span>Education</span>
+            </div>
+            <div className="blog_nav_item" onClick={() => handleTagClick('Blog')}>
+              <i className="fas fa-blog"></i>
+              <span>Blog</span>
+            </div>
+          </div>
+
+          <div className='col-lg-3 col-md-3 col-sm-12'>
+            <div className="blog_nav_search">
+              <input
+                type="text"
+                placeholder="Search blog..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onKeyUp={handleSearchKeyPress}
+              />
+              <i className="fas fa-search"></i>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -253,7 +262,6 @@ function Blog() {
           ))
         ) : (
           <div className="no_blogs_found col-12">
-            <p>No blogs found..</p>
           </div>
         )}
       </div>
@@ -267,7 +275,7 @@ function Blog() {
       ) : null}
 
       <div className="blog_mission_container">
-        <div className="blog_mission_text">jewelry redefined</div>
+        {/* <div className="blog_mission_text">jewelry redefined</div> */}
         <div className="blog_mission_white">                                 </div>
         <div className="row">
           <div className="col-md-6">
