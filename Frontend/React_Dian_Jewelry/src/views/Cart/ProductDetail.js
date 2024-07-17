@@ -62,16 +62,13 @@ function ProductDetail() {
                 setSelectedImage(images[0]);
 
                 return Promise.all([
-                    getDiamondDetail(productData.mainDiamondId).catch(error => {
-                        console.error('Error fetching diamond details:', error);
+                    getDiamondDetail(productData.mainDiamondAttributeId).catch(error => {
                         throw error;
                     }),
                     getCollectionDetail(productData.collectionId).catch(error => {
-                        console.error('Error fetching collection details:', error);
                         throw error;
                     }),
                     getProductList().catch(error => {
-                        console.error('Error fetching product list:', error);
                         throw error;
                     })
                 ]).then(([diamondResponse, collectionResponse, productListResponse]) => {
@@ -91,19 +88,16 @@ function ProductDetail() {
 
                     setAlsoLikeProducts(nextProducts);
                 }).catch(error => {
-                    console.error('Error in Promise.all:', error);
                 }).finally(() => {
                     setLoading(false);
                 });
             }).catch(error => {
-                console.error('Error fetching product details:', error);
                 setLoading(false);
             });
 
             getShellMaterials().then(response => {
                 setShellMaterials(response.data);
             }).catch(error => {
-                console.error('Error fetching shell materials:', error);
             });
         }
     }, [location.state]);

@@ -66,7 +66,7 @@ function Shape() {
                 setProducts(filteredProducts);
             })
             .catch(error => {
-                console.log('Error fetching products:', error);
+                console.log(error);
             });
 
     }, [shape, location.state]);
@@ -91,7 +91,7 @@ function Shape() {
                 setProducts(filteredProducts);
                 setResetKey(Date.now());
             })
-            .catch(error => console.log('Error fetching products:', error));
+            .catch(error => console.log(error));
     }, [clarity, carat, color, shape]);
 
     useEffect(() => {

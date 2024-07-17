@@ -127,30 +127,30 @@ const Home = () => {
     getNewestProducts().then(response => {
       const productsWithOriginalPrice = response.data.map(product => ({
         ...product,
-        originalPrice: product.price + 100
+        originalPrice: product.price
       }));
       setNewProducts(productsWithOriginalPrice);
       setDisplayProducts(productsWithOriginalPrice);
     }).catch(error => {
-      console.error('Error fetching newest products:', error);
+      console.error(error);
     });
 
     getTopSellingProducts().then(response => {
       const productsWithOriginalPrice = response.data.map(product => ({
         ...product,
-        originalPrice: product.price + 100
+        originalPrice: product.price
       }));
       setTopSellingProducts(productsWithOriginalPrice);
       setTrendingProducts(productsWithOriginalPrice.slice(-2));
     }).catch(error => {
-      console.error('Error fetching top selling products:', error);
+      console.error(error);
     });
 
     getNewestCollections().then(response => {
       const newestCollection = response.data;
       setNewestCollection(newestCollection);
     }).catch(error => {
-      console.error('Error fetching newest collections:', error);
+      console.error(error);
     });
   }, []);
 
@@ -434,7 +434,7 @@ const Home = () => {
                 <div key={index} className="trending_product_card card" onClick={() => handleProductClick(product)}>
                   <img src={product.imageLinkList} alt={product.name} className="product_image" />
                   <p className="trending_product_name">{product.name}</p>
-                  <p className="trending_product_price"><del>{product.originalPrice}$</del>    {product.price}$</p>
+                  <p className="trending_product_price">{product.price}$</p>
                 </div>
               ))}
             </div>

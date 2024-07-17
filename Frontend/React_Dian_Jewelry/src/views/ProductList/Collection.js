@@ -41,7 +41,7 @@ function Collection() {
                         { name: response.data.name }
                     ]);
                 })
-                .catch(error => console.log('Error fetching collection details:', error));
+                .catch(error => console.log(error));
 
             getProductList()
                 .then(response => {
@@ -63,7 +63,7 @@ function Collection() {
                     setProducts(filteredProducts);
                     setResetKey(Date.now());
                 })
-                .catch(error => console.log('Error fetching products:', error));
+                .catch(error => console.log(error));
         } else {
             setNavItems([
                 { name: 'Home', link: '/home' },
@@ -73,7 +73,7 @@ function Collection() {
                 .then(response => {
                     setProducts(response.data);
                 })
-                .catch(error => console.log('Error fetching products:', error));
+                .catch(error => console.log(error));
         }
     }, [location.state, clarity, carat, color, shape]);
 

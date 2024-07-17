@@ -35,7 +35,7 @@ function BlogDetail() {
               setCreatorName(fullName);
             })
             .catch(error => {
-              console.error('Error fetching employee data:', error);
+              console.error(error);
             });
 
           getAllArticles()
@@ -44,11 +44,11 @@ function BlogDetail() {
               setRelatedArticles(related);
             })
             .catch(error => {
-              console.error('Error fetching all articles:', error);
+              console.error(error);
             });
         })
         .catch(error => {
-          console.error('Error fetching article by ID:', error);
+          console.error(error);
         });
     }
     window.scrollTo(0, 210);

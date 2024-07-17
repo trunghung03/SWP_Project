@@ -40,7 +40,7 @@ function Blog() {
         setLoading(false); // Set loading to false when data is fetched
       })
       .catch(error => {
-        console.error('Error fetching articles:', error);
+        console.error(error);
         setLoading(false); // Set loading to false even if there is an error
       });
   }, []);
@@ -93,7 +93,7 @@ function Blog() {
               setSelectedTag('');
             })
             .catch(error => {
-              console.error('Error fetching articles:', error);
+              console.error(error);
             });
         } else {
           searchArticlesByTitle(searchTerm)
@@ -110,7 +110,7 @@ function Blog() {
               }
             })
             .catch(error => {
-              console.error('Error searching articles:', error);
+              console.error(error);
             });
         }
       }
