@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../CollectionSlide/CollectionSlide.scss';
-import { getCollectionList } from '../../services/ProductService'; 
+import { getCollectionList } from '../../services/ProductService';
 
 const CollectionSlide = ({ onCollectionClick }) => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const CollectionSlide = ({ onCollectionClick }) => {
     getCollectionList().then(response => {
       setCollections(response.data);
     }).catch(error => {
-      console.error('Error fetching collections:', error);
+      console.error(error);
     });
   }, []);
 
@@ -67,35 +67,38 @@ const CollectionSlide = ({ onCollectionClick }) => {
   }, []);
 
   return (
-    <div className="featured_jewelry_container">
-      <div className="left_section">
-        <h1 className="featured_title">Our Collections</h1>
-        <p className="featured_description">
-          View our outstanding jewelry collections, where artistry meets timeless elegance.
-          Each piece of jewelry is exquisitely crafted, bringing the splendor and class.
-        </p>
-        <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'all' })} className="shop_now_btn">
-          Shop now
-        </button>
-      </div>
-      <div className="right_section wrapper">
-        <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
-        <ul className="carousel">
-          {collections.map((collection, index) => {
-            const collectionName = collection.name.replace(/\s+/g, '-').toLowerCase();
-            return (
-              <li key={index} className="home_product_card card" onClick={() => handleNavigate(`/collection/${collectionName}`, { collectionId: collection.collectionId })}>
-                <div className="home_product_icon_wrapper" data-tooltip="View collection">
-                  <i className="far fa-eye home_product_icon_eye"></i>
-                </div>
-                <img src={collection.imageLink} alt={collection.name} className="home_product_image" />
-                <p className="home_product_name">{collection.name}</p>
-                <div className="home_collection_hover_effect"></div>
-              </li>
-            );
-          })}
-        </ul>
-        <i id="right" className="fa-solid fa-angle-right nav_arrow right_arrow" role="button"></i>
+    <div className="featured_jewelry_container container">
+      <div className='row'>
+        <div className="col-lg-4 col-md-4 col-sm-12 left_section">
+          <h1 className="featured_title">Our Collections</h1>
+          <p className="featured_description">
+            View our outstanding jewelry collections, where artistry meets timeless elegance.
+            Each piece of jewelry is exquisitely crafted, bringing the splendor and class.
+          </p>
+          <button onClick={() => handleNavigate('/diamond-jewelry', { category: 'all' })} className="shop_now_btn">
+            Shop now
+          </button>
+        </div>
+        <div className="col-lg-8 col-md-8 col-sm-12 right_section wrapper">
+          <i id="left" className="fa-solid fa-angle-left nav_arrow left_arrow" role="button"></i>
+          <i id="right" className="fa-solid fa-angle-right nav_arrow right_arrow" role="button"></i>
+
+          <ul className="carousel">
+            {collections.map((collection, index) => {
+              const collectionName = collection.name.replace(/\s+/g, '-').toLowerCase();
+              return (
+                <li key={index} className="home_product_card card" onClick={() => handleNavigate(`/collection/${collectionName}`, { collectionId: collection.collectionId })}>
+                  <div className="home_product_icon_wrapper" data-tooltip="View collection">
+                    <i className="far fa-eye home_product_icon_eye"></i>
+                  </div>
+                  <img src={collection.imageLink} alt={collection.name} className="home_product_image" />
+                  <p className="home_product_name">{collection.name}</p>
+                  <div className="home_collection_hover_effect"></div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );

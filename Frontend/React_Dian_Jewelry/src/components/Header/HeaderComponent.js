@@ -280,9 +280,9 @@ const HeaderComponent = () => {
                           <div className="each_noti">
                             <p className="noti_description">{notification}</p>
                           </div>
-                          <div className="noti_date">
+                          {/* <div className="noti_date">
                             <p>10:20 09/11/2004</p>
-                          </div>
+                          </div> */}
                         </div>
                       ))
                   ) : (
