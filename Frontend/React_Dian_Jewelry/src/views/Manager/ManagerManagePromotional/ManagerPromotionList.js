@@ -21,7 +21,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-
+import TablePagination from '@mui/material/TablePagination';
+import TableFooter from '@mui/material/TableFooter'; // Add this import
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Add this import
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'; // Add this import
 
 const getPromotionStatus = async (endDate, id) => {
   try {
@@ -38,6 +41,7 @@ const getPromotionStatus = async (endDate, id) => {
     return false;
   }
 };
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#f9c6bb',
@@ -101,15 +105,7 @@ const ManagerPromotionList = () => {
   const [editedPromotion, setEditedPromotion] = useState({});
   const [originalPromotion, setOriginalPromotion] = useState({});
   const [isSearch, setIsSearch] = useState(false);
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -123,22 +119,18 @@ const ManagerPromotionList = () => {
     fetchData();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentPromotion = promotionList.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
-  const totalPages = Math.ceil(promotionList.length / ordersPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
   };
 
-  // Search diamond by id
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const handleSearchKeyPress = async (e) => {
     const isInteger = (value) => {
       return /^-?\d+$/.test(value);
@@ -149,7 +141,7 @@ const ManagerPromotionList = () => {
         try {
           const response = await getPromotionDetail(searchQuery.trim());
           setPromotionList([response]);
-          setCurrentPage(1);
+          setPage(0);
         } catch (error) {
           console.error("Error fetching Promotion:", error);
           swal("Promotion not found!", "Please try another one.", "error");
@@ -165,7 +157,7 @@ const ManagerPromotionList = () => {
           } else {
             setPromotionList([]);
           }
-          setCurrentPage(1);
+          setPage(0);
         } catch (error) {
           console.error("Error fetching Promotion:", error);
           swal("Promotion not found!", "Please try another one.", "error");
@@ -175,15 +167,13 @@ const ManagerPromotionList = () => {
         try {
           const response = await ShowAllPromotion();
           setPromotionList(response);
-          setCurrentPage(1);
+          setPage(0);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
     }
-
   };
-
 
   const handleEdit = (Promotion) => {
     setEditMode(true);
@@ -226,8 +216,8 @@ const ManagerPromotionList = () => {
         PromotionToUpdate
       );
       console.log("Update response:", response.data);
-      const updatensetPromotionList = await ShowAllPromotion();
-      setPromotionList(updatensetPromotionList);
+      const updatedPromotionList = await ShowAllPromotion();
+      setPromotionList(updatedPromotionList);
       setEditMode(false);
       swal(
         "Updated successfully!",
@@ -251,7 +241,7 @@ const ManagerPromotionList = () => {
     try {
       const response = await ShowAllPromotion();
       setPromotionList(response);
-      setCurrentPage(1);
+      setPage(0);
       setIsSearch(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -287,33 +277,6 @@ const ManagerPromotionList = () => {
           >
             Add new promotional code
           </button>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              className="manager_button_pagination"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              className="manager_button_pagination"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -333,7 +296,7 @@ const ManagerPromotionList = () => {
               </TableHead>
               <TableBody>
                 {promotionList.length > 0 ? (
-                  currentPromotion.map((item) => (
+                  promotionList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
                     <TableRow className="manager_manage_table_body_row" key={item.id}>
                       <TableCell align="center">{item.id}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
@@ -354,12 +317,41 @@ const ManagerPromotionList = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="8" align="center">
+                    <TableCell colSpan="9" align="center">
                       No Promotion found
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    colSpan={9}
+                    count={promotionList.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handlePageChange}
+                    onRowsPerPageChange={handleRowsPerPageChange}
+                    ActionsComponent={() => (
+                      <div className="table-pagination">
+                        <IconButton
+                          onClick={(e) => handlePageChange(e, page - 1)}
+                          disabled={page === 0}
+                        >
+                          <ArrowBackIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={(e) => handlePageChange(e, page + 1)}
+                          disabled={page >= Math.ceil(promotionList.length / rowsPerPage) - 1}
+                        >
+                          <ArrowForwardIcon />
+                        </IconButton>
+                      </div>
+                    )}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
           {isSearch && (
@@ -370,12 +362,11 @@ const ManagerPromotionList = () => {
         </div>
       </div>
 
-
       {editMode && (
-       <div
-       className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
-       onClick={() => setEditMode(false)}
-     >
+        <div
+          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          onClick={() => setEditMode(false)}
+        >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}

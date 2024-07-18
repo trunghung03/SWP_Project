@@ -18,6 +18,8 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const ManagerCollectionList = () => {
   const navigate = useNavigate();
@@ -62,16 +64,11 @@ const ManagerCollectionList = () => {
     fetchData();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 6;
 
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = collectionItems.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(collectionItems.length / ordersPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
   };
 
   // Search Collection by id
@@ -86,7 +83,7 @@ const ManagerCollectionList = () => {
         try {
           const response = await searchCollectionById(searchQuery.trim());
           setCollectionItems([response]);
-          setCurrentPage(1);
+          setPage(1);
         } catch (error) {
           console.error("Error fetching Collection:", error);
           swal("Collection not found!", "Please try another one.", "error");
@@ -96,7 +93,7 @@ const ManagerCollectionList = () => {
         try {
           const response = await ShowAllCollection();
           setCollectionItems(response);
-          setCurrentPage(1);
+          setPage(1);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -107,9 +104,7 @@ const ManagerCollectionList = () => {
 
   const handleStatus = async (collectionID) => {
     try {
-
       const collection = await searchCollectionById(collectionID);
-      console.log(collection);
       const collectionStatus = collection.status;
       const action = collectionStatus ? "DEACTIVATE" : "ACTIVATE";
       const swalResult = await swal({
@@ -201,12 +196,16 @@ const ManagerCollectionList = () => {
     try {
       const response = await ShowAllCollection();
       setCollectionItems(response);
-      setCurrentPage(1);
+      setPage(1);
       setIsSearch(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
+
+  const indexOfLastOrder = page * rowsPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - rowsPerPage;
+  const currentOrders = collectionItems.slice(indexOfFirstOrder, indexOfLastOrder);
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -228,39 +227,21 @@ const ManagerCollectionList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3 style={{fontFamily:"serif", textDecoration:"none"}}>List Of Collections</h3>
-        <div className="manager_manage_diamond_create_button_section">
+        <div className="manager_manage_diamond_create_button_section" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-collection")}
           >
             Add new collection
           </button>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          <Stack spacing={2} direction="row">
+            <Pagination
+              count={Math.ceil(collectionItems.length / rowsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
         </div>
 
         {/* Table Collection list */}
@@ -321,7 +302,6 @@ const ManagerCollectionList = () => {
               </button>
             )}
         </div>
-        
       </div>
 
       {/* Update modal */}
