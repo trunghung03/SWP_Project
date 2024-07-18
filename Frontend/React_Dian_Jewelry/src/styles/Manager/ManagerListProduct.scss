@@ -75,13 +75,14 @@
 
 .manager_manage_diamond_create_button {
     background-color: #edaca5;
-    color: black;
-    padding: 5px 20px;
+    color: #1c1c1c;
+    padding: 0 20px;
     border: none;
-    border-radius: 11px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 15px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    height: 45px;
 }
 
 .manager_manage_diamond_create_button:hover {

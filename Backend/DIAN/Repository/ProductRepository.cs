@@ -103,7 +103,6 @@ namespace DIAN_.Repository
                     IQueryable<Product> productsQuery = _context.Products
                        .Where(p => p.Status)
                        .Include(p => p.Category)
-                       .ThenInclude(c => c.Size)
                        .Include(p => p.Shells);
 
                     if (!string.IsNullOrWhiteSpace(query.Name))
@@ -144,7 +143,7 @@ namespace DIAN_.Repository
             {
                 var product = await _context.Products
                     .Where(p => p.Status && p.ProductId == id)
-                    .Include(p => p.Category).ThenInclude(c => c.Size)
+                    .Include(p => p.Category).Include(p => p.Shells)
                     .FirstOrDefaultAsync();
 
                 if (product == null)
@@ -208,7 +207,7 @@ namespace DIAN_.Repository
         {
             var product = await _context.Products
                                         .Include(p => p.MainDiamondAtrribute)
-                                        .Include(p => p.Category).ThenInclude(c => c.Size)
+                                        .Include(p => p.Category).Include(p => p.Shells)
                                         .Where(p => p.Status && p.ProductId == id)
                                         .FirstOrDefaultAsync();
 

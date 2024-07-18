@@ -15,7 +15,5 @@ public partial class Shellmaterial
 
     public bool Status { get; set; }
 
-    public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
-
     public virtual ICollection<Shell> Shells { get; set; } = new List<Shell>();
 }

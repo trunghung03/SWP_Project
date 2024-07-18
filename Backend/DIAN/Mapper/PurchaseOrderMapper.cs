@@ -74,8 +74,7 @@ namespace DIAN_.Mapper
                 OrderId = dto.OrderId,
                 LineTotal = dto.LineTotal,
                 ProductId = dto.ProductId,
-                ShellMaterialId = dto.ShellMaterialId,
-                Size = dto.Size
+                ShellId = dto.ShellId,
             };
         }
 

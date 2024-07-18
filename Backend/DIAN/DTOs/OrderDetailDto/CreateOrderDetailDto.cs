@@ -14,11 +14,8 @@ namespace DIAN_.DTOs.OrderDetailDto
         [Required(ErrorMessage = "Product ID is required.")]
         public int ProductId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Shell Material ID must be a positive number.")]
-        public int? ShellMaterialId { get; set; }
-
-        [Range(0.01, double.MaxValue, ErrorMessage = "Size must be greater than 0.")]
-        public decimal? Size { get; set; }
+        [Required(ErrorMessage = "Shell ID is required.")]
+        public int ShellId { get; set; }
 
         public string? CertificateScan { get; set; }
 

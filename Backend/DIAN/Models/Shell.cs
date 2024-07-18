@@ -15,9 +15,13 @@ public partial class Shell
 
     public decimal? Weight { get; set; }
 
+    public decimal? Size { get; set; }
+
     public int AmountAvailable { get; set; }
 
     public bool Status { get; set; }
+
+    public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();
 
     public virtual Product Product { get; set; }
 

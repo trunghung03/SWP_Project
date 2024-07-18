@@ -179,7 +179,7 @@ const AdminEmployeeList = () => {
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/admin-add-employee")}
           >
-            Create new employee
+            Create new employee account
           </button>
           <div className="manager_manage_diamond_pagination">
             <button

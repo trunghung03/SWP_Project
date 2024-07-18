@@ -2,18 +2,30 @@
 .featured_jewelry_container {
   display: flex;
   justify-content: center;
-  margin: 10px 0 -15px -75px;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0 -15px 25px;
   position: relative;
+  overflow-x: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.featured_jewelry_container .row{
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
 .left_section {
   width: 30%;
   text-align: center;
-  padding: 0 3% 0 4%;
+  padding: 0 7% 0 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .featured_title {
@@ -49,9 +61,11 @@
 
 .right_section {
   display: flex;
-  width: 60%;
+  // width: 100%;
   position: relative;
   scroll-behavior: smooth;
+  // margin-left: 30px;
+  // margin-right: -35px;
 }
 
 .home_product_card {
@@ -161,8 +175,7 @@
 
 
 .nav_arrow {
-  padding: 13px 15px 10px 15px;
-  border-radius: 50%;
+  padding: 75px 15px 10px 15px;
 }
 
 .right_arrow:hover,
@@ -175,7 +188,7 @@
   position: relative;
 }
 
-.wrapper i {
+.wrapper .fa-eye{
   top: 50%;
   height: 50px;
   width: 50px;
@@ -191,16 +204,52 @@
   z-index: 1;
 }
 
+.wrapper #left {
+  top: 87px;
+  left: -37px;
+  height: 175px;
+  width: 50px;
+  cursor: pointer;
+  font-size: 1.25rem;
+  position: absolute;
+  text-align: center;
+  line-height: 27px;
+  background-color: transparent;
+  transform: translateY(-50%);
+  transition: transform 0.1s linear, box-shadow 0.3s ease-in-out;
+  z-index: 1;
+  border: 1px solid #797979;
+}
+
+.wrapper #left:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.wrapper #right {
+  bottom: -71px;
+  left: -37px;
+  height: 175px;
+  width: 50px;
+  cursor: pointer;
+  font-size: 1.25rem;
+  position: absolute;
+  text-align: center;
+  line-height: 27px;
+  background-color: transparent;
+  transform: translateY(-50%);
+  transition: transform 0.1s linear, box-shadow 0.3s ease-in-out;
+  z-index: 1;
+  border: 1px solid #797979;
+}
+
+.wrapper #right:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.23);
+}
+
 .wrapper i:active {
   transform: translateY(-50%) scale(0.85);
-}
-
-.wrapper i:first-child {
-  left: -30px;
-}
-
-.wrapper i:last-child {
-  left: 785px;
 }
 
 .wrapper .carousel {

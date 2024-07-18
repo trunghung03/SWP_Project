@@ -15,9 +15,7 @@ public partial class Orderdetail
 
     public int ProductId { get; set; }
 
-    public int? ShellMaterialId { get; set; }
-
-    public decimal? Size { get; set; }
+    public int? ShellId { get; set; }
 
     public bool Status { get; set; }
 
@@ -27,7 +25,7 @@ public partial class Orderdetail
 
     public virtual Product Product { get; set; }
 
-    public virtual Shellmaterial ShellMaterial { get; set; }
+    public virtual Shell Shell { get; set; }
 
     public virtual Warranty Warranty { get; set; }
 }

@@ -165,6 +165,20 @@ namespace DIAN_.Services
             return product.ToProductDTO();
         }
 
+        public async Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto)
+        {
+            var shells = new List<ShellDto>();
+
+            foreach (var size in createShellRequestDto.Sizes)
+            {
+                var shellModel = createShellRequestDto.ToShellFromCreateDto(size);
+
+                var shell = await _shellRepository.CreateShellAsync(shellModel);
+                shells.Add(shell.ToShellDetail());
+            }
+
+            return shells;
+        }
 
 
         public async Task<int> GetMainDiamondsCount(string shape, string color, string clarity, string cut, decimal carat)

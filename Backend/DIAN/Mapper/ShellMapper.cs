@@ -6,7 +6,7 @@ namespace DIAN_.Mapper
 {
     public static class ShellMapper
     {
-        public static Shell ToShellFromCreateDto(this CreateShellRequestDto shellModel)
+        public static Shell ToShellFromCreateDto(this CreateShellRequestDto shellModel, decimal size)
         {
             return new Shell
             {
@@ -14,9 +14,11 @@ namespace DIAN_.Mapper
                 ShellMaterialId = shellModel.ShellMaterialId,
                 Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
+                Size = size,
                 Status = shellModel.Status
             };
         }
+
         public static Shell ToShellFromUpdateDto(this UpdateShellRequestDto shellModel, int id)
         {
             return new Shell
@@ -25,6 +27,7 @@ namespace DIAN_.Mapper
                 ShellMaterialId = shellModel.ShellMaterialId,
                 Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
+                Size = shellModel.Size,
                 Status = shellModel.Status
             };
         }
@@ -43,6 +46,7 @@ namespace DIAN_.Mapper
                 ProductId = shellModel.ProductId ?? 0,
                 ShellMaterialId = shellModel.ShellMaterialId ?? 0,
                 Weight = shellModel.Weight ?? 0,
+                Size = shellModel.Size ?? 0,
                 AmountAvailable = shellModel.AmountAvailable,
                 Status = shellModel.Status
             };

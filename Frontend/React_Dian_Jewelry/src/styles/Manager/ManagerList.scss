@@ -111,16 +111,15 @@
 }
 
 .manager_manage_diamond_create_button {
-    background-color: #e47b7b;
-    color: white;
-    padding: 5px 20px;
+    background-color: #edaca5;
+    color: #1c1c1c;
+    padding: 0 20px;
     border: none;
-    border-radius: 11px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 15px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
-
 .manager_manage_diamond_create_button:hover {
     background-color: #e49393;
     transform: translateY(-5px);

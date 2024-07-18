@@ -10,6 +10,7 @@
 
         public int AmountAvailable { get; set; }
 
+        public List<decimal> Sizes { get; set; } = new List<decimal>();
         public bool Status { get; set; }
     }
 }

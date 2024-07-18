@@ -1,5 +1,6 @@
 ﻿using DIAN_.DTOs.DiamondDto;
 using DIAN_.DTOs.ProductDTOs;
+using DIAN_.DTOs.ShellDto;
 using DIAN_.DTOs.SubDiamondDto;
 
 namespace DIAN_.Interfaces
@@ -15,5 +16,7 @@ namespace DIAN_.Interfaces
         Task<DiamondDto> CreateMainDiamondAsync(CreateDiamondRequestDto requestDto);
 
         Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
+
+        Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto);
     }
 }

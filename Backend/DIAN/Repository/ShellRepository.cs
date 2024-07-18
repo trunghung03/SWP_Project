@@ -73,6 +73,7 @@ namespace DIAN_.Repository
             shell.AmountAvailable = shellDTO.AmountAvailable;
             shell.Weight = shellDTO.Weight;
             shell.Status = shellDTO.Status;
+            shell.Size = shellDTO.Size;
 
             _context.Shells.Update(shell);
             await _context.SaveChangesAsync();
