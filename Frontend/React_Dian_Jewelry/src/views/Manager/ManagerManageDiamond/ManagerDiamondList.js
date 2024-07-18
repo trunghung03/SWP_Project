@@ -144,11 +144,9 @@ const ManagerDiamondList = () => {
   };
 
   const handleUpdate = async () => {
-    const requiredFields = ["shape", "color", "clarity", "cut", "carat", "price"];
+    const requiredFields = ["price"];
     if (value === 1) { // if sub-diamond, add 'amountAvailable' to required fields
         requiredFields.push("amountAvailable");
-    } else { // if main diamond, add 'certificateScan' to required fields
-        requiredFields.push("certificateScan");
     }
 
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
@@ -380,8 +378,8 @@ const ManagerDiamondList = () => {
         </div>
       </div>
 
-      {/* Update modal */}
-      {editMode && (
+      {/* Update modal for Diamond */}
+      {editMode && value === 0 && (
         <div
           className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
           onClick={() => setEditMode(false)}
@@ -391,7 +389,7 @@ const ManagerDiamondList = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="manager_manage_diamond_modal_content">
-              <h4>Edit {value === 0 ? "Diamond" : "Sub-Diamond"} Information</h4>
+              <h4>Edit Diamond Information</h4>
               <div className="manager_manage_diamond_form_group">
                 <label>Shape</label>
                 <input
@@ -401,6 +399,7 @@ const ManagerDiamondList = () => {
                   value={editedDiamond.shape}
                   onChange={handleChange}
                   required
+                  readOnly
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -412,6 +411,7 @@ const ManagerDiamondList = () => {
                   value={editedDiamond.color}
                   onChange={handleChange}
                   required
+                  readOnly
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -423,6 +423,7 @@ const ManagerDiamondList = () => {
                   value={editedDiamond.clarity}
                   onChange={handleChange}
                   required
+                  readOnly
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -434,6 +435,7 @@ const ManagerDiamondList = () => {
                   value={editedDiamond.carat}
                   onChange={handleChange}
                   required
+                  readOnly
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
@@ -445,34 +447,124 @@ const ManagerDiamondList = () => {
                   value={editedDiamond.cut}
                   onChange={handleChange}
                   required
+                  readOnly
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                {value === 0 ? (
-                  <>
-                    <label>Certificate</label>
-                    <input
-                      type="text"
-                      name="certificateScan"
-                      value={editedDiamond.certificateScan}
-                      onChange={handleChange}
-                      maxLength={255}
-                      required
-                    />
-                  </>
-                ) : (
-                  <>
-                    <label>Quantity</label>
-                    <input
-                      type="text"
-                      name="amountAvailable"
-                      value={editedDiamond.amountAvailable}
-                      onChange={handleChange}
-                      maxLength={10}
-                      required
-                    />
-                  </>
-                )}
+                <label>Certificate</label>
+                <input
+                  type="text"
+                  name="certificateScan"
+                  value={editedDiamond.certificateScan}
+                  onChange={handleChange}
+                  maxLength={255}
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Price</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={editedDiamond.price}
+                  onChange={handleChange}
+                  min="100"
+                  max="10000"
+                  required
+                />
+              </div>
+              <div className="manager_manage_diamond_modal_actions">
+                <button onClick={() => setEditMode(false)}>Cancel</button>
+                <button onClick={handleUpdate}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Update modal for SubDiamond */}
+      {editMode && value === 1 && (
+        <div
+          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          onClick={() => setEditMode(false)}
+        >
+          <div
+            className="manager_manage_diamond_update_modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="manager_manage_diamond_modal_content">
+              <h4>Edit Sub-Diamond Information</h4>
+              <div className="manager_manage_diamond_form_group">
+                <label>Shape</label>
+                <input
+                  type="text"
+                  name="shape"
+                  maxLength={20}
+                  value={editedDiamond.shape}
+                  onChange={handleChange}
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Color</label>
+                <input
+                  type="text"
+                  name="color"
+                  maxLength={20}
+                  value={editedDiamond.color}
+                  onChange={handleChange}
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Clarity</label>
+                <input
+                  type="text"
+                  name="clarity"
+                  maxLength={4}
+                  value={editedDiamond.clarity}
+                  onChange={handleChange}
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Carat</label>
+                <input
+                  type="text"
+                  name="carat"
+                  maxLength={6}
+                  value={editedDiamond.carat}
+                  onChange={handleChange}
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Cut</label>
+                <input
+                  type="text"
+                  name="cut"
+                  maxLength={20}
+                  value={editedDiamond.cut}
+                  onChange={handleChange}
+                  required
+                  readOnly
+                />
+              </div>
+              <div className="manager_manage_diamond_form_group">
+                <label>Quantity</label>
+                <input
+                  type="number"
+                  name="amountAvailable"
+                  value={editedDiamond.amountAvailable}
+                  onChange={handleChange}
+                  min="1"
+                  required
+                />
               </div>
               <div className="manager_manage_diamond_form_group">
                 <label>Price</label>
