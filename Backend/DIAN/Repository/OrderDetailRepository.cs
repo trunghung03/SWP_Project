@@ -16,7 +16,7 @@ namespace DIAN_.Repository
         public async Task<Orderdetail?> CreateAsync(Orderdetail orderdetail)
         {
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
-            if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
+            if (!await _context.Shells.AnyAsync(s => s.ShellId == orderdetail.ShellId)) { return null; }
             await _context.AddAsync(orderdetail);
             await _context.SaveChangesAsync();
             return orderdetail;
@@ -57,7 +57,7 @@ namespace DIAN_.Repository
             var updateDetail = await _context.Orderdetails.FirstOrDefaultAsync(o => o.OrderDetailId == id);
             if (updateDetail == null) { return null; }
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
-            if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellMaterialId)) { return null; }
+            if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellId)) { return null; }
 
             // Assuming updateDetail and orderdetail are instances of the same class
             updateDetail.OrderId = orderdetail.OrderId;
@@ -65,8 +65,7 @@ namespace DIAN_.Repository
             updateDetail.ProductId = orderdetail.ProductId;
 
             // Copying nullable properties
-            updateDetail.ShellMaterialId = orderdetail.ShellMaterialId ?? null;
-            updateDetail.Size = orderdetail.Size ?? null;
+            updateDetail.ShellId = orderdetail.ShellId ?? null;
 
             // Copying non-nullable property
             updateDetail.Status = orderdetail.Status;
@@ -86,6 +85,9 @@ namespace DIAN_.Repository
                 .SelectMany(
                     combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondAtrributeId).DefaultIfEmpty(),
                     (combined, d) => new { combined.po, combined.od, combined.p, d })
+                .SelectMany(
+                    combined => _context.Shells.Where(s => s.ShellId == combined.od.ShellId).DefaultIfEmpty(),
+                    (combined, s) => new { combined.po, combined.od, combined.p, combined.d, s })
                 .GroupBy(x => x.po.OrderId)
                 .Select(g => new OrderBillDto
                 {
@@ -93,7 +95,7 @@ namespace DIAN_.Repository
                     UserId = g.First().po.UserId,
                     FirstName = g.First().po.User.FirstName,
                     LastName = g.First().po.User.LastName,
-                    Email = g.First().po.User.Email, // Include the email here
+                    Email = g.First().po.User.Email,
                     PhoneNumber = g.First().po.User.PhoneNumber,
                     Address = g.First().po.User.Address,
                     Note = g.First().po.Note,
@@ -110,14 +112,14 @@ namespace DIAN_.Repository
                         ProductImageLink = x.p.ImageLinkList,
                         ProductCode = x.p.ProductCode,
                         ProductDescription = x.p.Description,
-                        Size = x.od.Size ?? 0m,
-                        LineTotal = x.od.LineTotal,
-                        WarrantyStartDate = x.od.Warranty != null ? x.od.Warranty.StartDate : null,
-                        WarrantyEndDate = x.od.Warranty != null ? x.od.Warranty.EndDate : null,
+                        Size = x.s != null ? x.s.Size ?? 0 : 0,  
+                        ShellMaterial = x.s != null ? x.s.ShellMaterial.Name : null,  
+                        LineTotal = x.od.LineTotal
                     }).ToList()
                 }).FirstOrDefaultAsync();
 
             return orderBill;
         }
+
     }
 }

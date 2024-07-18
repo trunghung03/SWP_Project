@@ -20,10 +20,12 @@ namespace DIAN_.Controllers
     public class ShellsController : ControllerBase
     {
         private readonly IShellRepository _shellRepository;
+        private readonly IGoodsService _goodService;
 
-        public ShellsController(IShellRepository shellRepository)
+        public ShellsController(IShellRepository shellRepository, IGoodsService goodsService)
         {
             _shellRepository = shellRepository;
+            _goodService = goodsService;
         }
 
         // GET: api/Shells
@@ -84,7 +86,6 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateShell([FromBody] CreateShellRequestDto shellDto)
         {
@@ -94,15 +95,17 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var shellModel = shellDto.ToShellFromCreateDto();
-                await _shellRepository.CreateShellAsync(shellModel);
-                return Ok(shellModel.ToShellDetail());
+                var createdShells = await _goodService.CreateShells(shellDto);
+
+                return Ok(createdShells);
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateShell([FromBody] UpdateShellRequestDto shellRequestDto, [FromRoute] int id)
         {

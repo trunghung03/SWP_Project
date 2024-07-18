@@ -15,6 +15,7 @@ const ManagerAddShell = () => {
         amountAvailable: '',
         shellMaterialId: '',
         weight: '',
+        sizes: [] // Add sizes to state
     });
 
     const handleChange = async (e) => {
@@ -29,6 +30,12 @@ const ManagerAddShell = () => {
                 setProductName(""); // Reset product name if there's an error
             }
         }
+    };
+
+    const handleSizeChange = (e) => {
+        const { value } = e.target;
+        const sizes = value.split(',').map(size => parseFloat(size.trim()));
+        setShellData({ ...shellData, sizes });
     };
 
     const handleSubmit = async (e) => {
@@ -78,13 +85,13 @@ const ManagerAddShell = () => {
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Product Name</label>
-                            <input type="text" name="amountAvailable" value={productName} onChange={handleChange} required />
+                            <input type="text" name="productName" value={productName} readOnly />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Shell Material ID</label>
-                            <input placeholder="Add shell's material Id"  type="number" name="shellMaterialId" value={shellData.shellMaterialId} onChange={handleChange} required />
+                            <input placeholder="Add shell's material Id" type="number" name="shellMaterialId" value={shellData.shellMaterialId} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Amount Available</label>
@@ -95,6 +102,12 @@ const ManagerAddShell = () => {
                         <div className="manager_add_diamond_form_group">
                             <label>Weight</label>
                             <input placeholder="Add shell's weight" type="text" name="weight" value={shellData.weight} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="manager_add_diamond_form_row">
+                        <div className="manager_add_diamond_form_group">
+                            <label>Sizes (comma separated)</label>
+                            <input placeholder="Add sizes" type="text" name="sizes" onChange={handleSizeChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

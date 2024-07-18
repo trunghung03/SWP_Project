@@ -12,8 +12,7 @@ namespace DIAN_.Mapper
                 OrderId = orderDetailDto.OrderId,
                 LineTotal = orderDetailDto.LineTotal,
                 ProductId = orderDetailDto.ProductId,
-                ShellMaterialId = orderDetailDto.ShellMaterialId ?? null,
-                Size = orderDetailDto.Size ?? null,
+                ShellId = orderDetailDto.ShellId,
                 Status = true,
             };
         }
@@ -24,8 +23,7 @@ namespace DIAN_.Mapper
                 OrderId = orderDetailDto.OrderId,
                 LineTotal = orderDetailDto.LineTotal,
                 ProductId = orderDetailDto.ProductId,
-                ShellMaterialId = orderDetailDto.ShellMaterialId ?? null,
-                Size = orderDetailDto.Size ?? null,
+                ShellId = orderDetailDto.ShellId,
                 Status = orderDetailDto.Status,
             };
         }

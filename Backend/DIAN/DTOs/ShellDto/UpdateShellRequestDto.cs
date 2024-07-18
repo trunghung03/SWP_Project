@@ -11,6 +11,7 @@
 
         public int AmountAvailable { get; set; }
 
+        public decimal Size { get; set; }
         public bool Status { get; set; }
     }
 }
