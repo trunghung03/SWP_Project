@@ -377,19 +377,21 @@ const ManagerShellList = () => {
         return;
       }
     }
-
+  
     const isEqual =
       JSON.stringify(originalShellNotMaterial) === JSON.stringify(editedShellNotMaterial);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
     }
-
+  
     try {
       const response = await updateShellById(editedShellNotMaterial.shellId, editedShellNotMaterial);
       console.log("Update response:", response.data);
-      const updatedShells = await ShowAllShell();
-      setShell(updatedShells);
+      // Fetch updated shell data
+      const updatedShells = await ShowAllShell(currentPage, ordersPerPage);
+      setShell(updatedShells.data);
+      setTotalPages(updatedShells.pagination.totalPages);
       setEditShellMode(false);
       swal(
         "Updated successfully!",
