@@ -55,7 +55,7 @@ const ManagerShellList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
+      backgroundColor: '#faecec',
       color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
@@ -468,10 +468,6 @@ const ManagerShellList = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
-            <button
-              className="manager_manage_diamond_create_button"
-              onClick={() => backList()}
-            >Show all shells</button>
           </div>
         </div>
         <hr className="manager_header_line"></hr>
@@ -479,12 +475,12 @@ const ManagerShellList = () => {
         <h3>List Of Shells</h3>
 
         <div className="manager_manage_diamond_create_button_section">
-          <button
+          {/* <button
             className="manager_manage_diamond_create_button"
-            onClick={() => setAddMode(true)}
+            onClick={() => setAddMode(true) }
           >
-            Add new shell material
-          </button>
+            Add new shell material 
+          </button> */}
           <div className="manager_manage_diamond_pagination">
             
           </div>
@@ -511,12 +507,12 @@ const ManagerShellList = () => {
                       <StyledTableCell align="center">{item.price}</StyledTableCell>
                       <StyledTableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon />
+                          <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
                         <IconButton
                           onClick={() => handleDeleteShellMaterial(item.shellMaterialId)}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
                       </StyledTableCell>
                     </TableRow>
@@ -575,6 +571,7 @@ const ManagerShellList = () => {
         <StyledTableCell align="center">Product ID</StyledTableCell>
         <StyledTableCell align="center">Shell Material Name</StyledTableCell> 
         <StyledTableCell align="center">Weight</StyledTableCell>
+        <StyledTableCell align="center">Size</StyledTableCell>
         <StyledTableCell align="center">Price</StyledTableCell> 
         <StyledTableCell align="center">Quantity</StyledTableCell>  
         <StyledTableCell align="center">Action</StyledTableCell>
@@ -591,6 +588,7 @@ const ManagerShellList = () => {
               <StyledTableCell align="center">{item.productId}</StyledTableCell>
               <StyledTableCell align="center">{material ? material.name : 'Material not found'}</StyledTableCell>
               <StyledTableCell align="center">{item.weight}</StyledTableCell>
+              <StyledTableCell align="center">{item.size}</StyledTableCell>
               <StyledTableCell align="center">
                 ${material ? material.price * item.weight : 'Material not found'}
               </StyledTableCell>
@@ -599,10 +597,10 @@ const ManagerShellList = () => {
               </StyledTableCell>
               <StyledTableCell align="center">
                 <IconButton onClick={() => handleEditShell(item)}>
-                  <EditIcon />
+                  <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
                 </IconButton>
                 <IconButton onClick={() => handleDeleteShell(item.shellId)}>
-                  <DeleteIcon />
+                  <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
                 </IconButton>
               </StyledTableCell>
             </TableRow>

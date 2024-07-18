@@ -18,5 +18,7 @@ namespace DIAN_.Interfaces
         Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
 
         Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto);
+
+        Task<decimal> CalculateProductPriceAsync(int productId);
     }
 }

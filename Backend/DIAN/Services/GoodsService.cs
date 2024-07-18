@@ -154,16 +154,16 @@ namespace DIAN_.Services
                 throw new ValidationException("This sub diamond does not exist.");
             }
 
-            //var availableMainDiamondsCount = await _diamondRepository.CountDiamondsByAttributesAsync(createProductRequestDTO.MainDiamondAttributeId);
-
-            //if (availableMainDiamondsCount < createProductRequestDTO.MainDiamondAmount)
-            //{
-            //    throw new ValidationException($"Not enough main diamonds available. Required: {createProductRequestDTO.MainDiamondAmount}, Available: {availableMainDiamondsCount}.");
-            //}
-
             var product = await _productRepository.CreateAsync(productModel);
-            return product.ToProductDTO();
+
+            decimal productPrice = await CalculateProductPriceAsync(product.ProductId);
+
+            var productDTO = product.ToProductDTO();
+            productDTO.Price = productPrice;
+
+            return productDTO;
         }
+
 
         public async Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto)
         {
@@ -281,7 +281,7 @@ namespace DIAN_.Services
                 var updatedCount = 0;
                 foreach (var diamond in diamonds)
                 {
-                    if (updatedCount >= mainDiamondAmount) break; // Stop updating once we reach the mainDiamondAmount
+                    if (updatedCount >= mainDiamondAmount) break;
 
                     diamond.Status = false;
                     await _diamondRepository.UpdateDiamondStatus(mainDiamondAttributeId);
@@ -307,6 +307,40 @@ namespace DIAN_.Services
             return false;
         }
 
+        public async Task<decimal> CalculateProductPriceAsync(int productId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product == null) throw new ArgumentException("Product not found", nameof(productId));
+
+            decimal mainDiamondPrice = 0;
+            decimal subDiamondPrice = 0;
+            decimal shellPrice = 0;
+            decimal laborPrice = product.LaborCost ?? 0;
+
+            if (product.MainDiamondAtrributeId.HasValue && product.MainDiamondAtrributeId.Value != 0)
+            {
+                var mainDiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAtrributeId.Value);
+                decimal totalMainDiamondPrice = mainDiamonds.Sum(d => d.Price * product.MainDiamondAmount ?? 0);
+                mainDiamondPrice = totalMainDiamondPrice * (product.MainDiamondAmount ?? 1); 
+            }
+
+            if (product.SubDiamondAtrributeId.HasValue && product.SubDiamondAtrributeId.Value != 0)
+            {
+                var mainDiamonds = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId.Value);
+                decimal totalMainDiamondPrice = mainDiamonds.Price * product.MainDiamondAmount ?? 0;
+                mainDiamondPrice = totalMainDiamondPrice * (product.MainDiamondAmount ?? 1);
+            }
+
+
+            var shell = await _shellRepository.GetShellByProductIdAsync(productId);
+            if (shell != null)
+            {
+                shellPrice = (shell.Weight ?? 0) * shell.ShellMaterial.Price; // Assuming ShellMaterial includes the price per unit weight
+            }
+
+            decimal totalProductPrice = mainDiamondPrice + subDiamondPrice + laborPrice + shellPrice + product.LaborCost ?? 0;
+            return totalProductPrice;
+        }
 
     }
 }

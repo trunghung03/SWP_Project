@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
 import "../../../styles/Manager/ManagerList.scss";
-import { ShowAllCollection, searchCollectionById, deleteCollectionById, changeStatus, updateCollectionById } from "../../../services/ManagerService/ManagerCollectionService.js";
+import {
+  ShowAllCollection,
+  searchCollectionById,
+  changeStatus,
+  updateCollectionById,
+} from "../../../services/ManagerService/ManagerCollectionService.js";
 import logo from "../../../assets/img/logoN.png";
-import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -18,38 +22,98 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+
+// Head cells for the collection table
+const headCells = [
+  { id: 'collectionId', numeric: false, disablePadding: false, label: 'ID', sortable: true },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Name', sortable: true },
+  { id: 'description', numeric: false, disablePadding: false, label: 'Description', sortable: false },
+  { id: 'update', numeric: false, disablePadding: false, label: 'Update', sortable: false },
+  { id: 'action', numeric: false, disablePadding: false, label: 'Action', sortable: false },
+];
+
+// Enhanced Table Head for sorting
+function EnhancedTableHead(props) {
+  const { order, orderBy, onRequestSort } = props;
+
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            style={{ backgroundColor: "#faecec" }}
+            key={headCell.id}
+            align="center"
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            {headCell.sortable ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  onRequestSort: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+};
+
+// Comparator function for sorting
+const getComparator = (order, orderBy) => {
+  return order === 'desc'
+    ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
+    : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
+};
+
+// Sort table rows based on comparator
+const tableSort = (array, comparator) => {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+};
 
 const ManagerCollectionList = () => {
   const navigate = useNavigate();
-
   const [collectionItems, setCollectionItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedCollection, setEditedCollection] = useState({});
   const [isSearch, setIsSearch] = useState(false);
   const [originalCollection, setOriginalCollection] = useState({});
-  
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('collectionId');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,13 +135,10 @@ const ManagerCollectionList = () => {
     setPage(newPage);
   };
 
-  // Search Collection by id
   const handleSearchKeyPress = async (e) => {
-    const isInteger = (value) => {
-      return /^-?\d+$/.test(value);
-    };
+    const isInteger = (value) => /^-?\d+$/.test(value);
+
     if (e.key === "Enter") {
-      
       if (isInteger(searchQuery.trim())) {
         setIsSearch(true);
         try {
@@ -98,7 +159,6 @@ const ManagerCollectionList = () => {
           console.error("Error fetching data:", error);
         }
       }
-
     }
   };
 
@@ -118,23 +178,14 @@ const ManagerCollectionList = () => {
         await changeStatus(collectionID);
         const response = await ShowAllCollection();
         setCollectionItems(response);
-        swal(
-          `${action} successfully!`,
-          "Collection status has been changed.",
-          "success"
-        );
+        swal(`${action} successfully!`, "Collection status has been changed.", "success");
       }
     } catch (error) {
       console.error("Error changing collection status:", error);
-      swal(
-        "Something went wrong!",
-        "Failed to change collection status. Please try again.",
-        "error"
-      );
+      swal("Something went wrong!", "Failed to change collection status. Please try again.", "error");
     }
   };
 
-  // Update by id
   const handleEdit = (collection) => {
     setEditMode(true);
     setEditedCollection(collection);
@@ -147,7 +198,7 @@ const ManagerCollectionList = () => {
   };
 
   const handleUpdate = async () => {
-    const requiredFields = ['name', 'description', 'status'];
+    const requiredFields = ["name", "description", "status"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedCollection[field]) {
@@ -174,21 +225,10 @@ const ManagerCollectionList = () => {
       const updatedItems = await ShowAllCollection();
       setCollectionItems(updatedItems);
       setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The Collection information has been updated.",
-        "success"
-      );
+      swal("Updated successfully!", "The Collection information has been updated.", "success");
     } catch (error) {
-      console.error(
-        "Error updating Collection:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
+      console.error("Error updating Collection:", error.response ? error.response.data : error.message);
+      swal("Something went wrong!", "Failed to update. Please try again.", "error");
     }
   };
 
@@ -201,7 +241,7 @@ const ManagerCollectionList = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
+  };
 
   const indexOfLastOrder = page * rowsPerPage;
   const indexOfFirstOrder = indexOfLastOrder - rowsPerPage;
@@ -219,14 +259,15 @@ const ManagerCollectionList = () => {
             <input
               type="text"
               className="manager_manage_diamond_search_bar"
-              placeholder="Search by ID... "
+              placeholder="Search by ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
-        <hr className="manager_header_line"></hr>
+        <hr className="manager_header_line" />
+        <h3>List Of Collections</h3>
         <div className="manager_manage_diamond_create_button_section" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button
             className="manager_manage_diamond_create_button"
@@ -244,41 +285,44 @@ const ManagerCollectionList = () => {
           </Stack>
         </div>
 
-        {/* Table Collection list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">ID</StyledTableCell>
-                  <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Description</StyledTableCell>
-                  <StyledTableCell align="center">Update</StyledTableCell>
-                  <StyledTableCell align="center">Action</StyledTableCell>
-                </TableRow>
-              </TableHead>
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={(event, property) => {
+                  const isAsc = orderBy === property && order === "asc";
+                  setOrder(isAsc ? "desc" : "asc");
+                  setOrderBy(property);
+                }}
+                rowCount={collectionItems.length}
+              />
               <TableBody>
                 {currentOrders.length > 0 ? (
-                  currentOrders.map((item) => (
+                  tableSort(currentOrders, getComparator(order, orderBy)).map((item) => (
                     <TableRow
-                      className="manager_manage_table_body_row"
                       key={item.collectionId}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#f5f5f5",
+                        },
+                        cursor: "pointer",
+                      }}
                     >
                       <TableCell align="center">{item.collectionId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
                       <TableCell align="center">{item.description}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon />
+                          <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={() => handleStatus(item.collectionId)}
                           style={{
-                            backgroundColor: item.status
-                              ? "#1fd655"
-                              : "#c94143",
+                            backgroundColor: item.status ? "#1fd655" : "#c94143",
                             color: "white",
                           }}
                           variant="contained"
@@ -297,19 +341,18 @@ const ManagerCollectionList = () => {
             </Table>
           </TableContainer>
           {isSearch && (
-              <button className="btn btn-secondary mt-3" onClick={handleBack}>
-                Back to show all collections
-              </button>
-            )}
+            <button className="btn btn-secondary mt-3" onClick={handleBack}>
+              Back to show all collections
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Update modal */}
       {editMode && (
         <div
-        className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
-        onClick={() => setEditMode(false)}
-      >
+          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          onClick={() => setEditMode(false)}
+        >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
@@ -343,7 +386,7 @@ const ManagerCollectionList = () => {
                 <button onClick={handleUpdate}>Confirm</button>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       )}
     </div>

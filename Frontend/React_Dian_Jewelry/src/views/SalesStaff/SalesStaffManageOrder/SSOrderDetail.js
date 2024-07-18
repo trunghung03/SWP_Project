@@ -17,22 +17,24 @@ import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
 import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
-import { salesStaffUpdateOrderStatus,
-   getWarrantyURL, sendWarrantyEmail, getCertificateURL
- } from "../../../services/SalesStaffService/SSOrderService.js";
+import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getCertificateURL, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
+import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import swal from "sweetalert";
-import SSAddWarrantyPopup from "./SSAddWarrantyPopup.js";
-
 
 const SSOrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState({});
   const { orderId } = useParams();
   const [status, setStatus] = useState("");
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
+  const [loadingCertificate, setLoadingCertificate] = useState(false);
+  const [loadingWarranty, setLoadingWarranty] = useState(false);
+  const [warrantyExists, setWarrantyExists] = useState(false);
   const navigate = useNavigate();
+
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
+
   useEffect(() => {
     console.log("orderId:", orderId); // Log the orderId
     if (orderId) {
@@ -46,44 +48,77 @@ const SSOrderDetail = () => {
         .catch((error) => {
           console.error("Failed to fetch order details:", error);
         });
+
+      getWarrantyById(orderId)
+        .then((data) => {
+          setWarrantyExists(data !== null);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch warranty details:", error);
+        });
     }
   }, [orderId]);
+
   const handleSendCertificate = async () => {
+    setLoadingCertificate(true);
     try {
       const response = await getCertificateURL(orderId);
       const url = response.url;
       console.log('Certificate URL:', url);
       const emailData = {
-        toEmail: orderDetails.email, 
+        toEmail: orderDetails.email,
         subject: "Your Diamond's Certificate:",
-        body: `Here is a link: ${url}`, 
+        body: `Here is a link: ${url}`,
       };
-      console.log('emaildata: ' , emailData);
+      console.log('emaildata: ', emailData);
       await sendWarrantyEmail(emailData);
       swal("Success", "Certificate email sent successfully", "success");
     } catch (error) {
       console.error("Failed to send Certificate email:", error);
       swal("Error", "Failed to send Certificate email", "error");
     }
-  }
+    setLoadingCertificate(false);
+  };
+
   const handleSendEmail = async () => {
+    setLoadingWarranty(true);
     try {
       const response = await getWarrantyURL(orderId);
       const url = response.url;
       console.log('Warranty URL:', url);
       const emailData = {
-        toEmail: orderDetails.email, 
+        toEmail: orderDetails.email,
         subject: "Your Warranty",
-        body: `Here is your warranty link: ${url}`, 
+        body: `Here is your warranty link: ${url}`,
       };
-      console.log('emaildata: ' , emailData);
+      console.log('emaildata: ', emailData);
       await sendWarrantyEmail(emailData);
       swal("Success", "Warranty email sent successfully", "success");
     } catch (error) {
       console.error("Failed to send warranty email:", error);
       swal("Error", "Failed to send warranty email", "error");
     }
+    setLoadingWarranty(false);
   };
+
+  const handleAddWarranty = async () => {
+    const warrantyData = {
+      orderDetailId: orderDetails.orderId,
+      startDate: new Date().toISOString().split("T")[0], // current date
+      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0], // one year from now
+      status: "true"
+    };
+    
+    try {
+      await createWarranty(warrantyData);
+      setWarrantyExists(true);
+      swal("Success", "Warranty added successfully", "success");
+    } catch (error) {
+      console.error("Failed to add warranty:", error);
+      swal("Error", "Failed to add warranty", "error");
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       await salesStaffUpdateOrderStatus(status, orderId);
@@ -95,6 +130,7 @@ const SSOrderDetail = () => {
       console.error("Failed to update order status:", error);
     }
   };
+
   if (!orderDetails) {
     return <div>Loading...</div>;
   }
@@ -144,7 +180,7 @@ const SSOrderDetail = () => {
                           onChange={handleChange}
                           disabled={isOrderCompleted}
                         >
-                          <MenuItem value ="Unpaid">UnPaid</MenuItem>
+                          <MenuItem value="Unpaid">UnPaid</MenuItem>
                           <MenuItem value="Paid">Paid</MenuItem>
                           <MenuItem value="Preparing">Preparing</MenuItem>
                           <MenuItem value="Delivering">Delivering</MenuItem>
@@ -157,7 +193,7 @@ const SSOrderDetail = () => {
                 </div>
                 {orderDetails &&
                   orderDetails.productDetails?.map((item) => (
-                    <div class="ss_detail_card" key={item.id}>
+                    <div className="ss_detail_card" key={item.id}>
                       <div className="ss_detail_card_left">
                         <h3 className="ss_detail_card_name">
                           {item.productName}
@@ -167,15 +203,14 @@ const SSOrderDetail = () => {
                           alt={item.productName}
                         />
                       </div>
-                      <div class="ss_detail_card_content">
+                      <div className="ss_detail_card_content">
                         <p>{item.productDescription}</p>
                         <p>{item.productCode}</p>
-                        <p class="ss_detail_card_size">Size: {item.size}</p>
-                        <p class="ss_detail_card_price">${item.lineTotal}</p>
+                        <p className="ss_detail_card_size">Size: {item.size}</p>
+                        <p className="ss_detail_card_price">${item.lineTotal}</p>
                       </div>
                     </div>
                   ))}
-                {/* <hr className="manager_header_line"></hr> */}
                 <div style={{ margin: "4.3%", padding: "10px" }}>
                   <div style={{ marginBottom: "10px" }}>
                     <AccountCircleIcon /> Name: {orderDetails.firstName}{" "}
@@ -192,18 +227,40 @@ const SSOrderDetail = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
-                    <button className="salesstaff_manage_send_email_button" onClick={handleSendCertificate}>Send Certificate</button>
+                    <button
+                      className="salesstaff_manage_send_email_button"
+                      onClick={handleSendCertificate}
+                      disabled={loadingCertificate}
+                    >
+                      {loadingCertificate ? "Sending..." : "Send"}
+                    </button>
                   </div>
                   <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
                     <WarrantyIcon /> Warranty:
-                    <SSAddWarrantyPopup orderId={orderDetails.orderId} />
-                    <button className="salesstaff_manage_send_email_button" onClick={handleSendEmail}>Send via Email</button>
+                    {!warrantyExists ? (
+                      <>
+                        <button 
+                          className="salesstaff_manage_send_email_button" 
+                          onClick={handleAddWarranty}
+                        >
+                          Add Warranty
+                        </button>
+                        <p style={{marginLeft:"0.5%", color:"grey"}}>Noted: The warranty will be added automatically when you click 'Add Warranty'.</p>
+                      </>
+                    ) : (
+                      <button
+                        className="salesstaff_manage_send_email_button"
+                        onClick={handleSendEmail}
+                        disabled={loadingWarranty}
+                      >
+                        {loadingWarranty ? "Sending..." : "Send"}
+                      </button>
+                    )}
                   </div>
                 </div>
                 <p style={{ textAlign: "right", marginRight: "10%" }}>
                   Total Price: ${orderDetails.totalPrice}
                 </p>
-                {/* <hr className="manager_header_line"></hr> */}
                 <div className="ss_detail_confirmbutton">
                   <button onClick={handleSubmit} disabled={isOrderCompleted}>Confirm</button>
                 </div>

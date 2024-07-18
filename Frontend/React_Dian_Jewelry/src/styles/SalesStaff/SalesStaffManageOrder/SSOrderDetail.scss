@@ -151,25 +151,14 @@
 .SS_back_button:hover {
     font-weight: 600;
 }
-// .salesstaff_manage_send_email_button{
-//     display: flex;
-//     justify-content: space-between;
-//     padding-right: 15px;
-//     margin-top: 30px;
-// }
-// .manager_manage_diamond_create_button_section {
-//     display: flex;
-//     justify-content: space-between;
-//     padding-right: 15px;
-//     margin-top: 30px;
-// }
+
 
 .salesstaff_manage_send_email_button {
-    background-color: #efcada;
+    background-color: #01040c;
     margin-left: 10px;
     margin-bottom: 10px;
-    color: black;
-    padding: 5px 20px;
+    color: white;
+    padding: 2px 15px;
     border: none;
     border-radius: 11px;
     cursor: pointer;
@@ -178,11 +167,11 @@
 }
 
 .salesstaff_manage_send_email_button:hover {
-    background-color: #e1b9ca;
+    background-color: #5a5a5c;
 }
 .salesstaff_manage_send_email_confirm_button {
-    background-color: #efcada;
-    color: black;
+    background-color: #01040c;
+    color: white;
     padding: 5px 20px;
     align-items: flex-end;
     border: none;
@@ -194,7 +183,7 @@
 }
 
 .salesstaff_manage_send_email_confirm_button:hover {
-    background-color: #e1b9ca;
+    background-color: #5a5a5c;
 }
 .ss_warranty_order_manage{
     display: flex;

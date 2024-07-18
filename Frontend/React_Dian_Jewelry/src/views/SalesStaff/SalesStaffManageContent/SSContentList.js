@@ -5,6 +5,8 @@ import logo from "../../../assets/img/logoN.png";
 import '../../../styles/SalesStaff/SalesStaffManageContent/SSContentList.scss';
 import SalesStaffSidebar from '../../../components/SalesStaffSidebar/SalesStaffSidebar.js';
 import { getContentList, getContentByTitle, deleteContentById } from '../../../services/SalesStaffService/SSContentService.js';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // Content card
 const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete, onUpdate }) => {
@@ -44,9 +46,9 @@ const SSContentCard = ({ articleID, title, createdBy, date, image, tag, onDelete
         <p className="ss_manage_content_content_date">{new Date(date).toLocaleDateString()}</p>
       </div>
       <div className="ss_manage_content_content_actions">
-        <i className="fas fa-pen" onClick={handleUpdateClick} style={{ color: '#69706e' }}></i>
-        <i className="fas fa-trash" onClick={handleDeleteClick} style={{ color: '#69706e' }}></i>
-      </div>
+  <EditIcon onClick={handleUpdateClick} style={{ color: '#575252' }} />
+  <DeleteIcon onClick={handleDeleteClick} style={{ color: '#575252' }} />
+</div>
     </div>
   );
 };

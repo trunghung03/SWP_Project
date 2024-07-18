@@ -12,28 +12,22 @@ import {
   fetchWarrantyDetail,
 } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import logo from "../../../assets/img/logoN.png";
-import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from "@mui/material/Paper";
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { visuallyHidden } from '@mui/utils';
+import Box from "@mui/material/Box";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
+import PropTypes from "prop-types";
 import { EnhancedTableToolbar, getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const headCells = [
   { id: 'orderDetailId', numeric: false, disablePadding: false, label: 'Order Detail ID', sortable: true },
@@ -44,7 +38,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
 
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -53,17 +47,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all warranties',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -95,12 +78,9 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
 };
 
 const SSWarrantyList = () => {
@@ -108,7 +88,6 @@ const SSWarrantyList = () => {
   const [warrantyList, setWarrantyList] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('orderDetailId');
-  const [selected, setSelected] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -117,16 +96,6 @@ const SSWarrantyList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage, setOrdersPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#f9c6bb",
-      color: "1c1c1c",
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
 
   const fetchWarranties = async () => {
     try {
@@ -236,32 +205,6 @@ const SSWarrantyList = () => {
     }
   };
 
-  const handleBulkUpdate = async () => {
-    if (selected.length === 0) {
-      swal("No items selected!", "Please select at least one item to update.", "warning");
-      return;
-    }
-
-    setEditMode(true);
-    setEditedWarranty({});
-    setOriginalWarranty({});
-  };
-
-  const handleBulkUpdateConfirm = async () => {
-    try {
-      for (let orderDetailId of selected) {
-        const warrantyToUpdate = warrantyList.find(warranty => warranty.orderDetailId === orderDetailId);
-        await updateWarranty(orderDetailId, { ...warrantyToUpdate, status: editedWarranty.status });
-      }
-      fetchWarranties();
-      setEditMode(false);
-      swal("Updated successfully!", "The selected warranties have been updated.", "success");
-    } catch (error) {
-      console.error("Error updating warranties:", error);
-      swal("Something went wrong!", "Failed to update the selected warranties. Please try again.", "error");
-    }
-  };
-
   const isExpired = (endDate) => {
     const today = new Date().toLocaleDateString("en-CA");
     const formattedEndDate = new Date(endDate).toLocaleDateString("en-CA");
@@ -289,7 +232,7 @@ const SSWarrantyList = () => {
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 style={{ textAlign: "center" }}>Warranty List</h3>
+        <h3 style={{ textAlign: "center", color: "#292727", fontFamily: "serif" }}>Warranty List</h3>
         <div className="manager_manage_diamond_create_button_section" style={{ display: "flex", justifyContent: "flex-end" }}>
           <div className="manager_manage_diamond_pagination">
             <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
@@ -311,21 +254,12 @@ const SSWarrantyList = () => {
         </div>
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <EnhancedTableToolbar />
             <TableContainer>
               <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                 <EnhancedTableHead
-                  numSelected={selected.length}
                   order={order}
                   orderBy={orderBy}
-                  onSelectAllClick={(event) => {
-                    if (event.target.checked) {
-                      const newSelecteds = warrantyList.map((n) => n.orderDetailId);
-                      setSelected(newSelecteds);
-                      return;
-                    }
-                    setSelected([]);
-                  }}
                   onRequestSort={(event, property) => {
                     const isAsc = orderBy === property && order === 'asc';
                     setOrder(isAsc ? 'desc' : 'asc');
@@ -337,47 +271,16 @@ const SSWarrantyList = () => {
                   {tableSort(warrantyList, getComparator(order, orderBy))
                     .slice((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage)
                     .map((item, index) => {
-                      const isItemSelected = selected.indexOf(item.orderDetailId) !== -1;
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => {
-                            const selectedIndex = selected.indexOf(item.orderDetailId);
-                            let newSelected = [];
-
-                            if (selectedIndex === -1) {
-                              newSelected = newSelected.concat(selected, item.orderDetailId);
-                            } else if (selectedIndex === 0) {
-                              newSelected = newSelected.concat(selected.slice(1));
-                            } else if (selectedIndex === selected.length - 1) {
-                              newSelected = newSelected.concat(selected.slice(0, -1));
-                            } else if (selectedIndex > 0) {
-                              newSelected = newSelected.concat(
-                                selected.slice(0, selectedIndex),
-                                selected.slice(selectedIndex + 1),
-                              );
-                            }
-
-                            setSelected(newSelected);
-                          }}
                           role="checkbox"
-                          aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={item.orderDetailId}
-                          selected={isItemSelected}
                           sx={{ cursor: 'pointer' }}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                'aria-labelledby': labelId,
-                              }}
-                            />
-                          </TableCell>
                           <TableCell component="th" id={labelId} scope="row" padding="none" align="center">
                             {item.orderDetailId}
                           </TableCell>
@@ -399,28 +302,12 @@ const SSWarrantyList = () => {
                     })}
                   {warrantyList.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={6} align="center">No warranty found</TableCell>
+                      <TableCell colSpan={5} align="center">No warranty found</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={warrantyList.length}
-              rowsPerPage={ordersPerPage}
-              page={currentPage - 1}
-              onPageChange={(event, newPage) => handlePageChange(newPage + 1)}
-              onRowsPerPageChange={(event) => {
-                setOrdersPerPage(parseInt(event.target.value, 10));
-                setCurrentPage(1);
-                fetchWarranties();
-              }}
-            />
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
-              <button onClick={handleBulkUpdate} className="bulk-update-button">Update Selected</button>
-            </div>
           </Paper>
         </Box>
         {isSearch && (
@@ -454,7 +341,7 @@ const SSWarrantyList = () => {
               </div>
               <div className="manager_manage_diamond_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
-                <button onClick={handleBulkUpdateConfirm}>Confirm</button>
+                <button onClick={handleUpdate}>Confirm</button>
               </div>
             </div>
           </div>

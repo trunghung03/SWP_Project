@@ -8,7 +8,7 @@ import {
   ShowAllPromotion,
   getPromotionDetail,
   getPromotionByName,
-  updatePromotionById
+  updatePromotionById,
 } from "../../../services/ManagerService/ManagerPromotionService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -21,10 +21,89 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import TablePagination from '@mui/material/TablePagination';
-import TableFooter from '@mui/material/TableFooter'; // Add this import
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Add this import
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'; // Add this import
+import TablePagination from "@mui/material/TablePagination";
+import TableFooter from "@mui/material/TableFooter";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+
+const headCells = [
+  { id: 'id', numeric: false, disablePadding: false, label: 'ID', sortable: true },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Name', sortable: true },
+  { id: 'code', numeric: false, disablePadding: false, label: 'Code', sortable: true },
+  { id: 'amount', numeric: true, disablePadding: false, label: 'Discount Percentage (%)', sortable: true },
+  { id: 'description', numeric: false, disablePadding: false, label: 'Description', sortable: false },
+  { id: 'startDate', numeric: false, disablePadding: false, label: 'Start Date', sortable: true },
+  { id: 'endDate', numeric: false, disablePadding: false, label: 'End Date', sortable: true },
+  { id: 'status', numeric: false, disablePadding: false, label: 'Status', sortable: false },
+  { id: 'actions', numeric: false, disablePadding: false, label: 'Actions', sortable: false },
+];
+
+function EnhancedTableHead(props) {
+  const { order, orderBy, onRequestSort } = props;
+
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            style={{ backgroundColor: "#faecec" }}
+            key={headCell.id}
+            align="center"
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            {headCell.sortable ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  onRequestSort: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+};
+
+const getComparator = (order, orderBy) => {
+  return order === 'desc'
+    ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
+    : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
+};
+
+const tableSort = (array, comparator) => {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+};
 
 const getPromotionStatus = async (endDate, id) => {
   try {
@@ -97,14 +176,14 @@ const PromotionButton = ({ endDate, id }) => {
 
 const ManagerPromotionList = () => {
   const navigate = useNavigate();
-
   const [promotionList, setPromotionList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [employeeList, setEmployeeList] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [editedPromotion, setEditedPromotion] = useState({});
   const [originalPromotion, setOriginalPromotion] = useState({});
   const [isSearch, setIsSearch] = useState(false);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('id');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,7 +194,6 @@ const ManagerPromotionList = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -132,9 +210,8 @@ const ManagerPromotionList = () => {
   };
 
   const handleSearchKeyPress = async (e) => {
-    const isInteger = (value) => {
-      return /^-?\d+$/.test(value);
-    };
+    const isInteger = (value) => /^-?\d+$/.test(value);
+
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
         setIsSearch(true);
@@ -175,10 +252,10 @@ const ManagerPromotionList = () => {
     }
   };
 
-  const handleEdit = (Promotion) => {
+  const handleEdit = (promotion) => {
     setEditMode(true);
-    setEditedPromotion(Promotion);
-    setOriginalPromotion(Promotion);
+    setEditedPromotion(promotion);
+    setOriginalPromotion(promotion);
   };
 
   const handleChange = (e) => {
@@ -207,33 +284,17 @@ const ManagerPromotionList = () => {
       return;
     }
 
-    const PromotionToUpdate = { ...editedPromotion, status: true };
+    const promotionToUpdate = { ...editedPromotion, status: true };
 
     try {
-      console.log("Sending update request with data:", PromotionToUpdate);
-      const response = await updatePromotionById(
-        PromotionToUpdate.id,
-        PromotionToUpdate
-      );
-      console.log("Update response:", response.data);
+      const response = await updatePromotionById(promotionToUpdate.id, promotionToUpdate);
       const updatedPromotionList = await ShowAllPromotion();
       setPromotionList(updatedPromotionList);
       setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The Promotion information has been updated.",
-        "success"
-      );
+      swal("Updated successfully!", "The promotion information has been updated.", "success");
     } catch (error) {
-      console.error(
-        "Error updating Promotion:",
-        error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
-      );
+      console.error("Error updating promotion:", error.response ? error.response.data : error.message);
+      swal("Something went wrong!", "Failed to update. Please try again.", "error");
     }
   };
 
@@ -246,7 +307,7 @@ const ManagerPromotionList = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
+  };
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -267,8 +328,7 @@ const ManagerPromotionList = () => {
             />
           </div>
         </div>
-        <hr className="manager_header_line"></hr>
-
+        <hr className="manager_header_line" />
         <h3>List Of Promotional Codes</h3>
         <div className="manager_manage_diamond_create_button_section">
           <button
@@ -281,40 +341,39 @@ const ManagerPromotionList = () => {
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Code</StyledTableCell>
-                  <StyledTableCell align="center">Discount Percentage (%)</StyledTableCell>
-                  <StyledTableCell align="center">Description</StyledTableCell>
-                  <StyledTableCell align="center">Start Date</StyledTableCell>
-                  <StyledTableCell align="center">End Date</StyledTableCell>
-                  <StyledTableCell align="center">Status</StyledTableCell>
-                  <StyledTableCell align="center">Update</StyledTableCell>
-                </TableRow>
-              </TableHead>
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={(event, property) => {
+                  const isAsc = orderBy === property && order === "asc";
+                  setOrder(isAsc ? "desc" : "asc");
+                  setOrderBy(property);
+                }}
+                rowCount={promotionList.length}
+              />
               <TableBody>
                 {promotionList.length > 0 ? (
-                  promotionList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.id}>
-                      <TableCell align="center">{item.id}</TableCell>
-                      <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{item.code}</TableCell>
-                      <TableCell align="center">{item.amount}</TableCell>
-                      <TableCell align="center">{item.description}</TableCell>
-                      <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
-                      <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>
-                      <TableCell align="center">
-                        <PromotionButton endDate={item.endDate} id={item.id} />
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  tableSort(promotionList, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((item) => (
+                      <TableRow className="manager_manage_table_body_row" key={item.id}>
+                        <TableCell align="center">{item.id}</TableCell>
+                        <TableCell align="center">{item.name}</TableCell>
+                        <TableCell align="center">{item.code}</TableCell>
+                        <TableCell align="center">{item.amount}</TableCell>
+                        <TableCell align="center">{item.description}</TableCell>
+                        <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
+                        <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>
+                        <TableCell align="center">
+                          <PromotionButton endDate={item.endDate} id={item.id} />
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton onClick={() => handleEdit(item)}>
+                            <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
                 ) : (
                   <TableRow>
                     <TableCell colSpan="9" align="center">

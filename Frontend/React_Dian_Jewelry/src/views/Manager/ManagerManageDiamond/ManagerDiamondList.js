@@ -47,7 +47,7 @@ const ManagerDiamondList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
+      backgroundColor: '#faecec',
       color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {
@@ -350,12 +350,12 @@ const ManagerDiamondList = () => {
                       )}
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon />
+                          <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
                         <IconButton
                           onClick={() => handleDelete(item.diamondId || item.subDiamondId)}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
                       </TableCell>
                     </TableRow>

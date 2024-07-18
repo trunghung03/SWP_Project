@@ -32,7 +32,7 @@ const AdminEmployeeList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
+      backgroundColor: '#faecec',
       color: '1c1c1c',
     },
     [`&.${tableCellClasses.body}`]: {

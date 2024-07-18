@@ -14,10 +14,9 @@ import {
   getProductDiamond,
 } from "../../../services/ManagerService/ManagerProductService.js";
 import logo from "../../../assets/img/logoN.png";
-import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -25,7 +24,90 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Visibility } from "@mui/icons-material";
+import { Visibility } from "@mui/icons-material";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { visuallyHidden } from "@mui/utils";
+import Box from "@mui/material/Box";
+import PropTypes from "prop-types";
+
+// Head cells for the product table
+const headCells = [
+  { id: 'productId', numeric: false, disablePadding: false, label: 'ID', sortable: true },
+  { id: 'productCode', numeric: false, disablePadding: false, label: 'Code', sortable: true },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Name', sortable: true },
+  { id: 'price', numeric: false, disablePadding: false, label: 'Price', sortable: true },
+  { id: 'stock', numeric: false, disablePadding: false, label: 'Stock', sortable: true },
+  { id: 'action', numeric: false, disablePadding: false, label: 'Action', sortable: false },
+  { id: 'view', numeric: false, disablePadding: false, label: 'View', sortable: false },
+];
+
+// Enhanced Table Head for sorting
+function EnhancedTableHead(props) {
+  const { order, orderBy, onRequestSort } = props;
+
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            style={{ backgroundColor: "#faecec" }}
+            key={headCell.id}
+            align="center"
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            {headCell.sortable ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  onRequestSort: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+};
+
+// Comparator function for sorting
+const getComparator = (order, orderBy) => {
+  return order === 'desc'
+    ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
+    : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
+};
+
+// Sort table rows based on comparator
+const tableSort = (array, comparator) => {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+};
 
 const ManagerProductList = () => {
   const navigate = useNavigate();
@@ -38,26 +120,18 @@ const ManagerProductList = () => {
   const [categories, setCategories] = useState({});
   const [collections, setCollections] = useState({});
   const [mainDiamonds, setMainDiamonds] = useState({});
-  const [isSearch , setIsSearch] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+
   const viewDetail = (productId) => {
     navigate(`/manager-product-detail/${productId}`);
   };
+
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 6,
     totalPages: 1,
     totalCount: 0,
   });
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#f9c6bb',
-      color: '1c1c1c',
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
 
   const fetchData = async (page = 1, query = '') => {
     try {
@@ -104,9 +178,8 @@ const ManagerProductList = () => {
   };
 
   const handleSearchKeyPress = async (e) => {
-    const isInteger = (value) => {
-      return /^-?\d+$/.test(value);
-    };
+    const isInteger = (value) => /^-?\d+$/.test(value);
+
     if (e.key === "Enter") {
       if (isInteger(searchQuery.trim())) {
         setIsSearch(true);
@@ -115,7 +188,7 @@ const ManagerProductList = () => {
           setProductItems([response]);
           setPagination({
             currentPage: 1,
-            pageSize: 7,
+            pageSize: 6,
             totalPages: 1,
             totalCount: 1,
           });
@@ -137,34 +210,33 @@ const ManagerProductList = () => {
 
   const handleDelete = async (productID) => {
     swal({
-        title: "Are you sure to delete this product?",
-        text: "This action cannot be undone",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
+      title: "Are you sure to delete this product?",
+      text: "This action cannot be undone",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
     }).then((willDelete) => {
-        if (willDelete) {
-            deleteProductById(productID)
-                .then(() => {
-                    swal("Deleted successfully!", "The product has been deleted.", "success")
-                        .then(() => {
-                            fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
-                        });
-                })
-                .catch((error) => {
-                    console.error("Error deleting product:", error);
-                    swal("Something went wrong!", "Failed to delete the product. Please try again.", "error");
-                });
-        }
+      if (willDelete) {
+        deleteProductById(productID)
+          .then(() => {
+            swal("Deleted successfully!", "The product has been deleted.", "success")
+              .then(() => {
+                fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
+              });
+          })
+          .catch((error) => {
+            console.error("Error deleting product:", error);
+            swal("Something went wrong!", "Failed to delete the product. Please try again.", "error");
+          });
+      }
     });
-};
+  };
 
-
-const handleEdit = (product) => {
-  setEditMode(true);
-  setEditedProduct(product);
-  setOriginalProduct(product);
-};
+  const handleEdit = (product) => {
+    setEditMode(true);
+    setEditedProduct(product);
+    setOriginalProduct(product);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -173,132 +245,46 @@ const handleEdit = (product) => {
 
   const handleUpdate = async () => {
     const requiredFields = [
-        "name",
-        "description",
-        "laborPrice",
-        "imageLinkList",
-        "collectionId",
-        "categoryId",
+      "name",
+      "description",
+      "laborPrice",
+      "imageLinkList",
+      "collectionId",
+      "categoryId",
     ];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
 
     for (let field of requiredFields) {
-        if (!editedProduct[field]) {
-            swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-            return;
-        }
-        if (specialCharPattern.test(editedProduct[field])) {
-            swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-            return;
-        }
+      if (!editedProduct[field]) {
+        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedProduct[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
     }
 
     const isEqual = JSON.stringify(originalProduct) === JSON.stringify(editedProduct);
     if (isEqual) {
-        swal("No changes detected!", "You have not made any changes.", "error");
-        return;
+      swal("No changes detected!", "You have not made any changes.", "error");
+      return;
     }
 
     const productToUpdate = { ...editedProduct, status: true };
 
     updateProductById(productToUpdate.productId, productToUpdate)
-        .then(() => {
-            swal("Updated successfully!", "The product information has been updated.", "success")
-                .then(() => {
-                    fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
-                    setEditMode(false);
-                });
-        })
-        .catch((error) => {
-            console.error("Error updating product:", error.response ? error.response.data : error.message);
-            swal("Something went wrong!", "Failed to update. Please try again.", "error");
-        });
-};
-
-
-  const renderPagination = () => {
-    const pages = [];
-    const totalPages = pagination.totalPages;
-    const currentPage = pagination.currentPage;
-  
-    if (totalPages <= 5) {
-      // Show all pages if total pages are less than or equal to 5
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
-      // Show first page
-      pages.push(
-        <button
-          key={1}
-          onClick={() => handlePageChange(1)}
-          className={1 === currentPage ? "manager_order_active" : ""}
-        >
-          1
-        </button>
-      );
-  
-      if (currentPage > 3) {
-        pages.push(<span key="start-ellipsis">...</span>);
-      }
-  
-      // Show previous, current, and next page
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(totalPages - 1, currentPage + 1);
-  
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-  
-      if (currentPage < totalPages - 2) {
-        pages.push(<span key="end-ellipsis">...</span>);
-      }
-  
-      // Show last page
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className={totalPages === currentPage ? "manager_order_active" : ""}
-        >
-          {totalPages}
-        </button>
-      );
-    }
-  
-    return (
-      <div className="manager_manage_diamond_pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          &lt;
-        </button>
-        {pages}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          &gt;
-        </button>
-      </div>
-    );
+      .then(() => {
+        swal("Updated successfully!", "The product information has been updated.", "success")
+          .then(() => {
+            fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
+            setEditMode(false);
+          });
+      })
+      .catch((error) => {
+        console.error("Error updating product:", error.response ? error.response.data : error.message);
+        swal("Something went wrong!", "Failed to update. Please try again.", "error");
+      });
   };
 
   return (
@@ -321,87 +307,69 @@ const handleEdit = (product) => {
           </div>
         </div>
         <hr className="manager_product_header_line"></hr>
-        <h3 style={{fontFamily:"Georgia, 'Times New Roman', Times, serif", fontWeight:"500"}}>List Of Products</h3>
-        <div className="manager_manage_diamond_create_button_section">
+        <h3 style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif", fontWeight: "500" }}>
+          List Of Products
+        </h3>
+        <div className="manager_manage_diamond_create_button_section" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-product")}
           >
             Add product
           </button>
-          {renderPagination()}
+          <Stack spacing={2} direction="row">
+            <Pagination
+              count={pagination.totalPages}
+              page={pagination.currentPage}
+              onChange={(e, value) => handlePageChange(value)}
+              color="primary"
+            />
+          </Stack>
         </div>
 
-        {/* Table product list */}
         <div className="manager_manage_product_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">ID</StyledTableCell>
-                  <StyledTableCell align="center">Code</StyledTableCell>
-                  <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Price</StyledTableCell>
-                  {/* <StyledTableCell align="center">Description</StyledTableCell>
-                  <StyledTableCell align="center">Diamond</StyledTableCell>
-                  <StyledTableCell align="center">Main & Sub Diamond Amount</StyledTableCell>
-                  <StyledTableCell align="center">Shell Weight</StyledTableCell>
-                  <StyledTableCell align="center">Images</StyledTableCell>
-                  <StyledTableCell align="center">Category</StyledTableCell>
-                  <StyledTableCell align="center">Collection</StyledTableCell>
-                  <StyledTableCell align="center">Labor</StyledTableCell> */}
-                  <StyledTableCell align="center">Stock</StyledTableCell>
-                  <StyledTableCell align="center">Action</StyledTableCell>
-                  <StyledTableCell align="center">View</StyledTableCell>
-                </TableRow>
-              </TableHead>
+              <EnhancedTableHead
+                order={pagination.order}
+                orderBy={pagination.orderBy}
+                onRequestSort={(event, property) => {
+                  const isAsc = pagination.orderBy === property && pagination.order === 'asc';
+                  setPagination({ ...pagination, order: isAsc ? 'desc' : 'asc', orderBy: property });
+                }}
+                rowCount={productItems.length}
+              />
               <TableBody>
                 {productItems.length > 0 ? (
-                  productItems.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.productId}>
-                      <TableCell align="center">{item.productId}</TableCell>
-                      <TableCell align="center">{item.productCode}</TableCell>
-                      <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">${item.price}</TableCell>
-                      <TableCell align="center">{item.stock}</TableCell>
-                      {/* <TableCell align="center">{item.description}</TableCell>
-                      <TableCell align="center">{mainDiamonds[item.mainDiamondId]}</TableCell>
-                      <TableCell aligns="center">
-                        {item.mainDiamondAmount} / {item.subDiamondAmount}
-                      </TableCell>
-                      <TableCell align="center">{item.shellAmount}</TableCell>
-                      <TableCell align="center">
-                        {item.imageLinkList ? (
-                          <img
-                            src={item.imageLinkList.split(";")[0]}
-                            alt="Product"
-                            style={{
-                              width: "60px",
-                              height: "auto",
-                              marginRight: "5px",
-                            }}
-                          />
-                        ) : (
-                          "No image"
-                        )}
-                      </TableCell>
-                      <TableCell align="center">{categories[item.categoryId]}</TableCell>
-                      <TableCell align="center">{collections[item.collectionId]}</TableCell>
-                      <TableCell align="center">{item.laborPrice}</TableCell> */}
-                      
-                      <TableCell align="center">
-                        <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => handleDelete(item.productId)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Visibility onClick={() => viewDetail(item.productId)}></Visibility>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  tableSort(productItems, getComparator(pagination.order, pagination.orderBy))
+                    .map((item) => (
+                      <TableRow
+                        key={item.productId}
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5",
+                          },
+                          cursor: "pointer",
+                        }}
+                      >
+                        <TableCell align="center">{item.productId}</TableCell>
+                        <TableCell align="center">{item.productCode}</TableCell>
+                        <TableCell align="center">{item.name}</TableCell>
+                        <TableCell align="center">${item.price}</TableCell>
+                        <TableCell align="center">{item.stock}</TableCell>
+                        <TableCell align="center">
+                          <IconButton onClick={() => handleEdit(item)}>
+                            <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          </IconButton>
+                          <IconButton onClick={() => handleDelete(item.productId)}>
+                            <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Visibility onClick={() => viewDetail(item.productId)} />
+                        </TableCell>
+                      </TableRow>
+                    ))
                 ) : (
                   <TableRow>
                     <TableCell colSpan="12">No product found</TableCell>
@@ -418,7 +386,6 @@ const handleEdit = (product) => {
         </div>
       </div>
 
-      {/* Update modal */}
       {editMode && (
         <div
           className="manager_manage_product_modal_overlay"
@@ -487,7 +454,7 @@ const handleEdit = (product) => {
                 <label>Category ID</label>
                 <input
                   type="text"
-                  name="categoryID"
+                  name="categoryId"
                   value={editedProduct.categoryId}
                   onChange={handleChange}
                   required

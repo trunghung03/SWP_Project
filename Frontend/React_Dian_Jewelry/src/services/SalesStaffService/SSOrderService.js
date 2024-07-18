@@ -96,4 +96,8 @@ export const getCertificateURL = async (orderId) => {
   return response.data;
 };
 
+export const getWarrantyById = async (warrantyId) => {
+  const response = await axios.get(`${API_BASE_URL_ORDER}/warranties/${warrantyId}`);
+  return response.data;
+};
 

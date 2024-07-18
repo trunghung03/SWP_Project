@@ -12,7 +12,7 @@ const ManagerAddProduct = () => {
     const [productData, setProductData] = useState({
         productCode: '',
         name: '',
-        price: '',
+        price: '1', // Defaulting to 0
         description: '',
         mainDiamondAttributeId: '',
         subDiamondAttributeId: '',
@@ -96,7 +96,7 @@ const ManagerAddProduct = () => {
             const productDTO = {
                 productCode: productData.productCode,
                 name: productData.name,
-                price: parseFloat(productData.price),
+                price: parseFloat(productData.price), // This will always be 0
                 laborPrice: parseFloat(productData.laborPrice),
                 description: productData.description,
                 mainDiamondAttributeId: parseInt(productData.mainDiamondAttributeId),
@@ -160,10 +160,6 @@ const ManagerAddProduct = () => {
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
-                        <div className="manager_add_diamond_form_group">
-                            <label>Sale Price</label>
-                            <input type="number" name="price" placeholder="Input product's sale price" value={productData.price} onChange={handleChange} required style={{borderRadius:"6px"}}/>
-                        </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Labor Cost</label>
                             <input type="number" name="laborPrice" placeholder="Input product's labor cost" value={productData.laborPrice} onChange={handleChange} required style={{borderRadius:"6px"}}/>
