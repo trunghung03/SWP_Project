@@ -18,6 +18,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { getDeliveryStaffOrderList } from "../../services/DeliveryStaffService/DSDeliveryService.js";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const DSDeliveryList = () => {
   const navigate = useNavigate();
@@ -66,86 +68,8 @@ const DSDeliveryList = () => {
     fetchAllOrders(1, selectedValue);
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const renderPagination = () => {
-    const pages = [];
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
-      pages.push(
-        <button
-          key={1}
-          onClick={() => handlePageChange(1)}
-          className={1 === currentPage ? "manager_order_active" : ""}
-        >
-          1
-        </button>
-      );
-
-      if (currentPage > 3) {
-        pages.push(<span key="start-ellipsis">...</span>);
-      }
-
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push(<span key="end-ellipsis">...</span>);
-      }
-
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className={totalPages === currentPage ? "manager_order_active" : ""}
-        >
-          {totalPages}
-        </button>
-      );
-    }
-
-    return (
-      <div className="manager_manage_diamond_pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          &lt;
-        </button>
-        {pages}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          &gt;
-        </button>
-      </div>
-    );
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   const handleSearchKeyPress = (e) => {
@@ -211,7 +135,14 @@ const DSDeliveryList = () => {
               <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </FormControl>
-          {renderPagination()}
+          <Stack spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>

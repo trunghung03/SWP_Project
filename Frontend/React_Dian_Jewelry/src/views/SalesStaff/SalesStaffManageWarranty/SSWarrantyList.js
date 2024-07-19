@@ -28,6 +28,8 @@ import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
 import { EnhancedTableToolbar, getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const headCells = [
   { id: 'orderDetailId', numeric: false, disablePadding: false, label: 'Order Detail ID', sortable: true },
@@ -111,8 +113,8 @@ const SSWarrantyList = () => {
     fetchWarranties();
   }, []);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   const handleSearchKeyPress = async (e) => {
@@ -234,23 +236,14 @@ const SSWarrantyList = () => {
         <hr className="ss_manage_content_line"></hr>
         <h3 style={{ textAlign: "center", color: "#292727", fontFamily: "serif" }}>Warranty List</h3>
         <div className="manager_manage_diamond_create_button_section" style={{ display: "flex", justifyContent: "flex-end" }}>
-          <div className="manager_manage_diamond_pagination">
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={index + 1 === currentPage ? "manager_order_active" : ""}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-              &gt;
-            </button>
-          </div>
+          <Stack spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
         </div>
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>

@@ -24,6 +24,8 @@ import { visuallyHidden } from '@mui/utils';
 import { getSalesStaffOrderList } from "../../../services/SalesStaffService/SSOrderService.js";
 import PropTypes from 'prop-types';
 import { EnhancedTableToolbar, getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const headCells = [
   { id: 'orderId', numeric: false, disablePadding: false, label: 'Order ID', sortable: true },
@@ -140,95 +142,14 @@ const SSOrderList = () => {
     fetchOrders(pagination.currentPage, sortOrder);
   }, [employeeId, pagination.currentPage, sortOrder]);
 
-  const handlePageChange = (pageNumber) => {
-    fetchOrders(pageNumber, sortOrder);
+  const handlePageChange = (event, value) => {
+    fetchOrders(value, sortOrder);
   };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const renderPagination = () => {
-    const pages = [];
-    const totalPages = pagination.totalPages;
-    const currentPage = pagination.currentPage;
-
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
-      pages.push(
-        <button
-          key={1}
-          onClick={() => handlePageChange(1)}
-          className={1 === currentPage ? "manager_order_active" : ""}
-        >
-          1
-        </button>
-      );
-
-      if (currentPage > 3) {
-        pages.push(<span key="start-ellipsis">...</span>);
-      }
-
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push(<span key="end-ellipsis">...</span>);
-      }
-
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className={totalPages === currentPage ? "manager_order_active" : ""}
-        >
-          {totalPages}
-        </button>
-      );
-    }
-
-    return (
-      <div className="manager_manage_diamond_pagination">
-        <button
-          onClick={() => handlePageChange(pagination.currentPage - 1)}
-          disabled={pagination.currentPage === 1}
-        >
-          &lt;
-        </button>
-        {pages}
-        <button
-          onClick={() => handlePageChange(pagination.currentPage + 1)}
-          disabled={pagination.currentPage === totalPages}
-        >
-          &gt;
-        </button>
-      </div>
-    );
   };
 
   const handleSearchKeyPress = async (e) => {
@@ -302,7 +223,14 @@ const SSOrderList = () => {
               <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </FormControl>
-          {renderPagination()}
+          <Stack spacing={2}>
+            <Pagination
+              count={pagination.totalPages}
+              page={pagination.currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
         </div>
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
