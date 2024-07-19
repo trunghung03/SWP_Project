@@ -13,6 +13,6 @@ namespace DIAN_.Interfaces
 
         Task<Shell?> UpdateShellStockAsync(Shell shellDto, int id);
 
-        Task<Shell?> GetShellByProductIdAsync(int productId);
+        Task<List<Shell>> GetShellByProductIdAsync(int productId);
     }
 }

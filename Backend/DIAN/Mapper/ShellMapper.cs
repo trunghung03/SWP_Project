@@ -47,6 +47,7 @@ namespace DIAN_.Mapper
                 ShellMaterialId = shellModel.ShellMaterialId ?? 0,
                 Weight = shellModel.Weight ?? 0,
                 Size = shellModel.Size ?? 0,
+                ShellMaterialName = shellModel.ShellMaterial?.Name,
                 AmountAvailable = shellModel.AmountAvailable,
                 Status = shellModel.Status
             };

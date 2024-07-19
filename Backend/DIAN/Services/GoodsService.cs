@@ -314,7 +314,7 @@ namespace DIAN_.Services
 
             decimal mainDiamondPrice = 0;
             decimal subDiamondPrice = 0;
-            decimal shellPrice = 0;
+            //decimal shellPrice = 0;
             decimal laborPrice = product.LaborCost ?? 0;
 
             if (product.MainDiamondAtrributeId.HasValue && product.MainDiamondAtrributeId.Value != 0)
@@ -332,13 +332,13 @@ namespace DIAN_.Services
             }
 
 
-            var shell = await _shellRepository.GetShellByProductIdAsync(productId);
-            if (shell != null)
-            {
-                shellPrice = (shell.Weight ?? 0) * shell.ShellMaterial.Price; // Assuming ShellMaterial includes the price per unit weight
-            }
+            //var shell = await _shellRepository.GetShellByProductIdAsync(productId);
+            //if (shell != null)
+            //{
+            //    shellPrice = (shell.Weight ?? 0) * shell.ShellMaterial.Price; //not calculate shell price
+            //}
 
-            decimal totalProductPrice = mainDiamondPrice + subDiamondPrice + laborPrice + shellPrice + product.LaborCost ?? 0;
+            decimal totalProductPrice = mainDiamondPrice + subDiamondPrice + laborPrice + product.LaborCost ?? 0;
             return totalProductPrice;
         }
 

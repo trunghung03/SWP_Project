@@ -60,12 +60,13 @@ namespace DIAN_.Repository
             return shell;
         }
 
-        public Task<Shell?> GetShellByProductIdAsync(int productId) 
+        public async Task<List<Shell>> GetShellByProductIdAsync(int productId)
         {
-            var shell = _context.Shells
+            var shells = await _context.Shells
                 .Where(s => s.ProductId == productId)
-                .FirstOrDefaultAsync();
-            return shell;
+                .Include(s => s.ShellMaterial) 
+                .ToListAsync();
+            return shells;
         }
 
         public async Task<Shell?> UpdateShellAsync(Shell shellDTO, int id)

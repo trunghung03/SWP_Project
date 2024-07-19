@@ -166,5 +166,27 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("product/{productId}")]
+        public async Task<IActionResult> GetShellByProductId([FromRoute] int productId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var shells = await _shellRepository.GetShellByProductIdAsync(productId);
+                if (shells == null)
+                {
+                    return NotFound("Shell does not exist");
+                }
+                var shellDtos = shells.Select(shell => shell.ToShellDetail()).ToList();
+                return Ok(shellDtos);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
