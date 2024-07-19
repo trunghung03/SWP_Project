@@ -258,7 +258,7 @@ const ManagerPromotionList = () => {
       }
     }
   };
-  
+
   const handleEdit = (promotion) => {
     setEditMode(true);
     setEditedPromotion({
@@ -282,11 +282,20 @@ const ManagerPromotionList = () => {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
         return;
       }
-      if (specialCharPattern.test(editedPromotion[field])) {
+      if (field !== "description" && specialCharPattern.test(editedPromotion[field])) {
         swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
         return;
       }
     }
+
+    const validFromDate = new Date(editedPromotion.validFrom);
+  const validToDate = new Date(editedPromotion.validTo);
+
+  if (validFromDate > validToDate) {
+    swal("Invalid date range!", "The start date must be before the end date.", "error");
+    return;
+  }
+
 
     const isEqual =
       JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
@@ -298,11 +307,11 @@ const ManagerPromotionList = () => {
     const promotionToUpdate = { ...editedPromotion, status: true };
 
     try {
-      const response = await updatePromotionById(promotionToUpdate.id, promotionToUpdate);
-      const updatedPromotionList = await ShowAllPromotion();
-      setPromotionList(updatedPromotionList);
-      setEditMode(false);
-      swal("Updated successfully!", "The promotion information has been updated.", "success");
+        const response = await updatePromotionById(promotionToUpdate.id, promotionToUpdate);
+        const updatedPromotionList = await ShowAllPromotion();
+        setPromotionList(updatedPromotionList);
+        setEditMode(false);
+        swal("Updated successfully!", "The promotion information has been updated.", "success");
     } catch (error) {
       console.error("Error updating promotion:", error.response ? error.response.data : error.message);
       swal("Something went wrong!", "Failed to update. Please try again.", "error");
@@ -454,12 +463,12 @@ const ManagerPromotionList = () => {
               <div className="manager_manage_diamond_form_group">
                 <label>Promotion Name</label>
                 <input
-                label="Name"
-                name="name"
-                value={editedPromotion.name}
-                onChange={handleChange}
-                fullWidth
-              />
+                  label="Name"
+                  name="name"
+                  value={editedPromotion.name}
+                  onChange={handleChange}
+                  fullWidth
+                />
               </div>
               <div className="manager_manage_diamond_form_group">
                 <label>Code</label>
