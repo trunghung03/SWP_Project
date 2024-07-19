@@ -26,6 +26,10 @@ const getShellMaterials = () => {
     return axios.get(`${API_BASE_URL}/shellmaterials`);
 };
 
+const getShellByProductId = (productId) => {
+    return axios.get(`${API_BASE_URL}/shells/product/${productId}`);
+};
+
 const getProductsByIds = (ids) => {
     return axios.get(`${API_BASE_URL}/products/list`, { params: { ids: ids.join(',') } });
 };
@@ -57,5 +61,6 @@ export {
     getNewestProducts, 
     getTopSellingProducts, 
     getNewestCollections,
-    searchProducts 
+    searchProducts,
+    getShellByProductId 
 };

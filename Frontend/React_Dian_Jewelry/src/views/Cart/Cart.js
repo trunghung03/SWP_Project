@@ -12,6 +12,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
+import { getShellByProductId } from '../../services/ProductService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
@@ -93,10 +94,27 @@ function Cart() {
         navigate('/diamond-jewelry', { state: { category: 'all' } });
     };
 
-    const handleSizeChange = (e, index) => {
+    const handleSizeChange = async (e, index) => {
         const newSize = e.target.value;
         const updatedItem = { ...cartItems[index], selectedSize: newSize };
+
+        try {
+            const shellResponse = await getShellByProductId(updatedItem.productId);
+            const shellData = shellResponse.data;
+            const shellEntry = shellData.find(shell => shell.size === parseFloat(newSize) && shell.shellMaterialName === updatedItem.selectedShellName);
+            
+            if (shellEntry) {
+                updatedItem.selectedShellId = shellEntry.shellId;
+            }
+        } catch (error) {
+            console.error('Error fetching shell data:', error);
+        }
+
         updateCartItem(index, updatedItem);
+
+        const updatedCartItems = [...cartItems];
+        updatedCartItems[index] = updatedItem;
+        localStorage.setItem(`cartItems${customerId}`, JSON.stringify(updatedCartItems));
     };
 
     const handleViewProduct = (product) => {

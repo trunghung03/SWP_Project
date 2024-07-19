@@ -229,8 +229,8 @@ function Checkout() {
                     orderId: orderId,
                     lineTotal: item.price,
                     productId: item.productId,
-                    shellMaterialId: item.selectedShellId,
-                    subDiamondId: item.diamondId,
+                    shellId: item.selectedShellId,
+                    // subDiamondId: item.diamondId,
                     size: parseInt(item.selectedSize, 10)
                 };
                 return createOrderDetails(orderDetail);

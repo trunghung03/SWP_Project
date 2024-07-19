@@ -11,7 +11,7 @@ import necklaceSizeGuide from '../../assets/img/sgNecklace.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getProductList } from '../../services/ProductService';
+import {getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getShellByProductId } from '../../services/ProductService';
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
@@ -37,6 +37,7 @@ function ProductDetail() {
     const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
     const [shellPrice, setShellPrice] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [shellData, setShellData] = useState([]);
 
     const navigateToProductDetail = (product) => {
         const productId = product.productId;
@@ -68,12 +69,16 @@ function ProductDetail() {
                     getCollectionDetail(productData.collectionId).catch(error => {
                         throw error;
                     }),
+                    getShellByProductId(id).catch(error => {
+                        throw error;
+                    }),
                     getProductList().catch(error => {
                         throw error;
                     })
-                ]).then(([diamondResponse, collectionResponse, productListResponse]) => {
+                ]).then(([diamondResponse, collectionResponse, shellResponse, productListResponse]) => {
                     setDiamond(diamondResponse.data);
                     setCollection(collectionResponse.data);
+                    setShellData(shellResponse.data);
 
                     const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
                     const currentIndex = relatedProducts.findIndex(p => p.productId === productData.productId);
@@ -88,6 +93,7 @@ function ProductDetail() {
 
                     setAlsoLikeProducts(nextProducts);
                 }).catch(error => {
+                    console.error(error);
                 }).finally(() => {
                     setLoading(false);
                 });
@@ -98,6 +104,7 @@ function ProductDetail() {
             getShellMaterials().then(response => {
                 setShellMaterials(response.data);
             }).catch(error => {
+                console.error(error);
             });
         }
     }, [location.state]);
@@ -127,6 +134,8 @@ function ProductDetail() {
             });
             return;
         } else {
+            const shellEntry = shellData.find(shell => shell.productId === product.productId && shell.size === parseFloat(selectedSize) && shell.shellMaterialName === selectedShell);
+
             const productToSave = {
                 productId: product.productId,
                 name: product.name,
@@ -135,7 +144,7 @@ function ProductDetail() {
                 price: product.price + shellPrice,
                 selectedSize,
                 sizes: product.sizes.map(size => size.toString()),
-                selectedShellId: shellMaterials.find(shell => shell.name === selectedShell)?.shellMaterialId,
+                selectedShellId: shellEntry?.shellId,
                 selectedShellName: selectedShell,
                 diamondId: product.mainDiamondId,
                 categoryId: product.categoryId
@@ -279,7 +288,7 @@ function ProductDetail() {
                     <div className="product_delivery_detail">
                         <p><i className="fas fa-phone"></i> <a href='tel:0795795959'>0795 795 959</a></p>
                         <p><i className="fas fa-shipping-fast"></i> Fast delivery, convenient transaction</p>
-                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
+                        <p><i className="fas fa-calendar-alt"></i> Order now and ship by <strong> four days </strong> depending on selected size</p>
                     </div>
                     <hr className="product_detail_line" />
                 </div>
