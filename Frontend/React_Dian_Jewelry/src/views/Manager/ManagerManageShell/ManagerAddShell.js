@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import logo from '../../../assets/img/logoN.png';
@@ -6,6 +6,7 @@ import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js
 import { createShell } from '../../../services/ManagerService/ManagerShellService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
 import { getProductDetail } from '../../../services/ManagerService/ManagerProductService.js';
+import { ShowAllShellMaterial } from '../../../services/ManagerService/ManagerShellService.js';
 
 const ManagerAddShell = () => {
     const navigate = useNavigate();

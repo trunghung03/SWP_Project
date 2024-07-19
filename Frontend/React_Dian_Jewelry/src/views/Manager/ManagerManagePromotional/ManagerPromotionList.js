@@ -179,7 +179,14 @@ const ManagerPromotionList = () => {
   const [promotionList, setPromotionList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [editedPromotion, setEditedPromotion] = useState({});
+  const [editedPromotion, setEditedPromotion] = useState({
+    name: "",
+    code: "",
+    amount: 0,
+    description: "",
+    validFrom: "",
+    validTo: ""
+  });
   const [originalPromotion, setOriginalPromotion] = useState({});
   const [isSearch, setIsSearch] = useState(false);
   const [order, setOrder] = useState('asc');
@@ -251,14 +258,14 @@ const ManagerPromotionList = () => {
       }
     }
   };
-
+  
   const handleEdit = (promotion) => {
     setEditMode(true);
-    setEditedPromotion( setEditedPromotion({
+    setEditedPromotion({
       ...promotion,
       validFrom: formatDate(promotion.startDate),
       validTo: formatDate(promotion.endDate)
-    }));
+    });
     setOriginalPromotion(promotion);
   };
 
@@ -308,7 +315,7 @@ const ManagerPromotionList = () => {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
-  
+
 
   const handleBack = async () => {
     try {
@@ -381,7 +388,7 @@ const ManagerPromotionList = () => {
                         </TableCell>
                         <TableCell align="center">
                           <IconButton onClick={() => handleEdit(item)}>
-                            <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                            <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -447,14 +454,12 @@ const ManagerPromotionList = () => {
               <div className="manager_manage_diamond_form_group">
                 <label>Promotion Name</label>
                 <input
-                  type="text"
-                  name="name"
-                  maxLength={50}
-                  value={editedPromotion.name}
-                  onChange={handleChange}
-                  placeholder="Enter promotion's name"
-                  required
-                />
+                label="Name"
+                name="name"
+                value={editedPromotion.name}
+                onChange={handleChange}
+                fullWidth
+              />
               </div>
               <div className="manager_manage_diamond_form_group">
                 <label>Code</label>
