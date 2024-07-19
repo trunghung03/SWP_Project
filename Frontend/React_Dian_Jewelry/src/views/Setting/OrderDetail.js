@@ -145,7 +145,7 @@ function OrderDetail() {
                                     </div>
                                     <p className="order_detail_product_size">Shell: {product.shellMaterial}</p>
                                     <p className="order_detail_product_size">Size: {product.size}</p>
-                                    <p className="order_detail_product_price">{product.lineTotal}$</p>
+                                    <p className="order_detail_product_price">${product.lineTotal}</p>
                                 </div>
                             </div>
                         ))}
@@ -177,7 +177,7 @@ function OrderDetail() {
                             <p className="order_detail_date">{formatDate(orderDetails.date)}</p>
                             <p className="order_detail_total_price">
                                 <span className="order_detail_discount">{promotionCode ? `Promotion: ${promotionCode}` : ''}</span>
-                                Total price: {orderDetails.totalPrice}$
+                                Total price: ${orderDetails.totalPrice}
                             </p>
                         </div>
                         <div className="order_detail_actions">

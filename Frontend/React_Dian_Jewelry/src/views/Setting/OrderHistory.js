@@ -186,7 +186,7 @@ function OrderHistory() {
                                 <tr key={order.orderId}>
                                     <td>{formatDate(order.date)}</td>
                                     <td>{order.orderId}</td>
-                                    <td>{order.totalPrice}$</td>
+                                    <td>${order.totalPrice}</td>
                                     <td>{order.orderStatus}</td>
                                     <td>
                                         <i className="order_history_detail_icon fas fa-external-link-alt" onClick={() => handleDetailClick(order.orderId)} style={{ cursor: 'pointer' }}></i>

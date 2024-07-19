@@ -11,7 +11,7 @@ import necklaceSizeGuide from '../../assets/img/sgNecklace.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import {getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getShellByProductId } from '../../services/ProductService';
+import { getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getShellByProductId } from '../../services/ProductService';
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
@@ -110,6 +110,16 @@ function ProductDetail() {
     }, [location.state]);
 
     const handleAddToCart = () => {
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.warn("Please sign in or sign up to add jewelry to cart.", {
+                position: "top-right",
+                autoClose: 3000
+            });
+            return;
+        }
+
         if (!selectedShell) {
             toast.warn("Please choose a shell type.", {
                 position: "top-right",
@@ -120,15 +130,6 @@ function ProductDetail() {
 
         if (!selectedSize) {
             toast.warn("Please choose a size.", {
-                position: "top-right",
-                autoClose: 3000
-            });
-            return;
-        }
-
-        const token = localStorage.getItem('token');
-        if (!token) {
-            toast.warn("Please sign in or sign up to add jewelry to cart.", {
                 position: "top-right",
                 autoClose: 3000
             });
@@ -261,7 +262,7 @@ function ProductDetail() {
                         ))}
                     </p>
                     <div className="price_size_container">
-                        <p className="product_price_detail">{product.price + shellPrice}$</p>
+                        <p className="product_price_detail">${product.price + shellPrice}</p>
                         <div className="size_guide_container">
                             <button onClick={openSizeGuide} className="size_guide_detail">Size guide</button>
                             <select
@@ -333,7 +334,7 @@ function ProductDetail() {
                             </div>
                             <p className="also_like_detail">{product.clarity} | {product.carat} | {product.color}</p>
                             <p className="also_like_name">{product.name}</p>
-                            <p className="also_like_price">{product.price}$</p>
+                            <p className="also_like_price">${product.price}</p>
                         </div>
                     ))}
                 </div>

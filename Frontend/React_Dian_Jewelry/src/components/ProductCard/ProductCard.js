@@ -20,7 +20,7 @@ const ProductCard = ({ id, image, name, price, color, carat, clarity }) => {
             </div>
             <p className='product_card_detail'>{clarity} | {carat} | {color}</p>
             <h6 className='product_card_name'>{name}</h6>
-            <p className='product_card_price'>{price}$</p>
+            <p className='product_card_price'>${price}</p>
         </div>
     );
 };

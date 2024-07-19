@@ -180,7 +180,7 @@ function Cart() {
                                                     <button onClick={() => openSizeGuide(item.categoryId)} className="cart_size_guide_detail">Size guide</button>
                                                 </div>
                                             </div>
-                                            <div className="cart_item_price">{Math.floor(item.price)}$</div>
+                                            <div className="cart_item_price">${Math.floor(item.price)}</div>
                                         </div>
                                     </div>
                                 );
@@ -191,8 +191,8 @@ function Cart() {
                     <div className="cart_summary">
                         <h5 className="cart_summary_title"><i className="fas fa-receipt"></i> Summary</h5>
                         <div className="cart_summary_details">
-                            <p className="cart_summary_subtotal"><span>Subtotal</span><span><strong>{calculateTotal()}$</strong></span></p>
-                            <p className="cart_summary_total"><span>Total</span><span><strong>{calculateTotal()}$</strong></span></p>
+                            <p className="cart_summary_subtotal"><span>Subtotal</span><span><strong>${calculateTotal()}</strong></span></p>
+                            <p className="cart_summary_total"><span>Total</span><span><strong>${calculateTotal()}</strong></span></p>
                         </div>
                         <hr></hr>
                         <button onClick={handleCheckoutPage} className="cart_summary_checkout">Proceed to checkout</button>

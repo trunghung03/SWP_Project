@@ -99,12 +99,12 @@ function Invoice() {
                                     {cartItems.map((item, index) => (
                                         <tr key={index}>
                                             <td>{item.name}</td>
-                                            <td>{Math.floor(item.price)}$</td>
+                                            <td>${Math.floor(item.price)}</td>
                                         </tr>
                                     ))}
                                     <tr>
                                         <td>Discount</td>
-                                        <td>{Math.floor(orderDiscount)}$</td>
+                                        <td>${Math.floor(orderDiscount)}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -115,7 +115,7 @@ function Invoice() {
                                 <ul>
                                     <li><span>•</span> Order number: <strong>{orderId}</strong></li>
                                     <li><span>•</span> Date order: <strong>{formattedDate}</strong></li>
-                                    <li><span>•</span> Total price: <strong>{Math.floor(orderTotalPrice)}$</strong></li>
+                                    <li><span>•</span> Total price: <strong>${Math.floor(orderTotalPrice)}</strong></li>
                                     <li><span>•</span> Payment method: <strong>{paymentMethod}</strong></li>
                                 </ul>
                             </div>

@@ -375,7 +375,7 @@ function Checkout() {
                                     <div className="checkout_item_details">
                                         <div className="checkout_item_row">
                                             <p className="checkout_item_name"><strong>{item.name} x1</strong></p>
-                                            <p className="checkout_item_price"><strong>{Math.round(item.price)}$</strong></p>
+                                            <p className="checkout_item_price"><strong>${Math.round(item.price)}</strong></p>
                                         </div>
                                         <div className="checkout_item_row">
                                             <p><strong>Shell:</strong> {item.selectedShellName}</p>
@@ -452,10 +452,10 @@ function Checkout() {
 
                     <h5 className="checkout_summary_title"><i className="fas fa-receipt"></i>Total price</h5>
                     <div className="checkout_summary_details">
-                        <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>{Math.floor(calculateTotal())}$</strong></span></p>
-                        <p className="checkout_summary_discount"><span>Discount</span><span><strong>{Math.floor(voucherDiscount + pointsDiscount)}$</strong></span></p>
+                        <p className="checkout_summary_subtotal"><span>Subtotal</span><span><strong>${Math.floor(calculateTotal())}</strong></span></p>
+                        <p className="checkout_summary_discount"><span>Discount</span><span><strong>${Math.floor(voucherDiscount + pointsDiscount)}</strong></span></p>
                         <hr />
-                        <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>{Math.floor(totalPrice)}$</strong></span></p>
+                        <p className="checkout_summary_total"><span><strong>Total</strong></span><span><strong>${Math.floor(totalPrice)}</strong></span></p>
                     </div>
                     <button onClick={handleInvoice} className="checkout_summary_checkout" disabled={loading}>
                         {loading && <i className="fas fa-spinner fa-spin" style={{ marginRight: '5px' }}></i>}

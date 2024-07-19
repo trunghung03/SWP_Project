@@ -434,7 +434,7 @@ const Home = () => {
                 <div key={index} className="trending_product_card card" onClick={() => handleProductClick(product)}>
                   <img src={product.imageLinkList} alt={product.name} className="product_image" />
                   <p className="trending_product_name">{product.name}</p>
-                  <p className="trending_product_price">{product.price}$</p>
+                  <p className="trending_product_price">${product.price}</p>
                 </div>
               ))}
             </div>
@@ -470,7 +470,7 @@ const Home = () => {
                   <img src={product.imageLinkList} alt={product.name} className="home_feature_product_image" />
                   <p className='home_feature_product_detail'>{product.clarity} | {product.carat} | {product.color}</p>
                   <p className="home_feature_product_name">{product.name}</p>
-                  <p className="home_feature_product_price">{product.price}$</p>
+                  <p className="home_feature_product_price">${product.price}</p>
                 </div>
               </div>
             ))}
