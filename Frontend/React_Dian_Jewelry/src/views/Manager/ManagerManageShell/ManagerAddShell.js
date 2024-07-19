@@ -9,6 +9,7 @@ import { getProductDetail } from '../../../services/ManagerService/ManagerProduc
 
 const ManagerAddShell = () => {
     const navigate = useNavigate();
+    const [shellmaterials, setShellMaterials] = useState([]);
     const [productName, setProductName] = useState("");
     const [shellData, setShellData] = useState({
         productId: '',
@@ -17,7 +18,20 @@ const ManagerAddShell = () => {
         weight: '',
         sizes: [] // Add sizes to state
     });
-
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await ShowAllShellMaterial();
+                setShellMaterials(response);
+                console.log(response);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+    
+        fetchData(); // Invoke the fetchData function
+    }, []);
+    
     const handleChange = async (e) => {
         const { name, value } = e.target;
         setShellData({ ...shellData, [name]: value });
@@ -89,10 +103,20 @@ const ManagerAddShell = () => {
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
-                        <div className="manager_add_diamond_form_group">
-                            <label>Shell Material ID</label>
-                            <input placeholder="Add shell's material Id" type="number" name="shellMaterialId" value={shellData.shellMaterialId} onChange={handleChange} required />
-                        </div>
+                    <label>Shell Material</label>
+                            <select
+                                name="shellMaterialId"
+                                value={shellData.shellMaterialId}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="" disabled>Select shell material</option>
+                                {shellmaterials.map((material) => (
+                                    <option key={material.shellMaterialId} value={material.shellMaterialId}>
+                                        {material.name}
+                                    </option>
+                                ))}
+                            </select>
                         <div className="manager_add_diamond_form_group">
                             <label>Amount Available</label>
                             <input placeholder="Add amount available" type="text" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
