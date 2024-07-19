@@ -32,6 +32,8 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import DiamondIcon from "@mui/icons-material/Diamond";
 import SubDiamondIcon from "@mui/icons-material/Grain";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ const ManagerDiamondList = () => {
   const [editedDiamond, setEditedDiamond] = useState({});
   const [originalDiamond, setOriginalDiamond] = useState({});
   const [isSearch, setIsSearch] = useState(false);
-  const [pagination, setPagination] = useState({});
+  const [pagination, setPagination] = useState({ totalPages: 1, pageSize: 10, currentPage: 1 });
   const [currentPage, setCurrentPage] = useState(1);
   const [value, setValue] = useState(0); // For BottomNavigation
 
@@ -65,21 +67,23 @@ const ManagerDiamondList = () => {
 
   const fetchData = async (page, type = "main") => {
     try {
-      const response = type === "main" ? await ShowAllDiamond(page) : await getAllSubDiamond(page);
-      setDiamondList(response.data);
-      setPagination(response.pagination);
+        const response = type === "main" ? await ShowAllDiamond(page) : await getAllSubDiamond(page);
+        console.log("Fetch Data Response: ", response);
+        setDiamondList(response.data);
+        setPagination(response.pagination);
     } catch (error) {
-      console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error);
     }
-  };
+};
 
-  useEffect(() => {
+useEffect(() => {
     fetchData(currentPage, value === 0 ? "main" : "sub");
-  }, [currentPage, value]);
+}, [currentPage, value]);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+const handlePageChange = (event, value) => {
+    console.log("Page Change: ", value);
+    setCurrentPage(value);
+};
 
   const handleSearchKeyPress = async (e) => {
     const isInteger = (value) => /^-?\d+$/.test(value);
@@ -185,67 +189,6 @@ const ManagerDiamondList = () => {
     }
   };
 
-  const renderPagination = () => {
-    const pages = [];
-    const totalPages = pagination.totalPages;
-    const currentPage = pagination.currentPage;
-    if (totalPages <= 1) return null;
-    pages.push(
-      <button
-        key={1}
-        onClick={() => handlePageChange(1)}
-        className={1 === currentPage ? "manager_order_active" : ""}
-      >
-        1
-      </button>
-    );
-    if (currentPage > 3) {
-      pages.push(<span key="start-ellipsis">...</span>);
-    }
-    const startPage = Math.max(2, currentPage - 1);
-    const endPage = Math.min(totalPages - 1, currentPage + 1);
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={i === currentPage ? "manager_order_active" : ""}
-        >
-          {i}
-        </button>
-      );
-    }
-    if (currentPage < totalPages - 2) {
-      pages.push(<span key="end-ellipsis">...</span>);
-    }
-    pages.push(
-      <button
-        key={totalPages}
-        onClick={() => handlePageChange(totalPages)}
-        className={totalPages === currentPage ? "manager_order_active" : ""}
-      >
-        {totalPages}
-      </button>
-    );
-    return (
-      <div className="manager_manage_diamond_pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          &lt;
-        </button>
-        {pages}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          &gt;
-        </button>
-      </div>
-    );
-  };
-
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -267,30 +210,35 @@ const ManagerDiamondList = () => {
         </div>
         <hr className="manager_header_line"></hr>
         <h3 style={{ marginBottom: "2.5%" }}>List Of {value === 0 ? "Diamonds" : "Sub-Diamonds"}</h3>
-        <div className="manager_manage_diamond_create_button_section">
-          <div className="manager_manage_diamond_navigation">
-            <Box sx={{ width: 500 }}>
-              <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                  fetchData(1, newValue === 0 ? "main" : "sub");
-                }}
-              >
-                <BottomNavigationAction label="Diamonds" icon={<DiamondIcon />} />
-                <BottomNavigationAction label="Sub-Diamonds" icon={<SubDiamondIcon />} />
-              </BottomNavigation>
-            </Box>
+        <div className="manager_manage_diamond_create_button_section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ width: 500 }}>
+            <BottomNavigation
+              showLabels
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+                fetchData(1, newValue === 0 ? "main" : "sub");
+              }}
+            >
+              <BottomNavigationAction label="Diamonds" icon={<DiamondIcon />} />
+              <BottomNavigationAction label="Sub-Diamonds" icon={<SubDiamondIcon />} />
+            </BottomNavigation>
+          </Box>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <button
+              className="manager_manage_diamond_create_button"
+              onClick={() => navigate("/manager-add-diamond")}
+              style={{ marginRight: '20px' }}
+            >
+              Add new diamond
+            </button>
+            <Pagination
+              count={pagination.totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
           </div>
-          <button
-            className="manager_manage_diamond_create_button"
-            onClick={() => navigate("/manager-add-diamond")}
-          >
-            Add new diamond
-          </button>
-
-          {renderPagination()}
         </div>
 
         {/* Table diamond list */}

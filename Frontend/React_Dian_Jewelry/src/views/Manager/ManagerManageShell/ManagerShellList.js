@@ -11,8 +11,8 @@ import {
   updateShellMaterialById,
   getShellMaterialByName,
   createShellMaterial,
-  updateShellById
-  , ShowAllShellMaterial,
+  updateShellById,
+  ShowAllShellMaterial,
   deleteShellById
 } from "../../../services/ManagerService/ManagerShellService.js";
 import logo from "../../../assets/img/logoN.png";
@@ -27,6 +27,8 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const ManagerShellList = () => {
   const navigate = useNavigate();
@@ -97,89 +99,8 @@ const ManagerShellList = () => {
     }
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-  const renderPagination = () => {
-    const pages = [];
-    if (totalPages <= 5) {
-      // Show all pages if total pages are less than or equal to 5
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
-      // Show first page
-      pages.push(
-        <button
-          key={1}
-          onClick={() => handlePageChange(1)}
-          className={1 === currentPage ? "manager_order_active" : ""}
-        >
-          1
-        </button>
-      );
-
-      if (currentPage > 3) {
-        pages.push(<span key="start-ellipsis">...</span>);
-      }
-
-      // Show previous, current, and next page
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "manager_order_active" : ""}
-          >
-            {i}
-          </button>
-        );
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push(<span key="end-ellipsis">...</span>);
-      }
-
-      // Show last page
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className={totalPages === currentPage ? "manager_order_active" : ""}
-        >
-          {totalPages}
-        </button>
-      );
-    }
-
-    return (
-      <div className="manager_manage_diamond_pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          &lt;
-        </button>
-        {pages}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          &gt;
-        </button>
-      </div>
-    );
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   // Search diamond by id
@@ -292,8 +213,6 @@ const ManagerShellList = () => {
     setOriginalShell(shell);
   };
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedShell({ ...editedShell, [name]: value });
@@ -353,7 +272,6 @@ const ManagerShellList = () => {
     }
   };
 
-
   const handleEditShell = (shell) => {
     setEditShellMode(true);
     setEditedShellNotMaterial(shell);
@@ -410,7 +328,6 @@ const ManagerShellList = () => {
       );
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -475,12 +392,6 @@ const ManagerShellList = () => {
         <h3>List Of Shells</h3>
 
         <div className="manager_manage_diamond_create_button_section">
-          {/* <button
-            className="manager_manage_diamond_create_button"
-            onClick={() => setAddMode(true) }
-          >
-            Add new shell material 
-          </button> */}
           <div className="manager_manage_diamond_pagination">
             
           </div>
@@ -534,95 +445,84 @@ const ManagerShellList = () => {
           >
             Add new shell
           </button>
-          {renderPagination()}
-         { /*<div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div> */}
+          <Stack spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{
+                '& .Mui-selected': {
+                  backgroundColor: 'your-color-here',
+                  color: 'your-text-color-here',
+                },
+                '& .MuiPaginationItem-page:hover': {
+                  backgroundColor: 'your-hover-color-here',
+                },
+              }}
+            />
+          </Stack>
         </div>
 
         <div className="manager_manage_diamond_table_wrapper">
-        <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-    <TableHead>
-      <TableRow>
-        <StyledTableCell align="center">Shell Id</StyledTableCell>
-        <StyledTableCell align="center">Product ID</StyledTableCell>
-        <StyledTableCell align="center">Shell Material Name</StyledTableCell> 
-        <StyledTableCell align="center">Weight</StyledTableCell>
-        <StyledTableCell align="center">Size</StyledTableCell>
-        <StyledTableCell align="center">Price</StyledTableCell> 
-        <StyledTableCell align="center">Quantity</StyledTableCell>  
-        <StyledTableCell align="center">Action</StyledTableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {shell.length > 0 ? (
-        shell.map((item) => {
-          // Assuming shellMaterials is an array of shell material objects
-          const material = shellMaterial.find(material => material.shellMaterialId === item.shellMaterialId) || { name: 'N/A', price: 'N/A' };
-          return (
-            <TableRow className="manager_manage_table_body_row" key={item.shellId}>
-              <StyledTableCell align="center">{item.shellId}</StyledTableCell>
-              <StyledTableCell align="center">{item.productId}</StyledTableCell>
-              <StyledTableCell align="center">{material ? material.name : 'Material not found'}</StyledTableCell>
-              <StyledTableCell align="center">{item.weight}</StyledTableCell>
-              <StyledTableCell align="center">{item.size}</StyledTableCell>
-              <StyledTableCell align="center">
-                ${material ? material.price * item.weight : 'Material not found'}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {item.amountAvailable} 
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <IconButton onClick={() => handleEditShell(item)}>
-                  <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
-                </IconButton>
-                <IconButton onClick={() => handleDeleteShell(item.shellId)}>
-                  <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
-                </IconButton>
-              </StyledTableCell>
-            </TableRow>
-          );
-        })
-      ) : (
-        <TableRow>
-          <StyledTableCell colSpan="6" align="center">No shell found</StyledTableCell>
-        </TableRow>
-      )}
-    </TableBody>
-  </Table>
-</TableContainer>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">Shell Id</StyledTableCell>
+                  <StyledTableCell align="center">Product ID</StyledTableCell>
+                  <StyledTableCell align="center">Shell Material Name</StyledTableCell> 
+                  <StyledTableCell align="center">Weight</StyledTableCell>
+                  <StyledTableCell align="center">Size</StyledTableCell>
+                  <StyledTableCell align="center">Price</StyledTableCell> 
+                  <StyledTableCell align="center">Quantity</StyledTableCell>  
+                  <StyledTableCell align="center">Action</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {shell.length > 0 ? (
+                  shell.map((item) => {
+                    const material = shellMaterial.find(material => material.shellMaterialId === item.shellMaterialId) || { name: 'N/A', price: 'N/A' };
+                    return (
+                      <TableRow className="manager_manage_table_body_row" key={item.shellId}>
+                        <StyledTableCell align="center">{item.shellId}</StyledTableCell>
+                        <StyledTableCell align="center">{item.productId}</StyledTableCell>
+                        <StyledTableCell align="center">{material ? material.name : 'Material not found'}</StyledTableCell>
+                        <StyledTableCell align="center">{item.weight}</StyledTableCell>
+                        <StyledTableCell align="center">{item.size}</StyledTableCell>
+                        <StyledTableCell align="center">
+                          ${material ? material.price * item.weight : 'Material not found'}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {item.amountAvailable} 
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <IconButton onClick={() => handleEditShell(item)}>
+                            <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          </IconButton>
+                          <IconButton onClick={() => handleDeleteShell(item.shellId)}>
+                            <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          </IconButton>
+                        </StyledTableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <StyledTableCell colSpan="8" align="center">No shell found</StyledTableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </div>
 
       {/* Update modal */}
       {editMode && (
         <div
-        className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
-        onClick={() => setEditMode(false)}
-      >
+          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          onClick={() => setEditMode(false)}
+        >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}
@@ -660,9 +560,9 @@ const ManagerShellList = () => {
       )}
       {editShellMode && (
         <div
-        className={`manager_manage_diamond_modal_overlay ${editShellMode ? 'active' : ''}`}
-        onClick={() => setEditShellMode(false)}
-      >
+          className={`manager_manage_diamond_modal_overlay ${editShellMode ? 'active' : ''}`}
+          onClick={() => setEditShellMode(false)}
+        >
           <div
             className="manager_manage_diamond_update_modal"
             onClick={(e) => e.stopPropagation()}

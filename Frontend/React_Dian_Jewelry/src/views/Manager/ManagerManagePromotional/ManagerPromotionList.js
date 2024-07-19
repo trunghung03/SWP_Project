@@ -21,14 +21,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import TablePagination from "@mui/material/TablePagination";
-import TableFooter from "@mui/material/TableFooter";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const headCells = [
   { id: 'id', numeric: false, disablePadding: false, label: 'ID', sortable: true },
@@ -204,16 +202,16 @@ const ManagerPromotionList = () => {
     fetchData();
   }, []);
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
 
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(1);
   };
 
   const handleSearchKeyPress = async (e) => {
@@ -225,7 +223,7 @@ const ManagerPromotionList = () => {
         try {
           const response = await getPromotionDetail(searchQuery.trim());
           setPromotionList([response]);
-          setPage(0);
+          setPage(1);
         } catch (error) {
           console.error("Error fetching Promotion:", error);
           swal("Promotion not found!", "Please try another one.", "error");
@@ -241,7 +239,7 @@ const ManagerPromotionList = () => {
           } else {
             setPromotionList([]);
           }
-          setPage(0);
+          setPage(1);
         } catch (error) {
           console.error("Error fetching Promotion:", error);
           swal("Promotion not found!", "Please try another one.", "error");
@@ -251,7 +249,7 @@ const ManagerPromotionList = () => {
         try {
           const response = await ShowAllPromotion();
           setPromotionList(response);
-          setPage(0);
+          setPage(1);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -289,13 +287,12 @@ const ManagerPromotionList = () => {
     }
 
     const validFromDate = new Date(editedPromotion.validFrom);
-  const validToDate = new Date(editedPromotion.validTo);
+    const validToDate = new Date(editedPromotion.validTo);
 
-  if (validFromDate > validToDate) {
-    swal("Invalid date range!", "The start date must be before the end date.", "error");
-    return;
-  }
-
+    if (validFromDate > validToDate) {
+      swal("Invalid date range!", "The start date must be before the end date.", "error");
+      return;
+    }
 
     const isEqual =
       JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
@@ -307,11 +304,11 @@ const ManagerPromotionList = () => {
     const promotionToUpdate = { ...editedPromotion, status: true };
 
     try {
-        const response = await updatePromotionById(promotionToUpdate.id, promotionToUpdate);
-        const updatedPromotionList = await ShowAllPromotion();
-        setPromotionList(updatedPromotionList);
-        setEditMode(false);
-        swal("Updated successfully!", "The promotion information has been updated.", "success");
+      const response = await updatePromotionById(promotionToUpdate.id, promotionToUpdate);
+      const updatedPromotionList = await ShowAllPromotion();
+      setPromotionList(updatedPromotionList);
+      setEditMode(false);
+      swal("Updated successfully!", "The promotion information has been updated.", "success");
     } catch (error) {
       console.error("Error updating promotion:", error.response ? error.response.data : error.message);
       swal("Something went wrong!", "Failed to update. Please try again.", "error");
@@ -330,7 +327,7 @@ const ManagerPromotionList = () => {
     try {
       const response = await ShowAllPromotion();
       setPromotionList(response);
-      setPage(0);
+      setPage(1);
       setIsSearch(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -358,13 +355,19 @@ const ManagerPromotionList = () => {
         </div>
         <hr className="manager_header_line" />
         <h3>List Of Promotional Codes</h3>
-        <div className="manager_manage_diamond_create_button_section">
+        <div className="manager_manage_diamond_create_button_section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-promotion")}
           >
             Add new promotional code
           </button>
+          <Pagination
+            count={Math.ceil(promotionList.length / rowsPerPage)}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -382,7 +385,7 @@ const ManagerPromotionList = () => {
               <TableBody>
                 {promotionList.length > 0 ? (
                   tableSort(promotionList, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage)
                     .map((item) => (
                       <TableRow className="manager_manage_table_body_row" key={item.id}>
                         <TableCell align="center">{item.id}</TableCell>
@@ -410,35 +413,6 @@ const ManagerPromotionList = () => {
                   </TableRow>
                 )}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    colSpan={9}
-                    count={promotionList.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handlePageChange}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                    ActionsComponent={() => (
-                      <div className="table-pagination">
-                        <IconButton
-                          onClick={(e) => handlePageChange(e, page - 1)}
-                          disabled={page === 0}
-                        >
-                          <ArrowBackIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={(e) => handlePageChange(e, page + 1)}
-                          disabled={page >= Math.ceil(promotionList.length / rowsPerPage) - 1}
-                        >
-                          <ArrowForwardIcon />
-                        </IconButton>
-                      </div>
-                    )}
-                  />
-                </TableRow>
-              </TableFooter>
             </Table>
           </TableContainer>
           {isSearch && (
