@@ -62,23 +62,36 @@ const SSOrderDetail = () => {
   const handleSendCertificate = async () => {
     setLoadingCertificate(true);
     try {
-      const response = await getCertificateURL(orderId);
-      const url = response.url;
-      console.log('Certificate URL:', url);
-      const emailData = {
-        toEmail: orderDetails.email,
-        subject: "Your Diamond's Certificate:",
-        body: `Here is a link: ${url}`,
-      };
-      console.log('emaildata: ', emailData);
-      await sendWarrantyEmail(emailData);
-      swal("Success", "Certificate email sent successfully", "success");
+      if (!orderDetails.productDetails || orderDetails.productDetails.length === 0) {
+        throw new Error("No product details available");
+      }
+      
+      const emailPromises = orderDetails.productDetails.map(async (item) => {
+        const mainDiamondId = item.mainDiamondId;
+        if (!mainDiamondId) {
+          throw new Error("Main Diamond ID is null or undefined");
+        }
+        const response = await getCertificateURL(mainDiamondId);
+        const url = response.url;
+        console.log('Certificate URL:', url);
+        const emailData = {
+          toEmail: orderDetails.email,
+          subject: "Your Diamond's Certificate:",
+          body: `Here is a link: ${url}`,
+        };
+        console.log('emaildata: ', emailData);
+        await sendWarrantyEmail(emailData);
+      });
+  
+      await Promise.all(emailPromises);
+      swal("Success", "Certificate emails sent successfully", "success");
     } catch (error) {
-      console.error("Failed to send Certificate email:", error);
-      swal("Error", "Failed to send Certificate email", "error");
+      console.error("Failed to send Certificate emails:", error);
+      swal("Error", "Failed to send Certificate emails", "error");
     }
     setLoadingCertificate(false);
   };
+
 
   const handleSendEmail = async () => {
     setLoadingWarranty(true);

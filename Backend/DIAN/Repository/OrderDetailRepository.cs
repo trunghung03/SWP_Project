@@ -77,21 +77,21 @@ namespace DIAN_.Repository
         public async Task<OrderBillDto?> ViewOrderBillAsync(int orderId)
         {
             var orderBill = await _context.Purchaseorders
-                .Where(po => po.OrderId == orderId)
-                .SelectMany(po => po.Orderdetails, (po, od) => new { po, od })
-                .SelectMany(
-                    combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
-                    (combined, p) => new { combined.po, combined.od, p })
-                .SelectMany(
-                    combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondAtrributeId).DefaultIfEmpty(),
-                    (combined, d) => new { combined.po, combined.od, combined.p, d })
-                .SelectMany(
-                    combined => _context.Shells.Where(s => s.ShellId == combined.od.ShellId).DefaultIfEmpty(),
-                    (combined, s) => new { combined.po, combined.od, combined.p, combined.d, s })
-                .GroupBy(x => x.po.OrderId)
-                .Select(g => new OrderBillDto
-                {
-                    OrderId = orderId,
+         .Where(po => po.OrderId == orderId)
+         .SelectMany(po => po.Orderdetails, (po, od) => new { po, od })
+         .SelectMany(
+             combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
+             (combined, p) => new { combined.po, combined.od, p })
+         .SelectMany(
+             combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondAtrributeId).DefaultIfEmpty(),
+             (combined, d) => new { combined.po, combined.od, combined.p, d })
+         .SelectMany(
+             combined => _context.Shells.Where(s => s.ShellId == combined.od.ShellId).DefaultIfEmpty(),
+             (combined, s) => new { combined.po, combined.od, combined.p, combined.d, s })
+         .GroupBy(x => x.po.OrderId)
+         .Select(g => new OrderBillDto
+         {
+             OrderId = orderId,
                     UserId = g.First().po.UserId,
                     FirstName = g.First().po.User.FirstName,
                     LastName = g.First().po.User.LastName,
@@ -108,6 +108,7 @@ namespace DIAN_.Repository
                     PromotionAmount = g.First().po.Promotion != null ? g.First().po.Promotion.Amount : null,
                     ProductDetails = g.Select(x => new OrderBillProductDetailDto
                     {
+                        MainDiamondId = x.d != null ? (int?)x.d.DiamondId : null,
                         ProductName = x.p.Name,
                         ProductImageLink = x.p.ImageLinkList,
                         ProductCode = x.p.ProductCode,

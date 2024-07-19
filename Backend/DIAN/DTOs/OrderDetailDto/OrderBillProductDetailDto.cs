@@ -7,7 +7,8 @@
         public string ProductCode { get; set; }
         public string ProductDescription { get; set; }
         public decimal Size { get; set; }
-        public string ShellMaterial { get; set; }  
+        public string ShellMaterial { get; set; }
+        public int? MainDiamondId { get; set; }
         public decimal LineTotal { get; set; }
     }
 }
