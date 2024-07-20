@@ -229,9 +229,9 @@ function Checkout() {
                     orderId: orderId,
                     lineTotal: item.price,
                     productId: item.productId,
-                    shellId: item.selectedShellId,
+                    shellId: item.selectedShellId
                     // subDiamondId: item.diamondId,
-                    size: parseInt(item.selectedSize, 10)
+                    // size: parseInt(item.selectedSize, 10)
                 };
                 return createOrderDetails(orderDetail);
             });

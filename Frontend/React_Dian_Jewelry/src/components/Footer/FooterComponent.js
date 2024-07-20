@@ -129,7 +129,7 @@ const FooterComponent = () => {
                         <div className="col-sm-6 col-md-2 footer_4_column">
                             <h6>Information</h6>
                             <ul className="footer_content">
-                                <li><Link to="/FAQs" onClick={(e) => handleLinkClick(e, 0)}>Questions</Link></li>
+                                <li><Link to="/FAQs" onClick={(e) => handleLinkClick(e, 0)}>FAQs</Link></li>
                                 <li><Link to="/blog" onClick={(e) => handleLinkClick(e, 0)}>Articles</Link></li>
                                 <li><Link to="/introduce" onClick={(e) => handleLinkClick(e, 0)}>About us</Link></li>
                                 <li><Link to="/contact" onClick={(e) => handleLinkClick(e, 0)}>Contact us</Link></li>

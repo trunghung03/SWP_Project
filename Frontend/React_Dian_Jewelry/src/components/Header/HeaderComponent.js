@@ -591,7 +591,7 @@ const HeaderComponent = () => {
               </li>
               <li className="nav-item">
                 <Link className="price_list nav-link" to="/diamond-price">
-                  DIAMOND PRICE
+                  DIAMONDS
                 </Link>
               </li>
               <li className="nav-item">

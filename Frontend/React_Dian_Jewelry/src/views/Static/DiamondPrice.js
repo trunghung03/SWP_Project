@@ -2,17 +2,47 @@ import React, { useEffect, useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Static/DiamondPrice.scss';
-import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import diamondPriceMidImage1 from '../../assets/img/holdDiamond.jpeg';
 import diamondPriceMidImage2 from '../../assets/img/gia.webp';
 import diamondPriceMidImage3 from '../../assets/img/gia2.jpg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-import { Select, MenuItem, InputLabel, FormControl, Button, CircularProgress } from '@mui/material';
+import { Select, MenuItem, InputLabel, FormControl, Button, Modal, Box } from '@mui/material';
 import { getDiamondPrice, getShellMaterials, getShellMaterialById, getAllDiamonds } from '../../services/PricingService';
+import { getProductList } from '../../services/ProductService.js';
+import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
+import { useNavigate } from 'react-router-dom';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 750,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '10px',
+};
+
+const closeButtonStyle = {
+  position: 'absolute',
+  top: '10px',
+  right: '10px',
+  cursor: 'pointer',
+  fontSize: '18px',
+};
+
+const imageStyle = {
+  width: '220px',
+  height: '220px',
+  objectFit: 'cover',
+};
 
 function DiamondPrice() {
+  const navigate = useNavigate();
   const [transitionKey, setTransitionKey] = useState(Date.now());
   const [cut, setCut] = useState('');
   const [color, setColor] = useState('');
@@ -33,6 +63,17 @@ function DiamondPrice() {
   const [selectedCut, setSelectedCut] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedClarity, setSelectedClarity] = useState('');
+  const [products, setProducts] = useState([]);
+  const [resetKey, setResetKey] = useState(Date.now());
+
+  const [open, setOpen] = useState(false);
+  const [selectedDiamond, setSelectedDiamond] = useState(null);
+
+  const handleOpen = (diamond) => {
+    setSelectedDiamond(diamond);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -58,6 +99,12 @@ function DiamondPrice() {
       .catch(error => {
         console.error('Error fetching diamonds:', error);
       });
+
+    getProductList()
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => console.log(error));
   }, []);
 
   const navItems = [
@@ -157,6 +204,11 @@ function DiamondPrice() {
     setFilteredDiamonds(diamonds);
   };
 
+  const navigateToDiamondDetail = (diamond) => {
+    const diamondName = `${diamond.carat} Carat ${diamond.shape} Diamond`.replace(/\s+/g, '-').toLowerCase();
+    navigate(`/diamond-detail/${diamondName}`, { state: { id: diamond.id } });
+  };
+
   return (
     <div className="DiamondPrice">
       <HeaderComponent />
@@ -171,123 +223,6 @@ function DiamondPrice() {
           </p>
         </div>
       </div>
-
-      {/* Title */}
-      {/* <div className="diamond_price_title_container">
-        <h2 className="diamond_price_title">Diamond Price Calculator</h2>
-      </div> */}
-
-      {/* Price form */}
-      {/* <div className="diamond_price_form_wrapper">
-        <form className="diamond_price_form">
-          <div className="form_row">
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="cut-label">Cut</InputLabel>
-              <Select
-                labelId="cut-label"
-                value={cut}
-                onChange={(e) => setCut(e.target.value)}
-              >
-                <MenuItem value="Premium">Premium</MenuItem>
-                <MenuItem value="Very Good">Very Good</MenuItem>
-                <MenuItem value="Good">Good</MenuItem>
-                <MenuItem value="Fair">Fair</MenuItem>
-                <MenuItem value="Ideal">Ideal</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="clarity-label">Clarity</InputLabel>
-              <Select
-                labelId="clarity-label"
-                value={clarity}
-                onChange={(e) => setClarity(e.target.value)}
-              >
-                <MenuItem value="IF">IF</MenuItem>
-                <MenuItem value="VVS1">VVS1</MenuItem>
-                <MenuItem value="VVS2">VVS2</MenuItem>
-                <MenuItem value="VS1">VS1</MenuItem>
-                <MenuItem value="VS2">VS2</MenuItem>
-                <MenuItem value="SI1">SI1</MenuItem>
-                <MenuItem value="SI2">SI2</MenuItem>
-                <MenuItem value="I1">I1</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className="form_row">
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="color-label">Color</InputLabel>
-              <Select
-                labelId="color-label"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-              >
-                <MenuItem value="D">D</MenuItem>
-                <MenuItem value="E">E</MenuItem>
-                <MenuItem value="F">F</MenuItem>
-                <MenuItem value="G">G</MenuItem>
-                <MenuItem value="H">H</MenuItem>
-                <MenuItem value="I">I</MenuItem>
-                <MenuItem value="J">J</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Carat"
-              type="number"
-              value={carat}
-              onChange={(e) => setCarat(e.target.value)}
-            />
-          </div>
-          <Button
-            variant="contained"
-            onClick={calculatePrice}
-            className="calculate_btn"
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Calculate'}
-          </Button>
-        </form>
-        {showPrice && (
-          <div className="diamond_price_result">
-            <p>{price !== 'Diamond not found' && price !== 'Please fill in all fields for the most accurate price' ? `Price: ${price}` : price}</p>
-          </div>
-        )}
-      </div> */}
-
-      {/* Shell Price Checker */}
-      {/* <div className="diamond_price_title_container">
-        <h2 className="diamond_price_title">Shell Material Price Checker</h2>
-        <div className="diamond_price_form">
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="shell-label">Shell Material</InputLabel>
-            <Select
-              labelId="shell-label"
-              value={selectedShell}
-              onChange={(e) => setSelectedShell(e.target.value)}
-            >
-              {shellMaterials.map(shell => (
-                <MenuItem key={shell.shellMaterialId} value={shell.shellMaterialId}>
-                  {shell.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            variant="contained"
-            onClick={checkShellPrice}
-            className="calculate_btn"
-            disabled={shellLoading}
-          >
-            {shellLoading ? <CircularProgress size={24} /> : 'Check'}
-          </Button>
-        </div>
-        {shellPrice && (
-          <div className="diamond_price_result">
-            <p>{shellPrice}</p>
-          </div>
-        )}
-      </div> */}
 
       {/* Diamond Table */}
       <div className="diamond_price_title_container">
@@ -386,13 +321,13 @@ function DiamondPrice() {
             </thead>
             <tbody>
               {filteredDiamonds.map((diamond, index) => (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleOpen(diamond)}>
                   <td className="diamond_price_table_data">{diamond.shape}</td>
                   <td className="diamond_price_table_data">{diamond.carat}</td>
                   <td className="diamond_price_table_data">{diamond.cut}</td>
                   <td className="diamond_price_table_data">{diamond.color}</td>
                   <td className="diamond_price_table_data">{diamond.clarity}</td>
-                  <td className="diamond_price_table_data">{diamond.price}$</td>
+                  <td className="diamond_price_table_data">${diamond.price}</td>
                 </tr>
               ))}
             </tbody>
@@ -415,7 +350,7 @@ function DiamondPrice() {
               {shellMaterials.map((shell, index) => (
                 <tr key={index}>
                   <td className="shell_price_table_data">{shell.name}</td>
-                  <td className="shell_price_table_data">{shell.price}$</td>
+                  <td className="shell_price_table_data">${shell.price}</td>
                 </tr>
               ))}
             </tbody>
@@ -458,9 +393,40 @@ function DiamondPrice() {
 
       <ScrollToTop />
       <FooterComponent />
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="diamond_modal" sx={style}>
+          <span style={closeButtonStyle} onClick={handleClose}>&times;</span>
+          {selectedDiamond && (
+            <>
+              <div className="diamond_modal_content">
+                <div className="diamond_modal_text">
+                  <h2>{selectedDiamond.carat} Carat {selectedDiamond.shape} Diamond</h2>
+                  <p>{selectedDiamond.color} Color | {selectedDiamond.clarity} Clarity | {selectedDiamond.cut} Cut</p>
+                  <h2 className='diamond_modal_price'>${selectedDiamond.price}</h2>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigateToDiamondDetail(selectedDiamond)}
+                  >
+                    View
+                  </Button>
+                </div>
+                <div className="diamond_modal_image">
+                  <img src={diamondPriceMidImage1} alt="Diamond Image" style={imageStyle} />
+                </div>
+              </div>
+            </>
+          )}
+        </Box>
+      </Modal>
     </div>
   );
 }
 
 export default DiamondPrice;
-

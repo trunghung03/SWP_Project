@@ -25,6 +25,7 @@ import Search from './ProductList/Search';
 import Collection from './ProductList/Collection';
 import Shape from './ProductList/Shape';
 import ProductDetail from './Cart/ProductDetail';
+import DiamondDetail from './Cart/DiamondDetail';
 import Cart from './Cart/Cart';
 import Checkout from './Cart/Checkout';
 import Invoice from './Cart/Invoice';
@@ -134,6 +135,7 @@ function AppContent() {
             <Route path="/blog-detail/:title" element={<ProtectedRoute path="/blog-detail/:title" element={BlogDetail} />} />
             <Route path="/search" element={<ProtectedRoute path="/search" element={Search} />} />
             <Route path="/product-detail/:name" element={<ProtectedRoute path="/product-detail/:name" element={ProductDetail} />} />
+            <Route path="/diamond-detail/:name" element={<ProtectedRoute path="/diamond-detail/:name" element={DiamondDetail} />} />
             <Route path="/cart" element={<ProtectedRoute path="/cart" element={Cart} />} />
             <Route path="/FAQs" element={<ProtectedRoute path="/FAQs" element={FAQs} />} />
             <Route path="/login" element={<Login />} />

@@ -231,6 +231,7 @@
 .diamond_price_table tr:hover {
     background-color: #f4b798;
     color: white;
+    cursor: pointer;
 }
 
 .diamond_price_table th,
@@ -318,3 +319,102 @@
     font-size: 14px;
     padding: 15px;
 }
+
+/* Modal Close Button */
+.css-1rwt2y5-MuiButtonBase-root-MuiButton-root {
+    color: #fff !important;
+    height: 40px !important;
+    border: 1px solid #fff !important;
+    margin-bottom: 5px !important;
+}
+
+.css-1rwt2y5-MuiButtonBase-root-MuiButton-root:hover {
+    color: #fff !important;
+    background-color: #ff4d4d !important;
+}
+
+.css-12mxrte {
+    outline: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 750px !important;
+    height: 380px !important;
+    padding: 80px 60px 40px 40px !important;
+}
+
+.css-12mxrte span {
+    font-size: 40px !important;
+    right: 30px !important;
+    color: #1c1c1c;
+}
+
+.css-12mxrte span:hover {
+    color: #797979;
+}
+
+.MuiBox-root {
+    position: relative;
+}
+
+.MuiBox-root h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.MuiBox-root p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.diamond_modal h2 {
+    font-size: 30px;
+}
+
+.diamond_modal p {
+    font-size: 20px;
+    color: #797979;
+
+}
+
+.diamond_modal .diamond_modal_price {
+    margin-top: 40px;
+}
+
+.diamond_modal Button {
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    padding: 7px 55px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 13px;
+    // margin-right: -180px;
+    margin-top: 5px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+
+.diamond_modal Button:hover {
+    background-color: #797979;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+}
+
+.diamond_modal_content {
+    display: flex;
+    align-items: center;
+}
+
+.diamond_modal_text {
+    flex: 1;
+    padding-right: 50px;
+}
+
+
+
+
+
+
+
+
