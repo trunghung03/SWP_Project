@@ -12,7 +12,6 @@ import {
   getEmployeeByRole,
   getEmployeeByEmail,
   getEmployeeByName
-
 } from "../../services/AdminService/AdminEmployeeService.js";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -23,6 +22,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const AdminEmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -58,17 +59,13 @@ const AdminEmployeeList = () => {
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentEmployee = employeeList.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
+  const currentEmployee = employeeList.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(employeeList.length / ordersPerPage);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
-  // Search diamond by id
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
       setIsSearch(true);
@@ -91,7 +88,6 @@ const AdminEmployeeList = () => {
           } else {
             setEmployeeList([]);
           }
-
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching employee:", error);
@@ -108,6 +104,7 @@ const AdminEmployeeList = () => {
       }
     }
   };
+
   const handleBack = async () => {
     try {
       const response = await ShowAllEmployee();
@@ -119,8 +116,6 @@ const AdminEmployeeList = () => {
       console.error("Error fetching data:", error);
     }
   };
-
-  // Delete diamond by id
 
   const handleStatus = async (employeeID) => {
     try {
@@ -153,6 +148,7 @@ const AdminEmployeeList = () => {
       );
     }
   };
+
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
@@ -181,31 +177,14 @@ const AdminEmployeeList = () => {
           >
             Create new employee account
           </button>
-          <div className="manager_manage_diamond_pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  index + 1 === currentPage ? "manager_order_active" : ""
-                }
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          <Stack spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
         </div>
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -225,31 +204,30 @@ const AdminEmployeeList = () => {
                 {employeeList.length > 0 ? (
                   currentEmployee.map((item) => {
                     if (item.role !== 'Admin') {
-                      return <TableRow
-                        className="manager_manage_table_body_row"
-                        key={item.employeeId}
-                      >
-                        <TableCell align="center">{item.employeeId}</TableCell>
-                        <TableCell align="center">{item.role}</TableCell>
-                        <TableCell align="center">{item.email}</TableCell>
-                        <TableCell align="center">{`${item.firstName} ${item.lastName}`}</TableCell>
-                        <TableCell align="center">{item.phoneNumber}</TableCell>
-                        <TableCell align="center">{item.address}</TableCell>
-                        <TableCell align="center">
-                          <Button
-                            onClick={() => handleStatus(item.employeeId)}
-                            variant="contained"
-                            style={{
-                              backgroundColor: item.status
-                                ? "#1fd655"
-                                : "#c94143",
-                              color: "white",
-                            }}
-                          >
-                            {item.status ? "Active" : "Deactive"}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
+                      return (
+                        <TableRow className="manager_manage_table_body_row" key={item.employeeId}>
+                          <TableCell align="center">{item.employeeId}</TableCell>
+                          <TableCell align="center">{item.role}</TableCell>
+                          <TableCell align="center">{item.email}</TableCell>
+                          <TableCell align="center">{`${item.firstName} ${item.lastName}`}</TableCell>
+                          <TableCell align="center">{item.phoneNumber}</TableCell>
+                          <TableCell align="center">{item.address}</TableCell>
+                          <TableCell align="center">
+                            <Button
+                              onClick={() => handleStatus(item.employeeId)}
+                              variant="contained"
+                              style={{
+                                backgroundColor: item.status
+                                  ? "#1fd655"
+                                  : "#c94143",
+                                color: "white",
+                              }}
+                            >
+                              {item.status ? "Active" : "Deactive"}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
                     }
                   })
                 ) : (
@@ -260,7 +238,7 @@ const AdminEmployeeList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          {isSearch && ( // Conditionally render the back button
+          {isSearch && (
             <button className="SS_back_button" onClick={handleBack}>
               Back
             </button>

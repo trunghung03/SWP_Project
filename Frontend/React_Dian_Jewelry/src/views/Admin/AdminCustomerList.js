@@ -20,6 +20,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const AdminCustomerList = () => {
   const [customerList, setCustomerList] = useState([]);
@@ -52,17 +54,13 @@ const AdminCustomerList = () => {
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentCustomer = customerList.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
+  const currentCustomer = customerList.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(customerList.length / ordersPerPage);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
-  // Search diamond by id
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
       setIsSearch(true);
@@ -85,7 +83,6 @@ const AdminCustomerList = () => {
           } else {
             setCustomerList([]);
           }
-
           setCurrentPage(1);
         } catch (error) {
           console.error("Error fetching diamond:", error);
@@ -103,20 +100,17 @@ const AdminCustomerList = () => {
     }
   };
 
-
   const handleBack = async () => {
     try {
       const response = await ShowAllCustomer();
       setCustomerList(response);
       setCurrentPage(1);
-      setIsSearch(false); // Reset search state when back button is clicked
-      setSearchQuery(""); // Clear search query
+      setIsSearch(false);
+      setSearchQuery("");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  // Delete diamond by id
 
   const handleStatus = async (customerID) => {
     try {
@@ -171,30 +165,15 @@ const AdminCustomerList = () => {
         </div>
         <hr className="manager_header_line"></hr>
         <h3>List Of Customer Accounts</h3>
-        <div className="manager_manage_diamond_pagination">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            &lt;
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => handlePageChange(index + 1)}
-              className={
-                index + 1 === currentPage ? "manager_order_active" : ""
-              }
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            &gt;
-          </button>
+        <div className="manager_manage_diamond_create_button_section">
+          <Stack spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
         </div>
         <div className="container-fluid">
           <div className="row">
