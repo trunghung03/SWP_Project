@@ -56,8 +56,6 @@ namespace DIAN_.Mapper
             };
         }
 
-
-
         public static ProductListDTO ToProductListDTO(this Product product)
         {
             var firstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
@@ -73,6 +71,11 @@ namespace DIAN_.Mapper
                 Carat = product.MainDiamondAtrribute?.Carat ?? 0,
                 Color = product.MainDiamondAtrribute?.Color ?? "Not Available",
                 Clarity = product.MainDiamondAtrribute?.Clarity ?? "Not Available",
+                MainDiamondAttributeId = product.MainDiamondAtrributeId ?? 0,
+                SubDiamondAttributeId = product.SubDiamondAtrributeId ?? 0,
+                ProductCode = product.ProductCode,
+                Stock = product.Shells?.Sum(shell => shell.AmountAvailable) ?? 0
+
             };
         }
 

@@ -42,7 +42,7 @@ namespace DIAN_.Repository
             product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
                             (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
                             (product.LaborCost ?? 0);
-            
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             _memoryCache.Remove(CacheKey);
@@ -218,16 +218,16 @@ namespace DIAN_.Repository
             return product;
         }
 
- public async Task<List<Product>> GetListAsync()
+        public async Task<List<Product>> GetListAsync()
         {
             var products = await _context.Products
-                                 .Include(p => p.MainDiamondAtrribute) // Include the MainDiamond to get the shape
+                                 .Include(p => p.MainDiamondAtrribute)
+                                 .Include(p => p.Category)
+                                 .Include(p => p.Shells)
                                  .ToListAsync();
 
             return products;
         }
-
-
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
         {
@@ -255,8 +255,8 @@ namespace DIAN_.Repository
         public async Task<IEnumerable<Product>> GetLast8ProductsAsync()
         {
             return await _context.Products
-                                 .Include(p => p.MainDiamondAtrribute) 
-                                 .OrderByDescending(p => p.ProductId) 
+                                 .Include(p => p.MainDiamondAtrribute)
+                                 .OrderByDescending(p => p.ProductId)
                                  .Take(8)
                                  .ToListAsync();
         }
