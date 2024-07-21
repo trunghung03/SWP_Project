@@ -8,7 +8,6 @@ import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffS
 import {
   fetchAllWarranty,
   updateWarranty,
-  deleteWarranty,
   fetchWarrantyDetail,
 } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import logo from "../../../assets/img/logoN.png";
@@ -21,7 +20,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
@@ -144,28 +142,6 @@ const SSWarrantyList = () => {
     setSearchQuery("");
   };
 
-  const handleDelete = async (orderDetailId) => {
-    swal({
-      title: "Are you sure to delete this warranty?",
-      text: "This action cannot be undone",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        try {
-          const status = false;
-          await deleteWarranty(orderDetailId, status);
-          fetchWarranties();
-          swal("Deleted successfully!", "The warranty has been deleted.", "success");
-        } catch (error) {
-          console.error("Error deleting warranty:", error);
-          swal("Something went wrong!", "Failed to delete the warranty. Please try again.", "error");
-        }
-      }
-    });
-  };
-
   const handleEdit = (warranty) => {
     setEditMode(true);
     setEditedWarranty(warranty);
@@ -286,9 +262,6 @@ const SSWarrantyList = () => {
                             <IconButton onClick={() => handleEdit(item)}>
                               <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
                             </IconButton>
-                            <IconButton onClick={() => handleDelete(item.orderDetailId)}>
-                              <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
-                            </IconButton>
                           </TableCell>
                         </TableRow>
                       );
@@ -311,9 +284,9 @@ const SSWarrantyList = () => {
       </div>
       {editMode && (
         <div
-        className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
-        onClick={() => setEditMode(false)}
-      >
+          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          onClick={() => setEditMode(false)}
+        >
           <div className="manager_manage_diamond_update_modal" onClick={(e) => e.stopPropagation()}>
             <div className="manager_manage_diamond_modal_content">
               <div className="manager_manage_diamond_form_group">

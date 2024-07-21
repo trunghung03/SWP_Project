@@ -187,8 +187,7 @@ const ManagerShellList = () => {
       if (willDelete) {
         try {
           await deleteShellById(shellID);
-          const response = await ShowAllShell();
-          setShell(response);
+          await fetchShells(currentPage,ordersPerPage);
           swal(
             "Deleted successfully!",
             "The shell has been deleted.",

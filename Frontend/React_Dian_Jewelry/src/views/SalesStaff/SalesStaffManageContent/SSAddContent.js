@@ -18,10 +18,7 @@ function SSContentList() {
   const lastName = localStorage.getItem("lastName");
   const [contentData, setContentData] = useState({
     title: "",
-    content:
-      window.location.state?.updatedContent ||
-      localStorage.getItem("richTextContent") ||
-      "",
+    content: "",
     image: "",
     tag: "",
     date: new Date().toISOString(),
