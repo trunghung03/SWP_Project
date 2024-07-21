@@ -299,6 +299,33 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("searchAllFields")]
+        public async Task<IActionResult> SearchProductsAsync([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new ProductSearch
+                {
+                    Query = query
+                };
+
+                var products = await _productRepo.SearchProductsAsync(searchCriteria);
+
+                if (!products.Any())
+                {
+                    return NotFound("No products match the search criteria.");
+                }
+
+                var productDTOs = products.Select(product => product.ToProductDTO()).ToList();
+                return Ok(productDTOs);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here if necessary
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
     }
 }

@@ -324,5 +324,20 @@ namespace DIAN_.Repository
 
 
 
+        public async Task<List<Product>> SearchProductsAsync(ProductSearch searchCriteria)
+        {
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchCriteria.Query))
+            {
+                string queryStr = searchCriteria.Query.ToLower();
+                query = query.Where(p => p.Name.ToLower().Contains(queryStr) ||
+                                         p.ProductCode.ToLower().Contains(queryStr) ||
+                                         p.Description.ToLower().Contains(queryStr) ||
+                                         p.Price.ToString().Contains(queryStr));
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }

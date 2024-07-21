@@ -188,5 +188,31 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchShellsAsync([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new ShellSearch
+                {
+                    query = query
+                };
+
+                var shells = await _shellRepository.SearchShellsAsync(searchCriteria);
+
+                if (!shells.Any())
+                {
+                    return NotFound("No shells match the search criteria.");
+                }
+
+                var shellDtos = shells.Select(shell => shell.ToShellDetail()).ToList();
+                return Ok(shellDtos);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here if necessary
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
