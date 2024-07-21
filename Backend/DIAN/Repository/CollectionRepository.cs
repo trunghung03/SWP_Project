@@ -108,6 +108,7 @@ namespace DIAN_.Repository
 
             updateCollection.Name = collection.Name;
             updateCollection.Description = collection.Description;
+            updateCollection.CollectionImage = collection.CollectionImage;
             updateCollection.Status = collection.Status;
 
             await _context.SaveChangesAsync();

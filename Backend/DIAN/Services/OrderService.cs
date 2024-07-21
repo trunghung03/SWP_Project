@@ -4,8 +4,8 @@ using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Repository;
 using StackExchange.Redis;
-
 
 namespace DIAN_.Services
 {
@@ -18,10 +18,11 @@ namespace DIAN_.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IVnPayService _vnPayService;
         private readonly IEmailService _emailService;
+        private readonly IGoodsService _goodsService;
 
         public OrderService(IPromotionRepository promotionRepository, IPurchaseOrderRepository purchaseOrderRepository,
-        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository, 
-        IEmployeeRepository employeeRepository, IVnPayService vnPayService, IEmailService emailService)
+        ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository,
+        IEmployeeRepository employeeRepository, IVnPayService vnPayService, IEmailService emailService, IGoodsService goodsService)
         {
             _promotionRepository = promotionRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
@@ -30,6 +31,7 @@ namespace DIAN_.Services
             _employeeRepository = employeeRepository;
             _vnPayService = vnPayService;
             _emailService = emailService;
+            _goodsService = goodsService;
         }
 
         public bool SendEmailForVnPay(int orderId)
@@ -53,15 +55,40 @@ namespace DIAN_.Services
         public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
-            var customerEmail = _customerRepository.GetCustomerEmail(orderModel.UserId).Result;
+
+            ApplyPromotion(orderModel, promoCode);
+
+            HandleCustomerPoints(orderModel);
+
+            AssignStaffToOrder(orderModel);
+
+            var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
+
+            SendConfirmationEmail(orderToDto);
+            if (orderToDto.PaymentMethod == "VNPay")
+            {
+                bool isUpdateStock = _goodsService.UpdateQuantitiesForOrder("Paid", orderToDto.OrderId).Result;
+            }
+
+            return orderToDto.ToPurchaseOrderDTO();
+        }
+
+        private void ApplyPromotion(Purchaseorder orderModel, string promoCode)
+        {
             var promotion = _promotionRepository.GetPromotionByCodeAsync(promoCode).Result;
             if (promotion != null && promotion.Status)
             {
                 orderModel.TotalPrice -= promotion.Amount * orderModel.TotalPrice;
                 orderModel.PromotionId = promotion.PromotionId;
             }
-            else { orderModel.PromotionId = null; }
+            else
+            {
+                orderModel.PromotionId = null;
+            }
+        }
 
+        private void HandleCustomerPoints(Purchaseorder orderModel)
+        {
             bool usedPoints = orderModel.PayWithPoint.HasValue ? orderModel.PayWithPoint.Value : false;
 
             if (usedPoints)
@@ -72,7 +99,7 @@ namespace DIAN_.Services
                     var pointsValue = customer.Points.HasValue ? (decimal)customer.Points.Value : 0;
                     decimal pointRemaining = 0;
                     if (pointsValue >= orderModel.TotalPrice)
-                    {                   
+                    {
                         pointRemaining = pointsValue - orderModel.TotalPrice;
                         orderModel.TotalPrice = 0;
                     }
@@ -90,6 +117,10 @@ namespace DIAN_.Services
                     _customerRepository.UpdateCustomerPoint(customer.CustomerId, customerDto).Wait();
                 }
             }
+        }
+
+        private void AssignStaffToOrder(Purchaseorder orderModel)
+        {
             var salesStaff = _employeeRepository.GetEmployeeByRole("SalesStaff").Result;
             var deliveryStaff = _employeeRepository.GetEmployeeByRole("DeliveryStaff").Result;
 
@@ -99,9 +130,13 @@ namespace DIAN_.Services
 
             orderModel.SaleStaff = randomSalesStaff.EmployeeId;
             orderModel.DeliveryStaff = randomDeliveryStaff.EmployeeId;
+        }
 
-            var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
-            if (orderToDto.PaymentMethod == "Cash" || orderToDto.PaymentMethod == "Bank Transfer")
+        private void SendConfirmationEmail(Purchaseorder orderModel)
+        {
+            var customerEmail = _customerRepository.GetCustomerEmail(orderModel.UserId).Result;
+
+            if (orderModel.PaymentMethod == "Cash" || orderModel.PaymentMethod == "Bank Transfer")
             {
                 var emailBody = _emailService.GetEmailConfirmBody(orderModel, "orderConfirm.html").Result;
                 var mailRequest = new MailRequest
@@ -112,7 +147,49 @@ namespace DIAN_.Services
                 };
                 _emailService.SendEmailAsync(mailRequest);
             }
-            return orderToDto.ToPurchaseOrderDTO();
+        }
+        private void CheckDiamondAndShellAvailability(Purchaseorder orderModel)
+        {
+            foreach (var detail in orderModel.OrderDetails)
+            {
+                var product = _productRepository.GetByIdAsync(detail.ProductId).Result;
+
+                if (product.MainDiamondAmount.HasValue && product.MainDiamondAmount > 0)
+                {
+                    var mainDiamond = _diamondRepository.FindAvailableDiamond(product.MainDiamondAttributeId).Result.FirstOrDefault();
+                    if (mainDiamond == null || mainDiamond.Stock < product.MainDiamondAmount.Value)
+                    {
+                        throw new Exception($"Not enough main diamond for product {product.Name}");
+                    }
+                    // Update main diamond stock
+                    mainDiamond.Stock -= product.MainDiamondAmount.Value;
+                    _diamondRepository.UpdateAsync(mainDiamond, mainDiamond.DiamondId).Wait();
+                }
+
+                if (product.SubDiamondAmount.HasValue && product.SubDiamondAmount > 0)
+                {
+                    var subDiamond = _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAttributeId).Result;
+                    if (subDiamond == null || subDiamond.Stock < product.SubDiamondAmount.Value)
+                    {
+                        throw new Exception($"Not enough sub diamond for product {product.Name}");
+                    }
+                    // Update sub diamond stock
+                    subDiamond.Stock -= product.SubDiamondAmount.Value;
+                    _subDiamondRepository.UpdateAsync(subDiamond, subDiamond.SubDiamondId).Wait();
+                }
+
+                if (product.Stock.HasValue && product.Stock > 0)
+                {
+                    var shell = _shellRepository.GetShellByProductIdAsync(product.ProductId).Result.FirstOrDefault();
+                    if (shell == null || shell.Stock < product.Stock.Value)
+                    {
+                        throw new Exception($"Not enough shell stock for product {product.Name}");
+                    }
+                    // Update shell stock
+                    shell.Stock -= product.Stock.Value;
+                    _shellRepository.UpdateAsync(shell, shell.ShellId).Wait();
+                }
+            }
         }
     }
 }

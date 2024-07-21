@@ -152,7 +152,7 @@ namespace DIAN_.Services
         public async Task DeleteUnpaidOrdersOlderThan3Days()
         {
             var cutoffDate = DateTime.Now.AddDays(-3);
-            var unpaidOrders = await _purchaseOrderRepository.GetUnpaidOrdersOlderThan(cutoffDate);
+            var unpaidOrders = await _purchaseOrderRepository.GetUnpaidOrdersOlderThan(cutoffDate); 
             foreach (var order in unpaidOrders)
             {
                 await _purchaseOrderRepository.DeleteOrder(order.OrderId);

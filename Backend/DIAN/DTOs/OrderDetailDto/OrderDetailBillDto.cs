@@ -17,7 +17,6 @@ namespace DIAN_.DTOs.OrderDetailDto
         public string PaymentMethod { get; set; } = string.Empty;
 
         public string PromotionCode { get; set; } = string.Empty;
-        public int? MainDiamondId { get; set; }
         public decimal? PromotionAmount { get; set; }
         public bool? PayWithPoint { get; set; }
         public decimal TotalPrice { get; set; }

@@ -101,3 +101,7 @@ export const getWarrantyById = async (warrantyId) => {
   return response.data;
 };
 
+export const updateInventory = async(orderStatus, orderDetailId) => {
+  const response = await axios.put(`${API_BASE_URL_ORDER}/employees/salesstaff/update-inventory?status=${orderStatus}&orderId=${orderDetailId}`);
+  return response.data;
+}

@@ -8,7 +8,8 @@
         public string ProductDescription { get; set; }
         public decimal Size { get; set; }
         public string ShellMaterial { get; set; }
-        public int? MainDiamondId { get; set; }
+        public List<int>? MainDiamondId { get; set; }
+        public List<string> CertificateScans { get; set; } = new List<string>();
         public decimal LineTotal { get; set; }
     }
 }

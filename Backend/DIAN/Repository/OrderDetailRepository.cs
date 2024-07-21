@@ -59,15 +59,11 @@ namespace DIAN_.Repository
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
             if (!await _context.Shellmaterials.AnyAsync(s => s.ShellMaterialId == orderdetail.ShellId)) { return null; }
 
-            // Assuming updateDetail and orderdetail are instances of the same class
             updateDetail.OrderId = orderdetail.OrderId;
             updateDetail.LineTotal = orderdetail.LineTotal;
             updateDetail.ProductId = orderdetail.ProductId;
 
-            // Copying nullable properties
             updateDetail.ShellId = orderdetail.ShellId ?? null;
-
-            // Copying non-nullable property
             updateDetail.Status = orderdetail.Status;
 
             await _context.SaveChangesAsync();
@@ -77,47 +73,46 @@ namespace DIAN_.Repository
         public async Task<OrderBillDto?> ViewOrderBillAsync(int orderId)
         {
             var orderBill = await _context.Purchaseorders
-         .Where(po => po.OrderId == orderId)
-         .SelectMany(po => po.Orderdetails, (po, od) => new { po, od })
-         .SelectMany(
-             combined => _context.Products.Where(p => p.ProductId == combined.od.ProductId),
-             (combined, p) => new { combined.po, combined.od, p })
-         .SelectMany(
-             combined => _context.Diamonds.Where(d => d.DiamondId == combined.p.MainDiamondAtrributeId).DefaultIfEmpty(),
-             (combined, d) => new { combined.po, combined.od, combined.p, d })
-         .SelectMany(
-             combined => _context.Shells.Where(s => s.ShellId == combined.od.ShellId).DefaultIfEmpty(),
-             (combined, s) => new { combined.po, combined.od, combined.p, combined.d, s })
-         .GroupBy(x => x.po.OrderId)
-         .Select(g => new OrderBillDto
-         {
-             OrderId = orderId,
-                    UserId = g.First().po.UserId,
-                    FirstName = g.First().po.User.FirstName,
-                    LastName = g.First().po.User.LastName,
-                    Email = g.First().po.User.Email,
-                    PhoneNumber = g.First().po.User.PhoneNumber,
-                    Address = g.First().po.User.Address,
-                    Note = g.First().po.Note,
-                    PaymentMethod = g.First().po.PaymentMethod,
-                    PayWithPoint = g.First().po.PayWithPoint,
-                    TotalPrice = g.First().po.TotalPrice,
-                    Date = g.First().po.Date,
-                    OrderStatus = g.First().po.OrderStatus,
-                    PromotionCode = g.First().po.Promotion != null ? g.First().po.Promotion.Code : null,
-                    PromotionAmount = g.First().po.Promotion != null ? g.First().po.Promotion.Amount : null,
-                    ProductDetails = g.Select(x => new OrderBillProductDetailDto
+                .Where(po => po.OrderId == orderId)
+                .Include(po => po.User)
+                .Include(po => po.Promotion)
+                .Include(po => po.Orderdetails)
+                    .ThenInclude(od => od.Product)
+                .Include(po => po.Orderdetails)
+                    .ThenInclude(od => od.Shell)
+                .Include(po => po.Orderdetails)
+                    .ThenInclude(od => od.Diamonds) 
+                .Select(po => new OrderBillDto
+                {
+                    OrderId = po.OrderId,
+                    UserId = po.UserId,
+                    FirstName = po.User.FirstName,
+                    LastName = po.User.LastName,
+                    Email = po.User.Email,
+                    PhoneNumber = po.User.PhoneNumber,
+                    Address = po.User.Address,
+                    Note = po.Note,
+                    PaymentMethod = po.PaymentMethod,
+                    PayWithPoint = po.PayWithPoint,
+                    TotalPrice = po.TotalPrice,
+                    Date = po.Date,
+                    OrderStatus = po.OrderStatus,
+                    PromotionCode = po.Promotion != null ? po.Promotion.Code : null,
+                    PromotionAmount = po.Promotion != null ? po.Promotion.Amount : null,
+                    ProductDetails = po.Orderdetails.Select(od => new OrderBillProductDetailDto
                     {
-                        MainDiamondId = x.d != null ? (int?)x.d.DiamondId : null,
-                        ProductName = x.p.Name,
-                        ProductImageLink = x.p.ImageLinkList,
-                        ProductCode = x.p.ProductCode,
-                        ProductDescription = x.p.Description,
-                        Size = x.s != null ? x.s.Size ?? 0 : 0,  
-                        ShellMaterial = x.s != null ? x.s.ShellMaterial.Name : null,  
-                        LineTotal = x.od.LineTotal
+                        MainDiamondId = od.Diamonds.Select(d => d.DiamondId).ToList(),
+                        CertificateScans = od.Diamonds.Select(d => d.CertificateScan).ToList(),
+                        ProductName = od.Product.Name,
+                        ProductImageLink = od.Product.ImageLinkList,
+                        ProductCode = od.Product.ProductCode,
+                        ProductDescription = od.Product.Description,
+                        Size = od.Shell != null ? od.Shell.Size ?? 0 : 0,
+                        ShellMaterial = od.Shell != null ? od.Shell.ShellMaterial.Name : null,
+                        LineTotal = od.LineTotal
                     }).ToList()
-                }).FirstOrDefaultAsync();
+                })
+                .FirstOrDefaultAsync();
 
             return orderBill;
         }

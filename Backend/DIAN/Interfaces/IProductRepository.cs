@@ -26,5 +26,7 @@ namespace DIAN_.Interfaces
 
         Task<bool> ExistsMainDiamondAttributeAsync(int mainDiamondAttributeId);
         Task<bool> ExistsSubDiamondAttributeAsync(int subDiamondAttributeId);
+
+        Task<List<Product>> GetDiamondProduct();
     }
 }

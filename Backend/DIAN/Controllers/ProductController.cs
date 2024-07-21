@@ -42,6 +42,25 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("diamondproduct")]
+        public async Task<IActionResult> GetListDiamondProduct()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var products = await _productRepo.GetDiamondProduct();
+
+                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
+                return Ok(productDTOs);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         [HttpGet("product-detail/{productId}")]
         public async Task<IActionResult> GetProductDetail([FromRoute] int productId)

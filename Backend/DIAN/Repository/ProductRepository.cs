@@ -299,5 +299,30 @@ namespace DIAN_.Repository
         {
             return await _context.Subdiamonds.AnyAsync(sd => sd.DiamondId == subDiamondAttributeId);
         }
+
+        //public async Task<List<Product>> GetDiamondProduct() //only diamond (no shell, no subdiamond, main diamond amount = 1)
+        //{
+        //    var diamondProducts = await _context.Products
+        //        .Where(p => p.Shells == null && p.SubDiamondAmount == 0 && p.MainDiamondAtrributeId != null && p.MainDiamondAmount == 1)
+        //        .Include(p => p.MainDiamondAtrribute).Where(p => p.MainDiamondAtrribute.Diamonds.Status == true)
+        //        .ToListAsync();
+        //    return diamondProducts;
+        //}
+        public async Task<List<Product>> GetDiamondProduct()
+        {
+            var diamondProducts = await _context.Products
+                .Where(p => !_context.Shells.Any(s => s.ProductId == p.ProductId) // No shells
+                            && p.SubDiamondAtrributeId == null // No subdiamondattributeid
+                            && p.SubDiamondAmount == null // No subdiamondamount
+                            && p.MainDiamondAmount == 1 // Only one maindiamondamount
+                            && _context.Diamonds.Any(d => d.MainDiamondAtrributeId == p.MainDiamondAtrributeId && d.Status)) // MainDiamondAtrributeID in table diamond must have status = true
+                .Include(p => p.MainDiamondAtrribute) // Include related MainDiamondAtrribute
+                .ToListAsync();
+
+            return diamondProducts;
+        }
+
+
+
     }
 }
