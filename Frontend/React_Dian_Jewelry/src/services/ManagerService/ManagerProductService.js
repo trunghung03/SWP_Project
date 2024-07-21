@@ -28,6 +28,11 @@ const ShowAllProduct = async (pageNumber = 1, pageSize = 6, name = '') => {
   return response.data;
 };
 
+const pdfProduct = async() =>{
+  const response = await axios.get(`${API_BASE_URL}/products/list`);
+  return response.data;
+}
+
 const deleteProductById = (id) => {
   return axios.delete(`${API_BASE_URL}/products/${id}`);
 };
@@ -66,4 +71,4 @@ const uploadImage = async (data) => {
   return response.data;
 };
 
-export { ShowAllProduct, deleteProductById, createProduct, getProductDetail, getManageProductDetail, updateProductById, uploadImage, getProductCategory, getAllCollection, getProductCollection, getProductDiamond, getAllCategories };
+export { ShowAllProduct,pdfProduct ,deleteProductById, createProduct, getProductDetail, getManageProductDetail, updateProductById, uploadImage, getProductCategory, getAllCollection, getProductCollection, getProductDiamond, getAllCategories };

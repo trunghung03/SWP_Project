@@ -3,9 +3,11 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import "../../../styles/Manager/ManagerListProduct.scss";
 import {
   ShowAllProduct,
+  pdfProduct,
   getProductDetail,
   updateProductById,
   deleteProductById,
@@ -13,6 +15,7 @@ import {
   getProductCategory,
   getProductDiamond,
 } from "../../../services/ManagerService/ManagerProductService.js";
+import ProductPDF from "./ProductPDF.js";
 import logo from "../../../assets/img/logoN.png";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -121,6 +124,7 @@ const ManagerProductList = () => {
   const [collections, setCollections] = useState({});
   const [mainDiamonds, setMainDiamonds] = useState({});
   const [isSearch, setIsSearch] = useState(false);
+  const [pdfData, setPdfData] = useState([]);
 
   const viewDetail = (productId) => {
     navigate(`/manager-product-detail/${productId}`);
@@ -133,12 +137,14 @@ const ManagerProductList = () => {
     totalCount: 0,
   });
 
+
   const fetchData = async (page = 1, query = '') => {
     try {
       const response = await ShowAllProduct(page, pagination.pageSize, query);
       setProductItems(response.data);
+      const pdfResponse = await pdfProduct();
+      setPdfData(pdfResponse);  
       setPagination(response.pagination);
-
       const categoryMap = {};
       const collectionMap = {};
       const mainDiamondMap = {};
@@ -359,10 +365,10 @@ const ManagerProductList = () => {
                         <TableCell align="center">{item.stock}</TableCell>
                         <TableCell align="center">
                           <IconButton onClick={() => handleEdit(item)}>
-                            <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                            <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
                           </IconButton>
                           <IconButton onClick={() => handleDelete(item.productId)}>
-                            <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                            <DeleteIcon style={{ cursor: "pointer", color: "#575252" }} />
                           </IconButton>
                         </TableCell>
                         <TableCell align="center">
@@ -468,7 +474,19 @@ const ManagerProductList = () => {
           </div>
         </div>
       )}
+      <div className="pdf-download">
+        <PDFDownloadLink
+          document={<ProductPDF products={pdfData} />}
+          fileName="products.pdf"
+        >
+          {({ loading }) =>
+            loading ? 'Loading document...' : 'Download PDF'
+          }
+        </PDFDownloadLink>
+      </div>
     </div>
+
+
   );
 };
 
