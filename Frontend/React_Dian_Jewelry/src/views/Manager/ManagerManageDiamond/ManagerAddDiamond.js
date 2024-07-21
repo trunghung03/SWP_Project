@@ -17,7 +17,7 @@ const ManagerAddDiamond = () => {
         color: '',
         price: '',
         amountAvailable: '',
-        certificateScan: ''
+        certificateScan: null
     });
 
     const handleChange = (e) => {
