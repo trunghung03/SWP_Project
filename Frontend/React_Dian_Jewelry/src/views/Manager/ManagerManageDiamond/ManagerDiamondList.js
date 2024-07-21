@@ -14,8 +14,11 @@ import {
   getSubDiamondDetail,
   deleteSubDiamondById,
   updateSubDiamondById,
+  getMainDiamondAttribute,
+  getSubDiamondAttribute
 } from "../../../services/ManagerService/ManagerDiamondService.js";
 import logo from "../../../assets/img/logoN.png";
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -34,6 +37,7 @@ import DiamondIcon from "@mui/icons-material/Diamond";
 import SubDiamondIcon from "@mui/icons-material/Grain";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import DiamondPDf from "./DiamondPDF.js";
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
@@ -46,6 +50,8 @@ const ManagerDiamondList = () => {
   const [pagination, setPagination] = useState({ totalPages: 1, pageSize: 10, currentPage: 1 });
   const [currentPage, setCurrentPage] = useState(1);
   const [value, setValue] = useState(0); // For BottomNavigation
+  const [mainDiamondPDF, setMainDiamondPDF] = useState([]);
+  const [subDiamondPDF, setSubDiamondPDF] = useState([]);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -67,23 +73,27 @@ const ManagerDiamondList = () => {
 
   const fetchData = async (page, type = "main") => {
     try {
-        const response = type === "main" ? await ShowAllDiamond(page) : await getAllSubDiamond(page);
-        console.log("Fetch Data Response: ", response);
-        setDiamondList(response.data);
-        setPagination(response.pagination);
+      const response = type === "main" ? await ShowAllDiamond(page) : await getAllSubDiamond(page);
+      const mainPDf = await getMainDiamondAttribute();
+      setMainDiamondPDF(mainPDf);
+      const subPDF = await getSubDiamondAttribute();
+      setSubDiamondPDF(subPDF);
+      console.log("Fetch Data Response: ", response);
+      setDiamondList(response.data);
+      setPagination(response.pagination);
     } catch (error) {
-        console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error);
     }
-};
+  };
 
-useEffect(() => {
+  useEffect(() => {
     fetchData(currentPage, value === 0 ? "main" : "sub");
-}, [currentPage, value]);
+  }, [currentPage, value]);
 
-const handlePageChange = (event, value) => {
+  const handlePageChange = (event, value) => {
     console.log("Page Change: ", value);
     setCurrentPage(value);
-};
+  };
 
   const handleSearchKeyPress = async (e) => {
     const isInteger = (value) => /^-?\d+$/.test(value);
@@ -150,42 +160,42 @@ const handlePageChange = (event, value) => {
   const handleUpdate = async () => {
     const requiredFields = ["price"];
     if (value === 1) { // if sub-diamond, add 'amountAvailable' to required fields
-        requiredFields.push("amountAvailable");
+      requiredFields.push("amountAvailable");
     }
 
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
 
     for (let field of requiredFields) {
-        if (!editedDiamond[field]) {
-            swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
-            return;
-        }
-        if (specialCharPattern.test(editedDiamond[field])) {
-            swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-            return;
-        }
+      if (!editedDiamond[field]) {
+        swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
+        return;
+      }
+      if (specialCharPattern.test(editedDiamond[field])) {
+        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        return;
+      }
     }
 
     const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
     if (isEqual) {
-        swal("No changes detected!", "You have not made any changes.", "error");
-        return;
+      swal("No changes detected!", "You have not made any changes.", "error");
+      return;
     }
 
     const diamondToUpdate = { ...editedDiamond, status: true };
 
     try {
-        if (value === 0) {
-            await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
-        } else {
-            await updateSubDiamondById(diamondToUpdate.subDiamondId, diamondToUpdate);
-        }
-        fetchData(currentPage, value === 0 ? "main" : "sub");
-        setEditMode(false);
-        swal("Updated successfully!", "The diamond information has been updated.", "success");
+      if (value === 0) {
+        await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
+      } else {
+        await updateSubDiamondById(diamondToUpdate.subDiamondId, diamondToUpdate);
+      }
+      fetchData(currentPage, value === 0 ? "main" : "sub");
+      setEditMode(false);
+      swal("Updated successfully!", "The diamond information has been updated.", "success");
     } catch (error) {
-        console.error("Error updating diamond:", error);
-        swal("Something went wrong!", "Failed to update. Please try again.", "error");
+      console.error("Error updating diamond:", error);
+      swal("Something went wrong!", "Failed to update. Please try again.", "error");
     }
   };
 
@@ -298,12 +308,12 @@ const handlePageChange = (event, value) => {
                       )}
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
                         </IconButton>
                         <IconButton
                           onClick={() => handleDelete(item.diamondId || item.subDiamondId)}
                         >
-                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
+                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -534,6 +544,14 @@ const handlePageChange = (event, value) => {
           </div>
         </div>
       )}
+      <div className="pdf-download">
+        <PDFDownloadLink
+          document={<DiamondPDf main={mainDiamondPDF} sub={subDiamondPDF} />}
+          fileName="diamond.pdf"
+        >
+          {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
+        </PDFDownloadLink>
+      </div>
     </div>
   );
 };
