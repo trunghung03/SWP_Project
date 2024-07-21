@@ -235,5 +235,32 @@ namespace DIAN_.Controllers
             //    }
             //}
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchDiamondsAsync([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new DiamondSearchCriteria
+                {
+                    Query = query
+                };
+
+                var diamonds = await _diamondRepository.SearchDiamondsAsync(searchCriteria);
+
+                if (!diamonds.Any())
+                {
+                    return NotFound("No diamonds match the search criteria.");
+                }
+
+                var diamondDtos = diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList();
+                return Ok(diamondDtos);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here if necessary
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }

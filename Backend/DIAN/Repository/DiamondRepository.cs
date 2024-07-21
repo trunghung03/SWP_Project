@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs.ShellDto;
+﻿using DIAN_.DTOs.DiamondDto;
+using DIAN_.DTOs.ShellDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
@@ -290,5 +291,24 @@ namespace DIAN_.Repository
         {
             return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId && p.Status).ToListAsync();   
         }
+        public async Task<List<Diamond>> SearchDiamondsAsync(DiamondSearchCriteria searchCriteria)
+        {
+            var query = _context.Diamonds.Include(d => d.MainDiamondAtrribute).Where(d => d.Status).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchCriteria.Query))
+            {
+                string queryStr = searchCriteria.Query.ToLower();
+                query = query.Where(d => d.MainDiamondAtrribute.Shape.ToLower().Contains(queryStr) ||
+                                         d.MainDiamondAtrribute.Color.ToLower().Contains(queryStr) ||
+                                         d.MainDiamondAtrribute.Clarity.ToLower().Contains(queryStr) ||
+                                         d.MainDiamondAtrribute.Cut.ToLower().Contains(queryStr) ||
+                                         d.Price.ToString().Contains(queryStr) ||
+                                         d.MainDiamondAtrribute.Carat.ToString().Contains(queryStr));
+            }
+
+            return await query.ToListAsync();
+        }
+
+
     }
 }

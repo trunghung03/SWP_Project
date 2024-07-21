@@ -1,4 +1,5 @@
-﻿using DIAN_.Helper;
+﻿using DIAN_.DTOs.ShellDto;
+using DIAN_.Helper;
 using DIAN_.Models;
 
 namespace DIAN_.Interfaces
@@ -14,5 +15,7 @@ namespace DIAN_.Interfaces
         Task<Shell?> UpdateShellStockAsync(Shell shellDto, int id);
 
         Task<List<Shell>> GetShellByProductIdAsync(int productId);
+
+        Task<List<Shell>> SearchShellsAsync(ShellSearch searchCriteria);
     }
 }
