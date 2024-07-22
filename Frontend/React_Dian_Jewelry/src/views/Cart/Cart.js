@@ -12,7 +12,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
-import { getShellByProductId } from '../../services/ProductService';
+import { getShellByProductId, checkProductStock } from '../../services/ProductService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
@@ -27,13 +27,48 @@ function Cart() {
     const [sizeGuideImage, setSizeGuideImage] = useState(null);
     const customerId = localStorage.getItem('customerId');
     const { cartItems, removeFromCart, updateCartItem } = useCart();
+    const [shellData, setShellData] = useState({});
     const [filteredCartItems, setFilteredCartItems] = useState([]);
 
     useEffect(() => {
         const cartKey = `cartItems${customerId}`;
         const storedCartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
         setFilteredCartItems(storedCartItems);
+
+        storedCartItems.forEach(item => {
+            getShellByProductId(item.productId).then(response => {
+                setShellData(prevShellData => ({
+                    ...prevShellData,
+                    [item.productId]: response.data
+                }));
+            }).catch(error => {
+                console.error('Error fetching shell data:', error);
+            });
+        });
+
+        checkStockStatus(storedCartItems);
     }, [customerId, cartItems]);
+
+    const checkStockStatus = async (items) => {
+        try {
+            const stockChecks = await Promise.all(
+                items.map(item =>
+                    checkProductStock(item.productId)
+                        .then(response => ({
+                            ...item,
+                            isOutOfStock: response.data === "Not enough stock"
+                        }))
+                        .catch(error => ({
+                            ...item,
+                            isOutOfStock: true
+                        }))
+                )
+            );
+            setFilteredCartItems(stockChecks);
+        } catch (error) {
+            console.error('Error checking stock status:', error);
+        }
+    };
 
     const openSizeGuide = (categoryId) => {
         switch (categoryId) {
@@ -66,11 +101,11 @@ function Cart() {
         document.body.classList.remove('no-scroll');
     };
 
-    const handleCheckoutPage = () => {
+    const handleCheckoutPage = async () => {
         const updatedCartItems = JSON.parse(localStorage.getItem(`cartItems${customerId}`)) || [];
 
         if (updatedCartItems.length === 0) {
-            toast.warn("Please add something first! There are nothing in the cart.", {
+            toast.warn("Please add something first! There is nothing in the cart.", {
                 position: "top-right",
                 autoClose: 3000
             });
@@ -86,28 +121,55 @@ function Cart() {
             return;
         }
 
-        localStorage.setItem('fromCart', 'true');
-        navigate('/checkout', { state: { cartItems: updatedCartItems } });
+        try {
+            const stockChecks = await Promise.all(
+                updatedCartItems.map(item =>
+                    checkProductStock(item.productId)
+                        .then(response => ({
+                            ...item,
+                            isOutOfStock: response.data === "Not enough stock"
+                        }))
+                        .catch(error => ({
+                            ...item,
+                            isOutOfStock: true
+                        }))
+                )
+            );
+
+            const hasOutOfStockItems = stockChecks.some(item => item.isOutOfStock);
+
+            if (hasOutOfStockItems) {
+                toast.error("Some products in your cart are currently sold out. Please remove them to checkout.", {
+                    position: "top-right",
+                    autoClose: 3000
+                });
+                setFilteredCartItems(stockChecks);
+                return;
+            }
+
+            localStorage.setItem('fromCart', 'true');
+            navigate('/checkout', { state: { cartItems: updatedCartItems } });
+        } catch (error) {
+            toast.error("Some products in your cart are currently sold out. Please remove them to checkout.", {
+                position: "top-right",
+                autoClose: 3000
+            });
+            console.error(error);
+        }
     };
 
     const handleContinueShopping = () => {
         navigate('/diamond-jewelry', { state: { category: 'all' } });
     };
 
-    const handleSizeChange = async (e, index) => {
+    const handleSizeChange = (e, index) => {
         const newSize = e.target.value;
         const updatedItem = { ...cartItems[index], selectedSize: newSize };
 
-        try {
-            const shellResponse = await getShellByProductId(updatedItem.productId);
-            const shellData = shellResponse.data;
-            const shellEntry = shellData.find(shell => shell.size === parseFloat(newSize) && shell.shellMaterialName === updatedItem.selectedShellName);
-            
-            if (shellEntry) {
-                updatedItem.selectedShellId = shellEntry.shellId;
-            }
-        } catch (error) {
-            console.error('Error fetching shell data:', error);
+        const shellEntry = shellData[updatedItem.productId]?.find(shell => shell.size === parseFloat(newSize) && shell.shellMaterialName === updatedItem.selectedShellName);
+
+        if (shellEntry) {
+            updatedItem.selectedShellId = shellEntry.shellId;
         }
 
         updateCartItem(index, updatedItem);
@@ -122,19 +184,38 @@ function Cart() {
         navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
     };
 
-    const calculateTotal = () => {
-        return Math.floor(cartItems.reduce((total, item) => total + parseFloat(item.price), 0));
+    const handleRemoveFromCart = (index) => {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems.splice(index, 1);
+        localStorage.setItem(`cartItems${customerId}`, JSON.stringify(updatedCartItems));
+        setFilteredCartItems(updatedCartItems);
+        removeFromCart(index);
     };
+
+    const calculateTotal = () => {
+        return Math.floor(filteredCartItems.reduce((total, item) => {
+            if (!item.isOutOfStock) {
+                return total + parseFloat(item.price);
+            }
+            return total;
+        }, 0));
+    };
+
+    const getAvailableSizes = (productId, shellMaterialName) => {
+        return shellData[productId]?.filter(shell => shell.shellMaterialName === shellMaterialName);
+    };
+
+    const availableCartItemsCount = filteredCartItems.filter(item => !item.isOutOfStock).length;
 
     return (
         <div className={`cart ${showSizeGuide ? 'no-scroll' : ''}`}>
             <HeaderComponent />
             <SubNav items={navItems} />
-            <ToastContainer /> 
+            <ToastContainer />
             <div className="cart_main_container">
                 <div className="cart_header">
                     <div className="cart_title">
-                        <i className="fas fa-shopping-cart"></i> My Cart ({cartItems.length})
+                        <i className="fas fa-shopping-cart"></i> My Cart ({availableCartItemsCount})
                     </div>
                     <div className="continue_shopping" onClick={handleContinueShopping}>
                         &lt; Continue Shopping
@@ -142,51 +223,58 @@ function Cart() {
                 </div>
 
                 <div className="cart_container">
-                    <div className="cart_items">
-                        {cartItems.length === 0 ? (
-                            <div className="cart_empty_message">
-                                Nothing here... Let's add something to the cart!
-                            </div>
-                        ) : (
-                            cartItems.map((item, index) => {
+                    {filteredCartItems.length === 0 ? (
+                        <div className="cart_empty_message">
+                            Nothing here... Let's add something to the cart!
+                        </div>
+                    ) : (
+                        <div className="cart_items">
+                            {filteredCartItems.map((item, index) => {
                                 const firstImage = item.image.split(';')[0];
+                                const availableSizes = getAvailableSizes(item.productId, item.selectedShellName);
+                                const isOutOfStock = item.isOutOfStock;
                                 return (
-                                    <div className="cart_item" key={index}>
+                                    <div className={`cart_item ${isOutOfStock ? 'out-of-stock' : ''}`} key={index}>
                                         <img src={firstImage} className="cart_item_image" alt={item.name} />
                                         <div className="cart_item_details">
                                             <div className="cart_item_header">
-                                                <h5 className="cart_item_name">{item.name}</h5>
+                                                <h5 className={`cart_item_name ${isOutOfStock ? 'text-grey' : ''}`}>
+                                                    {item.name} {isOutOfStock && <span className="out-of-stock-text">(Sold out)</span>}
+                                                </h5>
                                                 <div className="cart_item_links">
-                                                    <a onClick={() => handleViewProduct(item)} className="cart_item_view">VIEW</a>
+                                                    <span onClick={() => !isOutOfStock && handleViewProduct(item)} className={`cart_item_view ${isOutOfStock ? 'disabled text-grey unclickable' : ''}`}>VIEW</span>
                                                     <span> | </span>
-                                                    <a className="cart_item_remove" onClick={() => removeFromCart(index)}>REMOVE</a>
+                                                    <a className="cart_item_remove" onClick={() => handleRemoveFromCart(index)}>REMOVE</a>
                                                 </div>
                                             </div>
-                                            <p className="cart_item_description">
+                                            <p className={`cart_item_description ${isOutOfStock ? 'text-grey' : ''}`}>
                                                 Shell: {item.selectedShellName}<br />
                                             </p>
                                             <div className="cart_item_actions">
                                                 <div className="cart_size_guide_container">
                                                     <select
-                                                        className="cart_ring_size_detail"
+                                                        className={`cart_ring_size_detail ${isOutOfStock ? 'disabled' : ''}`}
                                                         value={item.selectedSize || ''}
                                                         onChange={(e) => handleSizeChange(e, index)}
+                                                        disabled={isOutOfStock}
                                                     >
                                                         <option value="">Size</option>
-                                                        {item.sizes.map((size, sizeIndex) => (
-                                                            <option key={sizeIndex} value={size}>Size {size}</option>
+                                                        {availableSizes?.map((shell, sizeIndex) => (
+                                                            <option key={sizeIndex} value={shell.size} disabled={shell.amountAvailable === 0}>
+                                                                Size {shell.size}
+                                                            </option>
                                                         ))}
                                                     </select>
-                                                    <button onClick={() => openSizeGuide(item.categoryId)} className="cart_size_guide_detail">Size guide</button>
+                                                    <span onClick={() => !isOutOfStock && openSizeGuide(item.categoryId)} className={`cart_size_guide_detail ${isOutOfStock ? 'disabled text-grey unclickable' : ''}`}>Size guide</span>
                                                 </div>
                                             </div>
-                                            <div className="cart_item_price">${Math.floor(item.price)}</div>
+                                            <div className={`cart_item_price ${isOutOfStock ? 'text-grey' : ''}`}>${Math.floor(item.price)}</div>
                                         </div>
                                     </div>
                                 );
-                            })
-                        )}
-                    </div>
+                            })}
+                        </div>
+                    )}
 
                     <div className="cart_summary">
                         <h5 className="cart_summary_title"><i className="fas fa-receipt"></i> Summary</h5>
@@ -194,7 +282,7 @@ function Cart() {
                             <p className="cart_summary_subtotal"><span>Subtotal</span><span><strong>${calculateTotal()}</strong></span></p>
                             <p className="cart_summary_total"><span>Total</span><span><strong>${calculateTotal()}</strong></span></p>
                         </div>
-                        <hr></hr>
+                        <hr />
                         <button onClick={handleCheckoutPage} className="cart_summary_checkout">Proceed to checkout</button>
                         <div className="cart_summary_service">
                             <p className="24/7_service"><strong>24/7 Customer Service</strong></p>
@@ -212,7 +300,7 @@ function Cart() {
                     </div>
                 </div>
             )}
-            <br></br><br></br>
+            <br /><br />
             <Insta />
             <ScrollToTop />
             <FooterComponent />

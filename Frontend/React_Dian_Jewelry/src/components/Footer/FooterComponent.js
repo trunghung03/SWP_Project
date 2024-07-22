@@ -154,13 +154,16 @@ const FooterComponent = () => {
                     </div>
                     <hr className="hr_footer" />
                     <div className="copyright row">
-                        <div className="col-sm-12 col-md-6">
-                            <p>© Copyright 2024 by Dian Jewelry</p>
+                        <div className="end_footer col-sm-12 col-md-6">
+                            <p>© Copyright 2024 by Dian Jewelry</p> <p>ㅤ|ㅤ</p>
+                            <Link className="footer_tos_link" id="warrantyModalLink" to="#warranty"> Warranty Policyㅤ</Link>
+                            <p>| ㅤ</p>
+                            <Link className="footer_tos_link" id="tosModalLink" to="#tos">Terms of Service & Privacy Policy</Link>
                         </div>
-                        <div className="col-sm-12 col-md-6 tos_col">
+                        {/* <div className="col-sm-12 col-md-6 tos_col">
                             <Link className="footer_tos_link" id="warrantyModalLink" to="#warranty">• Warranty Policyㅤㅤ</Link>
                             <Link className="footer_tos_link" id="tosModalLink" to="#tos">• Terms of Service & Privacy Policy</Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </footer>

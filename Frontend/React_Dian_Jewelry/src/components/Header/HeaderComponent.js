@@ -182,7 +182,7 @@ const HeaderComponent = () => {
   return (
     <header className="header">
       <div className="top_announcement">
-        Free Shipping Around Viet Nam For All Orders, Don't Miss Discount.
+        Free Shipping Around Viet Nam For All Orders, Don't Miss Any Discount.
       </div>
       <div className="top_header container-fluid">
         <div
@@ -601,7 +601,7 @@ const HeaderComponent = () => {
               </li>
               <li className="nav-item">
                 <Link className="introduce nav-link" to="/introduce">
-                  INTRODUCE
+                  INTRODUCTION
                 </Link>
               </li>
               <li className="nav-item">

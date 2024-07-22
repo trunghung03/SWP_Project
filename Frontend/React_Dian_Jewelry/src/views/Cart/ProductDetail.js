@@ -11,7 +11,7 @@ import necklaceSizeGuide from '../../assets/img/sgNecklace.jpg';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/ProductDetail.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getShellByProductId } from '../../services/ProductService';
+import { getProductList, getProductDetail, getDiamondDetail, getCollectionDetail, getShellMaterials, getShellByProductId, checkProductStock } from '../../services/ProductService';
 import { useCart } from '../../services/CartService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
@@ -38,6 +38,8 @@ function ProductDetail() {
     const [shellPrice, setShellPrice] = useState(0);
     const [loading, setLoading] = useState(true);
     const [shellData, setShellData] = useState([]);
+    const [availableSizes, setAvailableSizes] = useState([]);
+    const [availableShells, setAvailableShells] = useState([]);
 
     const navigateToProductDetail = (product) => {
         const productId = product.productId;
@@ -92,6 +94,11 @@ function ProductDetail() {
                     }
 
                     setAlsoLikeProducts(nextProducts);
+
+                    const uniqueShells = [...new Set(shellResponse.data.map(shell => shell.shellMaterialName))];
+                    setAvailableShells(uniqueShells);
+                    const uniqueSizes = [...new Set(shellResponse.data.map(shell => shell.size))];
+                    setAvailableSizes(uniqueSizes);
                 }).catch(error => {
                     console.error(error);
                 }).finally(() => {
@@ -110,7 +117,6 @@ function ProductDetail() {
     }, [location.state]);
 
     const handleAddToCart = () => {
-
         const token = localStorage.getItem('token');
         if (!token) {
             toast.warn("Please sign in or sign up to add jewelry to cart.", {
@@ -120,39 +126,51 @@ function ProductDetail() {
             return;
         }
 
-        if (!selectedShell) {
-            toast.warn("Please choose a shell type.", {
+        checkProductStock(product.productId).then(response => {
+            if (response.data === "Not enough stock") {
+                toast.error("Sorry, this product is out of stock.", {
+                    position: "top-right",
+                    autoClose: 3000
+                });
+                return;
+            } else if (!selectedShell) {
+                toast.warn("Please choose a shell type.", {
+                    position: "top-right",
+                    autoClose: 3000
+                });
+                return;
+            } else if (!selectedSize) {
+                toast.warn("Please choose a size.", {
+                    position: "top-right",
+                    autoClose: 3000
+                });
+                return;
+            } else {
+                const shellEntry = shellData.find(shell => shell.productId === product.productId && shell.size === parseFloat(selectedSize) && shell.shellMaterialName === selectedShell);
+
+                const productToSave = {
+                    productId: product.productId,
+                    name: product.name,
+                    image: product.imageLinkList,
+                    code: product.productCode,
+                    price: product.price + shellPrice,
+                    selectedSize,
+                    sizes: product.sizes.map(size => size.toString()),
+                    selectedShellId: shellEntry?.shellId,
+                    selectedShellName: selectedShell,
+                    diamondId: product.mainDiamondId,
+                    categoryId: product.categoryId
+                };
+                addToCart(productToSave);
+                navigateToCart();
+            }
+        }).catch(error => {
+            toast.error("This product is currently out of stock. Sorry for this inconvenience.", {
                 position: "top-right",
                 autoClose: 3000
             });
-            return;
-        }
-
-        if (!selectedSize) {
-            toast.warn("Please choose a size.", {
-                position: "top-right",
-                autoClose: 3000
-            });
-            return;
-        } else {
-            const shellEntry = shellData.find(shell => shell.productId === product.productId && shell.size === parseFloat(selectedSize) && shell.shellMaterialName === selectedShell);
-
-            const productToSave = {
-                productId: product.productId,
-                name: product.name,
-                image: product.imageLinkList,
-                code: product.productCode,
-                price: product.price + shellPrice,
-                selectedSize,
-                sizes: product.sizes.map(size => size.toString()),
-                selectedShellId: shellEntry?.shellId,
-                selectedShellName: selectedShell,
-                diamondId: product.mainDiamondId,
-                categoryId: product.categoryId
-            };
-            addToCart(productToSave);
-            navigateToCart();
-        }
+            console.error(error);
+        });
     };
 
     const navigateToCart = () => {
@@ -205,6 +223,20 @@ function ProductDetail() {
         sizeGuideImage = necklaceSizeGuide;
     }
 
+    const isShellDisabled = (shell) => {
+        if (selectedSize) {
+            return !shellData.some(sh => sh.shellMaterialName === shell && sh.size === parseFloat(selectedSize) && sh.amountAvailable > 0);
+        }
+        return shellData.every(sh => sh.shellMaterialName === shell && sh.amountAvailable === 0);
+    };
+
+    const isSizeDisabled = (size) => {
+        if (selectedShell) {
+            return !shellData.some(sh => sh.size === size && sh.shellMaterialName === selectedShell && sh.amountAvailable > 0);
+        }
+        return shellData.every(sh => sh.size === size && sh.amountAvailable === 0);
+    };
+
     if (loading) {
         return (
             <div>
@@ -247,17 +279,17 @@ function ProductDetail() {
                     <p className="product_diamond_detail"><strong>Shape:</strong> {diamond.shape}</p>
                     <p className="product_weight_detail"><strong>Carat:</strong> {diamond.carat}</p>
                     <p className="product_shell_detail"><strong>Shell:</strong>
-                        {shellMaterials.map((shell) => (
-                            <label key={shell.shellMaterialId} style={{ marginRight: '1px', marginLeft: '15px', color: shell.amountAvailable === 0 ? 'gray' : 'black' }}>
+                        {availableShells.map((shell) => (
+                            <label key={shell} style={{ marginRight: '1px', marginLeft: '15px', color: isShellDisabled(shell) ? 'gray' : 'black' }}>
                                 <input
                                     className="shell_checkbox"
                                     type="radio"
-                                    value={shell.name}
-                                    checked={selectedShell === shell.name}
+                                    value={shell}
+                                    checked={selectedShell === shell}
                                     onChange={handleShellChange}
-                                    disabled={shell.amountAvailable === 0}
+                                    disabled={isShellDisabled(shell)}
                                 />
-                                {shell.name}
+                                {shell}
                             </label>
                         ))}
                     </p>
@@ -271,8 +303,8 @@ function ProductDetail() {
                                 onChange={handleSizeChange}
                             >
                                 <option value="">Size</option>
-                                {sizes.map((size, index) => (
-                                    <option key={index} value={size}>Size {size}</option>
+                                {availableSizes.map((size, index) => (
+                                    <option key={index} value={size} disabled={isSizeDisabled(size)}>{size}</option>
                                 ))}
                             </select>
                         </div>
@@ -349,7 +381,7 @@ function ProductDetail() {
                     <div className="just_for_you_features">
                         <div className="feature">
                             <i className="fas fa-recycle"></i>
-                            <p><strong>Recycle Gold and Silver</strong><br />We say no to 'dirty gold'</p>
+                            <p><strong>Recycled Gold and Silver</strong><br />We say no to 'dirty gold'</p>
                         </div>
                         <hr className="jfy_line1" />
                         <div className="feature with-lines">

@@ -16,6 +16,7 @@ import Switch from '@mui/material/Switch';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
+import { checkProductStock } from '../../services/ProductService';
 
 const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -188,39 +189,64 @@ function Checkout() {
             return;
         }
 
-        setLoading(true);
-
-        const userId = parseInt(localStorage.getItem('customerId'), 10);
-        const date = new Date().toISOString();
-        const initialTotal = calculateTotal();
-        const totalDiscount = voucherDiscount + pointsDiscount;
-
-        let remainingPoints = points;
-        let appliedDiscount = totalDiscount;
-        if (totalDiscount > initialTotal) {
-            remainingPoints = totalDiscount - initialTotal;
-            appliedDiscount = initialTotal;
-        } else {
-            remainingPoints = points - pointsDiscount;
-        }
-
-        const orderData = {
-            userId: userId,
-            date: date,
-            name: fullName,
-            phoneNumber: phone,
-            paymentMethod: paymentMethod,
-            shippingAddress: address,
-            totalPrice: initialTotal,
-            orderStatus: "Unpaid",
-            promotionId: appliedVoucher ? promotionId : null,
-            payWithPoint: usePoints,
-            note: note || "None",
-            saleStaff: 0,
-            deliveryStaff: 0
-        };
-
         try {
+            const stockChecks = await Promise.all(
+                cartItems.map(item =>
+                    checkProductStock(item.productId)
+                        .then(response => ({
+                            ...item,
+                            isOutOfStock: response.data === "Not enough stock"
+                        }))
+                        .catch(error => ({
+                            ...item,
+                            isOutOfStock: true
+                        }))
+                )
+            );
+
+            const hasOutOfStockItems = stockChecks.some(item => item.isOutOfStock);
+
+            if (hasOutOfStockItems) {
+                toast.error("Some products in your cart are currently sold out. Please remove them to checkout.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    onClose: () => navigate('/cart')
+                });
+                return;
+            }
+
+            setLoading(true);
+
+            const userId = parseInt(localStorage.getItem('customerId'), 10);
+            const date = new Date().toISOString();
+            const initialTotal = calculateTotal();
+            const totalDiscount = voucherDiscount + pointsDiscount;
+
+            let remainingPoints = points;
+            let appliedDiscount = totalDiscount;
+            if (totalDiscount > initialTotal) {
+                remainingPoints = totalDiscount - initialTotal;
+                appliedDiscount = initialTotal;
+            } else {
+                remainingPoints = points - pointsDiscount;
+            }
+
+            const orderData = {
+                userId: userId,
+                date: date,
+                name: fullName,
+                phoneNumber: phone,
+                paymentMethod: paymentMethod,
+                shippingAddress: address,
+                totalPrice: initialTotal,
+                orderStatus: "Unpaid",
+                promotionId: appliedVoucher ? promotionId : null,
+                payWithPoint: usePoints,
+                note: note || "None",
+                saleStaff: 0,
+                deliveryStaff: 0
+            };
+
             const createdOrder = await createPurchaseOrder(orderData, voucherCode);
             const orderId = createdOrder.orderId;
 
@@ -230,8 +256,6 @@ function Checkout() {
                     lineTotal: item.price,
                     productId: item.productId,
                     shellId: item.selectedShellId
-                    // subDiamondId: item.diamondId,
-                    // size: parseInt(item.selectedSize, 10)
                 };
                 return createOrderDetails(orderDetail);
             });
@@ -277,11 +301,9 @@ function Checkout() {
             }
 
         } catch (error) {
-            console.error('Error creating purchase order:', error);
             if (error.response) {
-                console.error('Server responded with an error:', error.response.data);
             }
-            toast.error("Error processing order! There was an error processing your order. Please try again.", {
+            toast.error("There was an error processing your order. Please try again.", {
                 position: "top-right",
                 autoClose: 3000
             });

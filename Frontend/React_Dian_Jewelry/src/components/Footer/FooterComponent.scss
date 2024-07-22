@@ -86,6 +86,12 @@
 
 .footer_tos_link {
     font-size: 16px;
+    text-decoration: none;
+    color: #7d6f68;
+}
+
+.footer_tos_link:hover {
+    color: #1c1c1c;
 }
 
 .copyright .tos_col {
@@ -241,4 +247,9 @@ body.modal-open {
 .footer_last_column .footer_cash {
     width: 40px;
     margin-top: -11px;
+}
+
+.end_footer {
+    display: flex;
+    white-space: nowrap;
 }

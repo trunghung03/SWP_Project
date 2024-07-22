@@ -19,7 +19,7 @@ class Reason extends Component {
                     </div>
                     <div className="reason_card">
                         <div className="reason_icon"><i className="fas fa-clock"></i></div>
-                        <h3 className="reason_card_title">SERVICE DEDICATED</h3>
+                        <h3 className="reason_card_title">DEDICATED SERVICE</h3>
                         <p className="reason_card_description">Dedicated staff, passionate about their job, rich in expertise, always ready to serve. Guaranteed to satisfy even the most demanding customers.</p>
                     </div>
                     <div className="reason_card">

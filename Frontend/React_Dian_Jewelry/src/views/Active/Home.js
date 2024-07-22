@@ -256,14 +256,14 @@ const Home = () => {
         <div className="under_slider_column">
           <i className="fa fa-undo-alt under_slider_icon"></i>
           <div className="under_slider_text_container">
-            <h4 className="under_slider_title">Better warranty</h4>
+            <h4 className="under_slider_title">Instant warranty</h4>
             <p className="under_slider_text">If jewelry have problems</p>
           </div>
         </div>
         <div className="under_slider_column">
           <i className="far fa-credit-card under_slider_icon"></i>
           <div className="under_slider_text_container">
-            <h4 className="under_slider_title">Secure payment</h4>
+            <h4 className="under_slider_title">Payment method</h4>
             <p className="under_slider_text">100% secure payment</p>
           </div>
         </div>

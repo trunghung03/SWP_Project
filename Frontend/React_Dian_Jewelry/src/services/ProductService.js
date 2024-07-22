@@ -50,6 +50,10 @@ const searchProducts = (query) => {
     return axios.get(`${API_BASE_URL}/products/search`, { params: { name: query } });
 };
 
+const checkProductStock = (productId) => {
+    return axios.get(`${API_BASE_URL}/products/checkstock`, { params: { productId } });
+};
+
 export { 
     getProductList, 
     getCollectionList, 
@@ -62,5 +66,6 @@ export {
     getTopSellingProducts, 
     getNewestCollections,
     searchProducts,
-    getShellByProductId 
+    getShellByProductId,
+    checkProductStock
 };

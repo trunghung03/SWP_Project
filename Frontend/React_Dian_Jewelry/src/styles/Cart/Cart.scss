@@ -289,3 +289,20 @@
 }
 
 //End size guide
+
+.disabled {
+    pointer-events: none;
+}
+
+.unclickable {
+    pointer-events: none;
+    cursor: default;
+}
+
+.text-grey {
+    color: grey;
+}
+
+.out-of-stock-text {
+    color: #e05858;
+}
