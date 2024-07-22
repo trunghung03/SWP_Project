@@ -15,7 +15,7 @@ namespace DIAN_.Interfaces
 
         Task<DiamondDto> CreateMainDiamondAsync(CreateDiamondRequestDto requestDto);
 
-        Task<bool> UpdateQuantitiesForOrder(string status, int orderId);
+        Task<bool> UpdateQuantitiesForOrder(int orderId, bool isIncrease);
 
         Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto);
 

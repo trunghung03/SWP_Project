@@ -1,6 +1,7 @@
 ﻿using DIAN_.DTOs.OrderDetailDto;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
+using DIAN_.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
@@ -10,9 +11,11 @@ namespace DIAN_.Controllers
     public class OrderDetailController : ControllerBase
     {
         private readonly IOrderDetailRepository _orderDetailRepository;
-        public OrderDetailController(IOrderDetailRepository orderDetailRepository)
+        private readonly IGoodsService _goodsService;
+        public OrderDetailController(IOrderDetailRepository orderDetailRepository, IGoodsService goodsService)
         {
             _orderDetailRepository = orderDetailRepository;
+            _goodsService = goodsService;
         }
 
         [HttpGet]
@@ -58,6 +61,21 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpPut("updatequantities/{orderId:int}")]
+        public async Task<IActionResult> UpdateQuantitiesForOrder([FromRoute] int orderId)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                var isQuantitiesUpdated = await _goodsService.UpdateQuantitiesForOrder(orderId, false);
+                if (!isQuantitiesUpdated) return NotFound();
+                return Ok();
+            }catch(Exception)
+            {
+                throw;
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateOrderDetailDto orderDetailDto)
@@ -66,13 +84,24 @@ namespace DIAN_.Controllers
             {
                 if (!ModelState.IsValid) return BadRequest(ModelState);
                 var orderDetail = await _orderDetailRepository.CreateAsync(orderDetailDto.FromCreateToOrderDetail());
-                if (orderDetail == null) return NotFound();
+
+                if (orderDetail == null) return NotFound("Order detail could not be created.");
+
+                //var isQuantitiesUpdated = await _goodsService.UpdateQuantitiesForOrder(orderDetail.OrderId, true);
+
+                //if (!isQuantitiesUpdated)
+                //{
+                //    throw new Exception("Failed to update product quantities.");
+                //}
+
                 return CreatedAtAction(nameof(GetByOrderDetailId), new { id = orderDetail.OrderDetailId }, orderDetail);
-            }catch(Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(UpdateOrderDetailDto orderDetailDto, int id)

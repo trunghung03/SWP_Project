@@ -52,7 +52,8 @@ namespace DIAN_.Services
             return true;
         }
 
-        public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
+        //checkout here ~ - quantities of shell, diamond, subdiamond
+        public async Task<PurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
 
@@ -62,16 +63,13 @@ namespace DIAN_.Services
 
             AssignStaffToOrder(orderModel);
 
-            var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
+            var orderToDto = await _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel);
 
             SendConfirmationEmail(orderToDto);
-            if (orderToDto.PaymentMethod == "VNPay")
-            {
-                bool isUpdateStock = _goodsService.UpdateQuantitiesForOrder("Paid", orderToDto.OrderId).Result;
-            }
 
             return orderToDto.ToPurchaseOrderDTO();
         }
+
 
         private void ApplyPromotion(Purchaseorder orderModel, string promoCode)
         {

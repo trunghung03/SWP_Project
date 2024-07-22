@@ -20,8 +20,4 @@ public partial class Notification
     public DateTime CreatedAt { get; set; }
 
     public bool MarkRead { get; set; }
-
-    public virtual Customer Recipient { get; set; }
-
-    public virtual Employee RecipientNavigation { get; set; }
 }

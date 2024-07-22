@@ -1,4 +1,5 @@
-﻿using DIAN_.Helper;
+﻿using DIAN_.DTOs.SubDiamondDto;
+using DIAN_.Helper;
 using DIAN_.Models;
 
 namespace DIAN_.Interfaces
@@ -10,7 +11,7 @@ namespace DIAN_.Interfaces
         Task<Subdiamond> CreateAsync(Subdiamond subdiamond);
         Task<Subdiamond?> UpdateAsync(int id, Subdiamond subdiamond);
         Task<Subdiamond?> DeleteAsync(int id);
-        Task<Subdiamond?> UpdateDiamondStock(int id, Subdiamond subdiamond);
+        Task<Subdiamond?> UpdateDiamondStock(int id, UpdateSubDiamondStockDto subdiamond);
         Task<Subdiamond> GetDiamondsByAttributeIdAsync(int attributeId);
         Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query);
 

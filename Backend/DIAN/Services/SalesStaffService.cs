@@ -60,6 +60,8 @@ namespace DIAN_.Services
             _logger.LogInformation($"customer Connection IDs: {customerConnectionId}");
             _logger.LogInformation($"deli Connection IDs: {deliConnectionId}");
 
+
+            _logger.LogInformation("deli id: " + order.DeliveryStaff);
             if (customerConnectionId != null && customerConnectionId.Any())
             {
 
@@ -123,7 +125,12 @@ namespace DIAN_.Services
                 Console.WriteLine("send mail");
                 await _emailService.SendEmailAsync(mailRequest);
             }
-            return updatedOrder;
+            if (status.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
+            {
+                await _goodService.UpdateQuantitiesForOrder(orderId, true);
+            }
+
+                return updatedOrder;
         }
 
         public async Task<(List<PurchaseOrderDetailDto> Orders, int TotalCount)> ViewListOrdersAssign(int salesStaffId, PurchaseOrderQuerry querry)

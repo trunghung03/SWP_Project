@@ -214,39 +214,14 @@ namespace DIAN_.Services
             return true;
         }
 
-
-        //public async Task<bool> CheckEnoughMainDiamond(Product product)
-        //{
-        //    var maindiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAtrributeId ?? 0);
-        //    if (maindiamonds == null || !maindiamonds.Any())
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
-        //public async Task<bool> CheckEnoughSubDiamond(Product product)
-        //{
-        //    var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
-        //    if (subDiamond == null)
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId) //when checkout, not - quantity yet (for ensure customer not cancel order)
+        public async Task<bool> UpdateQuantitiesForOrder(int orderId, bool increaseQuantities) //when checkout, not - quantity yet (for ensure customer not cancel order)
         {
             Console.WriteLine("Updating quantities for order");
-
-            if (!status.Equals("Paid", StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
 
             var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
             foreach (var orderDetail in orderDetails)
             {
-                var updateSuccess = await UpdateProductQuantities(orderDetail);
+                var updateSuccess = await UpdateProductQuantities(orderDetail, increaseQuantities);
                 if (!updateSuccess)
                 {
                     return false;
@@ -256,7 +231,8 @@ namespace DIAN_.Services
             return true;
         }
 
-        private async Task<bool> UpdateProductQuantities(Orderdetail orderDetail)
+
+        private async Task<bool> UpdateProductQuantities(Orderdetail orderDetail, bool increaseQuantities)
         {
             var product = await _productRepository.GetByIdAsync(orderDetail.ProductId);
             if (product == null)
@@ -264,13 +240,13 @@ namespace DIAN_.Services
                 return false;
             }
 
-            var shellUpdated = await UpdateShellStock(orderDetail.ProductId);
+            var shellUpdated = await UpdateShellStock(orderDetail.ProductId, increaseQuantities);
             if (!shellUpdated)
             {
                 return false;
             }
 
-            var diamondsUpdated = await UpdateDiamondsStock(product, orderDetail.OrderDetailId);
+            var diamondsUpdated = await UpdateDiamondsStock(product, orderDetail.OrderDetailId, increaseQuantities);
             if (!diamondsUpdated)
             {
                 return false;
@@ -279,14 +255,15 @@ namespace DIAN_.Services
             return true;
         }
 
-        private async Task<bool> UpdateShellStock(int productId)
+
+        private async Task<bool> UpdateShellStock(int productId, bool increaseQuantities)
         {
             var shell = await _shellRepository.GetShellByIdAsync(productId);
             if (shell != null)
             {
                 var updateShellStockDto = new UpdateShellStock
                 {
-                    Quantity = shell.AmountAvailable - 1
+                    Quantity = increaseQuantities ? shell.AmountAvailable + 1 : shell.AmountAvailable - 1
                 };
                 var updatedShell = updateShellStockDto.ToShellFromUpdateStockDto(shell.ShellId);
                 await _shellRepository.UpdateShellStockAsync(updatedShell, shell.ShellId);
@@ -297,11 +274,12 @@ namespace DIAN_.Services
             return false;
         }
 
-        private async Task<bool> UpdateDiamondsStock(Product product, int orderDetailId)
+
+        private async Task<bool> UpdateDiamondsStock(Product product, int orderDetailId, bool increaseQuantities)
         {
             if (product.MainDiamondAtrributeId != 0)
             {
-                var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId);
+                var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId, increaseQuantities);
                 if (!mainDiamondUpdated)
                 {
                     return false;
@@ -310,7 +288,7 @@ namespace DIAN_.Services
 
             if (product.SubDiamondAtrributeId != 0)
             {
-                var subDiamondUpdated = await UpdateSubDiamonds(product.SubDiamondAtrributeId.Value, product.SubDiamondAmount ?? 0, orderDetailId);
+                var subDiamondUpdated = await UpdateSubDiamonds(product.SubDiamondAtrributeId.Value, product.SubDiamondAmount ?? 0, orderDetailId, increaseQuantities);
                 if (!subDiamondUpdated)
                 {
                     return false;
@@ -320,7 +298,8 @@ namespace DIAN_.Services
             return true;
         }
 
-        private async Task<bool> UpdateMainDiamonds(int mainDiamondAttributeId, int mainDiamondAmount, int orderDetailId)
+
+        private async Task<bool> UpdateMainDiamonds(int mainDiamondAttributeId, int mainDiamondAmount, int orderDetailId, bool increaseQuantities)
         {
             var diamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(mainDiamondAttributeId);
             if (diamonds != null && diamonds.Any())
@@ -329,7 +308,8 @@ namespace DIAN_.Services
                 foreach (var diamond in diamonds)
                 {
                     if (updatedCount >= mainDiamondAmount) break;
-                    await _diamondRepository.UpdateMainDiamondOrderDetailId(orderDetailId, diamond.DiamondId);
+                    var newOrderDetailId = increaseQuantities ? 0 : orderDetailId;
+                    await _diamondRepository.UpdateMainDiamondOrderDetailId(newOrderDetailId, diamond.DiamondId);
                     updatedCount++;
                 }
                 return true;
@@ -337,22 +317,21 @@ namespace DIAN_.Services
             return false;
         }
 
-        private async Task<bool> UpdateSubDiamonds(int subDiamondAttributeId, int subDiamondAmount, int orderDetailId)
+
+        private async Task<bool> UpdateSubDiamonds(int subDiamondAttributeId, int subDiamondAmount, int orderDetailId, bool increaseQuantities)
         {
             var diamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(subDiamondAttributeId);
             if (diamond != null)
             {
                 var updateDiamondStockDto = new UpdateSubDiamondStockDto
                 {
-                    AmountAvailable = diamond.AmountAvailable - subDiamondAmount
+                    AmountAvailable = increaseQuantities ? diamond.AmountAvailable + subDiamondAmount : diamond.AmountAvailable - subDiamondAmount
                 };
-                await _subDiamondRepository.UpdateDiamondStock(diamond.DiamondId, diamond);
+                await _subDiamondRepository.UpdateDiamondStock(diamond.DiamondId, updateDiamondStockDto);
                 return true;
             }
             return false;
         }
-
-        
 
 
         public async Task<decimal> CalculateProductPriceAsync(int productId)

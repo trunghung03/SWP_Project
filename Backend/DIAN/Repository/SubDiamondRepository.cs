@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.ShellDto;
+using DIAN_.DTOs.SubDiamondDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Models;
@@ -85,7 +86,7 @@ namespace DIAN_.Repository
             return subDiamond;
         }
 
-        public async Task<Subdiamond?> UpdateDiamondStock(int id, Subdiamond subdiamond)
+        public async Task<Subdiamond?> UpdateDiamondStock(int id, UpdateSubDiamondStockDto subdiamond)
         {
             var subDiamond = await _context.Subdiamonds.FirstOrDefaultAsync(s => s.DiamondId == id);
             if (subDiamond == null)

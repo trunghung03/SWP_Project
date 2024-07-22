@@ -164,7 +164,7 @@ namespace DIAN_.Repository
             return result > 0;
         }
 
-        public async Task<string?> GetCustomerEmail(int id)
+        public async  Task<string?> GetCustomerEmail(int id)
         {
             return await _context.Customers
                                  .Where(c => c.CustomerId == id)
