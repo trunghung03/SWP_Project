@@ -265,12 +265,25 @@ namespace DIAN_.Repository
                                  .FirstOrDefaultAsync(da => da.DiamondAtrributeId == diamondAttributeId);
         }
 
-        public async Task<Diamond> UpdateMainDiamondOrderDetailId(int orderDetailId, int diamondId)
+        public async Task<Diamond> UpdateMainDiamondOrderDetailId(int? orderDetailId, int diamondId)
         {
             var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
             if (existingDiamond != null)
             {
                 existingDiamond.Status = false;
+                existingDiamond.OrderDetailId = orderDetailId;
+                await _context.SaveChangesAsync();
+                return existingDiamond;
+            }
+            throw new KeyNotFoundException("Diamond does not exist");
+        }
+
+        public async Task<Diamond> UpdateMainDiamondOrderDetailIdForCancel(int? orderDetailId, int diamondId)
+        {
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            if (existingDiamond != null)
+            {
+                existingDiamond.Status = true;
                 existingDiamond.OrderDetailId = orderDetailId;
                 await _context.SaveChangesAsync();
                 return existingDiamond;
@@ -292,6 +305,11 @@ namespace DIAN_.Repository
         public async Task<List<Diamond>> GetDiamondsByAttributeIdAsync(int attributeId)
         {
             return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId && p.Status).ToListAsync();   
+        }
+
+        public async Task<List<Diamond>> GetDiamondsByAttributeIdForCancelAsync(int attributeId)
+        {
+            return await _context.Diamonds.Where(p => p.MainDiamondAtrributeId == attributeId).ToListAsync();
         }
 
         public Task<List<Diamond>> FindAvailableDiamond(int mainDiamondAttributeId)

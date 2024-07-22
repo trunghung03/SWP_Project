@@ -99,6 +99,15 @@ namespace DIAN_.Mapper
                 Note = dto.Note
             };
         }
+
+        public static OrderUpdateStatusDto ToUpdateOrderStatus(this Purchaseorder orderUpdateStatusDto)
+        {
+            return new OrderUpdateStatusDto
+            {
+                OrderId = orderUpdateStatusDto.OrderId,
+                Status = orderUpdateStatusDto.OrderStatus
+            };
+        }
         public static Purchaseorder ToUpdatePurchaseOrderStatus(this Purchaseorder order, string status)
         {
             return new Purchaseorder

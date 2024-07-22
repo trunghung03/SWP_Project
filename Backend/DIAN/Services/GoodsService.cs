@@ -221,6 +221,7 @@ namespace DIAN_.Services
             var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
             foreach (var orderDetail in orderDetails)
             {
+                Console.WriteLine("Updating quantities for order detail: " + orderDetail.OrderDetailId);
                 var updateSuccess = await UpdateProductQuantities(orderDetail, increaseQuantities);
                 if (!updateSuccess)
                 {
@@ -301,15 +302,22 @@ namespace DIAN_.Services
 
         private async Task<bool> UpdateMainDiamonds(int mainDiamondAttributeId, int mainDiamondAmount, int orderDetailId, bool increaseQuantities)
         {
-            var diamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(mainDiamondAttributeId);
+            var diamonds = await _diamondRepository.GetDiamondsByAttributeIdForCancelAsync(mainDiamondAttributeId);
             if (diamonds != null && diamonds.Any())
             {
                 var updatedCount = 0;
                 foreach (var diamond in diamonds)
                 {
                     if (updatedCount >= mainDiamondAmount) break;
-                    var newOrderDetailId = increaseQuantities ? 0 : orderDetailId;
-                    await _diamondRepository.UpdateMainDiamondOrderDetailId(newOrderDetailId, diamond.DiamondId);
+                    int? newOrderDetailId = increaseQuantities ? null : orderDetailId;
+                    if (!increaseQuantities)
+                    {
+                        await _diamondRepository.UpdateMainDiamondOrderDetailId(newOrderDetailId, diamond.DiamondId);
+                    }
+                    else
+                    {
+                        await _diamondRepository.UpdateMainDiamondOrderDetailIdForCancel(newOrderDetailId, diamond.DiamondId);
+                    }
                     updatedCount++;
                 }
                 return true;

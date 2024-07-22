@@ -18,13 +18,15 @@ namespace DIAN_.Interfaces
         Task<Diamond?> UpdateDiamondCertificate(Diamond diamondModel, int id);
         Task<Diamondattribute> GetDiamondAttributeByIdAsync(int diamondAttributeId);
         Task<List<Diamond>> GetDiamondsByAttributeIdAsync(int attributeId);
+        Task<List<Diamond>> GetDiamondsByAttributeIdForCancelAsync(int attributeId);
 
         // In IDiamondRepository
         Task<int> CountDiamondsByAttributesAsync(string shape, string color, string clarity, string cut, decimal carat);
         Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId);
 
         //Task<Diamond?> UpdateDiamondStatus(int diamondId);
-        Task<Diamond> UpdateMainDiamondOrderDetailId(int orderDetailId, int diamondId);
+        Task<Diamond> UpdateMainDiamondOrderDetailId(int? orderDetailId, int diamondId);
+        Task<Diamond> UpdateMainDiamondOrderDetailIdForCancel(int? orderDetailId, int diamondId);
 
         Task<List<Diamond>> FindAvailableDiamond(int mainDiamondAttributeId);
         Task<List<Diamond>> SearchDiamondsAsync(DiamondSearchCriteria searchCriteria);

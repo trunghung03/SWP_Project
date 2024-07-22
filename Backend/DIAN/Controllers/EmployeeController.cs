@@ -7,6 +7,8 @@ using DIAN_.Services;
 using DIAN_.DTOs.AccountDTO;
 using DIAN_.Repository;
 using DIAN_.Helper;
+using DIAN_.DTOs.PurchaseOrderDTOs;
+using DIAN_.Mapper;
 
 namespace UserApplication.Controllers
 {
@@ -248,19 +250,24 @@ namespace UserApplication.Controllers
         }
 
         [HttpPut("salesstaff/updatestatus")]
-        public async Task<IActionResult> SalesStaffUpdateOrderStatus(string status, int orderId)
+        public async Task<IActionResult> SalesStaffUpdateOrderStatus([FromBody] OrderUpdateStatusDto updateOrderStatusDto)
         {
             try
             {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); };
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-                var order = await _salesStaffService.UpdateOrderStatus(status, orderId);
+                var order = await _salesStaffService.UpdateOrderStatus(updateOrderStatusDto.Status, updateOrderStatusDto.OrderId);
 
-                return Ok(order);
-            }catch(Exception) {
+                // Use the correct conversion method
+                return Ok(order.ToUpdateOrderStatus());
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
+
+
         //[HttpPut("salesstaff/update-inventory")]
         //public async Task<IActionResult> UpdateStock(string status, int orderId)
         //{
