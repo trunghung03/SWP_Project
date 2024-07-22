@@ -141,11 +141,12 @@ namespace DIAN_.Services
         {
             var productModel = createProductRequestDTO.ToProductFromCreateDTO();
 
-            var stockAvailable = await CheckStockAvailable(createProductRequestDTO);
-            if (!stockAvailable)
-            {
-                throw new ValidationException("Stock not available");
-            }
+            //var stockAvailable = await CheckStockAvailable(createProductRequestDTO); //no need to check stock here, create product
+            //here just mean create product design, not check stock
+            //if (!stockAvailable)
+            //{
+            //    throw new ValidationException("Stock not available");
+            //}
 
             var product = await _productRepository.CreateAsync(productModel);
 
@@ -178,25 +179,60 @@ namespace DIAN_.Services
             return count;
         }
 
-        public async Task<bool> CheckStockAvailable(CreateProductRequestDTO createProductRequestDTO)
+        //fe to check stock available
+        //shell not available ~ product not display ~ neednt check stock
+        public async Task<bool> CheckStockAvailable(int productId)
         {
-            var mainDiamondCount = await _diamondRepository.CountDiamondsByAttributesAsync(createProductRequestDTO.MainDiamondAttributeId);
-            var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(createProductRequestDTO.SubDiamondAttributeId);
+            // Retrieve the product using productId
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product == null)
+            {
+                throw new ArgumentException("Product not found", nameof(productId));
+            }
+
+            // Use the product's attributes to check stock availability
+            var mainDiamondCount = await _diamondRepository.CountDiamondsByAttributesAsync(product.MainDiamondAtrributeId ?? 0);
+            var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
+            if (subDiamond == null)
+            {
+                return false;
+            }
+
             var subDiamondCount = subDiamond.AmountAvailable;
             Console.WriteLine("Main diamond count: " + mainDiamondCount);
             Console.WriteLine("Sub diamond count: " + subDiamondCount);
 
-            if (mainDiamondCount < createProductRequestDTO.MainDiamondAmount)
+            if (mainDiamondCount < (product.MainDiamondAmount ?? 0))
             {
                 return false;
             }
-            if (subDiamondCount < createProductRequestDTO.SubDiamondAmount)
+            if (subDiamond.AmountAvailable < (product.SubDiamondAmount ?? 0))
             {
                 return false;
             }
 
             return true;
         }
+
+
+        //public async Task<bool> CheckEnoughMainDiamond(Product product)
+        //{
+        //    var maindiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAtrributeId ?? 0);
+        //    if (maindiamonds == null || !maindiamonds.Any())
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
+        //public async Task<bool> CheckEnoughSubDiamond(Product product)
+        //{
+        //    var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
+        //    if (subDiamond == null)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         public async Task<bool> UpdateQuantitiesForOrder(string status, int orderId) //when checkout, not - quantity yet (for ensure customer not cancel order)
         {

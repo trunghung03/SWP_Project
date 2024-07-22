@@ -148,48 +148,6 @@ namespace DIAN_.Services
                 _emailService.SendEmailAsync(mailRequest);
             }
         }
-        private void CheckDiamondAndShellAvailability(Purchaseorder orderModel)
-        {
-            foreach (var detail in orderModel.OrderDetails)
-            {
-                var product = _productRepository.GetByIdAsync(detail.ProductId).Result;
 
-                if (product.MainDiamondAmount.HasValue && product.MainDiamondAmount > 0)
-                {
-                    var mainDiamond = _diamondRepository.FindAvailableDiamond(product.MainDiamondAttributeId).Result.FirstOrDefault();
-                    if (mainDiamond == null || mainDiamond.Stock < product.MainDiamondAmount.Value)
-                    {
-                        throw new Exception($"Not enough main diamond for product {product.Name}");
-                    }
-                    // Update main diamond stock
-                    mainDiamond.Stock -= product.MainDiamondAmount.Value;
-                    _diamondRepository.UpdateAsync(mainDiamond, mainDiamond.DiamondId).Wait();
-                }
-
-                if (product.SubDiamondAmount.HasValue && product.SubDiamondAmount > 0)
-                {
-                    var subDiamond = _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAttributeId).Result;
-                    if (subDiamond == null || subDiamond.Stock < product.SubDiamondAmount.Value)
-                    {
-                        throw new Exception($"Not enough sub diamond for product {product.Name}");
-                    }
-                    // Update sub diamond stock
-                    subDiamond.Stock -= product.SubDiamondAmount.Value;
-                    _subDiamondRepository.UpdateAsync(subDiamond, subDiamond.SubDiamondId).Wait();
-                }
-
-                if (product.Stock.HasValue && product.Stock > 0)
-                {
-                    var shell = _shellRepository.GetShellByProductIdAsync(product.ProductId).Result.FirstOrDefault();
-                    if (shell == null || shell.Stock < product.Stock.Value)
-                    {
-                        throw new Exception($"Not enough shell stock for product {product.Name}");
-                    }
-                    // Update shell stock
-                    shell.Stock -= product.Stock.Value;
-                    _shellRepository.UpdateAsync(shell, shell.ShellId).Wait();
-                }
-            }
-        }
     }
 }

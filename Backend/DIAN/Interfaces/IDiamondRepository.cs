@@ -27,8 +27,6 @@ namespace DIAN_.Interfaces
         Task<Diamond> UpdateMainDiamondOrderDetailId(int orderDetailId, int diamondId);
 
         Task<List<Diamond>> FindAvailableDiamond(int mainDiamondAttributeId);
-        Task<Diamond?> UpdateDiamondStatus(int diamondId);
-        Task<Diamond> UpdateOrderDetailId(int orderId, int diamondId);
         Task<List<Diamond>> SearchDiamondsAsync(DiamondSearchCriteria searchCriteria);
 
     }

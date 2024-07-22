@@ -75,7 +75,9 @@ namespace DIAN_.Mapper
                 MainDiamondAttributeId = product.MainDiamondAtrributeId ?? 0,
                 SubDiamondAttributeId = product.SubDiamondAtrributeId ?? 0,
                 ProductCode = product.ProductCode,
-                Stock = product.Shells?.Sum(shell => shell.AmountAvailable) ?? 0
+                //Stock = product.Shells?.Sum(shell => shell.AmountAvailable) ?? 0
+                Stock = product.Shells?.FirstOrDefault()?.AmountAvailable ?? 0
+
 
             };
         }
