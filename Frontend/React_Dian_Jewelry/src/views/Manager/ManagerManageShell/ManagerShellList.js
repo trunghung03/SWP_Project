@@ -444,20 +444,21 @@ const ManagerShellList = () => {
           >
             Add new shell
           </button>
-          <Stack spacing={2}>
+          <Stack spacing={2} sx={{ alignItems: 'center', mt: 2 }}>
             <Pagination
               count={totalPages}
               page={currentPage}
               onChange={handlePageChange}
-              sx={{
-                '& .Mui-selected': {
-                  backgroundColor: 'your-color-here',
-                  color: 'your-text-color-here',
-                },
-                '& .MuiPaginationItem-page:hover': {
-                  backgroundColor: 'your-hover-color-here',
-                },
-              }}
+              color="primary"
+              // sx={{
+              //   '& .Mui-selected': {
+              //     backgroundColor: 'your-color-here',
+              //     color: 'your-text-color-here',
+              //   },
+              //   '& .MuiPaginationItem-page:hover': {
+              //     backgroundColor: 'your-hover-color-here',
+              //   },    
+              // }}
             />
           </Stack>
         </div>

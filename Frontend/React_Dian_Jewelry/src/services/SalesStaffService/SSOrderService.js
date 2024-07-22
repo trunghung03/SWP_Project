@@ -63,13 +63,14 @@ export const sendEmail = async (data) => {
   return response.data;
 };
 
-export const salesStaffUpdateOrderStatus = async (status, orderId) => {
-  return axios.put(`${API_BASE_URL_ORDER}/employees/salesstaff/updatestatus`, {}, { params: { status, orderId } })
+export const salesStaffUpdateOrderStatus = async (data) => {
+  return axios.put(`${API_BASE_URL_ORDER}/employees/salesstaff/updatestatus`, data)
     .then((response) => {
       return response.data;
     })
-    .catch(function (error) {
-      return error;
+    .catch((error) => {
+      console.error("Failed to update order status:", error);
+      throw error;
     });
 };
 

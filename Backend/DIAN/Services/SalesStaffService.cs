@@ -125,7 +125,7 @@ namespace DIAN_.Services
                 Console.WriteLine("send mail");
                 await _emailService.SendEmailAsync(mailRequest);
             }
-            if (status.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
+            if (status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
             {
                 await _goodService.UpdateQuantitiesForOrder(orderId, true);
             }
