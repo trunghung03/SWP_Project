@@ -206,7 +206,7 @@ function DiamondPrice() {
 
   const navigateToDiamondDetail = (diamond) => {
     const diamondName = `${diamond.carat} Carat ${diamond.shape} Diamond`.replace(/\s+/g, '-').toLowerCase();
-    navigate(`/diamond-detail/${diamondName}`, { state: { id: diamond.id } });
+    navigate(`/diamond-detail/${diamondName}`, { state: { id: diamond.diamondId } });
   };
 
   return (

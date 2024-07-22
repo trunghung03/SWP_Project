@@ -31,6 +31,8 @@ const UpdateTitle = () => {
       title = 'Transaction Fail | Dian Jewelry';
     } else if (path.startsWith('/product-detail')) {
       title = `Product Detail | Dian Jewelry`;
+    } else if (path.startsWith('/diamond-detail')) {
+      title = `Diamond Detail | Dian Jewelry`;
     } else if (path === '/login') {
       title = 'Sign in | Dian Jewelry';
     } else if (path === '/register') {

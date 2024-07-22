@@ -225,7 +225,7 @@ function Cart() {
                 <div className="cart_container">
                     {filteredCartItems.length === 0 ? (
                         <div className="cart_empty_message">
-                            Nothing here... Let's add something to the cart!
+                            <p>Nothing here... Let's add something to the cart!</p>
                         </div>
                     ) : (
                         <div className="cart_items">

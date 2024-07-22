@@ -355,19 +355,23 @@ const ManagerStatitic = () => {
          <hr className="manager_header_line"></hr>
           <h3 className="manager_manage_statistic_title" style={{fontFamily:"serif", color:"#292727"}}>Statistic Report</h3>
           <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+          Date: 
             <input
               className="manager_statis_input_date"
               type="date"
               value={localDate}
               onChange={handleDateChange}
-              style={{ marginLeft: "4.2%" }}
+              style={{ margin: "10px" }}
             ></input>
-            <div>
+            <div className="manager_manage_report_div1_wrapper">
               <div
                 className="manager_manage_report_div1"
                 style={{
                   display: "flex",
-                  padding: "20px",
+                  // padding: "20px",
+                  marginTop: "10px",
+                  marginBottom: "50px",
+                  justifyContent: "center",
                 }}
               >
                 {/* <h3>Today's Report</h3> */}
@@ -503,8 +507,8 @@ const ManagerStatitic = () => {
               <p style={{ fontSize: "24px", color: "green" }}>{totalProduct}</p>
             </div> */}
             </div>
-            <div className="manager_manage_report_filter">
-              <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
+            <div className="manager_manage_report_filter" style={{ marginTop: 40 }}>
+              <i className="fas fa-filter" style={{ paddingTop: 22 }}></i>
               <FormControl sx={{ m: 1, minWidth: 80 }}>
                 <InputLabel id="listYear-label">Year</InputLabel>
                 <Select
@@ -516,6 +520,7 @@ const ManagerStatitic = () => {
                   autoWidth
                   label="Year"
                   required
+                  size="small"
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -538,7 +543,7 @@ const ManagerStatitic = () => {
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
                 }}
               >
-                <h3>Sales</h3>
+                <h4 style={{marginBottom: "60px"}}>Sales</h4>
                 {loading ? (
                   <p>Loading...</p>
                 ) : totalValue && totalOrders ? (
@@ -558,7 +563,7 @@ const ManagerStatitic = () => {
                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
                 }}
               >
-                <h3>Category Sold</h3>
+                <h4>Category Sold</h4>
                 {allCatePercentages.length > 0 ? (
                   <Doughnut data={trafficSourceData} />
                 ) : (
@@ -566,8 +571,8 @@ const ManagerStatitic = () => {
                 )}
               </div>
             </div>
-            <div className="manager_manage_report_filter">
-              <i className="fas fa-filter" style={{ paddingTop: 30 }}></i>
+            <div className="manager_manage_report_filter" style={{ marginTop: 50 }}>
+              <i className="fas fa-filter" style={{ paddingTop: 20 }}></i>
               <FormControl sx={{ m: 1, minWidth: 80 }}>
                 <InputLabel id="listYear-label">Year</InputLabel>
                 <Select
@@ -579,6 +584,7 @@ const ManagerStatitic = () => {
                   value={selectedYear}
                   label="Year"
                   required
+                  size="small"
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -611,8 +617,8 @@ const ManagerStatitic = () => {
               </div>
             </div>
             <div className="manager_manage_diamond_table_wrapper"
-            style ={{marginTop:"3.5%"}}>
-              <h3>Top 10 Selling Products</h3>
+            style ={{marginTop:"70px"}}>
+              <h4>Top 10 Selling Products</h4>
               <TableContainer component={Paper} style={{boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"}}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -654,13 +660,13 @@ const ManagerStatitic = () => {
               </TableContainer>
             </div>
             <div className="manager_manage_diamond_table_wrapper"
-            style ={{marginTop:"3.5%"}}>Date:
+            style ={{marginTop:"70px"}}>Date:
               <input
                 className="manager_statis_input_date"
                 type="month"
                 value={monthYear}
                 onChange={MonthYearStats}
-                style={{ margin: "10px" }}
+                style={{ marginBottom: "20px" }}
               ></input>
               <TableContainer component={Paper}  style ={{boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"}}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
