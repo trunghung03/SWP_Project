@@ -17,7 +17,7 @@ import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
 import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
-import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getCertificateURL, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
+import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getCertificateURL, getWarrantyById, updateInventory } from "../../../services/SalesStaffService/SSOrderService.js";
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import swal from "sweetalert";
 
@@ -135,14 +135,17 @@ const SSOrderDetail = () => {
   const handleSubmit = async () => {
     try {
       await salesStaffUpdateOrderStatus(status, orderId);
+      await updateInventory(status, orderId);
       swal("Success", "Update order status successfully", "success");
       navigate('/sales-staff-order-list');
       console.log("status: ", status);
-      console.log("Order status updated successfully");
+      console.log("Order status and inventory updated successfully");
     } catch (error) {
-      console.error("Failed to update order status:", error);
+      console.error("Failed to update order status or inventory:", error);
+      swal("Error", "Failed to update order status or inventory", "error");
     }
   };
+  
 
   if (!orderDetails) {
     return <div>Loading...</div>;

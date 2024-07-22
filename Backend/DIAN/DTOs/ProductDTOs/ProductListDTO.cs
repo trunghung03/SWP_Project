@@ -18,6 +18,7 @@
         public decimal? Stock { get; set; } //amount available of shell
         public string Clarity { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
+        public string Cut { get; set; }
         public decimal Carat { get; set; } = 0;
         public int CollectionId { get; set; }
     }

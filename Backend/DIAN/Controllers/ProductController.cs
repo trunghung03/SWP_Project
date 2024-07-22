@@ -33,7 +33,27 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
-               
+
+                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
+                return Ok(productDTOs);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("diamondproduct")]
+        public async Task<IActionResult> GetListDiamondProduct()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var products = await _productRepo.GetDiamondProduct();
+
                 var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
                 return Ok(productDTOs);
             }
@@ -96,15 +116,12 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var productModel = await _goodsService.CreateProductAsync(productDTO); // This should return a ProductDTO
+                var productModel = await _goodsService.CreateProductAsync(productDTO); 
 
-                // Assuming productModel already is a ProductDTO and has an Id property
-                if (productModel == null || productModel.ProductId == 0) // Adjust the condition based on how you identify a valid product
+                if (productModel == null || productModel.ProductId == 0)
                 {
                     return BadRequest("Product creation failed.");
                 }
-
-                // Since productModel is already a ProductDTO, no need to convert
                 return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel);
             }
             catch (Exception)
@@ -112,7 +129,27 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-
+        [HttpGet("checkstock")]
+        public async Task<IActionResult> CheckStock([FromQuery] int productId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var stockAvailable = await _goodsService.CheckStockAvailable(productId);
+                if (!stockAvailable)
+                {
+                    return BadRequest("Not enough stock");
+                }
+                return Ok("Available");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
         [HttpPut("{id}")]

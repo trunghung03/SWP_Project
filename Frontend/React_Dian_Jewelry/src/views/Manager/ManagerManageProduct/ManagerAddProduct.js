@@ -92,11 +92,12 @@ const ManagerAddProduct = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const productDTO = {
                 productCode: productData.productCode,
                 name: productData.name,
-                price: parseFloat(productData.price), // This will always be 0
+                price: parseFloat(productData.price), // This will always be 1
                 laborPrice: parseFloat(productData.laborPrice),
                 description: productData.description,
                 mainDiamondAttributeId: parseInt(productData.mainDiamondAttributeId),
@@ -123,12 +124,18 @@ const ManagerAddProduct = () => {
                 console.error("Response status:", error.response.status);
                 console.error("Response headers:", error.response.headers);
                 if (error.response.data.errors) {
-                    for (const [key, value] of Object.entries(error.response.data.errors)) {
-                        console.error(`${key}: ${value}`);
-                    }
+                    const errorMessages = Object.values(error.response.data.errors).flat();
+                    swal({
+                        title: "Error",
+                        text: errorMessages.join('\n'),
+                        icon: "error",
+                    });
+                } else {
+                    swal("Error", "Failed to add product. Please try again.", "error");
                 }
+            } else {
+                swal("Error", "Failed to add product. Please try again.", "error");
             }
-            swal("Something is wrong!", "Failed to add product. Please try again.", "error");
         }
     };
 

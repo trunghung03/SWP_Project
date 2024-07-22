@@ -67,6 +67,7 @@ namespace DIAN_.Mapper
                 CategoryID = product.CategoryId,
                 ImageLinkList = firstImgLink,
                 CollectionId = product.CollectionId ?? 0,
+                Cut = product.MainDiamondAtrribute?.Cut ?? "Not Available", 
                 Shape = product.MainDiamondAtrribute?.Shape ?? "Not Available",
                 Carat = product.MainDiamondAtrribute?.Carat ?? 0,
                 Color = product.MainDiamondAtrribute?.Color ?? "Not Available",
@@ -74,7 +75,9 @@ namespace DIAN_.Mapper
                 MainDiamondAttributeId = product.MainDiamondAtrributeId ?? 0,
                 SubDiamondAttributeId = product.SubDiamondAtrributeId ?? 0,
                 ProductCode = product.ProductCode,
-                Stock = product.Shells?.Sum(shell => shell.AmountAvailable) ?? 0
+                //Stock = product.Shells?.Sum(shell => shell.AmountAvailable) ?? 0
+                Stock = product.Shells?.FirstOrDefault()?.AmountAvailable ?? 0
+
 
             };
         }

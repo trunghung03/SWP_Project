@@ -29,5 +29,7 @@
 
         public List<decimal> Sizes { get; set; } = new List<decimal>();
         public int? CategoryId { get; set; }
+        public int MainDiamondAmountAvailable { get; set; }
+        public int SubDiamondAmountAvailable { get; set; }
     }
 }

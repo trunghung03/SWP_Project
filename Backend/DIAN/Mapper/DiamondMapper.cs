@@ -51,7 +51,8 @@ namespace DIAN_.Mapper
         {
             return new Diamond
             {
-                OrderDetailId = updateOrderDetail.OrderDetailId
+                OrderDetailId = updateOrderDetail.OrderDetailId,
+                Status = updateOrderDetail.Status,
             };
         }
     }

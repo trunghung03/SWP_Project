@@ -288,37 +288,24 @@ namespace DIAN_.Controllers
             DateTime effectiveEndDate = endDate ?? DateTime.Now;
 
             var topProducts = await _context.Orderdetails
-     .Include(od => od.Product)
-     .ThenInclude(p => p.MainDiamondAtrribute) // Use the navigation property here
-     .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
-     .GroupBy(od => od.ProductId)
-     .Select(g => new
-     {
-         ProductId = g.Key,
-         ItemSold = g.Count(),
-     })
-     .OrderByDescending(g => g.ItemSold)
-     .Take(8)
-     .Join(_context.Products,
-         g => g.ProductId,
-         p => p.ProductId,
-         (g, p) => p)
-     .ToListAsync();
+                .Include(od => od.Product)
+                    .ThenInclude(p => p.MainDiamondAtrribute) 
+                .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
+                .GroupBy(od => od.ProductId)
+                .Select(g => new
+                {
+                    Product = g.First().Product,
+                    ItemSold = g.Count()
+                })
+                .OrderByDescending(g => g.ItemSold)
+                .Take(8)
+                .ToListAsync();
 
-
-            var diamondIds = topProducts.Select(tp => tp.MainDiamondAtrributeId).Distinct().ToList();
-            var diamonds = await _context.Diamonds
-                                         .Where(d => diamondIds.Contains(d.DiamondId))
-                                         .ToListAsync();
-
-            var productDTOs = topProducts.Select(tp =>
-            {
-                return tp.ToProductListDTO();
-            }).ToList();
+            var productDTOs = topProducts.Select(tp => tp.Product.ToProductListDTO()).ToList();
 
             return Ok(productDTOs);
-
         }
+
 
 
         [HttpGet("daily-statistics")]
