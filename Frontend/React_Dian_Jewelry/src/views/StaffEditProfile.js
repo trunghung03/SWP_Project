@@ -197,8 +197,8 @@ function StaffEditProfile() {
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">
         {role === "Manager" && <ManagerSidebar currentPage="manager_edit_profile" />}
-        {role === "SalesStaff" && <SalesStaffSidebar currentPage="manager_edit_profile" />}
-        {role !== "Manager" && role !== "SalesStaff" && <DeliveryStaffSidebar currentPage="manager_edit_profile" />}
+        {role === "SalesStaff" && <SalesStaffSidebar currentPage="salesstaff_edit_profile" />}
+        {role !== "Manager" && role !== "SalesStaff" && <DeliveryStaffSidebar currentPage="delistaff_edit_profile" />}
       </div>
 
       <div className="ss_manage_content_content">

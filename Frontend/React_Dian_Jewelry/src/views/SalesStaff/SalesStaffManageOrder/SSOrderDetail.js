@@ -65,7 +65,7 @@ const SSOrderDetail = () => {
       if (!orderDetails.productDetails || orderDetails.productDetails.length === 0) {
         throw new Error("No product details available");
       }
-      
+
       const emailPromises = orderDetails.productDetails.map(async (item) => {
         const mainDiamondId = item.mainDiamondId;
         if (!mainDiamondId) {
@@ -82,7 +82,7 @@ const SSOrderDetail = () => {
         console.log('emaildata: ', emailData);
         await sendWarrantyEmail(emailData);
       });
-  
+
       await Promise.all(emailPromises);
       swal("Success", "Certificate emails sent successfully", "success");
     } catch (error) {
@@ -121,7 +121,7 @@ const SSOrderDetail = () => {
       endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0], // one year from now
       status: "true"
     };
-    
+
     try {
       await createWarranty(warrantyData);
       setWarrantyExists(true);
@@ -145,30 +145,42 @@ const SSOrderDetail = () => {
       swal("Error", "Failed to update order status or inventory", "error");
     }
   };
-  
+
+  const isOrderOverdue = (orderDate) => {
+    const currentDate = new Date();
+    const createdDate = new Date(orderDate);
+    const diffTime = Math.abs(currentDate - createdDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 3;
+  };
 
   if (!orderDetails) {
     return <div>Loading...</div>;
   }
+
+  const isOverdue = status === "Unpaid" && isOrderOverdue(orderDetails.date);
 
   return (
     <>
       {orderDetails && (
         <div className="ss_manage_orderdetail_all_container">
           <div className="ss_manage_orderdetail_sidebar">
-            <SalesStaffSidebar currentPage="salesstaff_manage_orderdetail" />
+            <SalesStaffSidebar currentPage="salesstaff_manage_order" />
           </div>
           <div className="ss_manage_content_content">
             <div className="ss_manage_content_header">
               <img className="ss_manage_content_logo" src={logo} alt="Logo" />
             </div>
             <hr className="ss_manage_content_line"></hr>
-            <button
-              className="SS_back_button"
-              onClick={() => navigate("/sales-staff-order-list")}
-            >
-              Back
-            </button>
+            <div className="SS_back_button_wrapper">
+              <button
+                className="SS_back_button"
+                onClick={() => navigate("/sales-staff-order-list")}
+              >
+                Back
+              </button>
+            </div>
+
             <div className="ss_order_detail_container">
               <div>
                 <div
@@ -179,8 +191,8 @@ const SSOrderDetail = () => {
                     paddingTop: "1%",
                   }}
                 >
-                  <p className="ss_order_detail_p_tag">
-                    #{orderDetails.orderId}
+                  <p className="ss_order_detail_p_tag" style={{ color: isOverdue ? "#e05858" : "inherit" }}>
+                    #{orderDetails.orderId} {isOverdue && <span style={{ color: "#e05858" }}>(Overdue)</span>}
                   </p>
                   <div className="ss_button_status">
                     <Box sx={{ minWidth: 120 }}>
@@ -195,8 +207,9 @@ const SSOrderDetail = () => {
                           label="Status"
                           onChange={handleChange}
                           disabled={isOrderCompleted}
+                          size="small"
                         >
-                          <MenuItem value="Unpaid">UnPaid</MenuItem>
+                          <MenuItem value="Unpaid">Unpaid</MenuItem>
                           <MenuItem value="Paid">Paid</MenuItem>
                           <MenuItem value="Preparing">Preparing</MenuItem>
                           <MenuItem value="Delivering">Delivering</MenuItem>
@@ -255,13 +268,13 @@ const SSOrderDetail = () => {
                     <WarrantyIcon /> Warranty:
                     {!warrantyExists ? (
                       <>
-                        <button 
-                          className="salesstaff_manage_send_email_button" 
+                        <button
+                          className="salesstaff_manage_send_email_button"
                           onClick={handleAddWarranty}
                         >
                           Add Warranty
                         </button>
-                        <p style={{marginLeft:"0.5%", color:"grey"}}>Noted: The warranty will be added automatically when you click 'Add Warranty'.</p>
+                        <p style={{ marginLeft: "0.5%", color: "grey" }}>Noted: The warranty will be added automatically when you click 'Add Warranty'.</p>
                       </>
                     ) : (
                       <button
@@ -274,7 +287,7 @@ const SSOrderDetail = () => {
                     )}
                   </div>
                 </div>
-                <p style={{ textAlign: "right", marginRight: "10%" }}>
+                <p style={{ textAlign: "right", marginRight: "40px", fontSize: "18px", fontWeight: "bold" }}>
                   Total Price: ${orderDetails.totalPrice}
                 </p>
                 <div className="ss_detail_confirmbutton">

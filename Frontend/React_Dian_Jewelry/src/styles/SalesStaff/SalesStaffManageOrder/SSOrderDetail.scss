@@ -1,6 +1,14 @@
 .ss_manage_orderdetail_all_container {
     display: flex;
     width: 100%;
+
+    .css-i4bv87-MuiSvgIcon-root{
+        margin-right: 10px;
+    }
+
+    .ss_warranty_order_manage .css-i4bv87-MuiSvgIcon-root{
+        margin-right: 15px;
+    }
 }
 
 .ss_manage_content_header {
@@ -43,19 +51,18 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 4%;
+    margin: 10px 4% 4% 4%;
     border: 0.5px solid #cccccc;
-    margin-left: 5%;
-    margin-right: 10%;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     padding: 20px;
     font-family: 'Roboto', sans-serif; /* Đặt lại font-family */
+    height: 200px;
 }
 .ss_detail_card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    // transform: translateY(-10px);
+    box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
 }
 .ss_detail_card_left {
     display: flex;
@@ -123,33 +130,39 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 .ss_detail_confirmbutton button {
-    width: 95%;
+    width: 92%;
     padding: 10px 20px;
     margin-bottom: 3%;
-    margin-left:3%;
-    border: 0.5px solid #8bc4f0;
+    margin-left: 30px;
+    border: 0.5px solid #1c1c1c;
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #1c1c1c;
+    color: white;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    border-radius: 20px; /* Adjust the radius for more or less rounded corners */
+    border-radius: 20px; 
 }
 
 .ss_detail_confirmbutton button:hover {
-    border: 1.3px solid #8bc4f0;
-    background-color: #ebf5ff;
+    border: 1.3px solid #1c1c1c;
+    background-color: #797979;
 }
+
+.SS_back_button_wrapper{
+    margin-bottom: 60px;
+    margin-right: 10px;
+}
+
 .SS_back_button{
     background-color: white;
     color: black; 
     padding: 10px 20px; 
     border: none; 
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer; 
-    float: right;
 }
 .SS_back_button:hover {
-    font-weight: 600;
+    text-decoration: underline;
 }
 
 

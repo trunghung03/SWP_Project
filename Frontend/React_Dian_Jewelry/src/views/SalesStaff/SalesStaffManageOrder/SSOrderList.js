@@ -6,35 +6,39 @@ import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderList.scss";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from '@mui/material/TableSortLabel';
+import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import InfoIcon from "@mui/icons-material/Info";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { visuallyHidden } from '@mui/utils';
+import { visuallyHidden } from "@mui/utils";
 import { getSalesStaffOrderList } from "../../../services/SalesStaffService/SSOrderService.js";
-import PropTypes from 'prop-types';
-import { EnhancedTableToolbar, getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import PropTypes from "prop-types";
+import {
+  EnhancedTableToolbar,
+  getComparator,
+  tableSort,
+} from "../../../components/CustomTable/SortTable.js";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const headCells = [
-  { id: 'orderId', numeric: false, disablePadding: false, label: 'Order ID', sortable: true },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Customer Name', sortable: true },
-  { id: 'date', numeric: false, disablePadding: false, label: 'Created Date', sortable: true },
-  { id: 'shippingAddress', numeric: false, disablePadding: false, label: 'Shipping Address', sortable: true },
-  { id: 'phoneNumber', numeric: false, disablePadding: false, label: 'Phone number', sortable: true },
-  { id: 'orderStatus', numeric: false, disablePadding: false, label: 'Order Status', sortable: false },
-  { id: 'detail', numeric: false, disablePadding: false, label: 'Detail', sortable: false },
+  { id: "orderId", numeric: false, disablePadding: false, label: "Order ID", sortable: true },
+  { id: "name", numeric: false, disablePadding: false, label: "Customer Name", sortable: true },
+  { id: "date", numeric: false, disablePadding: false, label: "Created Date", sortable: true },
+  { id: "shippingAddress", numeric: false, disablePadding: false, label: "Shipping Address", sortable: true },
+  { id: "phoneNumber", numeric: false, disablePadding: false, label: "Phone number", sortable: true },
+  { id: "orderStatus", numeric: false, disablePadding: false, label: "Order Status", sortable: false },
+  { id: "detail", numeric: false, disablePadding: false, label: "Detail", sortable: false },
 ];
 
 function EnhancedTableHead(props) {
@@ -51,19 +55,19 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align="center"
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.sortable ? (
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === "desc" ? "sorted descending" : "sorted ascending"}
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -79,15 +83,16 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
 };
 
 const SSOrderList = () => {
   const navigate = useNavigate();
   const [orderList, setOrderList] = useState([]);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('orderId');
+  const [originalOrderList, setOriginalOrderList] = useState([]); // Maintain the original list
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("orderId");
   const [searchQuery, setSearchQuery] = useState("");
   const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
@@ -102,8 +107,8 @@ const SSOrderList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#faecec',
-      color: '#575757',
+      backgroundColor: "#faecec",
+      color: "#575757",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -122,10 +127,16 @@ const SSOrderList = () => {
 
   const fetchOrders = async (page = 1, status = sortOrder) => {
     try {
-      const response = await getSalesStaffOrderList(employeeId, page, pagination.pageSize, status);
+      const response = await getSalesStaffOrderList(
+        employeeId,
+        page,
+        pagination.pageSize,
+        status
+      );
       console.log("API Response:", response); // Log the full response to inspect it
       const { orders, totalCount } = response.data;
       setOrderList(orders);
+      setOriginalOrderList(orders); // Set the original list
       setPagination((prev) => ({
         ...prev,
         currentPage: page,
@@ -147,8 +158,8 @@ const SSOrderList = () => {
   };
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -159,7 +170,7 @@ const SSOrderList = () => {
         fetchOrders();
       } else {
         setIsSearch(true);
-        const filteredOrders = orderList.filter(
+        const filteredOrders = originalOrderList.filter(
           (order) =>
             order.orderId.toString().toLowerCase().includes(searchValue) ||
             order.name.toLowerCase().includes(searchValue)
@@ -172,7 +183,23 @@ const SSOrderList = () => {
   const handleBackClick = () => {
     setSearchQuery("");
     setIsSearch(false);
-    fetchOrders();
+    setOrderList(originalOrderList); // Reset to original list
+  };
+
+  const isOrderOverdue = (orderDate) => {
+    const currentDate = new Date();
+    const createdDate = new Date(orderDate);
+    const diffTime = Math.abs(currentDate - createdDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 3;
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -189,24 +216,26 @@ const SSOrderList = () => {
               className="ss_manage_content_search_bar"
               placeholder="Search by Order ID..."
               value={searchQuery}
-              style={{ width: '140px' }}
+              style={{ width: "140px" }}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyUp={handleSearchKeyPress}
             />
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 className="manager_title_employees" style={{ textAlign: "center", color: "#292727", fontFamily: "serif" }}>
+        <h3
+          className="manager_title_employees"
+          style={{
+            textAlign: "center",
+            color: "#292727",
+            fontFamily: "serif",
+          }}
+        >
           Order List
         </h3>
         <div className="ss_header_pagination_list">
-          <FormControl
-            variant="standard"
-            sx={{ m: 1, minWidth: 120, height: 30 }}
-          >
-            <InputLabel id="demo-simple-select-standard-label">
-              Status
-            </InputLabel>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
+            <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
@@ -232,8 +261,8 @@ const SSOrderList = () => {
             />
           </Stack>
         </div>
-        <Box sx={{ width: '100%' }}>
-          <Paper sx={{ width: '100%', mb: 2 }}>
+        <Box sx={{ width: "100%" }}>
+          <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={0} />
             <TableContainer>
               <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -247,6 +276,10 @@ const SSOrderList = () => {
                     .slice(0, pagination.pageSize)
                     .map((item, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
+                      const textStyle =
+                        item.orderStatus === "Unpaid" && isOrderOverdue(item.date)
+                          ? { color: "#e05858", fontWeight: "bold" }
+                          : {};
 
                       return (
                         <TableRow
@@ -255,16 +288,33 @@ const SSOrderList = () => {
                           role="checkbox"
                           tabIndex={-1}
                           key={item.orderId}
-                          sx={{ cursor: 'pointer' }}
+                          sx={{ cursor: "pointer" }}
                         >
-                          <TableCell component="th" id={labelId} scope="row" padding="none" align="center">
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                            align="center"
+                            style={textStyle}
+                          >
                             {item.orderId}
                           </TableCell>
-                          <TableCell align="center">{item.name}</TableCell>
-                          <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")}</TableCell>
-                          <TableCell align="center">{item.shippingAddress}</TableCell>
-                          <TableCell align="center">{item.phoneNumber}</TableCell>
-                          <TableCell align="center">{item.orderStatus}</TableCell>
+                          <TableCell align="center" style={textStyle}>
+                            {item.name}
+                          </TableCell>
+                          <TableCell align="center" style={textStyle}>
+                            {formatDate(item.date)}
+                          </TableCell>
+                          <TableCell align="center" style={textStyle}>
+                            {item.shippingAddress}
+                          </TableCell>
+                          <TableCell align="center" style={textStyle}>
+                            {item.phoneNumber}
+                          </TableCell>
+                          <TableCell align="center" style={textStyle}>
+                            {item.orderStatus}
+                          </TableCell>
                           <TableCell align="center">
                             <InfoIcon
                               style={{ cursor: "pointer", color: "#575252" }}
@@ -276,7 +326,9 @@ const SSOrderList = () => {
                     })}
                   {orderList.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={7} align="center">No order found</TableCell>
+                      <TableCell colSpan={7} align="center">
+                        No order found
+                      </TableCell>
                     </TableRow>
                   )}
                 </TableBody>
