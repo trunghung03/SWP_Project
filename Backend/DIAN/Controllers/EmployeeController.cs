@@ -268,23 +268,6 @@ namespace UserApplication.Controllers
         }
 
 
-        //[HttpPut("salesstaff/update-inventory")]
-        //public async Task<IActionResult> UpdateStock(string status, int orderId)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid) { return BadRequest(ModelState); };
-
-        //        var order = await _goodService.UpdateQuantitiesForOrder(status, orderId);
-
-        //        return Ok(order);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
-
         [HttpGet("deliverystaff/orderlists")]
         public async Task<IActionResult> ViewListDeliveryOrders(int staffId, [FromQuery] PurchaseOrderQuerry querry)
         {

@@ -130,7 +130,7 @@ namespace DIAN_.Mapper
         {
             OrderId = dto.OrderId,
             UserId = dto.UserId,
-            Date = DateTime.Now,
+            Date = dto.Date,
             Name = dto.Name,
             PhoneNumber = dto.PhoneNumber,
             PaymentMethod = dto.PaymentMethod,
