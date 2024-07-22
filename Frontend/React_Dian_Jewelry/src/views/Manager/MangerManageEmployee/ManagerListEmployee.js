@@ -7,32 +7,23 @@ import "../../../styles/Manager/ManagerList.scss";
 import {
   ShowAllEmployee,
   getEmployeeDetail,
-  deleteEpmloyeeById,
-  updateEmployeeById,
   getEmployeeByRole,
 } from "../../../services/ManagerService/ManagerEmployeeService.js";
 import logo from "../../../assets/img/logoN.png";
-import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { visuallyHidden } from "@mui/utils";
-import { getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import { visuallyHidden } from "@mui/utils";
+import PropTypes from "prop-types";
+import { getComparator, tableSort } from "../../../components/CustomTable/SortTable.js";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const headCells = [
   { id: 'employeeId', numeric: false, disablePadding: false, label: 'Employee ID', sortable: true },
@@ -55,7 +46,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
-          style ={{backgroundColor:"#faecec"}}
+            style={{ backgroundColor: "#faecec" }}
             key={headCell.id}
             align="center"
             padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -100,7 +91,6 @@ const ManagerEmployeeList = () => {
   const [employeesPerPage, setEmployeesPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
-
   const fetchEmployees = async () => {
     try {
       const response = await ShowAllEmployee();
@@ -115,8 +105,8 @@ const ManagerEmployeeList = () => {
     fetchEmployees();
   }, []);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   const handleSearchKeyPress = async (e) => {
@@ -129,6 +119,7 @@ const ManagerEmployeeList = () => {
           const response = await getEmployeeDetail(searchQuery.trim());
           setEmployeeList([response]);
           setCurrentPage(1);
+          setTotalPages(1);
         } catch (error) {
           console.error("Error fetching employee:", error);
           swal("Employee not found!", "Please try another one.", "error");
@@ -145,25 +136,21 @@ const ManagerEmployeeList = () => {
             setEmployeeList([]);
           }
           setCurrentPage(1);
+          setTotalPages(Math.ceil(response.length / employeesPerPage));
         } catch (error) {
           console.error("Error fetching employee:", error);
           swal("Employee not found!", "Please try another one.", "error");
         }
       } else {
-        try {
-          setIsSearch(false);
-          fetchEmployees();
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+        setIsSearch(false);
+        fetchEmployees();
+        setCurrentPage(1);
       }
     }
   };
 
   const handleBack = async () => {
     fetchEmployees();
-    setCurrentPage(1);
     setIsSearch(false);
     setSearchQuery("");
   };
@@ -188,7 +175,7 @@ const ManagerEmployeeList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3 style={{ textAlign: "center", marginBottom:"3%" }}>Employee List</h3>
+        <h3 style={{ textAlign: "center", marginBottom: "3%" }}>Employee List</h3>
         <Box sx={{ width: "100%", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <TableContainer>
@@ -226,27 +213,22 @@ const ManagerEmployeeList = () => {
                     ))}
                   {employeeList.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={7} align="center">No employee found</TableCell>
+                      <TableCell colSpan={6} align="center">No employee found</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={employeeList.length}
-              rowsPerPage={employeesPerPage}
-              page={currentPage - 1}
-              onPageChange={(event, newPage) => handlePageChange(newPage + 1)}
-              onRowsPerPageChange={(event) => {
-                setEmployeesPerPage(parseInt(event.target.value, 10));
-                setCurrentPage(1);
-                fetchEmployees();
-              }}
-            />
           </Paper>
         </Box>
+        <Stack spacing={2} sx={{ alignItems: 'center', mt: 2 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
         {isSearch && (
           <button className="btn btn-secondary mt-3" onClick={handleBack}>
             Back

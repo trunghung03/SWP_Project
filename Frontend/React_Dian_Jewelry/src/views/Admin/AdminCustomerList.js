@@ -165,16 +165,6 @@ const AdminCustomerList = () => {
         </div>
         <hr className="manager_header_line"></hr>
         <h3>List Of Customer Accounts</h3>
-        <div className="manager_manage_diamond_create_button_section">
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPages}
-              page={currentPage}
-              onChange={handlePageChange}
-              color="primary"
-            />
-          </Stack>
-        </div>
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
@@ -226,6 +216,14 @@ const AdminCustomerList = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" sx={{ margin: '20px 0' }}>
+                  <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="primary"
+                  />
+                </Stack>
               </div>
               {isSearch && (
                 <button className="SS_back_button" onClick={handleBack}>

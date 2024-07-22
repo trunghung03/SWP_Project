@@ -28,7 +28,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-
+import AutoResizeTextarea from "../../../components/AutoResizeTextBox/AutoResizeTextarea.js";
 // Head cells for the collection table
 const headCells = [
   { id: 'collectionId', numeric: false, disablePadding: false, label: 'ID', sortable: true },
@@ -191,15 +191,17 @@ const ManagerCollectionList = () => {
     setEditedCollection(collection);
     setOriginalCollection(collection);
   };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Field: ${name}, Value: ${value}`);
     setEditedCollection({ ...editedCollection, [name]: value });
   };
-
+  
   const handleUpdate = async () => {
     const requiredFields = ["name", "description", "status"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
+    
     for (let field of requiredFields) {
       if (!editedCollection[field]) {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
@@ -210,15 +212,15 @@ const ManagerCollectionList = () => {
         return;
       }
     }
-
+  
     const isEqual = JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
     }
-
+  
     const CollectionToUpdate = { ...editedCollection, status: true };
-
+  
     try {
       console.log("Sending update request with data:", CollectionToUpdate);
       await updateCollectionById(CollectionToUpdate.collectionId, CollectionToUpdate);
@@ -231,6 +233,7 @@ const ManagerCollectionList = () => {
       swal("Something went wrong!", "Failed to update. Please try again.", "error");
     }
   };
+  
 
   const handleBack = async () => {
     try {
@@ -372,12 +375,11 @@ const ManagerCollectionList = () => {
               </div>
               <div className="manager_manage_diamond_form_group">
                 <label>Description</label>
-                <input
-                  type="text"
+                <AutoResizeTextarea
                   name="description"
-                  maxLength={255}
                   value={editedCollection.description}
                   onChange={handleChange}
+                  maxLength={255}
                   required
                 />
               </div>
