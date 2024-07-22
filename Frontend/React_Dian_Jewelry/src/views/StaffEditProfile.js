@@ -166,30 +166,33 @@ function StaffEditProfile() {
 
   const handleChangePassword = async () => {
     try {
-      const updatePasswordData = {
-        email: email,
-        oldPassword: currentPassword,
-        newPassword: newPassword
-      };
-      console.log("Hello world");
-      const response = await updateEmployeePassword(updatePasswordData);
-      console.log("Update successfully");
-      toast.success("Password updated successfully.", {
-        position: "top-right",
-        autoClose: 8000
-      });
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setPasswordFormVisible(false);
+        const updatePasswordData = {
+            email: email,
+            oldPassword: currentPassword,
+            newPassword: newPassword
+        };
+        const response = await updateEmployeePassword(updatePasswordData);
+        
+        // Assuming the response contains a success flag and a message
+        if (response.success) {
+            toast.success("Update password successfully !", {
+                position: "top-right",
+                autoClose: 8000
+            });
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setPasswordFormVisible(false);
+        } else {
+            throw new Error(response);
+        }
     } catch (error) {
-      toast.error("Failed to update password. Please try again later.", {
-        position: "top-right",
-        autoClose: 8000
-      });
+        toast.error(error.message || "An error occurred", {
+            position: "top-right",
+            autoClose: 8000
+        });
     }
-  };
-
+};
   return (
     <div className="manager_manage_diamond_all_container">
       <div className="manager_manage_diamond_sidebar">

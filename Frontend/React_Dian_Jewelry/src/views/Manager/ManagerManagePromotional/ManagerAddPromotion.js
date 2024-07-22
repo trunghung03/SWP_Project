@@ -26,16 +26,26 @@ const ManagerAddPromotion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const promotionDataWithStatus = { ...promotionData, status: true };
-            if (promotionData.startDate > promotionData.endDate) throw new Error("End Date has to be after Start Date");
+            const { amount, startDate, endDate, ...rest } = promotionData;
+            const discountPercentage = parseFloat(amount);
+
+            if (startDate > endDate) throw new Error("End Date has to be after Start Date");
+            if (isNaN(discountPercentage) || discountPercentage <= 0 || discountPercentage > 100) throw new Error("Discount Percentage must be a positive number between 0 and 100");
+
+            const promotionDataWithStatus = {
+                ...rest,
+                amount: discountPercentage / 100,
+                status: true
+            };
+
             await createPromotion(promotionDataWithStatus);
             swal("Success", "Promotion added successfully", "success");
             navigate('/manager-promotional-list');
         } catch (error) {
             console.error("Error creating Promotion:", error);
-            if (error.message === "End Date has to be after Start Date") {
-                swal("End Date has to be after Start Date ", error.message, "error");}
-            else if (error.response) {
+            if (error.message === "End Date has to be after Start Date" || error.message === "Discount Percentage must be a positive number between 0 and 100") {
+                swal("Invalid Input", error.message, "error");
+            } else if (error.response) {
                 console.error("Response data:", error.response.data);
                 console.error("Response status:", error.response.status);
                 console.error("Response headers:", error.response.headers);
@@ -43,9 +53,9 @@ const ManagerAddPromotion = () => {
                     for (const [key, value] of Object.entries(error.response.data.errors)) {
                         console.error(`${key}: ${value}`);
                     }
-                } swal("Something is wrong!", "Failed to add Promotion. Please try again.", "error");
+                }
+                swal("Something is wrong!", "Failed to add Promotion. Please try again.", "error");
             }
-           
         }
     };
 
@@ -93,7 +103,7 @@ const ManagerAddPromotion = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Discount Percentage</label>
-                            <input type="text" name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
+                            <input type="number" min={1} name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

@@ -190,7 +190,7 @@ const ManagerAddDiamond = () => {
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Price</label>
-                            <input type="number" placeholder="Enter diamond's price" name="price" value={diamondData.price} onChange={handleChange} required />
+                            <input type="number" min={0} placeholder="Enter diamond's price" name="price" value={diamondData.price} onChange={handleChange} required />
                         </div>
                     </div>
                     {diamondType === 'sub' && (

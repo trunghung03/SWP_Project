@@ -50,7 +50,15 @@ const ManagerAddShell = () => {
     const handleSizeChange = (e) => {
         const { value } = e.target;
         const sizes = value.split(',').map(size => parseFloat(size.trim()));
-        setShellData({ ...shellData, sizes });
+        
+        // Check if all sizes are positive numbers
+        const allPositive = sizes.every(size => !isNaN(size) && size > 0);
+        
+        if (allPositive) {
+            setShellData({ ...shellData, sizes });
+        } else {
+            swal("Invalid Input", "All sizes must be positive numbers.", "error");
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -96,7 +104,7 @@ const ManagerAddShell = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Product ID</label>
-                            <input placeholder="Add product id" type="number" name="productId" value={shellData.productId} onChange={handleChange} required />
+                            <input placeholder="Add product id" type="number" min={1} name="productId" value={shellData.productId} onChange={handleChange} required />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Product Name</label>
@@ -104,35 +112,38 @@ const ManagerAddShell = () => {
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
-                    <label>Shell Material</label>
+                    <div className="manager_add_diamond_form_group"> 
+                         <label>Shell Material</label>
                             <select
                                 name="shellMaterialId"
                                 value={shellData.shellMaterialId}
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="" disabled>Select shell material</option>
+                                <option value="" disabled>Shell material</option>
                                 {shellmaterials.map((material) => (
                                     <option key={material.shellMaterialId} value={material.shellMaterialId}>
                                         {material.name}
                                     </option>
                                 ))}
                             </select>
+                    </div>
+                   
                         <div className="manager_add_diamond_form_group">
                             <label>Amount Available</label>
-                            <input placeholder="Add amount available" type="text" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
+                            <input placeholder="Add amount available" max={10} min={1} type="number" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Weight</label>
-                            <input placeholder="Add shell's weight" type="text" name="weight" value={shellData.weight} onChange={handleChange} required />
+                            <input placeholder="Add shell's weight" min={0.1} type="number" name="weight" value={shellData.weight} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Sizes (comma separated)</label>
-                            <input placeholder="Add sizes" type="text" name="sizes" onChange={handleSizeChange} required />
+                            <input placeholder="2,4,6,8" type="text" name="sizes" onChange={handleSizeChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
