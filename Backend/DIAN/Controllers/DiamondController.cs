@@ -132,16 +132,19 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-
-                var diamond = diamondDto.ToDiamondFromCreateDTO();
-                var result = await _goodsService.CreateMainDiamondAsync(diamond);
-                return Ok(new { diamondId = result.DiamondId, diamond = result.ToDiamondDTO() });
+                var result = await _goodsService.CreateMainDiamondAsync(diamondDto);
+                if (result == null)
+                {
+                    return NotFound("Failed to create diamond.");
+                }
+                return Ok(new { diamondId = result.DiamondId, diamond = result });
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
 
 
         [HttpPut("update/{id:int}")]
