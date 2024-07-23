@@ -88,7 +88,8 @@ const SSOrderDetail = () => {
         body: `Here are your certificate links: ${certificateUrls.join('; ')}`
       };
       await sendWarrantyEmail(emailData);
-      swal("Success", "Certificate emails sent successfully", "success");
+      await handleSendEmail();
+      swal("Success", "Certificate and warranty emails sent successfully", "success");
 
       // Update status to Preparing after sending emails
       const updateOrderStatusDto = {
@@ -106,6 +107,12 @@ const SSOrderDetail = () => {
 
   const handleSendEmail = async () => {
     try {
+      // Check if warranty already exists
+      const warrantyData = await getWarrantyById(orderId);
+      if (!warrantyData) {
+        await handleAddWarranty();
+      }
+
       const response = await getWarrantyURL(orderId);
       const url = response.url;
       const emailData = {
@@ -114,10 +121,9 @@ const SSOrderDetail = () => {
         body: `Here is your warranty link: ${url}`,
       };
       await sendWarrantyEmail(emailData);
-      swal("Success", "Warranty email sent successfully", "success");
     } catch (error) {
-      console.error("Failed to send warranty email:", error);
-      swal("Error", `Failed to send warranty email: ${error.message}`, "error");
+      console.error("Failed to send email:", error);
+      swal("Error", `Failed to send email: ${error.message}`, "error");
     }
   };
 
