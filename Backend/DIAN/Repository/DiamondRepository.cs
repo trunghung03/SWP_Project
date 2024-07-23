@@ -252,8 +252,8 @@ namespace DIAN_.Repository
             {
                 existingDiamond.CertificateScan = diamondModel.CertificateScan;
                 await _context.SaveChangesAsync();
-                //string individualCacheKey = $"Diamond_{id}";
-                //await _distributedCache.RemoveAsync(individualCacheKey);
+                string individualCacheKey = $"Diamond_{id}";
+                await _distributedCache.RemoveAsync(individualCacheKey);
                 return existingDiamond;
             }
             throw new KeyNotFoundException("Diamond does not exist");
