@@ -138,7 +138,7 @@ function DiamondDetail() {
 
         const productToSave = {
           productId: product.productId,
-          name: product.name,
+          name: diamond.carat + " Carat " + diamond.shape + " Diamond ",
           image: product.imageLinkList,
           code: product.productCode,
           price: product.price + shellPrice,
@@ -211,7 +211,7 @@ function DiamondDetail() {
           <img src={selectedImage} alt={product.name} className="main_image" />
         </div>
         <div className="product_info_detail">
-          <h2 className="product_name_detail">{diamond.carat} Carat {diamond.shape} Diamond</h2>
+          <h2 className="product_name_detail">{product.name}</h2>
           <p className="product_diamond_description">{diamond.cut} Cutㅤ|ㅤ{diamond.color} Colorㅤ|ㅤ{diamond.clarity} Clarity</p>
           <div className="price_size_container">
             <p className="product_price_detail">${product.price + shellPrice} (Only Diamond)</p>
@@ -234,23 +234,7 @@ function DiamondDetail() {
         </div>
       </div>
 
-      <div className="also_like_container">
-        <h2 className="also_like_title">You May Also Like</h2>
-        <div className="also_like_wrapper">
-          {alsoLikeProducts.map((product, index) => (
-            <div key={index} className="also_like_card" onClick={() => navigateToProductDetail(product)}>
-              <img src={product.imageLinkList} alt={product.name} className="also_like_image" />
-              <div className="also_product_view_icon_wrapper" data-tooltip="View detail">
-                <i className="far fa-eye also_product_view_icon"></i>
-              </div>
-              <p className="also_like_detail">{product.clarity} | {product.carat} | {product.color}</p>
-              <p className="also_like_name">{product.name}</p>
-              <p className="also_like_price">${product.price}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
+      <br></br><br></br>
       <div>
         <div className="just_for_you_container">
           <div className="just_for_you_text">
@@ -276,9 +260,9 @@ function DiamondDetail() {
         </div>
       </div>
 
-      <br></br><br></br>
+      <br></br><br></br><br></br>
       <CollectionSlide />
-      <br></br><br></br><br></br><br></br><br></br>
+      <br></br><br></br><br></br><br></br><br></br><br></br>
 
       <div className="GIA_image_wrapper">
         <img src={GIA} alt="GIA certificate" className="GIA_image" />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Static/DiamondPrice.scss';
@@ -8,32 +9,10 @@ import diamondPriceMidImage3 from '../../assets/img/gia2.jpg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
-import { Select, MenuItem, InputLabel, FormControl, Button, Modal, Box } from '@mui/material';
+import { Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
 import { getDiamondPrice, getShellMaterials, getShellMaterialById, getAllDiamonds } from '../../services/PricingService';
 import { getProductList } from '../../services/ProductService.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { useNavigate } from 'react-router-dom';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 750,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: '10px',
-};
-
-const closeButtonStyle = {
-  position: 'absolute',
-  top: '10px',
-  right: '10px',
-  cursor: 'pointer',
-  fontSize: '18px',
-};
 
 const imageStyle = {
   width: '220px',
@@ -42,7 +21,6 @@ const imageStyle = {
 };
 
 function DiamondPrice() {
-  const navigate = useNavigate();
   const [transitionKey, setTransitionKey] = useState(Date.now());
   const [cut, setCut] = useState('');
   const [color, setColor] = useState('');
@@ -64,16 +42,10 @@ function DiamondPrice() {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedClarity, setSelectedClarity] = useState('');
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [resetKey, setResetKey] = useState(Date.now());
 
-  const [open, setOpen] = useState(false);
-  const [selectedDiamond, setSelectedDiamond] = useState(null);
-
-  const handleOpen = (diamond) => {
-    setSelectedDiamond(diamond);
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -88,7 +60,6 @@ function DiamondPrice() {
         setShellMaterials(response.data);
       })
       .catch(error => {
-        console.error('Error fetching shell materials:', error);
       });
 
     getAllDiamonds()
@@ -97,12 +68,13 @@ function DiamondPrice() {
         setFilteredDiamonds(response.data);
       })
       .catch(error => {
-        console.error('Error fetching diamonds:', error);
       });
 
     getProductList()
       .then(response => {
-        setProducts(response.data);
+        const filtered = response.data.filter(product => product.categoryID === 10);
+        setProducts(filtered);
+        setFilteredProducts(filtered);
       })
       .catch(error => console.log(error));
   }, []);
@@ -153,7 +125,6 @@ function DiamondPrice() {
         setShellLoading(false);
       })
       .catch(error => {
-        console.error('Error fetching shell price:', error);
         setShellPrice('Shell material not found');
         setShellLoading(false);
       });
@@ -204,10 +175,9 @@ function DiamondPrice() {
     setFilteredDiamonds(diamonds);
   };
 
-  const navigateToDiamondDetail = (diamond) => {
-    const diamondName = `${diamond.carat} Carat ${diamond.shape} Diamond`.replace(/\s+/g, '-').toLowerCase();
-    console.log("DIAMOND ID: " + diamond.diamondId);
-    navigate(`/diamond-detail/${diamondName}`, { state: { id: diamond.diamondId } });
+  const handleViewClick = (productName, productId) => {
+    const formattedName = productName.replace(/\s+/g, '-').toLowerCase();
+    navigate(`/diamond-detail/${formattedName}`, { state: { id: productId } });
   };
 
   return (
@@ -322,7 +292,7 @@ function DiamondPrice() {
             </thead>
             <tbody>
               {filteredDiamonds.map((diamond, index) => (
-                <tr key={index} onClick={() => handleOpen(diamond)}>
+                <tr key={index}>
                   <td className="diamond_price_table_data">{diamond.shape}</td>
                   <td className="diamond_price_table_data">{diamond.carat}</td>
                   <td className="diamond_price_table_data">{diamond.cut}</td>
@@ -338,7 +308,7 @@ function DiamondPrice() {
 
       {/* Shell Price List */}
       <div className="shell_price_title_container">
-        <h2 className="shell_price_title">Shell Price List</h2>
+        <h2 className="shell_price_title">Shell Material Price List</h2>
         <div className="shell_price_table_wrapper">
           <table className="shell_price_table">
             <thead>
@@ -356,6 +326,23 @@ function DiamondPrice() {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Product Cards Section */}
+      <div className="product_cards_title_container">
+        <div className="product_cards_wrapper">
+          {filteredProducts.map((product, index) => (
+            <div key={index} className="product_card" onClick={() => handleViewClick(product.name, product.productId)}>
+              <img src={product.imageLinkList} alt={product.name} />
+              <div className="product_view_icon_wrapper" data-tooltip="View detail">
+                <i className="far fa-eye product_view_icon"></i>
+              </div>
+              <p className="product_card_detail">{product.clarity} | {product.carat} | {product.color}</p>
+              <h6 className="product_card_name">{product.name}</h6>
+              <p className="product_card_price">${product.price}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -394,38 +381,6 @@ function DiamondPrice() {
 
       <ScrollToTop />
       <FooterComponent />
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="diamond_modal" sx={style}>
-          <span style={closeButtonStyle} onClick={handleClose}>&times;</span>
-          {selectedDiamond && (
-            <>
-              <div className="diamond_modal_content">
-                <div className="diamond_modal_text">
-                  <h2>{selectedDiamond.carat} Carat {selectedDiamond.shape} Diamond</h2>
-                  <p>{selectedDiamond.color} Color | {selectedDiamond.clarity} Clarity | {selectedDiamond.cut} Cut</p>
-                  <h2 className='diamond_modal_price'>${selectedDiamond.price}</h2>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigateToDiamondDetail(selectedDiamond)}
-                  >
-                    View
-                  </Button>
-                </div>
-                <div className="diamond_modal_image">
-                  <img src={diamondPriceMidImage1} alt="Diamond Image" style={imageStyle} />
-                </div>
-              </div>
-            </>
-          )}
-        </Box>
-      </Modal>
     </div>
   );
 }
