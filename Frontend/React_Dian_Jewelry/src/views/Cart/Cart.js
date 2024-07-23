@@ -271,7 +271,7 @@ function Cart() {
                                             </div>
                                             {diamondAttr && !item.selectedShellName && (
                                                 <p className={`cart_item_diamond_attributes ${isOutOfStock ? 'text-grey' : 'text-diamond-data' }`}>
-                                                    {diamondAttr.cut} Cutㅤ|ㅤ{diamondAttr.color}Colorㅤ|ㅤ{diamondAttr.clarity}Clarity
+                                                    {diamondAttr.cut} Cutㅤ|ㅤ{diamondAttr.color} Colorㅤ|ㅤ{diamondAttr.clarity} Clarity
                                                 </p>
                                             )}
                                             <p className={`cart_item_description ${isOutOfStock ? 'text-grey' : 'text-diamond-only'}`}>

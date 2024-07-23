@@ -128,7 +128,7 @@ function ProductDetail() {
 
         checkProductStock(product.productId).then(response => {
             if (response.data === "Not enough stock") {
-                toast.error("Sorry, this product is out of stock.", {
+                toast.error("This product is currently out of stock. Sorry for this inconvenience.", {
                     position: "top-right",
                     autoClose: 3000
                 });

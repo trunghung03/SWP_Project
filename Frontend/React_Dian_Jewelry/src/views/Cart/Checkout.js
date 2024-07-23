@@ -264,7 +264,7 @@ function Checkout() {
                     orderId: orderId,
                     lineTotal: item.price,
                     productId: item.productId,
-                    shellId: item?.selectedShellId || "null"
+                    shellId: item?.selectedShellId || null
                 };
                 return createOrderDetails(orderDetail);
             });
