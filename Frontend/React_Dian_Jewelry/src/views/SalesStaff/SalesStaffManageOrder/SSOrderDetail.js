@@ -112,18 +112,23 @@ const SSOrderDetail = () => {
   const handleSendEmail = async () => {
     try {
       // Check if warranty already exists
-      const warrantyData = await getWarrantyById(orderId);
-      if (!warrantyData) {
-        await handleAddWarranty();
-      }
-
-      const response = await getWarrantyURL(orderId);
+      // const warrantyData = await getWarrantyById(orderId);
+      // if (!warrantyData) {
+      //   await handleAddWarranty();
+      // }
+      const warrantyData = await handleAddWarranty();
+    
+      // Get the warranty URL using the returned warranty data
+      const response = await getWarrantyURL(warrantyData.orderDetailId);
       const url = response.url;
+  
+      // Prepare email data
       const emailData = {
         toEmail: orderDetails.email,
         subject: "Your Warranty",
         body: `Here is your warranty link: ${url}`,
       };
+  
       await sendWarrantyEmail(emailData);
     } catch (error) {
       console.error("Failed to send email:", error);
@@ -142,7 +147,7 @@ const SSOrderDetail = () => {
     try {
       await createWarranty(warrantyData);
       setWarrantyExists(true);
-      swal("Success", "Warranty added successfully", "success");
+    //  swal("Success", "Warranty added successfully", "success");
     } catch (error) {
       console.error("Failed to add warranty:", error);
       swal("Error", `Failed to add warranty: ${error.message}`, "error");

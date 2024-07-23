@@ -30,7 +30,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const headCells = [
-  { id: 'orderDetailId', numeric: false, disablePadding: false, label: 'Order Detail ID', sortable: true },
+  { id: 'orderDetailId', numeric: false, disablePadding: false, label: 'Order ID', sortable: true },
   { id: 'startDate', numeric: false, disablePadding: false, label: 'Start Date', sortable: true },
   { id: 'endDate', numeric: false, disablePadding: false, label: 'End Date', sortable: true },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status', sortable: true },

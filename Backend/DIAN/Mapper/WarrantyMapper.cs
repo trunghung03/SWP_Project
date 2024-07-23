@@ -8,7 +8,7 @@ namespace DIAN_.Mapper
     {
         public static Warranty ToWarrantyFromCreateDto(this CreateWarrantyRequestDto warrantyDto)
         {
-          //  var startDate = DateTime.Now;
+            //  var startDate = DateTime.Now;
             return new Warranty
             {
                 OrderDetailId = warrantyDto.OrderDetailId,
@@ -16,7 +16,7 @@ namespace DIAN_.Mapper
                 //EndDate = startDate.AddYears(1),
                 StartDate = warrantyDto.StartDate,
                 EndDate = warrantyDto.EndDate,
-                Status = warrantyDto.Status
+                Status = "Active"
             };
         }
         public static Warranty ToWarrantyFromUpdateDto(this UpdateWarrantyRequestDto warrantyDto, int id)
