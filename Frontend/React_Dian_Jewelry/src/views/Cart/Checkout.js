@@ -255,7 +255,7 @@ function Checkout() {
                     orderId: orderId,
                     lineTotal: item.price,
                     productId: item.productId,
-                    shellId: item.selectedShellId
+                    shellId: item?.selectedShellId || "null"
                 };
                 return createOrderDetails(orderDetail);
             });
@@ -291,7 +291,7 @@ function Checkout() {
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
-                await UpdateQuantityCheckout(orderId); // Update quantities before navigating to invoice
+                await UpdateQuantityCheckout(orderId); 
                 toast.success("Order successfully! Thank you for your order.", {
                     position: "top-right",
                     autoClose: 3000
@@ -400,10 +400,16 @@ function Checkout() {
                                             <p className="checkout_item_name"><strong>{item.name} x1</strong></p>
                                             <p className="checkout_item_price"><strong>${Math.round(item.price)}</strong></p>
                                         </div>
-                                        <div className="checkout_item_row">
-                                            <p><strong>Shell:</strong> {item.selectedShellName}</p>
-                                            <p><strong>Size:</strong> {item.selectedSize}</p>
-                                        </div>
+                                        {!item.selectedShellName ? (
+                                            <p>(Only diamond)</p>
+                                        ) : (
+                                            <>
+                                                <div className="checkout_item_row">
+                                                    <p><strong>Shell:</strong> {item.selectedShellName}</p>
+                                                    <p><strong>Size:</strong> {item.selectedSize}</p>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 {index < cartItems.length - 1 && <hr />}
@@ -420,17 +426,6 @@ function Checkout() {
 
                     <h5 className="checkout_summary_payment_title"><i className="fas fa-credit-card"></i>Payment method</h5>
                     <div className="payment_methods">
-                        <div className="payment_method" onClick={() => setPaymentMethod('Cash')}>
-                            <input
-                                type="radio"
-                                id="cash"
-                                name="paymentMethod"
-                                checked={paymentMethod === 'Cash'}
-                                onChange={() => setPaymentMethod('Cash')}
-                            />
-                            <p className='payment_label' htmlFor="cash">Cash</p>
-                            {paymentMethod === 'Cash' && <p>(Give cash by the time received or contact us to come and transact directly at the store)</p>}
-                        </div>
                         <div className="payment_method" onClick={() => setPaymentMethod('Bank Transfer')}>
                             <input
                                 type="radio"

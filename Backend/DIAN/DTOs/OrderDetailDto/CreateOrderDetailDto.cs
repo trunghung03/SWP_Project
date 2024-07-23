@@ -14,7 +14,6 @@ namespace DIAN_.DTOs.OrderDetailDto
         [Required(ErrorMessage = "Product ID is required.")]
         public int ProductId { get; set; }
 
-        [Required(ErrorMessage = "Shell ID is required.")]
         public int ShellId { get; set; }
 
     }

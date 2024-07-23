@@ -21,7 +21,7 @@ namespace DIAN_.Repository
             && x.Cut == diamondAttribute.Cut 
             && x.Carat == diamondAttribute.Carat);
 
-            if (existingDiamondAttribute != null)
+            if (existingDiamondAttribute == null)
             {
                 _context.Diamondattributes.Add(diamondAttribute);
                 await _context.SaveChangesAsync();

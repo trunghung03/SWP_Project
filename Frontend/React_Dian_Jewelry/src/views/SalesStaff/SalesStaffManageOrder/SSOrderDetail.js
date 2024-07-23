@@ -45,13 +45,11 @@ const SSOrderDetail = () => {
   };
 
   useEffect(() => {
-    console.log("orderId:", orderId); // Log the orderId
     if (orderId) {
       getBillDetail(orderId)
         .then((data) => {
-          console.log("orderDetails:", data); // Log the orderDetails after fetching
           setOrderDetails(data);
-          setStatus(data.orderStatus); // Set status from fetched order details
+          setStatus(data.orderStatus);
           setIsOrderCompleted(data.orderStatus === "Completed");
         })
         .catch((error) => {
@@ -81,7 +79,6 @@ const SSOrderDetail = () => {
         if (!urls || urls.length === 0) {
           throw new Error(`No certificate scans available for product ${item.productName}`);
         }
-        console.log('Certificate URLs:', urls);
         certificateUrls = certificateUrls.concat(urls);
       }
 
@@ -90,9 +87,17 @@ const SSOrderDetail = () => {
         subject: "Your Diamond's Certificate:",
         body: `Here are your certificate links: ${certificateUrls.join('; ')}`
       };
-      console.log('emaildata: ', emailData);
       await sendWarrantyEmail(emailData);
       swal("Success", "Certificate emails sent successfully", "success");
+
+      // Update status to Preparing after sending emails
+      const updateOrderStatusDto = {
+        orderId: orderId,
+        status: "Preparing"
+      };
+      await salesStaffUpdateOrderStatus(updateOrderStatusDto);
+      setStatus("Preparing");
+
     } catch (error) {
       console.error("Failed to send Certificate emails:", error);
       swal("Error", `Failed to send Certificate emails: ${error.message}`, "error");
@@ -103,13 +108,11 @@ const SSOrderDetail = () => {
     try {
       const response = await getWarrantyURL(orderId);
       const url = response.url;
-      console.log('Warranty URL:', url);
       const emailData = {
         toEmail: orderDetails.email,
         subject: "Your Warranty",
         body: `Here is your warranty link: ${url}`,
       };
-      console.log('emaildata: ', emailData);
       await sendWarrantyEmail(emailData);
       swal("Success", "Warranty email sent successfully", "success");
     } catch (error) {
@@ -139,28 +142,15 @@ const SSOrderDetail = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      if (orderDetails.paymentMethod === "VNPAY") {
-        await handleSendCertificate();
-        await handleSendEmail();
-      } else {
-        const updateOrderStatusDto = {
-          orderId: orderId,
-          status: isOverdue ? "Cancelled" : status
-        };
-        
-        await salesStaffUpdateOrderStatus(updateOrderStatusDto);
+      const updateOrderStatusDto = {
+        orderId: orderId,
+        status: isOverdue ? "Cancelled" : status
+      };
 
-        // Check if the updated status is "Paid"
-        if (status === "Paid") {
-          await handleSendCertificate();
-          await handleSendEmail();
-        }
+      await salesStaffUpdateOrderStatus(updateOrderStatusDto);
+      swal("Success", "Order status updated successfully", "success");
 
-        swal("Success", "Order status updated successfully", "success");
-        navigate('/sales-staff-order-list');
-        console.log("status: ", updateOrderStatusDto.status);
-        console.log("Order status updated successfully");
-      }
+      // navigate('/sales-staff-order-list');
     } catch (error) {
       console.error("Failed to update order status", error);
       swal("Error", `Failed to update order status: ${error.message}`, "error");
@@ -181,6 +171,8 @@ const SSOrderDetail = () => {
   }
 
   const isOverdue = status === "Unpaid" && isOrderOverdue(orderDetails.date);
+  const isStatusDisabled = isOrderCompleted || isOverdue || status === "Paid" || status === "Cancelled";
+  const isButtonDisabled = isOrderCompleted || loading || status === "Cancelled";
 
   return (
     <>
@@ -228,7 +220,7 @@ const SSOrderDetail = () => {
                           value={status}
                           label="Status"
                           onChange={handleChange}
-                          disabled={isOrderCompleted || isOverdue}
+                          disabled={isStatusDisabled}
                           size="small"
                         >
                           <MenuItem value="Unpaid">Unpaid</MenuItem>
@@ -278,20 +270,23 @@ const SSOrderDetail = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
-                    {/* Removed individual send certificate button */}
                   </div>
                   <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
                     <WarrantyIcon /> Warranty:
-                    {/* Removed individual send warranty button */}
                   </div>
                 </div>
                 <p style={{ textAlign: "right", marginRight: "40px", fontSize: "18px", fontWeight: "bold" }}>
                   Total Price: ${orderDetails.totalPrice}
                 </p>
                 <div className="ss_detail_confirmbutton">
-                  <button onClick={handleSubmit} disabled={isOrderCompleted || loading}>
-                    {loading ? "Loading..." : (orderDetails.paymentMethod === "VNPAY" ? "Send Certificate, Warranty" : (isOverdue ? "Cancel Order" : "Confirm"))}
+                  <button onClick={handleSubmit} disabled={isButtonDisabled}>
+                    {loading ? "Loading..." : (status === "Paid" || status === "Preparing" || status === "Delivering" || status === "Completed") ? "Confirm" : "Confirm"}
                   </button>
+                  {status === "Paid" && (
+                    <button onClick={handleSendCertificate} disabled={isButtonDisabled}>
+                      Send Certificate, Warranty
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
