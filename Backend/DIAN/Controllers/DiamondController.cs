@@ -134,7 +134,7 @@ namespace DIAN_.Controllers
                 }
 
                 var diamond = diamondDto.ToDiamondFromCreateDTO();
-                var result = await _diamondRepository.AddDiamondAsync(diamond);
+                var result = await _goodsService.CreateMainDiamondAsync(diamond);
                 return Ok(new { diamondId = result.DiamondId, diamond = result.ToDiamondDTO() });
             }
             catch (Exception)
