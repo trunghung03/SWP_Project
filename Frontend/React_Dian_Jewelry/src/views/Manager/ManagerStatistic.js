@@ -28,11 +28,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-// const RenderProfitData = ({ profitData, profitOptions }) => {
-//   console.log("RenderProfitData:::", profitData);
-//   return <Line data={profitData} options={profitOptions} />;
-// };
-
 const ManagerStatitic = () => {
   const formatDate = (date) => {
     let d = new Date(date),
@@ -56,7 +51,8 @@ const ManagerStatitic = () => {
   const taskProgress = 75.5;
   const [allCatePercentages, setAllCatePercentages] = useState([]);
   const [totalProduct, setTotalProduct] = useState(null);
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedYearForSale, setSelectedYearForSale] = useState("");
+  const [selectedYearForProfit, setSelectedYearForProfit] = useState("");
   const [totalOrders, setTotalOrders] = useState(null);
   const [totalValue, setTotalValue] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -138,7 +134,7 @@ const ManagerStatitic = () => {
 
   const profitYear = async (event) => {
     const year = event.target.value;
-    setSelectedYear(year);
+    setSelectedYearForProfit(year);
     if (year) {
       setLoading(true);
       try {
@@ -181,7 +177,7 @@ const ManagerStatitic = () => {
 
   const handleYearChange = async (event) => {
     const year = event.target.value;
-    setSelectedYear(year);
+    setSelectedYearForSale(year);
     if (year) {
       const startMonth = `01-${year}`;
       const endMonth = `12-${year}`;
@@ -461,51 +457,6 @@ const ManagerStatitic = () => {
                   </p>
                 </div>
               </div>
-              {/* <div
-              className="manager_manage_report_div"
-              style={{
-                textAlign: "center",
-                flex: "1",
-                margin: "10px",
-                padding: "20px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-              }}
-            >
-              <h3>Total Customers</h3>
-              <p style={{ fontSize: "24px", color: "green" }}>
-                {totalCustomers}
-              </p>
-              <p style={{ color: "red" }}></p>
-            </div> */}
-              {/* <div
-              className="manager_manage_report_div"
-              style={{
-                textAlign: "center",
-                flex: "1",
-                margin: "10px",
-                padding: "20px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-              }}
-            >
-              <h3>Task Progress</h3>
-              <p style={{ fontSize: "24px" }}>{taskProgress}%</p>
-            </div> */}
-              {/* <div
-              className="manager_manage_report_div"
-              style={{
-                textAlign: "center",
-                flex: "1",
-                margin: "10px",
-                padding: "20px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-              }}
-            >
-              <h3>Total Products</h3>
-              <p style={{ fontSize: "24px", color: "green" }}>{totalProduct}</p>
-            </div> */}
             </div>
             <div className="manager_manage_report_filter" style={{ marginTop: 40 }}>
               <i className="fas fa-filter" style={{ paddingTop: 22 }}></i>
@@ -515,7 +466,7 @@ const ManagerStatitic = () => {
                   labelId="listYear-label"
                   id="listYear"
                   // name="year"
-                  value={selectedYear}
+                  value={selectedYearForSale}
                   onChange={handleYearChange}
                   autoWidth
                   label="Year"
@@ -581,7 +532,7 @@ const ManagerStatitic = () => {
                   name="year"
                   onChange={profitYear}
                   autoWidth
-                  value={selectedYear}
+                  value={selectedYearForProfit}
                   label="Year"
                   required
                   size="small"
