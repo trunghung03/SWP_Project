@@ -220,17 +220,15 @@ namespace DIAN_.Repository
 
         public async Task<List<Product>> GetListAsync()  //not display shell amount available = 0
         {
-            var products = await _context.Products
-                                 .Include(p => p.MainDiamondAtrribute)
-                                 .Include(p => p.Category)
-                                 .Include(p => p.Shells)
-                                 .Where(p => p.Shells.Any(s => s.AmountAvailable > 0))
-                                 //.Where(p => _context.Diamonds.Any(d => d.DiamondId == p.MainDiamondAtrributeId && d.Status)) 
-                                 .ToListAsync();
+            var productsQuery = _context.Products
+                                     .Include(p => p.MainDiamondAtrribute)
+                                     .Include(p => p.Category)
+                                     .Include(p => p.Shells)
+                                     .Where(p => p.Status);
 
-            return products;
+
+            return productsQuery.ToList();
         }
-
 
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
