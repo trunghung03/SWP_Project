@@ -46,6 +46,7 @@ namespace DIAN_.Repository
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             _memoryCache.Remove(CacheKey);
+            CacheUtils.InvalidateAllPaginationKeys(_memoryCache, CacheKey);
             return product;
         }
 
@@ -101,7 +102,6 @@ namespace DIAN_.Repository
                     }
 
                     IQueryable<Product> productsQuery = _context.Products
-                       .Where(p => p.Status)
                        .Include(p => p.Category)
                        .Include(p => p.Shells);
 
@@ -220,17 +220,20 @@ namespace DIAN_.Repository
 
         public async Task<List<Product>> GetListAsync()  //not display shell amount available = 0
         {
-            var products = await _context.Products
-                                 .Include(p => p.MainDiamondAtrribute)
-                                 .Include(p => p.Category)
-                                 .Include(p => p.Shells)
-                                 .Where(p => p.Shells.Any(s => s.AmountAvailable > 0))
-                                 //.Where(p => _context.Diamonds.Any(d => d.DiamondId == p.MainDiamondAtrributeId && d.Status)) 
-                                 .ToListAsync();
+            var productsQuery = _context.Products
+                                     .Include(p => p.MainDiamondAtrribute)
+                                     .Include(p => p.Category)
+                                     .Include(p => p.Shells)
+                                     .Where(p => p.Status);
 
-            return products;
+            //// If you need to filter shells by AmountAvailable > 0, you should do it after the query execution since EF Core does not support filtering on Include directly.
+            //var products = await productsQuery.ToListAsync();
+
+            //// Filter shells for each product if necessary. This is done in-memory.
+            //products.ForEach(p => p.Shells = p.Shells.Where(s => s.AmountAvailable > 0).ToList());
+
+            return productsQuery.ToList();
         }
-
 
 
         public async Task<Product> UpdateProductAsync(Product product, int id)
@@ -243,6 +246,7 @@ namespace DIAN_.Repository
                 existingProduct.ImageLinkList = product.ImageLinkList;
                 existingProduct.CollectionId = product.CollectionId;
                 existingProduct.CategoryId = product.CategoryId;
+                existingProduct.Status = product.Status;
                 await _context.SaveChangesAsync();
 
                 // Invalidate cache for product detail
@@ -365,7 +369,7 @@ namespace DIAN_.Repository
 
         public async Task<bool> HasSufficientDiamondsForProduct(int productId)
         {
-            var product = await GetByIdAsync(productId);
+            var product = await GetProductByIdForManage(productId);
             var mainDiamondAmount = await _context.Products
                 .Where(p => p.ProductId == productId && p.MainDiamondAtrributeId == product.MainDiamondAtrributeId)
                 .Select(p => p.MainDiamondAmount)
@@ -392,6 +396,12 @@ namespace DIAN_.Repository
                 isSubDiamondSufficient = subAmount >= product.SubDiamondAmount;
             }
             return isMainDiamondSufficient && isSubDiamondSufficient;
+        }
+        public async Task<Product> GetProductByIdForManage(int productId)
+        {
+            return await _context.Products
+                .Include(p => p.Shells)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
         }
     }
 }

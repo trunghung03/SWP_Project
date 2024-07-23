@@ -17,6 +17,7 @@ namespace DIAN_.Mapper
                 ImageLinkList = updateDTO.ImageLinkList,
                 CollectionId = updateDTO.CollectionId,
                 CategoryId = updateDTO.CategoryId,
+                Status = updateDTO.Status,
             };
         }
 
@@ -50,6 +51,7 @@ namespace DIAN_.Mapper
                 MainDiamondAmount = product.MainDiamondAmount ?? 0,
                 SubDiamondAmount = product.SubDiamondAmount ?? 0,
                 CollectionId = product.CollectionId,
+                Status = product.Status,
                 Sizes = sizes.ToList(),
                 CategoryId = product.CategoryId,
                 Stock = stock,

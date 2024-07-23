@@ -247,8 +247,9 @@ const ManagerProductList = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedProduct({ ...editedProduct, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setEditedProduct({ ...editedProduct, [name]: newValue });
   };
 
   const handleUpdate = async () => {
@@ -279,7 +280,7 @@ const ManagerProductList = () => {
       return;
     }
 
-    const productToUpdate = { ...editedProduct, status: true };
+    const productToUpdate = { ...editedProduct };
 
     updateProductById(productToUpdate.productId, productToUpdate)
       .then(() => {
@@ -480,6 +481,20 @@ const ManagerProductList = () => {
                   onChange={handleChange}
                   required
                 />
+              </div>
+              <div className="manager_manage_product_form_group">
+                <label>Status</label>
+                <select
+                  name="status"
+                  value={editedProduct.status ? "isDisplayed" : "notDisplayed"}
+                  onChange={(e) => {
+                    const value = e.target.value === "isDisplayed";
+                    setEditedProduct({ ...editedProduct, status: value });
+                  }}
+                >
+                  <option value="isDisplayed">isDisplayed</option>
+                  <option value="notDisplayed">notDisplayed</option>
+                </select>
               </div>
               <div className="manager_manage_product_modal_actions">
                 <button onClick={() => setEditMode(false)}>Cancel</button>
