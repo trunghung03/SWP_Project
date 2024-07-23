@@ -17,7 +17,5 @@ namespace DIAN_.DTOs.OrderDetailDto
         [Required(ErrorMessage = "Shell ID is required.")]
         public int ShellId { get; set; }
 
-        public string? CertificateScan { get; set; }
-
     }
 }
