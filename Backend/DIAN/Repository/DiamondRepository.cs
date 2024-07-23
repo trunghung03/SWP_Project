@@ -51,6 +51,7 @@ namespace DIAN_.Repository
             var diamonds = await _context.Diamonds
                 .Include(p => p.MainDiamondAtrribute)
                 .Where(d => d.Status)
+                .OrderBy(d => d.DiamondId)
                 .ToListAsync();
             //string cacheKey = "AllDiamonds";
             //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);

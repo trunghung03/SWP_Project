@@ -52,7 +52,8 @@ namespace DIAN_.Mapper
                 CollectionId = product.CollectionId,
                 Sizes = sizes.ToList(),
                 CategoryId = product.CategoryId,
-                Stock = stock
+                Stock = stock,
+                HasSufficientDiamonds = false
             };
         }
 

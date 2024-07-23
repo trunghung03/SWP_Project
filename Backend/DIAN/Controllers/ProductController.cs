@@ -192,6 +192,14 @@ namespace DIAN_.Controllers
                     return NotFound("Product does not exist");
                 }
 
+                var productDTOs = new List<ProductDTO>();
+                foreach (var product in products)
+                {
+                    var productDTO = product.ToProductDTO();
+                    productDTO.HasSufficientDiamonds = await _productRepo.HasSufficientDiamondsForProduct(product.ProductId);
+                    productDTOs.Add(productDTO);
+                }
+
                 var pagination = new
                 {
                     currentPage = query.PageNumber,
@@ -200,7 +208,7 @@ namespace DIAN_.Controllers
                     totalCount = totalItems
                 };
 
-                return Ok(new { data = products.Select(p => p.ToProductDTO()), pagination });
+                return Ok(new { data = productDTOs, pagination });
             }
             catch (Exception)
             {
