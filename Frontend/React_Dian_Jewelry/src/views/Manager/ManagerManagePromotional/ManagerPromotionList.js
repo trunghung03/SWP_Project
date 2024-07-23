@@ -102,14 +102,14 @@ const tableSort = (array, comparator) => {
   });
   return stabilizedThis.map((el) => el[0]);
 };
-
 const getPromotionStatus = async (endDate, id) => {
   try {
     const promotion = await getPromotionDetail(id);
     if (promotion.status === true) {
       const currentDate = new Date();
       const end = new Date(endDate);
-      return currentDate <= end;
+      // Include the end date in the active period
+      return currentDate <= end.setHours(23, 59, 59, 999);
     } else {
       return false;
     }
