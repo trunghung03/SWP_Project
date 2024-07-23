@@ -169,9 +169,11 @@ function SSContentList() {
                       <option value="" disabled selected>
                         Select a tag
                       </option>
-                      <option value="Information">Information</option>
+                      <option value="News">News</option>
+                      <option value="About">About</option>
+                      <option value="Service">Service</option>
                       <option value="Education">Education</option>
-                      <option value="Blog">Blog</option>
+                    <option value="Blog">Blog</option>
                     </select>
                   </div>
                 </div>

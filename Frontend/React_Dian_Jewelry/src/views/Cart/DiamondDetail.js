@@ -29,7 +29,6 @@ function DiamondDetail() {
   const [selectedShell, setSelectedShell] = useState('');
   const [product, setProduct] = useState({});
   const [diamond, setDiamond] = useState({});
-  const [collection, setCollection] = useState({});
   const [shellMaterials, setShellMaterials] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [showSpecifications, setShowSpecifications] = useState(true);
@@ -68,37 +67,8 @@ function DiamondDetail() {
           getDiamondDetail(productData.mainDiamondAttributeId).catch(error => {
             throw error;
           }),
-          getCollectionDetail(productData.collectionId).catch(error => {
-            throw error;
-          }),
-          getShellByProductId(id).catch(error => {
-            throw error;
-          }),
-          getProductList().catch(error => {
-            throw error;
-          })
-        ]).then(([diamondResponse, collectionResponse, shellResponse, productListResponse]) => {
+        ]).then(([diamondResponse]) => {
           setDiamond(diamondResponse.data);
-          setCollection(collectionResponse.data);
-          setShellData(shellResponse.data);
-
-          const relatedProducts = productListResponse.data.filter(product => product.categoryID === productData.categoryId);
-          const currentIndex = relatedProducts.findIndex(p => p.productId === productData.productId);
-          let nextProducts = [];
-
-          if (currentIndex !== -1) {
-            nextProducts = relatedProducts.slice(currentIndex + 1, currentIndex + 5);
-            if (nextProducts.length < 4) {
-              nextProducts = nextProducts.concat(relatedProducts.slice(0, 4 - nextProducts.length));
-            }
-          }
-
-          setAlsoLikeProducts(nextProducts);
-
-          const uniqueShells = [...new Set(shellResponse.data.map(shell => shell.shellMaterialName))];
-          setAvailableShells(uniqueShells);
-          const uniqueSizes = [...new Set(shellResponse.data.map(shell => shell.size))];
-          setAvailableSizes(uniqueSizes);
         }).catch(error => {
           console.error(error);
         }).finally(() => {
@@ -138,7 +108,7 @@ function DiamondDetail() {
 
         const productToSave = {
           productId: product.productId,
-          name: diamond.carat + " Carat " + diamond.shape + " Diamond ",
+          name: product.name,
           image: product.imageLinkList,
           code: product.productCode,
           price: product.price + shellPrice,
