@@ -104,7 +104,7 @@ const ManagerAddPromotion = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Discount Percentage</label>
-                            <input type="number" min={1} name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
+                            <input type="number" min={1} max={30} step={1} name="amount" placeholder='Enter amount' value={promotionData.amount} onChange={handleChange} required />
                         </div>
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

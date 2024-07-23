@@ -49,20 +49,20 @@ const ManagerAddShell = () => {
 
     const handleSizeChange = (e) => {
         const { value } = e.target;
-        const sizes = value.split(',').map(size => parseFloat(size.trim()));
+        const sizes = value.split(',').map(size => size.trim()).filter(size => size !== '');
         
-        // Check if all sizes are positive numbers
-        const allPositive = sizes.every(size => !isNaN(size) && size > 0);
+        const allPositive = sizes.every(size => !isNaN(size) && parseFloat(size) > 0);
         
         if (allPositive) {
-            setShellData({ ...shellData, sizes });
+            setShellData({ ...shellData, sizes: sizes.map(size => parseFloat(size)) });
         } else {
             swal("Invalid Input", "All sizes must be positive numbers.", "error");
         }
     };
 
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         try {
             const shellDataWithStatus = { ...shellData, status: true };
             await createShell(shellDataWithStatus);
@@ -81,7 +81,7 @@ const ManagerAddShell = () => {
                 }
             }
             swal("Something is wrong!", "Failed to add shell. Please try again.", "error");
-        }
+        } 
     };
 
     return (
@@ -130,14 +130,14 @@ const ManagerAddShell = () => {
                     </div>
                    
                         <div className="manager_add_diamond_form_group">
-                            <label>Amount Available</label>
-                            <input placeholder="Add amount available" max={10} min={1} type="number" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
+                            <label>Quantity</label>
+                            <input placeholder="Add amount available" min={1} type="number" name="amountAvailable" value={shellData.amountAvailable} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Weight</label>
-                            <input placeholder="Add shell's weight" min={0.1} type="number" name="weight" value={shellData.weight} onChange={handleChange} required />
+                            <label>Weight (Gram)</label>
+                            <input placeholder="Add shell's weight" min={0.1} step={0.1} max={1000} type="number" name="weight" value={shellData.weight} onChange={handleChange} required />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
