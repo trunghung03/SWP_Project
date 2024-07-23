@@ -1,5 +1,5 @@
 ﻿			use DIAN
-			Go
+			GO
 			INSERT INTO CUSTOMER (AccountType, Email, Password, LastName, FirstName, Address, PhoneNumber, Points, Status) VALUES
 			('Google', 'john.doe@yahoo.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Doe', 'John', '123 Main St', '+1 (212) 555-0198', 1000, 1),
 			('None', 'jane.smith@gmail.com', 'AQAAAAIAAYagAAAAEMWou0HCaLl0XudTeZbTd1sYxek2fn0EE1gwMM0PeNVZssP6BF9OEKTm1WybtT6FMA==', 'Smith', 'Jane', '456 Elm St', '+1 (415) 555-0234', 1500, 1),
@@ -400,12 +400,6 @@
 		(89, 578, 20600.00, 1),
 		(90, 580, 20800.00, 1);
 
-
-		
-
-
-		INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondAtrributeID, SubDiamondAtrributeID, LaborCost, ImageLinkList, MainDiamondAmount, SubDiamondAmount, Status, CollectionID, CategoryID)
-		VALUES
 INSERT INTO PRODUCT (productCode, [Name], Price, [Description], MainDiamondAtrributeID, SubDiamondAtrributeID, LaborCost, ImageLinkList, MainDiamondAmount, SubDiamondAmount, Status, CollectionID, CategoryID)
 VALUES
 ('PROD001', 'Cocktail Ring', 3190.00, 'Seven rows of shimmering lab diamonds that wrap the finger in light in this glamorous cocktail design.', 1 , 12, 71.50, 'https://image.brilliantearth.com/media/diamond_ring_vto/0M/BE1D54_white_Round_top_2_carat.png;https://image.brilliantearth.com/media/carat_image/84/BE1D54_RD_200ct_white_side1.jpg;https://image.brilliantearth.com/media/product_images/9R/BE1D54-18KW_BE3D20-18KW_3.jpg;https://image.brilliantearth.com/media/product_images/D6/BE1D54_white_additional2.jpeg', 0, 73, 1, 2, 1),
