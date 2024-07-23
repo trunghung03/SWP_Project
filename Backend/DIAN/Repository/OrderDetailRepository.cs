@@ -89,8 +89,8 @@ namespace DIAN_.Repository
                     FirstName = po.User.FirstName,
                     LastName = po.User.LastName,
                     Email = po.User.Email,
-                    PhoneNumber = po.User.PhoneNumber,
-                    Address = po.User.Address,
+                    PhoneNumber = po.PhoneNumber,
+                    Address = po.ShippingAddress,
                     Note = po.Note,
                     PaymentMethod = po.PaymentMethod,
                     PayWithPoint = po.PayWithPoint,
@@ -101,8 +101,8 @@ namespace DIAN_.Repository
                     PromotionAmount = po.Promotion != null ? po.Promotion.Amount : null,
                     ProductDetails = po.Orderdetails.Select(od => new OrderBillProductDetailDto
                     {
-                        MainDiamondId = od.Diamonds.Select(d => d.DiamondId).ToList(),
-                        CertificateScans = od.Diamonds.Select(d => d.CertificateScan).ToList(),
+                        MainDiamondId = od.Diamonds.Select(od => od.DiamondId).ToList(),
+                        CertificateScans = od.Diamonds.Select(od => od.CertificateScan).ToList(),
                         ProductName = od.Product.Name,
                         ProductImageLink = od.Product.ImageLinkList,
                         ProductCode = od.Product.ProductCode,
