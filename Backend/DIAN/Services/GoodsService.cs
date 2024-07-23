@@ -252,25 +252,36 @@ namespace DIAN_.Services
                 return false;
             }
 
-            var shellUpdated = await UpdateShellStock(orderDetail.ProductId, increaseQuantities);
-            if (!shellUpdated)
+            if (product.CategoryId == 10)
             {
-                return false;
+                var diamondsUpdated = await UpdateDiamondsStock(product, orderDetail.OrderDetailId, increaseQuantities);
+                if (!diamondsUpdated)
+                {
+                    return false;
+                }
             }
-
-            var diamondsUpdated = await UpdateDiamondsStock(product, orderDetail.OrderDetailId, increaseQuantities);
-            if (!diamondsUpdated)
+            else
             {
-                return false;
+                var shellUpdated = await UpdateShellStock(orderDetail.ShellId ?? 0, increaseQuantities);
+                if (!shellUpdated)
+                {
+                    return false;
+                }
+
+                var diamondsUpdated = await UpdateDiamondsStock(product, orderDetail.OrderDetailId, increaseQuantities);
+                if (!diamondsUpdated)
+                {
+                    return false;
+                }
             }
 
             return true;
         }
 
 
-        private async Task<bool> UpdateShellStock(int productId, bool increaseQuantities)
+        private async Task<bool> UpdateShellStock(int orderDetailId, bool increaseQuantities)
         {
-            var shell = await _shellRepository.GetShellByIdAsync(productId);
+            var shell = await _shellRepository.GetShellByIdAsync(orderDetailId);
             if (shell != null)
             {
                 var updateShellStockDto = new UpdateShellStock
@@ -289,21 +300,35 @@ namespace DIAN_.Services
 
         private async Task<bool> UpdateDiamondsStock(Product product, int orderDetailId, bool increaseQuantities)
         {
-            if (product.MainDiamondAtrributeId != 0)
+           if (product.CategoryId == 10)
             {
-                var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId, increaseQuantities);
-                if (!mainDiamondUpdated)
+                if (product.MainDiamondAtrributeId != 0)
                 {
-                    return false;
+                    var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId, increaseQuantities);
+                    if (!mainDiamondUpdated)
+                    {
+                        return false;
+                    }
                 }
             }
-
-            if (product.SubDiamondAtrributeId != 0)
+            else
             {
-                var subDiamondUpdated = await UpdateSubDiamonds(product.SubDiamondAtrributeId.Value, product.SubDiamondAmount ?? 0, orderDetailId, increaseQuantities);
-                if (!subDiamondUpdated)
+                if (product.MainDiamondAtrributeId != 0)
                 {
-                    return false;
+                    var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId, increaseQuantities);
+                    if (!mainDiamondUpdated)
+                    {
+                        return false;
+                    }
+                }
+
+                if (product.SubDiamondAtrributeId != 0)
+                {
+                    var subDiamondUpdated = await UpdateSubDiamonds(product.SubDiamondAtrributeId.Value, product.SubDiamondAmount ?? 0, orderDetailId, increaseQuantities);
+                    if (!subDiamondUpdated)
+                    {
+                        return false;
+                    }
                 }
             }
 
