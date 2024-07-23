@@ -165,7 +165,7 @@ namespace DIAN_.Controllers
                 var product = await _productRepo.UpdateProductAsync(updateDTO.ToProductFromUpdateDTO(id), id);
                 if (product == null)
                 {
-                    return NotFound("Promotion does not exist");
+                    return NotFound("Product does not exist");
                 }
                 return Ok(product.ToProductDTO());
             }

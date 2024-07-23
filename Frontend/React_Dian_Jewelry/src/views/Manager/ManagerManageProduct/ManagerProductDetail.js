@@ -122,13 +122,13 @@ const ManagerProductDetail = () => {
                 <p>Material: {productDetail.materialName}</p>
               </div>
               <div className="manager_product_detail_subcontent">
-                <p>Main Diamond ID: {productDetail.mainDiamondID}</p>
+                <p>Main Diamond ID: {productDetail.mainDiamondAttributeId}</p>
               </div>
               <div className="manager_product_detail_subcontent">
                 <p>Amount: {productDetail.mainDiamondAmount}</p>
               </div>
               <div className="manager_product_detail_subcontent">
-                <p>Sub Diamond ID: {productDetail.subDiamondID}</p>
+                <p>Sub Diamond ID: {productDetail.subDiamondAttributeId}</p>
               </div>
               <div className="manager_product_detail_subcontent">
                 <p>Amount: {productDetail.subDiamondAmount}</p>

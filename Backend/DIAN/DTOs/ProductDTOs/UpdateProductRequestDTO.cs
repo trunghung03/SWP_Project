@@ -21,5 +21,6 @@ namespace DIAN_.DTOs.ProductDTOs
         [Range(1, int.MaxValue, ErrorMessage = "Category ID must be a positive number.")]
         [Required(ErrorMessage = "Category ID is required.")]
         public int? CategoryId { get; set; }
+        public bool Status { get; set; }
     }
 }

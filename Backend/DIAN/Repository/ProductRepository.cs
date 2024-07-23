@@ -101,7 +101,6 @@ namespace DIAN_.Repository
                     }
 
                     IQueryable<Product> productsQuery = _context.Products
-                       .Where(p => p.Status)
                        .Include(p => p.Category)
                        .Include(p => p.Shells);
 
@@ -243,6 +242,7 @@ namespace DIAN_.Repository
                 existingProduct.ImageLinkList = product.ImageLinkList;
                 existingProduct.CollectionId = product.CollectionId;
                 existingProduct.CategoryId = product.CategoryId;
+                existingProduct.Status = product.Status;
                 await _context.SaveChangesAsync();
 
                 // Invalidate cache for product detail
@@ -365,7 +365,7 @@ namespace DIAN_.Repository
 
         public async Task<bool> HasSufficientDiamondsForProduct(int productId)
         {
-            var product = await GetByIdAsync(productId);
+            var product = await GetProductByIdForManage(productId);
             var mainDiamondAmount = await _context.Products
                 .Where(p => p.ProductId == productId && p.MainDiamondAtrributeId == product.MainDiamondAtrributeId)
                 .Select(p => p.MainDiamondAmount)
@@ -392,6 +392,12 @@ namespace DIAN_.Repository
                 isSubDiamondSufficient = subAmount >= product.SubDiamondAmount;
             }
             return isMainDiamondSufficient && isSubDiamondSufficient;
+        }
+        public async Task<Product> GetProductByIdForManage(int productId)
+        {
+            return await _context.Products
+                .Include(p => p.Shells)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
         }
     }
 }
