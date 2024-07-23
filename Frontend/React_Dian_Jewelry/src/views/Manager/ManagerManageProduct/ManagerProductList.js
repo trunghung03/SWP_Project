@@ -44,6 +44,7 @@ const headCells = [
   { id: 'stock', numeric: false, disablePadding: false, label: 'Stock', sortable: true },
   { id: 'action', numeric: false, disablePadding: false, label: 'Action', sortable: false },
   { id: 'view', numeric: false, disablePadding: false, label: 'View', sortable: false },
+  { id: 'available', numeric: false, disablePadding: false, label: 'Available', sortable: false },
 ];
 
 // Enhanced Table Head for sorting
@@ -137,13 +138,13 @@ const ManagerProductList = () => {
     totalCount: 0,
   });
 
-
   const fetchData = async (page = 1, query = '') => {
     try {
       const response = await ShowAllProduct(page, pagination.pageSize, query);
+      console.log("Fetched products:", response.data);
       setProductItems(response.data);
       const pdfResponse = await pdfProduct();
-      setPdfData(pdfResponse);  
+      setPdfData(pdfResponse);
       setPagination(response.pagination);
       const categoryMap = {};
       const collectionMap = {};
@@ -169,6 +170,7 @@ const ManagerProductList = () => {
       setCategories(categoryMap);
       setCollections(collectionMap);
       setMainDiamonds(mainDiamondMap);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -374,6 +376,9 @@ const ManagerProductList = () => {
                         <TableCell align="center">
                           <Visibility onClick={() => viewDetail(item.productId)} />
                         </TableCell>
+                        <TableCell align="center">
+                          {item.hasSufficientDiamonds.toString()}
+                        </TableCell>
                       </TableRow>
                     ))
                 ) : (
@@ -384,6 +389,16 @@ const ManagerProductList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <div className="pdf-download">
+            <PDFDownloadLink
+              document={<ProductPDF products={pdfData} />}
+              fileName="products.pdf"
+            >
+              {({ loading }) =>
+                loading ? 'Loading document...' : 'Download PDF'
+              }
+            </PDFDownloadLink>
+          </div>
           {isSearch && (
             <button className="btn btn-secondary mt-3" onClick={handleBack}>
               Back to show all products
@@ -474,19 +489,7 @@ const ManagerProductList = () => {
           </div>
         </div>
       )}
-      <div className="pdf-download">
-        <PDFDownloadLink
-          document={<ProductPDF products={pdfData} />}
-          fileName="products.pdf"
-        >
-          {({ loading }) =>
-            loading ? 'Loading document...' : 'Download PDF'
-          }
-        </PDFDownloadLink>
-      </div>
     </div>
-
-
   );
 };
 

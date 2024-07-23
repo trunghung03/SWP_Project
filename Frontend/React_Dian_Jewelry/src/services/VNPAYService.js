@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import axios from 'axios';
+import { UpdateQuantityCheckout } from '../services/CheckoutService';
 
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -23,7 +24,8 @@ function VNPAYService() {
         if (params.vnp_ResponseCode === '00') {
             const orderId = localStorage.getItem('orderId'); 
             if (orderId) {
-                postOrderId(orderId).then(() => {
+                postOrderId(orderId).then(async () => {
+                    await UpdateQuantityCheckout(orderId);
                     navigate('/invoice', { state: params });
                 }).catch(() => {
                     navigate('/transaction-fail');

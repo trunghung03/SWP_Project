@@ -7,7 +7,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Cart/Checkout.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { createPurchaseOrder, createOrderDetails, getPromotionByCode, requestVNPayPayment } from '../../services/CheckoutService.js';
+import { UpdateQuantityCheckout, createPurchaseOrder, createOrderDetails, getPromotionByCode, requestVNPayPayment } from '../../services/CheckoutService.js';
 import { useCart } from '../../services/CartService';
 import { UserContext } from '../../services/UserContext';
 import vnpay from '../../assets/img/vnpay.webp';
@@ -291,6 +291,7 @@ function Checkout() {
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
+                await UpdateQuantityCheckout(orderId); // Update quantities before navigating to invoice
                 toast.success("Order successfully! Thank you for your order.", {
                     position: "top-right",
                     autoClose: 3000

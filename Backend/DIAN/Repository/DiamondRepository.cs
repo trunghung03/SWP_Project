@@ -142,7 +142,7 @@ namespace DIAN_.Repository
         {
             var existingDiamond = await _context.Diamonds
                     .Include(d => d.MainDiamondAtrribute)
-                    .FirstOrDefaultAsync(x => x.DiamondId == id && x.Status);
+                    .FirstOrDefaultAsync(x => x.DiamondId == id );
             return existingDiamond;
             //string cacheKey = $"Diamond_{id}";
             //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
