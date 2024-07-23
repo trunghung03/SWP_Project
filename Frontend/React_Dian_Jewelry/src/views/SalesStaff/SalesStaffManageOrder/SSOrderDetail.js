@@ -31,7 +31,17 @@ const SSOrderDetail = () => {
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setStatus(event.target.value);
+    const newStatus = event.target.value;
+    if (isPreviousStatus(newStatus, status)) {
+      swal("Error", "Cannot update to a previous status", "error");
+      return;
+    }
+    setStatus(newStatus);
+  };
+
+  const isPreviousStatus = (newStatus, currentStatus) => {
+    const statusOrder = ["Unpaid", "Paid", "Preparing", "Delivering", "Completed", "Cancelled"];
+    return statusOrder.indexOf(newStatus) < statusOrder.indexOf(currentStatus);
   };
 
   useEffect(() => {
@@ -129,23 +139,28 @@ const SSOrderDetail = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const updateOrderStatusDto = {
-        orderId: orderId,
-        status: isOverdue ? "Cancelled" : status
-      };
-      
-      await salesStaffUpdateOrderStatus(updateOrderStatusDto);
-      
-      // Check if the updated status is "Paid"
-      if (status === "Paid") {
+      if (orderDetails.paymentMethod === "VNPAY") {
         await handleSendCertificate();
         await handleSendEmail();
-      }
+      } else {
+        const updateOrderStatusDto = {
+          orderId: orderId,
+          status: isOverdue ? "Cancelled" : status
+        };
+        
+        await salesStaffUpdateOrderStatus(updateOrderStatusDto);
 
-      swal("Success", "Order status updated successfully", "success");
-      navigate('/sales-staff-order-list');
-      console.log("status: ", updateOrderStatusDto.status);
-      console.log("Order status updated successfully");
+        // Check if the updated status is "Paid"
+        if (status === "Paid") {
+          await handleSendCertificate();
+          await handleSendEmail();
+        }
+
+        swal("Success", "Order status updated successfully", "success");
+        navigate('/sales-staff-order-list');
+        console.log("status: ", updateOrderStatusDto.status);
+        console.log("Order status updated successfully");
+      }
     } catch (error) {
       console.error("Failed to update order status", error);
       swal("Error", `Failed to update order status: ${error.message}`, "error");
@@ -275,7 +290,7 @@ const SSOrderDetail = () => {
                 </p>
                 <div className="ss_detail_confirmbutton">
                   <button onClick={handleSubmit} disabled={isOrderCompleted || loading}>
-                    {loading ? "Loading..." : (isOverdue ? "Cancel Order" : "Confirm")}
+                    {loading ? "Loading..." : (orderDetails.paymentMethod === "VNPAY" ? "Send Certificate, Warranty" : (isOverdue ? "Cancel Order" : "Confirm"))}
                   </button>
                 </div>
               </div>
