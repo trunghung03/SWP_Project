@@ -27,6 +27,7 @@ const SSOrderDetail = () => {
   const [status, setStatus] = useState("");
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [warrantyLoading, setWarrantyLoading] = useState(false);
   const [warrantyExists, setWarrantyExists] = useState(false);
   const navigate = useNavigate();
 
@@ -67,6 +68,7 @@ const SSOrderDetail = () => {
   }, [orderId]);
 
   const handleSendCertificate = async () => {
+    setWarrantyLoading(true);
     try {
       if (!orderDetails.productDetails || orderDetails.productDetails.length === 0) {
         throw new Error("No product details available");
@@ -102,6 +104,8 @@ const SSOrderDetail = () => {
     } catch (error) {
       console.error("Failed to send Certificate emails:", error);
       swal("Error", `Failed to send Certificate emails: ${error.message}`, "error");
+    } finally {
+      setWarrantyLoading(false);
     }
   };
 
@@ -286,11 +290,11 @@ const SSOrderDetail = () => {
                 </p>
                 <div className="ss_detail_confirmbutton">
                   <button onClick={handleSubmit} disabled={isButtonDisabled}>
-                    {loading ? "Loading..." : (status === "Paid" || status === "Preparing" || status === "Delivering" || status === "Completed") ? "Confirm" : "Confirm"}
+                    {loading ? "Loading..." : "Confirm"}
                   </button>
                   {status === "Paid" && (
-                    <button onClick={handleSendCertificate} disabled={isButtonDisabled}>
-                      Send Certificate, Warranty
+                    <button onClick={handleSendCertificate} disabled={warrantyLoading}>
+                      {warrantyLoading ? "Sending..." : "Send Certificate, Warranty"}
                     </button>
                   )}
                 </div>
