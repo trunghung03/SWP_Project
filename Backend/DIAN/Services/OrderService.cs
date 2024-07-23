@@ -53,7 +53,7 @@ namespace DIAN_.Services
         }
 
         //checkout here ~ - quantities of shell, diamond, subdiamond
-        public async Task<PurchaseOrderDTO> CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
+        public PurchaseOrderDTO CreatePurchaseOrderAsync(CreatePurchaseOrderDTO orderDto, string promoCode)
         {
             var orderModel = orderDto.ToCreatePurchaseOrder();
 
@@ -63,7 +63,7 @@ namespace DIAN_.Services
 
             AssignStaffToOrder(orderModel);
 
-            var orderToDto = await _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel);
+            var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
 
             SendConfirmationEmail(orderToDto);
 

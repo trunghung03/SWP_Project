@@ -374,10 +374,9 @@ namespace DIAN_.Controllers
                 var productDTOs = products.Select(product => product.ToProductDTO()).ToList();
                 return Ok(productDTOs);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log exception here if necessary
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 
