@@ -53,6 +53,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
+            style={{ backgroundColor: "#faecec" }}
             key={headCell.id}
             align="center"
             padding={headCell.disablePadding ? "none" : "normal"}
