@@ -210,33 +210,29 @@ namespace DIAN_.Controllers
             {
                 throw;
             }
-
-
-            //[HttpPut("updatecertificate/{id:int}")]
-            //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
-            //{
-            //    try
-            //    {
-            //        if (!ModelState.IsValid)
-            //        {
-            //            return BadRequest(ModelState);
-            //        }
-
-            //        var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
-            //        if (diamondModel == null)
-            //        {
-            //            return NotFound("Diamond does not exist");
-            //        }
-            //        return Ok(diamondModel.ToDiamondDTO());
-            //    }
-            //    catch (Exception)
-            //    {
-            //        throw;
-            //    }
-            //}
         }
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchDiamondsAsync([FromQuery] string query)
+
+            [HttpPut("updatecertificate/{id:int}")]
+            public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, [FromBody] UpdateDiamondCertificateDto updateCertificate)
+            {
+                try
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(ModelState);
+                    }
+                    var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
+                        
+                    return Ok(diamondModel.ToDiamondDTO());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            [HttpGet("search")]
+            public async Task<IActionResult> SearchDiamondsAsync([FromQuery] string query)
         {
             try
             {
