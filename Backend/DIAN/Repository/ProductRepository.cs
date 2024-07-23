@@ -46,6 +46,7 @@ namespace DIAN_.Repository
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             _memoryCache.Remove(CacheKey);
+            CacheUtils.InvalidateAllPaginationKeys(_memoryCache, CacheKey);
             return product;
         }
 
@@ -226,6 +227,11 @@ namespace DIAN_.Repository
                                      .Include(p => p.Shells)
                                      .Where(p => p.Status);
 
+            //// If you need to filter shells by AmountAvailable > 0, you should do it after the query execution since EF Core does not support filtering on Include directly.
+            //var products = await productsQuery.ToListAsync();
+
+            //// Filter shells for each product if necessary. This is done in-memory.
+            //products.ForEach(p => p.Shells = p.Shells.Where(s => s.AmountAvailable > 0).ToList());
 
             return productsQuery.ToList();
         }

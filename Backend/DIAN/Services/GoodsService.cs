@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs.DiamondDto;
+﻿using DIAN_.DTOs.DiamondAttributeDto;
+using DIAN_.DTOs.DiamondDto;
 using DIAN_.DTOs.ProductDTOs;
 using DIAN_.DTOs.ShellDto;
 using DIAN_.DTOs.SubDiamondDto;
@@ -34,16 +35,19 @@ namespace DIAN_.Services
         }
 
         //create diammond attribue, diamond at the same time (if diamond attribute does not exist => create diamond attribute)
-        public async Task<DiamondDto> CreateMainDiamondAsync(CreateDiamondRequestDto requestDto) 
+        public async Task<DiamondDto> CreateMainDiamondAsync(CreateDiamondRequestDto requestDto)
         {
             var diamondModel = requestDto.ToDiamondFromCreateDTO();
 
+            // Check if the diamond attribute already exists
             var attributeExists = await FindDiamondAttributeAsync(requestDto);
 
-            Diamondattribute existingAttribute;
-            if (!attributeExists)
+            Diamondattribute diamondAttribute;
+
+            if (attributeExists == null)
             {
-                var newAttribute = new Diamondattribute
+                // If the attribute does not exist, create a new one
+                var newAttribute = new CreateDiamondAttributeDto
                 {
                     Shape = requestDto.Shape,
                     Color = requestDto.Color,
@@ -51,22 +55,21 @@ namespace DIAN_.Services
                     Cut = requestDto.Cut,
                     Carat = requestDto.Carat
                 };
+                var newAttributeModel = newAttribute.FromCreateDtoToDiamondAttribute();
+                diamondAttribute = await _diamondAttributeRepository.CreateDiamondAttributeAsync(newAttributeModel);
 
-                existingAttribute = await _diamondAttributeRepository.CreateDiamondAttributeAsync(newAttribute);
             }
             else
             {
-                existingAttribute = await _diamondAttributeRepository.GetDiamondAttributeIdByDetailsAsync(
-                    requestDto.Shape, requestDto.Color, requestDto.Clarity, requestDto.Cut, requestDto.Carat);
+                diamondAttribute = attributeExists;
             }
-
             var newDiamond = new Diamond
             {
-                MainDiamondAtrributeId = existingAttribute.DiamondAtrributeId,
+                MainDiamondAtrributeId = diamondAttribute.DiamondAtrributeId,
                 Price = requestDto.Price,
                 Status = requestDto.Status,
                 CertificateScan = requestDto.CertificateScan
-                //order detail null for now
+                // Order detail is null for now
             };
 
             var diamondDto = await _diamondRepository.AddDiamondAsync(newDiamond);
@@ -114,16 +117,19 @@ namespace DIAN_.Services
             return diamondDto.ToSubDiamondDTO();
         }
 
-        private async Task<bool> FindDiamondAttributeAsync(CreateDiamondRequestDto requestDto)
+        private async Task<Diamondattribute> FindDiamondAttributeAsync(CreateDiamondRequestDto requestDto)
         {
             var allAttributes = await _diamondAttributeRepository.GetDiamondAttributesAsync();
-            return allAttributes.Any(attr =>
+            var foundAttribute = allAttributes.FirstOrDefault(attr =>
                 attr.Shape == requestDto.Shape &&
                 attr.Color == requestDto.Color &&
                 attr.Clarity == requestDto.Clarity &&
                 attr.Cut == requestDto.Cut &&
                 attr.Carat == requestDto.Carat);
+
+            return foundAttribute;
         }
+
 
         private async Task<bool> FindSubDiamondAttributeAsync(CreateSubDiamondRequestDto requestDto)
         {
