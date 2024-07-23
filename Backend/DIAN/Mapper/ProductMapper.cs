@@ -51,7 +51,7 @@ namespace DIAN_.Mapper
                 MainDiamondAmount = product.MainDiamondAmount ?? 0,
                 SubDiamondAmount = product.SubDiamondAmount ?? 0,
                 CollectionId = product.CollectionId,
-                Status = product.Status,
+                Status = true,
                 Sizes = sizes.ToList(),
                 CategoryId = product.CategoryId,
                 Stock = stock,
@@ -132,8 +132,9 @@ namespace DIAN_.Mapper
                 SubDiamondAmount = productRequestDTO.SubDiamondAmount,
                 CollectionId = productRequestDTO.CollectionId,
                 CategoryId = productRequestDTO.CategoryId,
-                Status = true
+                Status = productRequestDTO.Status
             };
         }
+
     }
 }

@@ -25,23 +25,36 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product) //not plus shell yet
         {
-            var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
+            if (product.CategoryId == 10)
+            {
+                var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
+                    ? await _context.Diamonds
+                        .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
+                         .Select(d => d.Price)
+                         .FirstOrDefaultAsync()
+                            : 0;
+                product.Price = mainDiamondPrice;
+            }
+            else
+            {
+                var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
                ? await _context.Diamonds
                    .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
                    .Select(d => d.Price)
                    .FirstOrDefaultAsync()
                : 0;
 
-            var subDiamondPrice = product.SubDiamondAtrributeId.HasValue
-                ? await _context.Diamonds
-                    .Where(d => d.DiamondId == product.SubDiamondAtrributeId.Value)
-                    .Select(d => d.Price)
-                    .FirstOrDefaultAsync()
-                : 0;
+                var subDiamondPrice = product.SubDiamondAtrributeId.HasValue
+                    ? await _context.Diamonds
+                        .Where(d => d.DiamondId == product.SubDiamondAtrributeId.Value)
+                        .Select(d => d.Price)
+                        .FirstOrDefaultAsync()
+                    : 0;
 
-            product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
-                            (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
-                            (product.LaborCost ?? 0);
+                product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
+                                (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
+                                (product.LaborCost ?? 0);
+            }
 
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
@@ -324,7 +337,7 @@ namespace DIAN_.Repository
                             && p.SubDiamondAmount == null // No subdiamondamount
                             && p.MainDiamondAmount == 1 // Only one maindiamondamount
                             && _context.Diamonds.Any(d => d.MainDiamondAtrributeId == p.MainDiamondAtrributeId && d.Status)) // MainDiamondAtrributeID in table diamond must have status = true
-                .Include(p => p.MainDiamondAtrribute) 
+                .Include(p => p.MainDiamondAtrribute)
                 .ToListAsync();
 
             return diamondProducts;

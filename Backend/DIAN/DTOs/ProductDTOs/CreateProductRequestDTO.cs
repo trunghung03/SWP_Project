@@ -18,43 +18,28 @@ namespace DIAN_.DTOs.ProductDTOs
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
 
-        [StringLength(500, ErrorMessage = "Description must not exceed 500 characters.")]
-        [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Main diamond ID is required.")]
-        public int MainDiamondAttributeId { get; set; }
+        public int? MainDiamondAttributeId { get; set; }
 
-        [Required(ErrorMessage = "Sub diamond ID is required.")]
-        public int SubDiamondAttributeId { get; set; }
+        public int? SubDiamondAttributeId { get; set; }
 
         [Required(ErrorMessage = "Labor price is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Labor price must be non-negative.")]
         public decimal LaborPrice { get; set; }
 
-        // [Required(ErrorMessage = "At least one image file is required.")]
-        // public List<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
-
         [Required(ErrorMessage = "Image link list is required.")]
         public string imageLinkList { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Sub diamond amount is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Sub diamond amount must be non-negative.")]
         public int SubDiamondAmount { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Main diamond amount must be non-negative.")]
-        public int? MainDiamondAmount { get; set; }
+        public int MainDiamondAmount { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Shell amount must be non-negative.")]
-        //public decimal? ShellAmount { get; set; }
-
-        [Range(1, int.MaxValue, ErrorMessage = "Collection ID must be a positive number.")]
         public int? CollectionId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Category ID must be a positive number.")]
-        [Required(ErrorMessage = "Category ID is required.")]
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         public bool Status { get; set; }
     }
+
 }

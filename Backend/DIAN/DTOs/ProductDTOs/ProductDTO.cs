@@ -11,15 +11,15 @@
 
         public string Description { get; set; } = string.Empty;
 
-        public int MainDiamondAttributeId { get; set; }
+        public int? MainDiamondAttributeId { get; set; }
 
-        public int SubDiamondAttributeId { get; set; }
+        public int? SubDiamondAttributeId { get; set; }
 
         public decimal LaborPrice { get; set; }
 
         public string ImageLinkList { get; set; } = string.Empty;
 
-        public int SubDiamondAmount { get; set; }
+        public int? SubDiamondAmount { get; set; }
 
         public int? MainDiamondAmount { get; set; }
 

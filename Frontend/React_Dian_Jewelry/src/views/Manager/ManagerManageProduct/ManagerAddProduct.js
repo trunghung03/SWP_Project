@@ -12,7 +12,7 @@ const ManagerAddProduct = () => {
     const [productData, setProductData] = useState({
         productCode: '',
         name: '',
-        price: '1', // Defaulting to 0
+        price: '1', // Defaulting to 1
         description: '',
         mainDiamondAttributeId: '',
         subDiamondAttributeId: '',
@@ -100,12 +100,12 @@ const ManagerAddProduct = () => {
                 price: parseFloat(productData.price), // This will always be 1
                 laborPrice: parseFloat(productData.laborPrice),
                 description: productData.description,
-                mainDiamondAttributeId: parseInt(productData.mainDiamondAttributeId),
-                subDiamondAttributeId: parseInt(productData.subDiamondAttributeId),
-                mainDiamondAmount: parseInt(productData.mainDiamondAmount),
-                subDiamondAmount: parseInt(productData.subDiamondAmount),
+                mainDiamondAttributeId: parseInt(productData.mainDiamondAttributeId) || null,
+                subDiamondAttributeId: productData.subDiamondAttributeId ? parseInt(productData.subDiamondAttributeId) : null,
+                mainDiamondAmount: parseInt(productData.mainDiamondAmount) || null,
+                subDiamondAmount: productData.subDiamondAmount ? parseInt(productData.subDiamondAmount) : 0,
                 imageLinkList: imageUrls.join(';'),
-                collectionId: parseInt(productData.collectionId),
+                collectionId: productData.collectionId ? parseInt(productData.collectionId) : null,
                 categoryId: parseInt(productData.categoryId),
                 status: true
             };
@@ -199,7 +199,6 @@ const ManagerAddProduct = () => {
                                     name="subDiamondAttributeId"
                                     value={productData.subDiamondAttributeId}
                                     onChange={handleChange}
-                                    required
                                     style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft:"5px", borderRadius:"7px"}}
                                 >
                                     <option value="">Select Sub Diamond</option>
@@ -219,7 +218,7 @@ const ManagerAddProduct = () => {
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Sub Diamond Quantity</label>
-                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} required style={{borderRadius:"6px"}}/>
+                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} style={{borderRadius:"6px"}}/>
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
@@ -230,7 +229,6 @@ const ManagerAddProduct = () => {
                                     name="collectionId"
                                     value={productData.collectionId}
                                     onChange={handleChange}
-                                    required
                                     style={{ maxHeight: '100px', overflowY: 'auto', width: '200px', paddingLeft:"5px", borderRadius:"7px"}}
                                 >
                                     <option value="">Select Collection</option>
