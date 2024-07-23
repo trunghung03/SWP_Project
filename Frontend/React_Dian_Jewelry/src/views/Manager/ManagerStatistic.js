@@ -64,6 +64,7 @@ const ManagerStatitic = () => {
   const [localDate, setLocalDate] = useState();
   const [monthYear, setMonthYear] = useState();
   const [minProfit,setMinProfit] = useState();
+  const [chosenDate , setChosenDate] = useState();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -105,6 +106,7 @@ const ManagerStatitic = () => {
         await profitYear({ target: { value: currentYear.toString() } });
         await MonthYearStats({ target: { value: currentMonth } });
         await dailyStats(formattedDate);
+        setChosenDate(formattedDate);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -124,6 +126,7 @@ const ManagerStatitic = () => {
     if (date) {
       const dailyValues = await DailyStats(date);
       setValueByDate(dailyValues);
+      setChosenDate(date);
     }
   };
 
@@ -355,7 +358,7 @@ const ManagerStatitic = () => {
             <input
               className="manager_statis_input_date"
               type="date"
-              value={localDate}
+              value={chosenDate}
               onChange={handleDateChange}
               style={{ margin: "10px" }}
             ></input>
