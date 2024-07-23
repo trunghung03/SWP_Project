@@ -189,8 +189,13 @@ namespace DIAN_.Services
             {
                 throw new ArgumentException("Product not found", nameof(productId));
             }
+            if (product.CategoryId == 10)
+            {
+                var availableDiamonds = await _diamondRepository.FindAvailableDiamond(product.MainDiamondAtrributeId ?? 0);
+                Console.WriteLine("Available diamonds: " + availableDiamonds.Count);
+                return availableDiamonds.Count > 0;
+            }
 
-            // Use the product's attributes to check stock availability
             var mainDiamondCount = await _diamondRepository.CountDiamondsByAttributesAsync(product.MainDiamondAtrributeId ?? 0);
             var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
             if (subDiamond == null)

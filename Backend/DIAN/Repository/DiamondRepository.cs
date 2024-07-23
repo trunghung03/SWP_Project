@@ -316,7 +316,7 @@ namespace DIAN_.Repository
         public Task<List<Diamond>> FindAvailableDiamond(int mainDiamondAttributeId)
         {
             return _context.Diamonds
-                .Where(d => d.MainDiamondAtrributeId == mainDiamondAttributeId && d.Status == false)
+                .Where(d => d.MainDiamondAtrributeId == mainDiamondAttributeId && d.Status == true)
                 .ToListAsync();
         }
         public async Task<List<Diamond>> SearchDiamondsAsync(DiamondSearchCriteria searchCriteria)
