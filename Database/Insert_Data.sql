@@ -163,8 +163,8 @@
 			('Wedding Earrings', 1),
 			('Wedding Bracelets',1),
 			('Wedding Necklaces',1),
-			('Engagement Rings',1);
-			('Diamond' ,1);
+			('Engagement Rings',1),
+			('Diamonds' ,1);
 			INSERT INTO SHELLMATERIAL ([Name], Price, Status) VALUES
 			('Silver', 1500, 1),
 			('Gold', 1700, 1),
