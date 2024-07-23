@@ -17,7 +17,7 @@ import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
 import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
-import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getCertificateURL, getWarrantyById, updateInventory } from "../../../services/SalesStaffService/SSOrderService.js";
+import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import swal from "sweetalert";
 
@@ -26,8 +26,7 @@ const SSOrderDetail = () => {
   const { orderId } = useParams();
   const [status, setStatus] = useState("");
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
-  const [loadingCertificate, setLoadingCertificate] = useState(false);
-  const [loadingWarranty, setLoadingWarranty] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [warrantyExists, setWarrantyExists] = useState(false);
   const navigate = useNavigate();
 
@@ -60,41 +59,37 @@ const SSOrderDetail = () => {
   }, [orderId]);
 
   const handleSendCertificate = async () => {
-    setLoadingCertificate(true);
     try {
       if (!orderDetails.productDetails || orderDetails.productDetails.length === 0) {
         throw new Error("No product details available");
       }
 
-      const emailPromises = orderDetails.productDetails.map(async (item) => {
-        const mainDiamondId = item.mainDiamondId;
-        if (!mainDiamondId) {
-          throw new Error("Main Diamond ID is null or undefined");
-        }
-        const response = await getCertificateURL(mainDiamondId);
-        const url = response.url;
-        console.log('Certificate URL:', url);
-        const emailData = {
-          toEmail: orderDetails.email,
-          subject: "Your Diamond's Certificate:",
-          body: `Here is a link: ${url}`,
-        };
-        console.log('emaildata: ', emailData);
-        await sendWarrantyEmail(emailData);
-      });
+      let certificateUrls = [];
 
-      await Promise.all(emailPromises);
+      for (const item of orderDetails.productDetails) {
+        const urls = item.certificateScans;
+        if (!urls || urls.length === 0) {
+          throw new Error(`No certificate scans available for product ${item.productName}`);
+        }
+        console.log('Certificate URLs:', urls);
+        certificateUrls = certificateUrls.concat(urls);
+      }
+
+      const emailData = {
+        toEmail: orderDetails.email,
+        subject: "Your Diamond's Certificate:",
+        body: `Here are your certificate links: ${certificateUrls.join('; ')}`
+      };
+      console.log('emaildata: ', emailData);
+      await sendWarrantyEmail(emailData);
       swal("Success", "Certificate emails sent successfully", "success");
     } catch (error) {
       console.error("Failed to send Certificate emails:", error);
-      swal("Error", "Failed to send Certificate emails", "error");
+      swal("Error", `Failed to send Certificate emails: ${error.message}`, "error");
     }
-    setLoadingCertificate(false);
   };
 
-
   const handleSendEmail = async () => {
-    setLoadingWarranty(true);
     try {
       const response = await getWarrantyURL(orderId);
       const url = response.url;
@@ -109,9 +104,8 @@ const SSOrderDetail = () => {
       swal("Success", "Warranty email sent successfully", "success");
     } catch (error) {
       console.error("Failed to send warranty email:", error);
-      swal("Error", "Failed to send warranty email", "error");
+      swal("Error", `Failed to send warranty email: ${error.message}`, "error");
     }
-    setLoadingWarranty(false);
   };
 
   const handleAddWarranty = async () => {
@@ -128,22 +122,35 @@ const SSOrderDetail = () => {
       swal("Success", "Warranty added successfully", "success");
     } catch (error) {
       console.error("Failed to add warranty:", error);
-      swal("Error", "Failed to add warranty", "error");
+      swal("Error", `Failed to add warranty: ${error.message}`, "error");
     }
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      await salesStaffUpdateOrderStatus(status, orderId);
-      await updateInventory(status, orderId);
-      swal("Success", "Update order status successfully", "success");
+      const updateOrderStatusDto = {
+        orderId: orderId,
+        status: isOverdue ? "Cancelled" : status
+      };
+      
+      await salesStaffUpdateOrderStatus(updateOrderStatusDto);
+      
+      // Check if the updated status is "Paid"
+      if (status === "Paid") {
+        await handleSendCertificate();
+        await handleSendEmail();
+      }
+
+      swal("Success", "Order status updated successfully", "success");
       navigate('/sales-staff-order-list');
-      console.log("status: ", status);
-      console.log("Order status and inventory updated successfully");
+      console.log("status: ", updateOrderStatusDto.status);
+      console.log("Order status updated successfully");
     } catch (error) {
-      console.error("Failed to update order status or inventory:", error);
-      swal("Error", "Failed to update order status or inventory", "error");
+      console.error("Failed to update order status", error);
+      swal("Error", `Failed to update order status: ${error.message}`, "error");
     }
+    setLoading(false);
   };
 
   const isOrderOverdue = (orderDate) => {
@@ -206,7 +213,7 @@ const SSOrderDetail = () => {
                           value={status}
                           label="Status"
                           onChange={handleChange}
-                          disabled={isOrderCompleted}
+                          disabled={isOrderCompleted || isOverdue}
                           size="small"
                         >
                           <MenuItem value="Unpaid">Unpaid</MenuItem>
@@ -222,13 +229,13 @@ const SSOrderDetail = () => {
                 </div>
                 {orderDetails &&
                   orderDetails.productDetails?.map((item) => (
-                    <div className="ss_detail_card" key={item.id}>
+                    <div className="ss_detail_card" key={item.productCode}>
                       <div className="ss_detail_card_left">
                         <h3 className="ss_detail_card_name">
                           {item.productName}
                         </h3>
                         <img
-                          src={item.productImageLink}
+                          src={item.productImageLink.split(';')[0]}
                           alt={item.productName}
                         />
                       </div>
@@ -256,42 +263,20 @@ const SSOrderDetail = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
-                    <button
-                      className="salesstaff_manage_send_email_button"
-                      onClick={handleSendCertificate}
-                      disabled={loadingCertificate}
-                    >
-                      {loadingCertificate ? "Sending..." : "Send"}
-                    </button>
+                    {/* Removed individual send certificate button */}
                   </div>
                   <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
                     <WarrantyIcon /> Warranty:
-                    {!warrantyExists ? (
-                      <>
-                        <button
-                          className="salesstaff_manage_send_email_button"
-                          onClick={handleAddWarranty}
-                        >
-                          Add Warranty
-                        </button>
-                        <p style={{ marginLeft: "0.5%", color: "grey" }}>Noted: The warranty will be added automatically when you click 'Add Warranty'.</p>
-                      </>
-                    ) : (
-                      <button
-                        className="salesstaff_manage_send_email_button"
-                        onClick={handleSendEmail}
-                        disabled={loadingWarranty}
-                      >
-                        {loadingWarranty ? "Sending..." : "Send"}
-                      </button>
-                    )}
+                    {/* Removed individual send warranty button */}
                   </div>
                 </div>
                 <p style={{ textAlign: "right", marginRight: "40px", fontSize: "18px", fontWeight: "bold" }}>
                   Total Price: ${orderDetails.totalPrice}
                 </p>
                 <div className="ss_detail_confirmbutton">
-                  <button onClick={handleSubmit} disabled={isOrderCompleted}>Confirm</button>
+                  <button onClick={handleSubmit} disabled={isOrderCompleted || loading}>
+                    {loading ? "Loading..." : (isOverdue ? "Cancel Order" : "Confirm")}
+                  </button>
                 </div>
               </div>
             </div>
