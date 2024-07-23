@@ -65,6 +65,7 @@ const ManagerStatitic = () => {
   const [monthYear, setMonthYear] = useState();
   const [minProfit,setMinProfit] = useState();
   const [chosenDate , setChosenDate] = useState();
+  const [chosenMonth,setChosenMonth] = useState();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -106,6 +107,7 @@ const ManagerStatitic = () => {
         await profitYear({ target: { value: currentYear.toString() } });
         await MonthYearStats({ target: { value: currentMonth } });
         await dailyStats(formattedDate);
+        setChosenMonth(currentMonth);
         setChosenDate(formattedDate);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -120,6 +122,7 @@ const ManagerStatitic = () => {
     const formattedMonthYear = monthYear;
     const response = await getDateStatistic(formattedMonthYear);
     setCurrentMonthStats(response);
+    setChosenMonth(monthYear);
   };
 
   const dailyStats = async (date) => {
@@ -614,11 +617,11 @@ const ManagerStatitic = () => {
               </TableContainer>
             </div>
             <div className="manager_manage_diamond_table_wrapper"
-            style ={{marginTop:"70px"}}>Date:
+            style ={{marginTop:"70px"}}>Month:
               <input
                 className="manager_statis_input_date"
                 type="month"
-                value={monthYear}
+                value={chosenMonth}
                 onChange={MonthYearStats}
                 style={{ marginBottom: "20px" }}
               ></input>
