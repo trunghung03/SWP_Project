@@ -214,6 +214,7 @@ const ManagerProductList = () => {
   const handleBack = () => {
     setSearchQuery("");
     fetchData(1);
+    setIsSearch(false);
   };
 
   const handleDelete = async (productID) => {

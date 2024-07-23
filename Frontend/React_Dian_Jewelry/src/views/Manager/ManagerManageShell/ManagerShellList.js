@@ -328,40 +328,11 @@ const ManagerShellList = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const requiredFields = ["name", "price"];
-    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
-    for (let field of requiredFields) {
-      if (!newShell[field]) {
-        swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
-        return;
-      }
-      if (specialCharPattern.test(newShell[field])) {
-        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-        return;
-      }
-    }
-
-    const shellDataWithStatus = { ...newShell, status: true };
-
-    try {
-      await createShellMaterial(shellDataWithStatus);
-      swal("Success", "Shell added successfully", "success");
-      setAddMode(false);
-      const response = await ShowAllShellMaterial();
-      setShellMaterial(response);
-    } catch (error) {
-      console.error("Error creating shell:", error);
-      swal("Something went wrong!", "Failed to add shell. Please try again.", "error");
-    }
-  };
-
   const backList = async () => {
     try {
       const response = await ShowAllShell();
       setShellMaterial(response);
-      setCurrentPage(1);
+      setCurrentPage(1); 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -375,16 +346,7 @@ const ManagerShellList = () => {
       <div className="manager_manage_diamond_content">
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
-          <div className="manager_manage_diamond_search_section">
-            <input
-              type="text"
-              className="manager_manage_diamond_search_bar"
-              placeholder="Search by ID or Name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyUp={handleSearchKeyPress}
-            />
-          </div>
+         
         </div>
         <hr className="manager_header_line"></hr>
 
@@ -581,7 +543,7 @@ const ManagerShellList = () => {
                 />
               </div>
               <div className="manager_manage_diamond_form_group">
-                <label>Amount Available</label>
+                <label>Quantity</label>
                 <input
                   type="text"
                   name="amountAvailable"
@@ -599,50 +561,7 @@ const ManagerShellList = () => {
         </div>
       )}
 
-      {/* Add new shell modal */}
-      {addMode && (
-        <div
-          className="manager_manage_diamond_modal_overlay"
-          onClick={() => setAddMode(false)}
-        >
-          <div
-            className="manager_manage_diamond_update_modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="manager_manage_diamond_modal_content">
-              <h4>Add Shell Material</h4>
-              <div className="manager_manage_diamond_form_group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  maxLength={100}
-                  placeholder="Enter shell's name"
-                  value={newShell.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Price</label>
-                <input
-                  type="text"
-                  name="price"
-                  placeholder="Enter amount available"
-                  maxLength={10}
-                  value={newShell.price}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_modal_actions">
-                <button onClick={() => setAddMode(false)}>Cancel</button>
-                <button onClick={handleSubmit}>Confirm</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+     
     </div>
   );
 };
