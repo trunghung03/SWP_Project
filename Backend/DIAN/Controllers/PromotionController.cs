@@ -6,6 +6,7 @@ using DIAN_.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DIAN_.Repository;
 
 namespace DIAN_.Controllers
 {
@@ -15,10 +16,14 @@ namespace DIAN_.Controllers
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IEmailService _emailService;
 
-        public PromotionController(IPromotionRepository promotionRepository)
+        public PromotionController(ICustomerRepository customerRepository, IPromotionRepository promotionRepository, IEmailService emailService)
         {
+            _customerRepository = customerRepository;
             this._promotionRepository = promotionRepository;
+            _emailService = emailService;
         }
 
         [HttpGet("list")]
@@ -96,11 +101,34 @@ namespace DIAN_.Controllers
                 }
                 var promotionModel = promotionDto.ToPromotionFromCreateDto();
                 await _promotionRepository.CreatePromotionAsync(promotionModel);
+
+
+                SendEmailToAll(promotionModel);
+
+
+
                 return Ok(promotionModel.ToPromotionDetail());
             }
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private async void SendEmailToAll(Promotion promotionModel)
+        {
+            var customers = _customerRepository.GetAllAsync().Result;
+
+            foreach (var customer in customers)
+            {
+                var emailBody = _emailService.EmailPromotionBody(promotionModel, customer.FirstName, "promotion.html").Result;
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = customer.Email,
+                    Subject = "[Dian Diamond] Don't miss out on this promotion!",
+                    Body = emailBody
+                };
+                await _emailService.SendEmailAsync(mailRequest);
             }
         }
 

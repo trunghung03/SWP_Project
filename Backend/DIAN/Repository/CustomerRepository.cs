@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using UserApplication.Dtos.Account;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace DIAN_.Repository
 {
@@ -170,6 +171,14 @@ namespace DIAN_.Repository
                                  .Where(c => c.CustomerId == id)
                                  .Select(c => c.Email)
                                  .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<string>> GetAllCustomerEmail()
+        {
+            return await _context.Customers
+                                 .Where(c => c.Status == true)
+                                 .Select(c => c.Email)
+                                 .ToListAsync();
         }
     }
 }

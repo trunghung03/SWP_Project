@@ -34,6 +34,26 @@ namespace DIAN_.Services
 
             return htmlContent;
         }
+
+        public async Task<string> EmailPromotionBody(Promotion promo, string customerName, string htmlTemplatePath)
+        {
+            if (!System.IO.File.Exists(htmlTemplatePath))
+            {
+                throw new Exception($"Template file '{htmlTemplatePath}' not found.");
+            }
+
+            string htmlContent = await System.IO.File.ReadAllTextAsync(htmlTemplatePath);
+
+            htmlContent = htmlContent.Replace("{promoName}", promo.Name);
+            htmlContent = htmlContent.Replace("{promoStart}", promo.ValidFrom.ToString("dd-MM"));
+            htmlContent = htmlContent.Replace("{promoEnd}", promo.ValidTo.ToString("dd-MM"));
+            htmlContent = htmlContent.Replace("{customerName}", customerName);
+            htmlContent = htmlContent.Replace("{promoDesc}", promo.Description);
+            htmlContent = htmlContent.Replace("{promoCode}", promo.Code);
+
+            return htmlContent;
+        }
+
         public async Task SendEmailAsync(MailRequest message)
         {
             var email = new MimeMessage();

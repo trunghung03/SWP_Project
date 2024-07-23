@@ -10,5 +10,6 @@ namespace DIAN_.Interfaces
         Task SendEmailReset(MailResetPassword message);
 
         Task<string> GetEmailConfirmBody(Purchaseorder order, string htmlTemplatePath);
+        Task<string> EmailPromotionBody(Promotion promo, string customerName, string htmlTemplatePath);
     }
 }
