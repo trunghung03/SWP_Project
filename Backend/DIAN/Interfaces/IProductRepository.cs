@@ -29,5 +29,7 @@ namespace DIAN_.Interfaces
 
         Task<List<Product>> GetDiamondProduct();
         Task<List<Product>> SearchProductsAsync(ProductSearch searchCriteria);
+        Task<bool> AreDiamondsSufficientForAllProducts(int diamondAttributeId); // for all
+        Task<bool> HasSufficientDiamondsForProduct(int productId); // for specific product
     }
 }

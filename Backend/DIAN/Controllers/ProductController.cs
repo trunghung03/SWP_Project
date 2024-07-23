@@ -6,6 +6,7 @@ using DIAN_.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DIAN_.Repository;
 
 namespace DIAN_.Controllers
 {
@@ -191,6 +192,14 @@ namespace DIAN_.Controllers
                     return NotFound("Product does not exist");
                 }
 
+                var productDTOs = new List<ProductDTO>();
+                foreach (var product in products)
+                {
+                    var productDTO = product.ToProductDTO();
+                    productDTO.HasSufficientDiamonds = await _productRepo.HasSufficientDiamondsForProduct(product.ProductId);
+                    productDTOs.Add(productDTO);
+                }
+
                 var pagination = new
                 {
                     currentPage = query.PageNumber,
@@ -199,7 +208,7 @@ namespace DIAN_.Controllers
                     totalCount = totalItems
                 };
 
-                return Ok(new { data = products.Select(p => p.ToProductDTO()), pagination });
+                return Ok(new { data = productDTOs, pagination });
             }
             catch (Exception)
             {
@@ -260,6 +269,34 @@ namespace DIAN_.Controllers
                 var products = await _productRepo.GetByNameAsync(name);
                 var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
                 return Ok(productDTOs);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("has-sufficient-diamonds-for-product")]
+        public async Task<IActionResult> HasSufficientDiamondsForProduct([FromQuery] int productId)
+        {
+            try
+            {
+                var result = await _productRepo.HasSufficientDiamondsForProduct(productId);
+                return Ok(new { available = result });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("are-diamonds-sufficient-for-all")]
+        public async Task<IActionResult> AreDiamondsSufficientForAllProducts([FromQuery] int diamondAttributeId)
+        {
+            try
+            {
+                var result = await _productRepo.AreDiamondsSufficientForAllProducts(diamondAttributeId);
+                return Ok(new { available = result });
             }
             catch (Exception)
             {
@@ -337,10 +374,9 @@ namespace DIAN_.Controllers
                 var productDTOs = products.Select(product => product.ToProductDTO()).ToList();
                 return Ok(productDTOs);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log exception here if necessary
-                return StatusCode(500, "Internal server error");
+                throw;
             }
         }
 

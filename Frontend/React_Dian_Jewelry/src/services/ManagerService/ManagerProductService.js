@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// const API_BASE_URL = 'https://localhost:7184/api';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const getProductDetail = async (id) => {
@@ -28,10 +27,10 @@ const ShowAllProduct = async (pageNumber = 1, pageSize = 6, name = '') => {
   return response.data;
 };
 
-const pdfProduct = async() =>{
+const pdfProduct = async () => {
   const response = await axios.get(`${API_BASE_URL}/products/list`);
   return response.data;
-}
+};
 
 const deleteProductById = (id) => {
   return axios.delete(`${API_BASE_URL}/products/${id}`);
@@ -46,15 +45,16 @@ const getProductCategory = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/categories/${id}`);
   return response.data;
 };
+
 const getProductCollection = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/collections/${id}`);
   return response.data;
 };
 
 const getAllCategories = async () => {
-  const response = await axios.get(`${API_BASE_URL}/categories`)
+  const response = await axios.get(`${API_BASE_URL}/categories`);
   return response.data;
-}
+};
 
 const getProductDiamond = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/${id}`);
@@ -71,4 +71,18 @@ const uploadImage = async (data) => {
   return response.data;
 };
 
-export { ShowAllProduct,pdfProduct ,deleteProductById, createProduct, getProductDetail, getManageProductDetail, updateProductById, uploadImage, getProductCategory, getAllCollection, getProductCollection, getProductDiamond, getAllCategories };
+export {
+  ShowAllProduct,
+  pdfProduct,
+  deleteProductById,
+  createProduct,
+  getProductDetail,
+  getManageProductDetail,
+  updateProductById,
+  uploadImage,
+  getProductCategory,
+  getAllCollection,
+  getProductCollection,
+  getProductDiamond,
+  getAllCategories,
+};

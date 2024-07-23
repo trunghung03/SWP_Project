@@ -31,5 +31,6 @@
         public int? CategoryId { get; set; }
         public int MainDiamondAmountAvailable { get; set; }
         public int SubDiamondAmountAvailable { get; set; }
+        public bool HasSufficientDiamonds { get; set; }
     }
 }

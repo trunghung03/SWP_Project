@@ -62,3 +62,13 @@ export const requestVNPayPayment = async (paymentData) => {
         throw error;
     }
 };
+
+export const UpdateQuantityCheckout = async (orderId) => {
+    try {
+        const response = await axios.put(`${API_URL}/orderdetails/updatequantities/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating order quantities:', error);
+        throw error;
+    }
+};

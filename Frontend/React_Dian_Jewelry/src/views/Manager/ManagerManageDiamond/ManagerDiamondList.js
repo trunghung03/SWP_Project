@@ -328,6 +328,14 @@ const ManagerDiamondList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <div className="pdf-download">
+            <PDFDownloadLink
+              document={<DiamondPDf main={mainDiamondPDF} sub={subDiamondPDF} />}
+              fileName="diamond.pdf"
+            >
+              {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
+            </PDFDownloadLink>
+          </div>
           {isSearch && (
             <button className="btn btn-secondary mt-3" onClick={handleBack}>
               Back to show all {value === 0 ? "diamonds" : "sub-diamonds"}
@@ -544,14 +552,7 @@ const ManagerDiamondList = () => {
           </div>
         </div>
       )}
-      <div className="pdf-download">
-        <PDFDownloadLink
-          document={<DiamondPDf main={mainDiamondPDF} sub={subDiamondPDF} />}
-          fileName="diamond.pdf"
-        >
-          {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
-        </PDFDownloadLink>
-      </div>
+
     </div>
   );
 };
