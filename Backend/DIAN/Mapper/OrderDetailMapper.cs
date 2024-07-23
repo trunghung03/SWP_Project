@@ -12,7 +12,7 @@ namespace DIAN_.Mapper
                 OrderId = orderDetailDto.OrderId,
                 LineTotal = orderDetailDto.LineTotal,
                 ProductId = orderDetailDto.ProductId,
-                ShellId = orderDetailDto.ShellId,
+                ShellId = orderDetailDto.ShellId ?? null,
                 Status = true,
             };
         }

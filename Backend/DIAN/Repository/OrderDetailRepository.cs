@@ -16,7 +16,7 @@ namespace DIAN_.Repository
         public async Task<Orderdetail?> CreateAsync(Orderdetail orderdetail)
         {
             if (!await _context.Purchaseorders.AnyAsync(o => o.OrderId == orderdetail.OrderId)) { return null; }
-            if (!await _context.Shells.AnyAsync(s => s.ShellId == orderdetail.ShellId)) { return null; }
+           // if (!await _context.Shells.AnyAsync(s => s.ShellId == orderdetail.ShellId)) { return null; }
             await _context.AddAsync(orderdetail);
             await _context.SaveChangesAsync();
             return orderdetail;
