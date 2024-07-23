@@ -6,6 +6,7 @@ using DIAN_.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DIAN_.Repository;
 
 namespace DIAN_.Controllers
 {
@@ -260,6 +261,34 @@ namespace DIAN_.Controllers
                 var products = await _productRepo.GetByNameAsync(name);
                 var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
                 return Ok(productDTOs);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("has-sufficient-diamonds-for-product")]
+        public async Task<IActionResult> HasSufficientDiamondsForProduct([FromQuery] int productId)
+        {
+            try
+            {
+                var result = await _productRepo.HasSufficientDiamondsForProduct(productId);
+                return Ok(new { available = result });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("are-diamonds-sufficient-for-all")]
+        public async Task<IActionResult> AreDiamondsSufficientForAllProducts([FromQuery] int diamondAttributeId)
+        {
+            try
+            {
+                var result = await _productRepo.AreDiamondsSufficientForAllProducts(diamondAttributeId);
+                return Ok(new { available = result });
             }
             catch (Exception)
             {

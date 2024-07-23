@@ -343,5 +343,55 @@ namespace DIAN_.Repository
 
             return await query.ToListAsync();
         }
+
+        public async Task<bool> AreDiamondsSufficientForAllProducts(int diamondAttributeId)
+        {
+            // Sum the MainDiamondAmount for products where the MainDiamondAttributeId matches the given ID
+            var totalMainDiamondAmountNeeded = await _context.Products
+                .Where(p => p.MainDiamondAtrributeId == diamondAttributeId)
+                .SumAsync(p => (int?)p.MainDiamondAmount) ?? 0;
+            Console.WriteLine($"Total Main Diamond Amount Needed: {totalMainDiamondAmountNeeded}");
+
+
+            // Count the available diamonds with the specified DiamondAttributeId and Status = true
+            var availableDiamondCount = await _context.Diamonds
+                .Where(d => d.MainDiamondAtrributeId == diamondAttributeId && d.Status == true)
+                .CountAsync();
+            Console.WriteLine($"Total Main Diamond Amount available: {totalMainDiamondAmountNeeded}");
+
+            // Return true if the count of available diamonds is greater than or equal to the total MainDiamondAmount needed; otherwise, return false
+            return availableDiamondCount >= totalMainDiamondAmountNeeded;
+        }
+
+        public async Task<bool> HasSufficientDiamondsForProduct(int productId)
+        {
+            var product = await GetByIdAsync(productId);
+            var mainDiamondAmount = await _context.Products
+                .Where(p => p.ProductId == productId && p.MainDiamondAtrributeId == product.MainDiamondAtrributeId)
+                .Select(p => p.MainDiamondAmount)
+                .FirstOrDefaultAsync();
+            Console.WriteLine($"Main Diamond Amount: {mainDiamondAmount}");
+            if (mainDiamondAmount == null)
+            {
+                return false;
+            }
+            var availableDiamondCount = await _context.Diamonds
+                .Where(d => d.MainDiamondAtrributeId == product.MainDiamondAtrributeId && d.Status == true)
+                .CountAsync();
+            Console.WriteLine($"Available Diamond Count: {availableDiamondCount}");
+
+            bool isMainDiamondSufficient = availableDiamondCount >= mainDiamondAmount;
+
+            bool isSubDiamondSufficient = true; // Assume true if no subdiamonds are needed.
+            if (product.SubDiamondAtrributeId.HasValue && product.SubDiamondAmount.HasValue && product.SubDiamondAmount > 0)
+            {
+                var subdiamond = await _context.Subdiamonds.FirstOrDefaultAsync(sd => sd.DiamondAtrributeId == product.SubDiamondAtrributeId && sd.Status == true);
+                int subAmount = subdiamond.AmountAvailable;
+                Console.WriteLine($"Available Sub Diamond Count: {subAmount}");
+                Console.WriteLine($"Sub Diamond Amount: {product.SubDiamondAmount}");
+                isSubDiamondSufficient = subAmount >= product.SubDiamondAmount;
+            }
+            return isMainDiamondSufficient && isSubDiamondSufficient;
+        }
     }
 }

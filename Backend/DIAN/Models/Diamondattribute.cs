@@ -14,7 +14,26 @@ public partial class Diamondattribute
     public string Color { get; set; }
 
     public string Clarity { get; set; }
+    /*
+     public int available()
+        int count = 0;
+    diamondattribute = new Diamondattribute();
+    List <Diamond> diamons = diamondattribute.Diamonds.ToList();
+    foreach (var diamond in diamonds)
+        {
+            if (diamond.Status == "Available")
+            {
+                count++;
+            }
+    return count
+        }
 
+
+    public boolean setDisplayProduct (){
+    Product product = new Product();
+    int avalableDiamond = available();
+   if (product.quantity >= avalableDiamond) product.setStatus(false)     
+     */
     public decimal Carat { get; set; }
 
     public string Cut { get; set; }
