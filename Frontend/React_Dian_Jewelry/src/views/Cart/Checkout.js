@@ -144,6 +144,14 @@ function Checkout() {
     const handleApplyVoucher = async () => {
         try {
             const promotion = await getPromotionByCode(voucherCode);
+
+            const currentDateTime = new Date();
+            const promotionEndDate = new Date(promotion.endDate);
+    
+            if (promotionEndDate < currentDateTime) {
+                throw new Error("Voucher has expired");
+            }
+    
             const discountAmount = calculateTotal() * promotion.amount;
             setVoucherDiscount(discountAmount);
             setPromotionId(promotion.id);
@@ -154,12 +162,13 @@ function Checkout() {
             });
         } catch (error) {
             console.error('Error applying voucher:', error);
-            toast.error("Invalid voucher code! Please try another one.", {
+            toast.error("Invalid voucher code or voucher has expired! Please try another one.", {
                 position: "top-right",
                 autoClose: 3000
             });
         }
     };
+    
 
     const handleInvoice = async () => {
         const { fullName, phone, address, note } = formData;
