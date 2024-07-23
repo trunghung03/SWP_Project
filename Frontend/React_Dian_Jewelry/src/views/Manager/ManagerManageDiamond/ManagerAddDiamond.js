@@ -9,6 +9,7 @@ import '../../../styles/Manager/ManagerAdd.scss';
 const ManagerAddDiamond = () => {
     const navigate = useNavigate();
     const [diamondType, setDiamondType] = useState('main');
+    const [diamondCerificate, setDiamondCertificate] = useState();
     const [diamondData, setDiamondData] = useState({
         shape: '',
         carat: '',
@@ -17,7 +18,7 @@ const ManagerAddDiamond = () => {
         color: '',
         price: '',
         amountAvailable: '',
-        certificateScan: null
+        certificateScan: 'null'
     });
 
     const handleChange = (e) => {
@@ -35,7 +36,7 @@ const ManagerAddDiamond = () => {
             color: '',
             price: '',
             amountAvailable: '',
-            certificateScan: ''
+            certificateScan: 'null'
         });
     };
 
@@ -60,10 +61,12 @@ const ManagerAddDiamond = () => {
     
             if (diamondType === 'main') {
                 const dataRes = await createDiamond(diamondDataWithStatus);
-                // console.log("Main diamond response:", dataRes);
-                // const certificate = await getCertificateById(dataRes.diamondId);
-                // console.log("Certificate response:", certificate);
-                // await updateCertificateById(dataRes.diamondId, { certificateScan: certificate.url });
+                console.log("Main diamond response:", dataRes);
+                await createDiamond(diamondDataWithStatus);
+                const certificate = await getCertificateById(dataRes.diamondId);
+                console.log(certificate);
+                setDiamondCertificate(certificate.url);
+                await updateCertificateById(dataRes.diamondId,{certificateScan: certificate.url});
             } else {
                 const subDiamondRes = await createSubDiamond(diamondDataWithStatus);
                 console.log("Sub diamond response:", subDiamondRes);
@@ -202,7 +205,7 @@ const ManagerAddDiamond = () => {
                     {diamondType === 'main' && (
                         <div className="manager_add_diamond_form_group">
                             <label>Certificate Scan</label>
-                            <input type="text" placeholder="Enter certificate scan URL" name="certificateScan" value={diamondData.certificateScan} onChange={handleChange} required />
+                            <input type="text" placeholder="Certificate scan URL will be displayed here" name="certificateScan" value={diamondCerificate} readOnly/>
                         </div>
                     )}
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
