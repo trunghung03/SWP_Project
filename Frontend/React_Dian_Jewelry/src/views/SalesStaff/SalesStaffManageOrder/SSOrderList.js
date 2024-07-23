@@ -123,7 +123,10 @@ const SSOrderList = () => {
   const handleChange = async (event) => {
     const selectedValue = event.target.value;
     setSortOrder(selectedValue);
-    fetchOrders(1, selectedValue);
+    setPagination((prev) => ({
+      ...prev,
+      currentPage: 1, // Reset to the first page
+    }));
   };
 
   const fetchOrders = async (page = 1, status = sortOrder) => {
@@ -155,7 +158,10 @@ const SSOrderList = () => {
   }, [employeeId, pagination.currentPage, sortOrder]);
 
   const handlePageChange = (event, value) => {
-    fetchOrders(value, sortOrder);
+    setPagination((prev) => ({
+      ...prev,
+      currentPage: value,
+    }));
   };
 
   const handleRequestSort = (event, property) => {
