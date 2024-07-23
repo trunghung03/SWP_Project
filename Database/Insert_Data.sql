@@ -164,7 +164,7 @@
 			('Wedding Bracelets',1),
 			('Wedding Necklaces',1),
 			('Engagement Rings',1);
-			
+			('Diamond' ,1);
 			INSERT INTO SHELLMATERIAL ([Name], Price, Status) VALUES
 			('Silver', 1500, 1),
 			('Gold', 1700, 1),
@@ -679,7 +679,6 @@
 		('PROD046', 'Whisper Eternity Necklace', 2890.00, 'Delicate design with diamonds encircling the band.',30, 7, 68.30,  'https://image.brilliantearth.com/media/product_images/CB/BE4DTN50_white_top.jpg;https://image.brilliantearth.com/media/product_images/7S/BE4DTN50_top.jpeg;https://image.brilliantearth.com/media/product_images/AM/BE1D4257LC-18KW-N-S6_BE4DTN50-18KW_BE4DTN50LC-14KW_062.jpg;https://image.brilliantearth.com/media/product_images/U0/BE3AD603-S_BE4DTN50-18KW_BE4DTN50LC-14KW_070.jpg', 0, 28, 1, 5, 4),
 		('PROD047', 'Certified Stud Earrings', 1995.00, 'Elegant stud earrings featuring certified lab grown diamonds.',31, 7, 79.32, 'https://image.brilliantearth.com/media/product_images/90/BE3DME01318_white_top.jpg;https://image.brilliantearth.com/media/product_images/9X/BE3DME01318_additional1.jpeg;https://image.brilliantearth.com/media/product_images/ZP/BE3DME01318-18KY_top.jpg;https://image.brilliantearth.com/media/product_images/Z5/BE3DME01318-yellow.jpg', 2, 0, 1, 6, 2),
 		('PROD048', 'Diamond Stud Earrings', 495.00, 'Simple and elegant lab grown diamond stud earrings.',33, 7, 42.00, 'https://image.brilliantearth.com/media/product_images/D4/BE3D0492E_yellow_top.jpg;https://image.brilliantearth.com/media/product_images/A5/BE3D0492E_white_top.jpg;https://image.brilliantearth.com/media/product_images/0F/BE3D0492E_rose_top.jpg;https://image.brilliantearth.com/media/product_images/FJ/BE3D492E-14KR_060.jpg', 2, 0, 1, 8, 2);
-
 		DECLARE @Weight DECIMAL(18, 2) = 50.00;
 		DECLARE @AmountAvailable INT = 100;
 
