@@ -5,6 +5,7 @@ import logo from '../../../assets/img/logoN.png';
 import ManagerSidebar from '../../../components/ManagerSidebar/ManagerSidebar.js';
 import { createDiamond, createSubDiamond, getCertificateById, updateCertificateById } from '../../../services/ManagerService/ManagerDiamondService.js';
 import '../../../styles/Manager/ManagerAdd.scss';
+import Loading from '../../../components/Loading/Loading.js';
 
 const ManagerAddDiamond = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ManagerAddDiamond = () => {
         amountAvailable: '',
         certificateScan: 'null'
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,27 +57,30 @@ const ManagerAddDiamond = () => {
             swal("Invalid Carat", `Carat value must be ${diamondType === 'main' ? 'greater than 0.5 and less than 4' : 'greater than 0.1 and less than or equal to 0.5'}`, "error");
             return;
         }
-    
+
+        setLoading(true); // Set loading state to true
         try {
             const diamondDataWithStatus = { ...diamondData, status: true };
-    
+
             if (diamondType === 'main') {
                 const dataRes = await createDiamond(diamondDataWithStatus);
                 console.log("Main diamond response:", dataRes);
-                await createDiamond(diamondDataWithStatus);
                 const certificate = await getCertificateById(dataRes.diamondId);
                 console.log(certificate);
                 setDiamondCertificate(certificate.url);
-                await updateCertificateById(dataRes.diamondId,{certificateScan: certificate.url});
+                await updateCertificateById(dataRes.diamondId, { certificateScan: certificate.url });
             } else {
                 const subDiamondRes = await createSubDiamond(diamondDataWithStatus);
                 console.log("Sub diamond response:", subDiamondRes);
             }
-    
+
             swal("Success", `${diamondType === 'main' ? 'Main' : 'Sub'} Diamond added successfully`, "success")
-                .then(() => {
-                    navigate('/manager-diamond-list');
-                });
+            swal("Success", `${diamondType === 'main' ? 'Main' : 'Sub'} Diamond added successfully`, "success")
+            .then(() => {
+                setTimeout(() => {
+                    navigate('/manager-diamond-list'); // Navigate after 3 seconds
+                }, 3000);
+            });
         } catch (error) {
             console.error("Error creating diamond:", error);
             if (error.response) {
@@ -89,8 +94,15 @@ const ManagerAddDiamond = () => {
                 }
             }
             swal("Something is wrong!", `Failed to add ${diamondType} diamond. Please try again.`, "error");
+        } finally {
+            setLoading(false); // Set loading state to false
         }
     };
+
+    if (loading) {
+        return <Loading />; // Render Loading component when loading
+    }
+
     
     return (
         <div className="manager_add_diamond_all_container">
