@@ -12,7 +12,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import '../../styles/Cart/Cart.scss';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { useCart } from '../../services/CartService';
-import { getShellByProductId, checkProductStock } from '../../services/ProductService';
+import { getShellByProductId, checkProductStock, getProductDetail, getDiamondDetail } from '../../services/ProductService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Insta from '../../components/BlogInspired/BlogInspired.js';
@@ -28,6 +28,7 @@ function Cart() {
     const customerId = localStorage.getItem('customerId');
     const { cartItems, removeFromCart, updateCartItem } = useCart();
     const [shellData, setShellData] = useState({});
+    const [diamondAttributes, setDiamondAttributes] = useState({});
     const [filteredCartItems, setFilteredCartItems] = useState([]);
 
     useEffect(() => {
@@ -36,18 +37,37 @@ function Cart() {
         setFilteredCartItems(storedCartItems);
 
         storedCartItems.forEach(item => {
-            getShellByProductId(item.productId).then(response => {
-                setShellData(prevShellData => ({
-                    ...prevShellData,
-                    [item.productId]: response.data
-                }));
-            }).catch(error => {
-                console.error('Error fetching shell data:', error);
-            });
+            if (!item.selectedShellName) {
+                fetchDiamondAttributes(item.productId);
+            } else {
+                getShellByProductId(item.productId).then(response => {
+                    setShellData(prevShellData => ({
+                        ...prevShellData,
+                        [item.productId]: response.data
+                    }));
+                }).catch(error => {
+                    console.error('Error fetching shell data:', error);
+                });
+            }
         });
 
         checkStockStatus(storedCartItems);
     }, [customerId, cartItems]);
+
+    const fetchDiamondAttributes = async (productId) => {
+        try {
+            const productResponse = await getProductDetail(productId);
+            const mainDiamondAttributeId = productResponse.data.mainDiamondAttributeId;
+            const diamondResponse = await getDiamondDetail(mainDiamondAttributeId);
+            const diamondDetails = diamondResponse.data;
+            setDiamondAttributes(prev => ({
+                ...prev,
+                [productId]: diamondDetails
+            }));
+        } catch (error) {
+            console.error('Error fetching diamond attributes:', error);
+        }
+    };
 
     const checkStockStatus = async (items) => {
         try {
@@ -112,7 +132,7 @@ function Cart() {
             return;
         }
 
-        const missingSizeItems = updatedCartItems.some(item => !item.selectedSize);
+        const missingSizeItems = updatedCartItems.some(item => !item.selectedSize && item.selectedShellName);
         if (missingSizeItems) {
             toast.warn("Please select a size for jewelry in your cart.", {
                 position: "top-right",
@@ -181,7 +201,8 @@ function Cart() {
 
     const handleViewProduct = (product) => {
         const productName = product.name.replace(/\s+/g, '-').toLowerCase();
-        navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
+        const targetPath = product.selectedShellName ? `/product-detail/${productName}` : `/diamond-detail/${productName}`;
+        navigate(targetPath, { state: { id: product.productId } });
     };
 
     const handleRemoveFromCart = (index) => {
@@ -233,6 +254,7 @@ function Cart() {
                                 const firstImage = item.image.split(';')[0];
                                 const availableSizes = getAvailableSizes(item.productId, item.selectedShellName);
                                 const isOutOfStock = item.isOutOfStock;
+                                const diamondAttr = diamondAttributes[item.productId];
                                 return (
                                     <div className={`cart_item ${isOutOfStock ? 'out-of-stock' : ''}`} key={index}>
                                         <img src={firstImage} className="cart_item_image" alt={item.name} />
@@ -247,27 +269,34 @@ function Cart() {
                                                     <a className="cart_item_remove" onClick={() => handleRemoveFromCart(index)}>REMOVE</a>
                                                 </div>
                                             </div>
-                                            <p className={`cart_item_description ${isOutOfStock ? 'text-grey' : ''}`}>
-                                                Shell: {item.selectedShellName}<br />
+                                            {diamondAttr && !item.selectedShellName && (
+                                                <p className={`cart_item_diamond_attributes ${isOutOfStock ? 'text-grey' : 'text-diamond-data' }`}>
+                                                    {diamondAttr.cut} Cutㅤ|ㅤ{diamondAttr.color}Colorㅤ|ㅤ{diamondAttr.clarity}Clarity
+                                                </p>
+                                            )}
+                                            <p className={`cart_item_description ${isOutOfStock ? 'text-grey' : 'text-diamond-only'}`}>
+                                                {item.selectedShellName ? `Shell: ${item.selectedShellName}` : '(Only diamond)'}<br />
                                             </p>
-                                            <div className="cart_item_actions">
-                                                <div className="cart_size_guide_container">
-                                                    <select
-                                                        className={`cart_ring_size_detail ${isOutOfStock ? 'disabled' : ''}`}
-                                                        value={item.selectedSize || ''}
-                                                        onChange={(e) => handleSizeChange(e, index)}
-                                                        disabled={isOutOfStock}
-                                                    >
-                                                        <option value="">Size</option>
-                                                        {availableSizes?.map((shell, sizeIndex) => (
-                                                            <option key={sizeIndex} value={shell.size} disabled={shell.amountAvailable === 0}>
-                                                                Size {shell.size}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <span onClick={() => !isOutOfStock && openSizeGuide(item.categoryId)} className={`cart_size_guide_detail ${isOutOfStock ? 'disabled text-grey unclickable' : ''}`}>Size guide</span>
+                                            {item.selectedShellName && (
+                                                <div className="cart_item_actions">
+                                                    <div className="cart_size_guide_container">
+                                                        <select
+                                                            className={`cart_ring_size_detail ${isOutOfStock ? 'disabled' : ''}`}
+                                                            value={item.selectedSize || ''}
+                                                            onChange={(e) => handleSizeChange(e, index)}
+                                                            disabled={isOutOfStock}
+                                                        >
+                                                            <option value="">Size</option>
+                                                            {availableSizes?.map((shell, sizeIndex) => (
+                                                                <option key={sizeIndex} value={shell.size} disabled={shell.amountAvailable === 0}>
+                                                                    Size {shell.size}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        <span onClick={() => !isOutOfStock && openSizeGuide(item.categoryId)} className={`cart_size_guide_detail ${isOutOfStock ? 'disabled text-grey unclickable' : ''}`}>Size guide</span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
                                             <div className={`cart_item_price ${isOutOfStock ? 'text-grey' : ''}`}>${Math.floor(item.price)}</div>
                                         </div>
                                     </div>
