@@ -29,12 +29,14 @@ const ManagerAddPromotion = () => {
             const { amount, startDate, endDate, ...rest } = promotionData;
             const discountPercentage = parseFloat(amount);
 
-            if (startDate > endDate) throw new Error("End Date has to be after Start Date");
+            if (new Date(startDate) > new Date(endDate)) throw new Error("End Date has to be after Start Date");
             if (isNaN(discountPercentage) || discountPercentage <= 0 || discountPercentage > 100) throw new Error("Discount Percentage must be a positive number between 0 and 100");
 
             const promotionDataWithStatus = {
                 ...rest,
                 amount: discountPercentage / 100,
+                startDate: new Date(startDate).toISOString(),
+                endDate: new Date(endDate).toISOString(),
                 status: true
             };
 
@@ -58,7 +60,6 @@ const ManagerAddPromotion = () => {
             }
         }
     };
-
     return (
         <div className="manager_add_diamond_all_container">
             <div className="manager_add_diamond_sidebar">
