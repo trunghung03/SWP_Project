@@ -2,20 +2,20 @@
 {
     public class ManageProductDetailDto
     {
-        public string CategoryName { get; set; }
-        public string CollectionName { get; set; }
+        public string? CategoryName { get; set; }
+        public string? CollectionName { get; set; }
         public int ProductID { get; set; }
-        public string ProductCode { get; set; }
-        public string ProductName { get; set; }
+        public string? ProductCode { get; set; }
+        public string? ProductName { get; set; }
         public decimal Price { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int? MainDiamondAttributeId { get; set; }
         public int? SubDiamondAttributeId { get; set; }
         public decimal? LaborCost { get; set; }
-        public string ImageLinkList { get; set; }
+        public string? ImageLinkList { get; set; }
         public int? SubDiamondAmount { get; set; }
         public int? MainDiamondAmount { get; set; }
         public int AmountAvailable { get; set; }
-        public string MaterialName { get; set; }
+        public string? MaterialName { get; set; }
     }
 }

@@ -286,14 +286,17 @@ namespace DIAN_.Repository
         {
             var result = (from category in _context.Categories
                           join product in _context.Products on category.CategoryId equals product.CategoryId
-                          join collection in _context.Collections on product.CollectionId equals collection.CollectionId
-                          join shell in _context.Shells on product.ProductId equals shell.ProductId
-                          join shellMaterial in _context.Shellmaterials on shell.ShellMaterialId equals shellMaterial.ShellMaterialId
+                          join collection in _context.Collections on product.CollectionId equals collection.CollectionId into collections
+                          from collection in collections.DefaultIfEmpty()
+                          join shell in _context.Shells on product.ProductId equals shell.ProductId into shells
+                          from shell in shells.DefaultIfEmpty()
+                          join shellMaterial in _context.Shellmaterials on shell.ShellMaterialId equals shellMaterial.ShellMaterialId into shellMaterials
+                          from shellMaterial in shellMaterials.DefaultIfEmpty()
                           where product.ProductId == productId
                           select new ManageProductDetailDto
                           {
                               CategoryName = category.Name,
-                              CollectionName = collection.Name,
+                              CollectionName = collection != null ? collection.Name : null,
                               ProductID = product.ProductId,
                               ProductCode = product.ProductCode,
                               ProductName = product.Name,
@@ -305,12 +308,13 @@ namespace DIAN_.Repository
                               ImageLinkList = product.ImageLinkList,
                               SubDiamondAmount = product.SubDiamondAmount,
                               MainDiamondAmount = product.MainDiamondAmount,
-                              AmountAvailable = shell.AmountAvailable,
-                              MaterialName = shellMaterial.Name
+                              AmountAvailable = shell != null ? shell.AmountAvailable : 0,
+                              MaterialName = shellMaterial != null ? shellMaterial.Name : null
                           }).FirstOrDefault();
 
             return result;
         }
+
         public async Task<bool> ExistsMainDiamondAttributeAsync(int mainDiamondAttributeId)
         {
             return await _context.Diamonds.AnyAsync(d => d.DiamondId == mainDiamondAttributeId);

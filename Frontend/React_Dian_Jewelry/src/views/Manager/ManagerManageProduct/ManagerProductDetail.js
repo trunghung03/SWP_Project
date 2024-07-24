@@ -63,22 +63,26 @@ const ManagerProductDetail = () => {
         </button>
         
         <div className="manager_product_detail_box">
-          <div
-            className="manager_product_detail_subcontent"
-            style={{ textAlign: "end", fontWeight: "600" }}
-          >
-            {productDetail.productCode}
-          </div>
-          <div
-            className="manager_product_detail_subcontent"
-            style={{
-              textAlign: "center",
-              fontFamily: "cursive",
-              fontSize: "30px",
-            }}
-          >
-            {productDetail.productName}
-          </div>
+          {productDetail.productCode && (
+            <div
+              className="manager_product_detail_subcontent"
+              style={{ textAlign: "end", fontWeight: "600" }}
+            >
+              {productDetail.productCode}
+            </div>
+          )}
+          {productDetail.productName && (
+            <div
+              className="manager_product_detail_subcontent"
+              style={{
+                textAlign: "center",
+                fontFamily: "cursive",
+                fontSize: "30px",
+              }}
+            >
+              {productDetail.productName}
+            </div>
+          )}
           <div
             className="manager_product_detail_content_2"
             style={{ display: "flex" }}
@@ -106,51 +110,63 @@ const ManagerProductDetail = () => {
               </ImageList>
             </div>
             <div>
-              <div className="manager_product_detail_subcontent">
-                <p>Description:</p>
-                <p>
-                  {productDetail.description}
-                </p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Category: {productDetail.categoryName}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Collection: {productDetail.collectionName}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Material: {productDetail.materialName}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Main Diamond ID: {productDetail.mainDiamondAttributeId}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Amount: {productDetail.mainDiamondAmount}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Sub Diamond ID: {productDetail.subDiamondAttributeId}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Amount: {productDetail.subDiamondAmount}</p>
-              </div>
-              <div className="manager_product_detail_subcontent">
-                <p>Labor Cost: {productDetail.laborCost}</p>
-              </div>
+              {productDetail.description && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Description:</p>
+                  <p>{productDetail.description}</p>
+                </div>
+              )}
+              {productDetail.categoryName && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Category: {productDetail.categoryName}</p>
+                </div>
+              )}
+              {productDetail.collectionName && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Collection: {productDetail.collectionName}</p>
+                </div>
+              )}
+              {productDetail.materialName && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Material: {productDetail.materialName}</p>
+                </div>
+              )}
+              {productDetail.mainDiamondAttributeId && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Main Diamond ID: {productDetail.mainDiamondAttributeId}</p>
+                </div>
+              )}
+              {productDetail.mainDiamondAmount && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Amount: {productDetail.mainDiamondAmount}</p>
+                </div>
+              )}
+              {productDetail.subDiamondAttributeId && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Sub Diamond ID: {productDetail.subDiamondAttributeId}</p>
+                </div>
+              )}
+              {productDetail.subDiamondAmount && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Amount: {productDetail.subDiamondAmount}</p>
+                </div>
+              )}
+              {productDetail.laborCost && (
+                <div className="manager_product_detail_subcontent">
+                  <p>Labor Cost: {productDetail.laborCost}</p>
+                </div>
+              )}
             </div>
           </div>
 
-          <div
-            className="manager_product_detail_subcontent"
-            style={{ textAlign: "end", marginRight: "10%" }}
-          >
-            Price: {productDetail.price}
-          </div>
-          <div
-            className="manager_product_detail_subcontent"
-            style={{ textAlign: "end", marginRight: "10%" }}
-          >
-            Stock: {productDetail.amountAvailable}
-          </div>
+          {productDetail.price && (
+            <div
+              className="manager_product_detail_subcontent"
+              style={{ textAlign: "end", marginRight: "10%" }}
+            >
+              Price: {productDetail.price}
+            </div>
+          )}
         </div>
       </div>
     </div>
