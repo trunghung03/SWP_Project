@@ -35,19 +35,17 @@ import { visuallyHidden } from "@mui/utils";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 
-// Head cells for the product table
 const headCells = [
   { id: 'productId', numeric: false, disablePadding: false, label: 'ID', sortable: true },
   { id: 'productCode', numeric: false, disablePadding: false, label: 'Code', sortable: true },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name', sortable: true },
   { id: 'price', numeric: false, disablePadding: false, label: 'Price', sortable: true },
-  { id: 'stock', numeric: false, disablePadding: false, label: 'Stock', sortable: true },
+  // { id: 'stock', numeric: false, disablePadding: false, label: 'Stock', sortable: true },
   { id: 'action', numeric: false, disablePadding: false, label: 'Action', sortable: false },
   { id: 'view', numeric: false, disablePadding: false, label: 'View', sortable: false },
   { id: 'available', numeric: false, disablePadding: false, label: 'Available', sortable: false },
 ];
 
-// Enhanced Table Head for sorting
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
 
@@ -95,14 +93,12 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-// Comparator function for sorting
 const getComparator = (order, orderBy) => {
   return order === 'desc'
     ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
     : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
 };
 
-// Sort table rows based on comparator
 const tableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -256,10 +252,8 @@ const ManagerProductList = () => {
   const handleUpdate = async () => {
     const requiredFields = [
       "name",
-      "description",
       "laborPrice",
       "imageLinkList",
-      "collectionId",
       "categoryId",
     ];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
@@ -282,6 +276,14 @@ const ManagerProductList = () => {
     }
 
     const productToUpdate = { ...editedProduct };
+
+    if (editedProduct.description === '') {
+      productToUpdate.description = null;
+    }
+
+    if (editedProduct.collectionId === '') {
+      productToUpdate.collectionId = null;
+    }
 
     updateProductById(productToUpdate.productId, productToUpdate)
       .then(() => {
@@ -366,7 +368,7 @@ const ManagerProductList = () => {
                         <TableCell align="center">{item.productCode}</TableCell>
                         <TableCell align="center">{item.name}</TableCell>
                         <TableCell align="center">${item.price}</TableCell>
-                        <TableCell align="center">{item.stock}</TableCell>
+                        {/* <TableCell align="center">{item.stock}</TableCell> */}
                         <TableCell align="center">
                           <IconButton onClick={() => handleEdit(item)}>
                             <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
@@ -437,9 +439,8 @@ const ManagerProductList = () => {
                   type="text"
                   name="description"
                   maxLength={255}
-                  value={editedProduct.description}
+                  value={editedProduct.description || ""}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div className="manager_manage_product_form_group">
@@ -467,9 +468,8 @@ const ManagerProductList = () => {
                 <input
                   type="text"
                   name="collectionId"
-                  value={editedProduct.collectionId}
+                  value={editedProduct.collectionId || ""}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
@@ -493,8 +493,8 @@ const ManagerProductList = () => {
                     setEditedProduct({ ...editedProduct, status: value });
                   }}
                 >
-                  <option value="isDisplayed">isDisplayed</option>
-                  <option value="notDisplayed">notDisplayed</option>
+                  <option value="isDisplayed">Is Displayed</option>
+                  <option value="notDisplayed">Not Displayed</option>
                 </select>
               </div>
               <div className="manager_manage_product_modal_actions">
