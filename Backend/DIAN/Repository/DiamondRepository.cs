@@ -268,7 +268,7 @@ namespace DIAN_.Repository
 
         public async Task<Diamond> UpdateMainDiamondOrderDetailId(int? orderDetailId, int diamondId)
         {
-            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.MainDiamondAtrributeId == diamondId && x.Status);
             if (existingDiamond != null)
             {
                 existingDiamond.Status = false;
@@ -281,7 +281,7 @@ namespace DIAN_.Repository
 
         public async Task<Diamond> UpdateMainDiamondOrderDetailIdForCancel(int? orderDetailId, int diamondId)
         {
-            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.MainDiamondAtrributeId == diamondId && x.Status == false);
             if (existingDiamond != null)
             {
                 existingDiamond.Status = true;
