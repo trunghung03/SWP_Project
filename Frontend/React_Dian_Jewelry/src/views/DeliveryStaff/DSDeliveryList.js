@@ -170,7 +170,7 @@ const DSDeliveryList = () => {
                       <TableCell align="center">{item.orderStatus}</TableCell>
                       <TableCell align="center">
                         <InfoIcon
-                          style={{ cursor: "pointer", color: "#ff6a6a" }}
+                           style={{ cursor: "pointer", color: "#575252" }}
                           onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>

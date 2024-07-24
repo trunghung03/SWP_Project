@@ -102,7 +102,7 @@ class ManagerSidebar extends Component {
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_promotional' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-promotional-list')}>
                                 <i className="fas fa-receipt"></i>
-                                <span>Manage Promotional</span>
+                                <span>Manage Promotion</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_collection' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-collection-list')}>
                                 <i className="fas fa-leaf"></i>
