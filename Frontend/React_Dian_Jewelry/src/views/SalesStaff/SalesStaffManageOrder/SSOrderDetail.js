@@ -15,9 +15,10 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
-import { getBillDetail, salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
-import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
+import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
+import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
+import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import swal from "sweetalert";
 
 const SSOrderDetail = () => {
@@ -66,6 +67,23 @@ const SSOrderDetail = () => {
     }
   }, [orderId]);
 
+  const handleSendEmail = async () => {
+    try {
+      const warrantyData = await handleAddWarranty();
+      const response = await getWarrantyURL(warrantyData.orderDetailId);
+      const url = response.url;
+      const emailData = {
+        toEmail: orderDetails.email,
+        subject: "Your Warranty",
+        body: `Here is your warranty link: ${url}`,
+      };
+      await sendWarrantyEmail(emailData);
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      swal("Error", `Failed to send email: ${error.message}`, "error");
+    }
+  };
+
   const handleSendCertificate = async () => {
     setWarrantyLoading(true);
     try {
@@ -88,11 +106,34 @@ const SSOrderDetail = () => {
         subject: "Your Diamond's Certificate:",
         body: `Here are your certificate links: ${certificateUrls.join('; ')}`
       };
-      await sendWarrantyEmail(emailData);
-      await handleSendEmail();
-      swal("Success", "Certificate and warranty emails sent successfully", "success");
 
-      // Update status to Preparing after sending emails
+      await sendWarrantyEmail(emailData);
+      swal("Success", "Send certificate success.", "success");
+
+      try {
+        console.log("test1");
+
+        const warrantyData = await handleAddWarranty();
+        console.log("test2");
+        console.log(warrantyData);
+
+        const response = await getWarrantyURL(warrantyData.orderDetailId);
+        console.log("test3");
+
+        const url = response.url;
+        console.log("test4");
+
+        const wemailData = {
+          toEmail: orderDetails.email,
+          subject: "Your Warranty",
+          body: `Here is your warranty link: ${url}`,
+        };
+        await sendWarrantyEmail(wemailData);
+        swal("Success", "Send warranty success.", "success");
+      } catch (error) {
+        // swal("Error", `Failed to send warranty email: ${error.message}`, "error");
+      }
+
       const updateOrderStatusDto = {
         orderId: orderId,
         status: "Preparing"
@@ -101,51 +142,25 @@ const SSOrderDetail = () => {
       setStatus("Preparing");
 
     } catch (error) {
-      console.error("Failed to send Certificate emails:", error);
-      swal("Error", `Failed to send Certificate emails: ${error.message}`, "error");
+      // swal("Error", `Failed to send Certificate emails: ${error.message}`, "error");
     } finally {
       setWarrantyLoading(false);
     }
   };
 
-  const handleSendEmail = async () => {
-    try {
-      const warrantyData = await getOrCreateWarranty(orderId);
-    
-      // Get the warranty URL using the returned warranty data
-      const response = await getWarrantyURL(warrantyData.orderDetailId);
-      const url = response.url;
-  
-      // Prepare email data
-      const emailData = {
-        toEmail: orderDetails.email,
-        subject: "Your Warranty",
-        body: `Here is your warranty link: ${url}`,
-      };
-  
-      await sendWarrantyEmail(emailData);
-    } catch (error) {
-      console.error("Failed to send email:", error);
-      swal("Error", `Failed to send email: ${error.message}`, "error");
-    }
-  };
+  const handleAddWarranty = async () => {
+    const warrantyData = {
+      orderDetailId: orderDetails.orderId,
+      startDate: new Date().toISOString().split("T")[0],
+      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0],
+      status: "true"
+    };
 
-  const getOrCreateWarranty = async (orderId) => {
     try {
-      const existingWarranty = await getWarrantyById(orderId);
-      if (existingWarranty) {
-        return existingWarranty;
-      } else {
-        const newWarranty = await createWarranty({
-          orderDetailId: orderDetails.orderId,
-          startDate: new Date().toISOString().split("T")[0], // current date
-          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0], // one year from now
-          status: "true"
-        });
-        return newWarranty;
-      }
+      await createWarranty(warrantyData);
+      setWarrantyExists(true);
     } catch (error) {
-      throw new Error("Failed to get or create warranty");
+      swal("Error", "Warranty already created.", "error");
     }
   };
 
@@ -159,8 +174,6 @@ const SSOrderDetail = () => {
 
       await salesStaffUpdateOrderStatus(updateOrderStatusDto);
       swal("Success", "Order status updated successfully", "success");
-
-      // navigate('/sales-staff-order-list');
     } catch (error) {
       console.error("Failed to update order status", error);
       swal("Error", `Failed to update order status: ${error.message}`, "error");
@@ -289,9 +302,11 @@ const SSOrderDetail = () => {
                   Total Price: ${orderDetails.totalPrice}
                 </p>
                 <div className="ss_detail_confirmbutton">
-                  <button onClick={handleSubmit} disabled={isButtonDisabled}>
-                    {loading ? "Loading..." : "Confirm"}
-                  </button>
+                  {status !== "Paid" && (
+                    <button onClick={handleSubmit} disabled={isButtonDisabled}>
+                      {loading ? "Loading..." : "Confirm"}
+                    </button>
+                  )}
                   {status === "Paid" && (
                     <button onClick={handleSendCertificate} disabled={warrantyLoading}>
                       {warrantyLoading ? "Sending..." : "Send Certificate, Warranty"}
