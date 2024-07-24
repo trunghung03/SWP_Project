@@ -581,12 +581,12 @@ const ManagerStatitic = () => {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center">
-                        Line Total
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
                         Product Code
                       </StyledTableCell>
-                      <StyledTableCell align="center">Name</StyledTableCell>
+                      <StyledTableCell align="center">
+                        Name
+                      </StyledTableCell>
+                      <StyledTableCell align="center">Line Total</StyledTableCell>
                       <StyledTableCell align="center">
                         Items Sold
                       </StyledTableCell>
