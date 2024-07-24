@@ -98,7 +98,7 @@ const AdminAddEmployee = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Password</label>
-                            <input type="text" name="password" placeholder="Enter password" value={employeeData.password} onChange={handleChange} required />
+                            <input type="password" name="password" placeholder="Enter password" value={employeeData.password} onChange={handleChange} required />
                         </div>
                     </div>
 
