@@ -178,7 +178,12 @@
     border: 1px solid #f9c6bb;
 }
 
-// Update modal
+/* Freeze background when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Modal overlay */
 .manager_manage_product_modal_overlay {
     position: fixed;
     top: 0;
@@ -190,21 +195,22 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    overflow-y: auto;
 }
 
+/* Modal content */
 .manager_manage_product_update_modal {
     background-color: white;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 500px;
     width: 100%;
     z-index: 1001;
-    overflow-y: auto;
-    margin: 300px 0 50px 0;
+    max-height: 80vh; /* Adjust height as needed */
+    overflow-y: auto; /* Enable vertical scroll inside the modal */
 }
 
+/* Modal content details */
 .manager_manage_product_modal_content {
     display: flex;
     flex-direction: column;
@@ -258,7 +264,7 @@
     background-color: #777;
 }
 
-.pdf-download{
+.pdf-download {
     text-align: end;
     margin-top: 10px;
 }

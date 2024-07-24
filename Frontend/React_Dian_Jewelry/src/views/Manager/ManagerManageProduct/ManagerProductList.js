@@ -241,6 +241,7 @@ const ManagerProductList = () => {
     setEditMode(true);
     setEditedProduct(product);
     setOriginalProduct(product);
+    document.body.classList.add("modal-open"); // Add this line
   };
 
   const handleChange = (e) => {
@@ -291,6 +292,7 @@ const ManagerProductList = () => {
           .then(() => {
             fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
             setEditMode(false);
+            document.body.classList.remove("modal-open"); // Add this line
           });
       })
       .catch((error) => {
@@ -414,7 +416,10 @@ const ManagerProductList = () => {
       {editMode && (
         <div
           className="manager_manage_product_modal_overlay"
-          onClick={() => setEditMode(false)}
+          onClick={() => {
+            setEditMode(false);
+            document.body.classList.remove("modal-open"); // Add this line
+          }}
         >
           <div
             className="manager_manage_product_update_modal"
@@ -498,7 +503,14 @@ const ManagerProductList = () => {
                 </select>
               </div>
               <div className="manager_manage_product_modal_actions">
-                <button onClick={() => setEditMode(false)}>Cancel</button>
+                <button
+                  onClick={() => {
+                    setEditMode(false);
+                    document.body.classList.remove("modal-open"); // Add this line
+                  }}
+                >
+                  Cancel
+                </button>
                 <button onClick={handleUpdate}>Confirm</button>
               </div>
             </div>

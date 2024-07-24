@@ -89,7 +89,7 @@ function DiamondDetail() {
   const handleAddToCart = () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      toast.warn("Please sign in or sign up to add jewelry to cart.", {
+      toast.warn("Please sign in or sign up to add diamond to cart.", {
         position: "top-right",
         autoClose: 3000
       });
@@ -98,7 +98,7 @@ function DiamondDetail() {
 
     checkProductStock(product.productId).then(response => {
       if (response.data === "Not enough stock") {
-        toast.error("Sorry, this product is out of stock.", {
+        toast.error("This product is currently out of stock. Sorry for this inconvenience.", {
           position: "top-right",
           autoClose: 3000
         });

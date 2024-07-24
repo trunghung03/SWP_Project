@@ -16,7 +16,7 @@ import recycledMetalsIcon from '../../assets/img/blog2.svg';
 import givingBackIcon from '../../assets/img/blog3.svg';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
-import Loading from '../../components/Loading/Loading'; // Import the Loading component
+import Loading from '../../components/Loading/Loading'; 
 
 function Blog() {
   const [articles, setArticles] = useState([]);
@@ -25,7 +25,7 @@ function Blog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchActive, setSearchActive] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const navItems = [
@@ -37,11 +37,11 @@ function Blog() {
     getAllArticles()
       .then(data => {
         setArticles(data);
-        setLoading(false); // Set loading to false when data is fetched
+        setLoading(false);
       })
       .catch(error => {
         console.error(error);
-        setLoading(false); // Set loading to false even if there is an error
+        setLoading(false); 
       });
   }, []);
 
@@ -117,7 +117,7 @@ function Blog() {
     }
   };
 
-  const firstThreeArticles = articles.slice(0, 3);
+  const lastThreeArticles = articles.slice(-3);
   const filteredArticles = searchActive
     ? searchResults.slice(0, visibleBlogs)
     : selectedTag
@@ -151,10 +151,10 @@ function Blog() {
         </div>
 
         <div className='blog_popular_title'>
-          <h4>Popular Education Blogs</h4>
+          <h4>Newest Blogs For You</h4>
         </div>
 
-        {firstThreeArticles.map(article => (
+        {lastThreeArticles.map(article => (
           <div key={article.articleID} className="col-md-4 mb-4">
             <div className="blog_card card">
               <img src={article.image} alt={article.title} className="blog_image card-img-top" />

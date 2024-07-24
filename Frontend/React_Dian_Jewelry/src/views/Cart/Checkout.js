@@ -147,11 +147,11 @@ function Checkout() {
 
             const currentDateTime = new Date();
             const promotionEndDate = new Date(promotion.endDate);
-    
+
             if (promotionEndDate < currentDateTime) {
                 throw new Error("Voucher has expired");
             }
-    
+
             const discountAmount = calculateTotal() * promotion.amount;
             setVoucherDiscount(discountAmount);
             setPromotionId(promotion.id);
@@ -168,7 +168,7 @@ function Checkout() {
             });
         }
     };
-    
+
 
     const handleInvoice = async () => {
         const { fullName, phone, address, note } = formData;
@@ -216,7 +216,7 @@ function Checkout() {
             const hasOutOfStockItems = stockChecks.some(item => item.isOutOfStock);
 
             if (hasOutOfStockItems) {
-                toast.error("Some products in your cart are currently sold out. Please remove them to checkout.", {
+                toast.error("Can not checkout due to some products in your cart are currently sold out. Sorry for this inconvenience.", {
                     position: "top-right",
                     autoClose: 3000,
                     onClose: () => navigate('/cart')
@@ -300,7 +300,7 @@ function Checkout() {
                 const vnpayResponse = await requestVNPayPayment(paymentData);
                 window.location.href = vnpayResponse.paymentUrl;
             } else {
-                await UpdateQuantityCheckout(orderId); 
+                await UpdateQuantityCheckout(orderId);
                 toast.success("Order successfully! Thank you for your order.", {
                     position: "top-right",
                     autoClose: 3000
@@ -313,9 +313,10 @@ function Checkout() {
         } catch (error) {
             if (error.response) {
             }
-            toast.error("There was an error processing your order. Please try again.", {
+            toast.error("Can not checkout due to some products in your cart are currently sold out. Sorry for this inconvenience.", {
                 position: "top-right",
-                autoClose: 3000
+                autoClose: 3000,
+                onClose: () => navigate('/cart')
             });
             setLoading(false);
         }
