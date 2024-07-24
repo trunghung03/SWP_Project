@@ -382,7 +382,7 @@ const ManagerProductList = () => {
                         <TableCell align="center">
                           <Visibility onClick={() => viewDetail(item.productId)} />
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell style ={{textTransform:"capitalize"}} align="center">
                           {item.hasSufficientDiamonds.toString()}
                         </TableCell>
                       </TableRow>
