@@ -15,10 +15,9 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
-import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
-import { useParams } from "react-router-dom";
-import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
+import { getBillDetail, salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
+import { useParams } from "react-router-dom";
 import swal from "sweetalert";
 
 const SSOrderDetail = () => {
@@ -111,12 +110,7 @@ const SSOrderDetail = () => {
 
   const handleSendEmail = async () => {
     try {
-      // Check if warranty already exists
-      // const warrantyData = await getWarrantyById(orderId);
-      // if (!warrantyData) {
-      //   await handleAddWarranty();
-      // }
-      const warrantyData = await handleAddWarranty();
+      const warrantyData = await getOrCreateWarranty(orderId);
     
       // Get the warranty URL using the returned warranty data
       const response = await getWarrantyURL(warrantyData.orderDetailId);
@@ -136,21 +130,22 @@ const SSOrderDetail = () => {
     }
   };
 
-  const handleAddWarranty = async () => {
-    const warrantyData = {
-      orderDetailId: orderDetails.orderId,
-      startDate: new Date().toISOString().split("T")[0], // current date
-      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0], // one year from now
-      status: "true"
-    };
-
+  const getOrCreateWarranty = async (orderId) => {
     try {
-      await createWarranty(warrantyData);
-      setWarrantyExists(true);
-    //  swal("Success", "Warranty added successfully", "success");
+      const existingWarranty = await getWarrantyById(orderId);
+      if (existingWarranty) {
+        return existingWarranty;
+      } else {
+        const newWarranty = await createWarranty({
+          orderDetailId: orderDetails.orderId,
+          startDate: new Date().toISOString().split("T")[0], // current date
+          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0], // one year from now
+          status: "true"
+        });
+        return newWarranty;
+      }
     } catch (error) {
-      console.error("Failed to add warranty:", error);
-      swal("Error", `Failed to add warranty: ${error.message}`, "error");
+      throw new Error("Failed to get or create warranty");
     }
   };
 
