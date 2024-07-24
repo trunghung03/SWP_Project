@@ -54,7 +54,7 @@ const SSOrderDetail = () => {
           setIsOrderCompleted(data.orderStatus === "Completed");
         })
         .catch((error) => {
-          console.error("Failed to fetch order details:", error);
+          // console.error("Failed to fetch order details:", error);
         });
 
       getWarrantyById(orderId)
@@ -62,7 +62,7 @@ const SSOrderDetail = () => {
           setWarrantyExists(data !== null);
         })
         .catch((error) => {
-          console.error("Failed to fetch warranty details:", error);
+          // console.error("Failed to fetch warranty details:", error);
         });
     }
   }, [orderId]);
@@ -117,19 +117,20 @@ const SSOrderDetail = () => {
         console.log("test2");
         console.log(warrantyData);
 
-        const response = await getWarrantyURL(warrantyData.orderDetailId);
+        const aaa = getWarrantyURL(orderId);
         console.log("test3");
 
-        const url = response.url;
+        const warrantyurl = aaa.url;
         console.log("test4");
+        console.log(warrantyurl);
 
-        const wemailData = {
-          toEmail: orderDetails.email,
-          subject: "Your Warranty",
-          body: `Here is your warranty link: ${url}`,
-        };
-        await sendWarrantyEmail(wemailData);
-        swal("Success", "Send warranty success.", "success");
+        // const wemailData = {
+        //   toEmail: orderDetails.email,
+        //   subject: "Your Warranty",
+        //   body: `Here is your warranty link: ${warrantyurl}`,
+        // };
+        // await sendWarrantyEmail(wemailData);
+        // swal("Success", "Send warranty success.", "success");
       } catch (error) {
         // swal("Error", `Failed to send warranty email: ${error.message}`, "error");
       }
