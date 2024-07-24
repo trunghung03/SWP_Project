@@ -231,7 +231,7 @@ const ManagerEmployeeList = () => {
         </Stack>
         {isSearch && (
           <button className="btn btn-secondary mt-3" onClick={handleBack}>
-            Back
+            Back to all
           </button>
         )}
       </div>
