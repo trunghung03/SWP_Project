@@ -100,7 +100,7 @@ function Checkout() {
     useEffect(() => {
         const cartKey = `cartItems${customerId}`;
         const storedCartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
-        setCartItems(storedCartItems);
+        setCartItems(groupCartItems(storedCartItems));
         window.scrollTo(0, 230);
     }, [customerId]);
 
@@ -133,8 +133,22 @@ function Checkout() {
         setTotalPrice(Math.max(0, initialTotal - totalDiscount));
     }, [usePoints, points, cartItems, voucherDiscount, pointsDiscount]);
 
+    const groupCartItems = (items) => {
+        const groupedItems = items.reduce((acc, item) => {
+            const key = `${item.productId}-${item.name}-${item.image}-${item.price}-${item.selectedShellId}-${item.selectedShellName}-${item.selectedSize}`;
+            if (!acc[key]) {
+                acc[key] = { ...item, quantity: 1 };
+            } else {
+                acc[key].quantity += 1;
+            }
+            return acc;
+        }, {});
+
+        return Object.values(groupedItems);
+    };
+
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + Math.round(parseFloat(item.price)), 0);
+        return cartItems.reduce((total, item) => total + (Math.round(parseFloat(item.price)) * item.quantity), 0);
     };
 
     const handleBackToCart = () => {
@@ -168,7 +182,6 @@ function Checkout() {
             });
         }
     };
-
 
     const handleInvoice = async () => {
         const { fullName, phone, address, note } = formData;
@@ -259,17 +272,23 @@ function Checkout() {
             const createdOrder = await createPurchaseOrder(orderData, voucherCode);
             const orderId = createdOrder.orderId;
 
-            const orderDetailsPromises = cartItems.map(item => {
-                const orderDetail = {
+            const orderDetailsPromises = cartItems.flatMap(item => {
+                return Array.from({ length: item.quantity }, () => ({
                     orderId: orderId,
                     lineTotal: item.price,
                     productId: item.productId,
                     shellId: item?.selectedShellId || null
-                };
-                return createOrderDetails(orderDetail);
+                })).map(orderDetail => createOrderDetails(orderDetail));
             });
 
             await Promise.all(orderDetailsPromises);
+
+            const expandedCartItems = cartItems.flatMap(item =>
+                Array.from({ length: item.quantity }, () => ({
+                    ...item,
+                    quantity: 1
+                }))
+            );
 
             const invoiceData = {
                 orderId,
@@ -277,7 +296,7 @@ function Checkout() {
                 orderTotalPrice: Math.floor(totalPrice),
                 orderDiscount: Math.floor(appliedDiscount),
                 paymentMethod,
-                cartItems
+                cartItems: expandedCartItems
             };
 
             localStorage.setItem('orderId', orderId);
@@ -407,8 +426,8 @@ function Checkout() {
                                     <img src={item.image.split(';')[0]} alt={item.name} className="checkout_item_image" />
                                     <div className="checkout_item_details">
                                         <div className="checkout_item_row">
-                                            <p className="checkout_item_name"><strong>{item.name} x1</strong></p>
-                                            <p className="checkout_item_price"><strong>${Math.round(item.price)}</strong></p>
+                                            <p className="checkout_item_name"><strong>{item.name} x{item.quantity}</strong></p>
+                                            <p className="checkout_item_price"><strong>${Math.round(item.price) * item.quantity}</strong></p>
                                         </div>
                                         {!item.selectedShellName ? (
                                             <p>(Only diamond)</p>

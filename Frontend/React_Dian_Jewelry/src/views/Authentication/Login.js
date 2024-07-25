@@ -23,7 +23,7 @@ import { UserContext } from "../../services/UserContext";
 import { GoogleLogin } from "@react-oauth/google";
 import CryptoJS from 'crypto-js';
 
-const SECRET_KEY = 'ERKufIf8ZD8FBGqYYP8n3xKdda9i3kh2X0N8CBBh7uY='; 
+const SECRET_KEY = 'ERKufIf8ZD8FBGqYYP8n3xKdda9i3kh2X0N8CBBh7uY=';
 
 const encryptPassword = (password) => {
   return CryptoJS.AES.encrypt(password, SECRET_KEY).toString();
@@ -48,31 +48,28 @@ const Login = () => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
     const rememberedPasswordEncrypted = localStorage.getItem("rememberedPassword");
 
-    const allCartItems = {};
+    const cartItemsBackup = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key.startsWith("cartItems")) {
-        allCartItems[key] = localStorage.getItem(key);
+        cartItemsBackup[key] = localStorage.getItem(key);
       }
     }
 
-    localStorage.clear();
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("lastName");
-    localStorage.removeItem("email");
-    localStorage.removeItem("points");
-
     if (rememberedEmail && rememberedPasswordEncrypted) {
       const rememberedPassword = decryptPassword(rememberedPasswordEncrypted);
-      localStorage.setItem("rememberedEmail", rememberedEmail);
-      localStorage.setItem("rememberedPassword", rememberedPasswordEncrypted);
       setEmail(rememberedEmail);
       setPassword(rememberedPassword);
       setRememberMe(true);
     }
 
-    for (const key in allCartItems) {
-      localStorage.setItem(key, allCartItems[key]);
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+    localStorage.removeItem("email");
+    localStorage.removeItem("points");
+
+    for (const key in cartItemsBackup) {
+      localStorage.setItem(key, cartItemsBackup[key]);
     }
   }, []);
 
@@ -266,6 +263,14 @@ const Login = () => {
   };
 
   const onSuccess = async (res) => {
+    const cartItemsBackup = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith("cartItems")) {
+        cartItemsBackup[key] = localStorage.getItem(key);
+      }
+    }
+
     const decoded = jwtDecode(res.credential);
 
     const body = {
@@ -293,6 +298,12 @@ const Login = () => {
       localStorage.setItem("role", "Customer");
       localStorage.setItem("customerId", userGGInfoRes.data.customerId);
       localStorage.setItem("Google", "Yes");
+
+      for (const key in cartItemsBackup) {
+        localStorage.setItem(key, cartItemsBackup[key]);
+      }
+
+      setCartItemsForUser(userGGInfoRes.data.customerId);
       navigate("/home");
     }
   };
@@ -305,7 +316,7 @@ const Login = () => {
 
   return (
     <div className="container main_container">
-      <ToastContainer /> 
+      <ToastContainer />
       <div className="row login_wrapper">
         <div className="col-lg-6 col-md-6 col-sm-12 left_side">
           <form className="sign_in_form" onSubmit={handleLogin}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -22,7 +22,6 @@ function Invoice() {
         { name: 'Invoice', link: '' }
     ];
     const navigate = useNavigate();
-    const location = useLocation();
     const [invoiceData, setInvoiceData] = useState(null);
     const [loading, setLoading] = useState(true); 
     const { setCartItems: updateCartContext } = useCart();
@@ -78,6 +77,13 @@ function Invoice() {
     const { orderId, orderDate, orderTotalPrice, orderDiscount, paymentMethod, cartItems } = invoiceData;
     const formattedDate = new Date(orderDate).toLocaleDateString('en-GB');
 
+    const expandedCartItems = cartItems.flatMap(item =>
+        Array(item.quantity).fill().map(() => ({
+            name: item.name,
+            price: Math.floor(item.price)
+        }))
+    );
+
     return (
         <div className="Invoice">
             <HeaderComponent />
@@ -96,10 +102,10 @@ function Invoice() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {cartItems.map((item, index) => (
+                                    {expandedCartItems.map((item, index) => (
                                         <tr key={index}>
                                             <td>{item.name}</td>
-                                            <td>${Math.floor(item.price)}</td>
+                                            <td>${item.price}</td>
                                         </tr>
                                     ))}
                                     <tr>
