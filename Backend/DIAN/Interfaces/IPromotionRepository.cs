@@ -1,5 +1,5 @@
-﻿    using DIAN_.DTOs.PromotionDto;
-    using DIAN_.Helper;
+﻿using DIAN_.DTOs.PromotionDto;
+using DIAN_.Helper;
     using DIAN_.Models;
 
     namespace DIAN_.Interfaces
@@ -30,7 +30,7 @@
 
             Task<bool> DeactivateAndActivatePromotion(int id);
 
+            Task<List<Promotion>> SearchPromotionsAsync(PromotionSearch searchCriteria);
 
-
-        }
+    }
     }

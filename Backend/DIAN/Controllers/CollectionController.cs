@@ -1,6 +1,9 @@
 ﻿using DIAN_.DTOs.CategoryDTO;
+using DIAN_.DTOs.CollectionDTO;
+using DIAN_.DTOs.PromotionDto;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
+using DIAN_.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DIAN_.Controllers
@@ -144,6 +147,31 @@ namespace DIAN_.Controllers
 
                 var collectionDto = collection.ToNewestCollectionDTO();
                 return Ok(collectionDto);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpGet("searchAllFields")]
+        public async Task<IActionResult> SearchCollection([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new CollectionSearch
+                {
+                    Query = query
+                };
+
+                var collections = await _collectionRepository.SearchCollectionAsync(searchCriteria);
+
+                if (!collections.Any())
+                {
+                    return NotFound("No Collections match the search criteria.");
+                }
+
+                var collDTOs = collections.Select(cl => cl.ToCollectionDTO()).ToList();
+                return Ok(collDTOs);
             }
             catch (Exception)
             {
