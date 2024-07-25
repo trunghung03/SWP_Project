@@ -280,10 +280,16 @@ const SSOrderDetail = () => {
                   Total Price: ${orderDetails.totalPrice}
                 </p>
                 <div className="ss_detail_confirmbutton">
-                  {status !== "Paid" && (
+                  {isOverdue ? (
                     <button onClick={handleSubmit} disabled={isButtonDisabled}>
-                      {loading ? "Loading..." : "Confirm"}
+                      {loading ? "Loading..." : "Cancel order"}
                     </button>
+                  ) : (
+                    status !== "Paid" && (
+                      <button onClick={handleSubmit} disabled={isButtonDisabled}>
+                        {loading ? "Loading..." : "Confirm"}
+                      </button>
+                    )
                   )}
                   {status === "Paid" && (
                     <button onClick={handleSendCertificateAndWarranty} disabled={warrantyLoading}>
