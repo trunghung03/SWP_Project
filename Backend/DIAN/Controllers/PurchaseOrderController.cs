@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.PurchaseOrderDTOs;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
@@ -33,7 +34,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] PurchaseOrderQuerry querry)
         {
             try
             {
@@ -41,7 +42,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync();
+                var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync(querry);
                 return Ok(purchaseOrders);
             }
             catch (Exception) { throw; }

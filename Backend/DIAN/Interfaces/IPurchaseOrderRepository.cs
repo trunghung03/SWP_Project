@@ -5,7 +5,7 @@ namespace DIAN_.Interfaces
 {
     public interface IPurchaseOrderRepository
     {
-        Task<List<Purchaseorder>> GetAllPurchaseOrderAsync(); //not need to know who is assigned
+        Task<List<Purchaseorder>> GetAllPurchaseOrderAsync(PurchaseOrderQuerry querry); //not need to know who is assigned
         Task<Purchaseorder> GetPurchaseOrderInfoAsync(int orderId);
         Task<Purchaseorder> CreatePurchaseOrderAsync(Purchaseorder order);
         Task<Purchaseorder> UpdatePurchaseOrderAsync(Purchaseorder order, int orderId);
