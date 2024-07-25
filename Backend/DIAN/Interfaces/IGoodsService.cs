@@ -20,6 +20,6 @@ namespace DIAN_.Interfaces
         Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto);
 
         Task<decimal> CalculateProductPriceAsync(int productId);
-        Task<bool> CheckStockAvailable(int productId);
+        Task<StockDto> CheckStockAvailable(int productId);
     }
 }

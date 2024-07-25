@@ -140,11 +140,7 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var stockAvailable = await _goodsService.CheckStockAvailable(productId);
-                if (!stockAvailable)
-                {
-                    return BadRequest("Not enough stock");
-                }
-                return Ok("Available");
+                return Ok(stockAvailable);
             }
             catch (Exception)
             {

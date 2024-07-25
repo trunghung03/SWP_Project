@@ -180,7 +180,7 @@ namespace DIAN_.Services
 
         //fe to check stock available
         //shell not available ~ product not display ~ neednt check stock
-        public async Task<bool> CheckStockAvailable(int productId)
+        public async Task<StockDto> CheckStockAvailable(int productId)
         {
             // Retrieve the product using productId
             var product = await _productRepository.GetByIdAsync(productId);
@@ -188,35 +188,49 @@ namespace DIAN_.Services
             {
                 throw new ArgumentException("Product not found", nameof(productId));
             }
+
+            var stockDto = new StockDto();
+
             if (product.CategoryId == 10)
             {
                 var availableDiamonds = await _diamondRepository.FindAvailableDiamond(product.MainDiamondAtrributeId ?? 0);
                 Console.WriteLine("Available diamonds: " + availableDiamonds.Count);
-                return availableDiamonds.Count > 0;
+                stockDto.MainDiamondCount = availableDiamonds.Count;
+                stockDto.SubDiamondCount = 0; // No sub-diamonds for this category
+                stockDto.MaxProductAvailable = availableDiamonds.Count / (product.MainDiamondAmount ?? 1);
             }
-
-            var mainDiamondCount = await _diamondRepository.CountDiamondsByAttributesAsync(product.MainDiamondAtrributeId ?? 0);
-            var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
-            if (subDiamond == null)
+            else
             {
-                return false;
+                var mainDiamondCount = await _diamondRepository.CountDiamondsByAttributesAsync(product.MainDiamondAtrributeId ?? 0);
+                var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
+                if (subDiamond == null)
+                {
+                    stockDto.MainDiamondCount = mainDiamondCount;
+                    stockDto.SubDiamondCount = 0;
+                    stockDto.MaxProductAvailable = mainDiamondCount / (product.MainDiamondAmount ?? 1);
+                }
+                else
+                {
+                    var subDiamondCount = subDiamond.AmountAvailable;
+                    Console.WriteLine("Main diamond count: " + mainDiamondCount);
+                    Console.WriteLine("Sub diamond count: " + subDiamondCount);
+
+                    stockDto.MainDiamondCount = mainDiamondCount;
+                    stockDto.SubDiamondCount = subDiamondCount;
+
+                    // Calculate the maximum number of products that can be made
+                    int maxProductsFromMainDiamonds = mainDiamondCount / (product.MainDiamondAmount ?? 1);
+                    int maxProductsFromSubDiamonds = subDiamondCount / (product.SubDiamondAmount ?? 1);
+                    stockDto.MaxProductAvailable = Math.Min(maxProductsFromMainDiamonds, maxProductsFromSubDiamonds);
+                }
             }
 
-            var subDiamondCount = subDiamond.AmountAvailable;
-            Console.WriteLine("Main diamond count: " + mainDiamondCount);
-            Console.WriteLine("Sub diamond count: " + subDiamondCount);
+            // Set the message based on stock availability
+            stockDto.Message = stockDto.MaxProductAvailable > 0 ? "Available" : "Not enough stock";
 
-            if (mainDiamondCount < (product.MainDiamondAmount ?? 0))
-            {
-                return false;
-            }
-            if (subDiamond.AmountAvailable < (product.SubDiamondAmount ?? 0))
-            {
-                return false;
-            }
-
-            return true;
+            return stockDto;
         }
+
 
         public async Task<bool> UpdateQuantitiesForOrder(int orderId, bool increaseQuantities) //when checkout, not - quantity yet (for ensure customer not cancel order)
         {
