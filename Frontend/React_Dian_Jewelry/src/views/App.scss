@@ -1,6 +1,6 @@
 body,
 html {
-  font-family: 'Lato', serif;
+  font-family: "Lato", serif;
 }
 
 body {
@@ -62,12 +62,10 @@ body {
   margin-bottom: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   margin-right: -50px !important;
-
 }
 
-
 .staff-btn {
-  background-color: #376B7E;
+  background-color: #376b7e;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -99,8 +97,8 @@ body {
 
 .control-buttons {
   display: flex;
-  justify-content: space-between; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
   background: white;
   padding: 8px 5px 8px 20px;
   border-bottom: 1px solid #d4d4d4;
@@ -112,7 +110,7 @@ body {
   padding: 5px 10px 7px 10px;
 }
 
-.control-buttons strong:hover{
+.control-buttons strong:hover {
   color: #797979;
   background-color: #ebebeb;
   border-radius: 50%;
@@ -170,7 +168,6 @@ body {
 
 .react-chatbot-kit-chat-btn-send:hover {
   background-color: #797979 !important;
-
 }
 
 .react-chatbot-kit-chat-input:focus {
@@ -219,11 +216,11 @@ body {
   fill: #1c1c1c !important;
 }
 
-.chatbot-logo{
+.chatbot-logo {
   width: 80px;
 }
 
-.react-chatbot-kit-chat-btn-send-icon{
+.react-chatbot-kit-chat-btn-send-icon {
   width: 17px !important;
   margin: 10px 10px 10px 7px !important;
 }
@@ -231,10 +228,14 @@ body {
 .react-chatbot-kit-chat-bot-message,
 .react-chatbot-kit-user-chat-message {
   word-break: break-word;
-  white-space: pre-wrap; 
+  white-space: pre-wrap;
 }
 
 .react-chatbot-kit-chat-message-container {
   word-break: break-word;
 }
 
+.link {
+  color: white;
+  text-decoration: none;
+}

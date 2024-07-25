@@ -1,26 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import logo from "../../assets/img/logoN.png";
-import swal from 'sweetalert';
-import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
-import FormControl from "@mui/material/FormControl";
+import PhoneIcon from "@mui/icons-material/Phone";
 import { Box } from "@mui/material";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import swal from "sweetalert";
+import logo from "../../assets/img/logoN.png";
+import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
+import {
+  deliStaffUpdateOrderStatus,
+  getBillDetail,
+} from "../../services/SalesStaffService/SSOrderService.js";
 import "../../styles/DeliveryStaff/DSOrderDetail.scss";
-import { getBillDetail, deliStaffUpdateOrderStatus } from "../../services/SalesStaffService/SSOrderService.js";
 
 function DSDeliveryDetail() {
   const navigate = useNavigate();
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState({});
-  const [status, setStatus] = useState('Deli');
+  const [status, setStatus] = useState("Deli");
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
 
   const handleChange = (event) => {
@@ -45,9 +48,9 @@ function DSDeliveryDetail() {
     try {
       await deliStaffUpdateOrderStatus(status, orderId);
       swal("Success", "Update order status successfully", "success");
-      navigate('/delivery-staff-delivery-list');
+      navigate("/delivery-staff-delivery-list");
     } catch (error) {
-      console.error('Failed to update order status:', error);
+      console.error("Failed to update order status:", error);
     }
   };
 
@@ -133,7 +136,9 @@ function DSDeliveryDetail() {
               Total Price: ${orderDetails.totalPrice}
             </p>
             <div className="ss_detail_confirmbutton">
-              <button onClick={handleSubmit} disabled={isOrderCompleted}>Done</button>
+              <button onClick={handleSubmit} disabled={isOrderCompleted}>
+                Done
+              </button>
             </div>
           </div>
         </div>

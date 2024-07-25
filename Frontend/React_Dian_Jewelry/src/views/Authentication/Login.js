@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "sonner";
+
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -21,9 +21,9 @@ import { jwtDecode } from "jwt-decode";
 import { useCart } from "../../services/CartService";
 import { UserContext } from "../../services/UserContext";
 import { GoogleLogin } from "@react-oauth/google";
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
-const SECRET_KEY = 'ERKufIf8ZD8FBGqYYP8n3xKdda9i3kh2X0N8CBBh7uY=';
+const SECRET_KEY = "ERKufIf8ZD8FBGqYYP8n3xKdda9i3kh2X0N8CBBh7uY=";
 
 const encryptPassword = (password) => {
   return CryptoJS.AES.encrypt(password, SECRET_KEY).toString();
@@ -46,7 +46,8 @@ const Login = () => {
 
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
-    const rememberedPasswordEncrypted = localStorage.getItem("rememberedPassword");
+    const rememberedPasswordEncrypted =
+      localStorage.getItem("rememberedPassword");
 
     const cartItemsBackup = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -84,10 +85,7 @@ const Login = () => {
     setLoading(true);
 
     if (!isValidEmail(email)) {
-      toast.error("Wrong email format! Please enter a valid email.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error("Wrong email format! Please enter a valid email.");
       setLoading(false);
       return;
     }
@@ -110,7 +108,7 @@ const Login = () => {
       } catch (error) {
         toast.error("Wrong email or password! Please try again.", {
           position: "top-right",
-          autoClose: 3000
+          autoClose: 3000,
         });
         console.error("Login failed: ", error);
         setLoading(false);
@@ -121,10 +119,13 @@ const Login = () => {
   const handleLoginResponse = (res, userInfo, userType) => {
     if (res && res.data && res.data.token) {
       if (!userInfo.status) {
-        toast.error("Account is deactivated! Please contact us if this is a mistake.", {
-          position: "top-right",
-          autoClose: 3000
-        });
+        toast.error(
+          "Account is deactivated! Please contact us if this is a mistake.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
         setLoading(false);
         return;
       }
@@ -308,7 +309,7 @@ const Login = () => {
     }
   };
 
-  const onFailure = (res) => { };
+  const onFailure = (res) => {};
 
   const handleGuestLogin = () => {
     navigate("/home");
@@ -316,7 +317,6 @@ const Login = () => {
 
   return (
     <div className="container main_container">
-      <ToastContainer />
       <div className="row login_wrapper">
         <div className="col-lg-6 col-md-6 col-sm-12 left_side">
           <form className="sign_in_form" onSubmit={handleLogin}>
@@ -405,7 +405,8 @@ const Login = () => {
                       disabled={renderProps.disabled}
                       className="google_custom_btn"
                     >
-                      <i className="fab fa-google google-icon"></i> Continue with Google
+                      <i className="fab fa-google google-icon"></i> Continue
+                      with Google
                     </button>
                   )}
                 />
@@ -426,11 +427,7 @@ const Login = () => {
               <img className="right_image" src={rightImage} alt="Ring photo" />
             </div>
             <div>
-              <img
-                className="right_image"
-                src={rightImage2}
-                alt="Ring photo"
-              />
+              <img className="right_image" src={rightImage2} alt="Ring photo" />
             </div>
             <div>
               <img className="right_image" src={rightImage3} alt="" />

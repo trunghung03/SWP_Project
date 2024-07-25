@@ -1,41 +1,70 @@
-import React, { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
-import "../../../styles/Manager/ManagerList.scss";
-import {
-  ShowAllCollection,
-  searchCollectionById,
-  changeStatus,
-  updateCollectionById,
-} from "../../../services/ManagerService/ManagerCollectionService.js";
-import logo from "../../../assets/img/logoN.png";
+import EditIcon from "@mui/icons-material/Edit";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Pagination from "@mui/material/Pagination";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import logo from "../../../assets/img/logoN.png";
 import AutoResizeTextarea from "../../../components/AutoResizeTextBox/AutoResizeTextarea.js";
+import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
+import {
+  ShowAllCollection,
+  changeStatus,
+  searchCollectionById,
+  updateCollectionById,
+} from "../../../services/ManagerService/ManagerCollectionService.js";
+import "../../../styles/Manager/ManagerList.scss";
 // Head cells for the collection table
 const headCells = [
-  { id: 'collectionId', numeric: false, disablePadding: false, label: 'ID', sortable: true },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Name', sortable: true },
-  { id: 'description', numeric: false, disablePadding: false, label: 'Description', sortable: false },
-  { id: 'update', numeric: false, disablePadding: false, label: 'Update', sortable: false },
-  { id: 'action', numeric: false, disablePadding: false, label: 'Action', sortable: false },
+  {
+    id: "collectionId",
+    numeric: false,
+    disablePadding: false,
+    label: "ID",
+    sortable: true,
+  },
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: false,
+    label: "Name",
+    sortable: true,
+  },
+  {
+    id: "description",
+    numeric: false,
+    disablePadding: false,
+    label: "Description",
+    sortable: false,
+  },
+  {
+    id: "update",
+    numeric: false,
+    disablePadding: false,
+    label: "Update",
+    sortable: false,
+  },
+  {
+    id: "action",
+    numeric: false,
+    disablePadding: false,
+    label: "Action",
+    sortable: false,
+  },
 ];
 
 // Enhanced Table Head for sorting
@@ -54,19 +83,21 @@ function EnhancedTableHead(props) {
             style={{ backgroundColor: "#faecec" }}
             key={headCell.id}
             align="center"
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.sortable ? (
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -82,13 +113,13 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
 };
 
 // Comparator function for sorting
 const getComparator = (order, orderBy) => {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
     : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
 };
@@ -112,8 +143,8 @@ const ManagerCollectionList = () => {
   const [editedCollection, setEditedCollection] = useState({});
   const [isSearch, setIsSearch] = useState(false);
   const [originalCollection, setOriginalCollection] = useState({});
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('collectionId');
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("collectionId");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,11 +209,19 @@ const ManagerCollectionList = () => {
         await changeStatus(collectionID);
         const response = await ShowAllCollection();
         setCollectionItems(response);
-        swal(`${action} successfully!`, "Collection status has been changed.", "success");
+        swal(
+          `${action} successfully!`,
+          "Collection status has been changed.",
+          "success"
+        );
       }
     } catch (error) {
       console.error("Error changing collection status:", error);
-      swal("Something went wrong!", "Failed to change collection status. Please try again.", "error");
+      swal(
+        "Something went wrong!",
+        "Failed to change collection status. Please try again.",
+        "error"
+      );
     }
   };
 
@@ -191,49 +230,67 @@ const ManagerCollectionList = () => {
     setEditedCollection(collection);
     setOriginalCollection(collection);
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(`Field: ${name}, Value: ${value}`);
     setEditedCollection({ ...editedCollection, [name]: value });
   };
-  
+
   const handleUpdate = async () => {
     const requiredFields = ["name", "description", "status"];
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
-    
+
     for (let field of requiredFields) {
       if (!editedCollection[field]) {
         swal("Please fill in all fields!", `Field cannot be empty.`, "error");
         return;
       }
       if (specialCharPattern.test(editedCollection[field])) {
-        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        swal(
+          "Invalid characters detected!",
+          `Field "${field}" contains special characters.`,
+          "error"
+        );
         return;
       }
     }
-  
-    const isEqual = JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
+
+    const isEqual =
+      JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
     }
-  
+
     const CollectionToUpdate = { ...editedCollection, status: true };
-  
+
     try {
       console.log("Sending update request with data:", CollectionToUpdate);
-      await updateCollectionById(CollectionToUpdate.collectionId, CollectionToUpdate);
+      await updateCollectionById(
+        CollectionToUpdate.collectionId,
+        CollectionToUpdate
+      );
       const updatedItems = await ShowAllCollection();
       setCollectionItems(updatedItems);
       setEditMode(false);
-      swal("Updated successfully!", "The Collection information has been updated.", "success");
+      swal(
+        "Updated successfully!",
+        "The Collection information has been updated.",
+        "success"
+      );
     } catch (error) {
-      console.error("Error updating Collection:", error.response ? error.response.data : error.message);
-      swal("Something went wrong!", "Failed to update. Please try again.", "error");
+      console.error(
+        "Error updating Collection:",
+        error.response ? error.response.data : error.message
+      );
+      swal(
+        "Something went wrong!",
+        "Failed to update. Please try again.",
+        "error"
+      );
     }
   };
-  
 
   const handleBack = async () => {
     try {
@@ -248,7 +305,10 @@ const ManagerCollectionList = () => {
 
   const indexOfLastOrder = page * rowsPerPage;
   const indexOfFirstOrder = indexOfLastOrder - rowsPerPage;
-  const currentOrders = collectionItems.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = collectionItems.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  );
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -271,7 +331,14 @@ const ManagerCollectionList = () => {
         </div>
         <hr className="manager_header_line" />
         <h3>List Of Collections</h3>
-        <div className="manager_manage_diamond_create_button_section" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div
+          className="manager_manage_diamond_create_button_section"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <button
             className="manager_manage_diamond_create_button"
             onClick={() => navigate("/manager-add-collection")}
@@ -303,38 +370,46 @@ const ManagerCollectionList = () => {
               />
               <TableBody>
                 {currentOrders.length > 0 ? (
-                  tableSort(currentOrders, getComparator(order, orderBy)).map((item) => (
-                    <TableRow
-                      key={item.collectionId}
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "#f5f5f5",
-                        },
-                        cursor: "pointer",
-                      }}
-                    >
-                      <TableCell align="center">{item.collectionId}</TableCell>
-                      <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{item.description}</TableCell>
-                      <TableCell align="center">
-                        <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Button
-                          onClick={() => handleStatus(item.collectionId)}
-                          style={{
-                            backgroundColor: item.status ? "#1fd655" : "#c94143",
-                            color: "white",
-                          }}
-                          variant="contained"
-                        >
-                          {item.status ? "Active" : "Deactive"}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  tableSort(currentOrders, getComparator(order, orderBy)).map(
+                    (item) => (
+                      <TableRow
+                        key={item.collectionId}
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5",
+                          },
+                          cursor: "pointer",
+                        }}
+                      >
+                        <TableCell align="center">
+                          {item.collectionId}
+                        </TableCell>
+                        <TableCell align="center">{item.name}</TableCell>
+                        <TableCell align="center">{item.description}</TableCell>
+                        <TableCell align="center">
+                          <IconButton onClick={() => handleEdit(item)}>
+                            <EditIcon
+                              style={{ cursor: "pointer", color: "#575252" }}
+                            />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Button
+                            onClick={() => handleStatus(item.collectionId)}
+                            style={{
+                              backgroundColor: item.status
+                                ? "#1fd655"
+                                : "#c94143",
+                              color: "white",
+                            }}
+                            variant="contained"
+                          >
+                            {item.status ? "Active" : "Deactive"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )
                 ) : (
                   <TableRow>
                     <TableCell colSpan="9">No Collection found</TableCell>
@@ -353,7 +428,9 @@ const ManagerCollectionList = () => {
 
       {editMode && (
         <div
-          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          className={`manager_manage_diamond_modal_overlay ${
+            editMode ? "active" : ""
+          }`}
           onClick={() => setEditMode(false)}
         >
           <div

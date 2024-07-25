@@ -1,24 +1,14 @@
-import React, { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
-import "../../../styles/Manager/ManagerList.scss";
-import {
-  ShowAllDiamond,
-  getDiamondDetail,
-  deleteDiamondById,
-  updateDiamondById,
-  getDiamondByShape,
-  getAllSubDiamond,
-  getSubDiamondDetail,
-  deleteSubDiamondById,
-  updateSubDiamondById,
-  getMainDiamondAttribute,
-  getSubDiamondAttribute
-} from "../../../services/ManagerService/ManagerDiamondService.js";
-import logo from "../../../assets/img/logoN.png";
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import DeleteIcon from "@mui/icons-material/Delete";
+import DiamondIcon from "@mui/icons-material/Diamond";
+import EditIcon from "@mui/icons-material/Edit";
+import SubDiamondIcon from "@mui/icons-material/Grain";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Pagination from "@mui/material/Pagination";
+import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -26,18 +16,29 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Box from "@mui/material/Box";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import DiamondIcon from "@mui/icons-material/Diamond";
-import SubDiamondIcon from "@mui/icons-material/Grain";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import logo from "../../../assets/img/logoN.png";
+import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
+import {
+  ShowAllDiamond,
+  deleteDiamondById,
+  deleteSubDiamondById,
+  getAllSubDiamond,
+  getDiamondByShape,
+  getDiamondDetail,
+  getMainDiamondAttribute,
+  getSubDiamondAttribute,
+  getSubDiamondDetail,
+  updateDiamondById,
+  updateSubDiamondById,
+} from "../../../services/ManagerService/ManagerDiamondService.js";
+import "../../../styles/Manager/ManagerList.scss";
 import DiamondPDf from "./DiamondPDF.js";
+import { Grid } from "@mui/material";
+import DiamondTypeSwitcher from "./DiamondTypeSwitcher.js";
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
@@ -47,7 +48,11 @@ const ManagerDiamondList = () => {
   const [editedDiamond, setEditedDiamond] = useState({});
   const [originalDiamond, setOriginalDiamond] = useState({});
   const [isSearch, setIsSearch] = useState(false);
-  const [pagination, setPagination] = useState({ totalPages: 1, pageSize: 10, currentPage: 1 });
+  const [pagination, setPagination] = useState({
+    totalPages: 1,
+    pageSize: 10,
+    currentPage: 1,
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [value, setValue] = useState(0); // For BottomNavigation
   const [mainDiamondPDF, setMainDiamondPDF] = useState([]);
@@ -55,8 +60,8 @@ const ManagerDiamondList = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#faecec',
-      color: '1c1c1c',
+      backgroundColor: "#faecec",
+      color: "1c1c1c",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -73,7 +78,10 @@ const ManagerDiamondList = () => {
 
   const fetchData = async (page, type = "main") => {
     try {
-      const response = type === "main" ? await ShowAllDiamond(page) : await getAllSubDiamond(page);
+      const response =
+        type === "main"
+          ? await ShowAllDiamond(page)
+          : await getAllSubDiamond(page);
       const mainPDf = await getMainDiamondAttribute();
       setMainDiamondPDF(mainPDf);
       const subPDF = await getSubDiamondAttribute();
@@ -105,8 +113,8 @@ const ManagerDiamondList = () => {
             ? await getDiamondDetail(searchQuery.trim())
             : await getSubDiamondDetail(searchQuery.trim())
           : value === 0
-            ? await getDiamondByShape(searchQuery.trim())
-            : await getSubDiamondDetail(searchQuery.trim());
+          ? await getDiamondByShape(searchQuery.trim())
+          : await getSubDiamondDetail(searchQuery.trim());
         setDiamondList(Array.isArray(response) ? response : [response]);
         setCurrentPage(1);
       } catch (error) {
@@ -129,12 +137,22 @@ const ManagerDiamondList = () => {
     }).then(async (willDelete) => {
       if (willDelete) {
         try {
-          value === 0 ? await deleteDiamondById(diamondId) : await deleteSubDiamondById(diamondId);
+          value === 0
+            ? await deleteDiamondById(diamondId)
+            : await deleteSubDiamondById(diamondId);
           fetchData(currentPage, value === 0 ? "main" : "sub");
-          swal("Deleted successfully!", "The diamond has been deleted.", "success");
+          swal(
+            "Deleted successfully!",
+            "The diamond has been deleted.",
+            "success"
+          );
         } catch (error) {
           console.error("Error deleting diamond:", error);
-          swal("Something went wrong!", "Failed to delete the diamond. Please try again.", "error");
+          swal(
+            "Something went wrong!",
+            "Failed to delete the diamond. Please try again.",
+            "error"
+          );
         }
       }
     });
@@ -159,7 +177,8 @@ const ManagerDiamondList = () => {
 
   const handleUpdate = async () => {
     const requiredFields = ["price"];
-    if (value === 1) { // if sub-diamond, add 'amountAvailable' to required fields
+    if (value === 1) {
+      // if sub-diamond, add 'amountAvailable' to required fields
       requiredFields.push("amountAvailable");
     }
 
@@ -167,16 +186,25 @@ const ManagerDiamondList = () => {
 
     for (let field of requiredFields) {
       if (!editedDiamond[field]) {
-        swal("Please fill in all fields!", `Field "${field}" cannot be empty.`, "error");
+        swal(
+          "Please fill in all fields!",
+          `Field "${field}" cannot be empty.`,
+          "error"
+        );
         return;
       }
       if (specialCharPattern.test(editedDiamond[field])) {
-        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
+        swal(
+          "Invalid characters detected!",
+          `Field "${field}" contains special characters.`,
+          "error"
+        );
         return;
       }
     }
 
-    const isEqual = JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
+    const isEqual =
+      JSON.stringify(originalDiamond) === JSON.stringify(editedDiamond);
     if (isEqual) {
       swal("No changes detected!", "You have not made any changes.", "error");
       return;
@@ -188,14 +216,25 @@ const ManagerDiamondList = () => {
       if (value === 0) {
         await updateDiamondById(diamondToUpdate.diamondId, diamondToUpdate);
       } else {
-        await updateSubDiamondById(diamondToUpdate.subDiamondId, diamondToUpdate);
+        await updateSubDiamondById(
+          diamondToUpdate.subDiamondId,
+          diamondToUpdate
+        );
       }
       fetchData(currentPage, value === 0 ? "main" : "sub");
       setEditMode(false);
-      swal("Updated successfully!", "The diamond information has been updated.", "success");
+      swal(
+        "Updated successfully!",
+        "The diamond information has been updated.",
+        "success"
+      );
     } catch (error) {
       console.error("Error updating diamond:", error);
-      swal("Something went wrong!", "Failed to update. Please try again.", "error");
+      swal(
+        "Something went wrong!",
+        "Failed to update. Please try again.",
+        "error"
+      );
     }
   };
 
@@ -219,38 +258,68 @@ const ManagerDiamondList = () => {
           </div>
         </div>
         <hr className="manager_header_line"></hr>
-        <h3 style={{ marginBottom: "2.5%" }}>List Of {value === 0 ? "Diamonds" : "Sub-Diamonds"}</h3>
-        <div className="manager_manage_diamond_create_button_section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box sx={{ width: 500 }}>
-            <BottomNavigation
-              showLabels
-              value={value}
-              onChange={(event, newValue) => {
-                setValue(newValue);
-                fetchData(1, newValue === 0 ? "main" : "sub");
-              }}
-            >
-              <BottomNavigationAction label="Diamonds" icon={<DiamondIcon />} />
-              <BottomNavigationAction label="Sub-Diamonds" icon={<SubDiamondIcon />} />
-            </BottomNavigation>
-          </Box>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+        <h3 style={{ marginBottom: "2.5%" }}>
+          List Of {value === 0 ? "Diamonds" : "Sub-Diamonds"}
+        </h3>
+        <Grid
+          container
+          className="manager_manage_diamond_create_button_section"
+          spacing={2}
+        >
+          <Grid item xs={12}>
+            <Box sx={{ width: 500 }}>
+              <BottomNavigation
+                showLabels
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                  fetchData(1, newValue === 0 ? "main" : "sub");
+                }}
+              >
+                <BottomNavigationAction
+                  label="Diamonds"
+                  icon={<DiamondIcon />}
+                />
+                <BottomNavigationAction
+                  label="Sub-Diamonds"
+                  icon={<SubDiamondIcon />}
+                />
+              </BottomNavigation>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <button className="manager_manage_diamond_create_button">
+              <PDFDownloadLink
+                className="link"
+                document={
+                  <DiamondPDf main={mainDiamondPDF} sub={subDiamondPDF} />
+                }
+                fileName="diamond.pdf"
+              >
+                {({ loading }) =>
+                  loading ? "Loading document..." : "Download PDF"
+                }
+              </PDFDownloadLink>
+            </button>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <button
               className="manager_manage_diamond_create_button"
               onClick={() => navigate("/manager-add-diamond")}
-              style={{ marginRight: '20px' }}
+              style={{ marginRight: "20px" }}
             >
               Add new diamond
             </button>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <Pagination
               count={pagination.totalPages}
               page={currentPage}
               onChange={handlePageChange}
               color="primary"
             />
-          </div>
-        </div>
-
+          </Grid>
+        </Grid>
         {/* Table diamond list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
@@ -265,7 +334,9 @@ const ManagerDiamondList = () => {
                   <StyledTableCell align="center">Cut</StyledTableCell>
                   <StyledTableCell align="center">Price</StyledTableCell>
                   {value === 0 ? (
-                    <StyledTableCell align="center">Certificate</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Certificate
+                    </StyledTableCell>
                   ) : (
                     <StyledTableCell align="center">Quantity</StyledTableCell>
                   )}
@@ -275,31 +346,24 @@ const ManagerDiamondList = () => {
               <TableBody>
                 {diamondList.length > 0 ? (
                   diamondList.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.diamondId || item.subDiamondId}>
+                    <TableRow
+                      className="manager_manage_table_body_row"
+                      key={item.diamondId || item.subDiamondId}
+                    >
                       <TableCell align="center">
                         {item.diamondId || item.subDiamondId}
                       </TableCell>
-                      <TableCell align="center">
-                        {item.shape}
-                      </TableCell>
-                      <TableCell align="center">
-                        {item.color}
-                      </TableCell>
-                      <TableCell align="center">
-                        {item.clarity}
-                      </TableCell>
-                      <TableCell align="center">
-                        {item.carat}
-                      </TableCell>
-                      <TableCell align="center">
-                        {item.cut}
-                      </TableCell>
-                      <TableCell align="center">
-                        ${item.price}
-                      </TableCell>
+                      <TableCell align="center">{item.shape}</TableCell>
+                      <TableCell align="center">{item.color}</TableCell>
+                      <TableCell align="center">{item.clarity}</TableCell>
+                      <TableCell align="center">{item.carat}</TableCell>
+                      <TableCell align="center">{item.cut}</TableCell>
+                      <TableCell align="center">${item.price}</TableCell>
                       {value === 0 ? (
                         <TableCell align="center">
-                          {item.certificateScan ? item.certificateScan : "No certificate"}
+                          {item.certificateScan
+                            ? item.certificateScan
+                            : "No certificate"}
                         </TableCell>
                       ) : (
                         <TableCell align="center">
@@ -308,12 +372,18 @@ const ManagerDiamondList = () => {
                       )}
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
+                          <EditIcon
+                            style={{ cursor: "pointer", color: "#575252" }}
+                          />
                         </IconButton>
                         <IconButton
-                          onClick={() => handleDelete(item.diamondId || item.subDiamondId)}
+                          onClick={() =>
+                            handleDelete(item.diamondId || item.subDiamondId)
+                          }
                         >
-                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }} />
+                          <DeleteIcon
+                            style={{ cursor: "pointer", color: "#575252" }}
+                          />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -328,14 +398,7 @@ const ManagerDiamondList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <div className="pdf-download">
-            <PDFDownloadLink
-              document={<DiamondPDf main={mainDiamondPDF} sub={subDiamondPDF} />}
-              fileName="diamond.pdf"
-            >
-              {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
-            </PDFDownloadLink>
-          </div>
+          <DiamondTypeSwitcher />
           {isSearch && (
             <button className="btn btn-secondary mt-3" onClick={handleBack}>
               Back to show all {value === 0 ? "diamonds" : "sub-diamonds"}
@@ -347,7 +410,9 @@ const ManagerDiamondList = () => {
       {/* Update modal for Diamond */}
       {editMode && value === 0 && (
         <div
-          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          className={`manager_manage_diamond_modal_overlay ${
+            editMode ? "active" : ""
+          }`}
           onClick={() => setEditMode(false)}
         >
           <div
@@ -452,7 +517,9 @@ const ManagerDiamondList = () => {
       {/* Update modal for SubDiamond */}
       {editMode && value === 1 && (
         <div
-          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
+          className={`manager_manage_diamond_modal_overlay ${
+            editMode ? "active" : ""
+          }`}
           onClick={() => setEditMode(false)}
         >
           <div
@@ -552,7 +619,6 @@ const ManagerDiamondList = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

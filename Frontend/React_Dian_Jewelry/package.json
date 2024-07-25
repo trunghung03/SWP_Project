@@ -2,6 +2,12 @@
   "name": "customer",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
@@ -13,7 +19,7 @@
     "@microsoft/signalr": "^8.0.0",
     "@mui/icons-material": "^5.15.20",
     "@mui/lab": "^5.0.0-alpha.170",
-    "@mui/material": "^5.16.4",
+    "@mui/material": "^5.16.5",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@react-oauth/google": "^0.12.1",
     "@react-pdf/renderer": "^3.4.4",
@@ -56,16 +62,11 @@
     "reactjs-popup": "^2.0.6",
     "sass": "^1.77.2",
     "slick-carousel": "^1.8.1",
+    "sonner": "^1.5.0",
     "styled-components": "^6.1.11",
     "sweetalert": "^2.1.2",
     "switch": "^0.0.0",
     "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

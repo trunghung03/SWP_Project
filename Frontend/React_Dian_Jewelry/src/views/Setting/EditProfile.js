@@ -1,54 +1,59 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import '../../styles/Setting/EditProfile.scss';
-import SubNav from '../../components/SubNav/SubNav.js';
-import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
-import { getUserInfo, updateCustomerInfo, changePasswordApi } from '../../services/UserService';
-import { UserContext } from '../../services/UserContext';
-import HeaderComponent from '../../components/Header/HeaderComponent';
-import FooterComponent from '../../components/Footer/FooterComponent';
-import Loading from '../../components/Loading/Loading';
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../../styles/Setting/EditProfile.scss";
+import SubNav from "../../components/SubNav/SubNav.js";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop.js";
+import {
+  getUserInfo,
+  updateCustomerInfo,
+  changePasswordApi,
+} from "../../services/UserService";
+import { UserContext } from "../../services/UserContext";
+import HeaderComponent from "../../components/Header/HeaderComponent";
+import FooterComponent from "../../components/Footer/FooterComponent";
+import Loading from "../../components/Loading/Loading";
 
 function EditProfile() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [isPasswordFormVisible, setPasswordFormVisible] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [points, setPoints] = useState(0);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [storedPassword, setStoredPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [storedPassword, setStoredPassword] = useState("");
   const [isGoogleUser, setIsGoogleUser] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    const isGoogle = localStorage.getItem('Google');
+    const storedEmail = localStorage.getItem("email");
+    const isGoogle = localStorage.getItem("Google");
     setIsGoogleUser(Boolean(isGoogle));
     if (storedEmail) {
-      getUserInfo(storedEmail).then((response) => {
-        const userData = response.data;
-        setFirstName(userData.firstName || '');
-        setLastName(userData.lastName || '');
-        setAddress(userData.address || '');
-        setPhoneNumber(userData.phoneNumber || '');
-        setEmail(userData.email || '');
-        setPoints(userData.points || 0);
-        setStoredPassword(userData.password || '');
-        setLoading(false); 
-      }).catch((error) => {
-        console.error('Error fetching user data:', error);
-        setLoading(false); 
-      });
+      getUserInfo(storedEmail)
+        .then((response) => {
+          const userData = response.data;
+          setFirstName(userData.firstName || "");
+          setLastName(userData.lastName || "");
+          setAddress(userData.address || "");
+          setPhoneNumber(userData.phoneNumber || "");
+          setEmail(userData.email || "");
+          setPoints(userData.points || 0);
+          setStoredPassword(userData.password || "");
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          setLoading(false);
+        });
     }
   }, []);
 
@@ -60,12 +65,22 @@ function EditProfile() {
   // }, []);
 
   const navItems = [
-    { name: 'Home', link: '/home' },
-    { name: 'Edit Profile', link: '/edit-profile' }
+    { name: "Home", link: "/home" },
+    { name: "Edit Profile", link: "/edit-profile" },
   ];
   const menuItems = [
-    { name: 'Edit Profile', path: '/edit-profile', icon: 'fas fa-user-edit', iconClass: 'icon-edit-profile' },
-    { name: 'Order History', path: '/order-history', icon: 'fas fa-history', iconClass: 'icon-order-history' },
+    {
+      name: "Edit Profile",
+      path: "/edit-profile",
+      icon: "fas fa-user-edit",
+      iconClass: "icon-edit-profile",
+    },
+    {
+      name: "Order History",
+      path: "/order-history",
+      icon: "fas fa-history",
+      iconClass: "icon-order-history",
+    },
   ];
 
   const togglePasswordForm = () => {
@@ -75,10 +90,11 @@ function EditProfile() {
   const togglePasswordVisibility = (id, eyeId) => {
     const passwordField = document.getElementById(id);
     const eyeIcon = document.getElementById(eyeId);
-    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordField.setAttribute('type', type);
-    eyeIcon.classList.toggle('fa-eye');
-    eyeIcon.classList.toggle('fa-eye-slash');
+    const type =
+      passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
+    eyeIcon.classList.toggle("fa-eye");
+    eyeIcon.classList.toggle("fa-eye-slash");
   };
 
   const isValidPhoneNumber = (phone) => {
@@ -87,24 +103,25 @@ function EditProfile() {
   };
 
   const isValidPassword = (password) => {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,20}$/;
+    const passwordPattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,20}$/;
     return passwordPattern.test(password);
   };
 
   const handleSaveProfileChanges = async () => {
     if (!firstName || !lastName) {
-      toast.error("Field cannot be empty! Please fill out all required fields.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error(
+        "Field cannot be empty! Please fill out all required fields.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
       return;
     }
 
     if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
-      toast.error("Phone number is invalid! Please try again.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error("Phone number is invalid! Please try again.");
       return;
     }
 
@@ -116,7 +133,7 @@ function EditProfile() {
       address,
       phoneNumber,
       points,
-      status: true
+      status: true,
     };
 
     try {
@@ -124,11 +141,11 @@ function EditProfile() {
       if (response.status === 200) {
         toast.success("Profile has been updated successfully.", {
           position: "top-right",
-          autoClose: 3000
+          autoClose: 3000,
         });
-        localStorage.setItem('firstName', firstName);
-        localStorage.setItem('lastName', lastName);
-        localStorage.setItem('points', points);
+        localStorage.setItem("firstName", firstName);
+        localStorage.setItem("lastName", lastName);
+        localStorage.setItem("points", points);
         setUser({
           firstName,
           lastName,
@@ -137,35 +154,41 @@ function EditProfile() {
         });
       }
     } catch (error) {
-      toast.error("Failed to update profile! Please try again.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error("Failed to update profile! Please try again.");
     }
   };
 
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Please fill in all fields. All password fields are required.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error(
+        "Please fill in all fields. All password fields are required.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
       return;
     }
 
     if (!isValidPassword(newPassword)) {
-      toast.error("Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error(
+        "Password must be between 6 to 20 characters long and include lowercase with uppercase letter, number, and special character.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error("New password and confirm password do not match! Please try again.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error(
+        "New password and confirm password do not match! Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
       return;
     }
 
@@ -173,28 +196,28 @@ function EditProfile() {
       const changePasswordResponse = await changePasswordApi({
         email,
         oldPassword: currentPassword,
-        newPassword: newPassword
+        newPassword: newPassword,
       });
 
-      if (changePasswordResponse.data === 'Cannot update password due to password is not match.') {
+      if (
+        changePasswordResponse.data ===
+        "Cannot update password due to password is not match."
+      ) {
         toast.error("Current password is incorrect! Please try again.", {
           position: "top-right",
-          autoClose: 3000
+          autoClose: 3000,
         });
       } else if (changePasswordResponse.data) {
         toast.success("Password has been changed successfully.", {
           position: "top-right",
-          autoClose: 3000
+          autoClose: 3000,
         });
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
       }
     } catch (error) {
-      toast.error("Failed to change password! Please try again.", {
-        position: "top-right",
-        autoClose: 3000
-      });
+      toast.error("Failed to change password! Please try again.");
     }
   };
 
@@ -213,21 +236,26 @@ function EditProfile() {
     <div className="EditProfile">
       <HeaderComponent />
       <SubNav items={navItems} />
-      <ToastContainer autoClose={3000} />
       <div className="edit_profile_container">
         <div className="setting_menu">
           <div className="setting_menu_section">
             <div className="setting_full_name">{`${user.firstName} ${user.lastName}`}</div>
-            <div className="setting_point"><p>{`${user.points} points`}</p></div>
+            <div className="setting_point">
+              <p>{`${user.points} points`}</p>
+            </div>
           </div>
           <div className="setting_menu_items">
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <div
                 key={item.path}
-                className={`setting_menu_item ${item.path === '/edit-profile' ? 'edit-profile-item' : ''}`}
+                className={`setting_menu_item ${
+                  item.path === "/edit-profile" ? "edit-profile-item" : ""
+                }`}
                 onClick={() => navigate(item.path)}
               >
-                <i className={`${item.icon} setting_menu_icon ${item.iconClass}`}></i>
+                <i
+                  className={`${item.icon} setting_menu_icon ${item.iconClass}`}
+                ></i>
                 <span className="setting_menu_item_name">{item.name}</span>
               </div>
             ))}
@@ -259,17 +287,36 @@ function EditProfile() {
             </div>
             <div className="edit_form_group">
               <label>Email *</label>
-              <input className="edit_email" type="email" value={email} readOnly />
+              <input
+                className="edit_email"
+                type="email"
+                value={email}
+                readOnly
+              />
             </div>
             <div className="edit_form_group">
               <label>Phone number</label>
-              <input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+              <input
+                type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
             </div>
             <div className="edit_form_group full_width">
               <label>Address</label>
-              <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
             </div>
-            <button type="button" className="edit_form_save_button" onClick={handleSaveProfileChanges}>Save change</button>
+            <button
+              type="button"
+              className="edit_form_save_button"
+              onClick={handleSaveProfileChanges}
+            >
+              Save change
+            </button>
           </form>
 
           {!isGoogleUser && (
@@ -277,7 +324,11 @@ function EditProfile() {
               <hr className="edit_profile_line"></hr>
               <h2 onClick={togglePasswordForm} className="toggle_password_form">
                 Change Password
-                <i className={`fas ${isPasswordFormVisible ? 'fa-chevron-up' : 'fa-chevron-down'} toggle_icon`}></i>
+                <i
+                  className={`fas ${
+                    isPasswordFormVisible ? "fa-chevron-up" : "fa-chevron-down"
+                  } toggle_icon`}
+                ></i>
               </h2>
               {isPasswordFormVisible && (
                 <form>
@@ -293,8 +344,13 @@ function EditProfile() {
                       <i
                         className="far fa-eye"
                         id="edit_current_password_eye"
-                        onClick={() => togglePasswordVisibility('current_password', 'edit_current_password_eye')}
-                        style={{ cursor: 'pointer' }}
+                        onClick={() =>
+                          togglePasswordVisibility(
+                            "current_password",
+                            "edit_current_password_eye"
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
                       ></i>
                     </span>
                   </div>
@@ -310,8 +366,13 @@ function EditProfile() {
                       <i
                         className="far fa-eye"
                         id="edit_new_password_eye"
-                        onClick={() => togglePasswordVisibility('new_password', 'edit_new_password_eye')}
-                        style={{ cursor: 'pointer' }}
+                        onClick={() =>
+                          togglePasswordVisibility(
+                            "new_password",
+                            "edit_new_password_eye"
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
                       ></i>
                     </span>
                   </div>
@@ -327,12 +388,23 @@ function EditProfile() {
                       <i
                         className="far fa-eye"
                         id="edit_confirm_password_eye"
-                        onClick={() => togglePasswordVisibility('confirm_password', 'edit_confirm_password_eye')}
-                        style={{ cursor: 'pointer' }}
+                        onClick={() =>
+                          togglePasswordVisibility(
+                            "confirm_password",
+                            "edit_confirm_password_eye"
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
                       ></i>
                     </span>
                   </div>
-                  <button type="button" className="edit_form_save_button" onClick={handleChangePassword}>Save new password</button>
+                  <button
+                    type="button"
+                    className="edit_form_save_button"
+                    onClick={handleChangePassword}
+                  >
+                    Save new password
+                  </button>
                 </form>
               )}
             </>
