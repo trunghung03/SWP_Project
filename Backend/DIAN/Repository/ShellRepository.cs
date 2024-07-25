@@ -53,6 +53,7 @@ namespace DIAN_.Repository
         {
             var shell = await _context.Shells
                .Where(s => s.Status && s.ShellId == id)
+               .Include(s => s.ShellMaterial)
                .FirstOrDefaultAsync();
             if (shell == null)
             {

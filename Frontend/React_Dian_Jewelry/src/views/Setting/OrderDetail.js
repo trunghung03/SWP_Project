@@ -5,10 +5,10 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Setting/OrderDetail.scss';
-import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellMaterialById } from '../../services/TrackingOrderService';
+import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellDetail } from '../../services/TrackingOrderService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
-import Loading from '../../components/Loading/Loading'; 
+import Loading from '../../components/Loading/Loading';
 
 function OrderDetail() {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ function OrderDetail() {
     const [orderDetails, setOrderDetails] = useState(null);
     const [promotionCode, setPromotionCode] = useState('');
     const [orderProducts, setOrderProducts] = useState([]);
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedFirstName = localStorage.getItem('firstName');
@@ -44,26 +44,38 @@ function OrderDetail() {
                 const filteredOrderDetails = orderDetailData.filter(item => item.orderId === orderNumber);
                 const productDetails = await Promise.all(filteredOrderDetails.map(async (item) => {
                     const productData = await getProductById(item.productId);
-                    const shellMaterialData = await getShellMaterialById(item.shellMaterialId);
+                    let shellMaterial = null;
+                    let size = null;
+
+                    try {
+                        const shellDetailData = await getShellDetail(item.shellId);
+                        shellMaterial = shellDetailData.shellMaterialName;
+                        size = shellDetailData.size;
+                    } catch (error) {
+                        console.log('Shell detail not available, this is a single diamond');
+                    }
+
                     return {
                         ...productData,
-                        size: item.size,
-                        shellMaterial: shellMaterialData.name,
-                        lineTotal: item.lineTotal
+                        size: size,
+                        shellMaterial: shellMaterial,
+                        lineTotal: item.lineTotal,
+                        isSingleDiamond: !shellMaterial && !size
                     };
                 }));
                 setOrderProducts(productDetails);
                 setLoading(false);
             }).catch(error => {
                 console.error('Error fetching order details:', error);
-                setLoading(false); 
+                setLoading(false);
             });
         }
     }, [orderNumber]);
 
     const handleProductView = (product) => {
         const productName = product.name.toLowerCase().replace(/\s+/g, '-');
-        navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
+        const path = product.isSingleDiamond ? `/diamond-detail/${productName}` : `/product-detail/${productName}`;
+        navigate(path, { state: { id: product.productId } });
     };
 
     useEffect(() => {
@@ -135,17 +147,21 @@ function OrderDetail() {
                         <hr className="order_detail_line1"></hr>
                         {orderProducts.map((product, index) => (
                             <div key={index} className="order_detail_product">
-                                <img src={product.imageLinkList.split(';')[0]} className="order_detail_product_image" alt={product.name} />
+                                <img src={product?.imageLinkList.split(';')[0]} className="order_detail_product_image" alt={product?.name} />
                                 <div className="order_detail_product_info">
                                     <div className="order_detail_product_header">
-                                        <h5 className="order_detail_product_name">{product.name}</h5>
+                                        <h5 className="order_detail_product_name">{product?.name}</h5>
                                         <div className="order_detail_product_links">
                                             <a href="" onClick={() => handleProductView(product)}>VIEW</a>
                                         </div>
                                     </div>
-                                    <p className="order_detail_product_size">Shell: {product.shellMaterial}</p>
-                                    <p className="order_detail_product_size">Size: {product.size}</p>
-                                    <p className="order_detail_product_price">${product.lineTotal}</p>
+                                    <p className="order_detail_product_size">
+                                        {product?.isSingleDiamond ? '(Only diamond)' : `Shell: ${product?.shellMaterial}`}
+                                    </p>
+                                    <p className="order_detail_product_size">
+                                        {product?.size ? `Size: ${product?.size}` : ''}
+                                    </p>
+                                    <p className="order_detail_product_price">${product?.lineTotal}</p>
                                 </div>
                             </div>
                         ))}
