@@ -4,6 +4,7 @@ using DIAN_.Helper;
 using DIAN_.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Mapper;
+using System.Linq;
 
 namespace DIAN_.Repository
 {
@@ -152,5 +153,17 @@ namespace DIAN_.Repository
             return promotions.Cast<Promotion?>().ToList();
         }
 
+        public async Task<List<Promotion>> SearchPromotionsAsync(PromotionSearch searchCriteria)
+        {
+            var query = _context.Promotions.AsQueryable();
+            if (!string.IsNullOrEmpty(searchCriteria.query))
+            {
+                string queryStr = searchCriteria.query.ToLower();
+                query = query.Where(prm => prm.Name.ToLower().Contains(queryStr) ||
+                                           prm.Code.ToLower().Contains(queryStr) ||
+                                           prm.Description.ToLower().Contains(queryStr));
+            }
+            return await query.ToListAsync();
+        }
     }
 }

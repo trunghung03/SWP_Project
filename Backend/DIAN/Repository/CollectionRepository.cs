@@ -1,4 +1,5 @@
 ﻿using DIAN_.DTOs.CategoryDTO;
+using DIAN_.DTOs.CollectionDTO;
 using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
@@ -134,6 +135,18 @@ namespace DIAN_.Repository
             return await _context.Collections
                                  .OrderByDescending(p => p.CollectionId) // Order by CollectionID to get the latest products                               
                                  .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Collection>> SearchCollectionAsync(CollectionSearch search)
+        {
+            var query = _context.Collections.AsQueryable();
+            if (!string.IsNullOrEmpty(search.Query))
+            {
+                string queryStr = search.Query.ToLower();
+                query = query.Where(cl => cl.Name.ToLower().Contains(queryStr) ||
+                                           cl.Description.ToLower().Contains(queryStr));
+            }
+            return await query.ToListAsync();
         }
     }
 }

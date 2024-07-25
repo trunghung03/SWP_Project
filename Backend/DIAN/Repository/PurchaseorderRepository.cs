@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DIAN_.Helper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DIAN_.Repository
 {
@@ -19,10 +20,17 @@ namespace DIAN_.Repository
             _context = context;
         }
 
-        public async Task<List<Purchaseorder>> GetAllPurchaseOrderAsync()
+        public async Task<List<Purchaseorder>> GetAllPurchaseOrderAsync(PurchaseOrderQuerry querry)
         {
-            var purchaseOrder = await _context.Purchaseorders.ToListAsync();
-            return purchaseOrder;
+            var purchaseOrders = _context.Purchaseorders.AsQueryable();
+
+            // Apply pagination
+            var paginatedOrders = await purchaseOrders
+            .Skip((querry.PageNumber - 1) * querry.PageSize)
+                .Take(querry.PageSize)
+                .ToListAsync();
+
+            return paginatedOrders;
         }
 
         public async Task<Purchaseorder> GetPurchaseOrderInfoAsync(int orderId)

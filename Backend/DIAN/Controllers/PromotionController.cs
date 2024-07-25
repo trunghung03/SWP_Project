@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DIAN_.Repository;
+using DIAN_.DTOs.ProductDTOs;
 
 namespace DIAN_.Controllers
 {
@@ -211,6 +212,31 @@ namespace DIAN_.Controllers
 
                 var promotionDtos = promotions.Select(p => p?.ToPromotionDetail());
                 return Ok(promotionDtos);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpGet("searchAllFields")]
+        public async Task<IActionResult> SearchPromotionsAsync([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new PromotionSearch
+                {
+                    query = query
+                };
+
+                var promotions = await _promotionRepository.SearchPromotionsAsync(searchCriteria);
+
+                if (!promotions.Any())
+                {
+                    return NotFound("No promotions match the search criteria.");
+                }
+
+                var promoDTOs = promotions.Select(promo => promo.ToPromotionDetail()).ToList();
+                return Ok(promoDTOs);
             }
             catch (Exception)
             {

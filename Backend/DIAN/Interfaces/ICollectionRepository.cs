@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs.CategoryDTO;
+﻿
+using DIAN_.DTOs.CollectionDTO;
 using DIAN_.Models;
 
 namespace DIAN_.Interfaces
@@ -13,5 +14,7 @@ namespace DIAN_.Interfaces
         Task<bool> UpdateCollectionStatus(int id);
 
         Task<Collection?> GetNewestCollectionAsync();
+
+        Task<List<Collection>> SearchCollectionAsync(CollectionSearch search);
     }
 }

@@ -118,5 +118,6 @@ namespace DIAN_.Repository
 
             return await query.ToListAsync();
         }
+
     }
 }
