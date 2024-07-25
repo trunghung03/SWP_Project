@@ -33,7 +33,6 @@ import Stack from "@mui/material/Stack";
 
 
 
-
 const headCells = [
   { id: "orderId", numeric: false, disablePadding: false, label: "Order ID", sortable: true },
   { id: "name", numeric: false, disablePadding: false, label: "Customer Name", sortable: true },
@@ -134,20 +133,14 @@ const ManagerOrderList = () => {
 
   const fetchOrders = async (page = 1, status = sortOrder) => {
     try {
-      const response = await fetchAllOrders(
-        employeeId,
-        page,
-        pagination.pageSize,
-        status
-      );
-      console.log("API Response:", response); // Log the full response to inspect it
-      const { orders, totalCount } = response.data;
+      const response = await fetchAllOrders();
+      const { orders, totalCount } = response;
       setOrderList(orders);
-      setOriginalOrderList(orders); // Set the original list
+      setOriginalOrderList(orders);
       setPagination((prev) => ({
         ...prev,
         currentPage: page,
-        totalPages: Math.ceil(totalCount / pagination.pageSize),
+        totalPages: Math.ceil(totalCount / (prev.pageSize || 1)), // Ensure pageSize is not zero
         totalCount,
       }));
     } catch (error) {
@@ -206,8 +199,8 @@ const ManagerOrderList = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
@@ -282,65 +275,39 @@ const ManagerOrderList = () => {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {tableSort(orderList, getComparator(order, orderBy))
-                    .slice(0, pagination.pageSize)
-                    .map((item, index) => {
+                  {tableSort(orderList || [], getComparator(order, orderBy))
+                    .slice(
+                      (pagination.currentPage - 1) * pagination.pageSize,
+                      pagination.currentPage * pagination.pageSize
+                    )
+                    .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      const textStyle =
-                        item.orderStatus === "Unpaid" && isOrderOverdue(item.date)
-                          ? { color: "#e05858", fontWeight: "bold" }
-                          : {};
-
+                      const isOverdue = isOrderOverdue(row.date);
                       return (
-                        <TableRow
-                          hover
-                          onClick={() => viewDetail(item.orderId)}
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={item.orderId}
-                          sx={{ cursor: "pointer" }}
-                        >
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            align="center"
-                            style={textStyle}
-                          >
-                            {item.orderId}
-                          </TableCell>
-                          <TableCell align="center" style={textStyle}>
-                            {item.name}
-                          </TableCell>
-                          <TableCell align="center" style={textStyle}>
-                            {formatDate(item.date)}
-                          </TableCell>
-                          <TableCell align="center" style={textStyle}>
-                            {item.shippingAddress}
-                          </TableCell>
-                          <TableCell align="center" style={textStyle}>
-                            {item.phoneNumber}
-                          </TableCell>
-                          <TableCell align="center" style={textStyle}>
-                            {item.orderStatus}
-                          </TableCell>
-                          <TableCell align="center">
+                        <TableRow hover tabIndex={-1} key={row.orderId}>
+                          <StyledTableCell align="center" component="th" id={labelId} scope="row" padding="none">
+                            {row.orderId}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">{row.name}</StyledTableCell>
+                          <StyledTableCell align="center">{formatDate(row.date)}</StyledTableCell>
+                          <StyledTableCell align="center">{row.shippingAddress}</StyledTableCell>
+                          <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
+                          <StyledTableCell align="center">
+                            <span
+                              className={`order-status ${isOverdue ? "overdue" : row.orderStatus}`}
+                            >
+                              {row.orderStatus}
+                            </span>
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
                             <InfoIcon
-                              style={{ cursor: "pointer", color: "#575252" }}
-                              onClick={() => viewDetail(item.orderId)}
+                              style={{ color: "#9e9e9e", cursor: "pointer" }}
+                              onClick={() => viewDetail(row.orderId)}
                             />
-                          </TableCell>
+                          </StyledTableCell>
                         </TableRow>
                       );
                     })}
-                  {orderList.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={7} align="center">
-                        No order found
-                      </TableCell>
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
             </TableContainer>
