@@ -71,6 +71,7 @@ import ManagerProductDetail from './Manager/ManagerManageProduct/ManagerProductD
 import StaffEditProfile from './StaffEditProfile.js';
 import logo from '../assets/img/logoN.png';
 import { SignalRProvider } from '../services/SignalRContext.js';
+import ManagerOrderList from './Manager/ManagerOrderList.js';
 
 function AppContent() {
   const [isClosed, setIsClosed] = useState(true);
@@ -169,6 +170,7 @@ function AppContent() {
             <Route path="/manager-add-diamond" element={<ProtectedRoute path="/manager-add-diamond" element={ManagerAddDiamond} />} />
             <Route path="/manager-product-list" element={<ProtectedRoute path="/manager-product-list" element={ManagerProductList} />} />
             <Route path="/manager-product-detail/:productId" element={<ManagerProductDetail />} />
+            <Route path="/manager-order-list" element={<ManagerOrderList/>} />
             <Route path="/manager-add-product" element={<ProtectedRoute path="/manager-add-product" element={ManagerAddProduct} />} />
             <Route path="/manager-shell-list" element={<ProtectedRoute path="/manager-shell-list" element={ManagerShellList} />} />
             <Route path="/manager-add-shell" element={<ProtectedRoute path="/manager-add-shell" element={ManagerAddShell} />} />
