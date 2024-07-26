@@ -277,6 +277,8 @@ namespace DIAN_.Repository
         {
             return await _context.Products
                                  .Include(p => p.MainDiamondAtrribute)
+                                 .Include(p => p.Shells)
+                                 .Where(p => p.Shells.Any(shell => shell.AmountAvailable > 0))
                                  .OrderByDescending(p => p.ProductId)
                                  .Take(8)
                                  .ToListAsync();

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DIAN_.Helper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Castle.Core.Resource;
 
 namespace DIAN_.Repository
 {
@@ -199,5 +200,13 @@ namespace DIAN_.Repository
             return order;
         }
 
+        public async Task<IEnumerable<Purchaseorder>> GetOrdersForCusAsync(int customerId)
+        {
+            return await _context.Purchaseorders
+                                 .Include(o => o.User) // Include related entities if needed
+                                 .Include(o => o.Promotion)
+                                 .Where(o => o.UserId == customerId)
+                                 .ToListAsync();
+        }
     }
 }

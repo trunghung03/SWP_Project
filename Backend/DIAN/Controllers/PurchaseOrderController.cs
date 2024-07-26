@@ -181,7 +181,32 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("by-customer/{customerId}")]
+        public async Task<IActionResult> GetOrdersByCustomerId(int customerId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
+                var orders = await _purchaseOrderRepo.GetOrdersForCusAsync(customerId);
+                if (orders == null || !orders.Any())
+                {
+                    return NotFound();
+                }
+
+                var orderDTOs = orders.Select(o => o.ToPurchaseOrderInfoDTO()).ToList();
+                return Ok(orderDTOs);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                _loggerManager.LogError($"Something went wrong inside GetOrdersByCustomerId action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
     }
 }

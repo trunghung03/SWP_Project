@@ -26,5 +26,6 @@ namespace DIAN_.Interfaces
 
         //Use w point or not
         Task<Purchaseorder?> CheckUsedPoint(bool payWithPoint, int userId);
+        Task<IEnumerable<Purchaseorder>> GetOrdersForCusAsync(int CustomerId);
     }
 }
