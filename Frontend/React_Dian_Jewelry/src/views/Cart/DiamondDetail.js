@@ -35,6 +35,7 @@ function DiamondDetail() {
   useEffect(() => {
     const fetchProductData = async (id) => {
       try {
+        console.log("ID: "+id);
         setLoading(true);
         const productResponse = await getProductDetail(id);
         const productData = productResponse.data;
@@ -48,8 +49,8 @@ function DiamondDetail() {
         setDiamond(diamondResponse.data);
 
         const stockResponse = await checkProductStock(id);
-        console.log("stockData", stockResponse.data);
-        const { message, maxProductAvailable } = stockResponse.data;
+        console.log("stockData", stockResponse);
+        const { message, maxProductAvailable } = stockResponse;
         if (message === "Available") {
           setMaxProductAvailable(maxProductAvailable);
         } else {
