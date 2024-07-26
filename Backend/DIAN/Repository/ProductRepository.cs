@@ -398,7 +398,7 @@ namespace DIAN_.Repository
             }
             var availableDiamondCount = await _context.Diamonds
                 .Where(d => d.MainDiamondAtrributeId == product.MainDiamondAtrributeId && d.Status == true)
-                .CountAsync();
+                .CountAsync();  
             Console.WriteLine($"Available Diamond Count: {availableDiamondCount}");
 
             bool isMainDiamondSufficient = availableDiamondCount >= mainDiamondAmount;
@@ -407,7 +407,7 @@ namespace DIAN_.Repository
             if (product.SubDiamondAtrributeId.HasValue && product.SubDiamondAmount.HasValue && product.SubDiamondAmount > 0)
             {
                 var subdiamond = await _context.Subdiamonds.FirstOrDefaultAsync(sd => sd.DiamondAtrributeId == product.SubDiamondAtrributeId && sd.Status == true);
-                int subAmount = subdiamond.AmountAvailable;
+                int subAmount = subdiamond?.AmountAvailable ?? 0;
                 Console.WriteLine($"Available Sub Diamond Count: {subAmount}");
                 Console.WriteLine($"Sub Diamond Amount: {product.SubDiamondAmount}");
                 isSubDiamondSufficient = subAmount >= product.SubDiamondAmount;

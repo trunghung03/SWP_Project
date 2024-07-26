@@ -158,7 +158,7 @@ function ProductDetail() {
   const handleAddToCart = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.warn("Please sign in or sign up to add jewelry to cart.");
+      toast.warning("Please sign in or sign up to add jewelry to cart.");
       return;
     }
 
@@ -174,13 +174,13 @@ function ProductDetail() {
           );
           return;
         } else if (!selectedShell) {
-          toast.warn("Please choose a shell type.", {
+          toast.warning("Please choose a shell type.", {
             position: "top-right",
             autoClose: 3000,
           });
           return;
         } else if (!selectedSize) {
-          toast.warn("Please choose a size.", {
+          toast.warning("Please choose a size.", {
             position: "top-right",
             autoClose: 3000,
           });

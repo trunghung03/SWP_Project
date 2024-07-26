@@ -72,7 +72,7 @@ function DiamondDetail() {
   const handleAddToCart = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.warn("Please sign in or sign up to add diamond to cart.");
+      toast.warning("Please sign in or sign up to add diamond to cart.");
       return;
     }
 
