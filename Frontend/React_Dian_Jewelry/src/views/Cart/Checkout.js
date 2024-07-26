@@ -208,7 +208,7 @@ function Checkout() {
     }
 
     if (paymentMethod === "") {
-      toast.warn("Please choose a payment method.");
+      toast.warning("Please choose a payment method.");
       return;
     }
 
