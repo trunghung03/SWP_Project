@@ -25,7 +25,7 @@ function Cart() {
     { name: "Cart", link: "/cart" },
   ];
   const customerId = localStorage.getItem("customerId");
-  const { cartItems, removeFromCart, updateCartItem } = useCart();
+  const { cartItems, removeFromCart } = useCart();
   const [shellData, setShellData] = useState({});
   const [diamondAttributes, setDiamondAttributes] = useState({});
   const [filteredCartItems, setFilteredCartItems] = useState([]);
@@ -34,7 +34,7 @@ function Cart() {
     const cartKey = `cartItems${customerId}`;
     const storedCartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
     const groupedItems = groupCartItems(storedCartItems);
-    setFilteredCartItems(groupedItems);
+    setFilteredCartItems(groupCartItems(storedCartItems));
 
     const fetchData = async () => {
       await Promise.all(
@@ -83,7 +83,7 @@ function Cart() {
           checkProductStock(item.productId)
             .then((response) => ({
               ...item,
-              isOutOfStock: response.data === "Not enough stock",
+              isOutOfStock: response.data.message === "Not enough stock",
             }))
             .catch((error) => ({
               ...item,
@@ -116,7 +116,7 @@ function Cart() {
       JSON.parse(localStorage.getItem(`cartItems${customerId}`)) || [];
 
     if (updatedCartItems.length === 0) {
-      toast.warn("Please add something first! There is nothing in the cart.");
+      toast.warning("Please add something first! There is nothing in the cart.");
       return;
     }
 
@@ -124,7 +124,7 @@ function Cart() {
       (item) => !item.selectedSize && item.selectedShellName
     );
     if (missingSizeItems) {
-      toast.warn("Please select a size for jewelry in your cart.");
+      toast.warning("Please select a size for jewelry in your cart.");
       return;
     }
 
@@ -134,7 +134,7 @@ function Cart() {
           checkProductStock(item.productId)
             .then((response) => ({
               ...item,
-              isOutOfStock: response.data === "Not enough stock",
+              isOutOfStock: response.data.message === "Not enough stock",
             }))
             .catch((error) => ({
               ...item,
@@ -147,7 +147,7 @@ function Cart() {
 
       if (hasOutOfStockItems) {
         toast.error(
-          "Some products in your cart are currently sold out. Please remove them to checkout.",
+          "Some products in your cart are currently out of stock. Please remove them to checkout.",
           {
             position: "top-right",
             autoClose: 3000,
@@ -161,7 +161,7 @@ function Cart() {
       navigate("/checkout", { state: { cartItems: updatedCartItems } });
     } catch (error) {
       toast.error(
-        "Some products in your cart are currently sold out. Please remove them to checkout.",
+        "Some products in your cart are currently out of stock. Please remove them to checkout.",
         {
           position: "top-right",
           autoClose: 3000,
@@ -199,18 +199,20 @@ function Cart() {
     }
   };
 
-  const calculateTotal = () => {
+  const calculateTotalQuantity = () => {
     return filteredCartItems.reduce((total, item) => {
-      if (!item.isOutOfStock) {
-        return total + parseFloat(item.price) * item.quantity;
-      }
-      return total;
+      return total + item.quantity;
     }, 0);
   };
 
-  const availableCartItemsCount = filteredCartItems.filter(
-    (item) => !item.isOutOfStock
-  ).length;
+  const calculateTotal = () => {
+    return filteredCartItems.reduce((total, item) => {
+      return total + parseFloat(item.price) * item.quantity;
+    }, 0);
+  };
+
+  const totalQuantity = calculateTotalQuantity();
+  const totalPrice = calculateTotal();
 
   return (
     <div className="cart">
@@ -220,8 +222,7 @@ function Cart() {
       <div className="cart_main_container">
         <div className="cart_header">
           <div className="cart_title">
-            <i className="fas fa-shopping-cart"></i> My Cart (
-            {availableCartItemsCount})
+            <i className="fas fa-shopping-cart"></i> My Cart ({totalQuantity})
           </div>
           <div className="continue_shopping" onClick={handleContinueShopping}>
             &lt; Continue Shopping
@@ -262,7 +263,7 @@ function Cart() {
                           {item.name}
                           {isOutOfStock && (
                             <span className="out-of-stock-text">
-                              (Sold out)
+                               (Sold out)
                             </span>
                           )}
                         </h5>
@@ -310,7 +311,11 @@ function Cart() {
                         {item.selectedSize && `Size: ${item.selectedSize}`}
                       </p>
                       <div className="cart_item_footer">
-                        <div className="cart_item_quantity">
+                        <div
+                          className={`cart_item_quantity ${
+                            isOutOfStock ? "text-grey" : ""
+                          }`}
+                        >
                           Quantity: {item.quantity}
                         </div>
                         <div
@@ -336,13 +341,13 @@ function Cart() {
               <p className="cart_summary_subtotal">
                 <span>Subtotal</span>
                 <span>
-                  <strong>${calculateTotal()}</strong>
+                  <strong>${totalPrice}</strong>
                 </span>
               </p>
               <p className="cart_summary_total">
                 <span>Total</span>
                 <span>
-                  <strong>${calculateTotal()}</strong>
+                  <strong>${totalPrice}</strong>
                 </span>
               </p>
             </div>

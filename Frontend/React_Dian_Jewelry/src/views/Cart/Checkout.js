@@ -4,7 +4,6 @@ import Switch from "@mui/material/Switch";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { toast } from "sonner";
 import vnpay from "../../assets/img/vnpay.webp";
 import Insta from "../../components/BlogInspired/BlogInspired.js";
@@ -45,19 +44,19 @@ const IOSSwitch = styled((props) => (
       "&.Mui-disabled + .MuiSwitch-track": {
         opacity: 0.5,
       },
-    },
-    "&.Mui-focusVisible .MuiSwitch-thumb": {
-      color: "#33cf4d",
-      border: "6px solid #fff",
-    },
-    "&.Mui-disabled .MuiSwitch-thumb": {
-      color:
-        theme.palette.mode === "light"
-          ? theme.palette.grey[100]
-          : theme.palette.grey[600],
-    },
-    "&.Mui-disabled + .MuiSwitch-track": {
-      opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
+      "&.Mui-focusVisible .MuiSwitch-thumb": {
+        color: "#33cf4d",
+        border: "6px solid #fff",
+      },
+      "&.Mui-disabled .MuiSwitch-thumb": {
+        color:
+          theme.palette.mode === "light"
+            ? theme.palette.grey[100]
+            : theme.palette.grey[600],
+      },
+      "&.Mui-disabled + .MuiSwitch-track": {
+        opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
+      },
     },
   },
   "& .MuiSwitch-thumb": {
@@ -218,7 +217,7 @@ function Checkout() {
           checkProductStock(item.productId)
             .then((response) => ({
               ...item,
-              isOutOfStock: response.data === "Not enough stock",
+              isOutOfStock: response.data.message === "Not enough stock",
             }))
             .catch((error) => ({
               ...item,
@@ -231,13 +230,13 @@ function Checkout() {
 
       if (hasOutOfStockItems) {
         toast.error(
-          "Can not checkout due to some products in your cart are currently sold out. Sorry for this inconvenience.",
+          "Can not checkout due to some products in your cart are currently out of stock. Sorry for this inconvenience.",
           {
             position: "top-right",
             autoClose: 3000,
-            onClose: () => navigate("/cart"),
           }
         );
+        setTimeout(() => navigate("/cart"), 3000);
         return;
       }
 
@@ -335,13 +334,13 @@ function Checkout() {
       if (error.response) {
       }
       toast.error(
-        "Can not checkout due to some products in your cart are currently sold out. Sorry for this inconvenience.",
+        "Can not checkout due to some products in your cart are currently out of stock. Sorry for this inconvenience.",
         {
           position: "top-right",
           autoClose: 3000,
-          onClose: () => navigate("/cart"),
         }
       );
+      setTimeout(() => navigate("/cart"), 3000);
       setLoading(false);
     }
   };
