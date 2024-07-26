@@ -4,14 +4,19 @@ import axios from "axios";
 const API_BASE_URL_ORDER = process.env.REACT_APP_API_BASE_URL;
 //get list orders
 
- const fetchAllOrders = async () => {
-  return axios.get(`${API_BASE_URL_ORDER}/purchaseorders/all`)
-  .then((response) => {
+const fetchAllOrders = async (page, pageSize, status) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL_ORDER}/purchaseorders/all`, {
+      params: {
+        PageNumber: page,
+        PageSize: pageSize,
+        Status: status,
+      },
+    });
     return response.data;
-  })
-  .catch(function (error) {
-    return error;
-  });
+  } catch (error) {
+    throw error;
+  }
 };
 
 //get order detail by id

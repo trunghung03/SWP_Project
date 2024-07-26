@@ -38,14 +38,20 @@ namespace DIAN_.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-                var purchaseOrders = await _purchaseOrderRepo.GetAllPurchaseOrderAsync(querry);
-                return Ok(purchaseOrders);
+
+                var (purchaseOrders, totalCount) = await _purchaseOrderRepo.GetAllPurchaseOrderAsync(querry);
+                var purchaseOrderDtos = purchaseOrders.Select(po => po.ToPurchaseOrderDetail()).ToList();
+                return Ok(new { purchaseOrders = purchaseOrderDtos, totalCount });
             }
-            catch (Exception) { throw; }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, "Internal server error");
+            }
         }
 
 

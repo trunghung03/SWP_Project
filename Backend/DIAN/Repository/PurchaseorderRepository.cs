@@ -20,17 +20,23 @@ namespace DIAN_.Repository
             _context = context;
         }
 
-        public async Task<List<Purchaseorder>> GetAllPurchaseOrderAsync(PurchaseOrderQuerry querry)
+        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetAllPurchaseOrderAsync(PurchaseOrderQuerry querry)
         {
             var purchaseOrders = _context.Purchaseorders.AsQueryable();
 
-            // Apply pagination
+            if (querry.Status != "default")
+            {
+                purchaseOrders = purchaseOrders.Where(po => po.OrderStatus == querry.Status);
+            }
+
+            var totalCount = await purchaseOrders.CountAsync();
+
             var paginatedOrders = await purchaseOrders
-            .Skip((querry.PageNumber - 1) * querry.PageSize)
+                .Skip((querry.PageNumber - 1) * querry.PageSize)
                 .Take(querry.PageSize)
                 .ToListAsync();
 
-            return paginatedOrders;
+            return (paginatedOrders, totalCount);
         }
 
         public async Task<Purchaseorder> GetPurchaseOrderInfoAsync(int orderId)

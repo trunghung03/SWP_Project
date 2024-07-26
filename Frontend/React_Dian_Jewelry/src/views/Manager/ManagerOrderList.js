@@ -31,8 +31,6 @@ import {
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
-
-
 const headCells = [
   { id: "orderId", numeric: false, disablePadding: false, label: "Order ID", sortable: true },
   { id: "name", numeric: false, disablePadding: false, label: "Customer Name", sortable: true },
@@ -93,14 +91,13 @@ EnhancedTableHead.propTypes = {
 const ManagerOrderList = () => {
   const navigate = useNavigate();
   const [orderList, setOrderList] = useState([]);
-  const [originalOrderList, setOriginalOrderList] = useState([]); // Maintain the original list
+  const [originalOrderList, setOriginalOrderList] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderId");
   const [searchQuery, setSearchQuery] = useState("");
-  const employeeId = localStorage.getItem("employeeId");
   const [sortOrder, setSortOrder] = useState("default");
   const [isSearch, setIsSearch] = useState(false);
-  const [dense, setDense] = React.useState(false);
+  const [dense, setDense] = useState(false);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pageSize: 6,
@@ -127,22 +124,36 @@ const ManagerOrderList = () => {
     setSortOrder(selectedValue);
     setPagination((prev) => ({
       ...prev,
-      currentPage: 1, // Reset to the first page
+      currentPage: 1,
     }));
+    fetchOrders(1, pagination.pageSize, selectedValue);
   };
 
-  const fetchOrders = async (page = 1, status = sortOrder) => {
+  const fetchOrders = async (page = 1, pageSize = 6, status = sortOrder) => {
     try {
-      const response = await fetchAllOrders();
-      const { orders, totalCount } = response;
-      setOrderList(orders);
-      setOriginalOrderList(orders);
-      setPagination((prev) => ({
-        ...prev,
-        currentPage: page,
-        totalPages: Math.ceil(totalCount / (prev.pageSize || 1)), // Ensure pageSize is not zero
-        totalCount,
-      }));
+      const response = await fetchAllOrders(page, pageSize, status);
+      console.log("API Response:", response);
+
+      if (response) {
+        const { purchaseOrders, totalCount } = response;
+        console.log("Purchase Orders:", purchaseOrders);
+        setOrderList(purchaseOrders || []);
+        setOriginalOrderList(purchaseOrders || []);
+        setPagination((prev) => ({
+          ...prev,
+          currentPage: page,
+          totalPages: Math.ceil(totalCount / pageSize),
+          totalCount,
+        }));
+      } else {
+        setOrderList([]);
+        setOriginalOrderList([]);
+        setPagination((prev) => ({
+          ...prev,
+          totalPages: 1,
+          totalCount: 0,
+        }));
+      }
     } catch (error) {
       console.error("Failed to fetch order list:", error);
       swal("Error", "Failed to fetch order list", "error");
@@ -150,14 +161,15 @@ const ManagerOrderList = () => {
   };
 
   useEffect(() => {
-    fetchOrders(pagination.currentPage, sortOrder);
-  }, [employeeId, pagination.currentPage, sortOrder]);
+    fetchOrders(pagination.currentPage, pagination.pageSize, sortOrder);
+  }, [pagination.currentPage, pagination.pageSize, sortOrder]);
 
   const handlePageChange = (event, value) => {
     setPagination((prev) => ({
       ...prev,
       currentPage: value,
     }));
+    fetchOrders(value, pagination.pageSize, sortOrder);
   };
 
   const handleRequestSort = (event, property) => {
@@ -170,7 +182,7 @@ const ManagerOrderList = () => {
     if (e.key === "Enter") {
       const searchValue = e.target.value.toLowerCase();
       if (searchValue.trim() === "") {
-        fetchOrders();
+        fetchOrders(pagination.currentPage, pagination.pageSize, sortOrder);
       } else {
         setIsSearch(true);
         const filteredOrders = originalOrderList.filter(
@@ -186,7 +198,7 @@ const ManagerOrderList = () => {
   const handleBackClick = () => {
     setSearchQuery("");
     setIsSearch(false);
-    setOrderList(originalOrderList); // Reset to original list
+    setOrderList(originalOrderList);
   };
 
   const isOrderOverdue = (orderDate) => {
@@ -275,39 +287,65 @@ const ManagerOrderList = () => {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {tableSort(orderList || [], getComparator(order, orderBy))
-                    .slice(
-                      (pagination.currentPage - 1) * pagination.pageSize,
-                      pagination.currentPage * pagination.pageSize
-                    )
-                    .map((row, index) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
-                      const isOverdue = isOrderOverdue(row.date);
-                      return (
-                        <TableRow hover tabIndex={-1} key={row.orderId}>
-                          <StyledTableCell align="center" component="th" id={labelId} scope="row" padding="none">
-                            {row.orderId}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">{row.name}</StyledTableCell>
-                          <StyledTableCell align="center">{formatDate(row.date)}</StyledTableCell>
-                          <StyledTableCell align="center">{row.shippingAddress}</StyledTableCell>
-                          <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
-                          <StyledTableCell align="center">
-                            <span
-                              className={`order-status ${isOverdue ? "overdue" : row.orderStatus}`}
+                  {orderList.length > 0 ? (
+                    tableSort(orderList, getComparator(order, orderBy))
+                      .map((item, index) => {
+                        const labelId = `enhanced-table-checkbox-${index}`;
+                        const textStyle =
+                          item.orderStatus === "Unpaid" && isOrderOverdue(item.date)
+                            ? { color: "#e05858", fontWeight: "bold" }
+                            : {};
+
+                        return (
+                          <TableRow
+                            hover
+                            onClick={() => viewDetail(item.orderId)}
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={item.orderId}
+                            sx={{ cursor: "pointer" }}
+                          >
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                              align="center"
+                              style={textStyle}
                             >
-                              {row.orderStatus}
-                            </span>
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <InfoIcon
-                              style={{ color: "#9e9e9e", cursor: "pointer" }}
-                              onClick={() => viewDetail(row.orderId)}
-                            />
-                          </StyledTableCell>
-                        </TableRow>
-                      );
-                    })}
+                              {item.orderId}
+                            </TableCell>
+                            <TableCell align="center" style={textStyle}>
+                              {item.name}
+                            </TableCell>
+                            <TableCell align="center" style={textStyle}>
+                              {formatDate(item.date)}
+                            </TableCell>
+                            <TableCell align="center" style={textStyle}>
+                              {item.shippingAddress}
+                            </TableCell>
+                            <TableCell align="center" style={textStyle}>
+                              {item.phoneNumber}
+                            </TableCell>
+                            <TableCell align="center" style={textStyle}>
+                              {item.orderStatus}
+                            </TableCell>
+                            <TableCell align="center">
+                              <InfoIcon
+                                style={{ cursor: "pointer", color: "#575252" }}
+                                onClick={() => viewDetail(item.orderId)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={7} align="center">
+                        No order found
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>

@@ -91,6 +91,7 @@ function AppContent() {
     '/delivery-staff-delivery-detail',
     '/manager-statistic',
     '/manager-diamond-list',
+    '/manager-order-list',
     '/manager-add-diamond',
     '/manager-product-list',
     '/manager-add-product',
