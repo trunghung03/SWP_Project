@@ -51,7 +51,7 @@ const searchProducts = (query) => {
 };
 
 const checkProductStock = (productId) => {
-    return axios.get(`${API_BASE_URL}/products/checkstock`, { params: { productId } });
+    return axios.get(`${API_BASE_URL}/products/checkstock?productId=${productId}`);
 };
 
 export { 
