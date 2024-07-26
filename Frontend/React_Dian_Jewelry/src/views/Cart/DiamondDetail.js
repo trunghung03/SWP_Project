@@ -1,9 +1,8 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
-import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import GIA from "../../assets/img/gia2.jpg";
 import Insta from "../../components/BlogInspired/BlogInspired.js";
 import CollectionSlide from "../../components/CollectionSlide/CollectionSlide";
@@ -17,129 +16,72 @@ import {
   checkProductStock,
   getDiamondDetail,
   getProductDetail,
-  getShellMaterials,
 } from "../../services/ProductService";
 import "../../styles/Cart/ProductDetail.scss";
 
 function DiamondDetail() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { addToCart } = useCart();
-  const [showSizeGuide, setShowSizeGuide] = useState(false);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedShell, setSelectedShell] = useState("");
+  const { addToCart, cartItems } = useCart();
   const [product, setProduct] = useState({});
   const [diamond, setDiamond] = useState({});
-  const [shellMaterials, setShellMaterials] = useState([]);
-  const [sizes, setSizes] = useState([]);
-  const [showSpecifications, setShowSpecifications] = useState(true);
   const [selectedImage, setSelectedImage] = useState("");
-  const [alsoLikeProducts, setAlsoLikeProducts] = useState([]);
-  const [shellPrice, setShellPrice] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [shellData, setShellData] = useState([]);
-  const [availableSizes, setAvailableSizes] = useState([]);
-  const [availableShells, setAvailableShells] = useState([]);
-
-  const navigateToProductDetail = (product) => {
-    const productId = product.productId;
-    const productName = product.name.replace(/\s+/g, "-").toLowerCase();
-    navigate(`/product-detail/${productName}`, { state: { id: productId } });
-    window.scrollTo(0, 220);
-  };
+  const [maxProductAvailable, setMaxProductAvailable] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 220);
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 220);
+    const fetchProductData = async (id) => {
+      try {
+        setLoading(true);
+        const productResponse = await getProductDetail(id);
+        const productData = productResponse.data;
+        console.log("productData", productData);
+        setProduct(productData);
+        const images = productData.imageLinkList.split(";");
+        setSelectedImage(images[0]);
+
+        const diamondResponse = await getDiamondDetail(productData.mainDiamondAttributeId);
+        console.log("diamondData", diamondResponse.data);
+        setDiamond(diamondResponse.data);
+
+        const stockResponse = await checkProductStock(id);
+        console.log("stockData", stockResponse.data);
+        const { message, maxProductAvailable } = stockResponse.data;
+        if (message === "Available") {
+          setMaxProductAvailable(maxProductAvailable);
+        } else {
+          setMaxProductAvailable(0);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const { id } = location.state || {};
     if (id) {
-      setLoading(true);
-      getProductDetail(id)
-        .then((response) => {
-          const productData = response.data;
-          setProduct(productData);
-          setSizes(productData.sizes.map((size) => size.toString()));
-          const images = productData.imageLinkList.split(";");
-          setSelectedImage(images[0]);
-
-          return Promise.all([
-            getDiamondDetail(productData.mainDiamondAttributeId).catch(
-              (error) => {
-                throw error;
-              }
-            ),
-          ])
-            .then(([diamondResponse]) => {
-              setDiamond(diamondResponse.data);
-            })
-            .catch((error) => {
-              console.error(error);
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        })
-        .catch((error) => {
-          setLoading(false);
-        });
-
-      getShellMaterials()
-        .then((response) => {
-          setShellMaterials(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      fetchProductData(id);
     }
   }, [location.state]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.warn("Please sign in or sign up to add diamond to cart.");
       return;
     }
 
-    checkProductStock(product.productId)
-      .then((response) => {
-        if (response.data === "Not enough stock") {
-          toast.error(
-            "This product is currently out of stock. Sorry for this inconvenience.",
-            {
-              position: "top-right",
-              autoClose: 3000,
-            }
-          );
-          return;
-        } else {
-          const shellEntry = shellData.find(
-            (shell) =>
-              shell.productId === product.productId &&
-              shell.size === parseFloat(selectedSize) &&
-              shell.shellMaterialName === selectedShell
-          );
+    try {
+      const stockResponse = await checkProductStock(product.productId);
+      const data = stockResponse.data;
+      console.log("Add to Cart Stock Data:", data);
+      const { message, maxProductAvailable } = data;
 
-          const productToSave = {
-            productId: product.productId,
-            name: product.name,
-            image: product.imageLinkList,
-            code: product.productCode,
-            price: product.price + shellPrice,
-            selectedSize,
-            sizes: product.sizes.map((size) => size.toString()),
-            selectedShellId: shellEntry?.shellId,
-            selectedShellName: selectedShell,
-            diamondId: product.mainDiamondId,
-            categoryId: product.categoryId,
-          };
-          addToCart(productToSave);
-          navigateToCart();
-        }
-      })
-      .catch((error) => {
+      if (message === "Not enough stock") {
         toast.error(
           "This product is currently out of stock. Sorry for this inconvenience.",
           {
@@ -147,12 +89,48 @@ function DiamondDetail() {
             autoClose: 3000,
           }
         );
-        console.error(error);
-      });
-  };
+        return;
+      }
 
-  const navigateToCart = () => {
-    toast.success("Add to cart successfully!");
+      const cartItemCount = cartItems.filter(
+        (item) => item.productId === product.productId
+      ).length;
+
+      if (cartItemCount >= maxProductAvailable) {
+        toast.error(
+          "You have added the maximum amount of this product to your cart.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+        return;
+      }
+
+      addToCart({
+        productId: product.productId,
+        name: product.name,
+        image: product.imageLinkList,
+        code: product.productCode,
+        price: product.price,
+        selectedSize: "",
+        sizes: product.sizes.map((size) => size.toString()),
+        selectedShellId: null,
+        selectedShellName: "",
+        diamondId: product.mainDiamondId,
+        categoryId: product.categoryId,
+      });
+      toast.success("Add to cart successfully!");
+    } catch (error) {
+      toast.error(
+        "This product is currently out of stock. Sorry for this inconvenience.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+      console.error(error);
+    }
   };
 
   const navItems = [
@@ -175,10 +153,7 @@ function DiamondDetail() {
   }
 
   return (
-    <div
-      id="product_detail"
-      className={`product_detail ${showSizeGuide ? "no-scroll" : ""}`}
-    >
+    <div id="product_detail" className={`product_detail`}>
       <HeaderComponent />
       <SubNav items={navItems} />
 
@@ -191,9 +166,7 @@ function DiamondDetail() {
                 key={index}
                 src={image}
                 alt={`${product.name} ${index + 1}`}
-                className={`thumbnail ${
-                  selectedImage === image ? "selected" : ""
-                }`}
+                className={`thumbnail ${selectedImage === image ? "selected" : ""}`}
                 onClick={() => setSelectedImage(image)}
               />
             ))}
@@ -201,14 +174,17 @@ function DiamondDetail() {
           <img src={selectedImage} alt={product.name} className="main_image" />
         </div>
         <div className="product_info_detail">
-          <h2 className="product_name_detail">{product.name}</h2>
+          <h2 className="product_name_detail">
+            {product.name}{" "}
+            {maxProductAvailable !== null && `(${maxProductAvailable} left)`}
+          </h2>
           <p className="product_diamond_description">
             {diamond.cut} Cutㅤ|ㅤ{diamond.color} Colorㅤ|ㅤ{diamond.clarity}{" "}
             Clarity
           </p>
           <div className="price_size_container">
             <p className="product_price_detail">
-              ${product.price + shellPrice} (Only Diamond)
+              ${product.price} (Only Diamond)
             </p>
           </div>
           <div className="product_actions_detail">
@@ -281,7 +257,6 @@ function DiamondDetail() {
         </div>
       </div>
 
-      <br></br>
       <br></br>
       <br></br>
       <CollectionSlide />
