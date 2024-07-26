@@ -38,7 +38,6 @@ import {
 import "../../../styles/Manager/ManagerList.scss";
 import DiamondPDf from "./DiamondPDF.js";
 import { Grid } from "@mui/material";
-import DiamondTypeSwitcher from "./DiamondTypeSwitcher.js";
 
 const ManagerDiamondList = () => {
   const navigate = useNavigate();
@@ -398,7 +397,7 @@ const ManagerDiamondList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <DiamondTypeSwitcher />
+          {/* <DiamondTypeSwitcher /> */}
           {isSearch && (
             <button className="btn btn-secondary mt-3" onClick={handleBack}>
               Back to show all {value === 0 ? "diamonds" : "sub-diamonds"}
