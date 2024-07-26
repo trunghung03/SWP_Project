@@ -14,7 +14,7 @@ namespace DIAN_.DTOs.PromotionDto
         public string Code { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Amount is required.")]
-        [Range(0, double.MaxValue, ErrorMessage = "Amount must be a non-negative number.")]
+        [Range(0, 0.3, ErrorMessage = "Amount must be a non-negative number and not exceed 30%")]
         public decimal Amount { get; set; }
 
         [Required(ErrorMessage = "Description is required.")]

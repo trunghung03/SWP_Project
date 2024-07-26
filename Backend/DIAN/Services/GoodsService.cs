@@ -218,14 +218,11 @@ namespace DIAN_.Services
                     stockDto.MainDiamondCount = mainDiamondCount;
                     stockDto.SubDiamondCount = subDiamondCount;
 
-                    // Calculate the maximum number of products that can be made
                     int maxProductsFromMainDiamonds = mainDiamondCount / (product.MainDiamondAmount ?? 1);
                     int maxProductsFromSubDiamonds = subDiamondCount / (product.SubDiamondAmount ?? 1);
                     stockDto.MaxProductAvailable = Math.Min(maxProductsFromMainDiamonds, maxProductsFromSubDiamonds);
                 }
             }
-
-            // Set the message based on stock availability
             stockDto.Message = stockDto.MaxProductAvailable > 0 ? "Available" : "Not enough stock";
 
             return stockDto;
