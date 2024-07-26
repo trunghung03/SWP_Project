@@ -3,6 +3,7 @@
     public class DiamondDto
     {
         public int DiamondId { get; set; }
+        public int DiamondAttributeId { get; set; }
 
         public string Shape { get; set; } = string.Empty;
 

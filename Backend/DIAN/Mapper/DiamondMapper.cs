@@ -11,6 +11,7 @@ namespace DIAN_.Mapper
             return new DiamondDto
             {
                 DiamondId = diamond.DiamondId,
+                DiamondAttributeId = diamond.MainDiamondAtrributeId ?? -1,
                 Shape = diamond.MainDiamondAtrribute?.Shape ?? "Not Available", 
                 Color = diamond.MainDiamondAtrribute?.Color ?? "Not Available",
                 Clarity = diamond.MainDiamondAtrribute?.Clarity ?? "Not Available", 
