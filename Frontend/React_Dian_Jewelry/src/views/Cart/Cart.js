@@ -259,7 +259,7 @@ function Cart() {
                             isOutOfStock ? "text-grey" : ""
                           }`}
                         >
-                          {item.name} x{item.quantity}{" "}
+                          {item.name}
                           {isOutOfStock && (
                             <span className="out-of-stock-text">
                               (Sold out)
@@ -309,12 +309,17 @@ function Cart() {
                         <br />
                         {item.selectedSize && `Size: ${item.selectedSize}`}
                       </p>
-                      <div
-                        className={`cart_item_price ${
-                          isOutOfStock ? "text-grey" : ""
-                        }`}
-                      >
-                        ${Math.floor(item.price * item.quantity)}
+                      <div className="cart_item_footer">
+                        <div className="cart_item_quantity">
+                          Quantity: {item.quantity}
+                        </div>
+                        <div
+                          className={`cart_item_price ${
+                            isOutOfStock ? "text-grey" : ""
+                          }`}
+                        >
+                          ${Math.floor(item.price * item.quantity)}
+                        </div>
                       </div>
                     </div>
                   </div>

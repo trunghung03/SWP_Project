@@ -123,7 +123,7 @@
 .cart_item_price {
     font-size: 20px;
     font-weight: bold;
-    margin: 63px 0 0 0;
+    margin: 48px 0 0 0;
     text-align: end;
 }
 
@@ -314,3 +314,17 @@
 .out-of-stock-text {
     color: #e05858;
 }
+
+.cart_item_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .cart_item_quantity {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 46px;
+  }
+  
