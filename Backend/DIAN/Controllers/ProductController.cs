@@ -34,8 +34,18 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
                 var products = await _productRepo.GetListAsync();
+                var filteredProducts = new List<Product>();
 
-                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
+                foreach (var product in products)
+                {
+                    if (await _productRepo.HasSufficientDiamondsForProduct(product.ProductId))
+                    {
+                        product.Status = true;
+                        filteredProducts.Add(product);
+                    }
+                }
+
+                var productDTOs = filteredProducts.Select(p => p.ToProductListDTO()).ToList();
                 return Ok(productDTOs);
             }
             catch (Exception)
@@ -55,7 +65,18 @@ namespace DIAN_.Controllers
                 }
                 var products = await _productRepo.GetDiamondProduct();
 
-                var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
+                var filteredProducts = new List<Product>();
+
+                foreach (var product in products)
+                {
+                    if (await _productRepo.HasSufficientDiamondsForProduct(product.ProductId))
+                    {
+                        product.Status = true;
+                        filteredProducts.Add(product);
+                    }
+                }
+
+                var productDTOs = filteredProducts.Select(p => p.ToProductListDTO()).ToList();
                 return Ok(productDTOs);
             }
             catch (Exception)
