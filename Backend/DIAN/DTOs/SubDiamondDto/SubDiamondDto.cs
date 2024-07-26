@@ -5,6 +5,7 @@ namespace DIAN_.DTOs.SubDiamondDto
     public class SubDiamondDto
     {
         public int SubDiamondId { get; set; }
+        public int SubDiamondAttributeId { get; set; }
 
         public string Shape { get; set; } = string.Empty;
 

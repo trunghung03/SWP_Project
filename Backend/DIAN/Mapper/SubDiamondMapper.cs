@@ -11,6 +11,7 @@ namespace DIAN_.Mapper
             return new SubDiamondDto
             {
                 SubDiamondId = diamond.DiamondId,
+                SubDiamondAttributeId = diamond.DiamondAtrributeId ?? -1,
                 Shape = diamond.DiamondAtrribute?.Shape, 
                 Color = diamond.DiamondAtrribute?.Color, 
                 Clarity = diamond.DiamondAtrribute?.Clarity, 
