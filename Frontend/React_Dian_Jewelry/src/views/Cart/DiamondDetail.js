@@ -49,8 +49,8 @@ function DiamondDetail() {
         setDiamond(diamondResponse.data);
 
         const stockResponse = await checkProductStock(id);
-        console.log("stockData", stockResponse);
-        const { message, maxProductAvailable } = stockResponse;
+        console.log("stockData", stockResponse.data);
+        const { message, maxProductAvailable } = stockResponse.data;
         if (message === "Available") {
           setMaxProductAvailable(maxProductAvailable);
         } else {
