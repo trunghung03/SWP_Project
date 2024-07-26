@@ -192,16 +192,16 @@
 			('Rose Gold', 2000, 1),
 			('White Gold', 2300, 1);
 			
-		INSERT INTO COLLECTION (CollectionID, [Name], Status, [Description], CollectionImage)
+		INSERT INTO COLLECTION ([Name], Status, [Description], CollectionImage)
 		VALUES
-		(1, 'Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.', 'https://i2.wp.com/www.wolf-and-stag.com/wp-content/uploads/2019/11/Capsule-Jewelry-Collection-4.jpg?quality=100&resize=1000%2C1500'),
-		(2, 'Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.', 'https://i.etsystatic.com/44410244/r/il/e673fe/5068446280/il_fullxfull.5068446280_2ksj.jpg'),
-		(3, 'Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.', 'https://image.brilliantearth.com/media/thumbnail/32/c0/32c03ba80196fe7da32991b3183feb81.jpg'),
-		(4, 'Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.', 'https://image.brilliantearth.com/cdn-cgi/image/width=1440,height=1090,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F74d345b581d1441d90f4a8a734add393'),
-		(5, 'Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.', 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fcc070a91902748e18c5359226ef4fb7a'),
-		(6, 'Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.', 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F546baa4954c64db18a3a75b885337b99'),
-		(7, 'Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FJ.jpg'),
-		(8, 'Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FASHION.jpg');
+		('Lotus Diamond Jewelry Collection', 1, 'An exquisite jewelry set featuring diamonds arranged in a lotus-inspired design, epitomizing elegance and sophistication.', 'https://i2.wp.com/www.wolf-and-stag.com/wp-content/uploads/2019/11/Capsule-Jewelry-Collection-4.jpg?quality=100&resize=1000%2C1500'),
+		('Modern Majesty Collection', 1, 'A contemporary collection that combines sleek designs with majestic diamond settings, perfect for the modern monarch.', 'https://i.etsystatic.com/44410244/r/il/e673fe/5068446280/il_fullxfull.5068446280_2ksj.jpg'),
+		('Classic Charm Collection', 1, 'A timeless collection that captures the essence of classic elegance with charming diamond pieces.', 'https://image.brilliantearth.com/media/thumbnail/32/c0/32c03ba80196fe7da32991b3183feb81.jpg'),
+		('Pure Perfection Collection', 1, 'An immaculate collection showcasing flawless diamonds that exude purity and perfection in every piece.', 'https://image.brilliantearth.com/cdn-cgi/image/width=1440,height=1090,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F74d345b581d1441d90f4a8a734add393'),
+		('Royal Radiance Collection', 1, 'A luxurious collection designed to evoke the regal beauty and radiant splendor of royalty.', 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2Fcc070a91902748e18c5359226ef4fb7a'),
+		('Celestial Sparkle Collection', 1, 'A heavenly collection inspired by the stars, featuring diamonds that sparkle like the night sky.', 'https://image.brilliantearth.com/cdn-cgi/image/width=886,height=1026,quality=100,format=auto/https://cdn.builder.io/api/v1/image/assets%2F9f2a69003c86470ea05deb9ecb9887be%2F546baa4954c64db18a3a75b885337b99'),
+		('Majestic Mystique Collection', 1, 'An enigmatic collection that blends majestic designs with a touch of mystery, ideal for those who love captivating jewelry.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FJ.jpg'),
+		('Vintage Virtue Collection', 1, 'A nostalgic collection that brings back the charm and virtue of vintage jewelry, with pieces that tell a story.', 'https://image.brilliantearth.com/media/product_tile_images/CocktailRings_MORE-TO-EXPLORE-TILES_DESKTOP_FASHION.jpg');
 		INSERT INTO DIAMONDATTRIBUTE (Shape, Color, Clarity, Carat, Cut)
 		VALUES
 		('Round', 'F', 'VVS2', 1.03, 'Super Ideal'),

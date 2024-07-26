@@ -5,10 +5,6 @@ namespace DIAN_.DTOs.CategoryDTO
 {
     public class CreateCollectionDTO
     {
-        [Required(ErrorMessage = "Collection ID is required.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Collection ID must be a positive number.")]
-        public int CollectionId { get; set; }
-
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(100, ErrorMessage = "Name must not exceed 100 characters.")]
         public string? Name { get; set; }
