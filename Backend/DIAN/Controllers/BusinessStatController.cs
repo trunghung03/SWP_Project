@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DIAN_.Controllers
 {
@@ -25,6 +26,8 @@ namespace DIAN_.Controllers
         public async Task<IActionResult> GetPurchaseOrdersCount([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             IQueryable<Purchaseorder> query = _context.Purchaseorders;
+
+            query = query.Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled");
 
             if (startDate.HasValue)
             {
@@ -54,6 +57,7 @@ namespace DIAN_.Controllers
         public async Task<IActionResult> GetTotalPurchaseOrderValue([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             IQueryable<Purchaseorder> query = _context.Purchaseorders;
+            query = query.Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled");
 
             if (startDate.HasValue)
             {
@@ -75,6 +79,7 @@ namespace DIAN_.Controllers
         public async Task<IActionResult> GetTimestampedOrders([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             IQueryable<Purchaseorder> query = _context.Purchaseorders;
+            query = query.Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled");
 
             if (startDate.HasValue)
             {
@@ -124,6 +129,7 @@ namespace DIAN_.Controllers
 
             // Get the order details, optionally filtered by date
             var query = _context.Orderdetails.AsQueryable();
+            query = query.Where(po => po.Order.OrderStatus != "Unpaid" && po.Order.OrderStatus != "Cancelled");
 
             if (startDate.HasValue)
             {
@@ -216,12 +222,11 @@ namespace DIAN_.Controllers
             {
                 DateTime startDate = new DateTime(targetYear, month, 1);
                 DateTime endDate = startDate.AddMonths(1).AddDays(-1);
-
                 int purchaseOrderCount = await _context.Purchaseorders
-                    .Where(po => po.Date >= startDate && po.Date <= endDate)
+                .Where(po => po.Date >= startDate && po.Date <= endDate)
+                .Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled")
                     .CountAsync();
-
-                monthlyCounts[month - 1] = purchaseOrderCount;
+            monthlyCounts[month - 1] = purchaseOrderCount;
             }
 
             return Ok(monthlyCounts);
@@ -241,6 +246,7 @@ namespace DIAN_.Controllers
 
                 decimal totalValue = await _context.Purchaseorders
                     .Where(po => po.Date >= startDate && po.Date <= endDate)
+                    .Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled")
                     .SumAsync(po => po.TotalPrice);
 
                 monthlyValues[month - 1] = totalValue;
@@ -257,6 +263,7 @@ namespace DIAN_.Controllers
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
                 .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
+                .Where(po => po.Order.OrderStatus != "Unpaid" && po.Order.OrderStatus != "Cancelled")
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
                 {
@@ -291,6 +298,7 @@ namespace DIAN_.Controllers
                 .Include(od => od.Product)
                     .ThenInclude(p => p.MainDiamondAtrribute) 
                 .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
+                .Where(po => po.Order.OrderStatus != "Unpaid" && po.Order.OrderStatus != "Cancelled")
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
                 {
@@ -317,6 +325,7 @@ namespace DIAN_.Controllers
 
             var ordersOnDate = await _context.Purchaseorders
                                         .Where(o => o.Date >= startDate && o.Date <= endDate)
+                                        .Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled")
                                         .Include(o => o.Orderdetails)
                                         .ToListAsync();
 
@@ -351,6 +360,7 @@ namespace DIAN_.Controllers
             var purchaseOrders = await _context.Purchaseorders
                 .Include(po => po.Orderdetails)
                 .Where(po => po.Date >= startDate && po.Date <= endDate)
+                .Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled")
                 .ToListAsync();
 
             var groupedStatistics = purchaseOrders
@@ -386,6 +396,7 @@ namespace DIAN_.Controllers
             var purchaseOrders = await _context.Purchaseorders
                 .Include(po => po.Orderdetails)
                 .Where(po => po.Date.Year == targetYear)
+                .Where(po => po.OrderStatus != "Unpaid" && po.OrderStatus != "Cancelled")
                 .ToListAsync();
 
             foreach (var order in purchaseOrders)
