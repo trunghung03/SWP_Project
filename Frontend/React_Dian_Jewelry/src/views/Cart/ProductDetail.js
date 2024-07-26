@@ -31,7 +31,7 @@ import "../../styles/Cart/ProductDetail.scss";
 function ProductDetail() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedShell, setSelectedShell] = useState("");
@@ -48,6 +48,7 @@ function ProductDetail() {
   const [shellData, setShellData] = useState([]);
   const [availableSizes, setAvailableSizes] = useState([]);
   const [availableShells, setAvailableShells] = useState([]);
+  const [maxProductAvailable, setMaxProductAvailable] = useState(null);
 
   const navigateToProductDetail = (product) => {
     const productId = product.productId;
@@ -88,6 +89,9 @@ function ProductDetail() {
             getProductList().catch((error) => {
               throw error;
             }),
+            checkProductStock(id).catch((error) => {
+              throw error;
+            }),
           ])
             .then(
               ([
@@ -95,10 +99,18 @@ function ProductDetail() {
                 collectionResponse,
                 shellResponse,
                 productListResponse,
+                stockResponse,
               ]) => {
                 setDiamond(diamondResponse.data);
                 setCollection(collectionResponse.data);
                 setShellData(shellResponse.data);
+
+                const { message, maxProductAvailable } = stockResponse.data;
+                if (message === "Available") {
+                  setMaxProductAvailable(maxProductAvailable);
+                } else {
+                  setMaxProductAvailable(0);
+                }
 
                 const relatedProducts = productListResponse.data.filter(
                   (product) => product.categoryID === productData.categoryId
@@ -155,62 +167,18 @@ function ProductDetail() {
     }
   }, [location.state]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.warning("Please sign in or sign up to add jewelry to cart.");
       return;
     }
 
-    checkProductStock(product.productId)
-      .then((response) => {
-        if (response.data === "Not enough stock") {
-          toast.error(
-            "This product is currently out of stock. Sorry for this inconvenience.",
-            {
-              position: "top-right",
-              autoClose: 3000,
-            }
-          );
-          return;
-        } else if (!selectedShell) {
-          toast.warning("Please choose a shell type.", {
-            position: "top-right",
-            autoClose: 3000,
-          });
-          return;
-        } else if (!selectedSize) {
-          toast.warning("Please choose a size.", {
-            position: "top-right",
-            autoClose: 3000,
-          });
-          return;
-        } else {
-          const shellEntry = shellData.find(
-            (shell) =>
-              shell.productId === product.productId &&
-              shell.size === parseFloat(selectedSize) &&
-              shell.shellMaterialName === selectedShell
-          );
+    try {
+      const stockResponse = await checkProductStock(product.productId);
+      const { message, maxProductAvailable } = stockResponse.data;
 
-          const productToSave = {
-            productId: product.productId,
-            name: product.name,
-            image: product.imageLinkList,
-            code: product.productCode,
-            price: product.price + shellPrice,
-            selectedSize,
-            sizes: product.sizes.map((size) => size.toString()),
-            selectedShellId: shellEntry?.shellId,
-            selectedShellName: selectedShell,
-            diamondId: product.mainDiamondId,
-            categoryId: product.categoryId,
-          };
-          addToCart(productToSave);
-          navigateToCart();
-        }
-      })
-      .catch((error) => {
+      if (message === "Not enough stock") {
         toast.error(
           "This product is currently out of stock. Sorry for this inconvenience.",
           {
@@ -218,12 +186,75 @@ function ProductDetail() {
             autoClose: 3000,
           }
         );
-        console.error(error);
-      });
-  };
+        return;
+      }
 
-  const navigateToCart = () => {
-    toast.success("Add to cart successfully!");
+      const cartItemCount = cartItems.filter(
+        (item) => item.productId === product.productId
+      ).length;
+
+      if (cartItemCount >= maxProductAvailable) {
+        toast.error(
+          "You have added the maximum amount of this product to your cart.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+        return;
+      }
+
+      if (!selectedShell) {
+        toast.warning("Please choose a shell type.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return;
+      }
+
+      if (!selectedSize) {
+        toast.warning("Please choose a size.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return;
+      }
+
+      const shellEntry = shellData.find(
+        (shell) =>
+          shell.productId === product.productId &&
+          shell.size === parseFloat(selectedSize) &&
+          shell.shellMaterialName === selectedShell
+      );
+
+      const productToSave = {
+        productId: product.productId,
+        name: product.name,
+        image: product.imageLinkList,
+        code: product.productCode,
+        price: product.price + shellPrice,
+        selectedSize,
+        sizes: product.sizes.map((size) => size.toString()),
+        selectedShellId: shellEntry?.shellId,
+        selectedShellName: selectedShell,
+        diamondId: product.mainDiamondId,
+        categoryId: product.categoryId,
+      };
+      addToCart(productToSave);
+      toast.success("Add to cart successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      toast.error(
+        "This product is currently out of stock. Sorry for this inconvenience.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+      console.error(error);
+    }
   };
 
   const openSizeGuide = () => {
@@ -337,7 +368,10 @@ function ProductDetail() {
           <img src={selectedImage} alt={product.name} className="main_image" />
         </div>
         <div className="product_info_detail">
-          <h2 className="product_name_detail">{product.name}</h2>
+          <h2 className="product_name_detail">
+            {product.name}{" "}
+            {maxProductAvailable !== null && `(${maxProductAvailable} left)`}
+          </h2>
           <p className="product_description_detail">{product.description}</p>
           <p className="product_code_detail">
             <strong>Code:</strong> {product.productCode}
