@@ -1,8 +1,8 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import GIA from "../../assets/img/gia2.jpg";
 import Insta from "../../components/BlogInspired/BlogInspired.js";
 import CollectionSlide from "../../components/CollectionSlide/CollectionSlide";
@@ -21,6 +21,7 @@ import "../../styles/Cart/ProductDetail.scss";
 
 function DiamondDetail() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { addToCart, cartItems } = useCart();
   const [product, setProduct] = useState({});
   const [diamond, setDiamond] = useState({});
@@ -35,21 +36,18 @@ function DiamondDetail() {
   useEffect(() => {
     const fetchProductData = async (id) => {
       try {
-        console.log("ID: "+id);
+        console.log("ID: " + id);
         setLoading(true);
         const productResponse = await getProductDetail(id);
         const productData = productResponse.data;
-        console.log("productData", productData);
         setProduct(productData);
         const images = productData.imageLinkList.split(";");
         setSelectedImage(images[0]);
 
         const diamondResponse = await getDiamondDetail(productData.mainDiamondAttributeId);
-        console.log("diamondData", diamondResponse.data);
         setDiamond(diamondResponse.data);
 
         const stockResponse = await checkProductStock(id);
-        console.log("stockData", stockResponse.data);
         const { message, maxProductAvailable } = stockResponse.data;
         if (message === "Available") {
           setMaxProductAvailable(maxProductAvailable);
@@ -121,7 +119,10 @@ function DiamondDetail() {
         diamondId: product.mainDiamondId,
         categoryId: product.categoryId,
       });
-      toast.success("Add to cart successfully!");
+      toast.success("Add to cart successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (error) {
       toast.error(
         "This product is currently out of stock. Sorry for this inconvenience.",

@@ -197,7 +197,7 @@ function Checkout() {
     const { fullName, phone, address, note } = formData;
 
     if (!fullName || !phone || !address) {
-      toast.warn("Please fill in all the required fields.");
+      toast.warning("Please fill in all the required fields.");
       return;
     }
 
@@ -326,8 +326,6 @@ function Checkout() {
         toast.promise(UpdateQuantityCheckout(orderId), {
           pending: "Processing...",
           success: "Checkout successfully!",
-          error:
-            "Can not checkout due to some products in your cart are currently sold out. Sorry for this inconvenience.",
         });
 
         localStorage.setItem("fromCheckout", "true");
