@@ -50,20 +50,34 @@ const searchProducts = (query) => {
     return axios.get(`${API_BASE_URL}/products/search`, { params: { name: query } });
 };
 
-const checkProductStock = (productId) => {
-    return axios.get(`${API_BASE_URL}/products/checkstock?productId=${productId}`);
-};
+  const checkProductStock = async (productId) => {
+    const response = await axios.get(`${API_BASE_URL}/products/checkstock?productId=${productId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      transformResponse: [function (data) {
+        try {
+          return JSON.parse(data);
+        } catch (e) {
+          return data;
+        }
+      }]
+    });
+    return response;
+  };
+  
 
-export { 
-    getProductList, 
-    getCollectionList, 
-    getProductDetail, 
-    getDiamondDetail, 
-    getCollectionDetail, 
-    getShellMaterials, 
-    getProductsByIds, 
-    getNewestProducts, 
-    getTopSellingProducts, 
+export {
+    getProductList,
+    getCollectionList,
+    getProductDetail,
+    getDiamondDetail,
+    getCollectionDetail,
+    getShellMaterials,
+    getProductsByIds,
+    getNewestProducts,
+    getTopSellingProducts,
     getNewestCollections,
     searchProducts,
     getShellByProductId,
