@@ -91,6 +91,10 @@ const getSubDiamondAttribute = async () => {
   return response.data;
 };
 
+
+
+
+
 export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape,getCertificateById,updateCertificateById 
   , getAllSubDiamond, getSubDiamondDetail, createSubDiamond, updateSubDiamondById, deleteSubDiamondById,
   getMainDiamondAttribute, getSubDiamondAttribute

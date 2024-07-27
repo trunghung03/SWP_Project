@@ -14,7 +14,14 @@ const clientID =
 root.render(
   // <React.StrictMode>
   <>
-    <Toaster richColors position="top-right" closeButton={true} />
+    <Toaster
+      richColors
+      position="top-right"
+      closeButton={true}
+      duration={3000}
+      transition
+      animation="bounce"
+    />
     <GoogleOAuthProvider clientId={clientID}>
       <App />
     </GoogleOAuthProvider>

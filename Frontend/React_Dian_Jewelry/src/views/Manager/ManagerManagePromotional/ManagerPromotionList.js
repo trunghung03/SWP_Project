@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
-import "../../../styles/Manager/ManagerList.scss";
-import {
-  ShowAllPromotion,
-  getPromotionDetail,
-  getPromotionByName,
-  updatePromotionById,
-} from "../../../services/ManagerService/ManagerPromotionService.js";
-import logo from "../../../assets/img/logoN.png";
+import EditIcon from "@mui/icons-material/Edit";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Pagination from '@mui/material/Pagination';
+import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,15 +11,20 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Pagination from '@mui/material/Pagination';
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import logo from "../../../assets/img/logoN.png";
+import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
+import {
+  ShowAllPromotion,
+  getPromotionByName,
+  getPromotionDetail,
+  updatePromotionById,
+} from "../../../services/ManagerService/ManagerPromotionService.js";
 
 const headCells = [
   { id: 'id', numeric: false, disablePadding: false, label: 'ID', sortable: true },
@@ -391,7 +389,7 @@ const ManagerPromotionList = () => {
                         <TableCell align="center">{item.id}</TableCell>
                         <TableCell align="center">{item.name}</TableCell>
                         <TableCell align="center">{item.code}</TableCell>
-                        <TableCell align="center">{item.amount*100}%</TableCell>
+                        <TableCell align="center">{item.amount*100}</TableCell>
                         <TableCell align="center">{item.description}</TableCell>
                         <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
                         <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>

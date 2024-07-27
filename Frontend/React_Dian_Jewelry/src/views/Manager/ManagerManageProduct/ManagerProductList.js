@@ -2,7 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Visibility } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Pagination from "@mui/material/Pagination";
