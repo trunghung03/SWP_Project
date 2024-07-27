@@ -33,15 +33,16 @@ function OrderHistory() {
         if (storedLastName) setLastName(storedLastName);
         if (storedPoints) setPoints(storedPoints);
 
-        getAllOrders().then(data => {
-            const customerOrders = data.filter(order => order.userId === parseInt(customerId));
-            setOrders(customerOrders);
-            setFilteredOrders(customerOrders);
-            setLoading(false); 
-        }).catch(error => {
-            console.error('Error fetching orders:', error);
-            setLoading(false); 
-        });
+        if (customerId) {
+            getAllOrders(customerId).then(data => {
+                setOrders(data);
+                setFilteredOrders(data);
+                setLoading(false); 
+            }).catch(error => {
+                console.error('Error fetching orders:', error);
+                setLoading(false); 
+            });
+        }
     }, []);
 
     useEffect(() => {
@@ -57,13 +58,6 @@ function OrderHistory() {
         setFilteredOrders(filtered);
         setCurrentPage(1);
     }, [filterStatus, sortOrder, orders]);
-
-    // useEffect(() => {
-    //     window.scrollTo({
-    //         top: document.querySelector('.order_history_container').offsetTop,
-    //         behavior: 'smooth',
-    //     });
-    // }, []);
 
     const navItems = [
         { name: 'Home', link: '/home' },
