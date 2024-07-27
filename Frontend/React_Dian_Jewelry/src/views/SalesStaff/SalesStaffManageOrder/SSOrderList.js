@@ -268,8 +268,6 @@ const SSOrderList = () => {
             />
           </Stack>
         </div>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={0} />
             <TableContainer>
               <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -341,8 +339,6 @@ const SSOrderList = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Paper>
-        </Box>
         {isSearch && (
           <button className="SS_back_button" onClick={handleBackClick}>
             Back

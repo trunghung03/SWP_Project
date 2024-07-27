@@ -322,7 +322,7 @@ namespace DIAN_.Services
             }
             else
             {
-                if (product.MainDiamondAtrributeId != 0)
+                if (product.MainDiamondAtrributeId != 0 && product.MainDiamondAtrributeId != null)
                 {
                     var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId, increaseQuantities);
                     if (!mainDiamondUpdated)
@@ -331,7 +331,7 @@ namespace DIAN_.Services
                     }
                 }
 
-                if (product.SubDiamondAtrributeId != 0)
+                if (product.SubDiamondAtrributeId != 0 && product.SubDiamondAtrributeId != null)
                 {
                     var subDiamondUpdated = await UpdateSubDiamonds(product.SubDiamondAtrributeId.Value, product.SubDiamondAmount ?? 0, orderDetailId, increaseQuantities);
                     if (!subDiamondUpdated)

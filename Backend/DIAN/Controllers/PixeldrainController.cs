@@ -33,40 +33,47 @@ namespace DIAN_.Controllers
             {
                 return NotFound();
             }
-
-            // Read the HTML template from warrantyTemplate.html
-            string htmlTemplatePath = "warrantyTemplate.html";
-            string htmlContent = await System.IO.File.ReadAllTextAsync(htmlTemplatePath);
-
-            // Replace placeholders in the HTML template with actual warranty data
-            htmlContent = htmlContent.Replace("{OrderDetailId}", warranty.OrderDetailId.ToString())
-                                     .Replace("{StartDate}", warranty.StartDate.ToString("yyyy-MM-dd"))
-                                     .Replace("{EndDate}", warranty.EndDate.ToString("yyyy-MM-dd"))
-                                     .Replace("{Status}", warranty.Status.ToString() ?? "Active");
-
-            // Define the output PDF file path
-            string outputPdfPath = "warranty.pdf";
-
-            // Convert HTML to PDF
-            ConvertHtmlToPdf(htmlContent, outputPdfPath);
-
-            // Upload the PDF to Pixeldrain
-            var uploadResult = await UploadPdfToPixeldrain(outputPdfPath);
-            dynamic result = uploadResult;
-            string uploadUrl = result.url;
-
-            if (!string.IsNullOrEmpty(uploadUrl))
+            try
             {
-                // Delete the local PDF file
-                if (System.IO.File.Exists(outputPdfPath))
+
+                // Read the HTML template from warrantyTemplate.html
+                string htmlTemplatePath = "warrantyTemplate.html";
+                string htmlContent =  System.IO.File.ReadAllText(htmlTemplatePath);
+
+                // Replace placeholders in the HTML template with actual warranty data
+                htmlContent = htmlContent.Replace("{OrderDetailId}", warranty.OrderDetailId.ToString())
+                                         .Replace("{StartDate}", warranty.StartDate.ToString("yyyy-MM-dd"))
+                                         .Replace("{EndDate}", warranty.EndDate.ToString("yyyy-MM-dd"))
+                                         .Replace("{Status}", warranty.Status.ToString() ?? "Active");
+
+                // Define the output PDF file path
+                string outputPdfPath = $"warranty-{warranty.OrderDetailId}.pdf";
+
+                // Convert HTML to PDF
+                ConvertHtmlToPdf(htmlContent, outputPdfPath);
+
+                // Upload the PDF to Pixeldrain
+                var uploadResult = await UploadPdfToPixeldrain(outputPdfPath);
+                dynamic result = uploadResult;
+                string uploadUrl = result.url;
+
+                if (!string.IsNullOrEmpty(uploadUrl))
                 {
-                    System.IO.File.Delete(outputPdfPath);
+                    // Delete the local PDF file
+                    if (System.IO.File.Exists(outputPdfPath))
+                    {
+                        System.IO.File.Delete(outputPdfPath);
+                    }
+
+                    return Ok(new { url = uploadUrl });
                 }
-
-                return Ok(new { url = uploadUrl });
+            }catch (Exception)
+            {
+                throw;
             }
+            return null;
 
-            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload PDF to Pixeldrain.");
+            //return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload PDF to Pixeldrain.");
         }
 
         [HttpGet("certificate")]

@@ -38,7 +38,7 @@ const headCells = [
   { id: "shippingAddress", numeric: false, disablePadding: false, label: "Shipping Address", sortable: true },
   { id: "phoneNumber", numeric: false, disablePadding: false, label: "Phone number", sortable: true },
   { id: "orderStatus", numeric: false, disablePadding: false, label: "Order Status", sortable: false },
-  { id: "detail", numeric: false, disablePadding: false, label: "Detail", sortable: false },
+ // { id: "detail", numeric: false, disablePadding: false, label: "Detail", sortable: false },
 ];
 
 function EnhancedTableHead(props) {
@@ -105,19 +105,10 @@ const ManagerOrderList = () => {
     totalCount: 0,
   });
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#faecec",
-      color: "#575757",
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
 
-  const viewDetail = (orderId) => {
-    navigate(`/sales-staff-manage-order-detail/${orderId}`);
-  };
+  // const viewDetail = (orderId) => {
+  //   navigate(`/sales-staff-manage-order-detail/${orderId}`);
+  // };
 
   const handleChange = async (event) => {
     const selectedValue = event.target.value;
@@ -276,9 +267,6 @@ const ManagerOrderList = () => {
             />
           </Stack>
         </div>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={0} />
             <TableContainer>
               <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                 <EnhancedTableHead
@@ -299,7 +287,7 @@ const ManagerOrderList = () => {
                         return (
                           <TableRow
                             hover
-                            onClick={() => viewDetail(item.orderId)}
+                            //onClick={() => viewDetail(item.orderId)}
                             role="checkbox"
                             tabIndex={-1}
                             key={item.orderId}
@@ -330,12 +318,12 @@ const ManagerOrderList = () => {
                             <TableCell align="center" style={textStyle}>
                               {item.orderStatus}
                             </TableCell>
-                            <TableCell align="center">
+                            {/* <TableCell align="center">
                               <InfoIcon
                                 style={{ cursor: "pointer", color: "#575252" }}
                                 onClick={() => viewDetail(item.orderId)}
                               />
-                            </TableCell>
+                            </TableCell> */}
                           </TableRow>
                         );
                       })
@@ -349,8 +337,6 @@ const ManagerOrderList = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Paper>
-        </Box>
         {isSearch && (
           <button className="SS_back_button" onClick={handleBackClick}>
             Back

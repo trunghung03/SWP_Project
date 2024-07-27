@@ -17,7 +17,12 @@ import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
 import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
 import { useParams } from "react-router-dom";
-import { salesStaffUpdateOrderStatus, getWarrantyURL, sendWarrantyEmail, getWarrantyById } from "../../../services/SalesStaffService/SSOrderService.js";
+import {
+  salesStaffUpdateOrderStatus,
+  getWarrantyURL,
+  sendWarrantyEmail,
+  getWarrantyById,
+} from "../../../services/SalesStaffService/SSOrderService.js";
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import swal from "sweetalert";
 
@@ -41,7 +46,14 @@ const SSOrderDetail = () => {
   };
 
   const isPreviousStatus = (newStatus, currentStatus) => {
-    const statusOrder = ["Unpaid", "Paid", "Preparing", "Delivering", "Completed", "Cancelled"];
+    const statusOrder = [
+      "Unpaid",
+      "Paid",
+      "Preparing",
+      "Delivering",
+      "Completed",
+      "Cancelled",
+    ];
     return statusOrder.indexOf(newStatus) < statusOrder.indexOf(currentStatus);
   };
 
@@ -67,13 +79,13 @@ const SSOrderDetail = () => {
     }
   }, [orderId]);
 
-
-
-  
   const handleSendCertificateAndWarranty = async () => {
     setWarrantyLoading(true);
     try {
-      if (!orderDetails.productDetails || orderDetails.productDetails.length === 0) {
+      if (
+        !orderDetails.productDetails ||
+        orderDetails.productDetails.length === 0
+      ) {
         throw new Error("No product details available");
       }
 
@@ -82,7 +94,9 @@ const SSOrderDetail = () => {
       for (const item of orderDetails.productDetails) {
         const urls = item.certificateScans;
         if (!urls || urls.length === 0) {
-          throw new Error(`No certificate scans available for product ${item.productName}`);
+          throw new Error(
+            `No certificate scans available for product ${item.productName}`
+          );
         }
         certificateUrls = certificateUrls.concat(urls);
       }
@@ -90,37 +104,70 @@ const SSOrderDetail = () => {
       const emailData = {
         toEmail: orderDetails.email,
         subject: "Your Diamond's Certificate:",
-        body: `Here is your certificate: ${certificateUrls.join('; ')}`
+        body: `Here is your certificate: ${certificateUrls.join("; ")}`,
       };
 
       await sendWarrantyEmail(emailData); //certi
       swal("Success", "Send certificate success.", "success");
+      let concatenatedWarrantyURLs = "";
 
       try {
-        await handleAddWarranty();
-        const warrantyURL = await getWarrantyURL(orderId);
-        console.log("Warranty url: "+ JSON.stringify(warrantyURL));
-        const wemailData = {
-          toEmail: orderDetails.email,
-          subject: "Your Warranty",
-          body: `Here is your warranty link: ${JSON.stringify(warrantyURL)}`,
-        };
-        console.log(wemailData.toEmail);
-        await sendWarrantyEmail(wemailData);
-        swal("Success", "Send warranty success.", "success");
+        const warrantyPromises = orderDetails.productDetails?.map((product) => {
+          return handleAddWarranty(product?.orderDetailId).then((response) => {
+            return getWarrantyURL(response?.orderDetailId)
+              .then((res) => {
+                console.log(" ádasdasdsadsaddasd", res.url);
+                return res?.url;
+              })
+              .catch((error) => {
+                swal(
+                  "Error",
+                  `Failed to get warranty URL: ${error.message}`,
+                  "error"
+                );
+                throw error; // Ensure the promise chain is rejected
+              });
+          });
+        });
+
+        Promise.all(warrantyPromises)
+          .then((urls) => {
+            concatenatedWarrantyURLs = urls.join("; ");
+            console.log(concatenatedWarrantyURLs);
+
+            const wemailData = {
+              toEmail: orderDetails.email,
+              subject: "Your Diamond's Warranty:",
+              body: `Here is your warranty: ${concatenatedWarrantyURLs}`,
+            };
+
+            sendWarrantyEmail(wemailData).then(() => {
+              swal("Success", "Send warranty success.", "success");
+            });
+          })
+          .catch((error) => {
+            swal(
+              "Error",
+              `Failed to process warranties: ${error.message}`,
+              "error"
+            );
+          });
       } catch (error) {
-        swal("Error", `Failed to send warranty email: ${error.message}`, "error");
+        swal("Error", `Unexpected error: ${error.message}`, "error");
       }
 
       const updateOrderStatusDto = {
         orderId: orderId,
-        status: "Preparing"
+        status: "Preparing",
       };
       await salesStaffUpdateOrderStatus(updateOrderStatusDto);
       setStatus("Preparing");
-
     } catch (error) {
-      swal("Error", `Failed to send Certificate emails: ${error.message}`, "error");
+      swal(
+        "Error",
+        `Failed to send Certificate emails: ${error.message}`,
+        "error"
+      );
     } finally {
       setWarrantyLoading(false);
     }
@@ -130,18 +177,13 @@ const SSOrderDetail = () => {
     const warrantyData = {
       orderDetailId: orderDetailId,
       startDate: new Date().toISOString().split("T")[0],
-      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0],
-      status: "true"
+      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+        .toISOString()
+        .split("T")[0],
+      status: "true",
     };
-  
-    try {
-      const addWarrantyResponse = await createWarranty(warrantyData);
-      setWarrantyExists(true);
-      console.log("Add warranty response: " + JSON.stringify(addWarrantyResponse));
-      return JSON.stringify(addWarrantyResponse); 
-    } catch (error) {
-      swal("Error", "Warranty already created.", "error");
-    }
+
+    return createWarranty(warrantyData);
   };
 
   const handleSubmit = async () => {
@@ -149,9 +191,9 @@ const SSOrderDetail = () => {
     try {
       const updateOrderStatusDto = {
         orderId: orderId,
-        status: isOverdue ? "Cancelled" : status
+        status: isOverdue ? "Cancelled" : status,
       };
-      navigate('/sales-staff-order-list')
+      navigate("/sales-staff-order-list");
       await salesStaffUpdateOrderStatus(updateOrderStatusDto);
       swal("Success", "Order status updated successfully", "success");
     } catch (error) {
@@ -174,8 +216,13 @@ const SSOrderDetail = () => {
   }
 
   const isOverdue = status === "Unpaid" && isOrderOverdue(orderDetails.date);
-  const isStatusDisabled = isOrderCompleted || isOverdue || status === "Paid" || status === "Cancelled";
-  const isButtonDisabled = isOrderCompleted || loading || status === "Cancelled";
+  const isStatusDisabled =
+    isOrderCompleted ||
+    isOverdue ||
+    status === "Paid" ||
+    status === "Cancelled";
+  const isButtonDisabled =
+    isOrderCompleted || loading || status === "Cancelled";
 
   return (
     <>
@@ -208,8 +255,14 @@ const SSOrderDetail = () => {
                     paddingTop: "1%",
                   }}
                 >
-                  <p className="ss_order_detail_p_tag" style={{ color: isOverdue ? "#e05858" : "inherit" }}>
-                    #{orderDetails.orderId} {isOverdue && <span style={{ color: "#e05858" }}>(Overdue)</span>}
+                  <p
+                    className="ss_order_detail_p_tag"
+                    style={{ color: isOverdue ? "#e05858" : "inherit" }}
+                  >
+                    #{orderDetails.orderId}{" "}
+                    {isOverdue && (
+                      <span style={{ color: "#e05858" }}>(Overdue)</span>
+                    )}
                   </p>
                   <div className="ss_button_status">
                     <Box sx={{ minWidth: 120 }}>
@@ -245,7 +298,7 @@ const SSOrderDetail = () => {
                           {item.productName}
                         </h3>
                         <img
-                          src={item.productImageLink.split(';')[0]}
+                          src={item.productImageLink.split(";")[0]}
                           alt={item.productName}
                         />
                       </div>
@@ -253,7 +306,9 @@ const SSOrderDetail = () => {
                         <p>{item.productDescription}</p>
                         <p>{item.productCode}</p>
                         <p className="ss_detail_card_size">Size: {item.size}</p>
-                        <p className="ss_detail_card_price">${item.lineTotal}</p>
+                        <p className="ss_detail_card_price">
+                          ${item.lineTotal}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -274,11 +329,21 @@ const SSOrderDetail = () => {
                   <div style={{ marginBottom: "10px" }}>
                     <VerifiedUserIcon /> Certificate:
                   </div>
-                  <div className="ss_warranty_order_manage" style={{ marginBottom: "10px" }}>
+                  <div
+                    className="ss_warranty_order_manage"
+                    style={{ marginBottom: "10px" }}
+                  >
                     <WarrantyIcon /> Warranty:
                   </div>
                 </div>
-                <p style={{ textAlign: "right", marginRight: "40px", fontSize: "18px", fontWeight: "bold" }}>
+                <p
+                  style={{
+                    textAlign: "right",
+                    marginRight: "40px",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                  }}
+                >
                   Total Price: ${orderDetails.totalPrice}
                 </p>
                 <div className="ss_detail_confirmbutton">
@@ -288,14 +353,22 @@ const SSOrderDetail = () => {
                     </button>
                   ) : (
                     status !== "Paid" && (
-                      <button onClick={handleSubmit} disabled={isButtonDisabled}>
+                      <button
+                        onClick={handleSubmit}
+                        disabled={isButtonDisabled}
+                      >
                         {loading ? "Loading..." : "Confirm"}
                       </button>
                     )
                   )}
                   {status === "Paid" && (
-                    <button onClick={handleSendCertificateAndWarranty} disabled={warrantyLoading}>
-                      {warrantyLoading ? "Sending..." : "Send Certificate, Warranty"}
+                    <button
+                      onClick={handleSendCertificateAndWarranty}
+                      disabled={warrantyLoading}
+                    >
+                      {warrantyLoading
+                        ? "Sending..."
+                        : "Send Certificate, Warranty"}
                     </button>
                   )}
                 </div>
