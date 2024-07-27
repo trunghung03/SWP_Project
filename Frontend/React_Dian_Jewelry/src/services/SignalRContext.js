@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import * as signalR from '@microsoft/signalr';
 import axios from 'axios';
 
-const API_BASE_URL = 'https://dian.japaneast.cloudapp.azure.com';
+const API_BASE_URL = 'https://dian.southeastasia.cloudapp.azure.com';
 
 const SignalRContext = createContext();
 
