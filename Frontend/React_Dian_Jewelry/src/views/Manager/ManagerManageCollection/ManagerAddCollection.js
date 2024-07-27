@@ -9,50 +9,68 @@ import '../../../styles/Manager/ManagerAdd.scss';
 const ManagerAddCollection = () => {
     const navigate = useNavigate();
     const [collectionData, setCollectionData] = useState({
-        collectionId: '',
         name: '',
         description: '',
         imageLink: ''
     });
     const [imageUrls, setImageUrls] = useState([]); // Array to store individual image URLs
     const [imagePreviews, setImagePreviews] = useState([]);
-
+    const [files, setFiles] = useState([]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCollectionData({ ...collectionData, [name]: value });
     };
 
-    const handleImageUpload = async (event) => {
-        const files = event.target.files;
+   
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const droppedFiles = Array.from(e.dataTransfer.files);
+        handleUploadImage(droppedFiles);
+    };
+
+    const handleFileSelect = (e) => {
+        const selectedFiles = Array.from(e.target.files);
+        handleUploadImage(selectedFiles);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleUploadImage = async (files) => {
         if (!files.length) {
-            console.error("No file selected.");
+            console.error("No files selected.");
             return;
         }
 
         const newImageUrls = [];
-        const newImagePreviews = [];
+        const newPreviews = [];
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const formData = new FormData();
-            formData.append("file", file); // Ensure the key matches your API's expected key
+            formData.append("file", file);
 
             try {
                 const response = await uploadImage(formData);
                 const url = response.url;
                 console.log("Uploaded image URL:", url);
                 newImageUrls.push(url);
-                newImagePreviews.push(URL.createObjectURL(file));
+                newPreviews.push(URL.createObjectURL(file));
             } catch (error) {
                 console.error("Upload error:", error);
             }
         }
 
         setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
-        setImagePreviews((prevPreviews) => [...prevPreviews, ...newImagePreviews]);
+        setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+        setFiles((prevFiles) => [...prevFiles, ...files]);
 
-        event.target.value = null;
+        setCollectionData((prevData) => ({
+            ...prevData,
+            imageLink: [...prevData.imageLink.split(';'), ...newImageUrls].join(';')
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -60,7 +78,7 @@ const ManagerAddCollection = () => {
         try {
             // Concatenate image URLs into a single string
             const imageLinksString = imageUrls.join(';');
-            
+
             // Update the collectionData with the concatenated image URLs
             const collectionDataWithImages = { 
                 ...collectionData, 
@@ -87,6 +105,18 @@ const ManagerAddCollection = () => {
         }
     };
 
+    const handleDeleteImage = (index) => {
+        setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+        setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+        setImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+
+        setCollectionData((prevData) => ({
+            ...prevData,
+            imageLink: prevData.imageLink.split(';').filter((_, i) => i !== index).join(';')
+        }));
+    };
+
+
     return (
         <div className="manager_add_diamond_all_container">
             <div className="manager_add_diamond_sidebar">
@@ -106,10 +136,6 @@ const ManagerAddCollection = () => {
                 <form className="manager_add_diamond_form" onSubmit={handleSubmit}>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
-                            <label>Collection ID</label>
-                            <input placeholder="Enter collection's id" type="text" name="collectionId" value={collectionData.collectionId} onChange={handleChange} required />
-                        </div>
-                        <div className="manager_add_diamond_form_group">
                             <label>Name</label>
                             <input type="text" placeholder="Enter collection's name" name="name" value={collectionData.name} onChange={handleChange} required />
                         </div>
@@ -119,8 +145,6 @@ const ManagerAddCollection = () => {
                         <input type="text" placeholder="Enter collection's description" name="description" value={collectionData.description} onChange={handleChange} required />
                     </div>
                     <div className="manager_add_collection_form_group">
-                        <label>Images</label>
-                        <input type="file" name="images" accept="image/*" multiple onChange={handleImageUpload} />
                         <div className="image_previews">
                             {imagePreviews.map((preview, index) => (
                                 <div key={index} className="image_preview_container">
@@ -155,6 +179,36 @@ const ManagerAddCollection = () => {
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    <div className="file-upload-container">
+                        <div
+                            className="file-dropzone"
+                            onDrop={handleDrop}
+                            onDragOver={handleDragOver}
+                        >
+                            <img src="https://img.icons8.com/clouds/100/000000/upload.png" alt="Upload" />
+                            <p>Drag and drop images here to upload</p>
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                accept="image/*"
+                                onChange={handleFileSelect} // Update this line
+                            />
+                            <label htmlFor="file-upload">Or select images to upload</label>
+                        </div>
+                        {files.length > 0 && (
+                            <div className="file-details">
+                                {files.map((file, index) => (
+                                    <div key={index} className="file-info">
+                                        <p>File Name: {file.name}</p>
+                                        <p>File Size: {(file.size / 1024).toFixed(2)} KB</p>
+                                        <button type="button" onClick={() => handleDeleteImage(index)}>Delete</button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>
                 </form>
