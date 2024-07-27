@@ -9,6 +9,8 @@ RUN dotnet publish "DIAN_.csproj" -c Release -o /app/publish
 
 # Use the ASP.NET runtime image for the final image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
+RUN apt-get update && apt-get install -y libkrb5-3
+
 WORKDIR /app
 # Copy the published application from the 'publish' stage to the final image
 COPY --from=publish /app/publish .
