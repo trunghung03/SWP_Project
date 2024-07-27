@@ -6,10 +6,11 @@ import '../../styles/Setting/OrderHistory.scss';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import { getAllOrders } from '../../services/TrackingOrderService';
+import { getUserInfo } from '../../services/UserService'; // Import getUserInfo
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import Loading from '../../components/Loading/Loading'; 
+import Loading from '../../components/Loading/Loading';
 
 function OrderHistory() {
     const navigate = useNavigate();
@@ -21,27 +22,34 @@ function OrderHistory() {
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState('All');
     const [sortOrder, setSortOrder] = useState('Newest');
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
     const ordersPerPage = 6;
 
     useEffect(() => {
-        const storedFirstName = localStorage.getItem('firstName');
-        const storedLastName = localStorage.getItem('lastName');
-        const storedPoints = localStorage.getItem('points');
+        const storedEmail = localStorage.getItem('email');
         const customerId = localStorage.getItem('customerId');
-        if (storedFirstName) setFirstName(storedFirstName);
-        if (storedLastName) setLastName(storedLastName);
-        if (storedPoints) setPoints(storedPoints);
 
-        getAllOrders().then(data => {
-            const customerOrders = data.filter(order => order.userId === parseInt(customerId));
-            setOrders(customerOrders);
-            setFilteredOrders(customerOrders);
-            setLoading(false); 
-        }).catch(error => {
-            console.error('Error fetching orders:', error);
-            setLoading(false); 
-        });
+        if (storedEmail) {
+            getUserInfo(storedEmail).then(response => {
+                const userData = response.data;
+                setFirstName(userData.firstName);
+                setLastName(userData.lastName);
+                setPoints(userData.points);
+            }).catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+        }
+
+        if (customerId) {
+            getAllOrders(customerId).then(data => {
+                setOrders(data);
+                setFilteredOrders(data);
+                setLoading(false);
+            }).catch(error => {
+                console.error('Error fetching orders:', error);
+                setLoading(false);
+            });
+        }
     }, []);
 
     useEffect(() => {
@@ -57,13 +65,6 @@ function OrderHistory() {
         setFilteredOrders(filtered);
         setCurrentPage(1);
     }, [filterStatus, sortOrder, orders]);
-
-    // useEffect(() => {
-    //     window.scrollTo({
-    //         top: document.querySelector('.order_history_container').offsetTop,
-    //         behavior: 'smooth',
-    //     });
-    // }, []);
 
     const navItems = [
         { name: 'Home', link: '/home' },

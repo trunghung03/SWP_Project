@@ -6,6 +6,7 @@ import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Setting/OrderDetail.scss';
 import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellDetail } from '../../services/TrackingOrderService';
+import { getUserInfo } from '../../services/UserService'; // Import getUserInfo
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Loading from '../../components/Loading/Loading';
@@ -24,12 +25,17 @@ function OrderDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedFirstName = localStorage.getItem('firstName');
-        const storedLastName = localStorage.getItem('lastName');
-        const storedPoints = localStorage.getItem('points');
-        if (storedFirstName) setFirstName(storedFirstName);
-        if (storedLastName) setLastName(storedLastName);
-        if (storedPoints) setPoints(storedPoints);
+        const storedEmail = localStorage.getItem('email');
+        if (storedEmail) {
+            getUserInfo(storedEmail).then(response => {
+                const userData = response.data;
+                setFirstName(userData.firstName);
+                setLastName(userData.lastName);
+                setPoints(userData.points);
+            }).catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+        }
 
         if (orderNumber) {
             getOrderById(orderNumber).then(async (data) => {

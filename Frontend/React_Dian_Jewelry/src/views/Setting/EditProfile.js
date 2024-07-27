@@ -22,6 +22,8 @@ function EditProfile() {
   const [isPasswordFormVisible, setPasswordFormVisible] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [tempFirstName, setTempFirstName] = useState(""); // Temporary state for form input
+  const [tempLastName, setTempLastName] = useState(""); // Temporary state for form input
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -43,6 +45,8 @@ function EditProfile() {
           const userData = response.data;
           setFirstName(userData.firstName || "");
           setLastName(userData.lastName || "");
+          setTempFirstName(userData.firstName || ""); // Set temp state
+          setTempLastName(userData.lastName || ""); // Set temp state
           setAddress(userData.address || "");
           setPhoneNumber(userData.phoneNumber || "");
           setEmail(userData.email || "");
@@ -56,13 +60,6 @@ function EditProfile() {
         });
     }
   }, []);
-
-  // useEffect(() => {
-  //   window.scrollTo({
-  //     top: document.querySelector('.edit_profile_container').offsetTop,
-  //     behavior: 'smooth',
-  //   });
-  // }, []);
 
   const navItems = [
     { name: "Home", link: "/home" },
@@ -109,7 +106,7 @@ function EditProfile() {
   };
 
   const handleSaveProfileChanges = async () => {
-    if (!firstName || !lastName) {
+    if (!tempFirstName || !tempLastName) {
       toast.error(
         "Field cannot be empty! Please fill out all required fields.",
         {
@@ -128,8 +125,8 @@ function EditProfile() {
     const updatedData = {
       email,
       password: storedPassword,
-      lastName,
-      firstName,
+      lastName: tempLastName,
+      firstName: tempFirstName,
       address,
       phoneNumber,
       points,
@@ -143,12 +140,13 @@ function EditProfile() {
           position: "top-right",
           autoClose: 3000,
         });
-        localStorage.setItem("firstName", firstName);
-        localStorage.setItem("lastName", lastName);
-        localStorage.setItem("points", points);
+        setFirstName(tempFirstName); // Update state with temp state
+        setLastName(tempLastName); // Update state with temp state
+        localStorage.setItem("firstName", tempFirstName);
+        localStorage.setItem("lastName", tempLastName);
         setUser({
-          firstName,
-          lastName,
+          firstName: tempFirstName,
+          lastName: tempLastName,
           email,
           points,
         });
@@ -239,9 +237,9 @@ function EditProfile() {
       <div className="edit_profile_container">
         <div className="setting_menu">
           <div className="setting_menu_section">
-            <div className="setting_full_name">{`${user.firstName} ${user.lastName}`}</div>
+            <div className="setting_full_name">{`${firstName} ${lastName}`}</div>
             <div className="setting_point">
-              <p>{`${user.points} points`}</p>
+              <p>{`${points} points`}</p>
             </div>
           </div>
           <div className="setting_menu_items">
@@ -269,8 +267,8 @@ function EditProfile() {
               <label>First name *</label>
               <input
                 type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={tempFirstName}
+                onChange={(e) => setTempFirstName(e.target.value)}
                 disabled={isGoogleUser}
                 className={isGoogleUser ? "disabled_input" : ""}
               />
@@ -279,8 +277,8 @@ function EditProfile() {
               <label>Last name *</label>
               <input
                 type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                value={tempLastName}
+                onChange={(e) => setTempLastName(e.target.value)}
                 disabled={isGoogleUser}
                 className={isGoogleUser ? "disabled_input" : ""}
               />

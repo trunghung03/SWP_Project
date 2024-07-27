@@ -24,6 +24,7 @@ import necklaceCategory from "../../assets/img/necklaceNav.jpg";
 import wNecklaceCategory from "../../assets/img/wNecklaceNav.webp";
 import { searchProducts } from "../../services/ProductService";
 import { useSignalR } from "../../services/SignalRContext";
+import { getUserInfo } from "../../services/UserService";
 
 const HeaderComponent = () => {
   const { user, setUser } = useContext(UserContext);
@@ -44,6 +45,7 @@ const HeaderComponent = () => {
   const { showNotifications, setShowNotifications } = useNotification();
   const [notificationCount, setNotificationCount] = useState(0);
   const [notificationsToShow, setNotificationsToShow] = useState(6);
+  const [points, setPoints] = useState(0);
   const notificationMenuRef = useRef(null);
   const accountMenuRef = useRef(null);
 
@@ -91,9 +93,27 @@ const HeaderComponent = () => {
   }, [setUser, startConnection, customerId]);
 
   useEffect(() => {
+    const fetchUserPoints = async () => {
+      try {
+        const email = localStorage.getItem("email");
+        if (email) {
+          const response = await getUserInfo(email);
+          setPoints(response.data.points);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchUserPoints();
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     setShowAccountDropdown(false);
     setShowNotifications(false);
-  }, [location.pathname]); 
+  }, [location.pathname]);
 
   const toggleAccountDropdown = () => {
     setShowAccountDropdown((prevShow) => !prevShow);
@@ -236,7 +256,9 @@ const HeaderComponent = () => {
                 )}
               </Link>
               <div
-                className={`notification_icon ${showNotifications ? "open" : ""}`}
+                className={`notification_icon ${
+                  showNotifications ? "open" : ""
+                }`}
                 onClick={toggleNotificationDropdown}
                 ref={notificationMenuRef}
               >
@@ -275,7 +297,9 @@ const HeaderComponent = () => {
                                 ? "none"
                                 : "1px solid #e0e0e0",
                           }}
-                          onClick={(e) => handleNotificationClick(e, notification)}
+                          onClick={(e) =>
+                            handleNotificationClick(e, notification)
+                          }
                         >
                           <div className="each_noti">
                             <p className="noti_description">{notification}</p>
@@ -303,7 +327,9 @@ const HeaderComponent = () => {
                 </div>
               </div>
               <div
-                className={`account_dropdown_section dropdown ${showAccountDropdown ? "open" : ""}`}
+                className={`account_dropdown_section dropdown ${
+                  showAccountDropdown ? "open" : ""
+                }`}
                 onClick={toggleAccountDropdown}
                 ref={accountMenuRef}
               >
@@ -327,9 +353,7 @@ const HeaderComponent = () => {
                         </p>
                       </li>
                       <li>
-                        <p className="point dropdown-item">
-                          {user.points} points
-                        </p>
+                        <p className="point dropdown-item">{points} points</p>
                       </li>
                       <hr className="account_hr1" />
                       <li>
@@ -618,4 +642,3 @@ const HeaderComponent = () => {
 };
 
 export default HeaderComponent;
-
