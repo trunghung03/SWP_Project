@@ -4,6 +4,7 @@ using DIAN_.DTOs.SubDiamondDto;
 using DIAN_.Mapper;
 using DIAN_.Helper;
 using DIAN_.Repository;
+using DIAN_.DTOs.DiamondDto;
 
 namespace DIAN_.Controllers
 {
@@ -153,6 +154,30 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
+        [HttpGet("searchSubDia")]
+        public async Task<IActionResult> SearchSubDiamondsAsync([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new SubDiamondSearch
+                {
+                    Query = query
+                };
 
+                var diamonds = await _subDiamondRepository.SearchSubDiamondsAsync(searchCriteria);
+
+                if (!diamonds.Any())
+                {
+                    return NotFound("No diamonds match the search criteria.");
+                }
+                var subDiamonds = diamonds.Select(subDiamond => subDiamond.ToSubDiamondDTO()).ToList();
+                return Ok(subDiamonds);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here if necessary
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
+            }
+        }
     }
 }

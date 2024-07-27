@@ -330,13 +330,10 @@ namespace DIAN_.Repository
                                          d.MainDiamondAtrribute.Color.ToLower().Contains(queryStr) ||
                                          d.MainDiamondAtrribute.Clarity.ToLower().Contains(queryStr) ||
                                          d.MainDiamondAtrribute.Cut.ToLower().Contains(queryStr) ||
-                                         d.Price.ToString().Contains(queryStr) ||
                                          d.MainDiamondAtrribute.Carat.ToString().Contains(queryStr));
             }
 
             return await query.ToListAsync();
         }
-
-
     }
 }

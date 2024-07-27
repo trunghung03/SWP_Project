@@ -215,27 +215,27 @@ namespace DIAN_.Controllers
             }
         }
 
-            [HttpPut("updatecertificate/{id:int}")]
-            public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, [FromBody] UpdateDiamondCertificateDto updateCertificate)
+        [HttpPut("updatecertificate/{id:int}")]
+        public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, [FromBody] UpdateDiamondCertificateDto updateCertificate)
+        {
+            try
             {
-                try
+                if (!ModelState.IsValid)
                 {
-                    if (!ModelState.IsValid)
-                    {
-                        return BadRequest(ModelState);
-                    }
-                    var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
-                        
-                    return Ok(diamondModel.ToDiamondDTO());
+                    return BadRequest(ModelState);
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
+                var diamondModel = await _diamondRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
 
-            [HttpGet("search")]
-            public async Task<IActionResult> SearchDiamondsAsync([FromQuery] string query)
+                return Ok(diamondModel.ToDiamondDTO());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchDiamondsAsync([FromQuery] string query)
         {
             try
             {
@@ -259,7 +259,7 @@ namespace DIAN_.Controllers
                 // Log exception here if necessary
                 return StatusCode(500, "Internal server error");
             }
-        }
 
+        }
     }
 }
