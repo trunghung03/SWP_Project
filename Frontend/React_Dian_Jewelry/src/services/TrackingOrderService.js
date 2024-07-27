@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (customerId) => {
     try {
-        const response = await axios.get(`${API_URL}/purchaseorders/all`);
+        const response = await axios.get(`${API_URL}/purchaseorders/by-customer/${customerId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching orders:', error);

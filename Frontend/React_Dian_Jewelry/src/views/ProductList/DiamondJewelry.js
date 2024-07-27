@@ -35,7 +35,6 @@ function DiamondJewelry() {
     const [color, setColor] = useState('');
     const [sort, setSort] = useState('');
     const [shape, setShape] = useState('');
-    const [resetKey, setResetKey] = useState(Date.now());
     const [bannerImage, setBannerImage] = useState('');
     const [bannerText, setBannerText] = useState('');
     const [transitionKey, setTransitionKey] = useState(Date.now());
@@ -70,7 +69,7 @@ function DiamondJewelry() {
 
     useEffect(() => {
         const { category } = location.state || {};
-        setCategory(category || '');
+        setCategory(category || 'all');
 
         if (category) {
             let navItems = [
@@ -93,28 +92,14 @@ function DiamondJewelry() {
             }
             setNavItems(navItems);
 
-            setClarity('');
-            setCarat('');
-            setColor('');
-            setSort('');
-            setShape('');
-            setResetKey(Date.now());
-
             if (categoryBannerMap[category]) {
                 setBannerImage(categoryBannerMap[category].image);
                 setBannerText(categoryBannerMap[category].text);
+            } else {
+                setBannerImage(categoryBannerMap.all.image);
+                setBannerText(categoryBannerMap.all.text);
             }
             setTransitionKey(Date.now());
-
-            getProductList()
-                .then(response => {
-                    let filteredProducts = response.data;
-
-                    filteredProducts = filteredProducts.filter(product => categoryMap[category].includes(product.categoryID));
-
-                    setProducts(filteredProducts);
-                })
-                .catch(error => console.log(error));
         } else {
             setNavItems([
                 { name: 'Home', link: '/home' },
@@ -123,43 +108,39 @@ function DiamondJewelry() {
             setBannerImage(categoryBannerMap.all.image);
             setBannerText(categoryBannerMap.all.text);
             setTransitionKey(Date.now());
-            getProductList()
-                .then(response => {
-                    setProducts(response.data);
-                })
-                .catch(error => console.log(error));
         }
-    }, [location.state]);
 
-    useEffect(() => {
         getProductList()
             .then(response => {
                 let filteredProducts = response.data;
 
-                if (clarity) {
-                    filteredProducts = filteredProducts.filter(product => product.clarity === clarity);
+                if (category && categoryMap[category]) {
+                    filteredProducts = filteredProducts.filter(product => categoryMap[category].includes(product.categoryID));
                 }
-                if (carat) {
-                    filteredProducts = filteredProducts.filter(product => product.carat === parseFloat(carat));
-                }
-                if (color) {
-                    filteredProducts = filteredProducts.filter(product => product.color === color);
-                }
-                if (shape) {
-                    filteredProducts = filteredProducts.filter(product => product.shape === shape);
-                }
-
-                filteredProducts = filteredProducts.filter(product => categoryMap[category]?.includes(product.categoryID));
 
                 setProducts(filteredProducts);
-                setResetKey(Date.now());
             })
             .catch(error => console.log(error));
-    }, [clarity, carat, color, shape, category]);
+    }, [location.state]);
 
     useEffect(() => {
+        let filteredProducts = [...products];
+
+        if (clarity) {
+            filteredProducts = filteredProducts.filter(product => product.clarity === clarity);
+        }
+        if (carat) {
+            filteredProducts = filteredProducts.filter(product => product.carat === parseFloat(carat));
+        }
+        if (color) {
+            filteredProducts = filteredProducts.filter(product => product.color === color);
+        }
+        if (shape) {
+            filteredProducts = filteredProducts.filter(product => product.shape === shape);
+        }
+
         if (sort) {
-            const sortedProducts = [...products].sort((a, b) => {
+            filteredProducts.sort((a, b) => {
                 switch (sort) {
                     case 'Newest':
                         return b.productId - a.productId;
@@ -173,10 +154,10 @@ function DiamondJewelry() {
                         return 0;
                 }
             });
-            setProducts(sortedProducts);
-            setResetKey(Date.now());
         }
-    }, [sort]);
+
+        setProducts(filteredProducts);
+    }, [clarity, carat, color, shape, sort]);
 
     const handleRemoveFilters = () => {
         setClarity('');
@@ -184,7 +165,6 @@ function DiamondJewelry() {
         setColor('');
         setSort('');
         setShape('');
-        setResetKey(Date.now());
     };
 
     useEffect(() => {
@@ -312,7 +292,7 @@ function DiamondJewelry() {
                         placeholder="None"
                     />
                 </div>
-                <ProductList products={products} resetKey={resetKey} />
+                <ProductList products={products} resetKey={transitionKey} />
             </div>
 
             <br></br><br></br>
