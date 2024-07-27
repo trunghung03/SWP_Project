@@ -101,58 +101,42 @@ namespace DIAN_.Repository
 
         public async Task<(List<Product>, int)> GetAllAsync(ProductQuery query)
         {
-            var cacheKey = $"{CacheKey}_{query.PageNumber}_{query.PageSize}_{query.Name}";
+            IQueryable<Product> productsQuery = _context.Products
+               .Include(p => p.Category)
+               .Include(p => p.Shells)
+               .Where(p => p.Status);
 
-            if (_memoryCache.TryGetValue(cacheKey, out (List<Product>, int) cachedProducts))
+            // If neither PageNumber nor PageSize is provided, return all products without pagination
+            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
             {
-                _logger.LogInformation("Products from cache");
-                return cachedProducts;
+                var allProducts = await productsQuery.OrderBy(p => p.ProductId).ToListAsync();
+                return (allProducts, allProducts.Count);
             }
-            else
-            {
-                try
-                {
-                    await semaphore.WaitAsync();
-                    if (_memoryCache.TryGetValue(cacheKey, out cachedProducts))
-                    {
-                        _logger.LogInformation("Products from cache");
-                        return cachedProducts;
-                    }
 
-                    IQueryable<Product> productsQuery = _context.Products
-                       .Include(p => p.Category)
-                       .Include(p => p.Shells);
+            // Default PageSize to 7 if not provided
+            int pageSize = query.PageSize ?? 7;
+            int pageNumber = query.PageNumber ?? 1;
 
-                    if (!string.IsNullOrWhiteSpace(query.Name))
-                    {
-                        productsQuery = productsQuery.Where(p => EF.Functions.Like(p.Name, $"%{query.Name}%"));
-                    }
+            var totalItems = await productsQuery.CountAsync();
 
-                    var totalItems = await productsQuery.CountAsync();
+            var skipNumber = (pageNumber - 1) * pageSize;
+            var productList = await productsQuery
+                .Skip(skipNumber)
+                .Take(pageSize)
+                .ToListAsync();
 
-                    var skipNumber = (query.PageNumber - 1) * query.PageSize;
-                    var productList = await productsQuery
-                        .Skip(skipNumber)
-                        .Take(query.PageSize)
-                        .ToListAsync();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                .SetPriority(CacheItemPriority.Normal)
+                .SetSize(1);
 
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
-                        .SetPriority(CacheItemPriority.Normal)
-                        .SetSize(1);
-
-                    var result = (productList, totalItems);
-                    _memoryCache.Set(cacheKey, result, cacheEntryOptions);
-                    _logger.LogInformation("Products from database");
-                    return result;
-                }
-                finally
-                {
-                    semaphore.Release();
-                }
-            }
+            var result = (productList, totalItems);
+            _memoryCache.Set($"{CacheKey}_{pageNumber}_{pageSize}", result, cacheEntryOptions);
+            _logger.LogInformation("Products from database");
+            return result;
         }
+
 
         public async Task<Product> GetByIdAsync(int id)
         {

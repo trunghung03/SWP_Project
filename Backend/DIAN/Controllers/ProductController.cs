@@ -217,21 +217,31 @@ namespace DIAN_.Controllers
                     productDTOs.Add(productDTO);
                 }
 
+                // Check if pagination parameters are provided
+                if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+                {
+                    // No pagination info needed if we are returning all products
+                    return Ok(new { data = productDTOs });
+                }
+
                 var pagination = new
                 {
-                    currentPage = query.PageNumber,
-                    pageSize = query.PageSize,
-                    totalPages = (int)Math.Ceiling((double)totalItems / query.PageSize),
+                    currentPage = query.PageNumber ?? 1,
+                    pageSize = query.PageSize ?? 7,
+                    totalPages = (int)Math.Ceiling((double)totalItems / (query.PageSize ?? 7)),
                     totalCount = totalItems
                 };
 
                 return Ok(new { data = productDTOs, pagination });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
             }
         }
+
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
@@ -361,14 +371,14 @@ namespace DIAN_.Controllers
                     return NotFound();
                 }
 
-                // Assuming ToProductListDTO does not require the diamond object as a parameter
                 var productDTOs = products.Select(p => p.ToProductListDTO()).ToList();
 
                 return Ok(productDTOs);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception if needed
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
             }
         }
         [HttpGet("searchAllFields")]
