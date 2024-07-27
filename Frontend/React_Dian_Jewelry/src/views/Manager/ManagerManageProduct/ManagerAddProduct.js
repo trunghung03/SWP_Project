@@ -23,7 +23,7 @@ const ManagerAddProduct = () => {
         collectionId: '',
         categoryId: ''
     });
-
+    const [files, setFiles] = useState([]);
     const [collections, setCollections] = useState([]);
     const [categories, setCategories] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
@@ -35,12 +35,17 @@ const ManagerAddProduct = () => {
         const fetchCollectionsAndCategories = async () => {
             try {
                 const [collectionsResponse, categoriesResponse, mainDiamondAttributesResponse, subDiamondAttributesResponse] = await Promise.all([
-                    getAllCollection(),
+                    getAllCollection("Manager"),
                     getAllCategories(),
                     getMainDiamondAttribute(),
                     getSubDiamondAttribute()
                 ]);
-
+    
+                console.log("Collections Response:", collectionsResponse);
+                console.log("Categories Response:", categoriesResponse);
+                console.log("Main Diamond Attributes Response:", mainDiamondAttributesResponse);
+                console.log("Sub Diamond Attributes Response:", subDiamondAttributesResponse);
+    
                 setCollections(collectionsResponse || []);
                 setCategories(categoriesResponse || []);
                 setMainDiamondAttributes(mainDiamondAttributesResponse || []);
@@ -49,51 +54,71 @@ const ManagerAddProduct = () => {
                 console.error("Error fetching data:", error);
             }
         };
-
+    
         fetchCollectionsAndCategories();
     }, []);
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProductData({ ...productData, [name]: value });
     };
 
-    const handleImageUpload = async (event) => {
-        const files = event.target.files;
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const droppedFiles = Array.from(e.dataTransfer.files);
+        handleUploadImage(droppedFiles); // Call handleUploadImage with dropped files
+    };
+    
+    const handleFileSelect = (e) => {
+        const selectedFiles = Array.from(e.target.files);
+        handleUploadImage(selectedFiles); // Call handleUploadImage with selected files
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleUploadImage = async (files) => {
         if (!files.length) {
-            console.error("No file selected.");
+            console.error("No files selected.");
             return;
         }
-
+    
         const newImageUrls = [];
-        const newImagePreviews = [];
-
+        const newPreviews = [];
+    
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const formData = new FormData();
             formData.append("file", file);
-
+    
             try {
                 const response = await uploadImage(formData);
                 const url = response.url;
                 console.log("Uploaded image URL:", url);
                 newImageUrls.push(url);
-                newImagePreviews.push(URL.createObjectURL(file));
+                newPreviews.push(URL.createObjectURL(file));
             } catch (error) {
                 console.error("Upload error:", error);
             }
         }
-
+    
         setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
-        setImagePreviews((prevPreviews) => [...prevPreviews, ...newImagePreviews]);
-
-        event.target.value = null;
+        setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+        setFiles((prevFiles) => [...prevFiles, ...files]);
+    
+        setProductData((prevData) => ({
+            ...prevData,
+            imageLinkList: [...prevData.imageLinkList.split(';'), ...newImageUrls].join(';')
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            await handleUploadImage(files);
+
             const productDTO = {
                 productCode: productData.productCode,
                 name: productData.name,
@@ -104,7 +129,7 @@ const ManagerAddProduct = () => {
                 subDiamondAttributeId: productData.subDiamondAttributeId ? parseInt(productData.subDiamondAttributeId) : null,
                 mainDiamondAmount: parseInt(productData.mainDiamondAmount) || null,
                 subDiamondAmount: productData.subDiamondAmount ? parseInt(productData.subDiamondAmount) : 0,
-                imageLinkList: imageUrls.join(';'),
+                imageLinkList: productData.imageLinkList,
                 collectionId: productData.collectionId ? parseInt(productData.collectionId) : null,
                 categoryId: parseInt(productData.categoryId),
                 status: true
@@ -139,6 +164,12 @@ const ManagerAddProduct = () => {
         }
     };
 
+    const handleDeleteImage = (index) => {
+        setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+        setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+    };
+
+
     return (
         <div className="manager_add_diamond_all_container">
             <div className="manager_add_diamond_sidebar">
@@ -159,17 +190,17 @@ const ManagerAddProduct = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Code</label>
-                            <input type="text" name="productCode" placeholder='PRODxxx' value={productData.productCode} onChange={handleChange} required style={{borderRadius:"6px"}}/>
+                            <input type="text" name="productCode" placeholder='PRODxxx' value={productData.productCode} onChange={handleChange} required style={{ borderRadius: "6px" }} />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Name</label>
-                            <input type="text" name="name" placeholder="Input product's name" value={productData.name} onChange={handleChange} required style={{borderRadius:"6px"}}/>
+                            <input type="text" name="name" placeholder="Input product's name" value={productData.name} onChange={handleChange} required style={{ borderRadius: "6px" }} />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Labor Cost</label>
-                            <input type="number" name="laborPrice" placeholder="Input product's labor cost" value={productData.laborPrice} onChange={handleChange} required style={{borderRadius:"6px"}}/>
+                            <input type="number" name="laborPrice" placeholder="Input product's labor cost" value={productData.laborPrice} onChange={handleChange} required style={{ borderRadius: "6px" }} />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
@@ -181,7 +212,7 @@ const ManagerAddProduct = () => {
                                     value={productData.mainDiamondAttributeId}
                                     onChange={handleChange}
                                     required
-                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft:"5px", borderRadius:"7px"}}
+                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft: "5px", borderRadius: "7px" }}
                                 >
                                     <option value="">Select Main Diamond</option>
                                     {mainDiamondAttributes.map((attr) => (
@@ -199,7 +230,7 @@ const ManagerAddProduct = () => {
                                     name="subDiamondAttributeId"
                                     value={productData.subDiamondAttributeId}
                                     onChange={handleChange}
-                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft:"5px", borderRadius:"7px"}}
+                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft: "5px", borderRadius: "7px" }}
                                 >
                                     <option value="">Select Sub Diamond</option>
                                     {subDiamondAttributes.map((attr) => (
@@ -214,11 +245,11 @@ const ManagerAddProduct = () => {
                     <div className="manager_add_diamond_form_row">
                         <div className="manager_add_diamond_form_group">
                             <label>Main Diamond Quantity</label>
-                            <input type="number" name="mainDiamondAmount" placeholder="Input quantity of main diamond" value={productData.mainDiamondAmount} onChange={handleChange} required style={{borderRadius:"6px"}}/>
+                            <input type="number" name="mainDiamondAmount" placeholder="Input quantity of main diamond" value={productData.mainDiamondAmount} onChange={handleChange} required style={{ borderRadius: "6px" }} />
                         </div>
                         <div className="manager_add_diamond_form_group">
                             <label>Sub Diamond Quantity</label>
-                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} style={{borderRadius:"6px"}}/>
+                            <input type="number" name="subDiamondAmount" placeholder="Input quantity of sub diamond" value={productData.subDiamondAmount} onChange={handleChange} style={{ borderRadius: "6px" }} />
                         </div>
                     </div>
                     <div className="manager_add_diamond_form_row">
@@ -229,7 +260,7 @@ const ManagerAddProduct = () => {
                                     name="collectionId"
                                     value={productData.collectionId}
                                     onChange={handleChange}
-                                    style={{ maxHeight: '100px', overflowY: 'auto', width: '200px', paddingLeft:"5px", borderRadius:"7px"}}
+                                    style={{ maxHeight: '100px', overflowY: 'auto', width: '200px', paddingLeft: "5px", borderRadius: "7px" }}
                                 >
                                     <option value="">Select Collection</option>
                                     {collections.map((collection) => (
@@ -246,7 +277,7 @@ const ManagerAddProduct = () => {
                                     value={productData.categoryId}
                                     onChange={handleChange}
                                     required
-                                    style={{ maxHeight: '100px', overflowY: 'auto' , paddingLeft:"5px", borderRadius:"7px"}}
+                                    style={{ maxHeight: '100px', overflowY: 'auto', paddingLeft: "5px", borderRadius: "7px" }}
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map((category) => (
@@ -258,53 +289,40 @@ const ManagerAddProduct = () => {
                     </div>
                     <div className="manager_add_diamond_form_group">
                         <label>Description</label>
-                        <input type="text" name="description" placeholder="Input product's description" value={productData.description} onChange={handleChange} required style={{borderRadius:"6px"}}/>
+                        <input type="text" name="description" placeholder="Input product's description" value={productData.description} onChange={handleChange} required style={{ borderRadius: "6px" }} />
                     </div>
-                    <div className="manager_add_diamond_form_group">
+                    {/* <div className="manager_add_diamond_form_group">
                         <label>Image</label>
-                        <input type="file" name="image" accept="image/*" onChange={handleImageUpload} multiple style={{borderRadius:"6px"}}/>
-                    </div>
-                    <div className="ss_add_displayed_image_div2">
-                        {imagePreviews.map((preview, index) => (
-                            <div key={index}>
-                                <button
-                                    onClick={() => {
-                                        setImagePreviews(imagePreviews.filter((_, i) => i !== index));
-                                        setImageUrls(imageUrls.filter((_, i) => i !== index));
-                                    }}
-                                    style={{
-                                        display: "block",
-                                        marginTop: "1%",
-                                        background: "none",
-                                        border: "none",
-                                        cursor: "pointer",
-                                        fontSize: "20px",
-                                        marginLeft: "90%"
-                                    }}
-                                >
-                                    &#x2715;
-                                </button>
-                                <div
-                                    className="ss_image_preview"
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        height: "100%",
-                                    }}
-                                >
-                                    <img
-                                        src={preview}
-                                        alt="Product"
-                                        style={{
-                                            width: "87%",
-                                            height: "40%",
-                                            margin: "auto",
-                                        }}
-                                    />
-                                </div>
+                        <input type="file" name="image" accept="image/*" onChange={handleImageUpload} multiple style={{ borderRadius: "6px" }} />
+                    </div> */}
+                    <div className="file-upload-container">
+                        <div
+                            className="file-dropzone"
+                            onDrop={handleDrop}
+                            onDragOver={handleDragOver}
+                        >
+                            <img src="https://img.icons8.com/clouds/100/000000/upload.png" alt="Upload" />
+                            <p>Drag and drop images here to upload</p>
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                accept="image/*"
+                                onChange={handleFileSelect} // Update this line
+                            />
+                            <label htmlFor="file-upload">Or select images to upload</label>
+                        </div>
+                        {files.length > 0 && (
+                            <div className="file-details">
+                                {files.map((file, index) => (
+                                    <div key={index} className="file-info">
+                                        <p>File Name: {file.name}</p>
+                                        <p>File Size: {(file.size / 1024).toFixed(2)} KB</p>
+                                        <button type="button" onClick={() => handleDeleteImage(index)}>Delete</button>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        )}
                     </div>
 
                     <button type="submit" className="manager_add_diamond_submit_button">Add</button>

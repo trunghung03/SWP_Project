@@ -61,8 +61,8 @@ const getProductDiamond = async (id) => {
   return response.data;
 };
 
-const getAllCollection = async () => {
-  const response = await axios.get(`${API_BASE_URL}/collections`);
+const getAllCollection = async (role) => {
+  const response = await axios.get(`${API_BASE_URL}/collections?role=${role}`);
   return response.data;
 };
 

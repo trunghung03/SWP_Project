@@ -187,3 +187,56 @@
     width: 100%;
     flex-direction: column;
 }
+.file-upload-container {
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.file-upload-container .file-dropzone {
+    position: relative;
+}
+
+.file-upload-container img {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.file-upload-container input[type="file"] {
+    display: none;
+}
+
+.file-upload-container label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-details {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.file-details .file-info {
+    margin-bottom: 10px;
+}
+
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.image-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
