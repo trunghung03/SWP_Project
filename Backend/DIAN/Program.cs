@@ -40,17 +40,6 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
