@@ -1,5 +1,5 @@
-import React from 'react';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import React, { useEffect } from 'react';
 
 // Define the styles for the PDF document
 const styles = StyleSheet.create({
@@ -77,7 +77,7 @@ const DiamondPDF = ({ main , sub }) => (
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Cut</Text>
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Carat</Text>
           </View>
-          {main.map((main) => (
+          {main?.map((main) => (
             <View style={styles.tableRow} key={main.diamondAttributeId}>
               <Text style={[styles.tableCell, styles.columnId]}>{main.diamondAttributeId}</Text>
               <Text style={[styles.tableCell, styles.columnCode]}>{main.shape}</Text>
@@ -101,7 +101,7 @@ const DiamondPDF = ({ main , sub }) => (
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Cut</Text>
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Carat</Text>
           </View>
-          {sub.map((sub) => (
+          {sub?.map((sub) => (
             <View style={styles.tableRow} key={main.diamondAttributeId}>
               <Text style={[styles.tableCell, styles.columnId]}>{sub.diamondAttributeId}</Text>
               <Text style={[styles.tableCell, styles.columnCode]}>{sub.shape}</Text>

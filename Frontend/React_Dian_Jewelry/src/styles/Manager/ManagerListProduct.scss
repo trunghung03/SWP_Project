@@ -1,270 +1,276 @@
 //Sidebar
 .manager_manage_product_all_container {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .manager_manage_product_content {
-    flex-grow: 1;
-    padding: 10px 8% 0 8%;
-    overflow-x: hidden;
+  flex-grow: 1;
+  padding: 10px 8% 0 8%;
+  overflow-x: hidden;
 }
 
 .manager_manage_product_sidebar {
-    z-index: 2;
+  z-index: 2;
 }
 
 //Header
 .manager_manage_product_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .manager_product_header_line {
-    width: 150%;
-    margin-left: -15%;
-    z-index: 1;
-    color: gray;
+  width: 150%;
+  margin-left: -15%;
+  z-index: 1;
+  color: gray;
 }
 
 .manager_manage_product_header .manager_manage_product_logo {
-    height: 60px;
-    width: 120px;
-    max-width: 120px;
-    margin-bottom: 5px;
+  height: 60px;
+  width: 120px;
+  max-width: 120px;
+  margin-bottom: 5px;
 }
 .manager_manage_product_header .manager_manage_product_search_section {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 .manager_manage_product_header .manager_manage_product_search_section input {
-    background-color: #f3f4f6;
-    border: none;
-    width: 220px;
-    height: 28px;
+  background-color: #f3f4f6;
+  border: none;
+  width: 220px;
+  height: 28px;
 }
 
-.manager_manage_product_header .manager_manage_product_search_section input:focus {
-    background-color: #f3f4f6;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    width: 220px;
+.manager_manage_product_header
+  .manager_manage_product_search_section
+  input:focus {
+  background-color: #f3f4f6;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  width: 220px;
 }
 
 .manager_manage_product_header .manager_manage_product_search_bar {
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 5px;
-    margin-right: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-right: 20px;
 }
-   
-.manager_manage_product_all_container h3{
-    text-align: center;
-    font-weight: bold;
-    color: #1c1c1c;
+
+.manager_manage_product_all_container h3 {
+  text-align: center;
+  font-weight: bold;
+  color: #1c1c1c;
 }
 
 .manager_manage_diamond_create_button_section {
-    display: flex;
-    justify-content: space-between;
-    padding-right: 15px;
-    // margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 15px;
+  // margin-top: 30px;
 }
 
 .manager_manage_diamond_create_button {
-    background-color: #270208;
-    color: white;
-    padding: 0 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 15px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    height: 45px;
+  background-color: #270208;
+  color: white;
+  padding: 0 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  height: 45px;
 }
 
 .manager_manage_diamond_create_button:hover {
-    background-color: #414141;
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #414141;
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
 
 //Table diamond
 .manager_manage_product_table_wrapper {
-    margin-top: 1%;
-    flex-grow: 1;
+  margin-top: 1%;
+  flex-grow: 1;
 }
 
 .manager_manage_product_table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    margin-top: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  margin-top: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .manager_manage_product_table td,
 .manager_manage_product_table th {
-    border: 1px solid gray;
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
+  border: 1px solid gray;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
 }
 
 .manager_manage_product_table th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 .manager_manage_product_table tr:nth-child(even) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .manager_manage_product_table tr:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 .manager_manage_product_table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    background-color: #f8dcce;
-    color: #1c1c1c;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #f8dcce;
+  color: #1c1c1c;
 }
 
 .manager_manage_product_table .fa-pen {
-    cursor: pointer;
-    color: #edd723;
-    margin-right: 20px;
+  cursor: pointer;
+  color: #edd723;
+  margin-right: 20px;
 }
 
 .manager_manage_product_table .fa-trash {
-    cursor: pointer;
-    color: #e03c3e;
-    transition: color 0.3s ease;
+  cursor: pointer;
+  color: #e03c3e;
+  transition: color 0.3s ease;
 }
 
 .manager_manage_product_table i:hover {
-    color: #0092f7;
+  color: #0092f7;
 }
 
 .manager_manage_product_pagination {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .manager_manage_product_pagination button {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    padding: 5px 10px 6px 10px;
-    margin: 0 5px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    color: gray;
-    font-size: 14px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 5px 10px 6px 10px;
+  margin: 0 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  color: gray;
+  font-size: 14px;
 }
 
 .manager_manage_product_pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    border: 1px solid gray;
+  cursor: not-allowed;
+  opacity: 0.5;
+  border: 1px solid gray;
 }
 
 .manager_manage_product_pagination .manager_order_active {
-    background-color: #f9c6bb;
-    color: white;
-    border: 1px solid #f9c6bb;
+  background-color: #f9c6bb;
+  color: white;
+  border: 1px solid #f9c6bb;
 }
 
 /* Freeze background when modal is open */
 body.modal-open {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 /* Modal overlay */
 .manager_manage_product_modal_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 /* Modal content */
 .manager_manage_product_update_modal {
-    background-color: white;
-    padding: 20px;
-    border-radius: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    z-index: 1001;
-    max-height: 80vh; /* Adjust height as needed */
-    overflow-y: auto; /* Enable vertical scroll inside the modal */
+  background-color: white;
+  padding: 20px;
+  border-radius: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+  z-index: 1001;
+  max-height: 80vh; /* Adjust height as needed */
+  overflow-y: auto; /* Enable vertical scroll inside the modal */
 }
 
 /* Modal content details */
 .manager_manage_product_modal_content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .manager_manage_product_modal_content h4 {
-    margin-bottom: 20px;
-    text-align: center;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .manager_manage_product_form_group {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .manager_manage_product_form_group label {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .manager_manage_product_form_group input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .manager_manage_product_modal_actions {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .manager_manage_product_modal_actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #1c1c1c;
-    color: white;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #1c1c1c;
+  color: white;
+  transition: background-color 0.3s ease;
 }
 
 .manager_manage_product_modal_actions button:hover {
-    background-color: #797979;
+  background-color: #797979;
 }
 
 .manager_manage_product_modal_actions button:first-child {
-    background-color: #999;
-    margin-right: 10px;
+  background-color: #999;
+  margin-right: 10px;
 }
 
 .manager_manage_product_modal_actions button:first-child:hover {
-    background-color: #777;
+  background-color: #777;
 }
 
 .pdf-download {
-    text-align: end;
-    margin-top: 10px;
+  text-align: end;
+  margin-top: 10px;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
 }

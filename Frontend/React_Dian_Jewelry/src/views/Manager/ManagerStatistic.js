@@ -1,32 +1,33 @@
-import React, { useState, useEffect } from "react";
-import ManagerSidebar from "../../components/ManagerSidebar/ManagerSidebar.js";
-import "../../styles/Manager/ManagerStatistic.scss";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
-import "chart.js/auto";
-import {
-  AllCurrentProduct,
-  GetSoldCategory,
-  TotalValue,
-  ShowProfitByYear,
-  TotalOrders,
-  DailyStats,
-  TotalCustomers,
-  getDateStatistic,
-  getTopTen,
-} from "../../services/ManagerService/ManagerStatisticService.js";
-import { styled } from "@mui/material/styles";
-import logo from "../../assets/img/logoN.png";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
+import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import "chart.js/auto";
+import React, { useEffect, useState } from "react";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
+import logo from "../../assets/img/logoN.png";
+import ManagerSidebar from "../../components/ManagerSidebar/ManagerSidebar.js";
+import {
+  AllCurrentProduct,
+  DailyStats,
+  GetSoldCategory,
+  ShowProfitByYear,
+  TotalCustomers,
+  TotalOrders,
+  TotalValue,
+  getDateStatistic,
+  getTopTen,
+} from "../../services/ManagerService/ManagerStatisticService.js";
+import "../../styles/Manager/ManagerStatistic.scss";
+import { toast } from "sonner";
 
 const ManagerStatitic = () => {
   const formatDate = (date) => {
@@ -63,9 +64,9 @@ const ManagerStatitic = () => {
   const [topTen, setTopTen] = useState([]);
   const [localDate, setLocalDate] = useState();
   const [monthYear, setMonthYear] = useState();
-  const [minProfit,setMinProfit] = useState();
-  const [chosenDate , setChosenDate] = useState();
-  const [chosenMonth,setChosenMonth] = useState();
+  const [minProfit, setMinProfit] = useState();
+  const [chosenDate, setChosenDate] = useState();
+  const [chosenMonth, setChosenMonth] = useState();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -120,15 +121,30 @@ const ManagerStatitic = () => {
   const MonthYearStats = async (event) => {
     const monthYear = event.target.value;
     const formattedMonthYear = monthYear;
-    const response = await getDateStatistic(formattedMonthYear);
-    setCurrentMonthStats(response);
+    toast.promise(getDateStatistic(formattedMonthYear), {
+      loading: "Loading...",
+      success: (res) => {
+        setCurrentMonthStats(res);
+        return "Data loaded successfully";
+      },
+      error: "Failed to load data",
+    });
     setChosenMonth(monthYear);
   };
 
   const dailyStats = async (date) => {
     if (date) {
       const dailyValues = await DailyStats(date);
-      setValueByDate(dailyValues);
+      toast.promise(DailyStats(date), {
+        loading: "Loading...",
+        success: (res) => {
+          setValueByDate(res);
+          return "Data loaded successfully";
+        },
+        error: "Failed to load data",
+      });
+
+      // setValueByDate(dailyValues);
       setChosenDate(date);
     }
   };
@@ -348,208 +364,230 @@ const ManagerStatitic = () => {
       <div className="manager_statitic_sidebar">
         <ManagerSidebar currentPage="manager_statistic" />
       </div>
-      <div
-        className="manager_statitic_content"
-      >
+      <div className="manager_statitic_content">
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
-        </div> 
-         <hr className="manager_header_line"></hr>
-          <h3 className="manager_manage_statistic_title" style={{fontFamily:"serif", color:"#292727"}}>Statistic Report</h3>
-          <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-          Date: 
-            <input
-              className="manager_statis_input_date"
-              type="date"
-              value={chosenDate}
-              onChange={handleDateChange}
-              style={{ margin: "10px" }}
-            ></input>
-            <div className="manager_manage_report_div1_wrapper">
+        </div>
+        <hr className="manager_header_line"></hr>
+        <h3
+          className="manager_manage_statistic_title"
+          style={{ fontFamily: "serif", color: "#292727" }}
+        >
+          Statistic Report
+        </h3>
+        <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+          Date:
+          <input
+            className="manager_statis_input_date"
+            type="date"
+            value={chosenDate}
+            onChange={handleDateChange}
+            style={{ margin: "10px" }}
+          />
+          <div className="manager_manage_report_div1_wrapper">
+            <div
+              className="manager_manage_report_div1"
+              style={{
+                display: "flex",
+                // padding: "20px",
+                marginTop: "10px",
+                marginBottom: "50px",
+                justifyContent: "center",
+              }}
+            >
+              {/* <h3>Today's Report</h3> */}
               <div
-                className="manager_manage_report_div1"
+                className="manager_manage_report_div"
                 style={{
                   display: "flex",
-                  // padding: "20px",
-                  marginTop: "10px",
-                  marginBottom: "50px",
-                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center", // Ensures vertical centering if needed
                 }}
               >
-                {/* <h3>Today's Report</h3> */}
-                <div
-                  className="manager_manage_report_div"
+                <i
+                  className="fa fa-shopping-cart manager_icon_style"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center" // Ensures vertical centering if needed
+                    color: "#2985fb",
+                    marginBottom: "4.3%",
+                    marginTop: "1.8%",
+                  }}
+                  aria-hidden="true"
+                ></i>{" "}
+                {/* Icon for Total Orders */}
+                <p
+                  style={{
+                    fontSize: "20px",
+                    textAlign: "center",
+                    fontWeight: "600",
                   }}
                 >
-                  <i className="fa fa-shopping-cart manager_icon_style" style={{color: "#2985fb", marginBottom:"4.3%", marginTop:"1.8%"}}aria-hidden="true"></i>{" "}
-                  {/* Icon for Total Orders */}
-                  <p style={{ fontSize: "20px", textAlign:"center", fontWeight:"600" }}>Total Orders:</p>
-                  <p style={{ textAlign: "center" }}>
-                    {valueByDate?.totalOrders !== undefined
-                      ? valueByDate.totalOrders
-                      : "N/A"}
-                  </p>
-                </div>
-                <div
-                  className="manager_manage_report_div"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center" // Ensures vertical centering if needed
-                  }}
-                >
-                  <i className="fa fa-users manager_icon_style" style ={{color:"#36e873", marginBottom:"4.3%", marginTop:"1.8%"}} aria-hidden="true"></i>{" "}
-                  {/* Icon for Total Customers */}
-                  <p style={{ fontSize: "20px" , textAlign:"center", fontWeight:"600"}}>Total Customers:</p>
-                  <p style={{ textAlign: "center" }}>
-                    {" "}
-                    {valueByDate?.totalCustomers !== undefined
-                      ? valueByDate.totalCustomers
-                      : "N/A"}
-                  </p>
-                </div>
-                <div
-                  className="manager_manage_report_div"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center" // Ensures vertical centering if needed
-                  }}
-                >
-                  <i className="fa fa-dollar-sign manager_icon_style" style={{color:"#f2d017", marginBottom:"4.3%", marginTop:"1.8%"}} aria-hidden="true"></i>{" "}
-                  {/* Icon for Total Sales Value */}
-                  <p style={{ fontSize: "20px", textAlign:"center", fontWeight:"600" }}>Total Sales Value: </p>
-                  <p style={{ textAlign: "center" }}>
-                    {valueByDate?.totalSales !== undefined
-                      ? valueByDate.totalSales
-                      : "N/A"}
-                  </p>
-                </div>
-                <div
-                  className="manager_manage_report_div"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center" // Ensures vertical centering if needed
-                  }}
-                >
-                  <i className="fa fa-chart-line manager_icon_style" style={{color:"#36e873", marginBottom:"4.3%", marginTop:"1.8%"}} aria-hidden="true"></i>{" "}
-                  {/* Icon for Profit */}
-                  <p
-                    style={{
-                      fontSize: "20px", textAlign:"center", fontWeight:"600"
-                    }}
-                  >
-                    Profit:
-                  </p>
-                  <p
-                    style={{
-                      textAlign: "center",
-                      fontSize: "15px",
-                      color: valueByDate?.profit > 0 ? "green" : "red",
-                    }}
-                  >
-                    {valueByDate?.profit !== undefined
-                      ? valueByDate.profit
-                      : "N/A"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="manager_manage_report_filter" style={{ marginTop: 40 }}>
-              <i className="fas fa-filter" style={{ paddingTop: 22 }}></i>
-              <FormControl sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="listYear-label">Year</InputLabel>
-                <Select
-                  labelId="listYear-label"
-                  id="listYear"
-                  // name="year"
-                  value={selectedYearForSale}
-                  onChange={handleYearChange}
-                  autoWidth
-                  label="Year"
-                  required
-                  size="small"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="2023">2023</MenuItem>
-                  <MenuItem value="2024">2024</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div
-                clasName="manager_manage_display_chart"
-                style={{
-                  flex: "2",
-                  margin: "10px",
-                  padding: "20px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  backgroundColor:"white",
-                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
-                }}
-              >
-                <h4 style={{marginBottom: "60px"}}>Sales</h4>
-                {loading ? (
-                  <p>Loading...</p>
-                ) : totalValue && totalOrders ? (
-                  <Bar data={data} options={options} />
-                ) : (
-                  <p>No data available for the selected year</p>
-                )}
+                  Total Orders:
+                </p>
+                <p style={{ textAlign: "center" }}>
+                  {valueByDate?.totalOrders !== undefined
+                    ? valueByDate.totalOrders
+                    : "N/A"}
+                </p>
               </div>
               <div
+                className="manager_manage_report_div"
                 style={{
-                  flex: "1",
-                  margin: "10px",
-                  padding: "20px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                   backgroundColor:"white",
-                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center", // Ensures vertical centering if needed
                 }}
               >
-                <h4>Category Sold</h4>
-                {allCatePercentages.length > 0 ? (
-                  <Doughnut data={trafficSourceData} />
-                ) : (
-                  <p>Please choose the year to see report</p>
-                )}
+                <i
+                  className="fa fa-users manager_icon_style"
+                  style={{
+                    color: "#36e873",
+                    marginBottom: "4.3%",
+                    marginTop: "1.8%",
+                  }}
+                  aria-hidden="true"
+                ></i>{" "}
+                {/* Icon for Total Customers */}
+                <p
+                  style={{
+                    fontSize: "20px",
+                    textAlign: "center",
+                    fontWeight: "600",
+                  }}
+                >
+                  Total Customers:
+                </p>
+                <p style={{ textAlign: "center" }}>
+                  {" "}
+                  {valueByDate?.totalCustomers !== undefined
+                    ? valueByDate.totalCustomers
+                    : "N/A"}
+                </p>
+              </div>
+              <div
+                className="manager_manage_report_div"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center", // Ensures vertical centering if needed
+                }}
+              >
+                <i
+                  className="fa fa-dollar-sign manager_icon_style"
+                  style={{
+                    color: "#f2d017",
+                    marginBottom: "4.3%",
+                    marginTop: "1.8%",
+                  }}
+                  aria-hidden="true"
+                ></i>{" "}
+                {/* Icon for Total Sales Value */}
+                <p
+                  style={{
+                    fontSize: "20px",
+                    textAlign: "center",
+                    fontWeight: "600",
+                  }}
+                >
+                  Total Sales Value:{" "}
+                </p>
+                <p style={{ textAlign: "center" }}>
+                  {valueByDate?.totalSales !== undefined
+                    ? valueByDate.totalSales
+                    : "N/A"}
+                </p>
+              </div>
+              <div
+                className="manager_manage_report_div"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center", // Ensures vertical centering if needed
+                }}
+              >
+                <i
+                  className="fa fa-chart-line manager_icon_style"
+                  style={{
+                    color: "#36e873",
+                    marginBottom: "4.3%",
+                    marginTop: "1.8%",
+                  }}
+                  aria-hidden="true"
+                ></i>{" "}
+                {/* Icon for Profit */}
+                <p
+                  style={{
+                    fontSize: "20px",
+                    textAlign: "center",
+                    fontWeight: "600",
+                  }}
+                >
+                  Profit:
+                </p>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "15px",
+                    color: valueByDate?.profit > 0 ? "green" : "red",
+                  }}
+                >
+                  {valueByDate?.profit !== undefined
+                    ? valueByDate.profit
+                    : "N/A"}
+                </p>
               </div>
             </div>
-            <div className="manager_manage_report_filter" style={{ marginTop: 50 }}>
-              <i className="fas fa-filter" style={{ paddingTop: 20 }}></i>
-              <FormControl sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="listYear-label">Year</InputLabel>
-                <Select
-                  labelId="listYear-label"
-                  id="listYear"
-                  name="year"
-                  onChange={profitYear}
-                  autoWidth
-                  value={selectedYearForProfit}
-                  label="Year"
-                  required
-                  size="small"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="2023">2023</MenuItem>
-                  <MenuItem value="2024">2024</MenuItem>
-                </Select>
-              </FormControl>
+          </div>
+          <div
+            className="manager_manage_report_filter"
+            style={{ marginTop: 40 }}
+          >
+            <i className="fas fa-filter" style={{ paddingTop: 22 }}></i>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <InputLabel id="listYear-label">Year</InputLabel>
+              <Select
+                labelId="listYear-label"
+                id="listYear"
+                // name="year"
+                value={selectedYearForSale}
+                onChange={handleYearChange}
+                autoWidth
+                label="Year"
+                required
+                size="small"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="2023">2023</MenuItem>
+                <MenuItem value="2024">2024</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              clasName="manager_manage_display_chart"
+              style={{
+                flex: "2",
+                margin: "10px",
+                padding: "20px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                backgroundColor: "white",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h4 style={{ marginBottom: "60px" }}>Sales</h4>
+              {loading ? (
+                <p>Loading...</p>
+              ) : totalValue && totalOrders ? (
+                <Bar data={data} options={options} />
+              ) : (
+                <p>No data available for the selected year</p>
+              )}
             </div>
             <div
               style={{
@@ -558,116 +596,164 @@ const ManagerStatitic = () => {
                 padding: "20px",
                 border: "1px solid #ddd",
                 borderRadius: "8px",
-                 backgroundColor:"white",
-                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                backgroundColor: "white",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <div>
-                <h3>Profit</h3>
-                {loading ? (
-                  <p>Loading...</p>
-                ) : profitByYear ? (
-                  <Line data={profitData} options={profitOptions} />
-                ) : (
-                  <p>No data available for the selected year</p>
-                )}
-              </div>
+              <h4>Category Sold</h4>
+              {allCatePercentages.length > 0 ? (
+                <Doughnut data={trafficSourceData} />
+              ) : (
+                <p>Please choose the year to see report</p>
+              )}
             </div>
-            <div className="manager_manage_diamond_table_wrapper"
-            style ={{marginTop:"70px"}}>
-              <h4>Top 10 Selling Products</h4>
-              <TableContainer component={Paper} style={{boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"}}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell align="center">
-                        Product Code
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        Name
-                      </StyledTableCell>
-                      <StyledTableCell align="center">Line Total</StyledTableCell>
-                      <StyledTableCell align="center">
-                        Items Sold
-                      </StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {topTen.length > 0 ? (
-                      topTen.map((item) => (
-                        <TableRow
-                          className="manager_manage_table_body_row"
-                          key={item.productCode}
-                        >
-                          <TableCell align="center">
-                            {item.productCode}
-                          </TableCell>
-                          <TableCell align="center">{item.name}</TableCell>
-                          <TableCell align="center">{item.lineTotal}</TableCell>
-                          <TableCell align="center">{item.itemSold}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan="9">No data to display</TableCell>
+          </div>
+          <div
+            className="manager_manage_report_filter"
+            style={{ marginTop: 50 }}
+          >
+            <i className="fas fa-filter" style={{ paddingTop: 20 }}></i>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <InputLabel id="listYear-label">Year</InputLabel>
+              <Select
+                labelId="listYear-label"
+                id="listYear"
+                name="year"
+                onChange={profitYear}
+                autoWidth
+                value={selectedYearForProfit}
+                label="Year"
+                required
+                size="small"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="2023">2023</MenuItem>
+                <MenuItem value="2024">2024</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div
+            style={{
+              flex: "1",
+              margin: "10px",
+              padding: "20px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              backgroundColor: "white",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <div>
+              <h3>Profit</h3>
+              {loading ? (
+                <p>Loading...</p>
+              ) : profitByYear ? (
+                <Line data={profitData} options={profitOptions} />
+              ) : (
+                <p>No data available for the selected year</p>
+              )}
+            </div>
+          </div>
+          <div
+            className="manager_manage_diamond_table_wrapper"
+            style={{ marginTop: "70px" }}
+          >
+            <h4>Top 10 Selling Products</h4>
+            <TableContainer
+              component={Paper}
+              style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
+            >
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">
+                      Product Code
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Name</StyledTableCell>
+                    <StyledTableCell align="center">Line Total</StyledTableCell>
+                    <StyledTableCell align="center">Items Sold</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {topTen.length > 0 ? (
+                    topTen.map((item) => (
+                      <TableRow
+                        className="manager_manage_table_body_row"
+                        key={item.productCode}
+                      >
+                        <TableCell align="center">{item.productCode}</TableCell>
+                        <TableCell align="center">{item.name}</TableCell>
+                        <TableCell align="center">{item.lineTotal}</TableCell>
+                        <TableCell align="center">{item.itemSold}</TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-            <div className="manager_manage_diamond_table_wrapper"
-            style ={{marginTop:"70px"}}>Month:
-              <input
-                className="manager_statis_input_date"
-                type="month"
-                value={chosenMonth}
-                onChange={MonthYearStats}
-                style={{ marginBottom: "20px" }}
-              ></input>
-              <TableContainer component={Paper}  style ={{boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"}}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                  <TableHead>
+                    ))
+                  ) : (
                     <TableRow>
-                      <StyledTableCell align="center">Date</StyledTableCell>
-                      <StyledTableCell align="center">
-                        Total Sales
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        Prime Cost
-                      </StyledTableCell>
-                      <StyledTableCell align="center">Profit</StyledTableCell>
+                      <TableCell colSpan="9">No data to display</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {currentMonthStats.length > 0 ? (
-                      currentMonthStats.map((item) => (
-                        <TableRow
-                          className="manager_manage_table_body_row"
-                          key={item.date}
-                        >
-                          <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")}</TableCell>
-                          <TableCell align="center">
-                            {item.totalSales}
-                          </TableCell>
-                          <TableCell align="center">{item.primeCost}</TableCell>
-                          <TableCell align="center">{item.profit}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan="9">
-                          No Empty Date Statistic found
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+          <div
+            className="manager_manage_diamond_table_wrapper"
+            style={{ marginTop: "70px" }}
+          >
+            Month:
+            <input
+              className="manager_statis_input_date"
+              type="month"
+              value={chosenMonth}
+              onChange={MonthYearStats}
+              style={{ marginBottom: "20px" }}
+            ></input>
+            <TableContainer
+              component={Paper}
+              style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
+            >
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Date</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Total Sales
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Prime Cost</StyledTableCell>
+                    <StyledTableCell align="center">Profit</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {currentMonthStats.length > 0 ? (
+                    currentMonthStats.map((item) => (
+                      <TableRow
+                        className="manager_manage_table_body_row"
+                        key={item.date}
+                      >
+                        <TableCell align="center">
+                          {new Date(item.date).toLocaleDateString("en-CA")}
                         </TableCell>
+                        <TableCell align="center">{item.totalSales}</TableCell>
+                        <TableCell align="center">{item.primeCost}</TableCell>
+                        <TableCell align="center">{item.profit}</TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan="9">
+                        No Empty Date Statistic found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 
