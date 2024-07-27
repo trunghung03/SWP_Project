@@ -27,7 +27,8 @@ import CollectionSlide from '../../components/CollectionSlide/CollectionSlide';
 function Shape() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [products, setProducts] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [navItems, setNavItems] = useState([]);
     const [shape, setShape] = useState('');
     const [clarity, setClarity] = useState('');
@@ -50,9 +51,9 @@ function Shape() {
 
     useEffect(() => {
         const { shape } = location.state || {};
+        setShape(shape || '');
 
         if (shape) {
-            setShape(shape);
             setNavItems([
                 { name: 'Home', link: '/home' },
                 { name: 'Diamond Jewelry', link: '' },
@@ -60,43 +61,41 @@ function Shape() {
             ]);
         }
 
-        getProductList()
-            .then(response => {
-                const filteredProducts = response.data.filter(product => product.shape === shape);
-                setProducts(filteredProducts);
-            })
-            .catch(error => {
+        const fetchProducts = async () => {
+            try {
+                const response = await getProductList();
+                setAllProducts(response.data);
+                filterProducts(response.data, shape);
+            } catch (error) {
                 console.log(error);
-            });
+            }
+        };
 
-    }, [shape, location.state]);
-
-    useEffect(() => {
-        getProductList()
-            .then(response => {
-                let filteredProducts = response.data;
-
-                if (clarity !== '') {
-                    filteredProducts = filteredProducts.filter(product => product.clarity === clarity);
-                }
-                if (carat !== '') {
-                    filteredProducts = filteredProducts.filter(product => product.carat === parseFloat(carat));
-                }
-                if (color !== '') {
-                    filteredProducts = filteredProducts.filter(product => product.color === color);
-                }
-
-                filteredProducts = filteredProducts.filter(product => product.shape === shape);
-
-                setProducts(filteredProducts);
-                setResetKey(Date.now());
-            })
-            .catch(error => console.log(error));
-    }, [clarity, carat, color, shape]);
+        fetchProducts();
+    }, [location.state]);
 
     useEffect(() => {
+        filterProducts(allProducts, shape);
+    }, [clarity, carat, color, shape, sort, allProducts]);
+
+    const filterProducts = (products, shape) => {
+        let filtered = products;
+
+        if (shape) {
+            filtered = filtered.filter(product => product.shape === shape);
+        }
+        if (clarity) {
+            filtered = filtered.filter(product => product.clarity === clarity);
+        }
+        if (carat) {
+            filtered = filtered.filter(product => product.carat === parseFloat(carat));
+        }
+        if (color) {
+            filtered = filtered.filter(product => product.color === color);
+        }
+
         if (sort) {
-            const sortedProducts = [...products].sort((a, b) => {
+            filtered.sort((a, b) => {
                 switch (sort) {
                     case 'Newest':
                         return b.productId - a.productId;
@@ -110,10 +109,11 @@ function Shape() {
                         return 0;
                 }
             });
-            setProducts(sortedProducts);
-            setResetKey(Date.now());
         }
-    }, [sort]);
+
+        setFilteredProducts(filtered);
+        setResetKey(Date.now());
+    };
 
     const handleRemoveFilters = () => {
         setClarity('');
@@ -206,7 +206,7 @@ function Shape() {
                 <div className='product_list_note_wrapper'>
                     <p className='product_list_note'>Note: Jewelry prices displayed are for reference only and will vary based on market prices</p>
                 </div>
-                <div className="shape_filters_products " >
+                <div className="shape_filters_products">
                     {(clarity || carat || color || sort) && (
                         <Button
                             onClick={handleRemoveFilters}
@@ -284,7 +284,7 @@ function Shape() {
                         onChange={(e) => setCarat(e.target.value)}
                     />
                 </div>
-                <ProductList products={products} key={resetKey} />
+                <ProductList products={filteredProducts} key={resetKey} />
             </div>
 
             <br></br><br></br>
