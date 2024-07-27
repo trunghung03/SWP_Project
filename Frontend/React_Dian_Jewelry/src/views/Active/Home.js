@@ -169,7 +169,10 @@ const Home = () => {
 
   const handleProductClick = (product) => {
     const productName = product.name.replace(/\s+/g, '-').toLowerCase();
-    navigate(`/product-detail/${productName}`, { state: { id: product.productId } });
+    const path = product.name.toLowerCase().includes('diamond') 
+      ? `/diamond-detail/${productName}`
+      : `/product-detail/${productName}`;
+    navigate(path, { state: { id: product.productId } });
   };
 
   const handleCollectionClick = () => {

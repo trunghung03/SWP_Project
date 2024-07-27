@@ -78,7 +78,7 @@
 }
 
 .cart_item_name {
-    font-size: 20px;
+    font-size: 20px !important;
     font-weight: bold;
 }
 
@@ -310,6 +310,13 @@
 .text-grey {
     color: grey;
     margin-bottom: 5px !important;
+    font-size: 15px;
+}
+
+.text-grey-price{
+    color: grey;
+    margin-bottom: 5px !important;
+    font-size: 20px !important;
 }
 
 .out-of-stock-text {

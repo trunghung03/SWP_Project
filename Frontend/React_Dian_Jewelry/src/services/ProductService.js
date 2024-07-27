@@ -50,7 +50,7 @@ const searchProducts = (query) => {
     return axios.get(`${API_BASE_URL}/products/search`, { params: { name: query } });
 };
 
-  const checkProductStock = async (productId) => {
+const checkProductStock = async (productId) => {
     const response = await axios.get(`${API_BASE_URL}/products/checkstock?productId=${productId}`, {
       headers: {
         'Accept': 'application/json',
@@ -65,8 +65,12 @@ const searchProducts = (query) => {
       }]
     });
     return response;
-  };
-  
+};
+
+const checkShellStock = async (shellId) => {
+    const response = await axios.get(`${API_BASE_URL}/shells/${shellId}`);
+    return response;
+};
 
 export {
     getProductList,
@@ -81,5 +85,6 @@ export {
     getNewestCollections,
     searchProducts,
     getShellByProductId,
-    checkProductStock
+    checkProductStock,
+    checkShellStock
 };
