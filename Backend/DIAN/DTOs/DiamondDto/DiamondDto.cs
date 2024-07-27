@@ -17,6 +17,9 @@
 
         public decimal Price { get; set; }
 
+        public bool Status { get; set; }
+
+        public int OrderDetailID { get; set; }
         public string CertificateScan { get; set; } = string.Empty;
 
 

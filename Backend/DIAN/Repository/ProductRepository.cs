@@ -25,36 +25,41 @@ namespace DIAN_.Repository
         }
         public async Task<Product> CreateAsync(Product product) //not plus shell yet
         {
-            if (product.CategoryId == 10)
+            var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductCode == product.ProductCode);
+            if (existingProduct != null)
             {
-                var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
-                    ? await _context.Diamonds
-                        .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
-                         .Select(d => d.Price)
-                         .FirstOrDefaultAsync()
-                            : 0;
-                product.Price = mainDiamondPrice;
+                throw new Exception("Product code already exists");
             }
-            else
-            {
-                var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
-               ? await _context.Diamonds
-                   .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
-                   .Select(d => d.Price)
-                   .FirstOrDefaultAsync()
-               : 0;
+            //if (product.CategoryId == 10)
+            //{
+            //    var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
+            //        ? await _context.Diamonds
+            //            .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
+            //             .Select(d => d.Price)
+            //             .FirstOrDefaultAsync()
+            //                : 0;
+            //    product.Price = mainDiamondPrice;
+            //}
+            //else
+            //{
+            //    var mainDiamondPrice = product.MainDiamondAtrributeId.HasValue
+            //   ? await _context.Diamonds
+            //       .Where(d => d.DiamondId == product.MainDiamondAtrributeId.Value)
+            //       .Select(d => d.Price)
+            //       .FirstOrDefaultAsync()
+            //   : 0;
 
-                var subDiamondPrice = product.SubDiamondAtrributeId.HasValue
-                    ? await _context.Diamonds
-                        .Where(d => d.DiamondId == product.SubDiamondAtrributeId.Value)
-                        .Select(d => d.Price)
-                        .FirstOrDefaultAsync()
-                    : 0;
+            //    var subDiamondPrice = product.SubDiamondAtrributeId.HasValue
+            //        ? await _context.Diamonds
+            //            .Where(d => d.DiamondId == product.SubDiamondAtrributeId.Value)
+            //            .Select(d => d.Price)
+            //            .FirstOrDefaultAsync()
+            //        : 0;
 
-                product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
-                                (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
-                                (product.LaborCost ?? 0);
-            }
+            //    product.Price = (mainDiamondPrice * (product.MainDiamondAmount ?? 0)) +
+            //                    (subDiamondPrice * (product.SubDiamondAmount ?? 0) * 0.05m) +
+            //                    (product.LaborCost ?? 0);
+            //}
 
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
@@ -239,12 +244,6 @@ namespace DIAN_.Repository
                                      .Include(p => p.Shells)
                                      .Where(p => p.Status);
 
-            //// If you need to filter shells by AmountAvailable > 0, you should do it after the query execution since EF Core does not support filtering on Include directly.
-            //var products = await productsQuery.ToListAsync();
-
-            //// Filter shells for each product if necessary. This is done in-memory.
-            //products.ForEach(p => p.Shells = p.Shells.Where(s => s.AmountAvailable > 0).ToList());
-
             return productsQuery.ToList();
         }
 
@@ -276,6 +275,7 @@ namespace DIAN_.Repository
         public async Task<IEnumerable<Product>> GetLast8ProductsAsync()
         {
             return await _context.Products
+                            .Where(p => p.Status)
                                  .Include(p => p.MainDiamondAtrribute)
                                  .Include(p => p.Shells)
                                  .Where(p => p.Shells.Any(shell => shell.AmountAvailable > 0))
@@ -326,15 +326,6 @@ namespace DIAN_.Repository
         {
             return await _context.Subdiamonds.AnyAsync(sd => sd.DiamondId == subDiamondAttributeId);
         }
-
-        //public async Task<List<Product>> GetDiamondProduct() //only diamond (no shell, no subdiamond, main diamond amount = 1)
-        //{
-        //    var diamondProducts = await _context.Products
-        //        .Where(p => p.Shells == null && p.SubDiamondAmount == 0 && p.MainDiamondAtrributeId != null && p.MainDiamondAmount == 1)
-        //        .Include(p => p.MainDiamondAtrribute).Where(p => p.MainDiamondAtrribute.Diamonds.Status == true)
-        //        .ToListAsync();
-        //    return diamondProducts;
-        //}
         public async Task<List<Product>> GetDiamondProduct()
         {
             var diamondProducts = await _context.Products
@@ -348,8 +339,6 @@ namespace DIAN_.Repository
 
             return diamondProducts;
         }
-
-
 
         public async Task<List<Product>> SearchProductsAsync(ProductSearch searchCriteria)
         {
@@ -416,7 +405,7 @@ namespace DIAN_.Repository
             }
             return isMainDiamondSufficient && isSubDiamondSufficient;
         }
-        public async Task<Product> GetProductByIdForManage(int productId)
+        public async Task<Product?> GetProductByIdForManage(int productId)
         {
             return await _context.Products
                 .Include(p => p.Shells)

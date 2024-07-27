@@ -279,9 +279,9 @@ namespace DIAN_.Repository
             throw new KeyNotFoundException("Diamond does not exist");
         }
 
-        public async Task<Diamond> UpdateMainDiamondOrderDetailIdForCancel(int? orderDetailId, int diamondId)
+        public async Task<Diamond> UpdateMainDiamondOrderDetailIdForCancel(int oldOrderDetailId,int? orderDetailId, int diamondId)
         {
-            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.MainDiamondAtrributeId == diamondId && x.Status == false);
+            var existingDiamond = await _context.Diamonds.FirstOrDefaultAsync(x => x.OrderDetailId == oldOrderDetailId);
             if (existingDiamond != null)
             {
                 existingDiamond.Status = true;

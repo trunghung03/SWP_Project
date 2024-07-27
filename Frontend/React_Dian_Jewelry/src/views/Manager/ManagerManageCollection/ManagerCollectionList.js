@@ -138,6 +138,7 @@ const tableSort = (array, comparator) => {
 const ManagerCollectionList = () => {
   const navigate = useNavigate();
   const [collectionItems, setCollectionItems] = useState([]);
+  const role = localStorage.getItem('role');
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedCollection, setEditedCollection] = useState({});
@@ -149,7 +150,7 @@ const ManagerCollectionList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ShowAllCollection();
+        const response = await ShowAllCollection(role);
         setCollectionItems(response);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -183,7 +184,7 @@ const ManagerCollectionList = () => {
       } else {
         setIsSearch(false);
         try {
-          const response = await ShowAllCollection();
+          const response = await ShowAllCollection(role);
           setCollectionItems(response);
           setPage(1);
         } catch (error) {
@@ -207,7 +208,7 @@ const ManagerCollectionList = () => {
 
       if (swalResult) {
         await changeStatus(collectionID);
-        const response = await ShowAllCollection();
+        const response = await ShowAllCollection(role);
         setCollectionItems(response);
         swal(
           `${action} successfully!`,
@@ -271,7 +272,7 @@ const ManagerCollectionList = () => {
         CollectionToUpdate.collectionId,
         CollectionToUpdate
       );
-      const updatedItems = await ShowAllCollection();
+      const updatedItems = await ShowAllCollection(role);
       setCollectionItems(updatedItems);
       setEditMode(false);
       swal(
@@ -294,7 +295,7 @@ const ManagerCollectionList = () => {
 
   const handleBack = async () => {
     try {
-      const response = await ShowAllCollection();
+      const response = await ShowAllCollection(role);
       setCollectionItems(response);
       setPage(1);
       setIsSearch(false);

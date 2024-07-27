@@ -13,7 +13,7 @@ namespace DIAN_.Repository
         private readonly ApplicationDbContext _context;
         private readonly IDistributedCache _distributedCache;
         private readonly ILogger<CollectionRepository> _logger;
-        private string cacheKey = "Collections";
+
         public CollectionRepository(ApplicationDbContext context, IDistributedCache distributedCache, ILogger<CollectionRepository> logger)
         {
             _context = context;
@@ -24,11 +24,12 @@ namespace DIAN_.Repository
         public async Task<Collection?> CreateAsync(Collection collection)
         {
             // Check for duplicates
-            if (await _context.Collections.AnyAsync(c => c.Name == collection.Name && c.CollectionId==collection.CollectionId)) { return null; }
+            if (await _context.Collections.AnyAsync(c => c.Name == collection.Name && c.CollectionId == collection.CollectionId)) { return null; }
 
             await _context.Collections.AddAsync(collection);
             await _context.SaveChangesAsync();
-            await _distributedCache.RemoveAsync(cacheKey);
+            await _distributedCache.RemoveAsync("Collections_Manager");
+            await _distributedCache.RemoveAsync("Collections_Customer");
             return collection;
         }
 
@@ -42,18 +43,33 @@ namespace DIAN_.Repository
             await _context.SaveChangesAsync();
             string individualCacheKey = $"Collection_{id}";
             await _distributedCache.RemoveAsync(individualCacheKey);
-            await _distributedCache.RemoveAsync(cacheKey);
+            await _distributedCache.RemoveAsync("Collections_Manager");
+            await _distributedCache.RemoveAsync("Collections_Customer");
             return collection;
         }
 
-        public async Task<List<Collection>> GetAllAsync()
+        public async Task<List<Collection>> GetAllAsync(string role)
         {
+            string cacheKey = $"Collections_{role}";
             string? cachedCollections = await _distributedCache.GetStringAsync(cacheKey);
             List<Collection> collections;
 
             if (string.IsNullOrEmpty(cachedCollections))
             {
-                collections = await _context.Collections.ToListAsync();
+                // Apply role-based filtering
+                if (role == "Manager")
+                {
+                    collections = await _context.Collections.ToListAsync();
+                }
+                else if (role == "Customer")
+                {
+                    collections = await _context.Collections.Where(c => c.Status).ToListAsync();
+                }
+                else
+                {
+                    // Default to an empty list if the role is not recognized
+                    collections = new List<Collection>();
+                }
 
                 if (collections != null && collections.Count > 0)
                 {
@@ -70,9 +86,16 @@ namespace DIAN_.Repository
             {
                 collections = JsonSerializer.Deserialize<List<Collection>>(cachedCollections);
                 _logger.LogInformation("Collections from cache");
+
+                // Apply role-based filtering on cached data
+                if (role == "Customer")
+                {
+                    collections = collections.Where(c => c.Status).ToList();
+                }
                 return collections;
-            }  
+            }
         }
+
         public async Task<Collection?> GetByIdAsync(int id)
         {
             string cacheKey = $"Collection_{id}";
@@ -100,7 +123,6 @@ namespace DIAN_.Repository
             return collection;
         }
 
-
         public async Task<Collection?> UpdateAsync(int id, Collection collection)
         {
             if (await _context.Collections.AnyAsync(c => c.Name == collection.Name)) { return null; }
@@ -114,8 +136,9 @@ namespace DIAN_.Repository
 
             await _context.SaveChangesAsync();
             string individualCacheKey = $"Collection_{id}";
-            await _distributedCache.RemoveAsync(cacheKey);
             await _distributedCache.RemoveAsync(individualCacheKey);
+            await _distributedCache.RemoveAsync("Collections_Manager");
+            await _distributedCache.RemoveAsync("Collections_Customer");
             return updateCollection;
         }
 
@@ -123,17 +146,19 @@ namespace DIAN_.Repository
         {
             var collection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
             if (collection == null) return false;
-            collection.Status = !collection.Status; 
+            collection.Status = !collection.Status;
             await _context.SaveChangesAsync();
             string individualCacheKey = $"Collection_{id}";
             await _distributedCache.RemoveAsync(individualCacheKey);
-            await _distributedCache.RemoveAsync(cacheKey);
+            await _distributedCache.RemoveAsync("Collections_Manager");
+            await _distributedCache.RemoveAsync("Collections_Customer");
             return true;
         }
+
         public async Task<Collection?> GetNewestCollectionAsync()
         {
-            return await _context.Collections
-                                 .OrderByDescending(p => p.CollectionId) // Order by CollectionID to get the latest products                               
+            return await _context.Collections.Where(p => p.Status)
+                                 .OrderByDescending(p => p.CollectionId)                             
                                  .FirstOrDefaultAsync();
         }
 

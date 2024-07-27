@@ -19,13 +19,13 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string role)
         {
             try
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); };
 
-                var collections = await _collectionRepository.GetAllAsync();
+                var collections = await _collectionRepository.GetAllAsync(role);
                 var collectionsDto = collections.Select(collection => collection.ToCollectionDTO());
                 return Ok(collectionsDto);
             }

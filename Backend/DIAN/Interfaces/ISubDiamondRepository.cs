@@ -12,7 +12,7 @@ namespace DIAN_.Interfaces
         Task<Subdiamond?> UpdateAsync(int id, Subdiamond subdiamond);
         Task<Subdiamond?> DeleteAsync(int id);
         Task<Subdiamond?> UpdateDiamondStock(int id, UpdateSubDiamondStockDto subdiamond);
-        Task<Subdiamond> GetDiamondsByAttributeIdAsync(int attributeId);
+        Task<Subdiamond?> GetDiamondsByAttributeIdAsync(int attributeId);
         Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query);
 
     }

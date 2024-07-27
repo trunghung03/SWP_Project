@@ -326,6 +326,7 @@ const ManagerDiamondList = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">ID</StyledTableCell>
+                  <StyledTableCell align="center">Attribute ID</StyledTableCell>
                   <StyledTableCell align="center">Shape</StyledTableCell>
                   <StyledTableCell align="center">Color</StyledTableCell>
                   <StyledTableCell align="center">Clarity</StyledTableCell>
@@ -339,6 +340,7 @@ const ManagerDiamondList = () => {
                   ) : (
                     <StyledTableCell align="center">Quantity</StyledTableCell>
                   )}
+                  <StyledTableCell align="center">Status</StyledTableCell>
                   <StyledTableCell align="center">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -351,6 +353,9 @@ const ManagerDiamondList = () => {
                     >
                       <TableCell align="center">
                         {item.diamondId || item.subDiamondId}
+                      </TableCell>
+                      <TableCell align="center">
+                        {item.diamondAttributeId || item.subDiamondAttributeId}
                       </TableCell>
                       <TableCell align="center">{item.shape}</TableCell>
                       <TableCell align="center">{item.color}</TableCell>
@@ -369,6 +374,7 @@ const ManagerDiamondList = () => {
                           {item.amountAvailable}
                         </TableCell>
                       )}
+                     <TableCell align="center">{item.status ? "Available" : "Sold"}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon

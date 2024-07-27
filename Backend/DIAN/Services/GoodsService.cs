@@ -147,14 +147,18 @@ namespace DIAN_.Services
         {
             var productModel = createProductRequestDTO.ToProductFromCreateDTO();
 
+            decimal productPrice = await CalculateProductPriceAsync(createProductRequestDTO);
+            productModel.Price = productPrice;
             var product = await _productRepository.CreateAsync(productModel);
+            var stock = await CheckStockAvailable(product.ProductId);
+            if (stock.MaxProductAvailable <= 0)
+            {
+                product.Status = false;
+                await _productRepository.UpdateProductAsync(product, product.ProductId);
+            }
 
-            decimal productPrice = await CalculateProductPriceAsync(product.ProductId);
 
-            var productDTO = product.ToProductDTO();
-            productDTO.Price = productPrice;
-
-            return productDTO;
+            return product.ToProductDTO();
         }
 
         public async Task<List<ShellDto>> CreateShells(CreateShellRequestDto createShellRequestDto)
@@ -197,7 +201,7 @@ namespace DIAN_.Services
                 Console.WriteLine("Available diamonds: " + availableDiamonds.Count);
                 stockDto.MainDiamondCount = availableDiamonds.Count;
                 stockDto.SubDiamondCount = 0; // No sub-diamonds for this category
-                stockDto.MaxProductAvailable = availableDiamonds.Count / (product.MainDiamondAmount ?? 1);
+                stockDto.MaxProductAvailable = (product.MainDiamondAmount ?? 1) != 0 ? availableDiamonds.Count / (product.MainDiamondAmount ?? 1) : 0;
             }
             else
             {
@@ -207,7 +211,7 @@ namespace DIAN_.Services
                 {
                     stockDto.MainDiamondCount = mainDiamondCount;
                     stockDto.SubDiamondCount = 0;
-                    stockDto.MaxProductAvailable = mainDiamondCount / (product.MainDiamondAmount ?? 1);
+                    stockDto.MaxProductAvailable = (product.MainDiamondAmount ?? 1) != 0 ? mainDiamondCount / (product.MainDiamondAmount ?? 1) : 0;
                 }
                 else
                 {
@@ -218,8 +222,12 @@ namespace DIAN_.Services
                     stockDto.MainDiamondCount = mainDiamondCount;
                     stockDto.SubDiamondCount = subDiamondCount;
 
-                    int maxProductsFromMainDiamonds = mainDiamondCount / (product.MainDiamondAmount ?? 1);
-                    int maxProductsFromSubDiamonds = subDiamondCount / (product.SubDiamondAmount ?? 1);
+                    int mainDiamondAmount = product.MainDiamondAmount ?? 1;
+                    int subDiamondAmount = product.SubDiamondAmount ?? 1;
+
+                    int maxProductsFromMainDiamonds = mainDiamondAmount != 0 ? mainDiamondCount / mainDiamondAmount : 0;
+                    int maxProductsFromSubDiamonds = subDiamondAmount != 0 ? subDiamondCount / subDiamondAmount : 0;
+
                     stockDto.MaxProductAvailable = Math.Min(maxProductsFromMainDiamonds, maxProductsFromSubDiamonds);
                 }
             }
@@ -306,14 +314,11 @@ namespace DIAN_.Services
         {
            if (product.CategoryId == 10)
             {
-                if (product.MainDiamondAtrributeId != 0)
-                {
-                    var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, product.MainDiamondAmount ?? 0, orderDetailId, increaseQuantities);
+                    var mainDiamondUpdated = await UpdateMainDiamonds(product.MainDiamondAtrributeId.Value, 1, orderDetailId, increaseQuantities);
                     if (!mainDiamondUpdated)
                     {
                         return false;
                     }
-                }
             }
             else
             {
@@ -342,21 +347,26 @@ namespace DIAN_.Services
 
         private async Task<bool> UpdateMainDiamonds(int mainDiamondAttributeId, int mainDiamondAmount, int orderDetailId, bool increaseQuantities)
         {
-            var diamonds = await _diamondRepository.GetDiamondsByAttributeIdForCancelAsync(mainDiamondAttributeId);
-            if (diamonds != null && diamonds.Any())
+            var diamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(mainDiamondAttributeId);
+            var cancelOrderDiamondList = await _diamondRepository.GetDiamondsByAttributeIdForCancelAsync(mainDiamondAttributeId);
+
+            if ((diamonds != null && diamonds.Any()) || (cancelOrderDiamondList != null && cancelOrderDiamondList.Any())) 
             {
                 var updatedCount = 0;
-                foreach (var diamond in diamonds)
+                var diamondListToUpdate = increaseQuantities ? cancelOrderDiamondList : diamonds;
+
+                foreach (var diamond in diamondListToUpdate)
                 {
                     if (updatedCount >= mainDiamondAmount) break;
                     int? newOrderDetailId = increaseQuantities ? null : orderDetailId;
+
                     if (!increaseQuantities)
                     {
-                        await _diamondRepository.UpdateMainDiamondOrderDetailId(newOrderDetailId, diamond.DiamondId);
+                        await _diamondRepository.UpdateMainDiamondOrderDetailId(newOrderDetailId, diamond.MainDiamondAtrributeId ?? 0);
                     }
                     else
                     {
-                        await _diamondRepository.UpdateMainDiamondOrderDetailIdForCancel(newOrderDetailId, diamond.DiamondId);
+                        await _diamondRepository.UpdateMainDiamondOrderDetailIdForCancel(orderDetailId, newOrderDetailId, diamond.MainDiamondAtrributeId ?? 0);
                     }
                     updatedCount++;
                 }
@@ -364,6 +374,7 @@ namespace DIAN_.Services
             }
             return false;
         }
+
 
 
         private async Task<bool> UpdateSubDiamonds(int subDiamondAttributeId, int subDiamondAmount, int orderDetailId, bool increaseQuantities)
@@ -382,43 +393,51 @@ namespace DIAN_.Services
         }
 
 
-        public async Task<decimal> CalculateProductPriceAsync(int productId)
+        public async Task<decimal> CalculateProductPriceAsync(CreateProductRequestDTO product)
         {
-            var product = await _productRepository.GetByIdAsync(productId);
-            if (product == null) throw new ArgumentException("Product not found", nameof(productId));
+            //var product = await _productRepository.GetByIdAsync(productId);
+            //if (product == null) throw new ArgumentException("Product not found", nameof(productId));
 
             decimal mainDiamondPrice = 0;
             decimal subDiamondPrice = 0;
-            //decimal shellPrice = 0;
-            decimal laborPrice = product.LaborCost ?? 0;
-
             if (product.CategoryId == 10)
             {
-                var mainDiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAtrributeId.Value);
-                decimal totalMainDiamondPrice = mainDiamonds.Sum(d => d.Price * product.MainDiamondAmount ?? 0);
-                mainDiamondPrice = totalMainDiamondPrice * (product.MainDiamondAmount ?? 1);
+                var mainDiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAttributeId.Value);
+                var singleDiamond = mainDiamonds.FirstOrDefault(); //?
+                if (singleDiamond != null)
+                {
+                    decimal totalMainDiamondPrice = singleDiamond.Price * (product.MainDiamondAmount);
+                    mainDiamondPrice = totalMainDiamondPrice;
+                }
                 return mainDiamondPrice;
             }
+
             else
             {
-                if (product.MainDiamondAtrributeId.HasValue && product.MainDiamondAtrributeId.Value != 0)
+                if (product.MainDiamondAttributeId.HasValue && product.MainDiamondAttributeId.Value != 0)
                 {
-                    var mainDiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAtrributeId.Value);
-                    decimal totalMainDiamondPrice = mainDiamonds.Sum(d => d.Price * product.MainDiamondAmount ?? 0);
-                    mainDiamondPrice = totalMainDiamondPrice * (product.MainDiamondAmount ?? 1);
+                    var mainDiamonds = await _diamondRepository.GetDiamondsByAttributeIdAsync(product.MainDiamondAttributeId.Value);
+                    var singleMainDiamond = mainDiamonds.FirstOrDefault();
+                    if (singleMainDiamond != null)
+                    {
+                        decimal totalMainDiamondPrice = singleMainDiamond.Price * (product.MainDiamondAmount);
+                        mainDiamondPrice = totalMainDiamondPrice;
+                    }
                 }
 
-                if (product.SubDiamondAtrributeId.HasValue && product.SubDiamondAtrributeId.Value != 0)
+                if (product.SubDiamondAttributeId.HasValue && product.SubDiamondAttributeId.Value != 0)
                 {
-                    var mainDiamonds = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId.Value);
-                    decimal totalMainDiamondPrice = mainDiamonds.Price * product.MainDiamondAmount ?? 0;
-                    mainDiamondPrice = totalMainDiamondPrice * (product.MainDiamondAmount ?? 1);
+                    var subdiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAttributeId.Value);
+                    if (subdiamond != null)
+                    {
+                        decimal totalSubDiamondPrice = subdiamond.Price * (product.SubDiamondAmount);
+                        subDiamondPrice = totalSubDiamondPrice;
+                    }
                 }
 
-                decimal totalProductPrice = mainDiamondPrice + subDiamondPrice + laborPrice + product.LaborCost ?? 0;
+                decimal totalProductPrice = mainDiamondPrice + subDiamondPrice + product.LaborPrice;
                 return totalProductPrice;
             }
-           
         }
 
     }

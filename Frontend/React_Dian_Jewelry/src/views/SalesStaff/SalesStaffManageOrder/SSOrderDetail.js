@@ -68,6 +68,8 @@ const SSOrderDetail = () => {
   }, [orderId]);
 
 
+
+  
   const handleSendCertificateAndWarranty = async () => {
     setWarrantyLoading(true);
     try {
@@ -88,10 +90,10 @@ const SSOrderDetail = () => {
       const emailData = {
         toEmail: orderDetails.email,
         subject: "Your Diamond's Certificate:",
-        body: `Here are your certificate and warranty: ${certificateUrls.join('; ')}`
+        body: `Here is your certificate: ${certificateUrls.join('; ')}`
       };
 
-      await sendWarrantyEmail(emailData);
+      await sendWarrantyEmail(emailData); //certi
       swal("Success", "Send certificate success.", "success");
 
       try {
@@ -124,14 +126,14 @@ const SSOrderDetail = () => {
     }
   };
 
-  const handleAddWarranty = async () => {
+  const handleAddWarranty = async (orderDetailId) => {
     const warrantyData = {
-      orderDetailId: orderDetails.orderId,
+      orderDetailId: orderDetailId,
       startDate: new Date().toISOString().split("T")[0],
       endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0],
       status: "true"
     };
-
+  
     try {
       const addWarrantyResponse = await createWarranty(warrantyData);
       setWarrantyExists(true);
@@ -149,7 +151,7 @@ const SSOrderDetail = () => {
         orderId: orderId,
         status: isOverdue ? "Cancelled" : status
       };
-
+      navigate('/sales-staff-order-list')
       await salesStaffUpdateOrderStatus(updateOrderStatusDto);
       swal("Success", "Order status updated successfully", "success");
     } catch (error) {

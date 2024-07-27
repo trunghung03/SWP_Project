@@ -298,7 +298,8 @@ namespace DIAN_.Controllers
                 .Include(od => od.Product)
                     .ThenInclude(p => p.MainDiamondAtrribute) 
                 .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
-                .Where(po => po.Order.OrderStatus != "Unpaid" && po.Order.OrderStatus != "Cancelled")
+                .Where(po => po.Status)
+             //   .Where(po => po.Order.OrderStatus != "Unpaid" && po.Order.OrderStatus != "Cancelled")
                 .GroupBy(od => od.ProductId)
                 .Select(g => new
                 {

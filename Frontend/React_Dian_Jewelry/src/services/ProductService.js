@@ -6,8 +6,8 @@ const getProductList = () => {
     return axios.get(`${API_BASE_URL}/products/list`);
 };
 
-const getCollectionList = () => {
-    return axios.get(`${API_BASE_URL}/collections`);
+const getCollectionList = (role) => {
+    return axios.get(`${API_BASE_URL}/collections?role=${role}`);
 };
 
 const getProductDetail = (id) => {

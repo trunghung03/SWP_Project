@@ -2,8 +2,9 @@ import axios from "axios";
 // const API_BASE_URL = 'https://localhost:7184/api';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const ShowAllCollection = async () => {
-    const response = await axios.get(`${API_BASE_URL}/collections`);
+
+const ShowAllCollection = async (role) => {
+    const response = await axios.get(`${API_BASE_URL}/collections?role=${role}`);
     return response.data;
 };
 

@@ -6,7 +6,7 @@ namespace DIAN_.Interfaces
 {
     public interface ICollectionRepository
     {
-        Task<List<Collection>> GetAllAsync();
+        Task<List<Collection>> GetAllAsync(string role);
         Task<Collection?> GetByIdAsync(int id);
         Task<Collection?> CreateAsync(Collection collection);
         Task<Collection?> UpdateAsync(int id, Collection collection);

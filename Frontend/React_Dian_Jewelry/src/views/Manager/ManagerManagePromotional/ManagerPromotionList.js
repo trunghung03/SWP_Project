@@ -26,7 +26,7 @@ import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { motion } from "framer-motion";
 
 const headCells = [
   { id: 'id', numeric: false, disablePadding: false, label: 'ID', sortable: true },
@@ -391,7 +391,7 @@ const ManagerPromotionList = () => {
                         <TableCell align="center">{item.id}</TableCell>
                         <TableCell align="center">{item.name}</TableCell>
                         <TableCell align="center">{item.code}</TableCell>
-                        <TableCell align="center">{item.amount*100}</TableCell>
+                        <TableCell align="center">{item.amount*100}%</TableCell>
                         <TableCell align="center">{item.description}</TableCell>
                         <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
                         <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>

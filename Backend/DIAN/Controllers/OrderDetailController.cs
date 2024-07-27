@@ -87,13 +87,6 @@ namespace DIAN_.Controllers
 
                 if (orderDetail == null) return NotFound("Order detail could not be created.");
 
-                //var isQuantitiesUpdated = await _goodsService.UpdateQuantitiesForOrder(orderDetail.OrderId, true);
-
-                //if (!isQuantitiesUpdated)
-                //{
-                //    throw new Exception("Failed to update product quantities.");
-                //}
-
                 return CreatedAtAction(nameof(GetByOrderDetailId), new { id = orderDetail.OrderDetailId }, orderDetail);
             }
             catch (Exception)
@@ -132,27 +125,6 @@ namespace DIAN_.Controllers
                 throw;
             }
         }
-        //[HttpPut("updatecertificate/{id:int}")]
-        //public async Task<IActionResult> UpdateDiamondCertificate([FromRoute] int id, UpdateCertificateDto updateCertificate)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
 
-        //        var orderDetailModel = await _orderDetailRepository.UpdateDiamondCertificate(updateCertificate.ToDiamondFromUpdateCertificate(id), id);
-        //        if (orderDetailModel == null)
-        //        {
-        //            return NotFound("Order Detail does not exist");
-        //        }
-        //        return Ok(orderDetailModel);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
     }
 }

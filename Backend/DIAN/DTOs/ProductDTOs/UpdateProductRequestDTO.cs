@@ -9,6 +9,7 @@ namespace DIAN_.DTOs.ProductDTOs
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
 
+        [StringLength(255, ErrorMessage = "Description must not exceed 500 characters.")]
         public string? Description { get; set; }
 
         public string ImageLinkList { get; set; }

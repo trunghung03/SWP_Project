@@ -18,6 +18,7 @@ namespace DIAN_.DTOs.ProductDTOs
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
 
+        [StringLength(255, ErrorMessage = "Description must not exceed 100 characters.")]
         public string Description { get; set; } = string.Empty;
 
         public int? MainDiamondAttributeId { get; set; }

@@ -18,6 +18,8 @@ namespace DIAN_.Mapper
                 Cut = diamond.MainDiamondAtrribute?.Cut ?? "Not Available",
                 Carat = diamond.MainDiamondAtrribute?.Carat ?? 0,
                 Price = diamond.Price,
+                Status = diamond.Status,
+                OrderDetailID = diamond.OrderDetailId ?? 0,
                 CertificateScan = diamond.CertificateScan,
             };
         }
