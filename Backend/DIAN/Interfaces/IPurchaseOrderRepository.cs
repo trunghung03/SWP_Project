@@ -11,6 +11,7 @@ namespace DIAN_.Interfaces
         Task<Purchaseorder> UpdatePurchaseOrderAsync(Purchaseorder order, int orderId);
         Task<Purchaseorder> GetPurchasrOrderById(int purchasrId);
         Task<Purchaseorder> UpdatePurchaseOrderStatusAsync(int orderId, string status);
+        Task<List<Purchaseorder>> SearchOrderAsync (PurchaseOrderSearch search);
         Task<List<Purchaseorder>> GetPurchaseOrderStatusAsync(string status, int id);
         Task<List<Purchaseorder>> DeliveryGetPurchaseOrderStatusAsync(string status, int id);
 

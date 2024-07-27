@@ -335,5 +335,33 @@ namespace DIAN_.Repository
 
             return await query.ToListAsync();
         }
+
+        public async Task<List<Diamond>> SearchMainDIamondAsync(DiamondSearch search)
+        {
+            var query = _context.Diamonds.Include(d => d.MainDiamondAtrribute).Where(d => d.Status).AsQueryable();
+
+            if (!string.IsNullOrEmpty(search.Shape))
+            {
+                query = query.Where(d => d.MainDiamondAtrribute.Shape.ToLower().Contains(search.Shape.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(search.Color))
+            {
+                query = query.Where(d => d.MainDiamondAtrribute.Color.ToLower().Contains(search.Color.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(search.Clarity))
+            {
+                query = query.Where(d => d.MainDiamondAtrribute.Clarity.ToLower().Contains(search.Clarity.ToLower()));
+            }
+            if (search.Carat.HasValue)
+            {
+                query = query.Where(d => d.MainDiamondAtrribute.Carat == search.Carat.Value);
+            }
+            if (!string.IsNullOrEmpty(search.Cut))
+            {
+                query = query.Where(d => d.MainDiamondAtrribute.Cut.ToLower().Contains(search.Cut.ToLower()));
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }

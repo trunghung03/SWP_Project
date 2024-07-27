@@ -1,6 +1,6 @@
-﻿namespace DIAN_.DTOs.SubDiamondDto
+﻿namespace DIAN_.DTOs.DiamondDto
 {
-    public class SubDiamondSearch
+    public class DiamondSearch
     {
         public string? Shape { get; set; }
 

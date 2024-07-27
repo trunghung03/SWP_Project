@@ -208,5 +208,20 @@ namespace DIAN_.Repository
                                  .Where(o => o.UserId == customerId)
                                  .ToListAsync();
         }
+
+        public async Task<List<Purchaseorder>> SearchOrderAsync(PurchaseOrderSearch search)
+        {
+            var query = _context.Purchaseorders.Include(po => po.Promotion).AsQueryable();
+            if (!string.IsNullOrEmpty(search.Query))
+            {
+                string queryStr = search.Query.ToLower();
+                query = query.Where(po => po.OrderId.ToString().Equals(queryStr) ||
+                                          po.Name.ToLower().Contains(queryStr) ||
+                                          po.Promotion.Name.ToLower().Contains(queryStr) ||
+                                          po.OrderStatus.ToLower().Contains(queryStr));
+
+            }
+            return await query.ToListAsync();
+        }
     }
 }

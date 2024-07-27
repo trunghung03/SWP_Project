@@ -1,8 +1,10 @@
 ﻿using DIAN_.DTOs.DiamondDto;
+using DIAN_.DTOs.SubDiamondDto;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
+using DIAN_.Repository;
 using DIAN_.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -260,6 +262,26 @@ namespace DIAN_.Controllers
                 return StatusCode(500, "Internal server error");
             }
 
+        }
+        [HttpGet("searchMainDia")]
+        public async Task<IActionResult> SearchSubDiamondsAsync([FromQuery] DiamondSearch searchCriteria)
+        {
+            try
+            {
+                var diamonds = await _diamondRepository.SearchMainDIamondAsync(searchCriteria);
+
+                if (!diamonds.Any())
+                {
+                    return NotFound("No diamonds match the search criteria.");
+                }
+                var Maindiamonds = diamonds.Select(Maindiamonds => Maindiamonds.ToDiamondDTO()).ToList();
+                return Ok(Maindiamonds);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here if necessary
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
+            }
         }
     }
 }

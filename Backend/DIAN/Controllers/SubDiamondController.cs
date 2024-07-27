@@ -155,15 +155,10 @@ namespace DIAN_.Controllers
             }
         }
         [HttpGet("searchSubDia")]
-        public async Task<IActionResult> SearchSubDiamondsAsync([FromQuery] string query)
+        public async Task<IActionResult> SearchSubDiamondsAsync([FromQuery] SubDiamondSearch searchCriteria)
         {
             try
             {
-                var searchCriteria = new SubDiamondSearch
-                {
-                    Query = query
-                };
-
                 var diamonds = await _subDiamondRepository.SearchSubDiamondsAsync(searchCriteria);
 
                 if (!diamonds.Any())

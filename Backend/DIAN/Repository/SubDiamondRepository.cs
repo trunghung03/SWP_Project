@@ -109,14 +109,25 @@ namespace DIAN_.Repository
         {
             var query = _context.Subdiamonds.Include(d => d.DiamondAtrribute).Where(d => d.Status).AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchCriteria.Query))
+            if (!string.IsNullOrEmpty(searchCriteria.Shape))
             {
-                string queryStr = searchCriteria.Query.ToLower();
-                query = query.Where(d => d.DiamondAtrribute.Shape.ToLower().Contains(queryStr) ||
-                                         d.DiamondAtrribute.Color.ToLower().Contains(queryStr) ||
-                                         d.DiamondAtrribute.Clarity.ToLower().Contains(queryStr) ||
-                                         d.DiamondAtrribute.Cut.ToLower().Contains(queryStr) ||
-                                         d.DiamondAtrribute.Carat.ToString().Contains(queryStr));
+                query = query.Where(d => d.DiamondAtrribute.Shape.ToLower().Contains(searchCriteria.Shape.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(searchCriteria.Color))
+            {
+                query = query.Where(d => d.DiamondAtrribute.Color.ToLower().Contains(searchCriteria.Color.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(searchCriteria.Clarity))
+            {
+                query = query.Where(d => d.DiamondAtrribute.Clarity.ToLower().Contains(searchCriteria.Clarity.ToLower()));
+            }
+            if (searchCriteria.Carat.HasValue)
+            {
+                query = query.Where(d => d.DiamondAtrribute.Carat == searchCriteria.Carat.Value);
+            }
+            if (!string.IsNullOrEmpty(searchCriteria.Cut))
+            {
+                query = query.Where(d => d.DiamondAtrribute.Cut.ToLower().Contains(searchCriteria.Cut.ToLower()));
             }
 
             return await query.ToListAsync();

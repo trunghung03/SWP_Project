@@ -1,4 +1,5 @@
-﻿using DIAN_.DTOs.PurchaseOrderDTOs;
+﻿using DIAN_.DTOs.ProductDTOs;
+using DIAN_.DTOs.PurchaseOrderDTOs;
 using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
@@ -207,7 +208,31 @@ namespace DIAN_.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpGet("searchOrders")]
+        public async Task<IActionResult> SearchOrdersAsync([FromQuery] string query)
+        {
+            try
+            {
+                var searchCriteria = new PurchaseOrderSearch
+                {
+                    Query = query
+                };
 
+                var orders = await _purchaseOrderRepo.SearchOrderAsync(searchCriteria);
+
+                if (!orders.Any())
+                {
+                    return NotFound("No orders match the search criteria.");
+                }
+
+                var poDTOs = orders.Select(po => po.ToPurchaseOrderDTO()).ToList();
+                return Ok(poDTOs);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
 
