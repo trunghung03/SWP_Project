@@ -32,6 +32,7 @@ namespace DIAN_.Mapper
         {
             return new PurchaseOrderInfoDTO
             {
+                OrderId= order.OrderId,
                 PayWithPoint = order.PayWithPoint,
                  //$"{order.User.LastName} {order.User.FirstName}",
                 FullName=order.Name,
