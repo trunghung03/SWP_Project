@@ -35,7 +35,7 @@ namespace DIAN_.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAll([FromQuery] PurchaseOrderQuerry querry)
+        public async Task<IActionResult> GetAll([FromQuery] PurchaseOrderQuerry query)
         {
             try
             {
@@ -44,14 +44,36 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var (purchaseOrders, totalCount) = await _purchaseOrderRepo.GetAllPurchaseOrderAsync(querry);
+                var (purchaseOrders, totalCount) = await _purchaseOrderRepo.GetAllPurchaseOrderAsync(query);
+
+                if (!purchaseOrders.Any())
+                {
+                    return NotFound("No purchase orders found");
+                }
+
                 var purchaseOrderDtos = purchaseOrders.Select(po => po.ToPurchaseOrderDetail()).ToList();
-                return Ok(new { purchaseOrders = purchaseOrderDtos, totalCount });
+
+                // Check if pagination parameters are provided
+                if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+                {
+                    // No pagination info needed if we are returning all purchase orders
+                    return Ok(new { data = purchaseOrderDtos });
+                }
+
+                var pagination = new
+                {
+                    currentPage = query.PageNumber ?? 1,
+                    pageSize = query.PageSize ?? 6,
+                    totalPages = (int)Math.Ceiling((double)totalCount / (query.PageSize ?? 6)),
+                    totalCount = totalCount
+                };
+
+                return Ok(new { data = purchaseOrderDtos, pagination });
             }
             catch (Exception ex)
             {
                 // Log the exception
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
             }
         }
 

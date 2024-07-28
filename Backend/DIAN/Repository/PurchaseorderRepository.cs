@@ -23,21 +23,32 @@ namespace DIAN_.Repository
 
         public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetAllPurchaseOrderAsync(PurchaseOrderQuerry querry)
         {
-            var purchaseOrders = _context.Purchaseorders.AsQueryable();
+            IQueryable<Purchaseorder> purchaseOrdersQuery = _context.Purchaseorders.AsQueryable();
 
             if (querry.Status != "default")
             {
-                purchaseOrders = purchaseOrders.Where(po => po.OrderStatus == querry.Status);
+                purchaseOrdersQuery = purchaseOrdersQuery.Where(po => po.OrderStatus == querry.Status);
             }
 
-            var totalCount = await purchaseOrders.CountAsync();
+            var totalItems = await purchaseOrdersQuery.CountAsync();
 
-            var paginatedOrders = await purchaseOrders
-                .Skip((querry.PageNumber - 1) * querry.PageSize)
-                .Take(querry.PageSize)
+            // If neither PageNumber nor PageSize is provided, return all purchase orders without pagination
+            if (!querry.PageNumber.HasValue && !querry.PageSize.HasValue)
+            {
+                var allOrders = await purchaseOrdersQuery.OrderBy(po => po.OrderId).ToListAsync();
+                return (allOrders, allOrders.Count);
+            }
+
+            int pageSize = querry.PageSize ?? 6;
+            int pageNumber = querry.PageNumber ?? 1;
+
+            var skipNumber = (pageNumber - 1) * pageSize;
+            var paginatedOrders = await purchaseOrdersQuery
+                .Skip(skipNumber)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return (paginatedOrders, totalCount);
+            return (paginatedOrders, totalItems);
         }
 
         public async Task<Purchaseorder> GetPurchaseOrderInfoAsync(int orderId)
@@ -119,43 +130,49 @@ namespace DIAN_.Repository
             return order;
         }
 
-        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListSalesOrderAssign(int staffId, PurchaseOrderQuerry querry)
+        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListSalesOrderAssign(int staffId, PurchaseOrderQuerry query)
         {
-            var query = _context.Purchaseorders
+            var ordersQuery = _context.Purchaseorders
                          .Where(po => po.SaleStaff == staffId);
 
-            if (querry.Status != "default")
+            if (query.Status != "default")
             {
-                query = query.Where(po => po.OrderStatus == querry.Status);
+                ordersQuery = ordersQuery.Where(po => po.OrderStatus == query.Status);
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await ordersQuery.CountAsync();
 
-            var orders = await query
-                                .Skip((querry.PageNumber - 1) * querry.PageSize)
-                                .Take(querry.PageSize)
+            int pageSize = query.PageSize ?? 6;
+            int pageNumber = query.PageNumber ?? 1;
+
+            var orders = await ordersQuery
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
                                 .ToListAsync();
 
             return (orders, totalCount);
         }
 
-        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListDeliOrderAssign(int staffId, PurchaseOrderQuerry querry)
+        public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListDeliOrderAssign(int staffId, PurchaseOrderQuerry query)
         {
-            var query = _context.Purchaseorders
+            var ordersQuery = _context.Purchaseorders
                 .Where(po => po.DeliveryStaff == staffId &&
                     (po.OrderStatus.ToLower() == "delivering"
                     || po.OrderStatus.ToLower() == "completed"));
 
-            if (querry.Status != "default")
+            if (query.Status != "default")
             {
-                query = query.Where(po => po.OrderStatus.ToLower() == querry.Status.ToLower());
+                ordersQuery = ordersQuery.Where(po => po.OrderStatus.ToLower() == query.Status.ToLower());
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await ordersQuery.CountAsync();
 
-            var orders = await query
-                .Skip((querry.PageNumber - 1) * querry.PageSize)
-                .Take(querry.PageSize)
+            int pageSize = query.PageSize ?? 6;
+            int pageNumber = query.PageNumber ?? 1;
+
+            var orders = await ordersQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             return (orders, totalCount);

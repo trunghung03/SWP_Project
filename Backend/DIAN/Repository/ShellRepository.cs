@@ -34,19 +34,29 @@ namespace DIAN_.Repository
 
         public async Task<(List<Shell>, int)> GetAllShellAsync(ShellQuerry query)
         {
-            var queryable = _context.Shells
-        .Where(s => s.Status)
-        .AsQueryable();
+            IQueryable<Shell> shellsQuery = _context.Shells.Where(s => s.Status).AsQueryable();
 
-            int totalItems = await queryable.CountAsync();
+            int totalItems = await shellsQuery.CountAsync();
 
-            var shells = await queryable
-                .Skip((query.PageNumber - 1) * query.PageSize)
-                .Take(query.PageSize)
+            // If neither PageNumber nor PageSize is provided, return all shells without pagination
+            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+            {
+                var allShells = await shellsQuery.OrderBy(s => s.ShellId).ToListAsync();
+                return (allShells, allShells.Count);
+            }
+
+            int pageSize = query.PageSize ?? 6; // Default page size to 6 if not provided
+            int pageNumber = query.PageNumber ?? 1; // Default page number to 1 if not provided
+
+            var skipNumber = (pageNumber - 1) * pageSize;
+            var paginatedShells = await shellsQuery
+                .Skip(skipNumber)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return (shells, totalItems);
+            return (paginatedShells, totalItems);
         }
+
 
 
         public async Task<Shell?> GetShellByIdAsync(int id)

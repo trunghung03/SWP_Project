@@ -29,7 +29,7 @@ namespace DIAN_.Controllers
         }
 
         // GET: api/Shells
-        [HttpGet]
+        [HttpGet ("all")]
         public async Task<IActionResult> GetShell([FromQuery] ShellQuerry query)
         {
             try
@@ -48,23 +48,36 @@ namespace DIAN_.Controllers
 
                 var shellDtos = shells.Select(shell => shell.ToShellDetail()).ToList();
 
+                // Check if pagination parameters are provided
+                if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+                {
+                    // No pagination info needed if we are returning all shells
+                    return Ok(new { data = shellDtos });
+                }
+
+                int pageSize = query.PageSize ?? 6; // Default page size to 6 if not provided
+                int pageNumber = query.PageNumber ?? 1; // Default page number to 1 if not provided
+
                 var paginationMetadata = new
                 {
-                    currentPage = query.PageNumber,
-                    pageSize = query.PageSize,
-                    totalPages = (int)Math.Ceiling((double)totalItems / query.PageSize),
+                    currentPage = pageNumber,
+                    pageSize = pageSize,
+                    totalPages = (int)Math.Ceiling((double)totalItems / pageSize),
                     totalItems
                 };
 
                 Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(paginationMetadata));
 
-                return Ok(new { Data = shellDtos, Pagination = paginationMetadata });
+                return Ok(new { data = shellDtos, pagination = paginationMetadata });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception (if logging is implemented)
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
             }
         }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetShellById( [FromRoute] int id)
         {

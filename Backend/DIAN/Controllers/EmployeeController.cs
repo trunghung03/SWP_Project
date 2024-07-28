@@ -279,9 +279,9 @@ namespace UserApplication.Controllers
                 }
 
                 var (orders, totalCount) = await _deliveryStaffService.ViewListDeliveryOrders(staffId, querry);
-                var totalPages = (int)Math.Ceiling((double)totalCount / querry.PageSize);
 
-                return Ok(new { orders, totalCount, totalPages });
+
+                return Ok(new { orders, totalCount });
             }
             catch (Exception ex)
             {
