@@ -40,7 +40,6 @@ namespace DIAN_.Controllers
             }
         }
 
-
         [HttpGet("all")]
         public async Task<IActionResult> GetAllDiamondsAsync([FromQuery] DiamondQuery query)
         {
@@ -51,7 +50,7 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var (diamonds, totalCount) = await _diamondRepository.GetAllDiamondsAsync(query);
+                var (diamonds, totalItems) = await _diamondRepository.GetAllDiamondsAsync(query);
 
                 if (!diamonds.Any())
                 {
@@ -60,19 +59,26 @@ namespace DIAN_.Controllers
 
                 var diamondDtos = diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList();
 
+                // Check if pagination parameters are provided
+                if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+                {
+                    // No pagination info needed if we are returning all diamonds
+                    return Ok(new { data = diamondDtos });
+                }
+
                 var pagination = new
                 {
-                    currentPage = query.PageNumber,
-                    pageSize = query.PageSize,
-                    totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize),
-                    totalCount
+                    currentPage = query.PageNumber ?? 1,
+                    pageSize = query.PageSize ?? 7,
+                    totalPages = (int)Math.Ceiling((double)totalItems / (query.PageSize ?? 7)),
+                    totalCount = totalItems
                 };
 
                 return Ok(new { data = diamondDtos, pagination });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
             }
         }
 

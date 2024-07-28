@@ -43,19 +43,34 @@ namespace DIAN_.Repository
             return subDiamond;
         }
 
-        public async Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
+        public async Task<(List<Subdiamond>, int)> GetAllSubDiamondsAsync(DiamondQuery query)
         {
-            var skipNumber = (query.PageNumber - 1) * query.PageSize;
-            var diamonds = await _context.Subdiamonds
-                   .Where(s => s.Status)
-                   .Include(p => p.DiamondAtrribute)
-                   .Skip(skipNumber)
-                   .Take(query.PageSize)
-                   .ToListAsync();
-            var totalCount = await _context.Subdiamonds.CountAsync(s => s.Status);
-            return (diamonds, totalCount);
+            IQueryable<Subdiamond> subDiamondsQuery = _context.Subdiamonds
+               .Include(p => p.DiamondAtrribute)
+               .Where(s => s.Status);
 
+            // If neither PageNumber nor PageSize is provided, return all sub-diamonds without pagination
+            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+            {
+                var allSubDiamonds = await subDiamondsQuery.OrderBy(p => p.DiamondId).ToListAsync();
+                return (allSubDiamonds, allSubDiamonds.Count);
+            }
+
+            // Default PageSize to 7 if not provided
+            int pageSize = query.PageSize ?? 7;
+            int pageNumber = query.PageNumber ?? 1;
+
+            var totalItems = await subDiamondsQuery.CountAsync();
+
+            var skipNumber = (pageNumber - 1) * pageSize;
+            var subDiamondList = await subDiamondsQuery
+                .Skip(skipNumber)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (subDiamondList, totalItems);
         }
+
 
         public async Task<Subdiamond?> GetByIdAsync(int id)
         {
