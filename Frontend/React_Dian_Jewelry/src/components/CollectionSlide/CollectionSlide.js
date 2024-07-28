@@ -4,7 +4,7 @@ import '../CollectionSlide/CollectionSlide.scss';
 import { getCollectionList } from '../../services/ProductService';
 
 const CollectionSlide = ({ onCollectionClick }) => {
-  const role = localStorage.getItem('role');
+  // const role = localStorage.getItem('role');
   const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
 
@@ -14,7 +14,7 @@ const CollectionSlide = ({ onCollectionClick }) => {
   };
 
   useEffect(() => {
-    getCollectionList(role).then(response => {
+    getCollectionList("Customer").then(response => {
       setCollections(response.data);
     }).catch(error => {
       console.error(error);
