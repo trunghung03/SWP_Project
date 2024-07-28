@@ -14,6 +14,8 @@ import {
   deleteSubDiamondById,
   getAllSubDiamond,
   ShowAllDiamond,
+  allMainDiamondPDF,
+  allSubDiamondPDF
 } from "../../../services/ManagerService/ManagerDiamondService";
 import "../../../styles/Manager/ManagerList.scss";
 import DiamondTable from "./DiamondTable";
@@ -118,13 +120,12 @@ export default function DiamondTypeSwitcher() {
         type === "main"
           ? await ShowAllDiamond(page)
           : await getAllSubDiamond(page);
-      // type === "main"
-      //   ? setMainDiamondPDF(response?.data)
-      //   : setSubDiamondPDF(response?.data);
-
-      // console.log("Fetch Data Response: ", response);
       setDiamondList(response?.data);
       setPagination(response?.pagination);
+      const mainDiamondPDF = await allMainDiamondPDF();
+      setMainDiamondPDF(mainDiamondPDF);
+      const subDiamondPDF = await allSubDiamondPDF();
+      setSubDiamondPDF(subDiamondPDF);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -208,6 +209,8 @@ export default function DiamondTypeSwitcher() {
             subdiamondList={diamondList}
             tableColumns={subDiamondTableColumns}
             handlePageChange={handlePageChange}
+            mainDiamondPDF={mainDiamondPDF}
+          subDiamondPDF={subDiamondPDF}
             handleDelete={handleDelete}
             setDiamondList={setDiamondList}
           />

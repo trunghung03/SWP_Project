@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiamondPDF = ({ main , sub }) => (
+const DiamondPDF = ({ main, sub }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.section}>
@@ -76,6 +76,8 @@ const DiamondPDF = ({ main , sub }) => (
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnPrice]}>Clarity</Text>
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Cut</Text>
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Carat</Text>
+            <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Price</Text>
+            <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock,styles.width='100%']}>Status</Text>
           </View>
           {main?.map((main) => (
             <View style={styles.tableRow} key={main.diamondAttributeId}>
@@ -85,6 +87,10 @@ const DiamondPDF = ({ main , sub }) => (
               <Text style={[styles.tableCell, styles.columnPrice]}>{main.clarity}</Text>
               <Text style={[styles.tableCell, styles.columnStock]}>{main.cut}</Text>
               <Text style={[styles.tableCell, styles.columnStock]}>{main.carat}</Text>
+              <Text style={[styles.tableCell, styles.columnStock]}>{main.price}</Text>
+              <Text style={[styles.tableCell, styles.columnStock]}>
+                {main.status ? 'Ready' : 'Sold'}
+              </Text>
             </View>
           ))}
         </View>
@@ -100,6 +106,8 @@ const DiamondPDF = ({ main , sub }) => (
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnPrice]}>Clarity</Text>
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Cut</Text>
             <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Carat</Text>
+            <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Price</Text>
+            <Text style={[styles.tableCell, styles.tableHeaderCell, styles.columnStock]}>Quantity</Text>
           </View>
           {sub?.map((sub) => (
             <View style={styles.tableRow} key={main.diamondAttributeId}>
@@ -109,6 +117,8 @@ const DiamondPDF = ({ main , sub }) => (
               <Text style={[styles.tableCell, styles.columnPrice]}>{sub.clarity}</Text>
               <Text style={[styles.tableCell, styles.columnStock]}>{sub.cut}</Text>
               <Text style={[styles.tableCell, styles.columnStock]}>{sub.carat}</Text>
+              <Text style={[styles.tableCell, styles.columnStock]}>{sub.price}</Text>
+              <Text style={[styles.tableCell, styles.columnStock]}>{sub.amountAvailable}</Text>
             </View>
           ))}
         </View>

@@ -61,6 +61,16 @@ const getAllSubDiamond = async (pageNumber = 1, pageSize = 6) => {
   return response.data;
 };
 
+const allSubDiamondPDF = async (pageNumber = 1, pageSize = 0) => {
+  const response = await axios.get(`${API_BASE_URL}/subdiamonds/all`, {
+    params: {
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+    },
+  });
+  return response.data;
+};
+
 const getSubDiamondDetail = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/subdiamonds/${id}`);
   return response.data;
@@ -91,11 +101,15 @@ const getSubDiamondAttribute = async () => {
   return response.data;
 };
 
+const allMainDiamondPDF = async () => {
+  const response = await axios.get(`${API_BASE_URL}/diamonds/alldiamondwithoutpagination`);
+  return response.data;
+};
 
 
 
 
 export { ShowAllDiamond, getDiamondDetail, deleteDiamondById, updateDiamondById, createDiamond, getDiamondByShape,getCertificateById,updateCertificateById 
   , getAllSubDiamond, getSubDiamondDetail, createSubDiamond, updateSubDiamondById, deleteSubDiamondById,
-  getMainDiamondAttribute, getSubDiamondAttribute
+  getMainDiamondAttribute, getSubDiamondAttribute,allSubDiamondPDF,allMainDiamondPDF
 };
