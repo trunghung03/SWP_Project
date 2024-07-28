@@ -29,7 +29,7 @@ const ShowAllProduct = async (pageNumber = 1, pageSize = 6, name = '') => {
 
 const pdfProduct = async () => {
   const response = await axios.get(`${API_BASE_URL}/products/list`);
-  return response.data;
+  return response;
 };
 
 const deleteProductById = (id) => {

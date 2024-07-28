@@ -291,10 +291,6 @@ const ManagerAddProduct = () => {
                         <label>Description</label>
                         <input type="text" name="description" placeholder="Input product's description" value={productData.description} onChange={handleChange} required style={{ borderRadius: "6px" }} />
                     </div>
-                    {/* <div className="manager_add_diamond_form_group">
-                        <label>Image</label>
-                        <input type="file" name="image" accept="image/*" onChange={handleImageUpload} multiple style={{ borderRadius: "6px" }} />
-                    </div> */}
                     <div className="file-upload-container">
                         <div
                             className="file-dropzone"

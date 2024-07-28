@@ -42,13 +42,6 @@ const ManagerStatitic = () => {
     return [year, month, day].join("-");
   };
 
-  const getCurrentMonthYear = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Ensure month is 2 digits
-    return `${year}-${month}`;
-  };
-
   const taskProgress = 75.5;
   const [allCatePercentages, setAllCatePercentages] = useState([]);
   const [totalProduct, setTotalProduct] = useState(null);
@@ -559,11 +552,14 @@ const ManagerStatitic = () => {
                 required
                 size="small"
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="2023">2023</MenuItem>
-                <MenuItem value="2024">2024</MenuItem>
+                  {Array.from(
+                  { length: new Date().getFullYear() - 2019 },
+                  (_, i) => 2023 + i
+                ).map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -613,24 +609,20 @@ const ManagerStatitic = () => {
             style={{ marginTop: 50 }}
           >
             <i className="fas fa-filter" style={{ paddingTop: 20 }}></i>
-            <FormControl sx={{ m: 1, minWidth: 80 }}>
-              <InputLabel id="listYear-label">Year</InputLabel>
+            <FormControl fullWidth>
+              <InputLabel>Year</InputLabel>
               <Select
-                labelId="listYear-label"
-                id="listYear"
-                name="year"
-                onChange={profitYear}
-                autoWidth
                 value={selectedYearForProfit}
-                label="Year"
-                required
-                size="small"
+                onChange={profitYear}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="2023">2023</MenuItem>
-                <MenuItem value="2024">2024</MenuItem>
+                {Array.from(
+                  { length: new Date().getFullYear() - 2019 },
+                  (_, i) => 2023 + i
+                ).map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>

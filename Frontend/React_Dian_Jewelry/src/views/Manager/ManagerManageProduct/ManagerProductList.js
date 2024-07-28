@@ -2,7 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Visibility } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Pagination from "@mui/material/Pagination";
@@ -31,6 +31,7 @@ import {
   getProductDetail,
   getProductDiamond,
   pdfProduct,
+  uploadImage,
   updateProductById,
 } from "../../../services/ManagerService/ManagerProductService.js";
 import "../../../styles/Manager/ManagerListProduct.scss";
@@ -167,6 +168,9 @@ const ManagerProductList = () => {
   const [mainDiamonds, setMainDiamonds] = useState({});
   const [isSearch, setIsSearch] = useState(false);
   const [pdfData, setPdfData] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   const viewDetail = (productId) => {
     navigate(`/manager-product-detail/${productId}`);
@@ -185,7 +189,7 @@ const ManagerProductList = () => {
       console.log("Fetched products:", response.data);
       setProductItems(response.data);
       const pdfResponse = await pdfProduct();
-      setPdfData(pdfResponse);
+      setPdfData(pdfResponse.data);
       setPagination(response.pagination);
       const categoryMap = {};
       const collectionMap = {};
@@ -298,7 +302,46 @@ const ManagerProductList = () => {
     setEditMode(true);
     setEditedProduct(product);
     setOriginalProduct(product);
-    document.body.classList.add("modal-open"); // Add this line
+    setFiles([]);
+    setImageUrls([]);
+    setImagePreviews(product.images || []);
+  };
+
+  const handleUploadImage = async (files) => {
+    if (!files.length) {
+      console.error("No files selected.");
+      return;
+    }
+
+    const newImageUrls = [];
+    const newPreviews = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await uploadImage(formData);
+        const url = response.url;
+        console.log("Uploaded image URL:", url);
+        newImageUrls.push(url);
+        newPreviews.push(URL.createObjectURL(file));
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    }
+
+    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+    setFiles((prevFiles) => [...prevFiles, ...files]);
+
+    setEditedProduct((prevData) => ({
+      ...prevData,
+      imageLinkList: prevData.imageLinkList
+        ? `${prevData.imageLinkList};${newImageUrls.join(';')}`
+        : newImageUrls.join(';'),
+    }));
   };
 
   const handleChange = (e) => {
@@ -307,6 +350,10 @@ const ManagerProductList = () => {
     setEditedProduct({ ...editedProduct, [name]: newValue });
   };
 
+  const handleFileSelect = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    handleUploadImage(selectedFiles); // Call handleUploadImage with selected files
+  };
   const handleUpdate = async () => {
     const requiredFields = [
       "name",
@@ -357,7 +404,7 @@ const ManagerProductList = () => {
         ).then(() => {
           fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
           setEditMode(false);
-          document.body.classList.remove("modal-open"); // Add this line
+          document.body.classList.remove("modal-open");
         });
       })
       .catch((error) => {
@@ -568,14 +615,19 @@ const ManagerProductList = () => {
                 />
               </div>
               <div className="manager_manage_product_form_group">
-                <label>Image</label>
+                {/* <label>Image</label>
                 <input
                   type="text"
                   name="imageLinkList"
                   value={editedProduct.imageLinkList}
                   onChange={handleChange}
                   required
-                />
+                /> */}
+
+                <div className="manager_add_diamond_form_group">
+                  <label>Image</label>
+                  <input type="file" name="image" accept="image/*" onChange={handleFileSelect} multiple style={{ borderRadius: "0px", padding: "0px" }} />
+                </div>
               </div>
               <div className="manager_manage_product_form_group">
                 <label>Collection ID</label>
