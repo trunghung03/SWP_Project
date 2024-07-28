@@ -178,7 +178,7 @@ function DiamondDetail() {
         <div className="product_info_detail">
           <h2 className="product_name_detail">
             {product.name}{" "}
-            {maxProductAvailable !== null && `(${maxProductAvailable} left)`}
+            {maxProductAvailable === 0 ? "(Sold out)" : `(${maxProductAvailable} left)`}
           </h2>
           <p className="product_diamond_description">
             {diamond.cut} Cutㅤ|ㅤ{diamond.color} Colorㅤ|ㅤ{diamond.clarity}{" "}
@@ -190,8 +190,16 @@ function DiamondDetail() {
             </p>
           </div>
           <div className="product_actions_detail">
-            <button className="add_to_cart_btn" onClick={handleAddToCart}>
-              <i className="fas fa-shopping-cart"></i> Add to cart
+            <button 
+              className="add_to_cart_btn"
+              onClick={handleAddToCart}
+              disabled={maxProductAvailable === 0}
+              style={{
+                backgroundColor: maxProductAvailable === 0 ? "#797979" : "#1c1c1c",
+                color: "white"
+              }}
+            >
+              <i className="fas fa-shopping-cart" style={{ color: "white" }}></i> {maxProductAvailable === 0 ? "Sold out" : "Add to cart"}
             </button>
           </div>
           <hr className="product_detail_line" />
