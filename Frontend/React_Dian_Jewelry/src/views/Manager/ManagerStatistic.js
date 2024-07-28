@@ -114,34 +114,26 @@ const ManagerStatitic = () => {
   const MonthYearStats = async (event) => {
     const monthYear = event.target.value;
     const formattedMonthYear = monthYear;
-    toast.promise(getDateStatistic(formattedMonthYear), {
-      loading: "Loading...",
-      success: (res) => {
+    try {
+        const res = await getDateStatistic(formattedMonthYear);
         setCurrentMonthStats(res);
-        return "Data loaded successfully";
-      },
-      error: "Failed to load data",
-    });
-    setChosenMonth(monthYear);
-  };
-
-  const dailyStats = async (date) => {
-    if (date) {
-      const dailyValues = await DailyStats(date);
-      toast.promise(DailyStats(date), {
-        loading: "Loading...",
-        success: (res) => {
-          setValueByDate(res);
-          return "Data loaded successfully";
-        },
-        error: "Failed to load data",
-      });
-
-      // setValueByDate(dailyValues);
-      setChosenDate(date);
+    } catch (error) {
+        console.error("Failed to load data", error);
     }
-  };
+    setChosenMonth(monthYear);
+};
 
+const dailyStats = async (date) => {
+    if (date) {
+        try {
+            const res = await DailyStats(date);
+            setValueByDate(res);
+        } catch (error) {
+            console.error("Failed to load data", error);
+        }
+        setChosenDate(date);
+    }
+};
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
     dailyStats(selectedDate);
