@@ -5,6 +5,7 @@ using DIAN_.Interfaces;
 using DIAN_.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 
 namespace DIAN_.Repository
@@ -84,54 +85,78 @@ namespace DIAN_.Repository
 
         public async Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
-            var skipNumber = (query.PageNumber - 1) * query.PageSize;
-            var diamonds = await _context.Diamonds
-                   .Where(s => s.Status)
-                   .Include(p => p.MainDiamondAtrribute)
-                   .Skip(skipNumber)
-                   .Take(query.PageSize)
-                   .ToListAsync();
-            var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
-            return (diamonds, totalCount);
-            //string cacheKey = $"Diamonds_{query.PageNumber}_{query.PageSize}";
-            //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+            IQueryable<Diamond> diamondQuery = _context.Diamonds
+                                                       .Include(d => d.MainDiamondAtrribute)
+                                                       .Where(d => d.Status);
 
-            //if (string.IsNullOrEmpty(cachedData))
-            //{
-            //    var skipNumber = (query.PageNumber - 1) * query.PageSize;
-            //    var diamonds = await _context.Diamonds
-            //        .Where(s => s.Status)
-            //        .Include(p => p.MainDiamondAtrribute)
-            //        .Skip(skipNumber)
-            //        .Take(query.PageSize)
-            //        .ToListAsync();
+            // If neither PageNumber nor PageSize is provided, return all diamonds without pagination
+            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+            {
+                var allDiamonds = await diamondQuery.OrderBy(d => d.DiamondId).ToListAsync();
+                return (allDiamonds, allDiamonds.Count);
+            }
 
-            //    var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
+            // Default PageSize to 7 if not provided
+            int pageSize = query.PageSize ?? 7;
+            int pageNumber = query.PageNumber ?? 1;
 
-            //    var cacheEntry = new { Diamonds = diamonds, TotalCount = totalCount };
-            //    string serializedData = JsonSerializer.Serialize(cacheEntry);
+            var totalItems = await diamondQuery.CountAsync();
 
-            //    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
-            //    {
-            //        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-            //    });
-            //    _logger.LogInformation("Diamonds from database");
-            //    return (diamonds, totalCount);
-            //}
-            //else
-            //{
-            //    using (JsonDocument doc = JsonDocument.Parse(cachedData))
-            //    {
-            //        JsonElement root = doc.RootElement;
-            //        var diamonds = JsonSerializer.Deserialize<List<Diamond>>(root.GetProperty("Diamonds").GetRawText());
-            //        int totalCount = root.GetProperty("TotalCount").GetInt32();
-            //        _logger.LogInformation("Diamonds from cache");
-            //        return (diamonds, totalCount);
-            //    }
-            //}
+            var skipNumber = (pageNumber - 1) * pageSize;
+            var diamondList = await diamondQuery
+                .Skip(skipNumber)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
+                .SetPriority(CacheItemPriority.Normal)
+                .SetSize(1);
+
+            var result = (diamondList, totalItems);
+            _logger.LogInformation("Diamonds from database");
+            return result;
         }
-        // In DiamondRepository class
-        public async Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId)
+
+        //string cacheKey = $"Diamonds_{query.PageNumber}_{query.PageSize}";
+        //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
+
+        //if (string.IsNullOrEmpty(cachedData))
+        //{
+        //    var skipNumber = (query.PageNumber - 1) * query.PageSize;
+        //    var diamonds = await _context.Diamonds
+        //        .Where(s => s.Status)
+        //        .Include(p => p.MainDiamondAtrribute)
+        //        .Skip(skipNumber)
+        //        .Take(query.PageSize)
+        //        .ToListAsync();
+
+        //    var totalCount = await _context.Diamonds.CountAsync(s => s.Status);
+
+        //    var cacheEntry = new { Diamonds = diamonds, TotalCount = totalCount };
+        //    string serializedData = JsonSerializer.Serialize(cacheEntry);
+
+        //    await _distributedCache.SetStringAsync(cacheKey, serializedData, new DistributedCacheEntryOptions
+        //    {
+        //        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+        //    });
+        //    _logger.LogInformation("Diamonds from database");
+        //    return (diamonds, totalCount);
+        //}
+        //else
+        //{
+        //    using (JsonDocument doc = JsonDocument.Parse(cachedData))
+        //    {
+        //        JsonElement root = doc.RootElement;
+        //        var diamonds = JsonSerializer.Deserialize<List<Diamond>>(root.GetProperty("Diamonds").GetRawText());
+        //        int totalCount = root.GetProperty("TotalCount").GetInt32();
+        //        _logger.LogInformation("Diamonds from cache");
+        //        return (diamonds, totalCount);
+        //    }
+        //}
+    // In DiamondRepository class
+    public async Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId)
         {
             return await _context.Diamonds
                 .Where(d => d.MainDiamondAtrributeId == mainDiamondAttributeId && d.Status == true) 

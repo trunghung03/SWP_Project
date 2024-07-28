@@ -96,7 +96,10 @@ namespace UserApplication.Controllers
             if (customer == null)
                 customer = await _customerRepository.RegisterAsync(user);
 
-
+            else if (customer.Status == false)
+            {
+                return Forbid("Your account is deactivated.");
+            }
             return Ok(
                 new NewUserDto
                 {
