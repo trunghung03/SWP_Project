@@ -87,36 +87,40 @@ namespace DIAN_.Repository
         {
             IQueryable<Diamond> diamondQuery = _context.Diamonds
                                                        .Include(d => d.MainDiamondAtrribute);
-
-            // If neither PageNumber nor PageSize is provided, return all diamonds without pagination
-            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+            if (!string.IsNullOrEmpty(query.SearchTerm))
             {
-                var allDiamonds = await diamondQuery.OrderBy(d => d.DiamondId).ToListAsync();
-                return (allDiamonds, allDiamonds.Count);
+                string lowerSearchTerm = query.SearchTerm.ToLower();
+                diamondQuery = diamondQuery.Where(d =>
+                    d.DiamondId.ToString().Contains(lowerSearchTerm) ||
+                    d.MainDiamondAtrributeId.ToString().Contains(lowerSearchTerm) ||
+                    d.CertificateScan.ToLower().Contains(lowerSearchTerm) ||
+                    d.OrderDetailId.ToString().Contains(lowerSearchTerm) ||
+                    d.Price.ToString().Contains(lowerSearchTerm) ||
+                    d.Status.ToString().ToLower().Contains(lowerSearchTerm) ||
+                    d.MainDiamondAtrribute.Shape.ToString().Contains(lowerSearchTerm) ||
+                    d.MainDiamondAtrribute.Carat.ToString().Contains(lowerSearchTerm) ||
+                    d.MainDiamondAtrribute.Color.ToLower().Contains(lowerSearchTerm) ||
+                    d.MainDiamondAtrribute.Clarity.ToLower().Contains(lowerSearchTerm) ||
+                    d.MainDiamondAtrribute.Cut.ToLower().Contains(lowerSearchTerm));
             }
 
-            // Default PageSize to 7 if not provided
-            int pageSize = query.PageSize ?? 7;
-            int pageNumber = query.PageNumber ?? 1;
-
             var totalItems = await diamondQuery.CountAsync();
+            Console.WriteLine($"Total items after filtering: {totalItems}");
 
-            var skipNumber = (pageNumber - 1) * pageSize;
-            var diamondList = await diamondQuery
-                .Skip(skipNumber)
-                .Take(pageSize)
-                .ToListAsync();
+            if (query.PageNumber.HasValue && query.PageSize.HasValue)
+            {
+                int pageSize = query.PageSize.Value;
+                int pageNumber = query.PageNumber.Value;
 
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
-                .SetPriority(CacheItemPriority.Normal)
-                .SetSize(1);
+                diamondQuery = diamondQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
 
-            var result = (diamondList, totalItems);
-            _logger.LogInformation("Diamonds from database");
-            return result;
+            var diamondList = await diamondQuery.OrderByDescending(p => p.DiamondId).Reverse().ToListAsync();
+            Console.WriteLine($"Items returned after pagination: {diamondList.Count}");
+
+            return (diamondList, totalItems);
         }
+
 
         //string cacheKey = $"Diamonds_{query.PageNumber}_{query.PageSize}";
         //string? cachedData = await _distributedCache.GetStringAsync(cacheKey);
@@ -154,8 +158,8 @@ namespace DIAN_.Repository
         //        return (diamonds, totalCount);
         //    }
         //}
-    // In DiamondRepository class
-    public async Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId)
+        // In DiamondRepository class
+        public async Task<int> CountDiamondsByAttributesAsync(int mainDiamondAttributeId)
         {
             return await _context.Diamonds
                 .Where(d => d.MainDiamondAtrributeId == mainDiamondAttributeId && d.Status == true) 
