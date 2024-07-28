@@ -86,7 +86,7 @@ namespace DIAN_.Repository
         {
             var skipNumber = (query.PageNumber - 1) * query.PageSize;
             var diamonds = await _context.Diamonds
-                   .Where(s => s.Status)
+                   //.Where(s => s.Status)
                    .Include(p => p.MainDiamondAtrribute)
                    .Skip(skipNumber)
                    .Take(query.PageSize)

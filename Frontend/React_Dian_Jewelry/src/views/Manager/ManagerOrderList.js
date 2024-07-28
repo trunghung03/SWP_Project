@@ -5,17 +5,14 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../../styles/SalesStaff/SalesStaffManageOrder/SSOrderList.scss";
 import ManagerSidebar from "../../components/ManagerSidebar/ManagerSidebar.js";
 import logo from "../../assets/img/logoN.png";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Paper from "@mui/material/Paper";
-import InfoIcon from "@mui/icons-material/Info";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -24,9 +21,8 @@ import { visuallyHidden } from "@mui/utils";
 import { fetchAllOrders } from "../../services/SalesStaffService/SSOrderService.js";
 import PropTypes from "prop-types";
 import {
-  EnhancedTableToolbar,
   getComparator,
-  tableSort,
+  tableSort
 } from "../../components/CustomTable/SortTable.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";

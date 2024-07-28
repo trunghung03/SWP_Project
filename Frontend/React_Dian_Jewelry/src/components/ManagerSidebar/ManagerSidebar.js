@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './ManagerSidebar.scss';
 import { useNavigate } from 'react-router-dom';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 class ManagerSidebar extends Component {
     constructor(props) {
@@ -109,8 +110,8 @@ class ManagerSidebar extends Component {
                                 <span>Manage Collection</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_view_order_list' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-order-list')}>
-                                <i className="fas fa-leaf"></i>
-                                <span>View Orders List</span>
+                            <ListAltIcon className="list-alt-icon"/>
+                            <span>Orders List</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/staff-edit-profile')}>
                                 <i className="fas fa-user"></i>

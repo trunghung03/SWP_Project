@@ -28,6 +28,7 @@ const mainDiamondTableColumns = [
   "Cut",
   "Price",
   "Certificate",
+  "Status",
   "Actions",
 ];
 

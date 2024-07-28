@@ -69,7 +69,7 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
   return (
     <React.Fragment>
       <IconButton onClick={handleClickOpen} color="primary" aria-label="edit">
-        <EditIcon />
+        <EditIcon style={{color:"#575252"}} />
       </IconButton>
       <Dialog
         fullScreen={fullScreen}

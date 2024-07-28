@@ -104,7 +104,7 @@ export default function DiamondTable({
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ cursor: "pointer" }}>
               {tableColumns.map((column) => (
                 <StyledTableCell align="center">{column}</StyledTableCell>
               ))}
@@ -113,26 +113,26 @@ export default function DiamondTable({
           <TableBody>
             {maindiamondList &&
               maindiamondList?.map((item) => (
-                <StyledTableRow key={item.diamondId}>
-                  <StyledTableCell align="center">
+                <TableRow hover key={item.diamondId}>
+                  <TableCell align="center">
                     {item.diamondId}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">
                     {item.diamondAttributeId}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{item.shape}</StyledTableCell>
-                  <StyledTableCell align="center">{item.color}</StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">{item.shape}</TableCell>
+                  <TableCell align="center">{item.color}</TableCell>
+                  <TableCell align="center">
                     {item.clarity}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{item.cut}</StyledTableCell>
-                  <StyledTableCell align="center">{item.carat}</StyledTableCell>
-                  <StyledTableCell align="center">{item.price}</StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">{item.cut}</TableCell>
+                  <TableCell align="center">{item.carat}</TableCell>
+                  <TableCell align="center">{item.price}</TableCell>
+                  <TableCell align="center">
                     {item.certificateScan ?? "not avail"}
-                  </StyledTableCell>
-
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">{item.status ? "Available" : "Sold"}</TableCell>
+                  <TableCell align="center">
                     <EditMainDiamondDialog
                       diamond={item}
                       setDiamondList={setDiamondList}
@@ -143,34 +143,34 @@ export default function DiamondTable({
                       color="secondary"
                       aria-label="delete"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{color:"#575252"}}/>
                     </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
+                  </TableCell>
+                </TableRow>
               ))}
 
             {subdiamondList &&
               subdiamondList?.map((item) => (
-                <StyledTableRow key={item.subDiamondId}>
-                  <StyledTableCell align="center">
+                <TableRow hover key={item.subDiamondId}>
+                  <TableCell align="center">
                     {item?.subDiamondId}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">
                     {item?.subDiamondAttributeId}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{item.shape}</StyledTableCell>
-                  <StyledTableCell align="center">{item.color}</StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">{item.shape}</TableCell>
+                  <TableCell align="center">{item.color}</TableCell>
+                  <TableCell align="center">
                     {item.clarity}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{item.carat}</StyledTableCell>
-                  <StyledTableCell align="center">{item.cut}</StyledTableCell>
-                  <StyledTableCell align="center">{item.price}</StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">{item.carat}</TableCell>
+                  <TableCell align="center">{item.cut}</TableCell>
+                  <TableCell align="center">{item.price}</TableCell>
+                  <TableCell align="center">
                     {" "}
                     {item.amountAvailable ?? 0}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
+                  </TableCell>
+                  <TableCell align="center">
                     <EditDialog
                       diamond={item}
                       setDiamondList={setDiamondList}
@@ -180,10 +180,10 @@ export default function DiamondTable({
                       color="secondary"
                       aria-label="delete"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{color:"#575252"}}/>
                     </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
+                  </TableCell>
+                </TableRow>
               ))}
           </TableBody>
         </Table>

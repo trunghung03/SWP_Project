@@ -144,9 +144,7 @@ namespace DIAN_.Repository
             var query = _context.Purchaseorders
                 .Where(po => po.DeliveryStaff == staffId &&
                     (po.OrderStatus.ToLower() == "delivering"
-                    || po.OrderStatus.ToLower() == "completed"
-                    || po.OrderStatus.ToLower() == "preparing"
-                    || po.OrderStatus.ToLower() == "cancelled"));
+                    || po.OrderStatus.ToLower() == "completed"));
 
             if (querry.Status != "default")
             {
