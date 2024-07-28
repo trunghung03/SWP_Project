@@ -34,8 +34,19 @@ namespace DIAN_.Repository
 
         public async Task<(List<Shell>, int)> GetAllShellAsync(ShellQuerry query)
         {
-            IQueryable<Shell> shellsQuery = _context.Shells.Where(s => s.Status).AsQueryable();
-
+            IQueryable<Shell> shellsQuery = _context.Shells
+                                            .Include(s => s.ShellMaterial) // Ensure ShellMaterial is included
+                                            .Where(s => s.Status)
+                                            .AsQueryable();
+            if (!string.IsNullOrEmpty(query.SearchTerm))
+            {
+                string lowerSearchTerm = query.SearchTerm.ToLower();
+                shellsQuery = shellsQuery.Where(s =>
+                                                    s.ShellId.ToString() == lowerSearchTerm ||
+                                                    s.ShellMaterial.Name.ToLower().Contains(lowerSearchTerm) ||
+                                                    s.AmountAvailable.ToString().Contains(lowerSearchTerm) ||
+                                                    s.Status.ToString().Contains(lowerSearchTerm));
+            }
             int totalItems = await shellsQuery.CountAsync();
 
             // If neither PageNumber nor PageSize is provided, return all shells without pagination

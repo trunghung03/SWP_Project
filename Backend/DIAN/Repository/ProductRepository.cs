@@ -105,7 +105,17 @@ namespace DIAN_.Repository
                .Include(p => p.Category)
                .Include(p => p.Shells)
                .Where(p => p.Status);
-
+            if (!string.IsNullOrEmpty(query.SearchTerm))
+            {
+                string lowerSearchTerm = query.SearchTerm.ToLower();
+                productsQuery = productsQuery.Where(d =>
+                    d.ProductId.ToString().Contains(lowerSearchTerm) ||
+                    d.Price.ToString().Contains(lowerSearchTerm) ||
+                    d.Status.ToString().ToLower().Contains(lowerSearchTerm) ||
+                    d.Description.ToLower().Contains(lowerSearchTerm) ||
+                    d.Name.ToLower().Contains(lowerSearchTerm) ||
+                    d.ProductCode.ToLower().Contains(lowerSearchTerm));
+            }
             // If neither PageNumber nor PageSize is provided, return all products without pagination
             if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
             {
