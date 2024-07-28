@@ -86,7 +86,7 @@ namespace DIAN_.Repository
         public async Task<(List<Diamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
             IQueryable<Diamond> diamondQuery = _context.Diamonds
-                                                       .Include(d => d.MainDiamondAtrribute)
+                                                       .Include(d => d.MainDiamondAtrribute);
 
             // If neither PageNumber nor PageSize is provided, return all diamonds without pagination
             if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
