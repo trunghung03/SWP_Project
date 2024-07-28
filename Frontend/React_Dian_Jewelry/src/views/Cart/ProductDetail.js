@@ -2,7 +2,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { toast } from "sonner";
 import GIA from "../../assets/img/gia2.jpg";
 import braceletSizeGuide from "../../assets/img/sgBracelet.jpg";
@@ -74,8 +73,10 @@ function ProductDetail() {
           const images = productData.imageLinkList.split(";");
           setSelectedImage(images[0]);
 
+          const diamondAttributeId = productData.mainDiamondAttributeId || productData.subDiamondAttributeId;
+
           return Promise.all([
-            getDiamondDetail(productData.mainDiamondAttributeId).catch(
+            getDiamondDetail(diamondAttributeId).catch(
               (error) => {
                 throw error;
               }
