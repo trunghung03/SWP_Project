@@ -76,11 +76,13 @@ namespace DIAN_.Controllers
 
                 return Ok(new { data = diamondDtos, pagination });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
+                throw;
             }
         }
+
+
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDiamondByIdAsync([FromRoute] int id)
