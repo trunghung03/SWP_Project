@@ -3,10 +3,12 @@ using DIAN_.DTOs.DiamondDto;
 using DIAN_.DTOs.ProductDTOs;
 using DIAN_.DTOs.ShellDto;
 using DIAN_.DTOs.SubDiamondDto;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.Repository;
+using Microsoft.Extensions.Caching.Distributed;
 using System.ComponentModel.DataAnnotations;
 
 namespace DIAN_.Services
@@ -20,10 +22,11 @@ namespace DIAN_.Services
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IShellRepository _shellRepository;
+        private readonly IDistributedCache _distributedCache;
 
         public GoodsService(IDiamondAttributeRepository diamondAttributeRepository, IProductRepository productRepository,
             ISubDiamondRepository subDiamondRepository, IDiamondRepository diamondRepository, IPurchaseOrderRepository purchaseOrderRepository,
-            IOrderDetailRepository orderDetailRepository, IShellRepository shellRepository)
+            IOrderDetailRepository orderDetailRepository, IShellRepository shellRepository, IDistributedCache distributedCache)
         {
             _diamondAttributeRepository = diamondAttributeRepository;
             _productRepository = productRepository;
@@ -32,6 +35,7 @@ namespace DIAN_.Services
             _purchaseOrderRepository = purchaseOrderRepository;
             _orderDetailRepository = orderDetailRepository;
             _shellRepository = shellRepository;
+            _distributedCache = distributedCache;
         }
 
         //create diammond attribue, diamond at the same time (if diamond attribute does not exist => create diamond attribute)
@@ -73,6 +77,7 @@ namespace DIAN_.Services
             };
 
             var diamondDto = await _diamondRepository.AddDiamondAsync(newDiamond);
+            await CacheUtils.InvalidateProductCaches(_distributedCache);
 
             return diamondDto.ToDiamondDTO();
         }
@@ -113,7 +118,7 @@ namespace DIAN_.Services
             };
 
             var diamondDto = await _subDiamondRepository.CreateAsync(newDiamond);
-
+            await CacheUtils.InvalidateProductCaches(_distributedCache);
             return diamondDto.ToSubDiamondDTO();
         }
 
@@ -156,7 +161,7 @@ namespace DIAN_.Services
                 product.Status = false;
                 await _productRepository.UpdateProductAsync(product, product.ProductId);
             }
-
+            await CacheUtils.InvalidateProductCaches(_distributedCache);
 
             return product.ToProductDTO();
         }
@@ -172,7 +177,7 @@ namespace DIAN_.Services
                 var shell = await _shellRepository.CreateShellAsync(shellModel);
                 shells.Add(shell.ToShellDetail());
             }
-
+            await CacheUtils.InvalidateProductCaches(_distributedCache);
             return shells;
         }
 
@@ -251,7 +256,7 @@ namespace DIAN_.Services
                     return false;
                 }
             }
-
+            await CacheUtils.InvalidateProductCaches(_distributedCache);
             return true;
         }
 

@@ -296,7 +296,7 @@ namespace DIAN_.Controllers
 
             var topProducts = await _context.Orderdetails
                 .Include(od => od.Product)
-                    .ThenInclude(p => p.MainDiamondAtrribute) 
+                    .ThenInclude(p => p.MainDiamondAtrribute).Include(p => p.Product.SubDiamondAtrribute)
                 .Where(od => od.Order.Date >= effectiveStartDate && od.Order.Date <= effectiveEndDate)
                 .Where(po => po.Status)
              //   .Where(po => po.Order.OrderStatus != "Unpaid" && po.Order.OrderStatus != "Cancelled")

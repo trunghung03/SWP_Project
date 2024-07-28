@@ -113,6 +113,7 @@ builder.Services.AddScoped<ISalesStaffService, SalesStaffService>();
 builder.Services.AddScoped<IDeliveryStaffService, DeliveryStaffService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IGoodsService, GoodsService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();

@@ -17,11 +17,13 @@ namespace DIAN_.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepo;
         private readonly IGoodsService _goodsService;
-        public ProductController(ApplicationDbContext context, IProductRepository productRepo, IGoodsService goodsService)
+        private readonly IProductService _productService;
+        public ProductController(ApplicationDbContext context, IProductRepository productRepo, IGoodsService goodsService, IProductService productService)
         {
             _productRepo = productRepo;
             _context = context;
             _goodsService = goodsService;
+            _productService = productService;
         }
 
         [HttpGet("list")]
@@ -33,19 +35,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var products = await _productRepo.GetListAsync();
-                var filteredProducts = new List<Product>();
-
-                foreach (var product in products)
-                {
-                    if (await _productRepo.HasSufficientDiamondsForProduct(product.ProductId))
-                    {
-                        product.Status = true;
-                        filteredProducts.Add(product);
-                    }
-                }
-
-                var productDTOs = filteredProducts.Select(p => p.ToProductListDTO()).ToList();
+                var productDTOs = await _productService.GetListAsync();
                 return Ok(productDTOs);
             }
             catch (Exception)
@@ -63,20 +53,7 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var products = await _productRepo.GetDiamondProduct();
-
-                var filteredProducts = new List<Product>();
-
-                foreach (var product in products)
-                {
-                    if (await _productRepo.HasSufficientDiamondsForProduct(product.ProductId))
-                    {
-                        product.Status = true;
-                        filteredProducts.Add(product);
-                    }
-                }
-
-                var productDTOs = filteredProducts.Select(p => p.ToProductListDTO()).ToList();
+                var productDTOs = await _productService.GetDiamondProductAsync();
                 return Ok(productDTOs);
             }
             catch (Exception)

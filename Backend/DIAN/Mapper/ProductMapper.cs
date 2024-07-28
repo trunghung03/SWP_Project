@@ -62,6 +62,9 @@ namespace DIAN_.Mapper
         public static ProductListDTO ToProductListDTO(this Product product)
         {
             var firstImgLink = product.ImageLinkList?.Split(';').FirstOrDefault();
+
+            var diamondAttribute = product.MainDiamondAtrribute ?? product.SubDiamondAtrribute;
+
             return new ProductListDTO
             {
                 ProductId = product.ProductId,
@@ -70,20 +73,18 @@ namespace DIAN_.Mapper
                 CategoryID = product.CategoryId,
                 ImageLinkList = firstImgLink,
                 CollectionId = product.CollectionId ?? 0,
-                Cut = product.MainDiamondAtrribute?.Cut ?? "Not Available", 
-                Shape = product.MainDiamondAtrribute?.Shape ?? "Not Available",
-                Carat = product.MainDiamondAtrribute?.Carat ?? 0,
-                Color = product.MainDiamondAtrribute?.Color ?? "Not Available",
-                Clarity = product.MainDiamondAtrribute?.Clarity ?? "Not Available",
+                Cut = diamondAttribute?.Cut ?? "Not Available",
+                Shape = diamondAttribute?.Shape ?? "Not Available",
+                Carat = diamondAttribute?.Carat ?? 0,
+                Color = diamondAttribute?.Color ?? "Not Available",
+                Clarity = diamondAttribute?.Clarity ?? "Not Available",
                 MainDiamondAttributeId = product.MainDiamondAtrributeId ?? 0,
                 SubDiamondAttributeId = product.SubDiamondAtrributeId ?? 0,
                 ProductCode = product.ProductCode,
-                //Stock = product.Shells?.Sum(shell => shell.AmountAvailable) ?? 0
                 Stock = product.Shells?.FirstOrDefault()?.AmountAvailable ?? 0
-
-
             };
         }
+
 
 
 

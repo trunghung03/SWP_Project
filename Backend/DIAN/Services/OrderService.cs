@@ -5,6 +5,7 @@ using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
 using DIAN_.Repository;
+using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
 
 namespace DIAN_.Services
@@ -19,10 +20,13 @@ namespace DIAN_.Services
         private readonly IVnPayService _vnPayService;
         private readonly IEmailService _emailService;
         private readonly IGoodsService _goodsService;
+        private readonly IProductService _productService;
+        private readonly IDistributedCache _distributedCache;
 
         public OrderService(IPromotionRepository promotionRepository, IPurchaseOrderRepository purchaseOrderRepository,
         ICustomerRepository customerRepository, IOrderDetailRepository orderDetailRepository,
-        IEmployeeRepository employeeRepository, IVnPayService vnPayService, IEmailService emailService, IGoodsService goodsService)
+        IEmployeeRepository employeeRepository, IVnPayService vnPayService, IEmailService emailService, IGoodsService goodsService,
+        IProductService productService, IDistributedCache distributedCache)
         {
             _promotionRepository = promotionRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
@@ -32,6 +36,8 @@ namespace DIAN_.Services
             _vnPayService = vnPayService;
             _emailService = emailService;
             _goodsService = goodsService;
+            _productService = productService;
+            _distributedCache = distributedCache;
         }
 
         public bool SendEmailForVnPay(int orderId)
@@ -64,8 +70,9 @@ namespace DIAN_.Services
             AssignStaffToOrder(orderModel);
 
             var orderToDto = _purchaseOrderRepository.CreatePurchaseOrderAsync(orderModel).Result;
-
             SendConfirmationEmail(orderToDto);
+
+            CacheUtils.InvalidateProductCaches(_distributedCache).Wait();
 
             return orderToDto.ToPurchaseOrderDTO();
         }

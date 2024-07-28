@@ -182,6 +182,7 @@ namespace DIAN_.Repository
             var products = await _context.Products
                                   .Where(p => p.Status && p.Name.Contains(name))
                                   .Include(p => p.MainDiamondAtrribute) // Include the MainDiamond to get the shape
+                                  .Include(p => p.SubDiamondAtrribute)
                                   .ToListAsync();
             return products;
         }
@@ -234,6 +235,7 @@ namespace DIAN_.Repository
         {
             var productsQuery = _context.Products
                                      .Include(p => p.MainDiamondAtrribute)
+                                     .Include(p => p.SubDiamondAtrribute)
                                      .Include(p => p.Category)
                                      .Include(p => p.Shells)
                                      .Where(p => p.Status);
@@ -271,6 +273,7 @@ namespace DIAN_.Repository
             return await _context.Products
                             .Where(p => p.Status)
                                  .Include(p => p.MainDiamondAtrribute)
+                                 .Include(p => p.SubDiamondAtrribute)
                                  .Include(p => p.Shells)
                                  .Where(p => p.Shells.Any(shell => shell.AmountAvailable > 0))
                                  .OrderByDescending(p => p.ProductId)

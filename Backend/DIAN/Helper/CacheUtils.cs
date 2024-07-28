@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
 
 namespace DIAN_.Helper
 {
@@ -18,6 +20,12 @@ namespace DIAN_.Helper
                     }
                 }
             }
+        }
+
+        public static async Task InvalidateProductCaches(IDistributedCache distributedCache)
+        {
+            await distributedCache.RemoveAsync("product_list");
+            await distributedCache.RemoveAsync("diamond_product_list");
         }
     }
 }
