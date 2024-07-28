@@ -79,7 +79,7 @@ function a11yProps(index) {
 export default function DiamondTypeSwitcher() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState(0);
-  const[currentPage,setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [diamondList, setDiamondList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
@@ -95,14 +95,14 @@ export default function DiamondTypeSwitcher() {
   const [subDiamondPDF, setSubDiamondPDF] = useState([]);
   const pageNumber = searchParams.get("pageNumber");
   const type = parseInt(searchParams.get("type"));
-  
+
   useEffect(() => {
     if (!isNaN(type)) {
       setValue(type);
     }
-    if(value === type){
+    if (value === type) {
       fetchData(pageNumber, value === 0 ? "main" : "sub");
-    }else{
+    } else {
       fetchData(1, value === 0 ? "main" : "sub");
     }
     setPagination({
@@ -111,7 +111,7 @@ export default function DiamondTypeSwitcher() {
       currentPage: pageNumber,
     });
     // fetchData(pageNumber, value === 0 ? "main" : "sub");
-  }, [searchParams,value]);
+  }, [searchParams, value]);
 
 
   const fetchData = async (page, type) => {
@@ -210,7 +210,7 @@ export default function DiamondTypeSwitcher() {
             tableColumns={subDiamondTableColumns}
             handlePageChange={handlePageChange}
             mainDiamondPDF={mainDiamondPDF}
-          subDiamondPDF={subDiamondPDF}
+            subDiamondPDF={subDiamondPDF}
             handleDelete={handleDelete}
             setDiamondList={setDiamondList}
           />
