@@ -63,12 +63,8 @@ const getAllSubDiamond = async (pageNumber = 1, pageSize = 6) => {
 
 const allSubDiamondPDF = async (pageNumber = 1, pageSize = 0) => {
   const response = await axios.get(`${API_BASE_URL}/subdiamonds/all`, {
-    params: {
-      PageNumber: pageNumber,
-      PageSize: pageSize,
-    },
   });
-  return response.data;
+  return response.data.data;
 };
 
 const getSubDiamondDetail = async (id) => {
