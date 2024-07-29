@@ -13,11 +13,12 @@ function SSUpdateContent() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const { id } = useParams();
+  const employeeId = localStorage.getItem("employeeId");
   const [contentData, setContentData] = useState({
     title: "",
     tag: "",
     content: "",
-    imageUrl: "",
+    image: "",
     createdBy: "",
   });
 
@@ -34,7 +35,7 @@ function SSUpdateContent() {
           title: contentResponse.data.title,
           tag: contentResponse.data.tag,
           content: contentResponse.data.content,
-          imageUrl: contentResponse.data.image,
+          image: contentResponse.data.image,
           createdBy: nameResponse.data,
         }));
         setImagePreview(contentResponse.data.image);
@@ -68,7 +69,7 @@ function SSUpdateContent() {
       const url = response.url;
       setContentData((prevContentData) => ({
         ...prevContentData,
-        imageUrl: url,
+        image: url,
       }));
       setImagePreview(URL.createObjectURL(file));
     } catch (error) {
@@ -83,7 +84,7 @@ function SSUpdateContent() {
       const formattedContentData = {
         ...contentData,
         status: true,
-        employee: parseInt(user.employeeId),
+        employee: employeeId,
       };
 
       await updateContentById(id, formattedContentData);
@@ -101,7 +102,7 @@ function SSUpdateContent() {
 
   const handleRemoveImage = () => {
     setImagePreview("");
-    setContentData({ ...contentData, imageUrl: "" });
+    setContentData({ ...contentData, image: "" });
   };
 
   return (
@@ -198,7 +199,7 @@ function SSUpdateContent() {
                 <label className="ss_add_content_label_image">Content avatar:</label>
                 <input
                   type="file"
-                  name="imageUrl"
+                  name="image"
                   accept="image/*"
                   onChange={handleImageUpload}
                   disabled={imagePreview ? true : false}
