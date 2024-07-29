@@ -29,6 +29,7 @@ import {
   uploadImage,
 } from "../../../services/ManagerService/ManagerCollectionService.js";
 import "../../../styles/Manager/ManagerList.scss";
+
 // Head cells for the collection table
 const headCells = [
   {
@@ -146,7 +147,7 @@ const tableSort = (array, comparator) => {
 const ManagerCollectionList = () => {
   const navigate = useNavigate();
   const [collectionItems, setCollectionItems] = useState([]);
-  const role = localStorage.getItem('role');
+  const role = localStorage.getItem("role");
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedCollection, setEditedCollection] = useState({});
@@ -273,11 +274,11 @@ const ManagerCollectionList = () => {
     setOriginalCollection(collection);
     setFiles([]);
     setImageUrls([]);
-    setImagePreviews(collection.imageLink || []);
+    setImagePreviews(collection.imageLink ? collection.imageLink.split(';') : []);
   };
   const handleUpdate = async () => {
     // Convert imageUrls array to a semicolon-separated string
-    const imageLinkString = imageUrls.join(';');
+    const imageLinkString = imageUrls.join(";");
 
     const updatedCollection = {
       ...editedCollection,
@@ -300,7 +301,10 @@ const ManagerCollectionList = () => {
     }
     try {
       console.log("Updating collection with data:", updatedCollection);
-      const response = await updateCollectionById(editedCollection.collectionId, updatedCollection);
+      const response = await updateCollectionById(
+        editedCollection.collectionId,
+        updatedCollection
+      );
       console.log("Update response:", response);
       setEditMode(false);
       const refreshedData = await ShowAllCollection(role);
@@ -418,7 +422,18 @@ const ManagerCollectionList = () => {
                         </TableCell>
                         <TableCell align="center">{item.name}</TableCell>
                         <TableCell align="center">{item.description}</TableCell>
-                        <TableCell align="center">{item.imageLink}</TableCell>
+                        <TableCell align="center">
+                          {item.imageLink
+                            ? item.imageLink.split(";").map((link, index) => (
+                                <img
+                                  key={index}
+                                  src={link}
+                                  alt={`Collection ${item.name} ${index + 1}`}
+                                  style={{ width: "50px", marginRight: "5px" }}
+                                />
+                              ))
+                            : "No images"}
+                        </TableCell>
                         <TableCell align="center">
                           <IconButton onClick={() => handleEdit(item)}>
                             <EditIcon
@@ -461,7 +476,9 @@ const ManagerCollectionList = () => {
 
       {editMode && (
         <div
-          className={`manager_manage_diamond_modal_overlay ${editMode ? "active" : ""}`}
+          className={`manager_manage_diamond_modal_overlay ${
+            editMode ? "active" : ""
+          }`}
           onClick={() => setEditMode(false)}
         >
           <div
@@ -494,11 +511,7 @@ const ManagerCollectionList = () => {
               <div className="manager_manage_product_form_group">
                 <div className="manager_add_diamond_form_group">
                   <label>Images:</label>
-                  <input
-                    type="file"
-                    multiple
-                    onChange={handleFileSelect}
-                  />
+                  <input type="file" multiple onChange={handleFileSelect} />
                 </div>
               </div>
               <div className="manager_manage_product_form_group">
@@ -522,8 +535,6 @@ const ManagerCollectionList = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };
