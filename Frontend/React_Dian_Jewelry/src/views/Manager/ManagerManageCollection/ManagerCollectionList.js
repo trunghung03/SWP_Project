@@ -243,8 +243,30 @@ const ManagerCollectionList = () => {
     });
   };
 
+  const handleFileSelect = async (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    const newImageUrls = [];
+    const newPreviews = [];
 
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      const formData = new FormData();
+      formData.append("file", file);
 
+      try {
+        const response = await uploadImage(formData);
+        const url = response.url;
+        console.log("Image: " + url);
+        newImageUrls.push(url);
+        newPreviews.push(URL.createObjectURL(file));
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    }
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+  };
   const handleEdit = (collection) => {
     setEditMode(true);
     setEditedCollection(collection);
@@ -253,93 +275,29 @@ const ManagerCollectionList = () => {
     setImageUrls([]);
     setImagePreviews(collection.imageLink || []);
   };
-
-  const handleFileSelect = async (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    const newImageUrls = [];
-    const newPreviews = [];
-  
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-      const formData = new FormData();
-      formData.append("file", file);
-  
-      try {
-        const response = await uploadImage(formData);
-        const url = response.url;
-        newImageUrls.push(url);
-        newPreviews.push(URL.createObjectURL(file));
-      } catch (error) {
-        console.error("Upload error:", error);
-      }
-    }
-  
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
-    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
-  };
-  const handleUploadImage = async (files) => {
-    if (!files.length) {
-      console.error("No files selected.");
-      return;
-    }
-
-    const newImageUrls = [];
-    const newPreviews = [];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await uploadImage(formData);
-        const url = response.url;
-        newImageUrls.push(url);
-        newPreviews.push(URL.createObjectURL(file));
-      } catch (error) {
-        console.error("Upload error:", error);
-      }
-    }
-
-    setFiles((prevFiles) => [...prevFiles, ...files]);
-    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
-    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
-  };
-
-  const handleDeleteImage = (index) => {
-    const newImageUrls = [...imageUrls];
-    const newPreviews = [...imagePreviews];
-    newImageUrls.splice(index, 1);
-    newPreviews.splice(index, 1);
-    setImageUrls(newImageUrls);
-    setImagePreviews(newPreviews);
-  };
-
   const handleUpdate = async () => {
     // Convert imageUrls array to a semicolon-separated string
     const imageLinkString = imageUrls.join(';');
-  
+
     const updatedCollection = {
       ...editedCollection,
       imageLink: imageLinkString,
     };
-  
+
     if (!updatedCollection.name) {
       swal("Validation Error", "Name is required.", "error");
       return;
     }
-  
+
     if (!updatedCollection.description) {
       swal("Validation Error", "Description is required.", "error");
       return;
     }
-  
+
     if (updatedCollection.status === undefined) {
       swal("Validation Error", "Status is required.", "error");
       return;
     }
-  
     try {
       console.log("Updating collection with data:", updatedCollection);
       const response = await updateCollectionById(editedCollection.collectionId, updatedCollection);
@@ -360,8 +318,6 @@ const ManagerCollectionList = () => {
       );
     }
   };
-  
-
 
   const handleCancel = () => {
     setEditMode(false);
