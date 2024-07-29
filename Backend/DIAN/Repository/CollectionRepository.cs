@@ -125,7 +125,6 @@ namespace DIAN_.Repository
 
         public async Task<Collection?> UpdateAsync(int id, Collection collection)
         {
-            if (await _context.Collections.AnyAsync(c => c.Name == collection.Name)) { return null; }
             var updateCollection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == id);
             if (updateCollection == null) return null;
 
