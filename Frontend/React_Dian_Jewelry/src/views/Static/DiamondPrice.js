@@ -227,9 +227,10 @@ function DiamondPrice() {
               onChange={handleCutFilterChange}
             >
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="Super Ideal">Super Ideal</MenuItem>
+              <MenuItem value="Good">Good</MenuItem>
               <MenuItem value="Very Good">Very Good</MenuItem>
               <MenuItem value="Ideal">Ideal</MenuItem>
+              <MenuItem value="Super Ideal">Super Ideal</MenuItem>
             </Select>
           </FormControl>
           <FormControl fullWidth margin="normal" size="small">

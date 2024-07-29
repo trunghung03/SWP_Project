@@ -93,7 +93,7 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-box-open"></i>
                                 <span>Manage Product</span>
                             </li>
-                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-diamond-list')}>
+                            <li className={`manager_sidebar_menu_item ${currentPage === 'manager_manage_diamond' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-diamond-list?type=0')}>
                                 <i className="fas fa-gem"></i>
                                 <span>Manage Diamond</span>
                             </li>
