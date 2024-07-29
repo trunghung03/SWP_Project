@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderDetail.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import logo from "../../../assets/img/logoN.png";
 import InputLabel from "@mui/material/InputLabel";
@@ -25,6 +25,7 @@ import {
 } from "../../../services/SalesStaffService/SSOrderService.js";
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
 import swal from "sweetalert";
+import { toast } from "sonner";
 
 const SSOrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -35,26 +36,35 @@ const SSOrderDetail = () => {
   const [warrantyLoading, setWarrantyLoading] = useState(false);
   const [warrantyExists, setWarrantyExists] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (event) => {
     const newStatus = event.target.value;
-    if (isPreviousStatus(newStatus, status)) {
-      swal("Error", "Cannot update to a previous status", "error");
+    if (status === "Delivering" && newStatus === "Completed") {
+      toast.error("Your role cannot update the status to 'Completed'", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    }
+    if (isInvalidStatusTransition(newStatus, status)) {
+      swal("Error", "Cannot update to this status from the current status", "error");
       return;
     }
     setStatus(newStatus);
   };
 
-  const isPreviousStatus = (newStatus, currentStatus) => {
-    const statusOrder = [
-      "Unpaid",
-      "Paid",
-      "Preparing",
-      "Delivering",
-      "Completed",
-      "Cancelled",
-    ];
-    return statusOrder.indexOf(newStatus) < statusOrder.indexOf(currentStatus);
+  const isInvalidStatusTransition = (newStatus, currentStatus) => {
+    const nextStatusMap = {
+      Unpaid: ["Paid"],
+      Paid: ["Preparing"],
+      Preparing: ["Delivering"],
+      Delivering: ["Completed"],
+      Completed: [],
+      Cancelled: []
+    };
+
+    return !nextStatusMap[currentStatus].includes(newStatus);
   };
 
   useEffect(() => {
@@ -66,7 +76,7 @@ const SSOrderDetail = () => {
           setIsOrderCompleted(data.orderStatus === "Completed");
         })
         .catch((error) => {
-          // console.error("Failed to fetch order details:", error);
+          console.error("Failed to fetch order details:", error);
         });
 
       getWarrantyById(orderId)
@@ -74,7 +84,7 @@ const SSOrderDetail = () => {
           setWarrantyExists(data !== null);
         })
         .catch((error) => {
-          // console.error("Failed to fetch warranty details:", error);
+          console.error("Failed to fetch warranty details:", error);
         });
     }
   }, [orderId]);
@@ -107,7 +117,7 @@ const SSOrderDetail = () => {
         body: `Here is your certificate: ${certificateUrls.join("; ")}`,
       };
 
-      await sendWarrantyEmail(emailData); //certi
+      await sendWarrantyEmail(emailData);
       swal("Success", "Send certificate success.", "success");
       let concatenatedWarrantyURLs = "";
 
@@ -116,7 +126,6 @@ const SSOrderDetail = () => {
           return handleAddWarranty(product?.orderDetailId).then((response) => {
             return getWarrantyURL(response?.orderDetailId)
               .then((res) => {
-                console.log(" ádasdasdsadsaddasd", res.url);
                 return res?.url;
               })
               .catch((error) => {
@@ -125,7 +134,7 @@ const SSOrderDetail = () => {
                   `Failed to get warranty URL: ${error.message}`,
                   "error"
                 );
-                throw error; // Ensure the promise chain is rejected
+                throw error;
               });
           });
         });
@@ -133,7 +142,6 @@ const SSOrderDetail = () => {
         Promise.all(warrantyPromises)
           .then((urls) => {
             concatenatedWarrantyURLs = urls.join("; ");
-            console.log(concatenatedWarrantyURLs);
 
             const wemailData = {
               toEmail: orderDetails.email,
@@ -193,16 +201,19 @@ const SSOrderDetail = () => {
         orderId: orderId,
         status: isOverdue ? "Cancelled" : status,
       };
-      navigate("/sales-staff-order-list");
       await salesStaffUpdateOrderStatus(updateOrderStatusDto);
-      swal("Success", "Order status updated successfully", "success");
+      toast.success("Order status updated successfully", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      navigate(`/sales-staff-order-list?tab=${new URLSearchParams(location.search).get("tab")}`);
     } catch (error) {
       console.error("Failed to update order status", error);
       swal("Error", `Failed to update order status: ${error.message}`, "error");
     }
     setLoading(false);
   };
-
+  
   const isOrderOverdue = (orderDate) => {
     const currentDate = new Date();
     const createdDate = new Date(orderDate);
@@ -239,7 +250,7 @@ const SSOrderDetail = () => {
             <div className="SS_back_button_wrapper">
               <button
                 className="SS_back_button"
-                onClick={() => navigate("/sales-staff-order-list")}
+                onClick={() => navigate(`/sales-staff-order-list?tab=${new URLSearchParams(location.search).get("tab")}`)}
               >
                 Back
               </button>

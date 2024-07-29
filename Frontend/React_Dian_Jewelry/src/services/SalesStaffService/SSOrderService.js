@@ -40,15 +40,19 @@ const fetchAllOrders = async (page, pageSize, status, searchTerm) => {
     return error;
   });
 }
-const getSalesStaffOrderList = async (staffId, pageNumber = 1, pageSize = 6, status = "default") => {
+const getSalesStaffOrderList = async (staffId, pageNumber = 1, pageSize = 6, status = "default", searchTerm = "") => {
   const params = { staffId, pageNumber, pageSize };
   if (status !== "default") {
     params.status = status;
+  }
+  if (searchTerm.trim() !== "") {
+    params.SearchTerm = searchTerm;
   }
   return axios.get(`${API_BASE_URL_ORDER}/employees/salesstaff/orderlists`, {
     params
   });
 };
+
  const getBillDetail = async (orderId) => {
   return axios.get(`${API_BASE_URL_ORDER}/employees/view-order-detail-bill`, { params: { orderId } })
   .then((response) => {
