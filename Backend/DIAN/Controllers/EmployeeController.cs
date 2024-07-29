@@ -210,13 +210,29 @@ namespace UserApplication.Controllers
 
                 var (orders, totalCount) = await _salesStaffService.ViewListOrdersAssign(staffId, querry);
 
-                return Ok(new { orders, totalCount });
+                // Check if pagination parameters are provided
+                if (!querry.PageNumber.HasValue && !querry.PageSize.HasValue)
+                {
+                    // No pagination info needed if we are returning all purchase orders
+                    return Ok(new { orders });
+                }
+
+                var pagination = new
+                {
+                    currentPage = querry.PageNumber ?? 1,
+                    pageSize = querry.PageSize ?? 6,
+                    totalPages = (int)Math.Ceiling((double)totalCount / (querry.PageSize ?? 6)),
+                    totalCount = totalCount
+                };
+
+                return Ok(new { orders, pagination });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         [HttpGet("salesstaff/status/{status}")] 
         public async Task<IActionResult> ViewListOrdersByStatus(string status, int id)
         {
@@ -281,7 +297,21 @@ namespace UserApplication.Controllers
                 var (orders, totalCount) = await _deliveryStaffService.ViewListDeliveryOrders(staffId, querry);
 
 
-                return Ok(new { orders, totalCount });
+                if (!querry.PageNumber.HasValue && !querry.PageSize.HasValue)
+                {
+                    // No pagination info needed if we are returning all purchase orders
+                    return Ok(new { orders });
+                }
+
+                var pagination = new
+                {
+                    currentPage = querry.PageNumber ?? 1,
+                    pageSize = querry.PageSize ?? 6,
+                    totalPages = (int)Math.Ceiling((double)totalCount / (querry.PageSize ?? 6)),
+                    totalCount = totalCount
+                };
+
+                return Ok(new { orders, pagination });
             }
             catch (Exception ex)
             {
