@@ -101,11 +101,6 @@ const ManagerOrderList = () => {
     totalCount: 0,
   });
 
-
-  // const viewDetail = (orderId) => {
-  //   navigate(`/sales-staff-manage-order-detail/${orderId}`);
-  // };
-
   const handleChange = async (event) => {
     const selectedValue = event.target.value;
     setSortOrder(selectedValue);
@@ -116,22 +111,17 @@ const ManagerOrderList = () => {
     fetchOrders(1, pagination.pageSize, selectedValue);
   };
 
-  const fetchOrders = async (page = 1, pageSize = 6, status = sortOrder) => {
+  const fetchOrders = async (page = 1, pageSize = 6, status = sortOrder, searchTerm) => {
     try {
-      const response = await fetchAllOrders(page, pageSize, status);
+      const response = await fetchAllOrders(page, pageSize, status, searchTerm = searchQuery);
       console.log("API Response:", response);
 
       if (response) {
-        const { purchaseOrders, totalCount } = response;
-        console.log("Purchase Orders:", purchaseOrders);
-        setOrderList(purchaseOrders || []);
-        setOriginalOrderList(purchaseOrders || []);
-        setPagination((prev) => ({
-          ...prev,
-          currentPage: page,
-          totalPages: Math.ceil(totalCount / pageSize),
-          totalCount,
-        }));
+        const { data, pagination } = response;
+        console.log("Purchase Orders:", data);
+        setOrderList(data || []);
+        setOriginalOrderList(data || []);
+        setPagination(pagination);
       } else {
         setOrderList([]);
         setOriginalOrderList([]);
@@ -148,8 +138,8 @@ const ManagerOrderList = () => {
   };
 
   useEffect(() => {
-    fetchOrders(pagination.currentPage, pagination.pageSize, sortOrder);
-  }, [pagination.currentPage, pagination.pageSize, sortOrder]);
+    fetchOrders(pagination.currentPage, pagination.pageSize, sortOrder, searchQuery);
+  }, [pagination.currentPage, pagination.pageSize, sortOrder, searchQuery]);
 
   const handlePageChange = (event, value) => {
     setPagination((prev) => ({
@@ -167,25 +157,21 @@ const ManagerOrderList = () => {
 
   const handleSearchKeyPress = async (e) => {
     if (e.key === "Enter") {
-      const searchValue = e.target.value.toLowerCase();
-      if (searchValue.trim() === "") {
-        fetchOrders(pagination.currentPage, pagination.pageSize, sortOrder);
-      } else {
+        const searchValue = e.target.value.toLowerCase();
+        setSearchQuery(searchValue);
         setIsSearch(true);
-        const filteredOrders = originalOrderList.filter(
-          (order) =>
-            order.orderId.toString().toLowerCase().includes(searchValue) ||
-            order.name.toLowerCase().includes(searchValue)
-        );
-        setOrderList(filteredOrders);
-      }
+        setPagination((prev) => ({
+            ...prev,
+            currentPage: 1,
+        }));
+        fetchOrders(1, pagination.pageSize, sortOrder, searchValue);
     }
-  };
+};
 
   const handleBackClick = () => {
     setSearchQuery("");
     setIsSearch(false);
-    setOrderList(originalOrderList);
+    fetchOrders(1, pagination.pageSize, sortOrder);
   };
 
   const isOrderOverdue = (orderDate) => {
@@ -333,9 +319,9 @@ const ManagerOrderList = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-        {isSearch && (
-          <button className="SS_back_button" onClick={handleBackClick}>
-            Back
+            {isSearch && (
+          <button className="btn btn-secondary mt-3" onClick={handleBackClick}>
+            Back to show all orders
           </button>
         )}
       </div>

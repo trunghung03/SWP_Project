@@ -29,7 +29,13 @@ namespace DIAN_.Repository
             {
                 purchaseOrdersQuery = purchaseOrdersQuery.Where(po => po.OrderStatus == querry.Status);
             }
-
+            if (!string.IsNullOrEmpty(querry.SearchTerm))
+            {
+                string lowerSearchTerm = querry.SearchTerm.ToLower();
+                purchaseOrdersQuery = purchaseOrdersQuery.Where(d =>
+                    d.OrderId.ToString().Equals(lowerSearchTerm) ||
+                    d.Name.ToLower().Contains(lowerSearchTerm));
+            }
             var totalItems = await purchaseOrdersQuery.CountAsync();
 
             // If neither PageNumber nor PageSize is provided, return all purchase orders without pagination

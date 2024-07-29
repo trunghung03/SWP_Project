@@ -36,6 +36,7 @@ const ManagerShellList = () => {
   const [shellMaterial, setShellMaterial] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   const [editedShell, setEditedShell] = useState({});
   const [originalShell, setOriginalShell] = useState({});
   const [addMode, setAddMode] = useState(false);
@@ -80,18 +81,18 @@ const ManagerShellList = () => {
       try {
         const response = await ShowAllShellMaterial();
         setShellMaterial(response);
-        await fetchShells(currentPage, ordersPerPage);
+        await fetchShells(currentPage, ordersPerPage, searchQuery);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
   
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
   
-  const fetchShells = async (pageNumber, pageSize) => {
+  const fetchShells = async (pageNumber, pageSize, searchQuery = "") => {
     try {
-      const response = await ShowAllShell(pageNumber, pageSize);
+      const response = await ShowAllShell(pageNumber, pageSize, searchQuery);
       setShell(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
@@ -103,49 +104,17 @@ const ManagerShellList = () => {
     setCurrentPage(value);
   };
 
-  // Search diamond by id
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const handleSearchKeyPress = async (e) => {
-    const isInteger = (value) => {
-      return /^-?\d+$/.test(value);
-    };
     if (e.key === "Enter") {
-      if (isInteger(searchQuery.trim())) {
-        try {
-          const response = await getShellMaterialDetail(searchQuery.trim());
-          setShellMaterial([response]);
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching shell:", error);
-          swal("Shell not found!", "Please try another one.", "error");
-        }
-      } else if (searchQuery.trim()) {
-        try {
-          const response = await getShellMaterialByName(searchQuery.trim());
-          if (Array.isArray(response)) {
-            setShellMaterial(response);
-          } else if (response) {
-            setShellMaterial([response]);
-          } else {
-            setShellMaterial([]);
-          }
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching shell:", error);
-          swal("Shell not found!", "Please try another one.", "error");
-        }
-      } else {
-        try {
-          const response = await ShowAllShell();
-          setShellMaterial(response);
-          setCurrentPage(1);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      }
+      setCurrentPage(1);
+      await fetchShells(1, ordersPerPage, searchQuery);
     }
   };
 
-  // Delete diamond by id
   const handleDeleteShellMaterial = async (shellID) => {
     swal({
       title: "Are you sure to delete this shell material?",
@@ -187,7 +156,7 @@ const ManagerShellList = () => {
       if (willDelete) {
         try {
           await deleteShellById(shellID);
-          await fetchShells(currentPage,ordersPerPage);
+          await fetchShells(currentPage, ordersPerPage, searchQuery);
           swal(
             "Deleted successfully!",
             "The shell has been deleted.",
@@ -205,7 +174,6 @@ const ManagerShellList = () => {
     });
   };
 
-  // Update by id (shellMaterial)
   const handleEdit = (shell) => {
     setEditMode(true);
     setEditedShell(shell);
@@ -306,7 +274,7 @@ const ManagerShellList = () => {
       const response = await updateShellById(editedShellNotMaterial.shellId, editedShellNotMaterial);
       console.log("Update response:", response.data);
       // Fetch updated shell data
-      const updatedShells = await ShowAllShell(currentPage, ordersPerPage);
+      const updatedShells = await ShowAllShell(currentPage, ordersPerPage, searchQuery);
       setShell(updatedShells.data);
       setTotalPages(updatedShells.pagination.totalPages);
       setEditShellMode(false);
@@ -328,14 +296,10 @@ const ManagerShellList = () => {
     }
   };
 
-  const backList = async () => {
-    try {
-      const response = await ShowAllShell();
-      setShellMaterial(response);
-      setCurrentPage(1); 
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const handleBackClick = async () => {
+    setSearchQuery("");
+    setCurrentPage(1);
+    await fetchShells(1, ordersPerPage, "");
   };
 
   return (
@@ -346,19 +310,23 @@ const ManagerShellList = () => {
       <div className="manager_manage_diamond_content">
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
-         
+          <input
+            type="text"
+            placeholder="Search by Id..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyUp={handleSearchKeyPress}
+            className="manager_manage_product_search_bar"
+          />
         </div>
         <hr className="manager_header_line"></hr>
 
         <h3>List Of Shells</h3>
 
         <div className="manager_manage_diamond_create_button_section">
-          <div className="manager_manage_diamond_pagination">
-            
-          </div>
+          <div className="manager_manage_diamond_pagination"></div>
         </div>
 
-        {/* Table shell list */}
         <div className="manager_manage_diamond_table_wrapper">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -381,9 +349,7 @@ const ManagerShellList = () => {
                         <IconButton onClick={() => handleEdit(item)}>
                           <EditIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
-                        <IconButton
-                          onClick={() => handleDeleteShellMaterial(item.shellMaterialId)}
-                        >
+                        <IconButton onClick={() => handleDeleteShellMaterial(item.shellMaterialId)}>
                           <DeleteIcon style={{ cursor: "pointer", color: "#575252" }}/>
                         </IconButton>
                       </StyledTableCell>
@@ -412,15 +378,6 @@ const ManagerShellList = () => {
               page={currentPage}
               onChange={handlePageChange}
               color="primary"
-              // sx={{
-              //   '& .Mui-selected': {
-              //     backgroundColor: 'your-color-here',
-              //     color: 'your-text-color-here',
-              //   },
-              //   '& .MuiPaginationItem-page:hover': {
-              //     backgroundColor: 'your-hover-color-here',
-              //   },    
-              // }}
             />
           </Stack>
         </div>
@@ -477,9 +434,15 @@ const ManagerShellList = () => {
             </Table>
           </TableContainer>
         </div>
+
+        {isSearch && (
+          <button className="SS_back_button" onClick={handleBackClick}>
+            Back to All
+          </button>
+        )}
+
       </div>
 
-      {/* Update modal */}
       {editMode && (
         <div
           className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
@@ -560,8 +523,6 @@ const ManagerShellList = () => {
           </div>
         </div>
       )}
-
-     
     </div>
   );
 };

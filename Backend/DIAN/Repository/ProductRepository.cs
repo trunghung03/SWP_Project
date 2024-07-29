@@ -115,7 +115,7 @@ namespace DIAN_.Repository
                     d.Status.ToString().ToLower().Contains(lowerSearchTerm) ||
                     d.Description.ToLower().Contains(lowerSearchTerm) ||
                     d.Name.ToLower().Contains(lowerSearchTerm) ||
-                    d.ProductCode.ToLower().Contains(lowerSearchTerm));
+                    d.ProductCode.ToString().Contains(lowerSearchTerm));
             }
 
             var totalItems = await productsQuery.CountAsync();

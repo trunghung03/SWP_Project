@@ -4,13 +4,14 @@ import axios from "axios";
 const API_BASE_URL_ORDER = process.env.REACT_APP_API_BASE_URL;
 //get list orders
 
-const fetchAllOrders = async (page, pageSize, status) => {
+const fetchAllOrders = async (page, pageSize, status, searchTerm) => {
   try {
     const response = await axios.get(`${API_BASE_URL_ORDER}/purchaseorders/all`, {
       params: {
         PageNumber: page,
         PageSize: pageSize,
         Status: status,
+        SearchTerm: searchTerm,
       },
     });
     return response.data;
