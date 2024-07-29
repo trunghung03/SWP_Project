@@ -43,32 +43,39 @@ namespace DIAN_.Repository
             return subDiamond;
         }
 
-        public async Task<(List<Subdiamond>, int)> GetAllSubDiamondsAsync(DiamondQuery query)
+        public async Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
-            IQueryable<Subdiamond> subDiamondsQuery = _context.Subdiamonds
-               .Include(p => p.DiamondAtrribute)
-               .Where(s => s.Status);
-
-            // If neither PageNumber nor PageSize is provided, return all sub-diamonds without pagination
-            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
+            IQueryable<Subdiamond> diamondQuery = _context.Subdiamonds
+                                                       .Include(d => d.DiamondAtrribute);
+            if (!string.IsNullOrEmpty(query.SearchTerm))
             {
-                var allSubDiamonds = await subDiamondsQuery.OrderBy(p => p.DiamondId).ToListAsync();
-                return (allSubDiamonds, allSubDiamonds.Count);
+                string lowerSearchTerm = query.SearchTerm.ToLower();
+                diamondQuery = diamondQuery.Where(d =>
+                    d.DiamondId.ToString().Contains(lowerSearchTerm) ||
+                    d.DiamondAtrributeId.ToString().Contains(lowerSearchTerm) ||
+                    d.Price.ToString().Contains(lowerSearchTerm) ||
+                    d.Status.ToString().ToLower().Contains(lowerSearchTerm) ||
+                    d.DiamondAtrribute.Shape.ToString().Contains(lowerSearchTerm) ||
+                    d.DiamondAtrribute.Carat.ToString().Contains(lowerSearchTerm) ||
+                    d.DiamondAtrribute.Clarity.ToLower().Contains(lowerSearchTerm) ||
+                    d.DiamondAtrribute.Cut.ToLower().Contains(lowerSearchTerm));
             }
 
-            // Default PageSize to 7 if not provided
-            int pageSize = query.PageSize ?? 7;
-            int pageNumber = query.PageNumber ?? 1;
+            var totalItems = await diamondQuery.CountAsync();
+            Console.WriteLine($"Total items after filtering: {totalItems}");
 
-            var totalItems = await subDiamondsQuery.CountAsync();
+            if (query.PageNumber.HasValue && query.PageSize.HasValue)
+            {
+                int pageSize = query.PageSize.Value;
+                int pageNumber = query.PageNumber.Value;
 
-            var skipNumber = (pageNumber - 1) * pageSize;
-            var subDiamondList = await subDiamondsQuery
-                .Skip(skipNumber)
-                .Take(pageSize)
-                .ToListAsync();
+                diamondQuery = diamondQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
 
-            return (subDiamondList, totalItems);
+            var diamondList = await diamondQuery.OrderByDescending(p => p.DiamondId).Reverse().ToListAsync();
+            Console.WriteLine($"Items returned after pagination: {diamondList.Count}");
+
+            return (diamondList, totalItems);
         }
 
 
