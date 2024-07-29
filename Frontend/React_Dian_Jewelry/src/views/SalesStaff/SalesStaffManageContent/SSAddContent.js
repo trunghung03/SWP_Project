@@ -208,15 +208,6 @@ function SSContentList() {
                   <label className="ss_add_content_label">
                     Write your content:
                   </label>
-                  <div className="ss_new_window_button">
-                    <button
-                      onClick={() => window.open("/rich-text-page", "_blank")}
-                      className="ss-navigate-button"
-                    >
-                      <i className="fa fa-external-link-alt"></i> Edit in new
-                      window
-                    </button>
-                  </div>
                 </div>
                 <RichTextEditor
                   className="ss_add_rich_text"
