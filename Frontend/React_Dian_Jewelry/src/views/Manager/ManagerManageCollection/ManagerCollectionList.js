@@ -26,6 +26,7 @@ import {
   changeStatus,
   searchCollectionById,
   updateCollectionById,
+  uploadImage,
 } from "../../../services/ManagerService/ManagerCollectionService.js";
 import "../../../styles/Manager/ManagerList.scss";
 // Head cells for the collection table
@@ -49,6 +50,13 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "Description",
+    sortable: false,
+  },
+  {
+    id: "imageLink",
+    numeric: false,
+    disablePadding: false,
+    label: "Images",
     sortable: false,
   },
   {
@@ -146,7 +154,9 @@ const ManagerCollectionList = () => {
   const [originalCollection, setOriginalCollection] = useState({});
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("collectionId");
-
+  const [files, setFiles] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -225,72 +235,137 @@ const ManagerCollectionList = () => {
       );
     }
   };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedCollection({
+      ...editedCollection,
+      [name]: name === "status" ? value === "true" : value,
+    });
+  };
+
+
 
   const handleEdit = (collection) => {
     setEditMode(true);
     setEditedCollection(collection);
     setOriginalCollection(collection);
+    setFiles([]);
+    setImageUrls([]);
+    setImagePreviews(collection.imageLink || []);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log(`Field: ${name}, Value: ${value}`);
-    setEditedCollection({ ...editedCollection, [name]: value });
-  };
-
-  const handleUpdate = async () => {
-    const requiredFields = ["name", "description", "status"];
-    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
-
-    for (let field of requiredFields) {
-      if (!editedCollection[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
-      if (specialCharPattern.test(editedCollection[field])) {
-        swal(
-          "Invalid characters detected!",
-          `Field "${field}" contains special characters.`,
-          "error"
-        );
-        return;
+  const handleFileSelect = async (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    const newImageUrls = [];
+    const newPreviews = [];
+  
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      const formData = new FormData();
+      formData.append("file", file);
+  
+      try {
+        const response = await uploadImage(formData);
+        const url = response.url;
+        newImageUrls.push(url);
+        newPreviews.push(URL.createObjectURL(file));
+      } catch (error) {
+        console.error("Upload error:", error);
       }
     }
-
-    const isEqual =
-      JSON.stringify(originalCollection) === JSON.stringify(editedCollection);
-    if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
+  
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+  };
+  const handleUploadImage = async (files) => {
+    if (!files.length) {
+      console.error("No files selected.");
       return;
     }
 
-    const CollectionToUpdate = { ...editedCollection, status: true };
+    const newImageUrls = [];
+    const newPreviews = [];
 
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await uploadImage(formData);
+        const url = response.url;
+        newImageUrls.push(url);
+        newPreviews.push(URL.createObjectURL(file));
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    }
+
+    setFiles((prevFiles) => [...prevFiles, ...files]);
+    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+  };
+
+  const handleDeleteImage = (index) => {
+    const newImageUrls = [...imageUrls];
+    const newPreviews = [...imagePreviews];
+    newImageUrls.splice(index, 1);
+    newPreviews.splice(index, 1);
+    setImageUrls(newImageUrls);
+    setImagePreviews(newPreviews);
+  };
+
+  const handleUpdate = async () => {
+    // Convert imageUrls array to a semicolon-separated string
+    const imageLinkString = imageUrls.join(';');
+  
+    const updatedCollection = {
+      ...editedCollection,
+      imageLink: imageLinkString,
+    };
+  
+    if (!updatedCollection.name) {
+      swal("Validation Error", "Name is required.", "error");
+      return;
+    }
+  
+    if (!updatedCollection.description) {
+      swal("Validation Error", "Description is required.", "error");
+      return;
+    }
+  
+    if (updatedCollection.status === undefined) {
+      swal("Validation Error", "Status is required.", "error");
+      return;
+    }
+  
     try {
-      console.log("Sending update request with data:", CollectionToUpdate);
-      await updateCollectionById(
-        CollectionToUpdate.collectionId,
-        CollectionToUpdate
-      );
-      const updatedItems = await ShowAllCollection(role);
-      setCollectionItems(updatedItems);
+      console.log("Updating collection with data:", updatedCollection);
+      const response = await updateCollectionById(editedCollection.collectionId, updatedCollection);
+      console.log("Update response:", response);
       setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The Collection information has been updated.",
-        "success"
-      );
+      const refreshedData = await ShowAllCollection(role);
+      setCollectionItems(refreshedData);
+      swal("Updated successfully!", "Collection has been updated.", "success");
     } catch (error) {
-      console.error(
-        "Error updating Collection:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Update error:", error);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+      }
       swal(
         "Something went wrong!",
-        "Failed to update. Please try again.",
+        "Failed to update collection. Please try again.",
         "error"
       );
     }
+  };
+  
+
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setEditedCollection(originalCollection);
   };
 
   const handleBack = async () => {
@@ -387,6 +462,7 @@ const ManagerCollectionList = () => {
                         </TableCell>
                         <TableCell align="center">{item.name}</TableCell>
                         <TableCell align="center">{item.description}</TableCell>
+                        <TableCell align="center">{item.imageLink}</TableCell>
                         <TableCell align="center">
                           <IconButton onClick={() => handleEdit(item)}>
                             <EditIcon
@@ -429,9 +505,7 @@ const ManagerCollectionList = () => {
 
       {editMode && (
         <div
-          className={`manager_manage_diamond_modal_overlay ${
-            editMode ? "active" : ""
-          }`}
+          className={`manager_manage_diamond_modal_overlay ${editMode ? "active" : ""}`}
           onClick={() => setEditMode(false)}
         >
           <div
@@ -461,14 +535,39 @@ const ManagerCollectionList = () => {
                   required
                 />
               </div>
+              <div className="manager_manage_product_form_group">
+                <div className="manager_add_diamond_form_group">
+                  <label>Images:</label>
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                  />
+                </div>
+              </div>
+              <div className="manager_manage_product_form_group">
+                <div className="manager_add_diamond_form_group">
+                  <label>Status:</label>
+                  <select
+                    name="status"
+                    value={editedCollection.status}
+                    onChange={handleChange}
+                  >
+                    <option value={true}>Active</option>
+                    <option value={false}>Inactive</option>
+                  </select>
+                </div>
+              </div>
               <div className="manager_manage_diamond_modal_actions">
-                <button onClick={() => setEditMode(false)}>Cancel</button>
+                <button onClick={handleCancel}>Cancel</button>
                 <button onClick={handleUpdate}>Confirm</button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+
     </div>
   );
 };

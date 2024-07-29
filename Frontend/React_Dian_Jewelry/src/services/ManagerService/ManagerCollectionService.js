@@ -23,9 +23,14 @@ const addCollection = async (data) => {
     return response.data;
 };
 
-const updateCollectionById = async (id, data) => {
-    const response = await axios.put(`${API_BASE_URL}/collections/${id}`, data);
-    return response.data;
+const updateCollectionById = async (collectionId, data) => {
+    try {
+        const response = await axios.put(`${API_BASE_URL}/collections/${collectionId}`, data);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to update collection:", error);
+        throw error;
+    }
 };
 
 const changeStatus = async (id) => {

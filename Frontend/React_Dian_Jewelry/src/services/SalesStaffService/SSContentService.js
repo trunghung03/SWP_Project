@@ -12,7 +12,8 @@ const getContentByTitle = (title) => {
 };
 
 const getContentById = (id) => {
-    return axios.get(`${API_BASE_URL}/articles/${id}`);
+    const response = axios.get(`${API_BASE_URL}/articles/${id}`);
+    return response
 };
 
 const getEmployeeNameByArticleId = (id) => {
