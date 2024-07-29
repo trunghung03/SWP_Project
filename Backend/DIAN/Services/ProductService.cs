@@ -1,4 +1,6 @@
 ﻿using DIAN_.DTOs.ProductDTOs;
+using DIAN_.DTOs.PromotionDto;
+using DIAN_.Helper;
 using DIAN_.Interfaces;
 using DIAN_.Mapper;
 using DIAN_.Models;
@@ -100,6 +102,65 @@ namespace DIAN_.Services
             await _distributedCache.SetAsync(cacheKey, encodedData, cacheOptions);
 
             return productDTOs;
+        }
+        public async Task<(List<ProductDTO>, int)> GetAllProductsAsync(ProductQuery query)
+        {
+            var (products, totalItems) = await _productRepo.GetAllAsync(query);
+
+            if (!products.Any())
+            {
+                return (new List<ProductDTO>(), totalItems);
+            }
+
+            var productDTOs = new List<ProductDTO>();
+            foreach (var product in products)
+            {
+                var productDTO = product.ToProductDTO();
+                productDTO.HasSufficientDiamonds = await _productRepo.HasSufficientDiamondsForProduct(product.ProductId);
+                productDTOs.Add(productDTO);
+            }
+
+            return (productDTOs, totalItems);
+        }
+        public async Task<(List<ProductDTO>, object)> GetPagedProductsAsync(ProductQuery query)
+        {
+            var (products, totalItems) = await _productRepo.GetAllAsync(query);
+
+            if (!products.Any())
+            {
+                return (new List<ProductDTO>(), null);
+            }
+
+            var productDTOs = new List<ProductDTO>();
+            foreach (var product in products)
+            {
+                var productDTO = product.ToProductDTO();
+                productDTO.HasSufficientDiamonds = await _productRepo.HasSufficientDiamondsForProduct(product.ProductId);
+                productDTOs.Add(productDTO);
+            }
+
+            if (!query.PageNumber.HasValue || !query.PageSize.HasValue)
+            {
+                return (productDTOs, null);
+            }
+
+            int pageSize = query.PageSize.Value;
+            int pageNumber = query.PageNumber.Value;
+
+            var pagedProducts = productDTOs
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var pagination = new
+            {
+                currentPage = pageNumber,
+                pageSize = pageSize,
+                totalPages = (int)Math.Ceiling((double)totalItems / pageSize),
+                totalCount = totalItems
+            };
+
+            return (pagedProducts, pagination);
         }
     }
 }

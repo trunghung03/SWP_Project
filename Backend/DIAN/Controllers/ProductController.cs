@@ -179,46 +179,25 @@ namespace DIAN_.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var (products, totalItems) = await _productRepo.GetAllAsync(query);
+                var (productDTOs, pagination) = await _productService.GetPagedProductsAsync(query);
 
-                if (!products.Any())
+                if (!productDTOs.Any())
                 {
                     return NotFound("Product does not exist");
                 }
 
-                var productDTOs = new List<ProductDTO>();
-                foreach (var product in products)
+                if (pagination == null)
                 {
-                    var productDTO = product.ToProductDTO();
-                    productDTO.HasSufficientDiamonds = await _productRepo.HasSufficientDiamondsForProduct(product.ProductId);
-                    productDTOs.Add(productDTO);
-                }
-
-                // Check if pagination parameters are provided
-                if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
-                {
-                    // No pagination info needed if we are returning all products
                     return Ok(new { data = productDTOs });
                 }
 
-                var pagination = new
-                {
-                    currentPage = query.PageNumber ?? 1,
-                    pageSize = query.PageSize ?? 7,
-                    totalPages = (int)Math.Ceiling((double)totalItems / (query.PageSize ?? 7)),
-                    totalCount = totalItems
-                };
-
                 return Ok(new { data = productDTOs, pagination });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(500, new { title = "An unexpected error occurred.", status = 500, detail = ex.Message });
+                throw;
             }
         }
-
-
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

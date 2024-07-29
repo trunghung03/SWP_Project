@@ -102,9 +102,10 @@ namespace DIAN_.Repository
         public async Task<(List<Product>, int)> GetAllAsync(ProductQuery query)
         {
             IQueryable<Product> productsQuery = _context.Products
-               .Include(p => p.Category)
-               .Include(p => p.Shells)
-               .Where(p => p.Status);
+                .Include(p => p.Category)
+                .Include(p => p.Shells)
+                .Where(p => p.Status);
+
             if (!string.IsNullOrEmpty(query.SearchTerm))
             {
                 string lowerSearchTerm = query.SearchTerm.ToLower();
@@ -116,35 +117,11 @@ namespace DIAN_.Repository
                     d.Name.ToLower().Contains(lowerSearchTerm) ||
                     d.ProductCode.ToLower().Contains(lowerSearchTerm));
             }
-            // If neither PageNumber nor PageSize is provided, return all products without pagination
-            if (!query.PageNumber.HasValue && !query.PageSize.HasValue)
-            {
-                var allProducts = await productsQuery.OrderBy(p => p.ProductId).ToListAsync();
-                return (allProducts, allProducts.Count);
-            }
-
-            // Default PageSize to 7 if not provided
-            int pageSize = query.PageSize ?? 7;
-            int pageNumber = query.PageNumber ?? 1;
 
             var totalItems = await productsQuery.CountAsync();
+            var productList = await productsQuery.OrderBy(p => p.ProductId).ToListAsync();
 
-            var skipNumber = (pageNumber - 1) * pageSize;
-            var productList = await productsQuery
-                .Skip(skipNumber)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(30))
-                .SetPriority(CacheItemPriority.Normal)
-                .SetSize(1);
-
-            var result = (productList, totalItems);
-            _memoryCache.Set($"{CacheKey}_{pageNumber}_{pageSize}", result, cacheEntryOptions);
-            _logger.LogInformation("Products from database");
-            return result;
+            return (productList, totalItems);
         }
 
 
