@@ -15,8 +15,7 @@ namespace DIAN_.Controllers
         {
             _articleRepository = articleRepository;
         }
-
-        [HttpGet("{id:int}")]   
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetArticleById(int id)
         {
             try
@@ -25,19 +24,21 @@ namespace DIAN_.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+
                 var article = await _articleRepository.GetArticleByIdAsync(id);
+
                 if (article == null)
                 {
-                    return NotFound("No article found with the given id");
+                    return NotFound(new { message = "No article found with the given id" });
                 }
 
                 var articleDto = article.ToArticleDetailDto();
 
                 return Ok(articleDto);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, new { message = "An error occurred while processing your request" });
             }
         }
 
