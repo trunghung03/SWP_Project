@@ -80,8 +80,7 @@ namespace DIAN_.Controllers
                 if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
                 var collection = await _collectionRepository.UpdateAsync(id, collectionDTO.FromUpdateDtoToCollection());
-
-                if (collection == null) { return BadRequest("Error! Please try again!"); }
+                if (collection == null) return NotFound("Duplicate name");
 
                 return Ok(collection);
             }

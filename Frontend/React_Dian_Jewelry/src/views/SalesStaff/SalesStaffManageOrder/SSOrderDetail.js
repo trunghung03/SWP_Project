@@ -222,7 +222,7 @@ const SSOrderDetail = () => {
     status === "Paid" ||
     status === "Cancelled";
   const isButtonDisabled =
-    isOrderCompleted || loading || status === "Cancelled";
+    isOrderCompleted || loading || status === "Cancelled" || status === "Completed";
 
   return (
     <>
