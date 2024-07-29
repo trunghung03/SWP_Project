@@ -87,6 +87,7 @@ namespace DIAN_.Repository
         {
             IQueryable<Diamond> diamondQuery = _context.Diamonds
                                                        .Include(d => d.MainDiamondAtrribute);
+
             if (!string.IsNullOrEmpty(query.SearchTerm))
             {
                 string lowerSearchTerm = query.SearchTerm.ToLower();
@@ -102,6 +103,31 @@ namespace DIAN_.Repository
                     d.MainDiamondAtrribute.Color.ToLower().Contains(lowerSearchTerm) ||
                     d.MainDiamondAtrribute.Clarity.ToLower().Contains(lowerSearchTerm) ||
                     d.MainDiamondAtrribute.Cut.ToLower().Contains(lowerSearchTerm));
+            }
+
+            if (!string.IsNullOrEmpty(query.Shape))
+            {
+                diamondQuery = diamondQuery.Where(d => d.MainDiamondAtrribute.Shape == query.Shape);
+            }
+
+            if (!string.IsNullOrEmpty(query.Color))
+            {
+                diamondQuery = diamondQuery.Where(d => d.MainDiamondAtrribute.Color == query.Color);
+            }
+
+            if (!string.IsNullOrEmpty(query.Clarity))
+            {
+                diamondQuery = diamondQuery.Where(d => d.MainDiamondAtrribute.Clarity == query.Clarity);
+            }
+
+            if (!string.IsNullOrEmpty(query.Cut))
+            {
+                diamondQuery = diamondQuery.Where(d => d.MainDiamondAtrribute.Cut == query.Cut);
+            }
+
+            if (query.Carat.HasValue)
+            {
+                diamondQuery = diamondQuery.Where(d => d.MainDiamondAtrribute.Carat == query.Carat.Value);
             }
 
             var totalItems = await diamondQuery.CountAsync();

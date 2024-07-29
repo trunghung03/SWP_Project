@@ -46,7 +46,8 @@ namespace DIAN_.Repository
         public async Task<(List<Subdiamond>, int)> GetAllDiamondsAsync(DiamondQuery query)
         {
             IQueryable<Subdiamond> diamondQuery = _context.Subdiamonds
-                                                       .Include(d => d.DiamondAtrribute);
+                                                          .Include(d => d.DiamondAtrribute);
+
             if (!string.IsNullOrEmpty(query.SearchTerm))
             {
                 string lowerSearchTerm = query.SearchTerm.ToLower();
@@ -59,6 +60,31 @@ namespace DIAN_.Repository
                     d.DiamondAtrribute.Carat.ToString().Contains(lowerSearchTerm) ||
                     d.DiamondAtrribute.Clarity.ToLower().Contains(lowerSearchTerm) ||
                     d.DiamondAtrribute.Cut.ToLower().Contains(lowerSearchTerm));
+            }
+
+            if (!string.IsNullOrEmpty(query.Shape))
+            {
+                diamondQuery = diamondQuery.Where(d => d.DiamondAtrribute.Shape == query.Shape);
+            }
+
+            if (!string.IsNullOrEmpty(query.Color))
+            {
+                diamondQuery = diamondQuery.Where(d => d.DiamondAtrribute.Color == query.Color);
+            }
+
+            if (!string.IsNullOrEmpty(query.Clarity))
+            {
+                diamondQuery = diamondQuery.Where(d => d.DiamondAtrribute.Clarity == query.Clarity);
+            }
+
+            if (!string.IsNullOrEmpty(query.Cut))
+            {
+                diamondQuery = diamondQuery.Where(d => d.DiamondAtrribute.Cut == query.Cut);
+            }
+
+            if (query.Carat.HasValue)
+            {
+                diamondQuery = diamondQuery.Where(d => d.DiamondAtrribute.Carat == query.Carat.Value);
             }
 
             var totalItems = await diamondQuery.CountAsync();
@@ -77,7 +103,6 @@ namespace DIAN_.Repository
 
             return (diamondList, totalItems);
         }
-
 
         public async Task<Subdiamond?> GetByIdAsync(int id)
         {

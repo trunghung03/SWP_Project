@@ -32,5 +32,7 @@ namespace DIAN_.Interfaces
         Task<List<Diamond>> SearchDiamondsAsync(DiamondSearchCriteria searchCriteria);
 
         Task<List<Diamond>> SearchMainDIamondAsync(DiamondSearch search);
+
+
     }
 }
