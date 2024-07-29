@@ -10,9 +10,8 @@ import { getManageProductDetail } from "../../../services/ManagerService/Manager
 function srcset(image, size, rows = 1, cols = 1) {
   return {
     src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
+    srcSet: `${image}?w=${size * cols}&h=${size * rows
+      }&fit=crop&auto=format&dpr=2 2x`,
   };
 }
 
@@ -20,10 +19,10 @@ const ManagerProductDetail = () => {
   const [productDetail, setProductDetail] = useState({});
   const [imageLinks, setImageLinks] = useState([]);
   const { productId } = useParams();
-  
+
   useEffect(() => {
     console.log("productId: ", productId);
-    if(productId){
+    if (productId) {
       getManageProductDetail(productId)
         .then((data) => {
           console.log("productDetail: ", data);
@@ -61,7 +60,7 @@ const ManagerProductDetail = () => {
         >
           &lt; Back
         </button>
-        
+
         <div className="manager_product_detail_box">
           {productDetail.productCode && (
             <div
@@ -126,47 +125,30 @@ const ManagerProductDetail = () => {
                   <p>Collection: {productDetail.collectionName}</p>
                 </div>
               )}
-              {productDetail.materialName && (
-                <div className="manager_product_detail_subcontent">
-                  <p>Material: {productDetail.materialName}</p>
-                </div>
-              )}
-              {productDetail.mainDiamondAttributeId && (
-                <div className="manager_product_detail_subcontent">
-                  <p>Main Diamond ID: {productDetail.mainDiamondAttributeId}</p>
-                </div>
-              )}
-              {productDetail.mainDiamondAmount && (
-                <div className="manager_product_detail_subcontent">
-                  <p>Amount: {productDetail.mainDiamondAmount}</p>
-                </div>
-              )}
-              {productDetail.subDiamondAttributeId && (
-                <div className="manager_product_detail_subcontent">
-                  <p>Sub Diamond ID: {productDetail.subDiamondAttributeId}</p>
-                </div>
-              )}
-              {productDetail.subDiamondAmount && (
-                <div className="manager_product_detail_subcontent">
-                  <p>Amount: {productDetail.subDiamondAmount}</p>
-                </div>
-              )}
+              <div className="manager_product_detail_subcontent">
+                <p>Main Diamond ID: {productDetail.mainDiamondAttributeId || "None"}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Main Diamond Amount: {productDetail.mainDiamondAmount || 0}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Sub Diamond ID: {productDetail.subDiamondAttributeId || "None"}</p>
+              </div>
+              <div className="manager_product_detail_subcontent">
+                <p>Sub Diamond Amount: {productDetail.subDiamondAmount || 0}</p>
+              </div>
               {productDetail.laborCost && (
                 <div className="manager_product_detail_subcontent">
                   <p>Labor Cost: {productDetail.laborCost}</p>
                 </div>
               )}
+              {productDetail.price && (
+                <div className="manager_product_detail_subcontent">
+                  Price: {productDetail.price}
+                </div>
+              )}
             </div>
           </div>
-
-          {productDetail.price && (
-            <div
-              className="manager_product_detail_subcontent"
-              style={{ textAlign: "end", marginRight: "10%" }}
-            >
-              Price: {productDetail.price}
-            </div>
-          )}
         </div>
       </div>
     </div>

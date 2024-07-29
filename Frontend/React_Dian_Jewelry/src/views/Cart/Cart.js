@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import SubNav from "../../components/SubNav/SubNav.js";
@@ -263,20 +262,14 @@ function Cart() {
                           {item.name}
                           {isOutOfStock && (
                             <span className="out-of-stock-text">
-                               (Sold out)
+                              {/*  (Sold out) */}
                             </span>
                           )}
                         </h5>
                         <div className="cart_item_links">
                           <span
-                            onClick={() =>
-                              !isOutOfStock && handleViewProduct(item)
-                            }
-                            className={`cart_item_view ${
-                              isOutOfStock
-                                ? "disabled text-grey unclickable"
-                                : ""
-                            }`}
+                            onClick={() => handleViewProduct(item)}
+                            className="cart_item_view"
                           >
                             VIEW
                           </span>
@@ -320,7 +313,7 @@ function Cart() {
                         </div>
                         <div
                           className={`cart_item_price ${
-                            isOutOfStock ? "text-grey" : ""
+                            isOutOfStock ? "text-grey-price" : ""
                           }`}
                         >
                           ${Math.floor(item.price * item.quantity)}
