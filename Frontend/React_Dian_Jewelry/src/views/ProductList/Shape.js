@@ -273,7 +273,7 @@ function Shape() {
                             <MenuItem value="J">J</MenuItem>
                         </Select>
                     </FormControl>
-
+{/* 
                     <TextField
                         className="shape_filter_group"
                         size="small"
@@ -282,7 +282,7 @@ function Shape() {
                         type="number"
                         value={carat}
                         onChange={(e) => setCarat(e.target.value)}
-                    />
+                    /> */}
                 </div>
                 <ProductList products={filteredProducts} key={resetKey} />
             </div>
