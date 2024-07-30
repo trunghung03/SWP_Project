@@ -548,7 +548,7 @@ const ManagerProductList = () => {
                         style={{ textTransform: "capitalize" }}
                         align="center"
                       >
-                        {item.hasSufficientDiamonds.toString()}
+                        {item.hasSufficientDiamonds ? "Available" : "Sold out"}
                       </TableCell>
                     </TableRow>
                   ))
