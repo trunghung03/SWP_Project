@@ -78,6 +78,7 @@ namespace DIAN_.Repository
                 .Include(po => po.Promotion)
                 .Include(po => po.Orderdetails)
                     .ThenInclude(od => od.Product)
+                        .ThenInclude(p => p.SubDiamondAtrribute) // Include SubDiamondAtrribute
                 .Include(po => po.Orderdetails)
                     .ThenInclude(od => od.Shell)
                 .Include(po => po.Orderdetails)
@@ -101,7 +102,7 @@ namespace DIAN_.Repository
                     PromotionAmount = po.Promotion != null ? po.Promotion.Amount : null,
                     ProductDetails = po.Orderdetails.Select(od => new OrderBillProductDetailDto
                     {
-                        OrderDetailId = od.OrderDetailId, 
+                        OrderDetailId = od.OrderDetailId,
                         MainDiamondId = od.Diamonds.Select(d => d.DiamondId).ToList(),
                         CertificateScans = od.Diamonds.Select(d => d.CertificateScan).ToList(),
                         ProductName = od.Product.Name,
@@ -110,14 +111,15 @@ namespace DIAN_.Repository
                         ProductDescription = od.Product.Description,
                         Size = od.Shell != null ? od.Shell.Size ?? 0 : 0,
                         ShellMaterial = od.Shell != null ? od.Shell.ShellMaterial.Name : null,
-                        LineTotal = od.LineTotal
+                        LineTotal = od.LineTotal,
+                        SubDiamondId = od.Product.SubDiamondAtrributeId ?? 0, 
+                        SubDiamondQuantity = od.Product.SubDiamondAmount ?? 0 
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
 
             return orderBill;
         }
-
 
     }
 }

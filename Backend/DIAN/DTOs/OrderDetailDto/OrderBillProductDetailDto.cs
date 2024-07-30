@@ -10,6 +10,8 @@
         public decimal Size { get; set; }
         public string ShellMaterial { get; set; }
         public List<int>? MainDiamondId { get; set; }
+        public int SubDiamondId { get; set; }
+        public int SubDiamondQuantity { get; set; }
         public List<string> CertificateScans { get; set; } = new List<string>();
         public decimal LineTotal { get; set; }
     }
