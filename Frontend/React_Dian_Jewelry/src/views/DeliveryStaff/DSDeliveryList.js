@@ -131,7 +131,7 @@ const DSDeliveryList = () => {
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 style={{ textAlign: "center", fontWeight: "unset" }}>Order List</h3>
+        <h3 style={{ textAlign: "center", fontWeight: "unset" }}>List Of Orders</h3>
         <div className="ss_header_pagination_list">
           <FormControl
             variant="standard"

@@ -219,7 +219,7 @@ const SSOrderList = () => {
             fontFamily: "serif",
           }}
         >
-          Order List
+          List Of Orders
         </h3>
         <OrderTabs value={tabValue} handleChange={handleTabChange} statusList={statusList} pagination={pagination} handlePageChange={handlePageChange} />
         <TableContainer>

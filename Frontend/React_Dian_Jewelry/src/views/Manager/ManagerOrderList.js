@@ -224,7 +224,7 @@ const ManagerOrderList = () => {
             fontFamily: "serif",
           }}
         >
-          Order List
+          List Of Orders
         </h3>
         <div className="ss_header_pagination_list">
           <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
