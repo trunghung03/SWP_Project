@@ -78,7 +78,7 @@ namespace DIAN_.Repository
                 .Include(po => po.Promotion)
                 .Include(po => po.Orderdetails)
                     .ThenInclude(od => od.Product)
-                        .ThenInclude(p => p.SubDiamondAtrribute) // Include SubDiamondAtrribute
+                        .ThenInclude(p => p.SubDiamondAtrribute) 
                 .Include(po => po.Orderdetails)
                     .ThenInclude(od => od.Shell)
                 .Include(po => po.Orderdetails)

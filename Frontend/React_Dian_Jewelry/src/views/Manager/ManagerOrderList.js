@@ -26,6 +26,7 @@ import {
 } from "../../components/CustomTable/SortTable.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import InfoIcon from "@mui/icons-material/Info";
 
 const headCells = [
   { id: "orderId", numeric: false, disablePadding: false, label: "Order ID", sortable: true },
@@ -34,7 +35,7 @@ const headCells = [
   { id: "shippingAddress", numeric: false, disablePadding: false, label: "Shipping Address", sortable: true },
   { id: "phoneNumber", numeric: false, disablePadding: false, label: "Phone number", sortable: true },
   { id: "orderStatus", numeric: false, disablePadding: false, label: "Order Status", sortable: false },
- // { id: "detail", numeric: false, disablePadding: false, label: "Detail", sortable: false },
+  { id: "detail", numeric: false, disablePadding: false, label: "Detail", sortable: false },
 ];
 
 function EnhancedTableHead(props) {
@@ -100,6 +101,10 @@ const ManagerOrderList = () => {
     totalPages: 1,
     totalCount: 0,
   });
+
+  const viewDetail = (orderId) => {
+    navigate(`/manager-manage-order-detail/${orderId}`);
+  };
 
   const handleChange = async (event) => {
     const selectedValue = event.target.value;
@@ -300,12 +305,12 @@ const ManagerOrderList = () => {
                             <TableCell align="center" style={textStyle}>
                               {item.orderStatus}
                             </TableCell>
-                            {/* <TableCell align="center">
+                            <TableCell align="center">
                               <InfoIcon
                                 style={{ cursor: "pointer", color: "#575252" }}
                                 onClick={() => viewDetail(item.orderId)}
                               />
-                            </TableCell> */}
+                            </TableCell>
                           </TableRow>
                         );
                       })
