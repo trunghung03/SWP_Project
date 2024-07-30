@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import "../../styles/Manager/ManagerList.scss";
 import logo from "../../assets/img/logoN.png";
 import DeliveryStaffSidebar from "../../components/DeliveryStaffSidebar/DeliveryStaffSidebar.js";
@@ -18,23 +19,31 @@ import InfoIcon from "@mui/icons-material/Info";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { getDeliveryStaffOrderList } from "../../services/DeliveryStaffService/DSDeliveryService.js";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const DSDeliveryList = () => {
   const navigate = useNavigate();
   const employeeId = localStorage.getItem("employeeId");
-  const [sortOrder, setSortOrder] = useState("default");
   const [orderList, setOrderList] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearch, setIsSearch] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const [sortOrder, setSortOrder] = useState(
+    searchParams.get("status") || "default"
+  );
+
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || ""
+  );
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.get("pageNumber")) || 1
+  );
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#faecec',
-      color: '1c1c1c',
+      backgroundColor: "#faecec",
+      color: "1c1c1c",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -45,12 +54,23 @@ const DSDeliveryList = () => {
     navigate(`/delivery-staff-delivery-detail/${orderId}`);
   };
 
-  const fetchAllOrders = async (page = 1, status = 'default') => {
+  const fetchAllOrders = async (
+    page = 1,
+    status = "default",
+    search = ""
+  ) => {
     try {
-      const response = await getDeliveryStaffOrderList(employeeId, page, 6, status);
-      const { orders, totalCount } = response;
+      const response = await getDeliveryStaffOrderList(
+        employeeId,
+        page,
+        6,
+        status,
+        search
+      );
+      const { orders, pagination } = response;
       setOrderList(orders);
-      setTotalPages(Math.ceil(totalCount / 6));
+      setTotalPages(pagination.totalPages);
+      setCurrentPage(pagination.currentPage);
     } catch (error) {
       console.error("Failed to fetch order list:", error);
       swal("Error", "Failed to fetch order list", "error");
@@ -58,41 +78,37 @@ const DSDeliveryList = () => {
   };
 
   useEffect(() => {
-    fetchAllOrders(currentPage, sortOrder);
-  }, [employeeId, currentPage, sortOrder]);
+    fetchAllOrders(currentPage, sortOrder, searchQuery);
+  }, [employeeId, currentPage, sortOrder, searchQuery]);
 
-  const handleChange = async (event) => {
+  const handleChange = (event) => {
     const selectedValue = event.target.value;
     setSortOrder(selectedValue);
     setCurrentPage(1); // Reset to the first page when changing the sort order
-    fetchAllOrders(1, selectedValue);
+    searchParams.set("status", selectedValue);
+    searchParams.set("pageNumber", 1);
+    setSearchParams(searchParams);
   };
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
+    searchParams.set("pageNumber", value);
+    setSearchParams(searchParams);
   };
 
-  const handleSearchKeyPress = (e) => {
-    if (e.key === "Enter") {
-      const searchValue = e.target.value.toLowerCase();
-      if (searchValue.trim() === "") {
-        setIsSearch(false);
-        fetchAllOrders(currentPage, sortOrder);
-      } else {
-        const filteredOrders = orderList.filter(order =>
-          order.orderId.toString().toLowerCase().includes(searchValue) ||
-          order.name.toLowerCase().includes(searchValue)
-        );
-        setOrderList(filteredOrders);
-        setIsSearch(true);
-      }
-    }
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    searchParams.set("search", value);
+    searchParams.set("pageNumber", 1);
+    setSearchParams(searchParams);
+    setCurrentPage(1);
   };
 
   const handleBackClick = () => {
     setSearchQuery("");
-    setIsSearch(false);
-    fetchAllOrders(currentPage, sortOrder);
+    searchParams.delete("search");
+    setSearchParams(searchParams);
   };
 
   return (
@@ -109,18 +125,18 @@ const DSDeliveryList = () => {
               className="ss_manage_content_search_bar"
               placeholder="Search by Order ID..."
               value={searchQuery}
-              style={{ width: '140px' }}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyUp={handleSearchKeyPress}
+              style={{ width: "140px" }}
+              onChange={handleSearchChange}
             />
           </div>
         </div>
         <hr className="ss_manage_content_line"></hr>
-        <h3 style={{ textAlign: "center", fontWeight: "unset" }}>
-          Order List
-        </h3>
+        <h3 style={{ textAlign: "center", fontWeight: "unset" }}>Order List</h3>
         <div className="ss_header_pagination_list">
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120, height: 30 }}>
+          <FormControl
+            variant="standard"
+            sx={{ m: 1, minWidth: 120, height: 30 }}
+          >
             <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
@@ -135,7 +151,7 @@ const DSDeliveryList = () => {
               <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </FormControl>
-          <Stack spacing={2}>
+          <Stack spacing={2} sx={{ mt: 2 }}>
             <Pagination
               count={totalPages}
               page={currentPage}
@@ -161,16 +177,21 @@ const DSDeliveryList = () => {
               <TableBody>
                 {orderList.length > 0 ? (
                   orderList.map((item) => (
-                    <TableRow className="manager_manage_table_body_row" key={item.orderId}>
+                    <TableRow
+                      className="manager_manage_table_body_row"
+                      key={item.orderId}
+                    >
                       <TableCell align="center">{item.orderId}</TableCell>
                       <TableCell align="center">{item.name}</TableCell>
-                      <TableCell align="center">{new Date(item.date).toLocaleDateString("en-CA")}</TableCell>
+                      <TableCell align="center">
+                        {new Date(item.date).toLocaleDateString("en-CA")}
+                      </TableCell>
                       <TableCell align="center">{item.shippingAddress}</TableCell>
                       <TableCell align="center">{item.phoneNumber}</TableCell>
                       <TableCell align="center">{item.orderStatus}</TableCell>
                       <TableCell align="center">
                         <InfoIcon
-                           style={{ cursor: "pointer", color: "#575252" }}
+                          style={{ cursor: "pointer", color: "#575252" }}
                           onClick={() => viewDetail(item.orderId)}
                         />
                       </TableCell>
@@ -184,7 +205,7 @@ const DSDeliveryList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          {isSearch && (
+          {searchQuery && (
             <button className="SS_back_button" onClick={handleBackClick}>
               Back
             </button>

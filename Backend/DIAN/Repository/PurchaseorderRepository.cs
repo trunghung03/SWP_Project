@@ -153,6 +153,7 @@ namespace DIAN_.Repository
                     d.PaymentMethod.ToLower().Contains(lowerSearchTerm) ||
                     d.Date.ToString().Contains(lowerSearchTerm) ||
                     d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.OrderStatus.ToLower().Contains(lowerSearchTerm) ||
                     d.PhoneNumber.Contains(lowerSearchTerm) ||
                     d.UserId.Equals(lowerSearchTerm) ||
                     d.Name.ToLower().Contains(lowerSearchTerm));
@@ -196,6 +197,7 @@ namespace DIAN_.Repository
                     d.PaymentMethod.ToLower().Contains(lowerSearchTerm) ||
                     d.Date.ToString().Contains(lowerSearchTerm) ||
                     d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.OrderStatus.ToLower().Contains(lowerSearchTerm) ||
                     d.PhoneNumber.Contains(lowerSearchTerm) ||
                     d.UserId.Equals(lowerSearchTerm) ||
                     d.Name.ToLower().Contains(lowerSearchTerm));

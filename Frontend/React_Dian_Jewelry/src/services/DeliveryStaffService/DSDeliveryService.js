@@ -16,22 +16,39 @@ const updateDeliveryStatus = (id, data) => {
   return axios.put(`${API_BASE_URL}/purchaseorders/${id}`, data);
 };
 
-const getDeliveryStaffOrderList = async (staffId, pageNumber = 1, pageSize = 6, status = 'default') => {
-  return axios.get(`${API_BASE_URL}/employees/deliverystaff/orderlists`, {
-    params: { staffId, pageNumber, pageSize, status }
-  }).then(response => response.data)
-    .catch(error => {
+const getDeliveryStaffOrderList = async (
+  staffId,
+  pageNumber = 1,
+  pageSize = 6,
+  status = "default",
+  search = ""
+) => {
+  return axios
+    .get(`${API_BASE_URL}/employees/deliverystaff/orderlists`, {
+      params: {
+        staffId,
+        PageNumber: pageNumber,
+        PageSize: pageSize,
+        Status: status,
+        SearchTerm: search,
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => {
       console.error("Error fetching orders:", error);
       throw error;
     });
 };
+
 const getDeliPurchaseOrderByStatus = async (status, id) => {
-  return axios.get(`${API_BASE_URL}/employees/deliverystaff/status/${status}`,{params:{id}})
-}
+  return axios.get(`${API_BASE_URL}/employees/deliverystaff/status/${status}`, {
+    params: { id },
+  });
+};
 export {
-  getDeliveryOrderDetail,
   getAllDeliveryOrder,
-  updateDeliveryStatus,
   getDeliPurchaseOrderByStatus,
-  getDeliveryStaffOrderList
+  getDeliveryOrderDetail,
+  getDeliveryStaffOrderList,
+  updateDeliveryStatus,
 };
