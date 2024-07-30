@@ -145,6 +145,8 @@ body {
         margin-bottom: 20px;
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 
+
+
         .order_detail_product_image {
             width: 130px;
             height: 130px;
@@ -171,6 +173,7 @@ body {
 
             .order_detail_product_links {
                 margin-top: -10px;
+
                 a {
                     color: #1c1c1c;
                     text-decoration: none;
@@ -289,4 +292,19 @@ body {
             }
         }
     }
+}
+
+
+.OrderDetail :where(.css-dev-only-do-not-override-1pg9a38).ant-image .ant-image-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.OrderDetail .ant-image-mask{
+    width: 130px;
+    height: 130px;
+    border-radius: 8px;
+    margin-right: 20px;
 }

@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Image, Space } from 'antd';
 import SubNav from '../../components/SubNav/SubNav.js';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop.js';
 import '../../styles/Setting/OrderDetail.scss';
 import { getOrderById, getPromotionById, getOrderDetailsByOrderId, getProductById, getShellDetail } from '../../services/TrackingOrderService';
-import { getUserInfo } from '../../services/UserService'; // Import getUserInfo
+import { getUserInfo } from '../../services/UserService';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 import FooterComponent from '../../components/Footer/FooterComponent';
 import Loading from '../../components/Loading/Loading';
@@ -153,7 +154,19 @@ function OrderDetail() {
                         <hr className="order_detail_line1"></hr>
                         {orderProducts.map((product, index) => (
                             <div key={index} className="order_detail_product">
-                                <img src={product?.imageLinkList.split(';')[0]} className="order_detail_product_image" alt={product?.name} />
+                                <Space size={12}>
+                                    <Image
+                                        width={150}
+                                        src={product?.imageLinkList.split(';')[0]}
+                                        placeholder={
+                                            <Image
+                                                preview={false}
+                                                src={product?.imageLinkList.split(';')[0]}
+                                                width={150}
+                                            />
+                                        }
+                                    />
+                                </Space>
                                 <div className="order_detail_product_info">
                                     <div className="order_detail_product_header">
                                         <h5 className="order_detail_product_name">{product?.name}</h5>

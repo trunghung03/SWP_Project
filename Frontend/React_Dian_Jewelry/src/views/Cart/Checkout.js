@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Image } from 'antd';
 import vnpay from "../../assets/img/vnpay.webp";
 import Insta from "../../components/BlogInspired/BlogInspired.js";
 import FooterComponent from "../../components/Footer/FooterComponent";
@@ -424,46 +425,49 @@ function Checkout() {
             </div>
           </form>
           <div className="checkout_cart_items_container">
-            {cartItems.map((item, index) => (
-              <React.Fragment key={index}>
-                <div className="checkout_cart_item">
-                  <img
-                    src={item.image.split(";")[0]}
-                    alt={item.name}
-                    className="checkout_item_image"
-                  />
-                  <div className="checkout_item_details">
-                    <div className="checkout_item_row">
-                      <p className="checkout_item_name">
-                        <strong>
-                          {item.name} x{item.quantity}
-                        </strong>
-                      </p>
-                      <p className="checkout_item_price">
-                        <strong>
-                          ${Math.round(item.price) * item.quantity}
-                        </strong>
-                      </p>
+            <Image.PreviewGroup>
+              {cartItems.map((item, index) => (
+                <React.Fragment key={index}>
+                  <div className="checkout_cart_item">
+                    <Image
+                      src={item.image.split(";")[0]}
+                      alt={item.name}
+                      className="checkout_item_image"
+                      width={130}
+                    />
+                    <div className="checkout_item_details">
+                      <div className="checkout_item_row">
+                        <p className="checkout_item_name">
+                          <strong>
+                            {item.name} x{item.quantity}
+                          </strong>
+                        </p>
+                        <p className="checkout_item_price">
+                          <strong>
+                            ${Math.round(item.price) * item.quantity}
+                          </strong>
+                        </p>
+                      </div>
+                      {!item.selectedShellName ? (
+                        <p>(Only diamond)</p>
+                      ) : (
+                        <>
+                          <div className="checkout_item_row">
+                            <p>
+                              <strong>Shell:</strong> {item.selectedShellName}
+                            </p>
+                            <p>
+                              <strong>Size:</strong> {item.selectedSize}
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </div>
-                    {!item.selectedShellName ? (
-                      <p>(Only diamond)</p>
-                    ) : (
-                      <>
-                        <div className="checkout_item_row">
-                          <p>
-                            <strong>Shell:</strong> {item.selectedShellName}
-                          </p>
-                          <p>
-                            <strong>Size:</strong> {item.selectedSize}
-                          </p>
-                        </div>
-                      </>
-                    )}
                   </div>
-                </div>
-                {index < cartItems.length - 1 && <hr />}
-              </React.Fragment>
-            ))}
+                  {index < cartItems.length - 1 && <hr />}
+                </React.Fragment>
+              ))}
+            </Image.PreviewGroup>
           </div>
         </div>
         <div className="checkout_summary">

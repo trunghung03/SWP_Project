@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Image } from 'antd';
 import GIA from "../../assets/img/gia2.jpg";
 import Insta from "../../components/BlogInspired/BlogInspired.js";
 import CollectionSlide from "../../components/CollectionSlide/CollectionSlide";
@@ -173,7 +174,14 @@ function DiamondDetail() {
               />
             ))}
           </div>
-          <img src={selectedImage} alt={product.name} className="main_image" />
+          <Image.PreviewGroup>
+            <Image
+              src={selectedImage}
+              alt={product.name}
+              className="main_image"
+              width={415}
+            />
+          </Image.PreviewGroup>
         </div>
         <div className="product_info_detail">
           <h2 className="product_name_detail">

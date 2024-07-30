@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { Image } from 'antd';
 import SubNav from "../../components/SubNav/SubNav.js";
 import "../../styles/Cart/Cart.scss";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop.js";
@@ -235,94 +236,97 @@ function Cart() {
             </div>
           ) : (
             <div className="cart_items">
-              {filteredCartItems.map((item) => {
-                const firstImage = item.image.split(";")[0];
-                const isOutOfStock = item.isOutOfStock;
-                const diamondAttr = diamondAttributes[item.productId];
-                const key = `${item.productId}-${item.name}-${item.image}-${item.price}-${item.selectedShellId}-${item.selectedShellName}-${item.selectedSize}`;
-                return (
-                  <div
-                    className={`cart_item ${
-                      isOutOfStock ? "out-of-stock" : ""
-                    }`}
-                    key={key}
-                  >
-                    <img
-                      src={firstImage}
-                      className="cart_item_image"
-                      alt={item.name}
-                    />
-                    <div className="cart_item_details">
-                      <div className="cart_item_header">
-                        <h5
-                          className={`cart_item_name ${
-                            isOutOfStock ? "text-grey" : ""
-                          }`}
-                        >
-                          {item.name}
-                          {isOutOfStock && (
-                            <span className="out-of-stock-text">
-                              {/*  (Sold out) */}
+              <Image.PreviewGroup>
+                {filteredCartItems.map((item) => {
+                  const firstImage = item.image.split(";")[0];
+                  const isOutOfStock = item.isOutOfStock;
+                  const diamondAttr = diamondAttributes[item.productId];
+                  const key = `${item.productId}-${item.name}-${item.image}-${item.price}-${item.selectedShellId}-${item.selectedShellName}-${item.selectedSize}`;
+                  return (
+                    <div
+                      className={`cart_item ${
+                        isOutOfStock ? "out-of-stock" : ""
+                      }`}
+                      key={key}
+                    >
+                      <Image
+                        src={firstImage}
+                        className="cart_item_image"
+                        alt={item.name}
+                        width={195}
+                      />
+                      <div className="cart_item_details">
+                        <div className="cart_item_header">
+                          <h5
+                            className={`cart_item_name ${
+                              isOutOfStock ? "text-grey" : ""
+                            }`}
+                          >
+                            {item.name}
+                            {isOutOfStock && (
+                              <span className="out-of-stock-text">
+                                {/*  (Sold out) */}
+                              </span>
+                            )}
+                          </h5>
+                          <div className="cart_item_links">
+                            <span
+                              onClick={() => handleViewProduct(item)}
+                              className="cart_item_view"
+                            >
+                              VIEW
                             </span>
-                          )}
-                        </h5>
-                        <div className="cart_item_links">
-                          <span
-                            onClick={() => handleViewProduct(item)}
-                            className="cart_item_view"
-                          >
-                            VIEW
-                          </span>
-                          <span> | </span>
-                          <a
-                            className="cart_item_remove"
-                            onClick={() => handleRemoveFromCart(key)}
-                          >
-                            REMOVE
-                          </a>
+                            <span> | </span>
+                            <a
+                              className="cart_item_remove"
+                              onClick={() => handleRemoveFromCart(key)}
+                            >
+                              REMOVE
+                            </a>
+                          </div>
                         </div>
-                      </div>
-                      {diamondAttr && !item.selectedShellName && (
+                        {diamondAttr && !item.selectedShellName && (
+                          <p
+                            className={`cart_item_diamond_attributes ${
+                              isOutOfStock ? "text-grey" : "text-diamond-data"
+                            }`}
+                          >
+                            {diamondAttr.cut} Cutㅤ|ㅤ{diamondAttr.color}{" "}
+                            Colorㅤ|ㅤ{diamondAttr.clarity} Clarity
+                          </p>
+                        )}
                         <p
-                          className={`cart_item_diamond_attributes ${
-                            isOutOfStock ? "text-grey" : "text-diamond-data"
+                          className={`cart_item_description ${
+                            isOutOfStock ? "text-grey" : "text-diamond-only"
                           }`}
                         >
-                          {diamondAttr.cut} Cutㅤ|ㅤ{diamondAttr.color}{" "}
-                          Colorㅤ|ㅤ{diamondAttr.clarity} Clarity
+                          {item.selectedShellName
+                            ? `Shell: ${item.selectedShellName}`
+                            : "(Only diamond)"}
+                          <br />
+                          {item.selectedSize && `Size: ${item.selectedSize}`}
                         </p>
-                      )}
-                      <p
-                        className={`cart_item_description ${
-                          isOutOfStock ? "text-grey" : "text-diamond-only"
-                        }`}
-                      >
-                        {item.selectedShellName
-                          ? `Shell: ${item.selectedShellName}`
-                          : "(Only diamond)"}
-                        <br />
-                        {item.selectedSize && `Size: ${item.selectedSize}`}
-                      </p>
-                      <div className="cart_item_footer">
-                        <div
-                          className={`cart_item_quantity ${
-                            isOutOfStock ? "text-grey" : ""
-                          }`}
-                        >
-                          Quantity: {item.quantity}
-                        </div>
-                        <div
-                          className={`cart_item_price ${
-                            isOutOfStock ? "text-grey-price" : ""
-                          }`}
-                        >
-                          ${Math.floor(item.price * item.quantity)}
+                        <div className="cart_item_footer">
+                          <div
+                            className={`cart_item_quantity ${
+                              isOutOfStock ? "text-grey" : ""
+                            }`}
+                          >
+                            Quantity: {item.quantity}
+                          </div>
+                          <div
+                            className={`cart_item_price ${
+                              isOutOfStock ? "text-grey-price" : ""
+                            }`}
+                          >
+                            ${Math.floor(item.price * item.quantity)}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </Image.PreviewGroup>
             </div>
           )}
 
