@@ -15,5 +15,7 @@ namespace DIAN_.Interfaces
         Task<Warranty> CreateWarrantyAsync(Warranty warrantyModel);
         Task<Warranty?> UpdateWarrantyAsync(int id, Warranty warranty);
         Task<Warranty?> DeleteWarrantyAsync(int id);
+
+        Task<string?> GetCustomerNameOfWarranty(Warranty warranty); 
     }
 }

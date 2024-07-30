@@ -148,7 +148,7 @@ const DSDeliveryList = () => {
               <MenuItem value="default">Default</MenuItem>
               <MenuItem value="Delivering">Delivering</MenuItem>
               <MenuItem value="Completed">Completed</MenuItem>
-              <MenuItem value="Cancelled">Cancelled</MenuItem>
+              {/* <MenuItem value="Cancelled">Cancelled</MenuItem> */}
             </Select>
           </FormControl>
           <Stack spacing={2} sx={{ mt: 2 }}>

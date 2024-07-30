@@ -6,6 +6,7 @@ import { deleteDiamondById, deleteSubDiamondById, getAllSubDiamond, ShowAllDiamo
 import "../../../styles/Manager/ManagerList.scss";
 import DiamondTable from "./DiamondTable";
 import PropTypes from "prop-types";
+import { toast } from "sonner";
 
 const mainDiamondTableColumns = [
   "ID",
@@ -72,38 +73,39 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
   const [clarityFilter, setClarityFilter] = useState("");
   const [colorFilter, setColorFilter] = useState("");
   const [cutFilter, setCutFilter] = useState("");
-  const pageNumber = searchParams.get("pageNumber");
-  const type = parseInt(searchParams.get("type"));
+  const pageNumber = parseInt(searchParams.get("pageNumber")) || 1;
+  const pageSize = parseInt(searchParams.get("pageSize")) || 6;
+  const type = parseInt(searchParams.get("type")) || 0;
 
   useEffect(() => {
-    if (!isNaN(type)) {
-      setValue(type);
-    }
-    if (value === type) {
-      fetchData(pageNumber, value === 0 ? "main" : "sub");
-    } else {
-      fetchData(1, value === 0 ? "main" : "sub");
-    }
+    setValue(type);
+    setCurrentPage(pageNumber);
+    fetchData(pageNumber, pageSize, value === 0 ? "main" : "sub");
     setPagination({
       ...pagination,
-      pageSize: 6,
+      pageSize: pageSize,
       currentPage: pageNumber,
     });
   }, [searchParams, value, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm]);
 
-  const fetchData = async (page, type) => {
+  const fetchData = async (page, pageSize, type) => {
     try {
       const response =
         type === "main"
-          ? await ShowAllDiamond(page, 6, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm)
-          : await getAllSubDiamond(page, 6, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm);
+          ? await ShowAllDiamond(page, pageSize, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm)
+          : await getAllSubDiamond(page, pageSize, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm);
 
       if (response?.data.length === 0) {
-        setDiamondList([{ message: "Diamond does not exist" }]);
+        const defaultResponse = type === "main"
+          ? await ShowAllDiamond(page, pageSize)
+          : await getAllSubDiamond(page, pageSize);
+        
+        setDiamondList(defaultResponse?.data);
+        setPagination(defaultResponse?.pagination);
       } else {
         setDiamondList(response?.data);
+        setPagination(response?.pagination);
       }
-      setPagination(response?.pagination);
     } catch (error) {
       console.error("Error fetching data:", error);
       setDiamondList([{ message: "Diamond does not exist" }]);
@@ -122,13 +124,14 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
 
   const handleChange = (e, newValue) => {
     searchParams.set("type", newValue);
+    searchParams.set("pageNumber", 1);
     setSearchParams(searchParams);
     setValue(newValue);
     setShapeFilter("");
     setClarityFilter("");
     setColorFilter("");
     setCutFilter("");
-    fetchData(1, newValue === 0 ? "main" : "sub");
+    fetchData(1, pageSize, newValue === 0 ? "main" : "sub");
   };
 
   const handleDelete = async (diamondId) => {
@@ -144,11 +147,18 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
           value === 0
             ? await deleteDiamondById(diamondId)
             : await deleteSubDiamondById(diamondId);
-          fetchData(pagination.currentPage, value === 0 ? "main" : "sub");
-          swal("Deleted successfully!", "The diamond has been deleted.", "success");
+          fetchData(pagination.currentPage, pageSize, value === 0 ? "main" : "sub");
+          toast.success("Delete successfully", {
+            position: "top-right",
+            autoClose: 2000,
+          });
         } catch (error) {
           console.error("Error deleting diamond:", error);
-          swal("Something went wrong!", "Failed to delete the diamond. Please try again.", "error");
+          toast.error("Cannot delete this diamond", {
+            position: "top-right",
+            autoClose: 2000,
+          }
+          )
         }
       }
     });

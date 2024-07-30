@@ -48,7 +48,10 @@ const SSOrderDetail = () => {
       return;
     }
     if (isInvalidStatusTransition(newStatus, status)) {
-      swal("Error", "Cannot update to this status from the current status", "error");
+      toast.error("Cannot update to this status from the current status", {
+        position: "top-right",
+        autoClose: 2000,
+      });
       return;
     }
     setStatus(newStatus);
@@ -118,7 +121,10 @@ const SSOrderDetail = () => {
       };
 
       await sendWarrantyEmail(emailData);
-      swal("Success", "Send certificate success.", "success");
+      toast.success("Send certificate success", {
+        position: "top-right",
+        autoClose: 2000,
+      });
       let concatenatedWarrantyURLs = "";
 
       try {
@@ -150,7 +156,10 @@ const SSOrderDetail = () => {
             };
 
             sendWarrantyEmail(wemailData).then(() => {
-              swal("Success", "Send warranty success.", "success");
+              toast.success("Send warranty success", {
+                position: "top-right",
+                autoClose: 2000,
+              });
             });
           })
           .catch((error) => {
@@ -161,7 +170,10 @@ const SSOrderDetail = () => {
             );
           });
       } catch (error) {
-        swal("Error", `Unexpected error: ${error.message}`, "error");
+        toast.error("Failed to send warranty", {
+          position: "top-right",
+          autoClose: 2000,
+        });
       }
 
       const updateOrderStatusDto = {
@@ -171,11 +183,10 @@ const SSOrderDetail = () => {
       await salesStaffUpdateOrderStatus(updateOrderStatusDto);
       setStatus("Preparing");
     } catch (error) {
-      swal(
-        "Error",
-        `Failed to send Certificate emails: ${error.message}`,
-        "error"
-      );
+      toast.error("Failed to send certificate and warranty", {
+        position: "top-right",
+        autoClose: 2000,
+      });
     } finally {
       setWarrantyLoading(false);
     }
@@ -209,7 +220,10 @@ const SSOrderDetail = () => {
       navigate(`/sales-staff-order-list?tab=${new URLSearchParams(location.search).get("tab")}`);
     } catch (error) {
       console.error("Failed to update order status", error);
-      swal("Error", `Failed to update order status: ${error.message}`, "error");
+      toast.error("Failed to update order status", { 
+        position: "top-right",
+        autoClose: 2000,
+      });
     }
     setLoading(false);
   };

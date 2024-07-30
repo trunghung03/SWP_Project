@@ -45,6 +45,23 @@ namespace DIAN_.Repository
             return warranties;
         }
 
+        public async Task<string?> GetCustomerNameOfWarranty(Warranty warranty)
+        {
+            var orderDetail = await _context.Orderdetails
+                .Include(od => od.Order)
+                .ThenInclude(o => o.User)
+                .FirstOrDefaultAsync(od => od.OrderDetailId == warranty.OrderDetailId);
+
+            if (orderDetail == null || orderDetail.Order == null || orderDetail.Order.User == null)
+            {
+                return null;
+            }
+
+            var customerName = $"{orderDetail.Order.User.FirstName} {orderDetail.Order.User.LastName}";
+            return customerName;
+        }
+
+
         public async Task<Warranty?> GetWarrantyByIdAsync(int id)
         {
             var warranty = await _context.Warranties

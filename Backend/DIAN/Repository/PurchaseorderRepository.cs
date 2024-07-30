@@ -34,6 +34,10 @@ namespace DIAN_.Repository
                 string lowerSearchTerm = querry.SearchTerm.ToLower();
                 purchaseOrdersQuery = purchaseOrdersQuery.Where(d =>
                     d.OrderId.ToString().Equals(lowerSearchTerm) ||
+                    d.PaymentMethod.ToLower().Contains(lowerSearchTerm) ||
+                    d.Date.ToString().Contains(lowerSearchTerm) ||
+                    d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.OrderStatus.ToLower().Contains(lowerSearchTerm) ||
                     d.Name.ToLower().Contains(lowerSearchTerm));
             }
             var totalItems = await purchaseOrdersQuery.CountAsync();

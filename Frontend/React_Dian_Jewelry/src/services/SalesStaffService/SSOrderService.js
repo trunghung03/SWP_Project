@@ -40,18 +40,24 @@ const fetchAllOrders = async (page, pageSize, status, searchTerm) => {
     return error;
   });
 }
+
 const getSalesStaffOrderList = async (staffId, pageNumber = 1, pageSize = 6, status = "default", searchTerm = "") => {
-  const params = { staffId, pageNumber, pageSize };
+  const params = { staffId, PageNumber: pageNumber, PageSize: pageSize };
   if (status !== "default") {
-    params.status = status;
+    params.Status = status;
   }
   if (searchTerm.trim() !== "") {
     params.SearchTerm = searchTerm;
   }
   return axios.get(`${API_BASE_URL_ORDER}/employees/salesstaff/orderlists`, {
     params
-  });
+  }).then(response => response.data)
+    .catch(error => {
+      console.error("Error fetching orders:", error);
+      throw error;
+    });
 };
+
 
  const getBillDetail = async (orderId) => {
   return axios.get(`${API_BASE_URL_ORDER}/employees/view-order-detail-bill`, { params: { orderId } })

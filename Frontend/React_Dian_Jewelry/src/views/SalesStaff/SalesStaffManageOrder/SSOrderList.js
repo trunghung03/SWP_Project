@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom"; // Import useSearchParams
 import swal from "sweetalert";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderList.scss";
@@ -19,6 +19,8 @@ import { getComparator, tableSort } from "../../../components/CustomTable/SortTa
 import { getSalesStaffOrderList } from "../../../services/SalesStaffService/SSOrderService.js";
 import OrderTabs from "./OrderTab.js";
 import { visuallyHidden } from "@mui/utils";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const headCells = [
   { id: "orderId", numeric: false, disablePadding: false, label: "Order ID", sortable: true },
@@ -79,52 +81,44 @@ EnhancedTableHead.propTypes = {
 
 const SSOrderList = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get location to parse URL parameters
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [orderList, setOrderList] = useState([]);
-  const [originalOrderList, setOriginalOrderList] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderId");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const employeeId = localStorage.getItem("employeeId");
   const [pagination, setPagination] = useState({
-    currentPage: 1,
+    currentPage: parseInt(searchParams.get("pageNumber")) || 1,
     pageSize: 6,
     totalPages: 1,
     totalCount: 0,
   });
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(parseInt(searchParams.get("tab")) || 0);
   const statusList = ["Unpaid", "Paid", "Preparing", "Delivering", "Completed", "Cancelled"];
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const tabValueParam = queryParams.get("tab");
-    if (tabValueParam) {
-      setTabValue(parseInt(tabValueParam, 10));
-    }
-  }, [location.search]);
 
   const viewDetail = (orderId) => {
     navigate(`/sales-staff-manage-order-detail/${orderId}?tab=${tabValue}`);
   };
 
-  const fetchOrders = async (page = 1) => {
+  const fetchOrders = async (page = 1, search = searchQuery) => {
     try {
       const status = statusList[tabValue];
       const response = await getSalesStaffOrderList(
         employeeId,
         page,
         pagination.pageSize,
-        status
+        status,
+        search
       );
-      const { orders, totalCount } = response.data;
+      const { orders, pagination: newPagination } = response;
       setOrderList(orders);
-      setOriginalOrderList(orders);
-      setPagination((prev) => ({
-        ...prev,
-        currentPage: page,
-        totalPages: Math.ceil(totalCount / pagination.pageSize),
-        totalCount,
-      }));
+      setPagination({
+        ...pagination,
+        currentPage: newPagination.currentPage,
+        totalPages: newPagination.totalPages,
+        totalCount: newPagination.totalCount,
+      });
     } catch (error) {
       console.error("Failed to fetch order list:", error);
       swal("Error", "Failed to fetch order list", "error");
@@ -133,13 +127,17 @@ const SSOrderList = () => {
 
   useEffect(() => {
     fetchOrders(pagination.currentPage);
-  }, [employeeId, pagination.currentPage, tabValue]);
+  }, [employeeId, pagination.currentPage, tabValue, searchQuery]);
 
   const handlePageChange = (event, value) => {
     setPagination((prev) => ({
       ...prev,
       currentPage: value,
     }));
+    setSearchParams((prev) => {
+      prev.set("pageNumber", value);
+      return prev;
+    });
   };
 
   const handleRequestSort = (event, property) => {
@@ -148,24 +146,33 @@ const SSOrderList = () => {
     setOrderBy(property);
   };
 
-  const handleSearchKeyPress = async (e) => {
-    if (e.key === "Enter") {
-      const searchValue = e.target.value.toLowerCase();
-      if (searchValue.trim() === "") {
-        fetchOrders();
-      } else {
-        const filteredOrders = originalOrderList.filter(
-          (order) =>
-            order.orderId.toString().toLowerCase().includes(searchValue) ||
-            order.name.toLowerCase().includes(searchValue)
-        );
-        setOrderList(filteredOrders);
-      }
-    }
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setSearchParams((prev) => {
+      prev.set("search", value);
+      prev.set("pageNumber", 1);
+      return prev;
+    });
+    fetchOrders(1, value);
   };
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
+    setSearchParams((prev) => {
+      prev.set("tab", newValue);
+      prev.set("pageNumber", 1);
+      return prev;
+    });
+  };
+
+  const handleBackClick = () => {
+    setSearchQuery("");
+    setSearchParams((prev) => {
+      prev.delete("search");
+      return prev;
+    });
+    fetchOrders(pagination.currentPage, "");
   };
 
   const isOrderOverdue = (orderDate) => {
@@ -196,11 +203,10 @@ const SSOrderList = () => {
             <input
               type="text"
               className="ss_manage_content_search_bar"
-              placeholder="Search by Order ID..."
+              placeholder="Search by . . ."
               value={searchQuery}
               style={{ width: "140px" }}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyUp={handleSearchKeyPress}
+              onChange={handleSearchChange}
             />
           </div>
         </div>
@@ -286,6 +292,11 @@ const SSOrderList = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        {/* {searchQuery && (
+          <button className="SS_back_button" onClick={handleBackClick}>
+            Back
+          </button>
+        )} */}
       </div>
     </div>
   );

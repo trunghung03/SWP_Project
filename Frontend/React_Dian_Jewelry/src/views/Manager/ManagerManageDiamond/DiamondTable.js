@@ -104,7 +104,7 @@ export default function DiamondTable({
         <TableCell align="center">{item.cut}</TableCell>
         <TableCell align="center">{item.carat}</TableCell>
         <TableCell align="center">{item.price}</TableCell>
-        <TableCell align="center">{item.certificateScan ?? "not avail"}</TableCell>
+        <TableCell align="center">{item.certificateScan || item.amountAvailable}</TableCell>
         <TableCell align="center">{item.status ? "Available" : "Sold"}</TableCell>
         <TableCell align="center">
           <EditMainDiamondDialog diamond={item} setDiamondList={setDiamondList} />

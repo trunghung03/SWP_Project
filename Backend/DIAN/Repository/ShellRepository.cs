@@ -44,6 +44,7 @@ namespace DIAN_.Repository
                 shellsQuery = shellsQuery.Where(s =>
                                                     s.ShellId.ToString() == lowerSearchTerm ||
                                                     s.ShellMaterial.Name.ToLower().Contains(lowerSearchTerm) ||
+                                                    s.ProductId.ToString().Contains(lowerSearchTerm) ||
                                                     s.AmountAvailable.ToString().Contains(lowerSearchTerm) ||
                                                     s.Status.ToString().Contains(lowerSearchTerm));
             }

@@ -18,6 +18,7 @@ import {
   getBillDetail,
 } from "../../services/SalesStaffService/SSOrderService.js";
 import "../../styles/DeliveryStaff/DSOrderDetail.scss";
+import { toast } from "sonner";
 
 function DSDeliveryDetail() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ function DSDeliveryDetail() {
   const handleSubmit = async () => {
     try {
       await deliStaffUpdateOrderStatus(status, orderId);
-      swal("Success", "Update order status successfully", "success");
+      toast.success("Update order status successfully");
       navigate("/delivery-staff-delivery-list");
     } catch (error) {
       console.error("Failed to update order status:", error);

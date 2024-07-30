@@ -28,6 +28,7 @@ namespace DIAN_.Controllers
         {
             // Retrieve warranty data from the repository
             var warranty = await _warrantyRepository.GetWarrantyByIdAsync(id);
+            var customerName = await _warrantyRepository.GetCustomerNameOfWarranty(warranty);
 
             if (warranty == null)
             {
@@ -44,7 +45,8 @@ namespace DIAN_.Controllers
                 htmlContent = htmlContent.Replace("{OrderDetailId}", warranty.OrderDetailId.ToString())
                                          .Replace("{StartDate}", warranty.StartDate.ToString("yyyy-MM-dd"))
                                          .Replace("{EndDate}", warranty.EndDate.ToString("yyyy-MM-dd"))
-                                         .Replace("{Status}", warranty.Status.ToString() ?? "Active");
+                                         .Replace("{Status}", warranty.Status.ToString() ?? "Active")
+                                         .Replace("{CustomerName}", customerName ?? "N/A");
 
                 // Define the output PDF file path
                 string outputPdfPath = $"warranty-{warranty.OrderDetailId}.pdf";
@@ -72,8 +74,6 @@ namespace DIAN_.Controllers
                 throw;
             }
             return null;
-
-            //return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload PDF to Pixeldrain.");
         }
 
         [HttpGet("certificate")]
