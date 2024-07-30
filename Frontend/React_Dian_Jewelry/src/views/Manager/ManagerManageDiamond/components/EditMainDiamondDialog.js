@@ -14,6 +14,7 @@ import {
   updateDiamondById,
   updateSubDiamondById,
 } from "../../../../services/ManagerService/ManagerDiamondService";
+import { useEffect } from "react";
 
 export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
   const theme = useTheme();
@@ -30,6 +31,7 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log("diamond: ", diamond);
   };
 
   const handleClose = () => {
@@ -44,6 +46,7 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
       //   amountAvailable: data.amountAvailable,
       status: true,
     };
+
 
     toast.promise(updateDiamondById(diamond?.diamondId, submitData), {
       loading: "Updating...",
@@ -66,12 +69,18 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
     // setOpen(false);
   };
 
+
+  useEffect(() => {
+    setDiamondForm(diamond);
+    // console.log("diamond: ", diamond);
+    // console.log("diamondForm: ", diamondForm);
+  }, [diamond]);
   return (
     <React.Fragment>
       <IconButton onClick={handleClickOpen} color="primary" aria-label="edit">
         <EditIcon style={{color:"#575252"}} />
       </IconButton>
-      <Dialog
+      <Dialog 
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
@@ -141,7 +150,7 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
             />
             {errors.price && <Typography variant="p" color={'red'}>{errors.price.message}</Typography>}
 
-            <DialogActions>
+            <DialogActions >
               <Button onClick={handleClose} color="secondary">
                 Cancel
               </Button>

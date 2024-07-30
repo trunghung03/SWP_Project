@@ -11,8 +11,9 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { updateSubDiamondById } from "../../../../services/ManagerService/ManagerDiamondService";
+import { useEffect } from "react";
 
-export default function EditDialog({ diamond, setDiamondList }) {
+export default function EditDialog({ diamond, setDiamondList,type }) {
   const theme = useTheme();
   const [diamondForm, setDiamondForm] = React.useState(diamond);
   const {
@@ -24,14 +25,19 @@ export default function EditDialog({ diamond, setDiamondList }) {
   });
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = React.useState(false);
+  
 
   const handleClickOpen = () => {
+    console.log("diamond: ", diamondForm);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    setDiamondForm(diamond);
+  }, [diamond,type]);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -75,7 +81,7 @@ export default function EditDialog({ diamond, setDiamondList }) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          Edit Diamond Attributes
+          Edit Sub Diamond Attributes
         </DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)}>

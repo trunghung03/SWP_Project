@@ -73,7 +73,7 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
   const [clarityFilter, setClarityFilter] = useState("");
   const [colorFilter, setColorFilter] = useState("");
   const [cutFilter, setCutFilter] = useState("");
-  const pageNumber = parseInt(searchParams.get("pageNumber")) || 1;
+  const pageNumber = parseInt(searchParams.get("pageNumber")) ;
   const pageSize = parseInt(searchParams.get("pageSize")) || 6;
   const type = parseInt(searchParams.get("type")) || 0;
 
@@ -86,7 +86,7 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
       pageSize: pageSize,
       currentPage: pageNumber,
     });
-  }, [searchParams, value, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm]);
+  }, [searchParams, value, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm,pageSize, pageNumber]);
 
   const fetchData = async (page, pageSize, type) => {
     try {
@@ -99,7 +99,6 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
         const defaultResponse = type === "main"
           ? await ShowAllDiamond(page, pageSize)
           : await getAllSubDiamond(page, pageSize);
-        
         setDiamondList(defaultResponse?.data);
         setPagination(defaultResponse?.pagination);
       } else {
@@ -131,7 +130,7 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
     setClarityFilter("");
     setColorFilter("");
     setCutFilter("");
-    fetchData(1, pageSize, newValue === 0 ? "main" : "sub");
+    // fetchData(1, pageSize, newValue === 0 ? "main" : "sub");
   };
 
   const handleDelete = async (diamondId) => {
@@ -163,6 +162,11 @@ export default function DiamondTypeSwitcher({ searchTerm }) {
       }
     });
   };
+
+  useEffect(() => {
+    console.log("diamondList: ", diamondList);
+  }, [diamondList]);
+
 
   const handleShapeFilterChange = (event) => {
     setShapeFilter(event.target.value);

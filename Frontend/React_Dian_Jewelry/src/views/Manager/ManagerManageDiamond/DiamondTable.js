@@ -11,6 +11,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -19,7 +20,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import DiamondPDF from "./DiamondPDF";
 import EditMainDiamondDialog from "./components/EditMainDiamondDialog";
 import EditDialog from "./components/EditDialog";
-import { allMainDiamondPDF, allSubDiamondPDF } from "../../../services/ManagerService/ManagerDiamondService";
+import {
+  allMainDiamondPDF,
+  allSubDiamondPDF,
+} from "../../../services/ManagerService/ManagerDiamondService";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,6 +63,10 @@ export default function DiamondTable({
   const downloadLinkRef = useRef(null);
   const type = parseInt(searchParams.get("type"), 10); // Convert type to a number
   const [loading, setLoading] = React.useState(false);
+  const [curType, setCurType] = React.useState(type);
+  const [currentDiamondList, setCurrentDiamondList] = React.useState(
+    maindiamondList ?? subdiamondList
+  );
 
   useEffect(() => {
     if (instance.url && !loading) {
@@ -82,6 +90,13 @@ export default function DiamondTable({
       });
     }
   };
+  useEffect(() => {
+    if (type === 0) {
+      setCurrentDiamondList(maindiamondList);
+    } else {
+      setCurrentDiamondList(subdiamondList);
+    }
+  }, [maindiamondList, subdiamondList, type]);
 
   const renderDiamondRows = (diamonds) => {
     if (diamonds.length === 1 && diamonds[0].message) {
@@ -94,21 +109,53 @@ export default function DiamondTable({
       );
     }
 
-    return diamonds.map((item) => (
+    return diamonds?.map((item) => (
       <TableRow hover key={item.diamondId || item.subDiamondId}>
-        <TableCell align="center">{item.diamondId || item.subDiamondId}</TableCell>
-        <TableCell align="center">{item.diamondAttributeId || item.subDiamondAttributeId}</TableCell>
+        <TableCell align="center">
+          {item.diamondId || item.subDiamondId}
+        </TableCell>
+        <TableCell align="center">
+          {item.diamondAttributeId || item.subDiamondAttributeId}
+        </TableCell>
         <TableCell align="center">{item.shape}</TableCell>
         <TableCell align="center">{item.color}</TableCell>
         <TableCell align="center">{item.clarity}</TableCell>
         <TableCell align="center">{item.cut}</TableCell>
         <TableCell align="center">{item.carat}</TableCell>
         <TableCell align="center">{item.price}</TableCell>
-        <TableCell align="center">{item.certificateScan || item.amountAvailable}</TableCell>
-        <TableCell align="center">{item.status ? "Available" : "Sold"}</TableCell>
         <TableCell align="center">
-          <EditMainDiamondDialog diamond={item} setDiamondList={setDiamondList} />
-          <IconButton onClick={() => handleDelete(item.diamondAttributeId || item.subDiamondId)} color="secondary" aria-label="delete">
+          <Typography
+            variant="p"
+            truncate="true"
+          >
+            {item?.certificateScan || item?.amountAvailable}
+          </Typography>
+        </TableCell>
+        <TableCell align="center">
+          {item.status ? "Available" : "Sold"}
+        </TableCell>
+        <TableCell align="center">
+          { item.certificateScan ? (
+            <EditMainDiamondDialog
+              type={curType}
+              diamond={item}
+              setDiamondList={setDiamondList}
+            />
+          ) : (
+            <EditDialog
+              diamond={item}
+              type={curType}
+              setDiamondList={setDiamondList}
+            />
+          )}
+          {/* <EditMainDiamondDialog diamond={item} setDiamondList={setDiamondList} /> */}
+          <IconButton
+            onClick={() =>
+              handleDelete(item.diamondAttributeId || item.subDiamondId)
+            }
+            color="secondary"
+            aria-label="delete"
+          >
             <DeleteIcon style={{ color: "#575252" }} />
           </IconButton>
         </TableCell>
@@ -119,7 +166,13 @@ export default function DiamondTable({
   return (
     <>
       <Grid container spacing={3} padding={3}>
-        <Grid item xs={12} container justifyContent="space-between" alignItems="center">
+        <Grid
+          item
+          xs={12}
+          container
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Grid item>
             <button
               color="primary"
@@ -164,8 +217,13 @@ export default function DiamondTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {type === 0 ? renderDiamondRows(maindiamondList.length ? maindiamondList : [{ message: "Diamond does not exist" }]) 
-                        : renderDiamondRows(subdiamondList.length ? subdiamondList : [{ message: "Diamond does not exist" }])}
+            {type === 0
+              ? renderDiamondRows(
+                  currentDiamondList ?? [{ message: "Diamond does not exist" }]
+                )
+              : renderDiamondRows(
+                  currentDiamondList ?? [{ message: "Diamond does not exist" }]
+                )}
           </TableBody>
         </Table>
       </TableContainer>
