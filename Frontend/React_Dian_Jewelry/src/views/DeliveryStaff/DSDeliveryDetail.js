@@ -56,22 +56,24 @@ function DSDeliveryDetail() {
   };
 
   return (
-    <div className="manager_manage_diamond_all_container">
-      <div className="manager_manage_diamond_sidebar">
+    <div className="ds_manage_orderdetail_all_container">
+      <div className="ds_manage_orderdetail_sidebar">
         <DeliveryStaffSidebar currentPage="deliverystaff_manage_order" />
       </div>
-      <div className="manager_manage_diamond_content">
-        <div className="manager_manage_diamond_header">
-          <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
+      <div className="ds_manage_content_content">
+        <div className="ds_manage_content_header">
+          <img className="ds_manage_content_logo" src={logo} alt="Logo" />
         </div>
-        <hr className="manager_header_line" />
-        <button
-          className="DS_back_button"
-          onClick={() => navigate("/delivery-staff-delivery-list")}
-        >
-          Back
-        </button>
-        <div className="ss_order_detail_container">
+        <hr className="ds_manage_content_line"></hr>
+        <div className="ds_back_button_wrapper">
+          <button
+            className="ds_back_button"
+            onClick={() => navigate("/delivery-staff-delivery-list")}
+          >
+            Back
+          </button>
+        </div>
+        <div className="ds_order_detail_container">
           <div>
             <div
               style={{
@@ -81,8 +83,8 @@ function DSDeliveryDetail() {
                 paddingTop: "1%",
               }}
             >
-              <p className="ss_order_detail_p_tag">#{orderDetails.orderId}</p>
-              <div className="ss_button_status">
+              <p className="ds_order_detail_p_tag">#{orderDetails.orderId}</p>
+              <div className="ds_button_status">
                 <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
@@ -105,16 +107,57 @@ function DSDeliveryDetail() {
             </div>
             {orderDetails &&
               orderDetails.productDetails?.map((item) => (
-                <div className="ss_detail_card" key={item.id}>
-                  <div className="ss_detail_card_left">
-                    <h3 className="ss_detail_card_name">{item.productName}</h3>
-                    <img src={item.productImageLink} alt={item.productName} />
+                <div className="ds_detail_card" key={item.productCode}>
+                  <div className="ds_detail_card_left">
+                    <img
+                      src={item.productImageLink.split(";")[0]}
+                      alt={item.productName}
+                    />
                   </div>
-                  <div className="ss_detail_card_content">
-                    <p>{item.productDescription}</p>
-                    <p>{item.productCode}</p>
-                    <p className="ss_detail_card_size">Size: {item.size}</p>
-                    <p className="ss_detail_card_price">${item.lineTotal}</p>
+                  <div className="ds_detail_card_content">
+                    <div className="ds_detail_card_header">
+                      <h5 className="ds_detail_card_name">
+                        {item.productName}
+                      </h5>
+                    </div>
+                    <div className="ds_detail_card_line">
+                      <p className="ds_detail_card_item">
+                        Shell: {item.shellMaterial}
+                      </p>
+                      <p className="ds_detail_card_item">Size: {item.size}</p>
+                    </div>
+                    <div className="ds_detail_card_line">
+                      <p className="ds_detail_card_item">
+                        Main Diamond ID: {item.mainDiamondId?.join(", ") || "N/A"}
+                      </p>
+                      <p className="ds_detail_card_item">
+                        Main Diamond Quantity: {item.mainDiamondQuantity || "N/A"}
+                      </p>
+                    </div>
+                    <div className="ds_detail_card_line">
+                      <p className="ds_detail_card_item">
+                        Sub Diamond ID: {item.subDiamondId || "N/A"}
+                      </p>
+                      <p className="ds_detail_card_item">
+                        Sub Diamond Quantity: {item.subDiamondQuantity || "N/A"}
+                      </p>
+                    </div>
+                    <p className="ds_detail_card_size">
+                      Certificate:{" "}
+                      {item.certificateScans?.map((scan, index) => (
+                        <React.Fragment key={index}>
+                          {index > 0 && ", "}
+                          <a
+                            href={scan}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {scan}
+                          </a>
+                        </React.Fragment>
+                      ))}
+                    </p>
+                    <p className="ds_detail_card_price">${item.lineTotal}</p>
                   </div>
                 </div>
               ))}
@@ -133,10 +176,17 @@ function DSDeliveryDetail() {
                 <PaymentIcon /> Payment Method: {orderDetails.paymentMethod}
               </div>
             </div>
-            <p style={{ textAlign: "right", marginRight: "10%" }}>
+            <p
+              style={{
+                textAlign: "right",
+                marginRight: "40px",
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
               Total Price: ${orderDetails.totalPrice}
             </p>
-            <div className="ss_detail_confirmbutton">
+            <div className="ds_detail_confirmbutton">
               <button onClick={handleSubmit} disabled={isOrderCompleted}>
                 Done
               </button>

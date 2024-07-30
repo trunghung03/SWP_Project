@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SalesStaffSidebar from "../../../components/SalesStaffSidebar/SalesStaffSidebar.js";
 import "../../../styles/SalesStaff/SalesStaffManageOrder/SSOrderDetail.scss";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import logo from "../../../assets/img/logoN.png";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,20 +12,17 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import PaymentIcon from "@mui/icons-material/Payment";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import WarrantyIcon from "@mui/icons-material/EventAvailable";
 import { Box } from "@mui/material";
-import { getBillDetail } from "../../../services/SalesStaffService/SSOrderService.js";
-import { useParams } from "react-router-dom";
+import swal from "sweetalert";
+import { toast } from "sonner";
 import {
+  getBillDetail,
   salesStaffUpdateOrderStatus,
   getWarrantyURL,
   sendWarrantyEmail,
   getWarrantyById,
 } from "../../../services/SalesStaffService/SSOrderService.js";
 import { createWarranty } from "../../../services/SalesStaffService/SSWarrantyService.js";
-import swal from "sweetalert";
-import { toast } from "sonner";
 
 const SSOrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -64,7 +61,7 @@ const SSOrderDetail = () => {
       Preparing: ["Delivering"],
       Delivering: ["Completed"],
       Completed: [],
-      Cancelled: []
+      Cancelled: [],
     };
 
     return !nextStatusMap[currentStatus].includes(newStatus);
@@ -217,17 +214,21 @@ const SSOrderDetail = () => {
         position: "top-right",
         autoClose: 2000,
       });
-      navigate(`/sales-staff-order-list?tab=${new URLSearchParams(location.search).get("tab")}`);
+      navigate(
+        `/sales-staff-order-list?tab=${new URLSearchParams(location.search).get(
+          "tab"
+        )}`
+      );
     } catch (error) {
       console.error("Failed to update order status", error);
-      toast.error("Failed to update order status", { 
+      toast.error("Failed to update order status", {
         position: "top-right",
         autoClose: 2000,
       });
     }
     setLoading(false);
   };
-  
+
   const isOrderOverdue = (orderDate) => {
     const currentDate = new Date();
     const createdDate = new Date(orderDate);
@@ -247,7 +248,10 @@ const SSOrderDetail = () => {
     status === "Paid" ||
     status === "Cancelled";
   const isButtonDisabled =
-    isOrderCompleted || loading || status === "Cancelled" || status === "Completed";
+    isOrderCompleted ||
+    loading ||
+    status === "Cancelled" ||
+    status === "Completed";
 
   return (
     <>
@@ -264,7 +268,13 @@ const SSOrderDetail = () => {
             <div className="SS_back_button_wrapper">
               <button
                 className="SS_back_button"
-                onClick={() => navigate(`/sales-staff-order-list?tab=${new URLSearchParams(location.search).get("tab")}`)}
+                onClick={() =>
+                  navigate(
+                    `/sales-staff-order-list?tab=${new URLSearchParams(
+                      location.search
+                    ).get("tab")}`
+                  )
+                }
               >
                 Back
               </button>
@@ -319,21 +329,55 @@ const SSOrderDetail = () => {
                   orderDetails.productDetails?.map((item) => (
                     <div className="ss_detail_card" key={item.productCode}>
                       <div className="ss_detail_card_left">
-                        <h3 className="ss_detail_card_name">
-                          {item.productName}
-                        </h3>
                         <img
                           src={item.productImageLink.split(";")[0]}
                           alt={item.productName}
                         />
                       </div>
                       <div className="ss_detail_card_content">
-                        <p>{item.productDescription}</p>
-                        <p>{item.productCode}</p>
-                        <p className="ss_detail_card_size">Size: {item.size}</p>
-                        <p className="ss_detail_card_price">
-                          ${item.lineTotal}
+                        <div className="ss_detail_card_header">
+                          <h5 className="ss_detail_card_name">
+                            {item.productName}
+                          </h5>
+                        </div>
+                        <div className="ss_detail_card_line">
+                          <p className="ss_detail_card_item">
+                            Shell: {item.shellMaterial}
+                          </p>
+                          <p className="ss_detail_card_item">Size: {item.size}</p>
+                        </div>
+                        <div className="ss_detail_card_line">
+                          <p className="ss_detail_card_item">
+                            Main Diamond ID: {item.mainDiamondId?.join(", ") || "N/A"}
+                          </p>
+                          <p className="ss_detail_card_item">
+                            Main Diamond Quantity: {item.mainDiamondQuantity || "N/A"}
+                          </p>
+                        </div>
+                        <div className="ss_detail_card_line">
+                          <p className="ss_detail_card_item">
+                            Sub Diamond ID: {item.subDiamondId || "N/A"}
+                          </p>
+                          <p className="ss_detail_card_item">
+                            Sub Diamond Quantity: {item.subDiamondQuantity || "N/A"}
+                          </p>
+                        </div>
+                        <p className="ss_detail_card_size">
+                          Certificate:{" "}
+                          {item.certificateScans?.map((scan, index) => (
+                            <React.Fragment key={index}>
+                              {index > 0 && ", "}
+                              <a
+                                href={scan}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {scan}
+                              </a>
+                            </React.Fragment>
+                          ))}
                         </p>
+                        <p className="ss_detail_card_price">${item.lineTotal}</p>
                       </div>
                     </div>
                   ))}
@@ -350,15 +394,6 @@ const SSOrderDetail = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <PaymentIcon /> Payment Method: {orderDetails.paymentMethod}
-                  </div>
-                  <div style={{ marginBottom: "10px" }}>
-                    <VerifiedUserIcon /> Certificate:
-                  </div>
-                  <div
-                    className="ss_warranty_order_manage"
-                    style={{ marginBottom: "10px" }}
-                  >
-                    <WarrantyIcon /> Warranty:
                   </div>
                 </div>
                 <p

@@ -497,10 +497,10 @@ function ProductDetail() {
               <strong>Clarity:</strong> {diamond.clarity}
             </p>
             <p className="product_specification_sub_diamond_amount">
-              <strong>Sub Diamond Amount:</strong> {product.subDiamondAmount}
+              <strong>Sub Diamond Quantity:</strong> {product.subDiamondAmount}
             </p>
             <p className="product_specification_main_diamond_amount">
-              <strong>Main diamond amount:</strong> {product.mainDiamondAmount}
+              <strong>Main Diamond Quantity:</strong> {product.mainDiamondAmount}
             </p>
             <p className="product_specification_collection">
               <strong>Collection:</strong> {collection.name}
