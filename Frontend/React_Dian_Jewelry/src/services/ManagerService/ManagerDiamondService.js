@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // Main Diamond
-const ShowAllDiamond = async (pageNumber = 1, pageSize = 6, shape = "", clarity = "", color = "", cut = "") => {
+const ShowAllDiamond = async (pageNumber = 1, pageSize = 6, shape = "", clarity = "", color = "", cut = "", search="") => {
   const response = await axios.get(`${API_BASE_URL}/diamonds/all`, {
     params: {
       PageNumber: pageNumber,
@@ -12,6 +12,7 @@ const ShowAllDiamond = async (pageNumber = 1, pageSize = 6, shape = "", clarity 
       Clarity: clarity,
       Color: color,
       Cut: cut,
+      SearchTerm: search
     },
   });
   return response.data;
@@ -51,7 +52,7 @@ const createDiamond = async (data) => {
 };
 
 // Sub Diamond
-const getAllSubDiamond = async (pageNumber = 1, pageSize = 6, shape = "", clarity = "", color = "", cut = "") => {
+const getAllSubDiamond = async (pageNumber = 1, pageSize = 6, shape = "", clarity = "", color = "", cut = "", search="") => {
   const response = await axios.get(`${API_BASE_URL}/subdiamonds/all`, {
     params: {
       PageNumber: pageNumber,
@@ -60,6 +61,7 @@ const getAllSubDiamond = async (pageNumber = 1, pageSize = 6, shape = "", clarit
       Clarity: clarity,
       Color: color,
       Cut: cut,
+      SearchTerm: search
     },
   });
   return response.data;

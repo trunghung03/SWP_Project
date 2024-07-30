@@ -150,6 +150,11 @@ namespace DIAN_.Repository
                 string lowerSearchTerm = querry.SearchTerm.ToLower();
                 ordersQuery = ordersQuery.Where(d =>
                     d.OrderId.ToString().Equals(lowerSearchTerm) ||
+                    d.PaymentMethod.ToLower().Contains(lowerSearchTerm) ||
+                    d.Date.ToString().Contains(lowerSearchTerm) ||
+                    d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.UserId.Equals(lowerSearchTerm) ||
                     d.Name.ToLower().Contains(lowerSearchTerm));
             }
             var totalCount = await ordersQuery.CountAsync();
@@ -188,6 +193,11 @@ namespace DIAN_.Repository
                 string lowerSearchTerm = querry.SearchTerm.ToLower();
                 ordersQuery = ordersQuery.Where(d =>
                     d.OrderId.ToString().Equals(lowerSearchTerm) ||
+                    d.PaymentMethod.ToLower().Contains(lowerSearchTerm) ||
+                    d.Date.ToString().Contains(lowerSearchTerm) ||
+                    d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.PhoneNumber.Contains(lowerSearchTerm) ||
+                    d.UserId.Equals(lowerSearchTerm) ||
                     d.Name.ToLower().Contains(lowerSearchTerm));
             }
             var totalCount = await ordersQuery.CountAsync();

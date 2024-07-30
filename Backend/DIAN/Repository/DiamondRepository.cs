@@ -93,7 +93,7 @@ namespace DIAN_.Repository
                 string lowerSearchTerm = query.SearchTerm.ToLower();
                 diamondQuery = diamondQuery.Where(d =>
                     d.DiamondId.ToString().Contains(lowerSearchTerm) ||
-                    d.MainDiamondAtrributeId.ToString().Contains(lowerSearchTerm) ||
+                    //d.MainDiamondAtrributeId.ToString().Contains(lowerSearchTerm) ||
                     d.CertificateScan.ToLower().Contains(lowerSearchTerm) ||
                     d.OrderDetailId.ToString().Contains(lowerSearchTerm) ||
                     d.Price.ToString().Contains(lowerSearchTerm) ||

@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Paper, TableContainer, Tab, Tabs, MenuItem, Select, FormControl, InputLabel, Grid } from "@mui/material";
+import { Box, Grid, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import swal from "sweetalert";
-import {
-  deleteDiamondById,
-  deleteSubDiamondById,
-  getAllSubDiamond,
-  ShowAllDiamond,
-} from "../../../services/ManagerService/ManagerDiamondService";
+import { deleteDiamondById, deleteSubDiamondById, getAllSubDiamond, ShowAllDiamond } from "../../../services/ManagerService/ManagerDiamondService";
 import "../../../styles/Manager/ManagerList.scss";
 import DiamondTable from "./DiamondTable";
 import PropTypes from "prop-types";
@@ -44,13 +39,7 @@ function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
@@ -69,7 +58,7 @@ function a11yProps(index) {
   };
 }
 
-export default function DiamondTypeSwitcher() {
+export default function DiamondTypeSwitcher({ searchTerm }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,14 +89,14 @@ export default function DiamondTypeSwitcher() {
       pageSize: 6,
       currentPage: pageNumber,
     });
-  }, [searchParams, value, shapeFilter, clarityFilter, colorFilter, cutFilter]);
+  }, [searchParams, value, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm]);
 
   const fetchData = async (page, type) => {
     try {
       const response =
         type === "main"
-          ? await ShowAllDiamond(page, 6, shapeFilter, clarityFilter, colorFilter, cutFilter)
-          : await getAllSubDiamond(page, 6, shapeFilter, clarityFilter, colorFilter, cutFilter);
+          ? await ShowAllDiamond(page, 6, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm)
+          : await getAllSubDiamond(page, 6, shapeFilter, clarityFilter, colorFilter, cutFilter, searchTerm);
 
       if (response?.data.length === 0) {
         setDiamondList([{ message: "Diamond does not exist" }]);
