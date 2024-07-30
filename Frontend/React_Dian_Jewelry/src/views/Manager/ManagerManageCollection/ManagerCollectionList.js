@@ -1,148 +1,21 @@
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import EditIcon from "@mui/icons-material/Edit";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Pagination from "@mui/material/Pagination";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import { visuallyHidden } from "@mui/utils";
-import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { Pagination, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
+import { useForm } from "react-hook-form";
 import logo from "../../../assets/img/logoN.png";
-import AutoResizeTextarea from "../../../components/AutoResizeTextBox/AutoResizeTextarea.js";
-import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js";
+import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar";
 import {
   ShowAllCollection,
   changeStatus,
   searchCollectionById,
   updateCollectionById,
   uploadImage,
-} from "../../../services/ManagerService/ManagerCollectionService.js";
+} from "../../../services/ManagerService/ManagerCollectionService";
 import "../../../styles/Manager/ManagerList.scss";
-
-// Head cells for the collection table
-const headCells = [
-  {
-    id: "collectionId",
-    numeric: false,
-    disablePadding: false,
-    label: "ID",
-    sortable: true,
-  },
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: false,
-    label: "Name",
-    sortable: true,
-  },
-  {
-    id: "description",
-    numeric: false,
-    disablePadding: false,
-    label: "Description",
-    sortable: false,
-  },
-  {
-    id: "imageLink",
-    numeric: false,
-    disablePadding: false,
-    label: "Images",
-    sortable: false,
-  },
-  {
-    id: "update",
-    numeric: false,
-    disablePadding: false,
-    label: "Update",
-    sortable: false,
-  },
-  {
-    id: "action",
-    numeric: false,
-    disablePadding: false,
-    label: "Action",
-    sortable: false,
-  },
-];
-
-// Enhanced Table Head for sorting
-function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
-
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            style={{ backgroundColor: "#faecec" }}
-            key={headCell.id}
-            align="center"
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            {headCell.sortable ? (
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            ) : (
-              headCell.label
-            )}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-};
-
-// Comparator function for sorting
-const getComparator = (order, orderBy) => {
-  return order === "desc"
-    ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
-    : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
-};
-
-// Sort table rows based on comparator
-const tableSort = (array, comparator) => {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-};
+import CollectionTable from "./CollectionTable";
+import EditCollectionModal from "./EditCollectionModal";
+import CollectionSearchBar from "./CollectionSearchBar";
 
 const ManagerCollectionList = () => {
   const navigate = useNavigate();
@@ -155,9 +28,8 @@ const ManagerCollectionList = () => {
   const [originalCollection, setOriginalCollection] = useState({});
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("collectionId");
-  const [files, setFiles] = useState([]);
-  const [imageUrls, setImageUrls] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
+  const { register, handleSubmit, reset } = useForm();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -169,7 +41,7 @@ const ManagerCollectionList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [role]);
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 6;
@@ -236,91 +108,23 @@ const ManagerCollectionList = () => {
       );
     }
   };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedCollection({
-      ...editedCollection,
-      [name]: name === "status" ? value === "true" : value,
-    });
-  };
 
-  const handleFileSelect = async (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    const newImageUrls = [];
-    const newPreviews = [];
-
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await uploadImage(formData);
-        const url = response.url;
-        console.log("Image: " + url);
-        newImageUrls.push(url);
-        newPreviews.push(URL.createObjectURL(file));
-      } catch (error) {
-        console.error("Upload error:", error);
-      }
-    }
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-    setImageUrls((prevUrls) => [...prevUrls, ...newImageUrls]);
-    setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
-  };
   const handleEdit = (collection) => {
     setEditMode(true);
     setEditedCollection(collection);
     setOriginalCollection(collection);
-    setFiles([]);
-    setImageUrls([]);
-    setImagePreviews(collection.imageLink ? collection.imageLink.split(';') : []);
+    reset(collection); // Reset form values
   };
-  const handleUpdate = async () => {
-    // Convert imageUrls array to a semicolon-separated string
-    const imageLinkString = imageUrls.join(";");
 
-    const updatedCollection = {
-      ...editedCollection,
-      imageLink: imageLinkString,
-    };
-
-    if (!updatedCollection.name) {
-      swal("Validation Error", "Name is required.", "error");
-      return;
-    }
-
-    if (!updatedCollection.description) {
-      swal("Validation Error", "Description is required.", "error");
-      return;
-    }
-
-    if (updatedCollection.status === undefined) {
-      swal("Validation Error", "Status is required.", "error");
-      return;
-    }
-    try {
-      console.log("Updating collection with data:", updatedCollection);
-      const response = await updateCollectionById(
-        editedCollection.collectionId,
-        updatedCollection
-      );
-      console.log("Update response:", response);
-      setEditMode(false);
-      const refreshedData = await ShowAllCollection(role);
-      setCollectionItems(refreshedData);
-      swal("Updated successfully!", "Collection has been updated.", "success");
-    } catch (error) {
-      console.error("Update error:", error);
-      if (error.response) {
-        console.error("Server response:", error.response.data);
-      }
-      swal(
-        "Something went wrong!",
-        "Failed to update collection. Please try again.",
-        "error"
-      );
-    }
+  const handleUpdate = (updatedCollection) => {
+    setCollectionItems((prevCollections) =>
+      prevCollections.map((item) =>
+        item.collectionId === updatedCollection.collectionId
+          ? updatedCollection
+          : item
+      )
+    );
+    setEditMode(false);
   };
 
   const handleCancel = () => {
@@ -354,16 +158,11 @@ const ManagerCollectionList = () => {
       <div className="manager_manage_diamond_content">
         <div className="manager_manage_diamond_header">
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
-          <div className="manager_manage_diamond_search_section">
-            <input
-              type="text"
-              className="manager_manage_diamond_search_bar"
-              placeholder="Search by ID..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyUp={handleSearchKeyPress}
-            />
-          </div>
+          <CollectionSearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            handleSearchKeyPress={handleSearchKeyPress}
+          />
         </div>
         <hr className="manager_header_line" />
         <h3>List Of Collections</h3>
@@ -391,149 +190,34 @@ const ManagerCollectionList = () => {
           </Stack>
         </div>
 
-        <div className="manager_manage_diamond_table_wrapper">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <EnhancedTableHead
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={(event, property) => {
-                  const isAsc = orderBy === property && order === "asc";
-                  setOrder(isAsc ? "desc" : "asc");
-                  setOrderBy(property);
-                }}
-                rowCount={collectionItems.length}
-              />
-              <TableBody>
-                {currentOrders.length > 0 ? (
-                  tableSort(currentOrders, getComparator(order, orderBy)).map(
-                    (item) => (
-                      <TableRow
-                        key={item.collectionId}
-                        sx={{
-                          "&:hover": {
-                            backgroundColor: "#f5f5f5",
-                          },
-                          cursor: "pointer",
-                        }}
-                      >
-                        <TableCell align="center">
-                          {item.collectionId}
-                        </TableCell>
-                        <TableCell align="center">{item.name}</TableCell>
-                        <TableCell align="center">{item.description}</TableCell>
-                        <TableCell align="center">
-                          {item.imageLink
-                            ? item.imageLink.split(";").map((link, index) => (
-                                <img
-                                  key={index}
-                                  src={link}
-                                  alt={`Collection ${item.name} ${index + 1}`}
-                                  style={{ width: "50px", marginRight: "5px" }}
-                                />
-                              ))
-                            : "No images"}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton onClick={() => handleEdit(item)}>
-                            <EditIcon
-                              style={{ cursor: "pointer", color: "#575252" }}
-                            />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Button
-                            onClick={() => handleStatus(item.collectionId)}
-                            style={{
-                              backgroundColor: item.status
-                                ? "#1fd655"
-                                : "#c94143",
-                              color: "white",
-                            }}
-                            variant="contained"
-                          >
-                            {item.status ? "Active" : "Deactive"}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan="9">No Collection found</TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {isSearch && (
-            <button className="btn btn-secondary mt-3" onClick={handleBack}>
-              Back to show all collections
-            </button>
-          )}
-        </div>
+        <CollectionTable
+          collections={currentOrders}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={(event, property) => {
+            const isAsc = orderBy === property && order === "asc";
+            setOrder(isAsc ? "desc" : "asc");
+            setOrderBy(property);
+          }}
+          handleEdit={handleEdit}
+          handleStatus={handleStatus}
+        />
+
+        {isSearch && (
+          <button className="btn btn-secondary mt-3" onClick={handleBack}>
+            Back to show all collections
+          </button>
+        )}
       </div>
 
       {editMode && (
-        <div
-          className={`manager_manage_diamond_modal_overlay ${
-            editMode ? "active" : ""
-          }`}
-          onClick={() => setEditMode(false)}
-        >
-          <div
-            className="manager_manage_diamond_update_modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Collection Information</h4>
-              <div className="manager_manage_diamond_form_group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  maxLength={100}
-                  value={editedCollection.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Description</label>
-                <AutoResizeTextarea
-                  name="description"
-                  value={editedCollection.description}
-                  onChange={handleChange}
-                  maxLength={255}
-                  required
-                />
-              </div>
-              <div className="manager_manage_product_form_group">
-                <div className="manager_add_diamond_form_group">
-                  <label>Images:</label>
-                  <input type="file" multiple onChange={handleFileSelect} />
-                </div>
-              </div>
-              <div className="manager_manage_product_form_group">
-                <div className="manager_add_diamond_form_group">
-                  <label>Status:</label>
-                  <select
-                    name="status"
-                    value={editedCollection.status}
-                    onChange={handleChange}
-                  >
-                    <option value={true}>Active</option>
-                    <option value={false}>Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="manager_manage_diamond_modal_actions">
-                <button onClick={handleCancel}>Cancel</button>
-                <button onClick={handleUpdate}>Confirm</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <EditCollectionModal
+          editMode={editMode}
+          handleCancel={handleCancel}
+          editedCollection={editedCollection}
+          setCollectionItems={setCollectionItems}
+          handleUpdate={handleUpdate}
+        />
       )}
     </div>
   );

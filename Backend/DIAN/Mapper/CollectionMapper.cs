@@ -24,7 +24,7 @@ namespace DIAN_.Mapper
                 Name = updateCollectionDTO.Name,
                 Description = updateCollectionDTO.Description,
                 Status = updateCollectionDTO.Status ?? true,
-                CollectionImage = updateCollectionDTO.ImageLink
+                CollectionImage = updateCollectionDTO.CollectionImage
             };
         }
 

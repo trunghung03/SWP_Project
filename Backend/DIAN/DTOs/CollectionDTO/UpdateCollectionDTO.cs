@@ -12,6 +12,6 @@ namespace DIAN_.DTOs.CategoryDTO
         public string? Description { get; set; }
         [Required(ErrorMessage ="Status is required")]
         public bool? Status { get; set; }
-        public string? ImageLink { get; set; }
+        public string? CollectionImage { get; set; }
     }
 }
