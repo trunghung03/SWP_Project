@@ -226,7 +226,7 @@ function Collection() {
                         </Select>
                     </FormControl>
 
-                    <TextField
+                    {/* <TextField
                         className="collection_filter_group"
                         size="small"
                         id="caratFilter"
@@ -234,7 +234,7 @@ function Collection() {
                         type="number"
                         value={carat}
                         onChange={(e) => setCarat(e.target.value)}
-                    />
+                    /> */}
 
 
                 </div>

@@ -165,6 +165,18 @@ function DiamondJewelry() {
         setColor('');
         setSort('');
         setShape('');
+        // Fetch all products again after removing filters
+        getProductList()
+            .then(response => {
+                let filteredProducts = response.data;
+
+                if (category && categoryMap[category]) {
+                    filteredProducts = filteredProducts.filter(product => categoryMap[category].includes(product.categoryID));
+                }
+
+                setProducts(filteredProducts);
+            })
+            .catch(error => console.log(error));
     };
 
     useEffect(() => {
@@ -281,7 +293,7 @@ function DiamondJewelry() {
                         </Select>
                     </FormControl>
 
-                    <TextField
+                    {/* <TextField
                         className="filter_group"
                         size="small"
                         id="caratFilter"
@@ -290,7 +302,7 @@ function DiamondJewelry() {
                         value={carat}
                         onChange={(e) => setCarat(e.target.value)}
                         placeholder="None"
-                    />
+                    /> */}
                 </div>
                 <ProductList products={products} resetKey={transitionKey} />
             </div>
