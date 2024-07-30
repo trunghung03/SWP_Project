@@ -142,7 +142,7 @@ namespace DIAN_.Repository
 
         public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListSalesOrderAssign(int staffId, PurchaseOrderQuerry querry)
         {
-            var ordersQuery = _context.Purchaseorders.OrderByDescending(o => o.Date)
+            var ordersQuery = _context.Purchaseorders.OrderByDescending(o => o.OrderId)
                   .Where(po => po.SaleStaff == staffId);
 
             if (querry.Status != "default")
@@ -184,7 +184,7 @@ namespace DIAN_.Repository
 
         public async Task<(List<Purchaseorder> Orders, int TotalCount)> GetListDeliOrderAssign(int staffId, PurchaseOrderQuerry querry)
         {
-            var ordersQuery = _context.Purchaseorders.OrderByDescending(o => o.Date)
+            var ordersQuery = _context.Purchaseorders.OrderByDescending(o => o.OrderId)
                 .Where(po => po.DeliveryStaff == staffId &&
                     (po.OrderStatus.ToLower() == "delivering"
                     || po.OrderStatus.ToLower() == "completed"));

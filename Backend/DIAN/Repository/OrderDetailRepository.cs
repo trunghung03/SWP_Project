@@ -113,7 +113,8 @@ namespace DIAN_.Repository
                         ShellMaterial = od.Shell != null ? od.Shell.ShellMaterial.Name : null,
                         LineTotal = od.LineTotal,
                         SubDiamondId = od.Product.SubDiamondAtrributeId ?? 0, 
-                        SubDiamondQuantity = od.Product.SubDiamondAmount ?? 0 
+                        SubDiamondQuantity = od.Product.SubDiamondAmount ?? 0,
+                        MainDiamondQuantity = od.Diamonds.Count()
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
