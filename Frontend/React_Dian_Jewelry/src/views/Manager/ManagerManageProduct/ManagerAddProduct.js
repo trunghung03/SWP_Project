@@ -109,9 +109,12 @@ const ManagerAddProduct = () => {
     
         setProductData((prevData) => ({
             ...prevData,
-            imageLinkList: [...prevData.imageLinkList.split(';'), ...newImageUrls].join(';')
+            imageLinkList: prevData.imageLinkList
+                ? `${prevData.imageLinkList};${newImageUrls.join(';')}`
+                : newImageUrls.join(';')
         }));
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
