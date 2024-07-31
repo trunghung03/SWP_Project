@@ -29,6 +29,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { Button } from "@mui/material";
+import { set, useForm } from "react-hook-form";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import { toast } from "sonner";
 
 const ManagerShellList = () => {
   const navigate = useNavigate();
@@ -90,6 +97,13 @@ const ManagerShellList = () => {
     fetchData();
   }, [currentPage, searchQuery]);
 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
   const fetchShells = async (pageNumber, pageSize, searchQuery = "") => {
     try {
       const response = await ShowAllShell(pageNumber, pageSize, searchQuery);
@@ -128,18 +142,16 @@ const ManagerShellList = () => {
           await deleteShellMaterialById(shellID);
           const response = await ShowAllShellMaterial();
           setShellMaterial(response);
-          swal(
-            "Deleted successfully!",
-            "The shell has been deleted.",
-            "success"
-          );
+          toast.success("Shell material deleted successfully!", {
+            position: "top-right",
+            autoClose: 2000,
+          });
         } catch (error) {
           console.error("Error deleting shell:", error);
-          swal(
-            "Something went wrong!",
-            "Failed to delete the shell. Please try again.",
-            "error"
-          );
+          toast.error("Failed to delete shell material. Please try again.", {
+            position: "top-right",
+            autoClose: 2000,
+          });
         }
       }
     });
@@ -157,21 +169,30 @@ const ManagerShellList = () => {
         try {
           await deleteShellById(shellID);
           await fetchShells(currentPage, ordersPerPage, searchQuery);
-          swal(
-            "Deleted successfully!",
-            "The shell has been deleted.",
-            "success"
-          );
+          toast.success("Shell deleted successfully!", {
+            position: "top-right",
+            autoClose: 2000,
+          });
         } catch (error) {
           console.error("Error deleting shell:", error);
-          swal(
-            "Something went wrong!",
-            "Failed to delete the shell. Please try again.",
-            "error"
-          );
+          toast.error("Failed to delete shell. Please try again.", {
+            position: "top-right",
+            autoClose: 2000,
+          });
         }
       }
     });
+  };
+
+  const handleCloseModal = () => {
+    // shell
+    setEditedShellNotMaterial(originalShellNotMaterial);
+    setEditShellMode(false);
+  };
+
+  const handleCloseShellMaterialModal = () => {
+    setEditedShell(originalShell);
+    setEditMode(false);
   };
 
   const handleEdit = (shell) => {
@@ -193,15 +214,17 @@ const ManagerShellList = () => {
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedShell[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
+        toast.info("Please fill in all fields!", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         return;
       }
       if (specialCharPattern.test(editedShell[field])) {
-        swal(
-          "Invalid characters detected!",
-          `Field "${field}" contains special characters.`,
-          "error"
-        );
+        toast.info("Invalid characters detected!", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         return;
       }
     }
@@ -209,7 +232,10 @@ const ManagerShellList = () => {
     const isEqual =
       JSON.stringify(originalShell) === JSON.stringify(editedShell);
     if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
+      toast.message("No changes detected!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
       return;
     }
 
@@ -225,20 +251,14 @@ const ManagerShellList = () => {
       const updatedItems = await ShowAllShellMaterial();
       setShellMaterial(updatedItems);
       setEditMode(false);
-      swal(
-        "Updated successfully!",
-        "The shellmaterial information has been updated.",
-        "success"
-      );
+      toast.success("Updated successfully!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
     } catch (error) {
       console.error(
         "Error updating shell material:",
         error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
       );
     }
   };
@@ -258,19 +278,17 @@ const ManagerShellList = () => {
     const specialCharPattern = /[$&+?@#|'<>^*()%]/;
     for (let field of requiredFields) {
       if (!editedShellNotMaterial[field]) {
-        swal(
-          "Please fill in all fields!",
-          `Field "${field}" cannot be empty.`,
-          "error"
-        );
+        toast.message("Please fill in all fields!", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         return;
       }
       if (specialCharPattern.test(editedShellNotMaterial[field])) {
-        swal(
-          "Invalid characters detected!",
-          `Field "${field}" contains special characters.`,
-          "error"
-        );
+        toast.message("Invalid characters detected!", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         return;
       }
     }
@@ -279,7 +297,10 @@ const ManagerShellList = () => {
       JSON.stringify(originalShellNotMaterial) ===
       JSON.stringify(editedShellNotMaterial);
     if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
+      toast.message("No changes detected!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
       return;
     }
 
@@ -298,20 +319,14 @@ const ManagerShellList = () => {
       setShell(updatedShells.data);
       setTotalPages(updatedShells.pagination.totalPages);
       setEditShellMode(false);
-      swal(
-        "Updated successfully!",
-        "The shell information has been updated.",
-        "success"
-      );
+      toast.success("Updated successfully!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
     } catch (error) {
       console.error(
         "Error updating shell:",
         error.response ? error.response.data : error.message
-      );
-      swal(
-        "Something went wrong!",
-        "Failed to update. Please try again.",
-        "error"
       );
     }
   };
@@ -515,92 +530,118 @@ const ManagerShellList = () => {
             Back to All
           </button>
         )}
-      </div>
 
-      {editMode && (
-        <div
-          className={`manager_manage_diamond_modal_overlay ${
-            editMode ? "active" : ""
-          }`}
-          onClick={() => setEditMode(false)}
-        >
-          <div
-            className="manager_manage_diamond_update_modal"
-            onClick={(e) => e.stopPropagation()}
+        <Modal open={editMode} onClose={handleCloseShellMaterialModal}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(handleUpdate)}
+            sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
+            style={{
+              backgroundColor: "white",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "30%",
+              boxShadow: 24,
+              borderRadius: 6,
+            }}
           >
-            <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Shell Material Information</h4>
-              <div className="manager_manage_diamond_form_group">
-                <label>Shell Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={editedShell.name}
-                  onChange={handleChange}
-                  maxLength={100}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Price</label>
-                <input
-                  type="text"
-                  name="price"
-                  value={editedShell.price}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_modal_actions">
-                <button onClick={() => setEditMode(false)}>Cancel</button>
-                <button onClick={handleUpdate}>Confirm</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {editShellMode && (
-        <div
-          className={`manager_manage_diamond_modal_overlay ${
-            editShellMode ? "active" : ""
-          }`}
-          onClick={() => setEditShellMode(false)}
-        >
-          <div
-            className="manager_manage_diamond_update_modal"
-            onClick={(e) => e.stopPropagation()}
+            <Typography variant="h6">Edit Shell Material</Typography>
+            <TextField
+              {...register("name", { required: true })}
+              type="text"
+              name="name"
+              label="Name"
+              value={editedShell.name}
+              onChange={handleChange}
+              // error={!!errors.name}
+              helperText={errors.name ? "Name is required" : ""}
+              maxLength={100}
+              required
+            />
+            <TextField
+              {...register("price", {
+                required: { value: true, message: "Price is required" },
+                min: { value: 1, message: "Price must be greater than 0" },
+              })}
+              type="number"
+              label="Price"
+              // error={!!errors.price}
+              helperText={errors.price ? errors.price.message : ""}
+              name="price"
+              value={editedShell.price}
+              onChange={handleChange}
+              required
+            />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              <Button onClick={() => setEditMode(false)}>Cancel</Button>
+              <Button onClick={handleUpdate}>Confirm</Button>
+            </Box>
+          </Box>
+        </Modal>
+
+        <Modal open={editShellMode} onClose={handleCloseModal}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(handleUpdateShell)}
+            sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
+            style={{
+              backgroundColor: "white",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "30%",
+              boxShadow: 24,
+              borderRadius: 6,
+            }}
           >
-            <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Shell Information</h4>
-              <div className="manager_manage_diamond_form_group">
-                <label>Product ID</label>
-                <input
-                  type="text"
-                  name="productId"
-                  value={editedShellNotMaterial.productId}
-                  onChange={handleShellChange}
-                  maxLength={100}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Quantity</label>
-                <input
-                  type="text"
-                  name="amountAvailable"
-                  value={editedShellNotMaterial.amountAvailable}
-                  onChange={handleShellChange}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_modal_actions">
-                <button onClick={() => setEditShellMode(false)}>Cancel</button>
-                <button onClick={handleUpdateShell}>Confirm</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            <Typography variant="h6">Edit Shell</Typography>
+            <TextField
+              {...register("productId", { required: true })}
+              type="text"
+              label="Product ID"
+              // error={!!errors.productId}
+              helperText={errors.productId ? "Product ID is required" : ""}
+              name="productId"
+              value={editedShellNotMaterial.productId}
+              onChange={handleShellChange}
+              required
+            />
+            <TextField
+              {...register("amountAvailable", {
+                required: {
+                  value: true,
+                  message: "Amount available is required",
+                },
+                min: {
+                  value: 1,
+                  message: "Amount available must be greater than 0",
+                },
+                max: {
+                  value: 50,
+                  message: "Amount available must be smaller than 50",
+                },
+              })}
+              type="number"
+              name="amountAvailable"
+              label="Amount Available"
+              // error={!!errors.amountAvailable}
+              helperText={
+                errors.amountAvailable ? errors.amountAvailable.message : ""
+              }
+              value={editedShellNotMaterial.amountAvailable}
+              onChange={handleShellChange}
+              required
+            />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              <Button onClick={() => setEditShellMode(false)}>Cancel</Button>
+              <Button onClick={handleUpdateShell}>Confirm</Button>
+            </Box>
+          </Box>
+        </Modal>
+      </div>
     </div>
   );
 };
