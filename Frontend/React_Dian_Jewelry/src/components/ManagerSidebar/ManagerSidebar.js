@@ -111,7 +111,7 @@ class ManagerSidebar extends Component {
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_view_order_list' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-order-list')}>
                             <ListAltIcon className="list-alt-icon"/>
-                            <span>Orders List</span>
+                            <span>Manage Order</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/staff-edit-profile')}>
                                 <i className="fas fa-user"></i>

@@ -2,7 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Pagination from '@mui/material/Pagination';
+import Pagination from "@mui/material/Pagination";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -25,18 +25,35 @@ import {
   getPromotionDetail,
   updatePromotionById,
 } from "../../../services/ManagerService/ManagerPromotionService.js";
+import { set, useForm } from "react-hook-form";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 const headCells = [
-  { id: 'id', numeric: false, disablePadding: false, label: 'ID', sortable: true },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Name', sortable: true },
-  { id: 'code', numeric: false, disablePadding: false, label: 'Code', sortable: true },
-  { id: 'amount', numeric: true, disablePadding: false, label: 'Discount Percentage (%)', sortable: true },
-  { id: 'description', numeric: false, disablePadding: false, label: 'Description', sortable: false },
-  { id: 'startDate', numeric: false, disablePadding: false, label: 'Start Date', sortable: true },
-  { id: 'endDate', numeric: false, disablePadding: false, label: 'End Date', sortable: true },
-  { id: 'status', numeric: false, disablePadding: false, label: 'Status', sortable: false },
-  { id: 'actions', numeric: false, disablePadding: false, label: 'Actions', sortable: false },
+  { id: "id", numeric: false, disablePadding: false, label: "ID", sortable: true },
+  { id: "name", numeric: false, disablePadding: false, label: "Name", sortable: true },
+  { id: "code", numeric: false, disablePadding: false, label: "Code", sortable: true },
+  { id: "amount", numeric: true, disablePadding: false, label: "Discount Percentage (%)", sortable: true },
+  { id: "description", numeric: false, disablePadding: false, label: "Description", sortable: false },
+  { id: "startDate", numeric: false, disablePadding: false, label: "Start Date", sortable: true },
+  { id: "endDate", numeric: false, disablePadding: false, label: "End Date", sortable: true },
+  { id: "status", numeric: false, disablePadding: false, label: "Status", sortable: false },
+  { id: "actions", numeric: false, disablePadding: false, label: "Actions", sortable: false },
 ];
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+
+const toUcsiDate = (date) => {
+  return new Date(date).toLocaleDateString("en-CA");
+};
 
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
@@ -53,19 +70,19 @@ function EnhancedTableHead(props) {
             style={{ backgroundColor: "#faecec" }}
             key={headCell.id}
             align="center"
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.sortable ? (
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === "desc" ? "sorted descending" : "sorted ascending"}
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -81,12 +98,12 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
 };
 
 const getComparator = (order, orderBy) => {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
     : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
 };
@@ -100,13 +117,13 @@ const tableSort = (array, comparator) => {
   });
   return stabilizedThis.map((el) => el[0]);
 };
+
 const getPromotionStatus = async (endDate, id) => {
   try {
     const promotion = await getPromotionDetail(id);
     if (promotion.status === true) {
       const currentDate = new Date();
       const end = new Date(endDate);
-      // Include the end date in the active period
       return currentDate <= end.setHours(23, 59, 59, 999);
     } else {
       return false;
@@ -119,8 +136,8 @@ const getPromotionStatus = async (endDate, id) => {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#f9c6bb',
-    color: '1c1c1c',
+    backgroundColor: "#f9c6bb",
+    color: "1c1c1c",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -174,19 +191,23 @@ const ManagerPromotionList = () => {
   const navigate = useNavigate();
   const [promotionList, setPromotionList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [editMode, setEditMode] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("id");
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [open, setOpen] = useState(false);
   const [editedPromotion, setEditedPromotion] = useState({
     name: "",
     code: "",
     amount: 0,
     description: "",
-    validFrom: "",
-    validTo: ""
+    startDate: "",
+    endDate: "",
   });
   const [originalPromotion, setOriginalPromotion] = useState({});
-  const [isSearch, setIsSearch] = useState(false);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -200,12 +221,12 @@ const ManagerPromotionList = () => {
     fetchData();
   }, []);
 
-  const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const handlePageChange = (event, value) => {
     setPage(value);
   };
+
+
+
 
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -243,94 +264,56 @@ const ManagerPromotionList = () => {
           swal("Promotion not found!", "Please try another one.", "error");
         }
       } else {
-        setIsSearch(false);
-        try {
-          const response = await ShowAllPromotion();
-          setPromotionList(response);
-          setPage(1);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+        swal("Please enter a valid promotion name or ID.", {
+          icon: "warning",
+        });
       }
     }
   };
 
-  const handleEdit = (promotion) => {
-    setEditMode(true);
-    setEditedPromotion({
-      ...promotion,
-      validFrom: formatDate(promotion.startDate),
-      validTo: formatDate(promotion.endDate)
-    });
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const handleOpenModal = (promotion) => {
+    setEditedPromotion(promotion);
     setOriginalPromotion(promotion);
+    Object.keys(promotion).forEach((key) => {
+      setValue(key, promotion[key]);
+      setValue("validFrom", formatDate(promotion.startDate));
+      setValue("validTo", formatDate(promotion.endDate));
+      setValue("amount", promotion.amount * 100);
+
+    });
+    setOpen(true);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedPromotion({ ...editedPromotion, [name]: value });
+  const handleCloseModal = () => {
+    setEditedPromotion(originalPromotion);
+    setOpen(false);
   };
 
-  const handleUpdate = async () => {
-    const requiredFields = ["name", "code", "amount", "description", "validFrom", "validTo"];
-    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
-    for (let field of requiredFields) {
-      if (!editedPromotion[field]) {
-        swal("Please fill in all fields!", `Field cannot be empty.`, "error");
-        return;
-      }
-      if (field !== "description" && specialCharPattern.test(editedPromotion[field])) {
-        swal("Invalid characters detected!", `Field "${field}" contains special characters.`, "error");
-        return;
-      }
-    }
-
-    const validFromDate = new Date(editedPromotion.validFrom);
-    const validToDate = new Date(editedPromotion.validTo);
-
-    if (validFromDate > validToDate) {
-      swal("Invalid date range!", "The start date must be before the end date.", "error");
-      return;
-    }
-
-    const isEqual =
-      JSON.stringify(originalPromotion) === JSON.stringify(editedPromotion);
-    if (isEqual) {
-      swal("No changes detected!", "You have not made any changes.", "error");
-      return;
-    }
-
-    const promotionToUpdate = { ...editedPromotion, status: true };
-
+  const onSubmit = async (data) => {
     try {
-      const response = await updatePromotionById(promotionToUpdate.id, promotionToUpdate);
-      const updatedPromotionList = await ShowAllPromotion();
-      setPromotionList(updatedPromotionList);
-      setEditMode(false);
-      swal("Updated successfully!", "The promotion information has been updated.", "success");
-    } catch (error) {
-      console.error("Error updating promotion:", error.response ? error.response.data : error.message);
-      swal("Something went wrong!", "Failed to update. Please try again.", "error");
-    }
-  };
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-
-  const handleBack = async () => {
-    try {
+      data.amount = data.amount/100;
+      data.validFrom = new Date(data.startDate);
+      data.validTo = new Date(data.endDate);
+      await updatePromotionById(editedPromotion.id, data);
+      setOpen(false);
+      swal("Update successful!", "Promotion has been updated.", "success");
       const response = await ShowAllPromotion();
       setPromotionList(response);
-      setPage(1);
-      setIsSearch(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error updating Promotion:", error);
+      swal("Update failed!", "There was an error updating the Promotion.", "error");
     }
   };
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, promotionList.length - (page - 1) * rowsPerPage);
+  const sortedPromotions = tableSort(promotionList, getComparator(order, orderBy));
+  const paginatedPromotions = sortedPromotions.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -368,147 +351,119 @@ const ManagerPromotionList = () => {
           />
         </div>
         <div className="manager_manage_diamond_table_wrapper">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <EnhancedTableHead
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={(event, property) => {
-                  const isAsc = orderBy === property && order === "asc";
-                  setOrder(isAsc ? "desc" : "asc");
-                  setOrderBy(property);
-                }}
-                rowCount={promotionList.length}
-              />
-              <TableBody>
-                {promotionList.length > 0 ? (
-                  tableSort(promotionList, getComparator(order, orderBy))
-                    .slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage)
-                    .map((item) => (
-                      <TableRow className="manager_manage_table_body_row" key={item.id}>
-                        <TableCell align="center">{item.id}</TableCell>
-                        <TableCell align="center">{item.name}</TableCell>
-                        <TableCell align="center">{item.code}</TableCell>
-                        <TableCell align="center">{item.amount*100}</TableCell>
-                        <TableCell align="center">{item.description}</TableCell>
-                        <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
-                        <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>
-                        <TableCell align="center">
-                          <PromotionButton endDate={item.endDate} id={item.id} />
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton onClick={() => handleEdit(item)}>
-                            <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan="9" align="center">
-                      No Promotion found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {isSearch && (
-            <button className="btn btn-secondary mt-3" onClick={handleBack}>
-              Back to show all promotions
-            </button>
-          )}
-        </div>
-      </div>
-
-      {editMode && (
-        <div
-          className={`manager_manage_diamond_modal_overlay ${editMode ? 'active' : ''}`}
-          onClick={() => setEditMode(false)}
-        >
-          <div
-            className="manager_manage_diamond_update_modal"
-            onClick={(e) => e.stopPropagation()}
+        <TableContainer component={Paper}>
+          <Table>
+            <EnhancedTableHead
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
+            <TableBody>
+              {paginatedPromotions.map((promotion) => (
+                <TableRow key={promotion.id}>
+                  <StyledTableCell align="center">{promotion.id}</StyledTableCell>
+                  <StyledTableCell align="center">{promotion.name}</StyledTableCell>
+                  <StyledTableCell align="center">{promotion.code}</StyledTableCell>
+                  <StyledTableCell align="center">{promotion.amount*100}</StyledTableCell>
+                  <StyledTableCell align="center">{promotion.description}</StyledTableCell>
+                  <TableCell align="center">{new Date(promotion.startDate).toLocaleDateString("en-CA")}</TableCell>
+                        <TableCell align="center">{new Date(promotion.endDate).toLocaleDateString("en-CA")}</TableCell>
+                  <StyledTableCell align="center">
+                    <PromotionButton endDate={promotion.endDate} id={promotion.id} />
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <IconButton onClick={() => handleOpenModal(promotion)}>
+                      <EditIcon />
+                    </IconButton>
+                  </StyledTableCell>
+                </TableRow>
+              ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={9} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Modal open={open} onClose={handleCloseModal}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
+            style={{
+              backgroundColor: "white",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "40%",
+              boxShadow: 24,
+              borderRadius: 5,
+            }}
           >
-            <div className="manager_manage_diamond_modal_content">
-              <h4>Edit Promotion Information</h4>
-              <div className="manager_manage_diamond_form_group">
-                <label>Promotion Name</label>
-                <input
-                  label="Name"
-                  name="name"
-                  value={editedPromotion.name}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Code</label>
-                <input
-                  type="text"
-                  name="code"
-                  maxLength={50}
-                  value={editedPromotion.code}
-                  onChange={handleChange}
-                  placeholder="Enter promotion's code"
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>Description</label>
-                <input
-                  type="text"
-                  name="description"
-                  value={editedPromotion.description}
-                  onChange={handleChange}
-                  placeholder="Enter promotion's description"
-                  maxLength={255}
-                  required
-                />
-              </div>
-
-              <div className="manager_manage_diamond_form_group">
-                <label>Percentage</label>
-                <input
-                  type="number"
-                  name="amount"
-                  value={editedPromotion.amount}
-                  onChange={handleChange}
-                  placeholder="Enter promotion's percentage"
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>From</label>
-                <input
-                  type="date"
-                  name="validFrom"
-                  placeholder="Enter promotion's valid from"
-                  value={editedPromotion.validFrom}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="manager_manage_diamond_form_group">
-                <label>To</label>
-                <input
-                  type="date"
-                  name="validTo"
-                  placeholder="Enter promotion's valid to"
-                  value={editedPromotion.validTo}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="manager_manage_diamond_modal_actions">
-                <button onClick={() => setEditMode(false)}>Cancel</button>
-                <button onClick={handleUpdate}>Confirm</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            <Typography variant="h6">Edit Promotion</Typography>
+            <TextField
+              {...register("name", { required: "Name is required" })}
+              label="Name"
+              error={!!errors.name}
+              helperText={errors.name ? errors.name.message : ""}
+              fullWidth
+            />
+            <TextField
+              {...register("code", { required: "Code is required" })}
+              label="Code"
+              error={!!errors.code}
+              helperText={errors.code ? errors.code.message : ""}
+              fullWidth
+            />
+            <TextField
+              {...register("amount", {
+                required: "Discount Percentage is required",
+                min: { value: 1, message: "Minimum value is 1" },
+                max: { value: 100, message: "Maximum value is 100" },
+              })}
+              label="Discount Percentage (%)"
+              type="number"
+              error={!!errors.amount}
+              helperText={errors.amount ? errors.amount.message : ""}
+              fullWidth
+            />
+            <TextField
+              {...register("description")}
+              label="Description"
+              fullWidth
+            />
+            <TextField
+              {...register("validFrom", { required: "Start Date is required" })}
+              label="Start Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              error={!!errors.startDate}
+              helperText={errors.startDate ? errors.startDate.message : ""}
+              fullWidth
+            />
+            <TextField
+              {...register("validTo", { required: "End Date is required" })}
+              label="End Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              error={!!errors.endDate}
+              helperText={errors.endDate ? errors.endDate.message : ""}
+              fullWidth
+            />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              <Button variant="contained" color="secondary" onClick={handleCloseModal}>
+                Cancel
+              </Button>
+              <Button variant="contained" color="primary" type="submit">
+                Save
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      </div>
+    </div>
     </div>
   );
 };
