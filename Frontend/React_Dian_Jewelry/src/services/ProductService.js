@@ -15,7 +15,7 @@ const getProductDetail = (id) => {
 };
 
 const getDiamondDetail = (id) => {
-    return axios.get(`${API_BASE_URL}/diamonds/${id}`);
+    return axios.get(`${API_BASE_URL}/diamond-attributes/${id}`);
 };
 
 const getCollectionDetail = (id) => {
