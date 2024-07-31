@@ -110,7 +110,9 @@ namespace DIAN_.Controllers
                                      .Replace("{Color}", diamond.MainDiamondAtrribute.Color)
                                      .Replace("{Clarity}", diamond.MainDiamondAtrribute.Clarity)
                                      .Replace("{Carat}", diamond.MainDiamondAtrribute.Carat.ToString() ?? "N/A")
-                                     .Replace("{Cut}", diamond.MainDiamondAtrribute.Cut);
+                                     .Replace("{Cut}", diamond.MainDiamondAtrribute.Cut)
+                                     .Replace("{OrderDetailId}", diamond.OrderDetailId.ToString() ?? "N/A")
+                                     .Replace("{Shape}", diamond.MainDiamondAtrribute.Shape);
 
             // Define the output PDF file path
             string outputPdfPath = "certificate.pdf";

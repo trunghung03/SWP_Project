@@ -27,7 +27,6 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
   );
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(editedProduct.imageLinkList || "");
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
@@ -57,25 +56,42 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
     handleCancel();
   };
 
+  const handleImageChange = async ({ fileList: newFileList }) => {
+    if (imagePreview.length + newFileList.length > 4) {
+      toast.error("You can only upload up to 4 images. Please delete an existing image to upload a new one.");
+      return;
+    }
+  
+    setLoading(true);
+  
+    const uploadPromises = newFileList.map(file => {
+      const formData = new FormData();
+      formData.append("file", file.originFileObj);
+      return uploadImage(formData);
+    });
+  
+    try {
+      const uploadedImages = await Promise.all(uploadPromises);
+      const uploadedUrls = uploadedImages.map(response => response.url);
+  
+      setImagePreview(prev => [...prev, ...uploadedUrls]);
+      setFileList(newFileList);
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Failed to upload image");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleImageDelete = (index) => {
+    setImagePreview((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data) => {
     setLoading(true);
 
-    let uploadedImages = [];
-    for (const file of fileList) {
-      const formData = new FormData();
-      formData.append("file", file.originFileObj);
-      try {
-        const response = await uploadImage(formData);
-        uploadedImages.push(response.url);
-      } catch (error) {
-        console.error("Upload error:", error);
-        message.error("Failed to upload image");
-        setLoading(false);
-        return;
-      }
-    }
-
-    const updatedImageLinks = [...imagePreview.filter(img => !uploadedImages.includes(img)), ...uploadedImages].join(";");
+    const updatedImageLinks = imagePreview.join(";");
 
     const updatedProduct = {
       ...editedProduct,
@@ -101,16 +117,6 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
     handleClose();
   };
 
-  const handleImageChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    const newPreviews = newFileList.map(file => URL.createObjectURL(file.originFileObj));
-    setImagePreview(prev => [...prev.filter(img => !newPreviews.includes(img)), ...newPreviews]);
-  };
-
-  const handleImageDelete = (index) => {
-    setImagePreview((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const uploadProps = {
     beforeUpload: (file) => {
       const isPNG = file.type === "image/png";
@@ -123,6 +129,14 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
     fileList,
     multiple: true,
   };
+  
+
+  useEffect(() => {
+    return () => {
+      // Clean up the object URLs to avoid memory leaks
+      imagePreview.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [imagePreview]);
 
   return (
     <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="edit-product-modal-title">

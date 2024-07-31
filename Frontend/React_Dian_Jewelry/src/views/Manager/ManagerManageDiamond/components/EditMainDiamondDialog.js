@@ -8,13 +8,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import * as React from "react";
-import { set, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  updateDiamondById,
-  updateSubDiamondById,
-} from "../../../../services/ManagerService/ManagerDiamondService";
+import { updateDiamondById } from "../../../../services/ManagerService/ManagerDiamondService";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
   const theme = useTheme();
@@ -23,6 +20,7 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues: diamondForm,
   });
@@ -40,13 +38,10 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
 
   const onSubmit = (data) => {
     console.log(data);
-    // handleUpdate(data);
     let submitData = {
       price: data.price,
-      //   amountAvailable: data.amountAvailable,
       status: true,
     };
-
 
     toast.promise(updateDiamondById(diamond?.diamondId, submitData), {
       loading: "Updating...",
@@ -65,30 +60,30 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
         return error.response.data.message;
       },
     });
-    // updateDiamondById(diamond.id, data);
-    // setOpen(false);
   };
-
 
   useEffect(() => {
     setDiamondForm(diamond);
-    // console.log("diamond: ", diamond);
-    // console.log("diamondForm: ", diamondForm);
-  }, [diamond]);
+    // Set form values manually if diamond changes
+    Object.keys(diamond).forEach((key) => {
+      setValue(key, diamond[key]);
+    });
+    console.log("Updated diamondForm: ", diamondForm);
+    console.log("Diamond status: ", diamond.status);
+  }, [diamond, setValue]);
+
   return (
     <React.Fragment>
       <IconButton onClick={handleClickOpen} color="primary" aria-label="edit">
-        <EditIcon style={{color:"#575252"}} />
+        <EditIcon style={{ color: "#575252" }} />
       </IconButton>
-      <Dialog 
+      <Dialog
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
-          Edit Diamond Price
-        </DialogTitle>
+        <DialogTitle id="responsive-dialog-title">Edit Diamond Price</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
@@ -134,6 +129,7 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
               fullWidth
             />
             <TextField
+               disabled={diamond?.status === false}
               margin="dense"
               label="Price"
               {...register("price", {
@@ -148,13 +144,13 @@ export default function EditMainDiamondDialog({ diamond, setDiamondList }) {
               })}
               fullWidth
             />
-            {errors.price && <Typography variant="p" color={'red'}>{errors.price.message}</Typography>}
+            {errors.price && <Typography variant="p" color="red">{errors.price.message}</Typography>}
 
-            <DialogActions >
+            <DialogActions>
               <Button onClick={handleClose} color="secondary">
                 Cancel
               </Button>
-              <Button type="submit" color="primary" disabled={errors.price}>
+              <Button type="submit" color="primary" disabled={diamond?.status === false || errors.price}>
                 Save
               </Button>
             </DialogActions>

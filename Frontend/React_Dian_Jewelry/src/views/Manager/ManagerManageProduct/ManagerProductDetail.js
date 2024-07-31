@@ -126,13 +126,13 @@ const ManagerProductDetail = () => {
                 </div>
               )}
               <div className="manager_product_detail_subcontent">
-                <p>Main Diamond ID: {productDetail.mainDiamondAttributeId || "None"}</p>
+                <p>Main Diamond Attribute ID: {productDetail.mainDiamondAttributeId || "None"}</p>
               </div>
               <div className="manager_product_detail_subcontent">
                 <p>Main Diamond Amount: {productDetail.mainDiamondAmount || 0}</p>
               </div>
               <div className="manager_product_detail_subcontent">
-                <p>Sub Diamond ID: {productDetail.subDiamondAttributeId || "None"}</p>
+                <p>Sub Diamond Attribute ID: {productDetail.subDiamondAttributeId || "None"}</p>
               </div>
               <div className="manager_product_detail_subcontent">
                 <p>Sub Diamond Amount: {productDetail.subDiamondAmount || 0}</p>

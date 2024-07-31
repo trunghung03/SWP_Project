@@ -176,6 +176,14 @@ const ManagerEmployeeList = () => {
         </div>
         <hr className="manager_header_line"></hr>
         <h3 style={{ textAlign: "center", marginBottom: "3%" }}>Employee List</h3>
+        <Stack spacing={2} sx={{ alignItems: 'flex-end', mt: 2, marginBottom: '10px'}}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
         <Box sx={{ width: "100%", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <TableContainer>
@@ -221,14 +229,6 @@ const ManagerEmployeeList = () => {
             </TableContainer>
           </Paper>
         </Box>
-        <Stack spacing={2} sx={{ alignItems: 'center', mt: 2 }}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-          />
-        </Stack>
         {isSearch && (
           <button className="btn btn-secondary mt-3" onClick={handleBack}>
             Back to all

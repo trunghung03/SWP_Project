@@ -36,11 +36,20 @@ namespace DIAN_.Repository
 
         public async Task<List<WarrantyDetailDto>> GetAllWarrantyAsync()
         {
-
             var warranties = await _context.Warranties
                 .Where(w => w.Status == "Active" || w.Status == "Invalid")
-                .Select(w => w.ToWarrantyDetailDto())
-                .ToListAsync();
+           .Include(w => w.OrderDetail)
+           .ThenInclude(od => od.Order)
+           .ThenInclude(o => o.User)
+           .Select(w => new WarrantyDetailDto
+           {
+               OrderDetailId = w.OrderDetailId,
+               StartDate = w.StartDate,
+               EndDate = w.EndDate,
+               Status = w.Status,
+               CustomerName = w.OrderDetail.Order.User.FirstName + " " + w.OrderDetail.Order.User.LastName
+           })
+           .ToListAsync();
 
             return warranties;
         }

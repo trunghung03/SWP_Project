@@ -127,21 +127,55 @@ const ManagerOrderDetail = () => {
                   orderDetails.productDetails?.map((item) => (
                     <div className="ss_detail_card" key={item.productCode}>
                       <div className="ss_detail_card_left">
-                        <h3 className="ss_detail_card_name">
-                          {item.productName}
-                        </h3>
                         <img
                           src={item.productImageLink.split(";")[0]}
                           alt={item.productName}
                         />
                       </div>
                       <div className="ss_detail_card_content">
-                        <p>{item.productDescription}</p>
-                        <p>{item.productCode}</p>
-                        <p className="ss_detail_card_size">Size: {item.size}</p>
-                        <p className="ss_detail_card_price">
-                          ${item.lineTotal}
+                        <div className="ss_detail_card_header">
+                          <h5 className="ss_detail_card_name">
+                            {item.productName}
+                          </h5>
+                        </div>
+                        <div className="ss_detail_card_line">
+                          <p className="ss_detail_card_item">
+                            Shell: {item.shellMaterial}
+                          </p>
+                          <p className="ss_detail_card_item">Size: {item.size}</p>
+                        </div>
+                        <div className="ss_detail_card_line">
+                          <p className="ss_detail_card_item">
+                            Main Diamond ID: {item.mainDiamondId?.join(", ") || "N/A"}
+                          </p>
+                          <p className="ss_detail_card_item">
+                            Main Diamond Quantity: {item.mainDiamondQuantity || "N/A"}
+                          </p>
+                        </div>
+                        <div className="ss_detail_card_line">
+                          <p className="ss_detail_card_item">
+                            Sub Diamond ID: {item.subDiamondId || "N/A"}
+                          </p>
+                          <p className="ss_detail_card_item">
+                            Sub Diamond Quantity: {item.subDiamondQuantity || "N/A"}
+                          </p>
+                        </div>
+                        <p className="ss_detail_card_size">
+                          Certificate:{" "}
+                          {item.certificateScans?.map((scan, index) => (
+                            <React.Fragment key={index}>
+                              {index > 0 && ", "}
+                              <a
+                                href={scan}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {scan}
+                              </a>
+                            </React.Fragment>
+                          ))}
                         </p>
+                        <p className="ss_detail_card_price">${item.lineTotal}</p>
                       </div>
                     </div>
                   ))}

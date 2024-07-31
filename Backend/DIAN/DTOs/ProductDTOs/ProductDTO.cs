@@ -24,7 +24,8 @@
         public int? MainDiamondAmount { get; set; }
 
         public decimal? Stock { get; set; } //amount available of shell
-        
+
+        public int MaxProductAvailable { get; set; }
         public int? CollectionId { get; set; }
 
         public List<decimal> Sizes { get; set; } = new List<decimal>();

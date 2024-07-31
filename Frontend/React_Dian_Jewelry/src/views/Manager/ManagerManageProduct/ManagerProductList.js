@@ -33,14 +33,58 @@ import EditModal from "./EditProductModal.js";
 import SearchBar from "./SearchBar";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { tableSort, getComparator } from "../../../Utils/TableUtils";
+import { toast } from "sonner";
+
 const headCells = [
-  { id: "productId", numeric: false, disablePadding: false, label: "ID", sortable: true },
-  { id: "productCode", numeric: false, disablePadding: false, label: "Code", sortable: true },
-  { id: "name", numeric: false, disablePadding: false, label: "Name", sortable: true },
-  { id: "price", numeric: false, disablePadding: false, label: "Price", sortable: true },
-  { id: "action", numeric: false, disablePadding: false, label: "Action", sortable: false },
-  { id: "view", numeric: false, disablePadding: false, label: "View", sortable: false },
-  { id: "available", numeric: false, disablePadding: false, label: "Available", sortable: false },
+  {
+    id: "productId",
+    numeric: false,
+    disablePadding: false,
+    label: "ID",
+    sortable: true,
+  },
+  {
+    id: "productCode",
+    numeric: false,
+    disablePadding: false,
+    label: "Code",
+    sortable: true,
+  },
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: false,
+    label: "Name",
+    sortable: true,
+  },
+  {
+    id: "price",
+    numeric: false,
+    disablePadding: false,
+    label: "Price",
+    sortable: true,
+  },
+  {
+    id: "action",
+    numeric: false,
+    disablePadding: false,
+    label: "Action",
+    sortable: false,
+  },
+  {
+    id: "view",
+    numeric: false,
+    disablePadding: false,
+    label: "View",
+    sortable: false,
+  },
+  {
+    id: "available",
+    numeric: false,
+    disablePadding: false,
+    label: "Quantity",
+    sortable: false,
+  },
 ];
 
 const ManagerProductList = () => {
@@ -62,8 +106,6 @@ const ManagerProductList = () => {
     try {
       const response = await ShowAllProduct(page, pagination.pageSize, query);
       setProductItems(response.data);
-      const pdfResponse = await pdfProduct();
-      setPdfData(pdfResponse.data);
       setPagination(response.pagination);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -71,12 +113,11 @@ const ManagerProductList = () => {
   };
 
   useEffect(() => {
-    fetchData(pagination.currentPage);
-  }, [pagination.currentPage]);
+    fetchData(pagination.currentPage, searchQuery);
+  }, [pagination.currentPage, searchQuery]);
 
   const handlePageChange = (pageNumber) => {
     setPagination((prev) => ({ ...prev, currentPage: pageNumber }));
-    fetchData(pageNumber, searchQuery);
   };
 
   const handleSearchKeyPress = async (e) => {
@@ -92,7 +133,7 @@ const ManagerProductList = () => {
         });
       } catch (error) {
         console.error("Error fetching product:", error);
-        swal("Product not found!", "Please try another one.", "error");
+        toast.error("Product not found! Please try another one.");
       }
     }
   };
@@ -113,21 +154,21 @@ const ManagerProductList = () => {
       if (willDelete) {
         deleteProductById(productID)
           .then(() => {
-            swal(
-              "Deleted successfully!",
-              "The product has been deleted.",
-              "success"
-            ).then(() => {
-              fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
-            });
+            toast
+              .success("Product deleted successfully!", {
+                position: "top-center",
+                autoClose: 3000,
+              })
+              .then(() => {
+                fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
+              });
           })
           .catch((error) => {
             console.error("Error deleting product:", error);
-            swal(
-              "Something went wrong!",
-              "Failed to delete the product. Please try again.",
-              "error"
-            );
+            toast.error("Failed to delete product. Please try again.", {
+              position: "top-center",
+              autoClose: 3000,
+            });
           });
       }
     });
@@ -143,10 +184,17 @@ const ManagerProductList = () => {
       await updateProductById(updatedProduct.productId, updatedProduct);
       fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
       setEditMode(false);
-      swal("Updated successfully!", "The product information has been updated.", "success");
+      toast.success("Product updated successfully!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
     } catch (error) {
       console.error("Error updating product:", error);
-      swal("Something went wrong!", "Failed to update. Please try again.", "error");
+      swal(
+        "Something went wrong!",
+        "Failed to update. Please try again.",
+        "error"
+      );
     }
   };
 
@@ -169,7 +217,12 @@ const ManagerProductList = () => {
           />
         </div>
         <hr className="manager_product_header_line"></hr>
-        <h3 style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif", fontWeight: "500" }}>
+        <h3
+          style={{
+            fontFamily: "Georgia, 'Times New Roman', Times, serif",
+            fontWeight: "500",
+          }}
+        >
           List Of Products
         </h3>
         <div className="manager_manage_diamond_create_button_section">
@@ -192,7 +245,9 @@ const ManagerProductList = () => {
                   fileName="products.pdf"
                   className="link"
                 >
-                  {({ loading }) => (loading ? "Loading document..." : "Download PDF")}
+                  {({ loading }) =>
+                    loading ? "Loading document..." : "Download PDF"
+                  }
                 </PDFDownloadLink>
               </button>
             </Grid>
@@ -215,7 +270,9 @@ const ManagerProductList = () => {
                 order={pagination.order}
                 orderBy={pagination.orderBy}
                 onRequestSort={(event, property) => {
-                  const isAsc = pagination.orderBy === property && pagination.order === "asc";
+                  const isAsc =
+                    pagination.orderBy === property &&
+                    pagination.order === "asc";
                   setPagination({
                     ...pagination,
                     order: isAsc ? "desc" : "asc",
@@ -245,17 +302,27 @@ const ManagerProductList = () => {
                       <TableCell align="center">${item.price}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
+                          <EditIcon
+                            style={{ cursor: "pointer", color: "#575252" }}
+                          />
                         </IconButton>
-                        <IconButton onClick={() => handleDelete(item.productId)}>
-                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }} />
+                        <IconButton
+                          onClick={() => handleDelete(item.productId)}
+                        >
+                          <DeleteIcon
+                            style={{ cursor: "pointer", color: "#575252" }}
+                          />
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
-                        <Visibility onClick={() => viewDetail(item.productId)} />
+                        <Visibility
+                          onClick={() => viewDetail(item.productId)}
+                        />
                       </TableCell>
-                      <TableCell style={{ textTransform: "capitalize" }} align="center">
-                        {item.hasSufficientDiamonds ? "Available" : "Sold out"}
+                      <TableCell align="center">
+                        {item.maxProductAvailable === 0
+                          ? "Sold out"
+                          : item.maxProductAvailable}
                       </TableCell>
                     </TableRow>
                   ))

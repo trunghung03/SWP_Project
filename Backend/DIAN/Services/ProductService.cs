@@ -13,11 +13,13 @@ namespace DIAN_.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepo;
+        private readonly IGoodsService _goodsService;
         private readonly IDistributedCache _distributedCache;
 
-        public ProductService(IProductRepository productRepo, IDistributedCache distributedCache)
+        public ProductService(IProductRepository productRepo, IDistributedCache distributedCache, IGoodsService goodsService)
         {
             _productRepo = productRepo;
+            _goodsService = goodsService;
             _distributedCache = distributedCache;
         }
 
@@ -135,6 +137,8 @@ namespace DIAN_.Services
             foreach (var product in products)
             {
                 var productDTO = product.ToProductDTO();
+                var stockDto = await _goodsService.CheckStockAvailable(product.ProductId);
+                productDTO.MaxProductAvailable = stockDto.MaxProductAvailable;
                 productDTO.HasSufficientDiamonds = await _productRepo.HasSufficientDiamondsForProduct(product.ProductId);
                 productDTOs.Add(productDTO);
             }

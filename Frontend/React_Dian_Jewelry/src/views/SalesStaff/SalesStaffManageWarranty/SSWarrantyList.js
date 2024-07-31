@@ -30,7 +30,8 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const headCells = [
-  { id: 'orderDetailId', numeric: false, disablePadding: false, label: 'Order ID', sortable: true },
+  { id: 'orderDetailId', numeric: false, disablePadding: false, label: 'Order Detail ID', sortable: true },
+  { id: 'customerName', numeric: false, disablePadding: false, label: 'Customer Name', sortable: true },
   { id: 'startDate', numeric: false, disablePadding: false, label: 'Start Date', sortable: true },
   { id: 'endDate', numeric: false, disablePadding: false, label: 'End Date', sortable: true },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status', sortable: true },
@@ -254,6 +255,7 @@ const SSWarrantyList = () => {
                           <TableCell component="th" id={labelId} scope="row" padding="none" align="center">
                             {item.orderDetailId}
                           </TableCell>
+                          <TableCell align="center">{item.customerName}</TableCell>
                           <TableCell align="center">{new Date(item.startDate).toLocaleDateString("en-CA")}</TableCell>
                           <TableCell align="center">{new Date(item.endDate).toLocaleDateString("en-CA")}</TableCell>
                           <TableCell align="center" style={{ color: isExpired(item.endDate) ? "red" : "inherit" }}>
