@@ -8,9 +8,10 @@ import {
   Button,
   Box,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button as AntdButton, Upload, message } from "antd";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -22,7 +23,7 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = useState(editMode);
   const [imagePreview, setImagePreview] = useState(
-    editedProduct.imageLinkList ? editedProduct?.imageLinkList.split(';') : []
+    editedProduct.imageLinkList ? editedProduct.imageLinkList.split(';') : []
   );
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,15 +35,6 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
       status: editedProduct.status ? "isDisplayed" : "notDisplayed"
     },
   });
-
-
-  useEffect(() => {
-    console.log("Image Preview:", imagePreview); // Debugging the image preview
-   
-   if(imagePreview.length ===1 ) {
-     setImageUrl(editedProduct?.imageLinkList.split(';'));
-   }
-  }, [editedProduct?.imageLinkList, imagePreview]);
 
   useEffect(() => {
     if (editMode) {
@@ -83,10 +75,12 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
       }
     }
 
+    const updatedImageLinks = [...imagePreview.filter(img => !uploadedImages.includes(img)), ...uploadedImages].join(";");
+
     const updatedProduct = {
       ...editedProduct,
       ...data,
-      image: uploadedImages.length > 0 ? uploadedImages : imageUrl,
+      imageLinkList: updatedImageLinks,
       status: data.status === "isDisplayed",
     };
 
@@ -110,8 +104,11 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
   const handleImageChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     const newPreviews = newFileList.map(file => URL.createObjectURL(file.originFileObj));
-    setImagePreview(newPreviews);
-    console.log("Image Previews:", newPreviews); // Debugging the new image previews
+    setImagePreview(prev => [...prev.filter(img => !newPreviews.includes(img)), ...newPreviews]);
+  };
+
+  const handleImageDelete = (index) => {
+    setImagePreview((prev) => prev.filter((_, i) => i !== index));
   };
 
   const uploadProps = {
@@ -165,7 +162,15 @@ const EditModal = ({ editMode, handleCancel, editedProduct, setEditedProduct, ha
             {imagePreview?.length > 0 && (
               <Box marginBottom={2} display="flex" flexDirection="column" alignItems="center">
                 {imagePreview.map((img, index) => (
-                  <img key={index} src={img} alt={`Preview ${index}`} style={{ width: 200, height: 200, objectFit: "cover", marginBottom: 10 }} />
+                  <div key={index} style={{ position: 'relative', marginBottom: 10 }}>
+                    <img src={img} alt={`Preview ${index}`} style={{ width: 200, height: 200, objectFit: "cover" }} />
+                    <IconButton
+                      style={{ position: 'absolute', top: 0, right: 0 }}
+                      onClick={() => handleImageDelete(index)}
+                    >
+                      <DeleteOutlined />
+                    </IconButton>
+                  </div>
                 ))}
               </Box>
             )}
