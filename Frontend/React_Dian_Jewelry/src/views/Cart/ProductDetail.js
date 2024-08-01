@@ -268,13 +268,30 @@ function ProductDetail() {
     setShowSizeGuide(false);
     document.body.classList.remove("no-scroll");
   };
+  
+  const calculateShellPrice = (shell, shellMaterials) => {
+    const material = shellMaterials.find(
+      (material) => material.shellMaterialId === shell.shellMaterialId
+    );
+    return material ? material.price * shell.weight : 0;
+  };
 
   const handleShellChange = (e) => {
-    const selectedShell = shellMaterials.find(
-      (shell) => shell.name === e.target.value
+    const selectedShellMaterial = shellMaterials.find(
+      (shellMaterial) => shellMaterial.name === e.target.value
     );
-    setSelectedShell(selectedShell.name);
-    setShellPrice(selectedShell.price);
+    const selectedShellData = shellData.find(
+      (shell) => shell.shellMaterialName === selectedShellMaterial.name
+    );
+  
+    setSelectedShell(selectedShellMaterial.name);
+    
+    if (selectedShellData) {
+      const shellPrice = calculateShellPrice(selectedShellData, shellMaterials);
+      setShellPrice(shellPrice);
+    } else {
+      setShellPrice(0);
+    }
   };
 
   const handleSizeChange = (e) => {
