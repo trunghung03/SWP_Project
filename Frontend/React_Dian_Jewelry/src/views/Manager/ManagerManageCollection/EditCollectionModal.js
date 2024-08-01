@@ -46,7 +46,6 @@ const EditCollectionModal = ({
   });
 
   useEffect(() => {
-    // console.log("Image preview:", editedCollection?.imageLink);
     console.log("Edited collection:", editedCollection);
     if (open === true) {
       setOpen(true);
@@ -69,101 +68,46 @@ const EditCollectionModal = ({
   const onSubmit = async (data) => {
     setLoading(true);
 
+    const updatedCollection = {
+      name: data.name,
+      description: data.description,
+      status: editedCollection.status, // Use the current status from the edited collection
+      collectionImage: imageUrl || imagePreview,
+    };
+
     if (fileList.length > 0) {
       const file = fileList[0].originFileObj;
       const formData = new FormData();
       formData.append("file", file);
 
-
-      toast.promise(uploadImage(formData), {
-        loading: "Uploading...",
-        success: (response) => {
-          const url = response.url;
-          console.log("Upload success:", url);
-          setImageUrl(url);
-          console.log("Edited collection:", editedCollection);
-          let updatedCollection = {
-            // ...editedCollection,
-            name: data.name,
-            description: data.description, 
-            status: data.status,
-            collectionImage: response?.url ?? imagePreview,
-          };
-          console.log("Updated collection:", updatedCollection);
-          console.log("Data:", data);
-           toast.promise(
-            updateCollectionById(collectionId, updatedCollection),
-            {
-              loading: "Updating...",
-              success: () => {
-                setOpen(false);
-                updatedCollection= {...updatedCollection, collectionId: collectionId}
-                updatedCollection= {...updatedCollection, imageLink: response?.url ?? imagePreview}
-                setCollectionItems((prev) =>
-                  prev.map((item) =>
-                    item.collectionId === editedCollection.collectionId
-                      ? updatedCollection
-                      : item
-                  )
-                );
-                return "Collection updated successfully";
-              },
-              error: (error) => {
-                console.error("Update error:", error);
-                return "Failed to update collection";
-              },
-            }
-          );
-          // return "Image uploaded successfully";
-        },
-        error: (error) => {
-          console.error("Upload error:", error);
-          return "Failed to upload image";
-        },
-      });
-      
-
-      // uploadImage(formData)
-      //   .then((response) => {
-      //     const url = response.url;
-      //     console.log("Upload success:", url);
-      //     setImageUrl(url);
-      //     console.log("Edited collection:", editedCollection);
-      //     const updatedCollection = {
-      //       // ...editedCollection,
-      //       name: data.name,
-      //       description: data.description,
-      //       status: data.status,
-      //       collectionImage: response.url ?? imagePreview,
-      //     };
-      //     console.log("Updated collection:", updatedCollection);
-
-      //     toast.promise(
-      //       updateCollectionById(editedCollection?.collectionId, updatedCollection),
-      //       {
-      //         loading: "Updating...",
-      //         success: () => {
-      //           setOpen(false);
-      //           setCollectionItems((prev) =>
-      //             prev.map((item) =>
-      //               item.collectionId === editedCollection.collectionId
-      //                 ? updatedCollection
-      //                 : item
-      //             )
-      //           );
-      //           return "Collection updated successfully";
-      //         },
-      //         error: (error) => {
-      //           console.error("Update error:", error);
-      //           return "Failed to update collection";
-      //         },
-      //       }
-      //     );
-      //   })
-      //   .catch((error) => {
-      //     console.error("Upload error:", error);
-      //   });
+      // Upload image and update the collection
+      try {
+        const uploadResponse = await uploadImage(formData);
+        updatedCollection.collectionImage = uploadResponse?.url || imagePreview;
+      } catch (error) {
+        console.error("Upload error:", error);
+        toast.error("Failed to upload image");
+        setLoading(false);
+        return;
+      }
     }
+
+    try {
+      await updateCollectionById(collectionId, updatedCollection);
+      setOpen(false);
+      setCollectionItems((prev) =>
+        prev.map((item) =>
+          item.collectionId === editedCollection.collectionId
+            ? { ...updatedCollection, collectionId, imageLink: updatedCollection.collectionImage }
+            : item
+        )
+      );
+      toast.success("Collection updated successfully");
+    } catch (error) {
+      console.error("Update error:", error);
+      toast.error("Failed to update collection");
+    }
+
     setLoading(false);
     handleClose();
   };
@@ -249,20 +193,6 @@ const EditCollectionModal = ({
             </Upload>
           </Box>
           <Input type="hidden" {...register('collectionId')}></Input>
-          <TextField
-            select
-            margin="dense"
-            label="Status"
-            {...register("status", { required: "Status is required" })}
-            fullWidth
-            defaultValue={editedCollection.status}
-            SelectProps={{ native: true }}
-            error={!!errors.status}
-            helperText={errors.status?.message}
-          >
-            <option value={true}>Active</option>
-            <option value={false}>Inactive</option>
-          </TextField>
           <DialogActions>
             <Button onClick={handleClose} color="secondary">
               Cancel
