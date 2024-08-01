@@ -104,24 +104,24 @@ const SSOrderDetail = () => {
       for (const item of orderDetails.productDetails) {
         const urls = item.certificateScans;
         if (!urls || urls.length === 0) {
-          throw new Error(
-            `No certificate scans available for product ${item.productName}`
-          );
+          continue;
         }
         certificateUrls = certificateUrls.concat(urls);
       }
-
-      const emailData = {
-        toEmail: orderDetails.email,
-        subject: "Your Diamond's Certificate:",
-        body: `Here is your certificate: ${certificateUrls.join("; ")}`,
-      };
-
-      await sendWarrantyEmail(emailData);
-      toast.success("Send certificate success", {
-        position: "top-right",
-        autoClose: 2000,
-      });
+      if (certificateUrls.length > 0) {
+        const emailData = {
+          toEmail: orderDetails.email,
+          subject: "Your Diamond's Certificate:",
+          body: `Here is your certificate: ${certificateUrls.join("; ")}`,
+        };
+  
+        await sendWarrantyEmail(emailData);
+       
+        toast.success("Send certificate success", {
+          position: "top-right",
+          autoClose: 2000,
+        });
+      }
       let concatenatedWarrantyURLs = "";
 
       try {
