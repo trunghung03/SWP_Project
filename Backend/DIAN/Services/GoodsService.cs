@@ -212,11 +212,18 @@ namespace DIAN_.Services
             {
                 var mainDiamondCount = await _diamondRepository.CountDiamondsByAttributesAsync(product.MainDiamondAtrributeId ?? 0);
                 var subDiamond = await _subDiamondRepository.GetDiamondsByAttributeIdAsync(product.SubDiamondAtrributeId ?? 0);
+                var mainDiamond = await _diamondRepository.GetDiamondByIdAsync(product.MainDiamondAtrributeId ?? 0);
                 if (subDiamond == null)
                 {
                     stockDto.MainDiamondCount = mainDiamondCount;
                     stockDto.SubDiamondCount = 0;
                     stockDto.MaxProductAvailable = (product.MainDiamondAmount ?? 1) != 0 ? mainDiamondCount / (product.MainDiamondAmount ?? 1) : 0;
+                }
+                else if (mainDiamond == null)
+                {
+                    stockDto.MainDiamondCount = 0;
+                    stockDto.SubDiamondCount = subDiamond.AmountAvailable;
+                    stockDto.MaxProductAvailable = (product.SubDiamondAmount ?? 1) != 0 ? subDiamond.AmountAvailable / (product.SubDiamondAmount ?? 1) : 0;
                 }
                 else
                 {
