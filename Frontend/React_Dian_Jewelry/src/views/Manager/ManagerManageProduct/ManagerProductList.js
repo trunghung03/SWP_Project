@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Button,
   Grid,
   IconButton,
   Pagination,
@@ -22,8 +21,6 @@ import logo from "../../../assets/img/logoN.png";
 import {
   ShowAllProduct,
   deleteProductById,
-  getProductDetail,
-  pdfProduct,
   updateProductById,
 } from "../../../services/ManagerService/ManagerProductService.js";
 import "../../../styles/Manager/ManagerListProduct.scss";
@@ -34,6 +31,7 @@ import SearchBar from "./SearchBar";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { tableSort, getComparator } from "../../../Utils/TableUtils";
 import { toast } from "sonner";
+import { useDebouncedCallback } from 'use-debounce';
 
 const headCells = [
   {
@@ -89,9 +87,10 @@ const headCells = [
 
 const ManagerProductList = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("SearchTerm") || "");
 
   const [productItems, setProductItems] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editedProduct, setEditedProduct] = useState({});
   const [pdfData, setPdfData] = useState([]);
@@ -101,46 +100,34 @@ const ManagerProductList = () => {
     totalPages: 1,
     totalCount: 0,
   });
+  const page = searchParams.get("PageNumber") || 1;
 
-  const fetchData = async (page = 1, query = "") => {
+  const fetchData = useDebouncedCallback(async () => {
+    const searchTerm = searchParams.get("SearchTerm") || "";
+
     try {
-      const response = await ShowAllProduct(page, pagination.pageSize, query);
+      const response = await ShowAllProduct(page, pagination.pageSize, searchTerm);
       setProductItems(response.data);
       setPagination(response.pagination);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, 500);
 
   useEffect(() => {
-    fetchData(pagination.currentPage, searchQuery);
-  }, [pagination.currentPage, searchQuery]);
+    fetchData();
+  }, [searchParams]);
 
   const handlePageChange = (pageNumber) => {
-    setPagination((prev) => ({ ...prev, currentPage: pageNumber }));
+    searchParams.set("PageNumber", pageNumber);
+    setSearchParams(searchParams);
   };
 
-  const handleSearchKeyPress = async (e) => {
-    if (e.key === "Enter") {
-      try {
-        const response = await getProductDetail(searchQuery.trim());
-        setProductItems([response]);
-        setPagination({
-          currentPage: 1,
-          pageSize: 6,
-          totalPages: 1,
-          totalCount: 1,
-        });
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        toast.error("Product not found! Please try another one.");
-      }
-    }
-  };
-
-  const handleBack = () => {
-    setSearchQuery("");
-    fetchData(1);
+  const handleSearchTermChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    searchParams.set("SearchTerm", value);
+    setSearchParams(searchParams);
   };
 
   const handleDelete = async (productID) => {
@@ -154,19 +141,16 @@ const ManagerProductList = () => {
       if (willDelete) {
         deleteProductById(productID)
           .then(() => {
-            toast
-              .success("Product deleted successfully!", {
-                position: "top-center",
-                autoClose: 3000,
-              })
-              .then(() => {
-                fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
-              });
+            toast.success("Product deleted successfully!", {
+              position: "top-right",
+              autoClose: 3000,
+            });
+            fetchData(); // Fetch fresh data
           })
           .catch((error) => {
             console.error("Error deleting product:", error);
             toast.error("Failed to delete product. Please try again.", {
-              position: "top-center",
+              position: "top-right",
               autoClose: 3000,
             });
           });
@@ -182,7 +166,7 @@ const ManagerProductList = () => {
   const handleUpdate = async (updatedProduct) => {
     try {
       await updateProductById(updatedProduct.productId, updatedProduct);
-      fetchData(pagination.currentPage, searchQuery); // Fetch fresh data
+      fetchData(); // Fetch fresh data
       setEditMode(false);
       toast.success("Product updated successfully!", {
         position: "top-center",
@@ -211,9 +195,8 @@ const ManagerProductList = () => {
         <div className="manager_manage_product_header">
           <img className="manager_manage_product_logo" src={logo} alt="Logo" />
           <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            handleSearchKeyPress={handleSearchKeyPress}
+            searchTerm={searchTerm}
+            setSearchTerm={handleSearchTermChange}
           />
         </div>
         <hr className="manager_product_header_line"></hr>
@@ -256,7 +239,7 @@ const ManagerProductList = () => {
           <Stack spacing={2} direction="row">
             <Pagination
               count={pagination.totalPages}
-              page={pagination.currentPage}
+              page={parseInt(searchParams.get("PageNumber")) || 1}
               onChange={(e, value) => handlePageChange(value)}
               color="primary"
             />
@@ -335,11 +318,6 @@ const ManagerProductList = () => {
             </Table>
           </TableContainer>
 
-          {searchQuery && (
-            <button className="btn btn-secondary mt-3" onClick={handleBack}>
-              Back to show all products
-            </button>
-          )}
         </div>
       </div>
 

@@ -22,6 +22,7 @@ function OrderDetail() {
     const [points, setPoints] = useState(0);
     const [orderDetails, setOrderDetails] = useState(null);
     const [promotionCode, setPromotionCode] = useState('');
+    const [promotionAmount, setPromotionAmount] = useState(null);
     const [orderProducts, setOrderProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -45,6 +46,7 @@ function OrderDetail() {
                 if (data.promotionId) {
                     const promotionData = await getPromotionById(data.promotionId);
                     setPromotionCode(promotionData.code);
+                    setPromotionAmount(promotionData.amount);
                 }
 
                 const orderDetailData = await getOrderDetailsByOrderId(orderNumber);
@@ -211,7 +213,9 @@ function OrderDetail() {
                         <div className="order_detail_footer">
                             <p className="order_detail_date">{formatDate(orderDetails.date)}</p>
                             <p className="order_detail_total_price">
-                                <span className="order_detail_discount">{promotionCode ? `Promotion: ${promotionCode}` : ''}</span>
+                                <span className="order_detail_discount">
+                                    {promotionCode ? `Promotion: ${promotionCode} (-${promotionAmount * 100}%)` : ''}
+                                </span>
                                 Total price: ${orderDetails.totalPrice}
                             </p>
                         </div>

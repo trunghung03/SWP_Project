@@ -288,7 +288,17 @@ const Login = () => {
     const userInfoRes = await googleLoginApi(body);
     localStorage.setItem("token", userInfoRes.data.token);
     let userGGInfoRes = await getUserInfo(decoded.email);
-
+    if (!userGGInfoRes.data.status){
+      toast.error(
+        "Account is deactivated! Please contact us if this is a mistake.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+      setLoading(false);
+      return;
+    }
     if (userInfoRes.status === 200) {
       setUser({
         firstName: decoded.given_name,

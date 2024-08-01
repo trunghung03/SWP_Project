@@ -25,7 +25,7 @@ import {
   getPromotionDetail,
   updatePromotionById,
 } from "../../../services/ManagerService/ManagerPromotionService.js";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -42,6 +42,7 @@ const headCells = [
   { id: "status", numeric: false, disablePadding: false, label: "Status", sortable: false },
   { id: "actions", numeric: false, disablePadding: false, label: "Actions", sortable: false },
 ];
+
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
@@ -49,7 +50,6 @@ const formatDate = (dateString) => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
-
 
 const toUcsiDate = (date) => {
   return new Date(date).toLocaleDateString("en-CA");
@@ -225,9 +225,6 @@ const ManagerPromotionList = () => {
     setPage(value);
   };
 
-
-
-
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(1);
@@ -285,7 +282,6 @@ const ManagerPromotionList = () => {
       setValue("validFrom", formatDate(promotion.startDate));
       setValue("validTo", formatDate(promotion.endDate));
       setValue("amount", promotion.amount * 100);
-
     });
     setOpen(true);
   };
@@ -296,10 +292,19 @@ const ManagerPromotionList = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log("Form Data:", data); // Log form data
     try {
-      data.amount = data.amount/100;
-      data.validFrom = new Date(data.startDate);
-      data.validTo = new Date(data.endDate);
+      const startDate = new Date(data.validFrom);
+      const endDate = new Date(data.validTo);
+
+      if (endDate < startDate) {
+        swal("Invalid date range!", "End date cannot be earlier than start date.", "error");
+        return;
+      }
+
+      data.amount = data.amount / 100;
+      data.startDate = startDate;
+      data.endDate = endDate;
       await updatePromotionById(editedPromotion.id, data);
       setOpen(false);
       swal("Update successful!", "Promotion has been updated.", "success");
@@ -351,119 +356,120 @@ const ManagerPromotionList = () => {
           />
         </div>
         <div className="manager_manage_diamond_table_wrapper">
-        <TableContainer component={Paper}>
-          <Table>
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {paginatedPromotions.map((promotion) => (
-                <TableRow key={promotion.id}>
-                  <StyledTableCell align="center">{promotion.id}</StyledTableCell>
-                  <StyledTableCell align="center">{promotion.name}</StyledTableCell>
-                  <StyledTableCell align="center">{promotion.code}</StyledTableCell>
-                  <StyledTableCell align="center">{promotion.amount*100}</StyledTableCell>
-                  <StyledTableCell align="center">{promotion.description}</StyledTableCell>
-                  <TableCell align="center">{new Date(promotion.startDate).toLocaleDateString("en-CA")}</TableCell>
-                        <TableCell align="center">{new Date(promotion.endDate).toLocaleDateString("en-CA")}</TableCell>
-                  <StyledTableCell align="center">
-                    <PromotionButton endDate={promotion.endDate} id={promotion.id} />
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <IconButton onClick={() => handleOpenModal(promotion)}>
-                      <EditIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={9} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Modal open={open} onClose={handleCloseModal}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
-            style={{
-              backgroundColor: "white",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "40%",
-              boxShadow: 24,
-              borderRadius: 5,
-            }}
-          >
-            <Typography variant="h6">Edit Promotion</Typography>
-            <TextField
-              {...register("name", { required: "Name is required" })}
-              label="Name"
-              error={!!errors.name}
-              helperText={errors.name ? errors.name.message : ""}
-              fullWidth
-            />
-            <TextField
-              {...register("code", { required: "Code is required" })}
-              label="Code"
-              error={!!errors.code}
-              helperText={errors.code ? errors.code.message : ""}
-              fullWidth
-            />
-            <TextField
-              {...register("amount", {
-                required: "Discount Percentage is required",
-                min: { value: 1, message: "Minimum value is 1" },
-                max: { value: 100, message: "Maximum value is 100" },
-              })}
-              label="Discount Percentage (%)"
-              type="number"
-              error={!!errors.amount}
-              helperText={errors.amount ? errors.amount.message : ""}
-              fullWidth
-            />
-            <TextField
-              {...register("description")}
-              label="Description"
-              fullWidth
-            />
-            <TextField
-              {...register("validFrom", { required: "Start Date is required" })}
-              label="Start Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              error={!!errors.startDate}
-              helperText={errors.startDate ? errors.startDate.message : ""}
-              fullWidth
-            />
-            <TextField
-              {...register("validTo", { required: "End Date is required" })}
-              label="End Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              error={!!errors.endDate}
-              helperText={errors.endDate ? errors.endDate.message : ""}
-              fullWidth
-            />
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button variant="contained" color="secondary" onClick={handleCloseModal}>
-                Cancel
-              </Button>
-              <Button variant="contained" color="primary" type="submit">
-                Save
-              </Button>
+          <TableContainer component={Paper}>
+            <Table>
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+              />
+              <TableBody>
+                {paginatedPromotions.map((promotion) => (
+                  <TableRow key={promotion.id}>
+                    <StyledTableCell align="center">{promotion.id}</StyledTableCell>
+                    <StyledTableCell align="center">{promotion.name}</StyledTableCell>
+                    <StyledTableCell align="center">{promotion.code}</StyledTableCell>
+                    <StyledTableCell align="center">{promotion.amount * 100}</StyledTableCell>
+                    <StyledTableCell align="center">{promotion.description}</StyledTableCell>
+                    <TableCell align="center">{new Date(promotion.startDate).toLocaleDateString("en-CA")}</TableCell>
+                    <TableCell align="center">{new Date(promotion.endDate).toLocaleDateString("en-CA")}</TableCell>
+                    <StyledTableCell align="center">
+                      <PromotionButton endDate={promotion.endDate} id={promotion.id} />
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <IconButton onClick={() => handleOpenModal(promotion)}>
+                        <EditIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                  </TableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={9} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Modal open={open} onClose={handleCloseModal}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
+              style={{
+                backgroundColor: "white",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "40%",
+                boxShadow: 24,
+                borderRadius: 5,
+              }}
+            >
+              <Typography variant="h6">Edit Promotion</Typography>
+              <TextField
+                {...register("name", { required: "Name is required" })}
+                label="Name"
+                error={!!errors.name}
+                helperText={errors.name ? errors.name.message : ""}
+                fullWidth
+              />
+              <TextField
+                {...register("code", { required: "Code is required" })}
+                label="Code"
+                error={!!errors.code}
+                helperText={errors.code ? errors.code.message : ""}
+                fullWidth
+              />
+              <TextField
+                {...register("amount", {
+                  required: "Discount Percentage is required",
+                  min: { value: 1, message: "Minimum value is 1" },
+                  max: { value: 100, message: "Maximum value is 100" },
+                })}
+                label="Discount Percentage (%)"
+                type="number"
+                error={!!errors.amount}
+                helperText={errors.amount ? errors.amount.message : ""}
+                fullWidth
+              />
+              <TextField
+                {...register("description")}
+                label="Description"
+                fullWidth
+              />
+              <TextField
+                {...register("validFrom", { required: "Start Date is required" })}
+                label="Start Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.validFrom}
+                helperText={errors.validFrom ? errors.validFrom.message : ""}
+                fullWidth
+              />
+              <TextField
+                {...register("validTo", { required: "End Date is required" })}
+                label="End Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.validTo}
+                helperText={errors.validTo ? errors.validTo.message : ""}
+                fullWidth
+              />
+
+              <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+                <Button variant="contained" color="secondary" onClick={handleCloseModal}>
+                  Cancel
+                </Button>
+                <Button variant="contained" color="primary" type="submit">
+                  Save
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </Modal>
+          </Modal>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

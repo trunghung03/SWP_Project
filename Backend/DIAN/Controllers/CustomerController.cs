@@ -90,24 +90,35 @@ namespace UserApplication.Controllers
         [HttpPost("login-gg")]
         public async Task<IActionResult> LoginGG(RegisterUserDto user)
         {
-            if (!ModelState.IsValid) { return BadRequest(ModelState); };
-            var customer = await _customerRepository.GetByEmailAsync(user.Email);
-
-            if (customer == null)
-                customer = await _customerRepository.RegisterAsync(user);
-
-            else if (customer.Status == false)
+            try
             {
-                return Forbid("Your account is deactivated.");
-            }
-            return Ok(
-                new NewUserDto
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var customer = await _customerRepository.GetByEmailAsync(user.Email);
+
+                if (customer == null)
+                {
+                    customer = await _customerRepository.RegisterAsync(user);
+                }
+
+                return Ok(new NewUserDto
                 {
                     Email = customer.Email,
                     AccountType = "Google",
                     Token = _tokenService.CreateCustomerToken(customer)
                 });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal server error. Please try again later.");
+            }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
