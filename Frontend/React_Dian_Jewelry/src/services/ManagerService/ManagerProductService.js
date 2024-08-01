@@ -16,16 +16,17 @@ const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
 
-const ShowAllProduct = async (pageNumber = 1, pageSize = 6, name = '') => {
+const ShowAllProduct = async (pageNumber = 1, pageSize = 6, searchTerm = '') => {
   const response = await axios.get(`${API_BASE_URL}/products/all`, {
     params: {
       PageNumber: pageNumber,
       PageSize: pageSize,
-      Name: name,
+      SearchTerm: searchTerm,
     },
   });
   return response.data;
 };
+
 
 const pdfProduct = async () => {
   const response = await axios.get(`${API_BASE_URL}/products/list`);

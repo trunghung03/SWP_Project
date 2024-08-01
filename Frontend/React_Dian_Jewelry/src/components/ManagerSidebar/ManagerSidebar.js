@@ -110,7 +110,7 @@ class ManagerSidebar extends Component {
                                 <span>Manage Collection</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_view_order_list' ? 'selected' : ''}`} onClick={() => this.props.navigate('/manager-order-list')}>
-                            <ListAltIcon className="list-alt-icon"/>
+                            <i className="fas fa-box"/>
                             <span>Manage Order</span>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_edit_profile' ? 'selected' : ''}`} onClick={() => this.props.navigate('/staff-edit-profile')}>
@@ -149,7 +149,7 @@ class ManagerSidebar extends Component {
                                 <i className="fas fa-leaf"></i>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_view_order_list' ? 'selected' : ''}`} data-tooltip="View Orders List" onClick={() => this.props.navigate('/manager-order-list')}>
-                                <i className="fas fa-leaf"></i>
+                                <i className="fas fa-box"></i>
                             </li>
                             <li className={`manager_sidebar_menu_item ${currentPage === 'manager_edit_profile' ? 'selected' : ''}`} data-tooltip="Edit Profile" onClick={() => this.props.navigate('/staff-edit-profile')}>
                                 <i className="fas fa-user"></i>
