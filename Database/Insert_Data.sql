@@ -187,7 +187,7 @@
 			('Diamond',1);
 			
 			INSERT INTO SHELLMATERIAL ([Name], Price, Status) VALUES
-			('Silver', 1.5, 1),
+			('Silver', 3, 1),
 			('Gold', 75, 1),
 			('Rose Gold', 20, 1),
 			('White Gold', 32, 1);
