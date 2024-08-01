@@ -100,12 +100,7 @@ namespace DIAN_.Repository
             {
                 return null;
             }
-            shell.ProductId = shellDTO.ProductId;
-            shell.ShellMaterialId = shellDTO.ShellMaterialId;
             shell.AmountAvailable = shellDTO.AmountAvailable;
-            shell.Weight = shellDTO.Weight;
-            shell.Status = shellDTO.Status;
-            shell.Size = shellDTO.Size;
 
             _context.Shells.Update(shell);
             await _context.SaveChangesAsync();

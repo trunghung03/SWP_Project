@@ -23,12 +23,7 @@ namespace DIAN_.Mapper
         {
             return new Shell
             {
-                ProductId = shellModel.ProductId,
-                ShellMaterialId = shellModel.ShellMaterialId,
-                Weight = shellModel.Weight,
                 AmountAvailable = shellModel.AmountAvailable,
-                Size = shellModel.Size,
-                Status = shellModel.Status
             };
         }
         public static Shell ToShellFromUpdateStockDto(this UpdateShellStock shellModel, int id)

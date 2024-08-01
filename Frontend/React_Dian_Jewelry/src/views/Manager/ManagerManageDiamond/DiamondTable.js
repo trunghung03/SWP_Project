@@ -149,7 +149,7 @@ export default function DiamondTable({
             />
           )}
           {/* <EditMainDiamondDialog diamond={item} setDiamondList={setDiamondList} /> */}
-          <IconButton
+          {/* <IconButton
             onClick={() =>
               handleDelete(item.diamondAttributeId || item.subDiamondId)
             }
@@ -157,7 +157,7 @@ export default function DiamondTable({
             aria-label="delete"
           >
             <DeleteIcon style={{ color: "#575252" }} />
-          </IconButton>
+          </IconButton> */}
         </TableCell>
       </TableRow>
     ));
