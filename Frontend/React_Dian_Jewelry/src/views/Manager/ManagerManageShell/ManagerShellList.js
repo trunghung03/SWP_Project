@@ -6,14 +6,11 @@ import ManagerSidebar from "../../../components/ManagerSidebar/ManagerSidebar.js
 import "../../../styles/Manager/ManagerList.scss";
 import {
   ShowAllShell,
-  getShellMaterialDetail,
+  ShowAllShellMaterial,
   deleteShellMaterialById,
   updateShellMaterialById,
-  getShellMaterialByName,
-  createShellMaterial,
-  updateShellById,
-  ShowAllShellMaterial,
   deleteShellById,
+  updateShellById,
 } from "../../../services/ManagerService/ManagerShellService.js";
 import logo from "../../../assets/img/logoN.png";
 import { styled } from "@mui/material/styles";
@@ -30,7 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { Button } from "@mui/material";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -41,24 +38,12 @@ const ManagerShellList = () => {
   const navigate = useNavigate();
 
   const [shellMaterial, setShellMaterial] = useState([]);
+  const [shell, setShell] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [isSearch, setIsSearch] = useState(false);
-  const [editedShell, setEditedShell] = useState({});
-  const [originalShell, setOriginalShell] = useState({});
-  const [addMode, setAddMode] = useState(false);
-  const [shell, setShell] = useState([]);
   const [editShellMode, setEditShellMode] = useState(false);
-  const [editedShellNotMaterial, setEditedShellNotMaterial] = useState({
-    productId: "",
-    amountAvailable: "",
-  });
-  const [originalShellNotMaterial, setOriginalShellNotMaterial] = useState({});
-  const [newShell, setNewShell] = useState({
-    productId: "",
-    amountAvailable: "",
-  });
-
+  const [editedShell, setEditedShell] = useState({ name: "", price: "" });
+  const [editedShellNotMaterial, setEditedShellNotMaterial] = useState({ amountAvailable: "" });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const ordersPerPage = 6;
@@ -73,21 +58,11 @@ const ManagerShellList = () => {
     },
   }));
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ShowAllShellMaterial();
-        setShellMaterial(response);
+        const shellMaterialsResponse = await ShowAllShellMaterial();
+        setShellMaterial(shellMaterialsResponse);
         await fetchShells(currentPage, ordersPerPage, searchQuery);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -97,12 +72,8 @@ const ManagerShellList = () => {
     fetchData();
   }, [currentPage, searchQuery]);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const { register: register2, handleSubmit: handleSubmit2, setValue: setValue2, formState: { errors: errors2 } } = useForm();
 
   const fetchShells = async (pageNumber, pageSize, searchQuery = "") => {
     try {
@@ -185,69 +156,25 @@ const ManagerShellList = () => {
   };
 
   const handleCloseModal = () => {
-    // shell
-    setEditedShellNotMaterial(originalShellNotMaterial);
+    setEditedShellNotMaterial({});
     setEditShellMode(false);
   };
 
   const handleCloseShellMaterialModal = () => {
-    setEditedShell(originalShell);
+    setEditedShell({});
     setEditMode(false);
   };
 
-  const handleEdit = (shell) => {
+  const handleEdit = (shellMaterial) => {
+    setValue("name", shellMaterial.name);
+    setValue("price", shellMaterial.price);
     setEditMode(true);
-    setEditedShell(shell);
-    setOriginalShell(shell);
+    setEditedShell(shellMaterial);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedShell({ ...editedShell, [name]: value });
-    setNewShell({ ...newShell, [name]: value });
-  };
-
-  const handleUpdate = async () => {
-    const status = true;
-    const price = 0;
-    const requiredFields = ["name", "price"];
-    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
-    for (let field of requiredFields) {
-      if (!editedShell[field]) {
-        toast.info("Please fill in all fields!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-        return;
-      }
-      if (specialCharPattern.test(editedShell[field])) {
-        toast.info("Invalid characters detected!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-        return;
-      }
-    }
-
-    const isEqual =
-      JSON.stringify(originalShell) === JSON.stringify(editedShell);
-    if (isEqual) {
-      toast.message("No changes detected!", {
-        position: "top-right",
-        autoClose: 2000,
-      });
-      return;
-    }
-
-    const shellToUpdate = { ...editedShell, status: true };
-
+  const handleUpdate = async (data) => {
     try {
-      console.log("Sending update request with data:", shellToUpdate);
-      const response = await updateShellMaterialById(
-        shellToUpdate.shellMaterialId,
-        shellToUpdate
-      );
-      console.log("Update response:", response.data);
+      await updateShellMaterialById(editedShell.shellMaterialId, data);
       const updatedItems = await ShowAllShellMaterial();
       setShellMaterial(updatedItems);
       setEditMode(false);
@@ -256,66 +183,21 @@ const ManagerShellList = () => {
         autoClose: 2000,
       });
     } catch (error) {
-      console.error(
-        "Error updating shell material:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error updating shell material:", error.response ? error.response.data : error.message);
     }
   };
 
   const handleEditShell = (shell) => {
+    setValue2("productId", shell.productId);
+    setValue2("amountAvailable", shell.amountAvailable);
     setEditShellMode(true);
     setEditedShellNotMaterial(shell);
-    setOriginalShellNotMaterial(shell);
-  };
-  const handleShellChange = (e) => {
-    const { name, value } = e.target;
-    setEditedShellNotMaterial({ ...editedShellNotMaterial, [name]: value });
   };
 
-  const handleUpdateShell = async () => {
-    const requiredFields = ["productId", "amountAvailable"];
-    const specialCharPattern = /[$&+?@#|'<>^*()%]/;
-    for (let field of requiredFields) {
-      if (!editedShellNotMaterial[field]) {
-        toast.message("Please fill in all fields!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-        return;
-      }
-      if (specialCharPattern.test(editedShellNotMaterial[field])) {
-        toast.message("Invalid characters detected!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-        return;
-      }
-    }
-
-    const isEqual =
-      JSON.stringify(originalShellNotMaterial) ===
-      JSON.stringify(editedShellNotMaterial);
-    if (isEqual) {
-      toast.message("No changes detected!", {
-        position: "top-right",
-        autoClose: 2000,
-      });
-      return;
-    }
-
+  const handleUpdateShell = async (data) => {
     try {
-      const response = await updateShellById(
-        editedShellNotMaterial.shellId,
-        editedShellNotMaterial
-      );
-      console.log("Update response:", response.data);
-      // Fetch updated shell data
-      const updatedShells = await ShowAllShell(
-        currentPage,
-        ordersPerPage,
-        searchQuery
-      );
+      await updateShellById(editedShellNotMaterial.shellId, data);
+      const updatedShells = await ShowAllShell(currentPage, ordersPerPage, searchQuery);
       setShell(updatedShells.data);
       setTotalPages(updatedShells.pagination.totalPages);
       setEditShellMode(false);
@@ -324,10 +206,7 @@ const ManagerShellList = () => {
         autoClose: 2000,
       });
     } catch (error) {
-      console.error(
-        "Error updating shell:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error updating shell:", error.response ? error.response.data : error.message);
     }
   };
 
@@ -336,6 +215,11 @@ const ManagerShellList = () => {
     setCurrentPage(1);
     await fetchShells(1, ordersPerPage, "");
   };
+
+  const materialMap = shellMaterial.reduce((acc, material) => {
+    acc[material.shellMaterialId] = material;
+    return acc;
+  }, {});
 
   return (
     <div className="manager_manage_diamond_all_container">
@@ -347,7 +231,6 @@ const ManagerShellList = () => {
           <img className="manager_manage_diamond_logo" src={logo} alt="Logo" />
         </div>
         <hr className="manager_header_line"></hr>
-
         <h3>List Of Shells</h3>
 
         <div className="manager_manage_diamond_create_button_section">
@@ -359,9 +242,7 @@ const ManagerShellList = () => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center">
-                    Shell Material ID
-                  </StyledTableCell>
+                  <StyledTableCell align="center">Shell Material ID</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Price</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
@@ -370,42 +251,23 @@ const ManagerShellList = () => {
               <TableBody>
                 {shellMaterial.length > 0 ? (
                   shellMaterial.map((item) => (
-                    <TableRow
-                      className="manager_manage_table_body_row"
-                      key={item.shellMaterialId}
-                    >
-                      <StyledTableCell align="center">
-                        {item.shellMaterialId}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {item.name}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {item.price}
-                      </StyledTableCell>
+                    <TableRow className="manager_manage_table_body_row" key={item.shellMaterialId}>
+                      <StyledTableCell align="center">{item.shellMaterialId}</StyledTableCell>
+                      <StyledTableCell align="center">{item.name}</StyledTableCell>
+                      <StyledTableCell align="center">{item.price}</StyledTableCell>
                       <StyledTableCell align="center">
                         <IconButton onClick={() => handleEdit(item)}>
-                          <EditIcon
-                            style={{ cursor: "pointer", color: "#575252" }}
-                          />
+                          <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
                         </IconButton>
-                        <IconButton
-                          onClick={() =>
-                            handleDeleteShellMaterial(item.shellMaterialId)
-                          }
-                        >
-                          <DeleteIcon
-                            style={{ cursor: "pointer", color: "#575252" }}
-                          />
+                        <IconButton onClick={() => handleDeleteShellMaterial(item.shellMaterialId)}>
+                          <DeleteIcon style={{ cursor: "pointer", color: "#575252" }} />
                         </IconButton>
                       </StyledTableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <StyledTableCell colSpan="4" align="center">
-                      No shell found
-                    </StyledTableCell>
+                    <StyledTableCell colSpan="4" align="center">No shell found</StyledTableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -413,22 +275,14 @@ const ManagerShellList = () => {
           </TableContainer>
         </div>
 
-        <div
-          className="manager_manage_diamond_create_button_section"
-          style={{ marginTop: "2%" }}
-        >
-          <button
-            className="manager_manage_diamond_create_button"
-            onClick={() => navigate("/manager-add-shell")}
-          >
-            Add new shell
-          </button>
+        <div className="manager_manage_diamond_create_button_section" style={{ marginTop: "2%" }}>
+          <button className="manager_manage_diamond_create_button" onClick={() => navigate("/manager-add-shell")}>Add new shell</button>
           <div className="manager_manage_product_search_section">
             <input
               type="text"
               placeholder="Search . . ."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               onKeyUp={handleSearchKeyPress}
               className="manager_manage_product_search_bar"
             />
@@ -450,9 +304,7 @@ const ManagerShellList = () => {
                 <TableRow>
                   <StyledTableCell align="center">Shell Id</StyledTableCell>
                   <StyledTableCell align="center">Product ID</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Shell Material Name
-                  </StyledTableCell>
+                  <StyledTableCell align="center">Shell Material Name</StyledTableCell>
                   <StyledTableCell align="center">Weight</StyledTableCell>
                   <StyledTableCell align="center">Size</StyledTableCell>
                   <StyledTableCell align="center">Price</StyledTableCell>
@@ -463,51 +315,22 @@ const ManagerShellList = () => {
               <TableBody>
                 {shell.length > 0 ? (
                   shell.map((item) => {
-                    const material = shellMaterial.find(
-                      (material) =>
-                        material.shellMaterialId === item.shellMaterialId
-                    ) || { name: "N/A", price: "N/A" };
+                    const material = materialMap[item.shellMaterialId] || { name: "N/A", price: "N/A" };
                     return (
-                      <TableRow
-                        className="manager_manage_table_body_row"
-                        key={item.shellId}
-                      >
-                        <StyledTableCell align="center">
-                          {item.shellId}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {item.productId}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {material ? material.name : "Material not found"}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {item.weight}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {item.size}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          $
-                          {material
-                            ? material.price * item.weight
-                            : "Material not found"}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {item.amountAvailable}
-                        </StyledTableCell>
+                      <TableRow className="manager_manage_table_body_row" key={item.shellId}>
+                        <StyledTableCell align="center">{item.shellId}</StyledTableCell>
+                        <StyledTableCell align="center">{item.productId}</StyledTableCell>
+                        <StyledTableCell align="center">{material.name}</StyledTableCell>
+                        <StyledTableCell align="center">{item.weight}</StyledTableCell>
+                        <StyledTableCell align="center">{item.size}</StyledTableCell>
+                        <StyledTableCell align="center">${material.price * item.weight}</StyledTableCell>
+                        <StyledTableCell align="center">{item.amountAvailable}</StyledTableCell>
                         <StyledTableCell align="center">
                           <IconButton onClick={() => handleEditShell(item)}>
-                            <EditIcon
-                              style={{ cursor: "pointer", color: "#575252" }}
-                            />
+                            <EditIcon style={{ cursor: "pointer", color: "#575252" }} />
                           </IconButton>
-                          <IconButton
-                            onClick={() => handleDeleteShell(item.shellId)}
-                          >
-                            <DeleteIcon
-                              style={{ cursor: "pointer", color: "#575252" }}
-                            />
+                          <IconButton onClick={() => handleDeleteShell(item.shellId)}>
+                            <DeleteIcon style={{ cursor: "pointer", color: "#575252" }} />
                           </IconButton>
                         </StyledTableCell>
                       </TableRow>
@@ -515,21 +338,13 @@ const ManagerShellList = () => {
                   })
                 ) : (
                   <TableRow>
-                    <StyledTableCell colSpan="8" align="center">
-                      No shell found
-                    </StyledTableCell>
+                    <StyledTableCell colSpan="8" align="center">No shell found</StyledTableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </TableContainer>
         </div>
-
-        {isSearch && (
-          <button className="SS_back_button" onClick={handleBackClick}>
-            Back to All
-          </button>
-        )}
 
         <Modal open={editMode} onClose={handleCloseShellMaterialModal}>
           <Box
@@ -553,9 +368,6 @@ const ManagerShellList = () => {
               type="text"
               name="name"
               label="Name"
-              value={editedShell.name}
-              onChange={handleChange}
-              // error={!!errors.name}
               helperText={errors.name ? "Name is required" : ""}
               maxLength={100}
               required
@@ -567,16 +379,13 @@ const ManagerShellList = () => {
               })}
               type="number"
               label="Price"
-              // error={!!errors.price}
               helperText={errors.price ? errors.price.message : ""}
               name="price"
-              value={editedShell.price}
-              onChange={handleChange}
               required
             />
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button onClick={() => setEditMode(false)}>Cancel</Button>
-              <Button onClick={handleUpdate}>Confirm</Button>
+              <Button onClick={handleCloseShellMaterialModal}>Cancel</Button>
+              <Button type="submit">Confirm</Button>
             </Box>
           </Box>
         </Modal>
@@ -584,7 +393,7 @@ const ManagerShellList = () => {
         <Modal open={editShellMode} onClose={handleCloseModal}>
           <Box
             component="form"
-            onSubmit={handleSubmit(handleUpdateShell)}
+            onSubmit={handleSubmit2(handleUpdateShell)}
             sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
             style={{
               backgroundColor: "white",
@@ -599,18 +408,7 @@ const ManagerShellList = () => {
           >
             <Typography variant="h6">Edit Shell</Typography>
             <TextField
-              {...register("productId", { required: true })}
-              type="text"
-              label="Product ID"
-              // error={!!errors.productId}
-              helperText={errors.productId ? "Product ID is required" : ""}
-              name="productId"
-              value={editedShellNotMaterial.productId}
-              onChange={handleShellChange}
-              required
-            />
-            <TextField
-              {...register("amountAvailable", {
+              {...register2("amountAvailable", {
                 required: {
                   value: true,
                   message: "Amount available is required",
@@ -627,17 +425,12 @@ const ManagerShellList = () => {
               type="number"
               name="amountAvailable"
               label="Amount Available"
-              // error={!!errors.amountAvailable}
-              helperText={
-                errors.amountAvailable ? errors.amountAvailable.message : ""
-              }
-              value={editedShellNotMaterial.amountAvailable}
-              onChange={handleShellChange}
+              helperText={errors2.amountAvailable ? errors2.amountAvailable.message : ""}
               required
             />
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button onClick={() => setEditShellMode(false)}>Cancel</Button>
-              <Button onClick={handleUpdateShell}>Confirm</Button>
+              <Button onClick={handleCloseModal}>Cancel</Button>
+              <Button type="submit">Confirm</Button>
             </Box>
           </Box>
         </Modal>

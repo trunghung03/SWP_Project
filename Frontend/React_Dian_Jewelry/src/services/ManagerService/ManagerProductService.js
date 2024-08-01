@@ -16,7 +16,7 @@ const updateProductById = (id, data) => {
   return axios.put(`${API_BASE_URL}/products/${id}`, data);
 };
 
-const ShowAllProduct = async (pageNumber = 1, pageSize = 6, searchTerm = '') => {
+const ShowAllProduct = async (pageNumber = '', pageSize = '', searchTerm = '') => {
   const response = await axios.get(`${API_BASE_URL}/products/all`, {
     params: {
       PageNumber: pageNumber,

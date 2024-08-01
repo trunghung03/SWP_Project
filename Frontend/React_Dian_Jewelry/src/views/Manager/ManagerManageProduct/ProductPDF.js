@@ -82,7 +82,7 @@ const ProductPDF = ({ products }) => (
               <Text style={[styles.tableCell, styles.columnCode]}>{product.productCode}</Text>
               <Text style={[styles.tableCell, styles.columnName]}>{product.name}</Text>
               <Text style={[styles.tableCell, styles.columnPrice]}>{product.price}</Text>
-              <Text style={[styles.tableCell, styles.columnStock]}>{product.stock}</Text>
+              <Text style={[styles.tableCell, styles.columnStock]}>{product.maxProductAvailable}</Text>
             </View>
           ))}
         </View>
